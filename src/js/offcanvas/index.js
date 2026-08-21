@@ -1,7 +1,7 @@
-import Offcanvas from './offcanvas.js';
+import { getClickTarget } from './../click-target/index.js';
 import { $, document } from './../globals.js';
 import { getTarget, initComponent } from './../helpers.js';
-import { getClickTarget } from './../click-target/index.js';
+import Offcanvas from './offcanvas.js';
 
 // Offcanvas default options
 Offcanvas.defaults = {

@@ -1,5 +1,5 @@
-import Modal from './modal.js';
 import { $ } from './../globals.js';
+import Modal from './modal.js';
 
 /**
  * Modal Helpers

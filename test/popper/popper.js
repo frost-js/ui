@@ -148,6 +148,7 @@ describe('Popper', function() {
                     $.setStyle(button, { marginTop: '50px' });
                     $('#badge').popper('update');
 
+                    const badge = $.findOne('#badge');
                     return $.getStyle(badge, 'transform');
                 }),
                 'translate3d(4px, 84px, 0px)',

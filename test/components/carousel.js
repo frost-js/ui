@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { exec } from './../setup.js';
 import { waitFor } from './../helpers.js';
+import { exec } from './../setup.js';
 
 describe('Carousel', function() {
     beforeEach(async function() {
@@ -3248,6 +3248,7 @@ describe('Carousel', function() {
         it('works with swipe option (query)', async function() {
             await exec((_) => {
                 $('#carousel1').carousel({ swipe: false });
+                const carousel1 = $.findOne('#carousel1');
 
                 const downEvent = new MouseEvent('mousedown', {
                     clientX: 400,
@@ -3364,6 +3365,7 @@ describe('Carousel', function() {
                 });
             }).then(waitFor(50)).then(async (_) => {
                 await exec((_) => {
+                    const carousel1 = $.findOne('#carousel1');
                     const downEvent = new MouseEvent('mousedown', {
                         clientX: 400,
                     });

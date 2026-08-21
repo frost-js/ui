@@ -1,9 +1,9 @@
+import { getClickTarget } from './../click-target/index.js';
+import { $, document, window } from './../globals.js';
+import { getTarget, initComponent } from './../helpers.js';
 import { getTopModal } from './helpers.js';
 import Modal from './modal.js';
 import { _zoom } from './prototype/helpers.js';
-import { $, document, window } from './../globals.js';
-import { getTarget, initComponent } from './../helpers.js';
-import { getClickTarget } from './../click-target/index.js';
 
 // Modal default options
 Modal.defaults = {

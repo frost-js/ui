@@ -1,6 +1,6 @@
-import Collapse from './collapse.js';
 import { $, document } from './../globals.js';
 import { getTargetSelector, initComponent } from './../helpers.js';
+import Collapse from './collapse.js';
 
 // Collapse default options
 Collapse.defaults = {

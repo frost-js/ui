@@ -1,8 +1,8 @@
-import { getDirection } from './helpers.js';
 import BaseComponent from './../base-component.js';
 import FocusTrap from './../focus-trap/index.js';
 import { $, document } from './../globals.js';
 import { addScrollPadding, resetScrollPadding } from './../helpers.js';
+import { getDirection } from './helpers.js';
 
 /**
  * Offcanvas Class

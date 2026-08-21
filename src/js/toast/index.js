@@ -1,6 +1,6 @@
-import Toast from './toast.js';
 import { $, document } from './../globals.js';
 import { getTarget, initComponent } from './../helpers.js';
+import Toast from './toast.js';
 
 // Toast default options
 Toast.defaults = {

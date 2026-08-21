@@ -7,6 +7,17 @@ import { getDataset } from './helpers.js';
  */
 export default class BaseComponent {
     /**
+     * Initialize a BaseComponent.
+     * @param {HTMLElement} node The input node.
+     * @return {BaseComponent} A new BaseComponent object.
+     */
+    static init(node, ...args) {
+        return $.hasData(node, this.DATA_KEY) ?
+            $.getData(node, this.DATA_KEY) :
+            new this(node, ...args);
+    }
+
+    /**
      * New BaseComponent constructor.
      * @param {HTMLElement} node The input node.
      * @param {object} [options] The options to create the BaseComponent with.
@@ -36,16 +47,5 @@ export default class BaseComponent {
         $.removeData(this._node, this.constructor.DATA_KEY);
         this._node = null;
         this._options = null;
-    }
-
-    /**
-     * Initialize a BaseComponent.
-     * @param {HTMLElement} node The input node.
-     * @return {BaseComponent} A new BaseComponent object.
-     */
-    static init(node, ...args) {
-        return $.hasData(node, this.DATA_KEY) ?
-            $.getData(node, this.DATA_KEY) :
-            new this(node, ...args);
     }
 }

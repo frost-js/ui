@@ -1,7 +1,7 @@
-import Dropdown from './dropdown.js';
+import { getClickTarget } from './../click-target/index.js';
 import { $, document } from './../globals.js';
 import { initComponent } from './../helpers.js';
-import { getClickTarget } from './../click-target/index.js';
+import Dropdown from './dropdown.js';
 
 // Dropdown default options
 Dropdown.defaults = {
@@ -32,7 +32,7 @@ $.addEventDelegate(document, 'click.ui.dropdown keydown.ui.dropdown', '[data-ui-
 $.addEventDelegate(document, 'keydown.ui.dropdown', '[data-ui-toggle="dropdown"]', (e) => {
     switch (e.code) {
         case 'ArrowDown':
-        case 'ArrowUp':
+        case 'ArrowUp': {
             e.preventDefault();
 
             const node = e.currentTarget;
@@ -45,6 +45,7 @@ $.addEventDelegate(document, 'keydown.ui.dropdown', '[data-ui-toggle="dropdown"]
             const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', dropdown._menuNode);
             $.focus(focusNode);
             break;
+        }
     }
 });
 

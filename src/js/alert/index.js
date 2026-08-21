@@ -1,6 +1,6 @@
-import Alert from './alert.js';
 import { $, document } from './../globals.js';
 import { getTarget, initComponent } from './../helpers.js';
+import Alert from './alert.js';
 
 // Alert default options
 Alert.defaults = {

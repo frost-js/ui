@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { exec } from './../setup.js';
 import { waitFor } from './../helpers.js';
+import { exec } from './../setup.js';
 
 describe('Modal', function() {
     afterEach(async function() {
@@ -240,6 +240,7 @@ describe('Modal', function() {
                 });
             }).then(waitFor(50)).then(async (_) => {
                 await exec((_) => {
+                    const modal1 = $.findOne('#modal1');
                     UI.Modal.init(modal1).show();
                 });
             });

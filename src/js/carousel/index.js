@@ -1,8 +1,8 @@
+import { $, document } from './../globals.js';
+import { getTarget, initComponent } from './../helpers.js';
 import Carousel from './carousel.js';
 import { _events } from './prototype/events.js';
 import { _resetStyles, _setIndex, _setTimer, _show, _update, _updateIndicators } from './prototype/helpers.js';
-import { $, document } from './../globals.js';
-import { getTarget, initComponent } from './../helpers.js';
 
 // Carousel default options
 Carousel.defaults = {

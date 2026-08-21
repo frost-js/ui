@@ -61,5 +61,5 @@
 
 .toast-body {
     padding: var(--ui-toast-padding-x);
-    word-wrap: break-word;
+    overflow-wrap: break-word;
 }

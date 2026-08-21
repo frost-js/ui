@@ -21,6 +21,49 @@ export default class Tab extends BaseComponent {
     }
 
     /**
+     * Hide the current Tab (forcefully).
+     */
+    _hide() {
+        $.setDataset(this._target, { uiAnimating: 'out' });
+
+        $.fadeOut(this._target, {
+            duration: this._options.duration,
+        }).then((_) => {
+            $.removeClass(this._target, 'active');
+            $.removeClass(this._node, 'active');
+            $.removeDataset(this._target, 'uiAnimating');
+            $.setAttribute(this._node, { 'aria-selected': false });
+            $.triggerEvent(this._node, 'hidden.ui.tab');
+        }).catch((_) => {
+            if ($.getDataset(this._target, 'uiAnimating') === 'out') {
+                $.removeDataset(this._target, 'uiAnimating');
+            }
+        });
+    }
+
+    /**
+     * Show the current Tab (forcefully).
+     */
+    _show() {
+        $.setDataset(this._target, { uiAnimating: 'in' });
+
+        $.addClass(this._target, 'active');
+        $.addClass(this._node, 'active');
+
+        $.fadeIn(this._target, {
+            duration: this._options.duration,
+        }).then((_) => {
+            $.setAttribute(this._node, { 'aria-selected': true });
+            $.removeDataset(this._target, 'uiAnimating');
+            $.triggerEvent(this._node, 'shown.ui.tab');
+        }).catch((_) => {
+            if ($.getDataset(this._target, 'uiAnimating') === 'in') {
+                $.removeDataset(this._target, 'uiAnimating');
+            }
+        });
+    }
+
+    /**
      * Dispose the Tab.
      */
     dispose() {
@@ -80,48 +123,5 @@ export default class Tab extends BaseComponent {
 
             activeTab._hide();
         }
-    }
-
-    /**
-     * Hide the current Tab (forcefully).
-     */
-    _hide() {
-        $.setDataset(this._target, { uiAnimating: 'out' });
-
-        $.fadeOut(this._target, {
-            duration: this._options.duration,
-        }).then((_) => {
-            $.removeClass(this._target, 'active');
-            $.removeClass(this._node, 'active');
-            $.removeDataset(this._target, 'uiAnimating');
-            $.setAttribute(this._node, { 'aria-selected': false });
-            $.triggerEvent(this._node, 'hidden.ui.tab');
-        }).catch((_) => {
-            if ($.getDataset(this._target, 'uiAnimating') === 'out') {
-                $.removeDataset(this._target, 'uiAnimating');
-            }
-        });
-    }
-
-    /**
-     * Show the current Tab (forcefully).
-     */
-    _show() {
-        $.setDataset(this._target, { uiAnimating: 'in' });
-
-        $.addClass(this._target, 'active');
-        $.addClass(this._node, 'active');
-
-        $.fadeIn(this._target, {
-            duration: this._options.duration,
-        }).then((_) => {
-            $.setAttribute(this._node, { 'aria-selected': true });
-            $.removeDataset(this._target, 'uiAnimating');
-            $.triggerEvent(this._node, 'shown.ui.tab');
-        }).catch((_) => {
-            if ($.getDataset(this._target, 'uiAnimating') === 'in') {
-                $.removeDataset(this._target, 'uiAnimating');
-            }
-        });
     }
 }

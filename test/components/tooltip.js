@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { exec } from './../setup.js';
 import { waitFor } from './../helpers.js';
+import { exec } from './../setup.js';
 
 describe('Tooltip', function() {
     beforeEach(async function() {
@@ -1427,6 +1427,7 @@ describe('Tooltip', function() {
                 });
             }).then(waitFor(50)).then(async (_) => {
                 await exec((_) => {
+                    const tooltipToggle1 = $.findOne('#tooltipToggle1');
                     $.triggerEvent(tooltipToggle1, 'mouseout');
                 });
             }).then(waitFor(50)).then(async (_) => {
@@ -1449,6 +1450,7 @@ describe('Tooltip', function() {
                 });
             }).then(waitFor(50)).then(async (_) => {
                 await exec((_) => {
+                    const tooltipToggle1 = $.findOne('#tooltipToggle1');
                     $.triggerEvent(tooltipToggle1, 'blur');
                 });
             }).then(waitFor(50)).then(async (_) => {
@@ -1471,6 +1473,7 @@ describe('Tooltip', function() {
                 });
             }).then(waitFor(50)).then(async (_) => {
                 await exec((_) => {
+                    const tooltipToggle1 = $.findOne('#tooltipToggle1');
                     $.triggerEvent(tooltipToggle1, 'click');
                 });
             }).then(waitFor(50)).then(async (_) => {

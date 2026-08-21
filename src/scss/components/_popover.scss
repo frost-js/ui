@@ -23,7 +23,7 @@
     max-width: var(--ui-popover-max-width);
     @include reset-text();
     font-size: $popover-font-size;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
     background-color: var(--ui-popover-bg);
     background-clip: padding-box;
     border: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);

@@ -1,5 +1,5 @@
-import { getDirOffset, getDirection, getIndex } from './../helpers.js';
 import { $ } from './../../globals.js';
+import { getDirOffset, getDirection, getIndex } from './../helpers.js';
 
 /**
  * Reset styles of an item.

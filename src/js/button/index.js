@@ -1,6 +1,6 @@
-import Button from './button.js';
 import { $, document } from './../globals.js';
 import { initComponent } from './../helpers.js';
+import Button from './button.js';
 
 // Button init
 initComponent('button', Button);

@@ -216,7 +216,7 @@ pre {
 code {
     font-size: $small-font-size;
     color: var(--ui-code-color);
-    word-wrap: break-word;
+    overflow-wrap: break-word;
 
     @at-root a>#{&} {
         color: inherit;
@@ -320,7 +320,7 @@ select:not([multiple]) > * {
 }
 
 select {
-    word-wrap: normal;
+    overflow-wrap: normal;
 
     &:disabled {
         opacity: 1;

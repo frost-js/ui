@@ -1,9 +1,9 @@
+import { $ } from './../globals.js';
+import { initComponent } from './../helpers.js';
 import Popover from './popover.js';
 import { _events } from './prototype/events.js';
 import { _show, _stop } from './prototype/helpers.js';
 import { _render } from './prototype/render.js';
-import { $ } from './../globals.js';
-import { initComponent } from './../helpers.js';
 
 // Popover default options
 Popover.defaults = {

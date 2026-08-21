@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { exec } from './../setup.js';
 import { waitFor } from './../helpers.js';
+import { exec } from './../setup.js';
 
 describe('Tab', function() {
     beforeEach(async function() {

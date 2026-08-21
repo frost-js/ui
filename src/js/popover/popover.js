@@ -29,6 +29,13 @@ export default class Popover extends BaseComponent {
     }
 
     /**
+     * Disable the Popover.
+     */
+    disable() {
+        this._enabled = false;
+    }
+
+    /**
      * Dispose the Popover.
      */
     dispose() {
@@ -71,13 +78,6 @@ export default class Popover extends BaseComponent {
         this._arrow = null;
 
         super.dispose();
-    }
-
-    /**
-     * Disable the Popover.
-     */
-    disable() {
-        this._enabled = false;
     }
 
     /**

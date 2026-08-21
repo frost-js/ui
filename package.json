@@ -1,6 +1,7 @@
 {
     "name": "@fr0st/ui",
     "version": "2.6.1",
+    "private": false,
     "description": "FrostUI is a free, open-source UI library for JavaScript.",
     "keywords": [
         "ui",
@@ -15,8 +16,14 @@
         "url": "https://github.com/elusivecodes/FrostUI/issues",
         "email": "elusivecodes@gmail.com"
     },
-    "main": "src/js/index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/elusivecodes/FrostUI.git"
+    },
+    "license": "MIT",
+    "author": "Elusive",
     "type": "module",
+    "main": "src/js/index.js",
     "files": [
         "dist",
         "LICENSE",
@@ -40,31 +47,24 @@
         "sass-unused": "fusv src/scss",
         "test": "mocha --recursive"
     },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/elusivecodes/FrostUI.git"
-    },
-    "author": "Elusive",
-    "license": "MIT",
-    "private": false,
-    "devDependencies": {
-        "@fr0st/eslint-config": "^1.0.3",
-        "@fr0st/stylelint-config": "^1.0.8",
-        "@rollup/plugin-node-resolve": "^16.0.1",
-        "autoprefixer": "^10.4.21",
-        "clean-css-cli": "^5.6.3",
-        "eslint": "^9.26.0",
-        "find-unused-sass-variables": "^6.1.0",
-        "mocha": "^11.2.2",
-        "postcss": "^8.5.3",
-        "postcss-cli": "^11.0.1",
-        "puppeteer": "^24.8.2",
-        "rollup": "^4.40.2",
-        "sass": "^1.88.0",
-        "stylelint": "^16.19.1",
-        "terser": "^5.39.1"
-    },
     "dependencies": {
-        "@fr0st/query": "^3.3.0"
+        "@fr0st/query": "^4.0.0"
+    },
+    "devDependencies": {
+        "@fr0st/eslint-config": "^4.0.0",
+        "@fr0st/stylelint-config": "^3.0.0",
+        "@rollup/plugin-node-resolve": "^16.0.3",
+        "autoprefixer": "^10.5.4",
+        "clean-css-cli": "^5.6.3",
+        "eslint": "^10.8.1",
+        "find-unused-sass-variables": "^6.2.1",
+        "mocha": "^11.8.0",
+        "postcss": "^8.5.26",
+        "postcss-cli": "^11.0.1",
+        "puppeteer": "^25.8.0",
+        "rollup": "^4.62.4",
+        "sass": "^1.102.0",
+        "stylelint": "^17.14.1",
+        "terser": "^5.50.0"
     }
 }

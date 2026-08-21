@@ -1,7 +1,7 @@
-import assert from 'node:assert/strict';
-import puppeteer from 'puppeteer';
 import * as fs from 'fs';
+import assert from 'node:assert/strict';
 import * as path from 'path';
+import puppeteer from 'puppeteer';
 import * as server from './../server/server.js';
 
 const port = 3001;

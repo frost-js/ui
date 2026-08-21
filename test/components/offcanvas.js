@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { exec } from './../setup.js';
 import { waitFor } from './../helpers.js';
+import { exec } from './../setup.js';
 
 describe('Offcanvas', function() {
     afterEach(async function() {
@@ -220,6 +220,7 @@ describe('Offcanvas', function() {
                 });
             }).then(waitFor(50)).then(async (_) => {
                 await exec((_) => {
+                    const offcanvas1 = $.findOne('#offcanvas1');
                     UI.Offcanvas.init(offcanvas1).show();
                 });
             });

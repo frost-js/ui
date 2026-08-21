@@ -29,6 +29,13 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
+     * Disable the Tooltip.
+     */
+    disable() {
+        this._enabled = false;
+    }
+
+    /**
      * Dispose the Tooltip.
      */
     dispose() {
@@ -70,13 +77,6 @@ export default class Tooltip extends BaseComponent {
         this._arrow = null;
 
         super.dispose();
-    }
-
-    /**
-     * Disable the Tooltip.
-     */
-    disable() {
-        this._enabled = false;
     }
 
     /**

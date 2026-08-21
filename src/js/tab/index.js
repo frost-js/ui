@@ -1,6 +1,6 @@
-import Tab from './tab.js';
 import { $, document } from './../globals.js';
 import { initComponent } from './../helpers.js';
+import Tab from './tab.js';
 
 // Tab default options
 Tab.defaults = {

@@ -1,7 +1,7 @@
-import { addPopper, getPopperPlacement, removePopper } from './helpers.js';
 import BaseComponent from './../base-component.js';
 import { $, document, window } from './../globals.js';
 import { getScrollContainer } from './../helpers.js';
+import { addPopper, getPopperPlacement, removePopper } from './helpers.js';
 
 /**
  * Popper Class

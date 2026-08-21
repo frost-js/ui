@@ -1,6 +1,6 @@
-import { getDirOffset, getDirection, getIndex } from './../helpers.js';
 import { $ } from './../../globals.js';
 import { getPosition } from './../../helpers.js';
+import { getDirOffset, getDirection, getIndex } from './../helpers.js';
 
 /**
  * Attach events for the Carousel.

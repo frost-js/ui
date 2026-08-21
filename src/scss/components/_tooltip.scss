@@ -16,7 +16,7 @@
     display: block;
     margin: 0;
     font-size: var(--ui-tooltip-font-size);
-    word-wrap: break-word;
+    overflow-wrap: break-word;
     opacity: 0;
     @include reset-text();
 

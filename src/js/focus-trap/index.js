@@ -1,5 +1,5 @@
-import FocusTrap from './focus-trap.js';
 import { initComponent } from './../helpers.js';
+import FocusTrap from './focus-trap.js';
 
 // FocusTrap default options
 FocusTrap.defaults = {

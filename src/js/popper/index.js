@@ -1,6 +1,6 @@
+import { initComponent } from './../helpers.js';
 import Popper from './popper.js';
 import { _updateArrow } from './prototype/helpers.js';
-import { initComponent } from './../helpers.js';
 
 // Popper default options
 Popper.defaults = {

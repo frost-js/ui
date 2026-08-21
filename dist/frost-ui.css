@@ -8,96 +8,96 @@
   --ui-gray: #808080;
   --ui-gray-rgb: 128, 128, 128;
   --ui-primary: #2759bc;
-  --ui-primary-emphasis: rgb(35.1, 80.1, 169.2);
-  --ui-primary-highlight: rgb(31.2, 71.2, 150.4);
-  --ui-primary-active: rgb(23.4, 53.4, 112.8);
-  --ui-primary-subtle: rgb(211.8, 221.8, 241.6);
-  --ui-primary-subtle-emphasis: rgb(190.2, 205.2, 234.9);
+  --ui-primary-emphasis: rgb(13.7647058824%, 31.4117647059%, 66.3529411765%);
+  --ui-primary-highlight: rgb(12.2352941176%, 27.9215686275%, 58.9803921569%);
+  --ui-primary-active: rgb(9.1764705882%, 20.9411764706%, 44.2352941176%);
+  --ui-primary-subtle: rgb(83.0588235294%, 86.9803921569%, 94.7450980392%);
+  --ui-primary-subtle-emphasis: rgb(74.5882352941%, 80.4705882353%, 92.1176470588%);
   --ui-primary-subtle-text: #2759bc;
   --ui-primary-contrast: #fff;
   --ui-primary-rgb: 39, 89, 188;
   --ui-primary-emphasis-rgb: 35, 80, 169;
   --ui-primary-subtle-rgb: 212, 222, 242;
   --ui-primary-contrast-rgb: 255, 255, 255;
-  --ui-secondary: rgb(102.4, 102.4, 102.4);
-  --ui-secondary-emphasis: rgb(92.16, 92.16, 92.16);
-  --ui-secondary-highlight: rgb(81.92, 81.92, 81.92);
-  --ui-secondary-active: rgb(61.44, 61.44, 61.44);
-  --ui-secondary-subtle: rgb(224.48, 224.48, 224.48);
-  --ui-secondary-subtle-emphasis: rgb(209.22, 209.22, 209.22);
-  --ui-secondary-subtle-text: rgb(81.92, 81.92, 81.92);
+  --ui-secondary: rgb(40.1568627451%, 40.1568627451%, 40.1568627451%);
+  --ui-secondary-emphasis: rgb(36.1411764706%, 36.1411764706%, 36.1411764706%);
+  --ui-secondary-highlight: rgb(32.1254901961%, 32.1254901961%, 32.1254901961%);
+  --ui-secondary-active: rgb(24.0941176471%, 24.0941176471%, 24.0941176471%);
+  --ui-secondary-subtle: rgb(88.031372549%, 88.031372549%, 88.031372549%);
+  --ui-secondary-subtle-emphasis: rgb(82.0470588235%, 82.0470588235%, 82.0470588235%);
+  --ui-secondary-subtle-text: rgb(32.1254901961%, 32.1254901961%, 32.1254901961%);
   --ui-secondary-contrast: #fff;
   --ui-secondary-rgb: 102, 102, 102;
   --ui-secondary-emphasis-rgb: 92, 92, 92;
   --ui-secondary-subtle-rgb: 224, 224, 224;
   --ui-secondary-contrast-rgb: 255, 255, 255;
   --ui-success: #008442;
-  --ui-success-emphasis: rgb(0, 118.8, 59.4);
-  --ui-success-highlight: rgb(0, 105.6, 52.8);
-  --ui-success-active: rgb(0, 79.2, 39.6);
-  --ui-success-subtle: rgb(204, 230.4, 217.2);
-  --ui-success-subtle-emphasis: rgb(178.5, 218.1, 198.3);
-  --ui-success-subtle-text: rgb(0, 105.6, 52.8);
+  --ui-success-emphasis: rgb(0%, 46.5882352941%, 23.2941176471%);
+  --ui-success-highlight: rgb(0%, 41.4117647059%, 20.7058823529%);
+  --ui-success-active: rgb(0%, 31.0588235294%, 15.5294117647%);
+  --ui-success-subtle: rgb(80%, 90.3529411765%, 85.1764705882%);
+  --ui-success-subtle-emphasis: rgb(70%, 85.5294117647%, 77.7647058824%);
+  --ui-success-subtle-text: rgb(0%, 41.4117647059%, 20.7058823529%);
   --ui-success-contrast: #fff;
   --ui-success-rgb: 0, 132, 66;
   --ui-success-emphasis-rgb: 0, 119, 59;
   --ui-success-subtle-rgb: 204, 230, 217;
   --ui-success-contrast-rgb: 255, 255, 255;
   --ui-info: #0ebbbb;
-  --ui-info-emphasis: rgb(12.6, 168.3, 168.3);
-  --ui-info-highlight: rgb(62.2, 200.6, 200.6);
-  --ui-info-active: rgb(110.4, 214.2, 214.2);
-  --ui-info-subtle: rgb(206.8, 241.4, 241.4);
-  --ui-info-subtle-emphasis: rgb(182.7, 234.6, 234.6);
-  --ui-info-subtle-text: rgb(8.4, 112.2, 112.2);
+  --ui-info-emphasis: rgb(4.9411764706%, 66%, 66%);
+  --ui-info-highlight: rgb(24.3921568627%, 78.6666666667%, 78.6666666667%);
+  --ui-info-active: rgb(43.2941176471%, 84%, 84%);
+  --ui-info-subtle: rgb(81.0980392157%, 94.6666666667%, 94.6666666667%);
+  --ui-info-subtle-emphasis: rgb(71.6470588235%, 92%, 92%);
+  --ui-info-subtle-text: rgb(3.2941176471%, 44%, 44%);
   --ui-info-contrast: #000;
   --ui-info-rgb: 14, 187, 187;
   --ui-info-emphasis-rgb: 13, 168, 168;
   --ui-info-subtle-rgb: 207, 241, 241;
   --ui-info-contrast-rgb: 0, 0, 0;
   --ui-warning: #f77625;
-  --ui-warning-emphasis: rgb(222.3, 106.2, 33.3);
-  --ui-warning-highlight: rgb(248.6, 145.4, 80.6);
-  --ui-warning-active: rgb(250.2, 172.8, 124.2);
-  --ui-warning-subtle: rgb(253.4, 227.6, 211.4);
-  --ui-warning-subtle-emphasis: rgb(252.6, 213.9, 189.6);
-  --ui-warning-subtle-text: rgb(148.2, 70.8, 22.2);
+  --ui-warning-emphasis: rgb(87.1764705882%, 41.6470588235%, 13.0588235294%);
+  --ui-warning-highlight: rgb(97.4901960784%, 57.0196078431%, 31.6078431373%);
+  --ui-warning-active: rgb(98.1176470588%, 67.7647058824%, 48.7058823529%);
+  --ui-warning-subtle: rgb(99.3725490196%, 89.2549019608%, 82.9019607843%);
+  --ui-warning-subtle-emphasis: rgb(99.0588235294%, 83.8823529412%, 74.3529411765%);
+  --ui-warning-subtle-text: rgb(58.1176470588%, 27.7647058824%, 8.7058823529%);
   --ui-warning-contrast: #000;
   --ui-warning-rgb: 247, 118, 37;
   --ui-warning-emphasis-rgb: 222, 106, 33;
   --ui-warning-subtle-rgb: 253, 228, 211;
   --ui-warning-contrast-rgb: 0, 0, 0;
   --ui-danger: #c71010;
-  --ui-danger-emphasis: rgb(179.1, 14.4, 14.4);
-  --ui-danger-highlight: rgb(159.2, 12.8, 12.8);
-  --ui-danger-active: rgb(119.4, 9.6, 9.6);
-  --ui-danger-subtle: rgb(243.8, 207.2, 207.2);
-  --ui-danger-subtle-emphasis: rgb(238.2, 183.3, 183.3);
-  --ui-danger-subtle-text: rgb(159.2, 12.8, 12.8);
+  --ui-danger-emphasis: rgb(70.2352941176%, 5.6470588235%, 5.6470588235%);
+  --ui-danger-highlight: rgb(62.431372549%, 5.0196078431%, 5.0196078431%);
+  --ui-danger-active: rgb(46.8235294118%, 3.7647058824%, 3.7647058824%);
+  --ui-danger-subtle: rgb(95.6078431373%, 81.2549019608%, 81.2549019608%);
+  --ui-danger-subtle-emphasis: rgb(93.4117647059%, 71.8823529412%, 71.8823529412%);
+  --ui-danger-subtle-text: rgb(62.431372549%, 5.0196078431%, 5.0196078431%);
   --ui-danger-contrast: #fff;
   --ui-danger-rgb: 199, 16, 16;
   --ui-danger-emphasis-rgb: 179, 14, 14;
   --ui-danger-subtle-rgb: 244, 207, 207;
   --ui-danger-contrast-rgb: 255, 255, 255;
-  --ui-light: rgb(229.6, 229.6, 229.6);
-  --ui-light-emphasis: rgb(206.64, 206.64, 206.64);
-  --ui-light-highlight: rgb(183.68, 183.68, 183.68);
-  --ui-light-active: rgb(137.76, 137.76, 137.76);
-  --ui-light-subtle: rgb(249.92, 249.92, 249.92);
-  --ui-light-subtle-emphasis: rgb(237.22, 237.22, 237.22);
-  --ui-light-subtle-text: rgb(91.84, 91.84, 91.84);
+  --ui-light: rgb(90.0392156863%, 90.0392156863%, 90.0392156863%);
+  --ui-light-emphasis: rgb(81.0352941176%, 81.0352941176%, 81.0352941176%);
+  --ui-light-highlight: rgb(72.031372549%, 72.031372549%, 72.031372549%);
+  --ui-light-active: rgb(54.0235294118%, 54.0235294118%, 54.0235294118%);
+  --ui-light-subtle: rgb(98.0078431373%, 98.0078431373%, 98.0078431373%);
+  --ui-light-subtle-emphasis: rgb(93.0274509804%, 93.0274509804%, 93.0274509804%);
+  --ui-light-subtle-text: rgb(36.0156862745%, 36.0156862745%, 36.0156862745%);
   --ui-light-contrast: #000;
   --ui-light-rgb: 230, 230, 230;
   --ui-light-emphasis-rgb: 207, 207, 207;
   --ui-light-subtle-rgb: 250, 250, 250;
   --ui-light-contrast-rgb: 0, 0, 0;
-  --ui-dark: rgb(51.2, 51.2, 51.2);
-  --ui-dark-emphasis: rgb(46.08, 46.08, 46.08);
-  --ui-dark-highlight: rgb(91.96, 91.96, 91.96);
-  --ui-dark-active: rgb(132.72, 132.72, 132.72);
-  --ui-dark-subtle: rgb(214.24, 214.24, 214.24);
-  --ui-dark-subtle-emphasis: rgb(193.86, 193.86, 193.86);
-  --ui-dark-subtle-text: rgb(51.2, 51.2, 51.2);
+  --ui-dark: rgb(20.0784313725%, 20.0784313725%, 20.0784313725%);
+  --ui-dark-emphasis: rgb(18.0705882353%, 18.0705882353%, 18.0705882353%);
+  --ui-dark-highlight: rgb(36.062745098%, 36.062745098%, 36.062745098%);
+  --ui-dark-active: rgb(52.0470588235%, 52.0470588235%, 52.0470588235%);
+  --ui-dark-subtle: rgb(84.0156862745%, 84.0156862745%, 84.0156862745%);
+  --ui-dark-subtle-emphasis: rgb(76.0235294118%, 76.0235294118%, 76.0235294118%);
+  --ui-dark-subtle-text: rgb(20.0784313725%, 20.0784313725%, 20.0784313725%);
   --ui-dark-contrast: #fff;
   --ui-dark-rgb: 51, 51, 51;
   --ui-dark-emphasis-rgb: 46, 46, 46;
@@ -115,27 +115,27 @@
   --ui-body-line-height: 1.5;
   --ui-body-bg: #fff;
   --ui-body-bg-rgb: 255, 255, 255;
-  --ui-body-color: rgb(25.6, 25.6, 25.6);
+  --ui-body-color: rgb(10.0392156863%, 10.0392156863%, 10.0392156863%);
   --ui-body-color-rgb: 26, 26, 26;
-  --ui-secondary-bg: rgb(229.6, 229.6, 229.6);
+  --ui-secondary-bg: rgb(90.0392156863%, 90.0392156863%, 90.0392156863%);
   --ui-secondary-bg-rgb: 230, 230, 230;
-  --ui-secondary-color: rgba(25.6, 25.6, 25.6, 0.7);
+  --ui-secondary-color: rgba(10.0392156863%, 10.0392156863%, 10.0392156863%, 0.7);
   --ui-secondary-color-rgb: 26, 26, 26;
-  --ui-tertiary-bg: rgb(242.3, 242.3, 242.3);
+  --ui-tertiary-bg: rgb(95.0196078431%, 95.0196078431%, 95.0196078431%);
   --ui-tertiary-bg-rgb: 242, 242, 242;
-  --ui-tertiary-color: rgba(25.6, 25.6, 25.6, 0.5);
+  --ui-tertiary-color: rgba(10.0392156863%, 10.0392156863%, 10.0392156863%, 0.5);
   --ui-tertiary-color-rgb: 26, 26, 26;
   --ui-emphasis-color: #000;
   --ui-emphasis-color-rgb: 0, 0, 0;
   --ui-link-color: #2759bc;
   --ui-link-color-rgb: 39, 89, 188;
   --ui-link-decoration: underline;
-  --ui-link-hover-color: rgb(23.4, 53.4, 112.8);
+  --ui-link-hover-color: rgb(9.1764705882%, 20.9411764706%, 44.2352941176%);
   --ui-link-hover-color-rgb: 23, 53, 113;
   --ui-link-hover-decoration: underline;
-  --ui-code-color: rgb(210.2, 63.8, 63.8);
-  --ui-mark-bg: rgb(255, 248.2, 213.6);
-  --ui-border-color: rgb(204.2, 204.2, 204.2);
+  --ui-code-color: rgb(82.431372549%, 25.0196078431%, 25.0196078431%);
+  --ui-mark-bg: rgb(100%, 97.3333333333%, 83.7647058824%);
+  --ui-border-color: rgb(80.0784313725%, 80.0784313725%, 80.0784313725%);
   --ui-border-color-translucent: rgba(0, 0, 0, 0.15);
   --ui-border-width: 1px;
   --ui-border-style: solid;
@@ -171,73 +171,73 @@
 
 [data-ui-theme=dark] {
   color-scheme: dark;
-  --ui-primary-emphasis: rgb(60.6, 105.6, 194.7);
-  --ui-primary-subtle: rgb(15.6, 35.6, 75.2);
-  --ui-primary-subtle-emphasis: rgb(19.5, 44.5, 94);
-  --ui-primary-subtle-text: rgb(125.4, 155.4, 214.8);
+  --ui-primary-emphasis: rgb(23.7647058824%, 41.4117647059%, 76.3529411765%);
+  --ui-primary-subtle: rgb(6.1176470588%, 13.9607843137%, 29.4901960784%);
+  --ui-primary-subtle-emphasis: rgb(7.6470588235%, 17.4509803922%, 36.862745098%);
+  --ui-primary-subtle-text: rgb(49.1764705882%, 60.9411764706%, 84.2352941176%);
   --ui-primary-emphasis-rgb: 61, 106, 195;
   --ui-primary-subtle-rgb: 16, 36, 75;
-  --ui-secondary-emphasis: rgb(117.66, 117.66, 117.66);
-  --ui-secondary-subtle: rgb(40.96, 40.96, 40.96);
-  --ui-secondary-subtle-emphasis: rgb(51.2, 51.2, 51.2);
-  --ui-secondary-subtle-text: rgb(163.44, 163.44, 163.44);
+  --ui-secondary-emphasis: rgb(46.1411764706%, 46.1411764706%, 46.1411764706%);
+  --ui-secondary-subtle: rgb(16.062745098%, 16.062745098%, 16.062745098%);
+  --ui-secondary-subtle-emphasis: rgb(20.0784313725%, 20.0784313725%, 20.0784313725%);
+  --ui-secondary-subtle-text: rgb(64.0941176471%, 64.0941176471%, 64.0941176471%);
   --ui-secondary-emphasis-rgb: 118, 118, 118;
   --ui-secondary-subtle-rgb: 41, 41, 41;
-  --ui-success-emphasis: rgb(25.5, 144.3, 84.9);
-  --ui-success-subtle: rgb(0, 52.8, 26.4);
+  --ui-success-emphasis: rgb(10%, 56.5882352941%, 33.2941176471%);
+  --ui-success-subtle: rgb(0%, 20.7058823529%, 10.3529411765%);
   --ui-success-subtle-emphasis: #004221;
-  --ui-success-subtle-text: rgb(102, 181.2, 141.6);
+  --ui-success-subtle-text: rgb(40%, 71.0588235294%, 55.5294117647%);
   --ui-success-emphasis-rgb: 25, 144, 85;
   --ui-success-subtle-rgb: 0, 53, 26;
-  --ui-info-emphasis: rgb(38.1, 193.8, 193.8);
-  --ui-info-subtle: rgb(5.6, 74.8, 74.8);
-  --ui-info-subtle-emphasis: rgb(7, 93.5, 93.5);
-  --ui-info-subtle-text: rgb(62.2, 200.6, 200.6);
+  --ui-info-emphasis: rgb(14.9411764706%, 76%, 76%);
+  --ui-info-subtle: rgb(2.1960784314%, 29.3333333333%, 29.3333333333%);
+  --ui-info-subtle-emphasis: rgb(2.7450980392%, 36.6666666667%, 36.6666666667%);
+  --ui-info-subtle-text: rgb(24.3921568627%, 78.6666666667%, 78.6666666667%);
   --ui-info-emphasis-rgb: 38, 194, 194;
   --ui-info-subtle-rgb: 6, 75, 75;
-  --ui-warning-emphasis: rgb(247.8, 131.7, 58.8);
-  --ui-warning-subtle: rgb(98.8, 47.2, 14.8);
-  --ui-warning-subtle-emphasis: rgb(123.5, 59, 18.5);
-  --ui-warning-subtle-text: rgb(248.6, 145.4, 80.6);
+  --ui-warning-emphasis: rgb(97.1764705882%, 51.6470588235%, 23.0588235294%);
+  --ui-warning-subtle: rgb(38.7450980392%, 18.5098039216%, 5.8039215686%);
+  --ui-warning-subtle-emphasis: rgb(48.431372549%, 23.137254902%, 7.2549019608%);
+  --ui-warning-subtle-text: rgb(97.4901960784%, 57.0196078431%, 31.6078431373%);
   --ui-warning-emphasis-rgb: 248, 132, 59;
   --ui-warning-subtle-rgb: 99, 47, 15;
-  --ui-danger-emphasis: rgb(204.6, 39.9, 39.9);
-  --ui-danger-subtle: rgb(79.6, 6.4, 6.4);
-  --ui-danger-subtle-emphasis: rgb(99.5, 8, 8);
-  --ui-danger-subtle-text: rgb(221.4, 111.6, 111.6);
+  --ui-danger-emphasis: rgb(80.2352941176%, 15.6470588235%, 15.6470588235%);
+  --ui-danger-subtle: rgb(31.2156862745%, 2.5098039216%, 2.5098039216%);
+  --ui-danger-subtle-emphasis: rgb(39.0196078431%, 3.137254902%, 3.137254902%);
+  --ui-danger-subtle-text: rgb(86.8235294118%, 43.7647058824%, 43.7647058824%);
   --ui-danger-emphasis-rgb: 205, 40, 40;
   --ui-danger-subtle-rgb: 80, 6, 6;
-  --ui-light-emphasis: rgb(242.3, 242.3, 242.3);
-  --ui-light-subtle: rgb(91.84, 91.84, 91.84);
-  --ui-light-subtle-emphasis: rgb(160.72, 160.72, 160.72);
-  --ui-light-subtle-text: rgb(229.6, 229.6, 229.6);
+  --ui-light-emphasis: rgb(95.0196078431%, 95.0196078431%, 95.0196078431%);
+  --ui-light-subtle: rgb(36.0156862745%, 36.0156862745%, 36.0156862745%);
+  --ui-light-subtle-emphasis: rgb(63.0274509804%, 63.0274509804%, 63.0274509804%);
+  --ui-light-subtle-text: rgb(90.0392156863%, 90.0392156863%, 90.0392156863%);
   --ui-light-emphasis-rgb: 242, 242, 242;
   --ui-light-subtle-rgb: 92, 92, 92;
-  --ui-dark-emphasis: rgb(71.58, 71.58, 71.58);
-  --ui-dark-subtle: rgb(30.72, 30.72, 30.72);
-  --ui-dark-subtle-emphasis: rgb(40.96, 40.96, 40.96);
-  --ui-dark-subtle-text: rgb(173.48, 173.48, 173.48);
+  --ui-dark-emphasis: rgb(28.0705882353%, 28.0705882353%, 28.0705882353%);
+  --ui-dark-subtle: rgb(12.0470588235%, 12.0470588235%, 12.0470588235%);
+  --ui-dark-subtle-emphasis: rgb(16.062745098%, 16.062745098%, 16.062745098%);
+  --ui-dark-subtle-text: rgb(68.031372549%, 68.031372549%, 68.031372549%);
   --ui-dark-emphasis-rgb: 72, 72, 72;
   --ui-dark-subtle-rgb: 31, 31, 31;
-  --ui-body-bg: rgb(25.6, 25.6, 25.6);
+  --ui-body-bg: rgb(10.0392156863%, 10.0392156863%, 10.0392156863%);
   --ui-body-bg-rgb: 26, 26, 26;
-  --ui-body-color: rgb(204.2, 204.2, 204.2);
+  --ui-body-color: rgb(80.0784313725%, 80.0784313725%, 80.0784313725%);
   --ui-body-color-rgb: 204, 204, 204;
-  --ui-secondary-bg: rgb(51.2, 51.2, 51.2);
+  --ui-secondary-bg: rgb(20.0784313725%, 20.0784313725%, 20.0784313725%);
   --ui-secondary-bg-rgb: 51, 51, 51;
-  --ui-secondary-color: rgba(204.2, 204.2, 204.2, 0.7);
+  --ui-secondary-color: rgba(80.0784313725%, 80.0784313725%, 80.0784313725%, 0.7);
   --ui-secondary-color-rgb: 204, 204, 204;
-  --ui-tertiary-bg: rgb(38.4, 38.4, 38.4);
+  --ui-tertiary-bg: rgb(15.0588235294%, 15.0588235294%, 15.0588235294%);
   --ui-tertiary-bg-rgb: 38, 38, 38;
-  --ui-tertiary-color: rgba(204.2, 204.2, 204.2, 0.5);
+  --ui-tertiary-color: rgba(80.0784313725%, 80.0784313725%, 80.0784313725%, 0.5);
   --ui-tertiary-color-rgb: 204, 204, 204;
   --ui-emphasis-color: #fff;
   --ui-emphasis-color-rgb: 255, 255, 255;
-  --ui-link-color: rgb(103.8, 138.8, 208.1);
+  --ui-link-color: rgb(40.7058823529%, 54.431372549%, 81.6078431373%);
   --ui-link-color-rgb: 104, 139, 208;
-  --ui-link-hover-color: rgb(190.2, 205.2, 234.9);
+  --ui-link-hover-color: rgb(74.5882352941%, 80.4705882353%, 92.1176470588%);
   --ui-link-hover-color-rgb: 190, 205, 235;
-  --ui-border-color: rgb(76.8, 76.8, 76.8);
+  --ui-border-color: rgb(30.1176470588%, 30.1176470588%, 30.1176470588%);
   --ui-border-color-translucent: rgba(255, 255, 255, 0.15);
 }
 
@@ -430,7 +430,7 @@ pre code {
 code {
   font-size: 0.875em;
   color: var(--ui-code-color);
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 a > code {
   color: inherit;
@@ -523,7 +523,7 @@ select:not([multiple]) > * {
 }
 
 select {
-  word-wrap: normal;
+  overflow-wrap: normal;
 }
 select:disabled {
   opacity: 1;
@@ -2593,7 +2593,7 @@ fieldset:disabled .btn {
   flex-direction: column;
   min-width: 0;
   color: var(--ui-body-color);
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   background-color: var(--ui-card-bg);
   background-clip: border-box;
   border: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
@@ -4578,13 +4578,13 @@ fieldset:disabled .btn {
   text-transform: none;
   word-spacing: normal;
   letter-spacing: normal;
+  line-break: auto;
   word-break: normal;
   white-space: normal;
   text-decoration: none;
   text-shadow: none;
-  line-break: auto;
   font-size: var(--ui-font-size-sm);
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   background-color: var(--ui-popover-bg);
   background-clip: padding-box;
   border: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);
@@ -4830,7 +4830,6 @@ fieldset:disabled .btn {
   background-clip: padding-box;
   border: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-border-color);
   opacity: 0;
-  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-radius: var(--ui-toast-border-radius);
 }
@@ -4870,7 +4869,7 @@ fieldset:disabled .btn {
 
 .toast-body {
   padding: var(--ui-toast-padding-x);
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .tooltip {
@@ -4890,7 +4889,7 @@ fieldset:disabled .btn {
   display: block;
   margin: 0;
   font-size: var(--ui-tooltip-font-size);
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   opacity: 0;
   font-family: -apple-system, blinkmacsystemfont, "Segoe UI", tahoma, geneva, verdana, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 0.875em;
@@ -4901,11 +4900,11 @@ fieldset:disabled .btn {
   text-transform: none;
   word-spacing: normal;
   letter-spacing: normal;
+  line-break: auto;
   word-break: normal;
   white-space: normal;
   text-decoration: none;
   text-shadow: none;
-  line-break: auto;
 }
 .tooltip.show {
   opacity: var(--ui-tooltip-opacity);
@@ -5081,7 +5080,7 @@ fieldset:disabled .btn {
 .btn-check {
   position: absolute;
   pointer-events: none;
-  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
 }
 
 .form-text {
@@ -5174,13 +5173,6 @@ select.input-filled, select.input-outline {
   -moz-appearance: none;
   appearance: none;
 }
-select.input-filled:not([multiple]), select.input-outline:not([multiple]) {
-  padding-right: calc(1rem + 16px);
-  background-image: var(--ui-select-arrow-background-image);
-  background-repeat: no-repeat;
-  background-position: right 0.5rem center;
-  background-size: 16px 12px;
-}
 select.input-filled:not([multiple]), select.input-outline:not([multiple]),
 [data-ui-theme=light] select.input-filled:not([multiple]), [data-ui-theme=light] select.input-outline:not([multiple]) {
   --ui-select-arrow-background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%230008' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
@@ -5190,6 +5182,13 @@ select.input-filled:not([multiple]), select.input-outline:not([multiple]),
   --ui-select-arrow-background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23FFF8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
 }
 
+select.input-filled:not([multiple]), select.input-outline:not([multiple]) {
+  padding-right: calc(1rem + 16px);
+  background-image: var(--ui-select-arrow-background-image);
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 16px 12px;
+}
 select.input-filled[multiple], select.input-outline[multiple] {
   padding: 0;
 }
@@ -5921,7 +5920,7 @@ select.input-lg[multiple] option {
   overflow: hidden !important;
   white-space: nowrap !important;
   border: 0 !important;
-  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
 }
 .visually-hidden:not(caption),
 .visually-hidden-focusable:not(:focus):not(caption) {

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { exec } from './../setup.js';
 import { waitFor } from './../helpers.js';
+import { exec } from './../setup.js';
 
 describe('Popover', function() {
     beforeEach(async function() {
@@ -1647,6 +1647,7 @@ describe('Popover', function() {
                 });
             }).then(waitFor(50)).then(async (_) => {
                 await exec((_) => {
+                    const popoverToggle1 = $.findOne('#popoverToggle1');
                     $.triggerEvent(popoverToggle1, 'mouseout');
                 });
             }).then(waitFor(50)).then(async (_) => {
@@ -1669,6 +1670,7 @@ describe('Popover', function() {
                 });
             }).then(waitFor(50)).then(async (_) => {
                 await exec((_) => {
+                    const popoverToggle1 = $.findOne('#popoverToggle1');
                     $.triggerEvent(popoverToggle1, 'blur');
                 });
             }).then(waitFor(50)).then(async (_) => {
@@ -1691,6 +1693,7 @@ describe('Popover', function() {
                 });
             }).then(waitFor(50)).then(async (_) => {
                 await exec((_) => {
+                    const popoverToggle1 = $.findOne('#popoverToggle1');
                     $.triggerEvent(popoverToggle1, 'click');
                 });
             }).then(waitFor(50)).then(async (_) => {
