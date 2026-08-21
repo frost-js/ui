@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { beforeEach, describe, it } from 'mocha';
 import { exec } from './../setup.js';
 
 describe('popper container', function() {

@@ -18,20 +18,14 @@ export default [
         ],
     },
     {
-        name: '@fr0st/ui/test-globals',
+        name: '@fr0st/ui/browser-globals',
         files: [
             'test/**/*.js',
         ],
         languageOptions: {
             globals: {
                 $: 'readonly',
-                after: 'readonly',
-                afterEach: 'readonly',
                 Animation: 'readonly',
-                before: 'readonly',
-                beforeEach: 'readonly',
-                describe: 'readonly',
-                it: 'readonly',
                 UI: 'readonly',
             },
         },

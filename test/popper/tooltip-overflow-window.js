@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { beforeEach, describe, it } from 'mocha';
 import { exec, screenshot } from './../setup.js';
 
 describe('popper tooltip (overflow/window)', function() {

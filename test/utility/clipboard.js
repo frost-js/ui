@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { describe, it } from 'mocha';
 import { exec } from './../setup.js';
 
 describe('Clipboard', function() {
