@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
 import { expectAnimationState } from '../../support/assertions/animation.js';
+import { expectStyles } from '../../support/assertions/styles.js';
 import { measureScrollbarSize } from '../../support/measurements/scrollbar.js';
 
 test.beforeEach(async ({ page }) => {
@@ -1428,6 +1429,9 @@ test.describe('Modal', () => {
     test.describe('scroll padding', () => {
         test('adds scroll padding (vertical)', async ({ page }) => {
             const scrollbarSize = await measureScrollbarSize(page);
+            const paddingRight = scrollbarSize ?
+                `${scrollbarSize}px` :
+                '';
 
             await page.evaluate((_) => {
                 $.setStyle(document.body, { height: '2000px' });
@@ -1441,8 +1445,12 @@ test.describe('Modal', () => {
             });
             await advanceClock(page, 50);
 
-            await expect(page.locator('body')).toHaveCSS('padding-right', `${scrollbarSize}px`);
-            await expect(page.locator('#modalDialog1')).toHaveCSS('padding-right', `${scrollbarSize}px`);
+            await expectStyles(page, [
+                {
+                    selectors: ['body', '#modalDialog1'],
+                    styles: { paddingRight },
+                },
+            ]);
         });
 
         test('does not add padding if scrollbars are hidden (vertical)', async ({ page }) => {
@@ -1457,8 +1465,12 @@ test.describe('Modal', () => {
             });
             await advanceClock(page, 50);
 
-            await expect(page.locator('body')).toHaveCSS('padding-right', '0px');
-            await expect(page.locator('#modalDialog1')).toHaveCSS('padding-right', '0px');
+            await expectStyles(page, [
+                {
+                    selectors: ['body', '#modalDialog1'],
+                    styles: { paddingRight: '' },
+                },
+            ]);
         });
 
         test('works with existing padding (vertical)', async ({ page }) => {
@@ -1479,7 +1491,12 @@ test.describe('Modal', () => {
             });
             await advanceClock(page, 50);
 
-            await expect(page.locator('body')).toHaveCSS('padding-right', `${scrollbarSize + 10}px`);
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: `${scrollbarSize + 10}px` },
+                },
+            ]);
         });
 
         test('restores scroll padding (vertical)', async ({ page }) => {
@@ -1505,8 +1522,12 @@ test.describe('Modal', () => {
             });
             await advanceClock(page, 50);
 
-            await expect(page.locator('body')).toHaveCSS('padding-right', '0px');
-            await expect(page.locator('#modalDialog1')).toHaveCSS('padding-right', '0px');
+            await expectStyles(page, [
+                {
+                    selectors: ['body', '#modalDialog1'],
+                    styles: { paddingRight: '' },
+                },
+            ]);
         });
 
         test('restores existing scroll padding to document body (vertical)', async ({ page }) => {
@@ -1535,7 +1556,12 @@ test.describe('Modal', () => {
             });
             await advanceClock(page, 50);
 
-            await expect(page.locator('body')).toHaveCSS('padding-right', '10px');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: '10px' },
+                },
+            ]);
         });
     });
 });

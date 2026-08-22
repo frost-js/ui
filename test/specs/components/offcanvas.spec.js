@@ -1212,6 +1212,9 @@ test.describe('Offcanvas', () => {
     test.describe('scroll padding', () => {
         test('adds scroll padding to document body', async ({ page }) => {
             const scrollbarSize = await measureScrollbarSize(page);
+            const paddingRight = scrollbarSize ?
+                `${scrollbarSize}px` :
+                '';
 
             await page.evaluate((_) => {
                 $.setStyle(document.body, { height: '2000px' });
@@ -1224,7 +1227,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            await expect(page.locator('body')).toHaveCSS('padding-right', `${scrollbarSize}px`);
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight },
+                },
+            ]);
         });
 
         test('does not add padding if scrollbars are hidden', async ({ page }) => {
@@ -1263,7 +1271,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            await expect(page.locator('body')).toHaveCSS('padding-right', `${scrollbarSize + 10}px`);
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: `${scrollbarSize + 10}px` },
+                },
+            ]);
         });
 
         test('restores scroll padding to document body', async ({ page }) => {
