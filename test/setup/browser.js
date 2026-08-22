@@ -20,6 +20,17 @@ export async function advanceClock(page, milliseconds) {
 }
 
 /**
+ * Wait for callbacks queued for the next animation frame.
+ * @param {import('@playwright/test').Page} page The Playwright page.
+ * @returns {Promise<void>} The promise.
+ */
+export async function waitForFrame(page) {
+    await page.evaluate((_) => new Promise((resolve) => {
+        window.requestAnimationFrame(resolve);
+    }));
+}
+
+/**
  * Reset the browser page and FrostUI defaults.
  * @param {import('@playwright/test').Page} page The Playwright page.
  * @returns {Promise<void>} The promise.
