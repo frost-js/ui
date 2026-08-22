@@ -1,6 +1,10 @@
 import { defineConfig } from '@playwright/test';
 
-const browserSpecificPositioningTests = '**/popper/*.spec.js';
+const browserSpecificPositioningTests = [
+    '**/popper/dropdown*.spec.js',
+    '**/popper/popover*.spec.js',
+    '**/popper/tooltip*.spec.js',
+];
 
 export default defineConfig({
     projects: [

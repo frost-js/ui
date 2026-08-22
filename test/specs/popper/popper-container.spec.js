@@ -11,9 +11,9 @@ test.describe('Popper container', () => {
         await page.evaluate((_) => {
             document.body.innerHTML =
                 '<div id="container" style="width: 50px; height: 50px;">' +
-                '<button class="btn btn-secondary" id="button" type="button">Button</button>' +
+                '<button class="btn btn-secondary" id="button" style="width: 80px; height: 34px;" type="button">Button</button>' +
                 '</div>' +
-                '<div class="badge" id="badge">Badge</div>';
+                '<div class="badge" id="badge" style="width: 60px; height: 21px;">Badge</div>';
         });
     });
 
@@ -31,7 +31,7 @@ test.describe('Popper container', () => {
             await expectStyles(page, [
                 {
                     selectors: ['#badge'],
-                    styles: { transform: 'translate3d(-7px, 34px, 0px)' },
+                    styles: { transform: 'translate3d(-10px, 34px, 0px)' },
                 },
             ]);
         });
@@ -48,7 +48,7 @@ test.describe('Popper container', () => {
             await expectStyles(page, [
                 {
                     selectors: ['#badge'],
-                    styles: { transform: 'translate3d(-7px, 34px, 0px)' },
+                    styles: { transform: 'translate3d(-10px, 34px, 0px)' },
                 },
             ]);
         });
