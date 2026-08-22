@@ -206,7 +206,7 @@ test.describe('Popper Tooltip (overflow/window)', () => {
 
         test('works with right/start and bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
-                document.scrollingElement.scrollTop = 1040;
+                document.scrollingElement.scrollTop = 1020;
                 const tooltipToggle = document.querySelector('#tooltipToggle');
                 const tooltip = UI.Tooltip.init(tooltipToggle, {
                     placement: 'right',
@@ -250,7 +250,7 @@ test.describe('Popper Tooltip (overflow/window)', () => {
 
         test('works with right/center and bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
-                document.scrollingElement.scrollTop = 1040;
+                document.scrollingElement.scrollTop = 1020;
                 const tooltipToggle = document.querySelector('#tooltipToggle');
                 const tooltip = UI.Tooltip.init(tooltipToggle, {
                     placement: 'right',
@@ -382,7 +382,7 @@ test.describe('Popper Tooltip (overflow/window)', () => {
 
         test('works with left/start and bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
-                document.scrollingElement.scrollTop = 1040;
+                document.scrollingElement.scrollTop = 1020;
                 const tooltipToggle = document.querySelector('#tooltipToggle');
                 const tooltip = UI.Tooltip.init(tooltipToggle, {
                     placement: 'left',
@@ -426,7 +426,7 @@ test.describe('Popper Tooltip (overflow/window)', () => {
 
         test('works with left/center and bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
-                document.scrollingElement.scrollTop = 1040;
+                document.scrollingElement.scrollTop = 1020;
                 const tooltipToggle = document.querySelector('#tooltipToggle');
                 const tooltip = UI.Tooltip.init(tooltipToggle, {
                     placement: 'left',
