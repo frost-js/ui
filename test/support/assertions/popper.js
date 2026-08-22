@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { measureScrollbarSize } from '../measurements/scrollbar.js';
 
 /**
  * @typedef {'top'|'right'|'bottom'|'left'} PopperPlacement
@@ -99,10 +100,17 @@ export async function expectPopperPosition(page, {
             bottom: popperBottom,
             left: popperBox.x,
         };
+        const contact = minContact ?? 0;
+        const clampedEdges = {
+            top: Math.min(boundaryBox.top, referenceBottom - contact),
+            right: Math.max(boundaryBox.right, referenceBox.x + contact),
+            bottom: Math.max(boundaryBox.bottom, referenceBox.y + contact),
+            left: Math.min(boundaryBox.left, referenceRight - contact),
+        };
 
         expectCoordinate(
             popperEdges[boundaryEdge],
-            boundaryBox[boundaryEdge],
+            clampedEdges[boundaryEdge],
             `${popper} ${boundaryEdge} boundary`,
         );
     }
@@ -123,26 +131,42 @@ export async function expectPopperPosition(page, {
  * @returns {Promise<{top: number, right: number, bottom: number, left: number}>} The box.
  */
 async function getBoundaryBox(page, selector) {
-    return page.evaluate((selector) => {
+    const scrollbarSize = await measureScrollbarSize(page);
+
+    return page.evaluate(({ selector, scrollbarSize }) => {
         if (!selector) {
+            const root = document.documentElement;
+            const scrollSizeX = root.scrollWidth > window.innerWidth ?
+                scrollbarSize :
+                0;
+            const scrollSizeY = root.scrollHeight > window.innerHeight ?
+                scrollbarSize :
+                0;
+
             return {
                 top: 0,
-                right: document.documentElement.clientWidth,
-                bottom: document.documentElement.clientHeight,
+                right: window.innerWidth - scrollSizeY,
+                bottom: window.innerHeight - scrollSizeX,
                 left: 0,
             };
         }
 
         const node = document.querySelector(selector);
         const rect = node.getBoundingClientRect();
+        const scrollSizeX = node.scrollWidth > node.clientWidth ?
+            scrollbarSize :
+            0;
+        const scrollSizeY = node.scrollHeight > node.clientHeight ?
+            scrollbarSize :
+            0;
 
         return {
             top: rect.top,
-            right: rect.right,
-            bottom: rect.bottom,
+            right: rect.right - scrollSizeY,
+            bottom: rect.bottom - scrollSizeX,
             left: rect.left,
         };
-    }, selector);
+    }, { selector, scrollbarSize });
 }
 
 /**

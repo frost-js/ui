@@ -410,7 +410,7 @@ test.describe('Popper Popover (overflow)', () => {
 
         test('works with bottom/center and bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
-                document.querySelector('#scroll').scrollTop = 1130;
+                document.querySelector('#scroll').scrollTop = 1100;
                 const popoverToggle = document.querySelector('#popoverToggle');
                 const popover = UI.Popover.init(popoverToggle, {
                     placement: 'bottom',

@@ -410,7 +410,7 @@ test.describe('Popper Tooltip (overflow)', () => {
 
         test('works with bottom/center and bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
-                document.querySelector('#scroll').scrollTop = 1080;
+                document.querySelector('#scroll').scrollTop = 1050;
                 const tooltipToggle = document.querySelector('#tooltipToggle');
                 const tooltip = UI.Tooltip.init(tooltipToggle, {
                     placement: 'bottom',
