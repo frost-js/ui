@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { resetPage, waitForFrame } from '../../setup/browser.js';
-import { expectStyles } from '../../support/assertions/styles.js';
+import { expectPopperPosition } from '../../support/assertions/popper.js';
 
 test.beforeEach(async ({ page }) => {
     await resetPage(page);
@@ -46,12 +46,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1173px, 1637px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'bottom',
+                position: 'center',
+                spacing: 3,
+            });
         });
 
         test('works with right/center and right edge', async ({ page }) => {
@@ -67,12 +68,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1037px, 1560px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'left',
+                position: 'center',
+                spacing: 3,
+            });
         });
 
         test('works with bottom/center and bottom edge', async ({ page }) => {
@@ -88,12 +90,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1173px, 1483px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'top',
+                position: 'center',
+                spacing: 3,
+            });
         });
 
         test('works with left/center and left edge', async ({ page }) => {
@@ -109,12 +112,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1306px, 1560px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'right',
+                position: 'center',
+                spacing: 3,
+            });
         });
     });
 
@@ -132,12 +136,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1145px, 1483px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'top',
+                spacing: 3,
+                boundaryEdge: 'right',
+            });
         });
 
         test('works with top/center and right edge', async ({ page }) => {
@@ -153,12 +158,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1145px, 1483px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'top',
+                spacing: 3,
+                boundaryEdge: 'right',
+            });
         });
 
         test('works with top/center and left edge', async ({ page }) => {
@@ -174,12 +180,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1200px, 1483px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'top',
+                spacing: 3,
+                boundaryEdge: 'left',
+            });
         });
 
         test('works with top/end and left edge', async ({ page }) => {
@@ -195,12 +202,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1200px, 1483px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'top',
+                spacing: 3,
+                boundaryEdge: 'left',
+            });
         });
 
         test('works with right/start and bottom edge', async ({ page }) => {
@@ -216,12 +224,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1306px, 1519px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'right',
+                spacing: 3,
+                boundaryEdge: 'bottom',
+            });
         });
 
         test('works with right/center and top edge', async ({ page }) => {
@@ -237,12 +246,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1306px, 1600px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'right',
+                spacing: 3,
+                boundaryEdge: 'top',
+            });
         });
 
         test('works with right/center and bottom edge', async ({ page }) => {
@@ -258,12 +268,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1306px, 1519px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'right',
+                spacing: 3,
+                boundaryEdge: 'bottom',
+            });
         });
 
         test('works with right/end and top edge', async ({ page }) => {
@@ -279,12 +290,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1306px, 1600px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'right',
+                spacing: 3,
+                boundaryEdge: 'top',
+            });
         });
 
         test('works with bottom/start and right edge', async ({ page }) => {
@@ -300,12 +312,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1145px, 1637px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'bottom',
+                spacing: 3,
+                boundaryEdge: 'right',
+            });
         });
 
         test('works with bottom/center and right edge', async ({ page }) => {
@@ -321,12 +334,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1145px, 1637px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'bottom',
+                spacing: 3,
+                boundaryEdge: 'right',
+            });
         });
 
         test('works with bottom/center and left edge', async ({ page }) => {
@@ -342,12 +356,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1200px, 1637px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'bottom',
+                spacing: 3,
+                boundaryEdge: 'left',
+            });
         });
 
         test('works with bottom/end and left edge', async ({ page }) => {
@@ -363,12 +378,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1200px, 1637px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'bottom',
+                spacing: 3,
+                boundaryEdge: 'left',
+            });
         });
 
         test('works with left/start and bottom edge', async ({ page }) => {
@@ -384,12 +400,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1037px, 1519px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'left',
+                spacing: 3,
+                boundaryEdge: 'bottom',
+            });
         });
 
         test('works with left/center and top edge', async ({ page }) => {
@@ -405,12 +422,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1037px, 1600px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'left',
+                spacing: 3,
+                boundaryEdge: 'top',
+            });
         });
 
         test('works with left/center and bottom edge', async ({ page }) => {
@@ -426,12 +444,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1037px, 1519px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'left',
+                spacing: 3,
+                boundaryEdge: 'bottom',
+            });
         });
 
         test('works with left/end and top edge', async ({ page }) => {
@@ -447,12 +466,13 @@ test.describe('Popper Dropdown (overflow/window)', () => {
             });
 
             await waitForFrame(page);
-            await expectStyles(page, [
-                {
-                    selectors: ['.dropdown-menu'],
-                    styles: { transform: 'translate3d(1037px, 1600px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.dropdown-menu',
+                reference: '#dropdownToggle',
+                placement: 'left',
+                spacing: 3,
+                boundaryEdge: 'top',
+            });
         });
     });
 });

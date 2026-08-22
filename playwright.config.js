@@ -1,11 +1,5 @@
 import { defineConfig } from '@playwright/test';
 
-const browserSpecificPositioningTests = [
-    '**/popper/dropdown*.spec.js',
-    '**/popper/popover*.spec.js',
-    '**/popper/tooltip*.spec.js',
-];
-
 export default defineConfig({
     projects: [
         {
@@ -19,12 +13,10 @@ export default defineConfig({
         },
         {
             name: 'firefox',
-            testIgnore: browserSpecificPositioningTests,
             use: { browserName: 'firefox' },
         },
         {
             name: 'webkit',
-            testIgnore: browserSpecificPositioningTests,
             use: { browserName: 'webkit' },
         },
     ],

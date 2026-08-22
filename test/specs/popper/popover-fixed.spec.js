@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { resetPage } from '../../setup/browser.js';
-import { expectStyles } from '../../support/assertions/styles.js';
+import { expectPopperPosition } from '../../support/assertions/popper.js';
 
 test.beforeEach(async ({ page }) => {
     await resetPage(page);
@@ -31,12 +31,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(1200px, 1520px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'top',
+                position: 'start',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with top/center', async ({ page }) => {
@@ -50,12 +52,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(1136px, 1520px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'top',
+                position: 'center',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with top/end', async ({ page }) => {
@@ -69,12 +73,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(1072px, 1520px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'top',
+                position: 'end',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with right/start', async ({ page }) => {
@@ -88,12 +94,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(1281px, 1600px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'right',
+                position: 'start',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with right/center', async ({ page }) => {
@@ -107,12 +115,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(1281px, 1578px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'right',
+                position: 'center',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with right/end', async ({ page }) => {
@@ -126,12 +136,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(1281px, 1557px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'right',
+                position: 'end',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with bottom/start', async ({ page }) => {
@@ -145,12 +157,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(1200px, 1637px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'bottom',
+                position: 'start',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with bottom/center', async ({ page }) => {
@@ -164,12 +178,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(1136px, 1637px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'bottom',
+                position: 'center',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with bottom/end', async ({ page }) => {
@@ -183,12 +199,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(1072px, 1637px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'bottom',
+                position: 'end',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with left/start', async ({ page }) => {
@@ -202,12 +220,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(991px, 1600px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'left',
+                position: 'start',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with left/center', async ({ page }) => {
@@ -221,12 +241,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(991px, 1578px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'left',
+                position: 'center',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
 
         test('works with left/end', async ({ page }) => {
@@ -240,12 +262,14 @@ test.describe('Popper Popover (fixed)', () => {
                 popover.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.popover'],
-                    styles: { transform: 'translate3d(991px, 1557px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.popover',
+                reference: '#popoverToggle',
+                placement: 'left',
+                position: 'end',
+                spacing: 3,
+                referencePlacement: false,
+            });
         });
     });
 });

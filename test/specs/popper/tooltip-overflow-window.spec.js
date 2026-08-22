@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { resetPage } from '../../setup/browser.js';
-import { expectStyles } from '../../support/assertions/styles.js';
+import { expectPopperPosition } from '../../support/assertions/popper.js';
 
 test.beforeEach(async ({ page }) => {
     await resetPage(page);
@@ -38,12 +38,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1170px, 1636px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'bottom',
+                position: 'center',
+                spacing: 2,
+                referencePlacement: false,
+            });
         });
 
         test('works with right/center and right edge', async ({ page }) => {
@@ -58,12 +60,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1075px, 1601px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'left',
+                position: 'center',
+                spacing: 2,
+                referencePlacement: false,
+            });
         });
 
         test('works with bottom/center and bottom edge', async ({ page }) => {
@@ -78,12 +82,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1170px, 1567px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'top',
+                position: 'center',
+                spacing: 2,
+                referencePlacement: false,
+            });
         });
 
         test('works with left/center and left edge', async ({ page }) => {
@@ -98,12 +104,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1266px, 1601px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'right',
+                position: 'center',
+                spacing: 2,
+                referencePlacement: false,
+            });
         });
     });
 
@@ -120,12 +128,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1142px, 1567px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'top',
+                spacing: 2,
+                boundaryEdge: 'right',
+                referencePlacement: false,
+            });
         });
 
         test('works with top/center and right edge', async ({ page }) => {
@@ -140,12 +150,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1142px, 1567px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'top',
+                spacing: 2,
+                boundaryEdge: 'right',
+                referencePlacement: false,
+            });
         });
 
         test('works with top/center and left edge', async ({ page }) => {
@@ -160,12 +172,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1200px, 1567px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'top',
+                spacing: 2,
+                boundaryEdge: 'left',
+                referencePlacement: false,
+            });
         });
 
         test('works with top/end and left edge', async ({ page }) => {
@@ -180,12 +194,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1200px, 1567px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'top',
+                spacing: 2,
+                boundaryEdge: 'left',
+                referencePlacement: false,
+            });
         });
 
         test('works with right/start and bottom edge', async ({ page }) => {
@@ -200,12 +216,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1266px, 1594px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'right',
+                spacing: 2,
+                boundaryEdge: 'bottom',
+                referencePlacement: false,
+            });
         });
 
         test('works with right/center and top edge', async ({ page }) => {
@@ -220,12 +238,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1266px, 1610px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'right',
+                spacing: 2,
+                boundaryEdge: 'top',
+                referencePlacement: false,
+            });
         });
 
         test('works with right/center and bottom edge', async ({ page }) => {
@@ -240,12 +260,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1266px, 1594px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'right',
+                spacing: 2,
+                boundaryEdge: 'bottom',
+                referencePlacement: false,
+            });
         });
 
         test('works with right/end and top edge', async ({ page }) => {
@@ -260,12 +282,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1266px, 1610px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'right',
+                spacing: 2,
+                boundaryEdge: 'top',
+                referencePlacement: false,
+            });
         });
 
         test('works with bottom/start and right edge', async ({ page }) => {
@@ -280,12 +304,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1142px, 1636px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'bottom',
+                spacing: 2,
+                boundaryEdge: 'right',
+                referencePlacement: false,
+            });
         });
 
         test('works with bottom/center and right edge', async ({ page }) => {
@@ -300,12 +326,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1142px, 1636px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'bottom',
+                spacing: 2,
+                boundaryEdge: 'right',
+                referencePlacement: false,
+            });
         });
 
         test('works with bottom/center and left edge', async ({ page }) => {
@@ -320,12 +348,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1200px, 1636px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'bottom',
+                spacing: 2,
+                boundaryEdge: 'left',
+                referencePlacement: false,
+            });
         });
 
         test('works with bottom/end and left edge', async ({ page }) => {
@@ -340,12 +370,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1200px, 1636px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'bottom',
+                spacing: 2,
+                boundaryEdge: 'left',
+                referencePlacement: false,
+            });
         });
 
         test('works with left/start and bottom edge', async ({ page }) => {
@@ -360,12 +392,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1075px, 1594px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'left',
+                spacing: 2,
+                boundaryEdge: 'bottom',
+                referencePlacement: false,
+            });
         });
 
         test('works with left/center and top edge', async ({ page }) => {
@@ -380,12 +414,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1075px, 1610px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'left',
+                spacing: 2,
+                boundaryEdge: 'top',
+                referencePlacement: false,
+            });
         });
 
         test('works with left/center and bottom edge', async ({ page }) => {
@@ -400,12 +436,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1075px, 1594px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'left',
+                spacing: 2,
+                boundaryEdge: 'bottom',
+                referencePlacement: false,
+            });
         });
 
         test('works with left/end and top edge', async ({ page }) => {
@@ -420,12 +458,14 @@ test.describe('Popper Tooltip (overflow/window)', () => {
                 tooltip.show();
             });
 
-            await expectStyles(page, [
-                {
-                    selectors: ['.tooltip'],
-                    styles: { transform: 'translate3d(1075px, 1610px, 0px)' },
-                },
-            ]);
+            await expectPopperPosition(page, {
+                popper: '.tooltip',
+                reference: '#tooltipToggle',
+                placement: 'left',
+                spacing: 2,
+                boundaryEdge: 'top',
+                referencePlacement: false,
+            });
         });
     });
 });
