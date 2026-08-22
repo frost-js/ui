@@ -45,9 +45,9 @@
         "js-minify": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-ui.js.map\" --output dist/frost-ui.min.js dist/frost-ui.js",
         "js-minify-bundle": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-ui-bundle.js.map\" --output dist/frost-ui-bundle.min.js dist/frost-ui-bundle.js",
         "sass-unused": "fusv src/scss",
-        "test": "npm run build && npm run test:playwright",
+        "test": "npm run build && npm run test:browser",
+        "test:browser": "playwright test --forbid-only",
         "test:headed": "playwright test --forbid-only --headed",
-        "test:playwright": "playwright test --forbid-only",
         "test:ui": "playwright test --ui"
     },
     "dependencies": {
