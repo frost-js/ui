@@ -45,7 +45,11 @@
         "js-minify": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-ui.js.map\" --output dist/frost-ui.min.js dist/frost-ui.js",
         "js-minify-bundle": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-ui-bundle.js.map\" --output dist/frost-ui-bundle.min.js dist/frost-ui-bundle.js",
         "sass-unused": "fusv src/scss",
-        "test": "mocha --recursive"
+        "test": "npm run test:legacy && npm run test:playwright",
+        "test:headed": "PWTEST_CACHE_DIR=.tmp/playwright/cache playwright test --forbid-only --headed",
+        "test:legacy": "mocha \"test/components/**/*.js\" \"test/popper/**/*.js\" \"test/utility/**/*.js\"",
+        "test:playwright": "PWTEST_CACHE_DIR=.tmp/playwright/cache playwright test --forbid-only",
+        "test:ui": "PWTEST_CACHE_DIR=.tmp/playwright/cache playwright test --ui"
     },
     "dependencies": {
         "@fr0st/query": "^4.0.0"
@@ -53,6 +57,7 @@
     "devDependencies": {
         "@fr0st/eslint-config": "^4.0.0",
         "@fr0st/stylelint-config": "^3.0.0",
+        "@playwright/test": "^1.62.1",
         "@rollup/plugin-node-resolve": "^16.0.3",
         "autoprefixer": "^10.5.4",
         "clean-css-cli": "^5.6.3",

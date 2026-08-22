@@ -3,8 +3,11 @@ import frostConfig, { browserConfig, nodeConfig } from '@fr0st/eslint-config';
 export default [
     {
         ignores: [
+            '.tmp/**',
             'dist/**',
+            'playwright-report/**',
             'screens/**',
+            'test-results/**',
         ],
     },
     frostConfig,
