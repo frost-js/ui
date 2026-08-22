@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
 import { expectAnimationState } from '../../support/assertions/animation.js';
+import { expectStyles } from '../../support/assertions/styles.js';
 
 test.beforeEach(async ({ page }) => {
     await setupClock(page);
@@ -120,7 +121,12 @@ test.describe('Offcanvas', () => {
             await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('body')).toHaveClass('offcanvas-backdrop');
-            expect(await page.locator('body').evaluate((node) => node.style.overflow)).toBe('hidden');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { overflow: 'hidden' },
+                },
+            ]);
         });
 
         test('shows the offcanvas (data-ui-toggle)', async ({ page }) => {
@@ -233,7 +239,12 @@ test.describe('Offcanvas', () => {
             await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
-            expect(await page.locator('body').evaluate((node) => node.style.overflow)).toBe('');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { overflow: '' },
+                },
+            ]);
         });
 
         test('hides the offcanvas (data-ui-dismiss)', async ({ page }) => {
@@ -345,7 +356,7 @@ test.describe('Offcanvas', () => {
             });
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
-            expect(await page.locator('#offcanvas1').getAttribute('style')).toBeNull();
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expectAnimationState(page, [
                 {
                     selectors: ['#offcanvas1'],
@@ -684,8 +695,8 @@ test.describe('Offcanvas', () => {
             await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
-            expect(await page.locator('#offcanvas1').getAttribute('aria-hidden')).toBeNull();
-            expect(await page.locator('#offcanvas1').getAttribute('aria-modal')).toBeNull();
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('aria-hidden');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
             await expectAnimationState(page, [
                 {
@@ -705,8 +716,8 @@ test.describe('Offcanvas', () => {
             await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
-            expect(await page.locator('#offcanvas1').getAttribute('aria-hidden')).toBeNull();
-            expect(await page.locator('#offcanvas1').getAttribute('aria-modal')).toBeNull();
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('aria-hidden');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
             await expectAnimationState(page, [
                 {
@@ -1140,7 +1151,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            expect(await page.locator('body').evaluate((node) => node.style.overflow)).toBe('hidden');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { overflow: 'hidden' },
+                },
+            ]);
         });
 
         test('works with scroll option', async ({ page }) => {
@@ -1150,7 +1166,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            expect(await page.locator('body').evaluate((node) => node.style.overflow)).toBe('');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { overflow: '' },
+                },
+            ]);
         });
 
         test('works with scroll option (data-ui-scroll)', async ({ page }) => {
@@ -1161,7 +1182,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            expect(await page.locator('body').evaluate((node) => node.style.overflow)).toBe('');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { overflow: '' },
+                },
+            ]);
             await expect(page.locator('#offcanvas1')).toHaveAttribute('data-ui-scroll', 'true');
         });
 
@@ -1173,7 +1199,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            expect(await page.locator('body').evaluate((node) => node.style.overflow)).toBe('');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { overflow: '' },
+                },
+            ]);
         });
     });
 
@@ -1190,7 +1221,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            expect(await page.locator('body').evaluate((node) => node.style.paddingRight)).toBe('15px');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: '15px' },
+                },
+            ]);
         });
 
         test('does not add padding if scrollbars are hidden', async ({ page }) => {
@@ -1204,7 +1240,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            expect(await page.locator('body').evaluate((node) => node.style.paddingRight)).toBe('');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: '' },
+                },
+            ]);
         });
 
         test('works with existing padding', async ({ page }) => {
@@ -1222,7 +1263,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            expect(await page.locator('body').evaluate((node) => node.style.paddingRight)).toBe('25px');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: '25px' },
+                },
+            ]);
         });
 
         test('restores scroll padding to document body', async ({ page }) => {
@@ -1246,7 +1292,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            expect(await page.locator('body').evaluate((node) => node.style.paddingRight)).toBe('');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: '' },
+                },
+            ]);
         });
 
         test('restores existing scroll padding to document body', async ({ page }) => {
@@ -1273,7 +1324,12 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            expect(await page.locator('body').evaluate((node) => node.style.paddingRight)).toBe('10px');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: '10px' },
+                },
+            ]);
         });
     });
 });

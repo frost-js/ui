@@ -42,7 +42,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1173px, 1483px, 0px)' },
@@ -63,7 +63,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1306px, 1560px, 0px)' },
@@ -84,7 +84,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1173px, 1637px, 0px)' },
@@ -105,7 +105,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1037px, 1560px, 0px)' },
@@ -125,7 +125,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1200px, 1483px, 0px)' },
@@ -145,7 +145,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1173px, 1483px, 0px)' },
@@ -165,7 +165,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1147px, 1483px, 0px)' },
@@ -185,7 +185,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1306px, 1600px, 0px)' },
@@ -205,7 +205,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1306px, 1560px, 0px)' },
@@ -225,7 +225,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1306px, 1520px, 0px)' },
@@ -245,7 +245,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1200px, 1637px, 0px)' },
@@ -265,7 +265,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1173px, 1637px, 0px)' },
@@ -285,7 +285,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1147px, 1637px, 0px)' },
@@ -305,7 +305,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1037px, 1600px, 0px)' },
@@ -325,7 +325,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1037px, 1560px, 0px)' },
@@ -345,7 +345,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1037px, 1520px, 0px)' },
@@ -368,7 +368,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1173px, 1637px, 0px)' },
@@ -389,7 +389,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1037px, 1560px, 0px)' },
@@ -410,7 +410,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1173px, 1483px, 0px)' },
@@ -431,7 +431,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1306px, 1560px, 0px)' },
@@ -454,7 +454,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1145px, 1483px, 0px)' },
@@ -475,7 +475,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1145px, 1483px, 0px)' },
@@ -496,7 +496,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1200px, 1483px, 0px)' },
@@ -517,7 +517,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1200px, 1483px, 0px)' },
@@ -538,7 +538,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1306px, 1519px, 0px)' },
@@ -559,7 +559,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1306px, 1600px, 0px)' },
@@ -580,7 +580,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1306px, 1519px, 0px)' },
@@ -601,7 +601,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1306px, 1600px, 0px)' },
@@ -622,7 +622,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1145px, 1637px, 0px)' },
@@ -643,7 +643,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1145px, 1637px, 0px)' },
@@ -664,7 +664,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1200px, 1637px, 0px)' },
@@ -685,7 +685,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1200px, 1637px, 0px)' },
@@ -706,7 +706,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1037px, 1519px, 0px)' },
@@ -727,7 +727,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1037px, 1600px, 0px)' },
@@ -748,7 +748,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1037px, 1519px, 0px)' },
@@ -769,7 +769,7 @@ test.describe('Popper Dropdown (overflow)', () => {
             });
 
             await waitForFrame(page);
-            + await expectStyles(page, [
+            await expectStyles(page, [
                 {
                     selectors: ['.dropdown-menu'],
                     styles: { transform: 'translate3d(1037px, 1600px, 0px)' },

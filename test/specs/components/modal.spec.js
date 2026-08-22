@@ -777,8 +777,8 @@ test.describe('Modal', () => {
             await advanceClock(page, 300);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
-            expect(await page.locator('#modal1').getAttribute('aria-hidden')).toBeNull();
-            expect(await page.locator('#modal1').getAttribute('aria-modal')).toBeNull();
+            await expect(page.locator('#modal1')).not.toHaveAttribute('aria-hidden');
+            await expect(page.locator('#modal1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
             await expectAnimationState(page, [
@@ -799,8 +799,8 @@ test.describe('Modal', () => {
             await advanceClock(page, 300);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
-            expect(await page.locator('#modal1').getAttribute('aria-hidden')).toBeNull();
-            expect(await page.locator('#modal1').getAttribute('aria-modal')).toBeNull();
+            await expect(page.locator('#modal1')).not.toHaveAttribute('aria-hidden');
+            await expect(page.locator('#modal1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
             await expectAnimationState(page, [
@@ -1182,8 +1182,8 @@ test.describe('Modal', () => {
             await advanceClock(page, 125);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
-            expect(await page.locator('#modal1').getAttribute('aria-hidden')).toBeNull();
-            expect(await page.locator('#modal1').getAttribute('aria-modal')).toBeNull();
+            await expect(page.locator('#modal1')).not.toHaveAttribute('aria-hidden');
+            await expect(page.locator('#modal1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
             await expectAnimationState(page, [
                 {

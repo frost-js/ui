@@ -763,7 +763,7 @@ test.describe('Collapse', () => {
             await advanceClock(page, 250);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
-            expect(await page.locator('#collapseToggle1').getAttribute('aria-expanded')).toBeNull();
+            await expect(page.locator('#collapseToggle1')).not.toHaveAttribute('aria-expanded');
             await expect(page.locator('#collapse1')).toHaveClass('collapse');
             await expectAnimationState(page, [
                 {
@@ -783,7 +783,7 @@ test.describe('Collapse', () => {
             await advanceClock(page, 250);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
-            expect(await page.locator('#collapseToggle1').getAttribute('aria-expanded')).toBeNull();
+            await expect(page.locator('#collapseToggle1')).not.toHaveAttribute('aria-expanded');
             await expect(page.locator('#collapse1')).toHaveClass('collapse');
             await expectAnimationState(page, [
                 {

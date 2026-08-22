@@ -119,7 +119,7 @@ test.describe('Button', () => {
             await expect(page.locator('#button1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#button1')).toHaveAttribute('aria-pressed', 'true');
             await expect(page.locator('#button2')).not.toHaveClass(/\bactive\b/);
-            expect(await page.locator('#button2').getAttribute('aria-pressed')).toBeNull();
+            await expect(page.locator('#button2')).not.toHaveAttribute('aria-pressed');
         });
 
         test('toggles the button (data-ui-toggle)', async ({ page }) => {
