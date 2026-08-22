@@ -46,10 +46,10 @@
         "js-minify-bundle": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-ui-bundle.js.map\" --output dist/frost-ui-bundle.min.js dist/frost-ui-bundle.js",
         "sass-unused": "fusv src/scss",
         "test": "npm run test:legacy && npm run test:playwright",
-        "test:headed": "PWTEST_CACHE_DIR=.tmp/playwright/cache playwright test --forbid-only --headed",
+        "test:headed": "playwright test --forbid-only --headed",
         "test:legacy": "mocha \"test/components/**/*.js\" \"test/popper/**/*.js\" \"test/utility/**/*.js\"",
-        "test:playwright": "PWTEST_CACHE_DIR=.tmp/playwright/cache playwright test --forbid-only",
-        "test:ui": "PWTEST_CACHE_DIR=.tmp/playwright/cache playwright test --ui"
+        "test:playwright": "playwright test --forbid-only",
+        "test:ui": "playwright test --ui"
     },
     "dependencies": {
         "@fr0st/query": "^4.0.0"
