@@ -1372,6 +1372,29 @@ test.describe('Carousel', () => {
         });
 
         test('swipes with touch events', async ({ page }) => {
+            const hasTouch = await page.evaluate((_) => {
+                if (typeof Touch !== 'function' || typeof TouchEvent !== 'function') {
+                    return false;
+                }
+
+                try {
+                    const touch = new Touch({
+                        identifier: 1,
+                        target: document.body,
+                    });
+
+                    new TouchEvent('touchstart', {
+                        touches: [touch],
+                    });
+
+                    return true;
+                } catch {
+                    return false;
+                }
+            });
+
+            test.skip(!hasTouch, 'Touch constructors are not usable in this browser.');
+
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1);

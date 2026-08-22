@@ -6,7 +6,6 @@ export default [
             '.tmp/**',
             'dist/**',
             'playwright-report/**',
-            'screens/**',
             'test-results/**',
         ],
     },
@@ -16,8 +15,7 @@ export default [
         ...nodeConfig,
         files: [
             '*.config.js',
-            'server/**/*.js',
-            'test/**/*.js',
+            'test/support/server/**/*.js',
         ],
     },
     {

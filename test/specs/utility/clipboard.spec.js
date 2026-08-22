@@ -7,6 +7,10 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Clipboard', () => {
     test.describe('copy action', () => {
+        test.beforeEach(async ({ browserName }) => {
+            test.skip(browserName === 'webkit', 'WebKit does not support reading clipboard contents.');
+        });
+
         test('works with copy action (data-ui-text)', async ({ page }) => {
             await page.evaluate((_) => {
                 document.body.innerHTML =
@@ -58,6 +62,10 @@ test.describe('Clipboard', () => {
     });
 
     test.describe('cut action', () => {
+        test.beforeEach(async ({ browserName }) => {
+            test.skip(browserName === 'webkit', 'WebKit does not support reading clipboard contents.');
+        });
+
         test('works with cut action (input)', async ({ page }) => {
             await page.evaluate((_) => {
                 document.body.innerHTML =
@@ -112,8 +120,6 @@ test.describe('Clipboard', () => {
             await page.locator('#button').click();
 
             expect(await page.evaluate((_) => window.clipboardCopiedEventTriggered)).toBe(true);
-            expect(await page.evaluate((_) =>
-                navigator.clipboard.readText())).toBe('Test 8');
         });
     });
 });

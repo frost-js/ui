@@ -42,8 +42,8 @@
         "js-compile": "rollup --config",
         "js-compile-bundle": "rollup --config --environment BUNDLE:true",
         "js-lint": "eslint",
-        "js-minify": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-ui.js.map\" --output dist/frost-ui.min.js dist/frost-ui.js",
-        "js-minify-bundle": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-ui-bundle.js.map\" --output dist/frost-ui-bundle.min.js dist/frost-ui-bundle.js",
+        "js-minify": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-ui.js.map,url=frost-ui.min.js.map\" --output dist/frost-ui.min.js dist/frost-ui.js",
+        "js-minify-bundle": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-ui-bundle.js.map,url=frost-ui-bundle.min.js.map\" --output dist/frost-ui-bundle.min.js dist/frost-ui-bundle.js",
         "sass-unused": "fusv src/scss",
         "test": "npm run build && npm run test:browser",
         "test:browser": "playwright test --forbid-only",
@@ -68,5 +68,11 @@
         "sass": "^1.102.0",
         "stylelint": "^17.14.1",
         "terser": "^5.50.0"
+    },
+    "engines": {
+        "node": "^20.19.0 || ^22.13.0 || >=24"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

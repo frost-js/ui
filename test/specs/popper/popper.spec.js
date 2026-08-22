@@ -10,8 +10,8 @@ test.describe('Popper', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
             document.body.innerHTML =
-                '<button class="btn btn-secondary" id="button" type="button">Button</button>' +
-                '<div class="badge" id="badge">Badge</div>';
+                '<button class="btn btn-secondary" id="button" style="width: 80px; height: 34px;" type="button">Button</button>' +
+                '<div class="badge" id="badge" style="width: 60px; height: 21px;">Badge</div>';
         });
     });
 
@@ -116,7 +116,7 @@ test.describe('Popper', () => {
             await expectStyles(page, [
                 {
                     selectors: ['#badge'],
-                    styles: { transform: 'translate3d(3px, 84px, 0px)' },
+                    styles: { transform: 'translate3d(10px, 84px, 0px)' },
                 },
             ]);
         });
@@ -134,7 +134,7 @@ test.describe('Popper', () => {
             await expectStyles(page, [
                 {
                     selectors: ['#badge'],
-                    styles: { transform: 'translate3d(3px, 84px, 0px)' },
+                    styles: { transform: 'translate3d(10px, 84px, 0px)' },
                 },
             ]);
         });
@@ -231,7 +231,7 @@ test.describe('Popper', () => {
                 return result;
             });
 
-            expect(callbackTransform).toBe('translate3d(3px, 34px, 0px)');
+            expect(callbackTransform).toBe('translate3d(10px, 34px, 0px)');
         });
 
         test('executes a callback after updating the popper (query)', async ({ page }) => {
@@ -246,7 +246,7 @@ test.describe('Popper', () => {
                 return result;
             });
 
-            expect(callbackTransform).toBe('translate3d(3px, 34px, 0px)');
+            expect(callbackTransform).toBe('translate3d(10px, 34px, 0px)');
         });
 
         test('uses the node as the first argument', async ({ page }) => {
@@ -336,7 +336,7 @@ test.describe('Popper', () => {
                 {
                     selectors: ['#badge'],
                     styles: {
-                        margin: '34px 0px 0px 3px',
+                        margin: '34px 0px 0px 10px',
                         transform: '',
                     },
                 },
@@ -355,7 +355,7 @@ test.describe('Popper', () => {
                 {
                     selectors: ['#badge'],
                     styles: {
-                        margin: '34px 0px 0px 3px',
+                        margin: '34px 0px 0px 10px',
                         transform: '',
                     },
                 },

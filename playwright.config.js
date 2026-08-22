@@ -1,10 +1,27 @@
 import { defineConfig } from '@playwright/test';
 
+const browserSpecificPositioningTests = '**/popper/*.spec.js';
+
 export default defineConfig({
     projects: [
         {
             name: 'chromium',
-            use: { browserName: 'chromium' },
+            use: {
+                browserName: 'chromium',
+                permissions: [
+                    'clipboard-read',
+                ],
+            },
+        },
+        {
+            name: 'firefox',
+            testIgnore: browserSpecificPositioningTests,
+            use: { browserName: 'firefox' },
+        },
+        {
+            name: 'webkit',
+            testIgnore: browserSpecificPositioningTests,
+            use: { browserName: 'webkit' },
         },
     ],
     testDir: './test/specs',
@@ -13,9 +30,6 @@ export default defineConfig({
     use: {
         baseURL: 'http://localhost:3001',
         headless: true,
-        permissions: [
-            'clipboard-read',
-        ],
         reducedMotion: 'reduce',
         viewport: {
             height: 600,
