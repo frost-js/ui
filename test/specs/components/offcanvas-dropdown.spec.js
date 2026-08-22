@@ -58,7 +58,7 @@ test.describe('Offcanvas/Dropdown', () => {
                 },
                 {
                     selectors: ['#offcanvas'],
-                    progress: 0.08,
+                    progress: 0.5,
                 },
             ]);
         });
