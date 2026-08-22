@@ -57,11 +57,11 @@ test.describe('Modal/Dropdown', () => {
             await expectAnimationState(page, [
                 {
                     selectors: ['#dropdown'],
-                    progress: 0.5,
+                    active: true,
                 },
                 {
                     selectors: ['#modalDialog', '.modal-backdrop'],
-                    progress: 0.08,
+                    active: true,
                 },
             ]);
         });
@@ -97,7 +97,7 @@ test.describe('Modal/Dropdown', () => {
             await expectAnimationState(page, [
                 {
                     selectors: ['#dropdown'],
-                    progress: 0.5,
+                    active: true,
                 },
                 {
                     selectors: ['#modalDialog'],

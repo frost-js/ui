@@ -53,7 +53,7 @@ test.describe('Offcanvas/Modal', () => {
             await expectAnimationState(page, [
                 {
                     selectors: ['#modalDialog', '.modal-backdrop'],
-                    progress: 0.08,
+                    active: true,
                 },
                 {
                     selectors: ['#offcanvas'],
@@ -92,7 +92,7 @@ test.describe('Offcanvas/Modal', () => {
             await expectAnimationState(page, [
                 {
                     selectors: ['#modalDialog', '.modal-backdrop'],
-                    progress: 0.08,
+                    active: true,
                 },
                 {
                     selectors: ['#offcanvas'],

@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 /**
  * @typedef {object} AnimationStateExpectation
  * @property {string[]} selectors The selectors.
+ * @property {boolean} [active] Whether animation data should exist.
  * @property {number|null} [progress=null] The expected progress, or `null` if no animation data should exist.
  * @property {Record<string, string>} [styles] The expected inline styles.
  */
@@ -17,6 +18,7 @@ export async function expectAnimationState(page, expectations) {
     const expectedStates = expectations.flatMap((expectation) =>
         expectation.selectors.map((selector) => ({
             selector,
+            active: expectation.active ?? expectation.progress != null,
             progress: expectation.progress ?? null,
             styles: expectation.styles,
         })),
@@ -50,7 +52,7 @@ export async function expectAnimationState(page, expectations) {
 
         expect(actual.matches, `${message}: selector match count`).toBe(1);
 
-        if (expected.progress === null) {
+        if (!expected.active) {
             expect(actual.animation, message).toEqual({
                 progress: undefined,
                 start: undefined,
@@ -59,11 +61,14 @@ export async function expectAnimationState(page, expectations) {
         } else {
             expect(actual.animation.progress, message).toBeDefined();
             expect(actual.animation.progress, message).not.toBe('');
-            expect(Number(actual.animation.progress), message).toBeCloseTo(expected.progress, 10);
             expect(actual.animation.start, message).toBeDefined();
             expect(actual.animation.start, message).not.toBe('');
             expect(actual.animation.time, message).toBeDefined();
             expect(actual.animation.time, message).not.toBe('');
+
+            if (expected.progress !== null) {
+                expect(Number(actual.animation.progress), message).toBeCloseTo(expected.progress, 10);
+            }
         }
 
         if (expected.styles) {

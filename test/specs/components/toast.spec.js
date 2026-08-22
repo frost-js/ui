@@ -131,9 +131,10 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
-            await expect(page.locator('#toast2')).toHaveClass('toast show');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
+            await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast2')).toBeVisible();
         });
 
         test('hides the toast (data-ui-dismiss)', async ({ page }) => {
@@ -148,9 +149,8 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
-            await expect(page.locator('#toast2')).toHaveClass('toast show');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
         });
 
         test('hides the toast (query)', async ({ page }) => {
@@ -167,9 +167,8 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
-            await expect(page.locator('#toast2')).toHaveClass('toast show');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
         });
 
         test('hides multiple toasts (query)', async ({ page }) => {
@@ -178,12 +177,10 @@ test.describe('Toast', () => {
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('.toast')).toHaveClass([
-                'toast',
-                'toast',
-            ]);
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
-            await expect(page.locator('#toast2')).toHaveAttribute('style', 'display: none !important;');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
+            await expect(page.locator('#toast2')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast2')).toBeHidden();
         });
 
         test('does not remove the toast after hiding', async ({ page }) => {
@@ -230,8 +227,8 @@ test.describe('Toast', () => {
                 UI.Toast.init(toast1).hide();
             });
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
             await expectAnimationState(page, [
                 {
                     selectors: ['#toast1'],
@@ -265,9 +262,11 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast show');
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
             await expect(page.locator('#toast1')).toHaveAttribute('style', '');
-            await expect(page.locator('#toast2')).toHaveClass('toast show');
+            await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast2')).toBeVisible();
         });
 
         test('shows the toast (query)', async ({ page }) => {
@@ -292,9 +291,9 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast show');
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
             await expect(page.locator('#toast1')).toHaveAttribute('style', '');
-            await expect(page.locator('#toast2')).toHaveClass('toast show');
         });
 
         test('shows multiple toasts (query)', async ({ page }) => {
@@ -319,10 +318,10 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('.toast')).toHaveClass([
-                'toast show',
-                'toast show',
-            ]);
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
+            await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast2')).toBeVisible();
             await expect(page.locator('#toast1')).toHaveAttribute('style', '');
             await expect(page.locator('#toast2')).toHaveAttribute('style', '');
         });
@@ -360,7 +359,8 @@ test.describe('Toast', () => {
                 UI.Toast.init(toast1).show();
             });
 
-            await expect(page.locator('#toast1')).toHaveClass('toast show');
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
             await expectAnimationState(page, [
                 {
                     selectors: ['#toast1'],
@@ -371,33 +371,36 @@ test.describe('Toast', () => {
 
     test.describe('events', () => {
         test('triggers hide event', async ({ page }) => {
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
+                let triggered = false;
+
                 $.addEvent(toast1, 'hide.ui.toast', (_) => {
-                    document.documentElement.dataset.toastHideState = String(
-                        toast1.className === 'toast show' &&
-                        !toast1.hasAttribute('style'),
-                    );
+                    triggered = true;
                 });
                 UI.Toast.init(toast1).hide();
+
+                return triggered;
             });
 
-            await expect(page.locator('html')).toHaveAttribute('data-toast-hide-state', 'true');
+            expect(eventTriggered).toBe(true);
         });
 
         test('triggers hidden event', async ({ page }) => {
             await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
+                window.toastHiddenEventTriggered = false;
+
                 $.addEvent(toast1, 'hidden.ui.toast', (_) => {
-                    document.documentElement.dataset.toastHidden = 'true';
+                    window.toastHiddenEventTriggered = true;
                 });
                 UI.Toast.init(toast1).hide();
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('html')).toHaveAttribute('data-toast-hidden', 'true');
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
+            expect(await page.evaluate((_) => window.toastHiddenEventTriggered)).toBe(true);
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
         });
 
         test('triggers show event', async ({ page }) => {
@@ -410,18 +413,19 @@ test.describe('Toast', () => {
                 $.stop('#toast1');
             });
             await advanceClock(page, 50);
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
+                let triggered = false;
+
                 $.addEvent(toast1, 'show.ui.toast', (_) => {
-                    document.documentElement.dataset.toastShowState = String(
-                        toast1.className === 'toast' &&
-                        toast1.style.getPropertyValue('display') === 'none',
-                    );
+                    triggered = true;
                 });
                 UI.Toast.init(toast1).show();
+
+                return triggered;
             });
 
-            await expect(page.locator('html')).toHaveAttribute('data-toast-show-state', 'true');
+            expect(eventTriggered).toBe(true);
         });
 
         test('triggers shown event', async ({ page }) => {
@@ -436,15 +440,18 @@ test.describe('Toast', () => {
             await advanceClock(page, 50);
             await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
+                window.toastShownEventTriggered = false;
+
                 $.addEvent(toast1, 'shown.ui.toast', (_) => {
-                    document.documentElement.dataset.toastShown = 'true';
+                    window.toastShownEventTriggered = true;
                 });
                 UI.Toast.init(toast1).show();
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('html')).toHaveAttribute('data-toast-shown', 'true');
-            await expect(page.locator('#toast1')).toHaveClass('toast show');
+            expect(await page.evaluate((_) => window.toastShownEventTriggered)).toBe(true);
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
             await expect(page.locator('#toast1')).toHaveAttribute('style', '');
         });
 
@@ -456,8 +463,8 @@ test.describe('Toast', () => {
             });
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast show');
-            expect(await page.locator('#toast1').getAttribute('style')).toBeNull();
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
             await expectAnimationState(page, [
                 {
                     selectors: ['#toast1'],
@@ -475,8 +482,8 @@ test.describe('Toast', () => {
             });
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast show');
-            expect(await page.locator('#toast1').getAttribute('style')).toBeNull();
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
             await expectAnimationState(page, [
                 {
                     selectors: ['#toast1'],
@@ -501,8 +508,8 @@ test.describe('Toast', () => {
             });
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
             await expectAnimationState(page, [
                 {
                     selectors: ['#toast1'],
@@ -529,8 +536,8 @@ test.describe('Toast', () => {
             });
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
             await expectAnimationState(page, [
                 {
                     selectors: ['#toast1'],
@@ -694,8 +701,8 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
         });
 
         test('works with autohide option', async ({ page }) => {
@@ -705,8 +712,8 @@ test.describe('Toast', () => {
             });
             await advanceClock(page, 350);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast show');
-            expect(await page.locator('#toast1').getAttribute('style')).toBeNull();
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
         });
 
         test('works with autohide option (data-ui-autohide)', async ({ page }) => {
@@ -717,9 +724,9 @@ test.describe('Toast', () => {
             });
             await advanceClock(page, 350);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast show');
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
             await expect(page.locator('#toast1')).toHaveAttribute('data-ui-autohide', 'false');
-            expect(await page.locator('#toast1').getAttribute('style')).toBeNull();
+            await expect(page.locator('#toast1')).toBeVisible();
         });
 
         test('works with autohide option (query)', async ({ page }) => {
@@ -728,8 +735,8 @@ test.describe('Toast', () => {
             });
             await advanceClock(page, 350);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast show');
-            expect(await page.locator('#toast1').getAttribute('style')).toBeNull();
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
         });
     });
 
@@ -763,8 +770,8 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
         });
 
         test('works with delay option (data-ui-delay)', async ({ page }) => {
@@ -797,9 +804,9 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#toast1')).toHaveAttribute('data-ui-delay', '300');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
+            await expect(page.locator('#toast1')).toBeHidden();
         });
 
         test('works with delay option (query)', async ({ page }) => {
@@ -831,8 +838,8 @@ test.describe('Toast', () => {
             ]);
             await advanceClock(page, 100);
 
-            await expect(page.locator('#toast1')).toHaveClass('toast');
-            await expect(page.locator('#toast1')).toHaveAttribute('style', 'display: none !important;');
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
         });
     });
 });

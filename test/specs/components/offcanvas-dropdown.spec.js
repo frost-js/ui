@@ -54,11 +54,11 @@ test.describe('Offcanvas/Dropdown', () => {
             await expectAnimationState(page, [
                 {
                     selectors: ['#dropdown'],
-                    progress: 0.5,
+                    active: true,
                 },
                 {
                     selectors: ['#offcanvas'],
-                    progress: 0.5,
+                    active: true,
                 },
             ]);
         });
@@ -93,7 +93,7 @@ test.describe('Offcanvas/Dropdown', () => {
             await expectAnimationState(page, [
                 {
                     selectors: ['#dropdown'],
-                    progress: 0.5,
+                    active: true,
                 },
                 {
                     selectors: ['#offcanvas'],

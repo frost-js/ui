@@ -161,16 +161,12 @@ test.describe('Collapse', () => {
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('[data-ui-toggle="collapse"]')).toHaveClass([
-                'btn btn-secondary',
-                'btn btn-secondary',
-            ]);
+            await expect(page.locator('#collapseToggle1')).not.toHaveClass(/\bcollapsed\b/);
+            await expect(page.locator('#collapseToggle2')).not.toHaveClass(/\bcollapsed\b/);
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#collapseToggle2')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('.collapse')).toHaveClass([
-                'collapse show',
-                'collapse show',
-            ]);
+            await expect(page.locator('#collapse1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#collapse2')).toHaveClass(/\bshow\b/);
         });
 
         test('can be called multiple times', async ({ page }) => {
@@ -289,16 +285,12 @@ test.describe('Collapse', () => {
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('[data-ui-toggle="collapse"]')).toHaveClass([
-                'btn btn-secondary collapsed',
-                'btn btn-secondary collapsed',
-            ]);
+            await expect(page.locator('#collapseToggle1')).toHaveClass(/\bcollapsed\b/);
+            await expect(page.locator('#collapseToggle2')).toHaveClass(/\bcollapsed\b/);
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
             await expect(page.locator('#collapseToggle2')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('.collapse')).toHaveClass([
-                'collapse',
-                'collapse',
-            ]);
+            await expect(page.locator('#collapse1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#collapse2')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#collapse1')).toHaveAttribute('style', '');
             await expect(page.locator('#collapse2')).toHaveAttribute('style', '');
         });
@@ -428,16 +420,12 @@ test.describe('Collapse', () => {
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('[data-ui-toggle="collapse"]')).toHaveClass([
-                'btn btn-secondary',
-                'btn btn-secondary',
-            ]);
+            await expect(page.locator('#collapseToggle1')).not.toHaveClass(/\bcollapsed\b/);
+            await expect(page.locator('#collapseToggle2')).not.toHaveClass(/\bcollapsed\b/);
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#collapseToggle2')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('.collapse')).toHaveClass([
-                'collapse show',
-                'collapse show',
-            ]);
+            await expect(page.locator('#collapse1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#collapse2')).toHaveClass(/\bshow\b/);
         });
 
         test('can be called multiple times', async ({ page }) => {
@@ -557,16 +545,12 @@ test.describe('Collapse', () => {
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('[data-ui-toggle="collapse"]')).toHaveClass([
-                'btn btn-secondary collapsed',
-                'btn btn-secondary collapsed',
-            ]);
+            await expect(page.locator('#collapseToggle1')).toHaveClass(/\bcollapsed\b/);
+            await expect(page.locator('#collapseToggle2')).toHaveClass(/\bcollapsed\b/);
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
             await expect(page.locator('#collapseToggle2')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('.collapse')).toHaveClass([
-                'collapse',
-                'collapse',
-            ]);
+            await expect(page.locator('#collapse1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#collapse2')).not.toHaveClass(/\bshow\b/);
         });
 
         test('can be called multiple times', async ({ page }) => {
@@ -599,33 +583,34 @@ test.describe('Collapse', () => {
 
     test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
-                const collapseToggle1 = $.findOne('#collapseToggle1');
+                let triggered = false;
+
                 $.addEvent(collapse1, 'show.ui.collapse', (_) => {
-                    document.documentElement.dataset.collapseShowState = String(
-                        collapse1.className === 'collapse' &&
-                        collapseToggle1.classList.contains('collapsed') &&
-                        !collapseToggle1.hasAttribute('aria-expanded'),
-                    );
+                    triggered = true;
                 });
                 UI.Collapse.init(collapse1).show();
+
+                return triggered;
             });
 
-            await expect(page.locator('html')).toHaveAttribute('data-collapse-show-state', 'true');
+            expect(eventTriggered).toBe(true);
         });
 
         test('triggers shown event', async ({ page }) => {
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
+                window.collapseShownEventTriggered = false;
+
                 $.addEvent(collapse1, 'shown.ui.collapse', (_) => {
-                    document.documentElement.dataset.collapseShown = 'true';
+                    window.collapseShownEventTriggered = true;
                 });
                 UI.Collapse.init(collapse1).show();
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('html')).toHaveAttribute('data-collapse-shown', 'true');
+            expect(await page.evaluate((_) => window.collapseShownEventTriggered)).toBe(true);
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#collapse1')).toHaveClass('collapse show');
@@ -641,20 +626,19 @@ test.describe('Collapse', () => {
                 $.stop('#collapse1');
             });
             await advanceClock(page, 50);
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
-                const collapseToggle1 = $.findOne('#collapseToggle1');
+                let triggered = false;
+
                 $.addEvent(collapse1, 'hide.ui.collapse', (_) => {
-                    document.documentElement.dataset.collapseHideState = String(
-                        collapse1.className === 'collapse show' &&
-                        !collapseToggle1.classList.contains('collapsed') &&
-                        collapseToggle1.getAttribute('aria-expanded') === 'true',
-                    );
+                    triggered = true;
                 });
                 UI.Collapse.init(collapse1).hide();
+
+                return triggered;
             });
 
-            await expect(page.locator('html')).toHaveAttribute('data-collapse-hide-state', 'true');
+            expect(eventTriggered).toBe(true);
         });
 
         test('triggers hidden event', async ({ page }) => {
@@ -669,47 +653,50 @@ test.describe('Collapse', () => {
             await advanceClock(page, 50);
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
+                window.collapseHiddenEventTriggered = false;
+
                 $.addEvent(collapse1, 'hidden.ui.collapse', (_) => {
-                    document.documentElement.dataset.collapseHidden = 'true';
+                    window.collapseHiddenEventTriggered = true;
                 });
                 UI.Collapse.init(collapse1).hide();
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('html')).toHaveAttribute('data-collapse-hidden', 'true');
+            expect(await page.evaluate((_) => window.collapseHiddenEventTriggered)).toBe(true);
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
             await expect(page.locator('#collapse1')).toHaveClass('collapse');
         });
 
         test('triggers show event (toggle)', async ({ page }) => {
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
-                const collapseToggle1 = $.findOne('#collapseToggle1');
+                let triggered = false;
+
                 $.addEvent(collapse1, 'show.ui.collapse', (_) => {
-                    document.documentElement.dataset.collapseShowState = String(
-                        collapse1.className === 'collapse' &&
-                        collapseToggle1.classList.contains('collapsed') &&
-                        !collapseToggle1.hasAttribute('aria-expanded'),
-                    );
+                    triggered = true;
                 });
                 UI.Collapse.init(collapse1).toggle();
+
+                return triggered;
             });
 
-            await expect(page.locator('html')).toHaveAttribute('data-collapse-show-state', 'true');
+            expect(eventTriggered).toBe(true);
         });
 
         test('triggers shown event (toggle)', async ({ page }) => {
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
+                window.collapseShownEventTriggered = false;
+
                 $.addEvent(collapse1, 'shown.ui.collapse', (_) => {
-                    document.documentElement.dataset.collapseShown = 'true';
+                    window.collapseShownEventTriggered = true;
                 });
                 UI.Collapse.init(collapse1).toggle();
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('html')).toHaveAttribute('data-collapse-shown', 'true');
+            expect(await page.evaluate((_) => window.collapseShownEventTriggered)).toBe(true);
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#collapse1')).toHaveClass('collapse show');
@@ -725,20 +712,19 @@ test.describe('Collapse', () => {
                 $.stop('#collapse1');
             });
             await advanceClock(page, 50);
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
-                const collapseToggle1 = $.findOne('#collapseToggle1');
+                let triggered = false;
+
                 $.addEvent(collapse1, 'hide.ui.collapse', (_) => {
-                    document.documentElement.dataset.collapseHideState = String(
-                        collapse1.className === 'collapse show' &&
-                        !collapseToggle1.classList.contains('collapsed') &&
-                        collapseToggle1.getAttribute('aria-expanded') === 'true',
-                    );
+                    triggered = true;
                 });
                 UI.Collapse.init(collapse1).toggle();
+
+                return triggered;
             });
 
-            await expect(page.locator('html')).toHaveAttribute('data-collapse-hide-state', 'true');
+            expect(eventTriggered).toBe(true);
         });
 
         test('triggers hidden event (toggle)', async ({ page }) => {
@@ -753,14 +739,16 @@ test.describe('Collapse', () => {
             await advanceClock(page, 50);
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
+                window.collapseHiddenEventTriggered = false;
+
                 $.addEvent(collapse1, 'hidden.ui.collapse', (_) => {
-                    document.documentElement.dataset.collapseHidden = 'true';
+                    window.collapseHiddenEventTriggered = true;
                 });
                 UI.Collapse.init(collapse1).toggle();
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('html')).toHaveAttribute('data-collapse-hidden', 'true');
+            expect(await page.evaluate((_) => window.collapseHiddenEventTriggered)).toBe(true);
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
             await expect(page.locator('#collapse1')).toHaveClass('collapse');

@@ -214,15 +214,19 @@ test.describe('Alert', () => {
 
     test.describe('events', () => {
         test('triggers close event', async ({ page }) => {
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => {
                 const alert1 = $.findOne('#alert1');
+                let triggered = false;
+
                 $.addEvent(alert1, 'close.ui.alert', (_) => {
-                    document.documentElement.dataset.alertClose = 'true';
+                    triggered = true;
                 });
                 UI.Alert.init(alert1).close();
+
+                return triggered;
             });
 
-            await expect(page.locator('html')).toHaveAttribute('data-alert-close', 'true');
+            expect(eventTriggered).toBe(true);
             await expect(page.locator('#alert1')).toHaveCount(1);
             await expect(page.locator('#alert2')).toHaveCount(1);
         });
@@ -230,14 +234,16 @@ test.describe('Alert', () => {
         test('triggers closed event', async ({ page }) => {
             await page.evaluate((_) => {
                 const alert1 = $.findOne('#alert1');
+                window.alertClosedEventTriggered = false;
+
                 $.addEvent(alert1, 'closed.ui.alert', (_) => {
-                    document.documentElement.dataset.alertClosed = 'true';
+                    window.alertClosedEventTriggered = true;
                 });
                 UI.Alert.init(alert1).close();
             });
             await advanceClock(page, 150);
 
-            await expect(page.locator('html')).toHaveAttribute('data-alert-closed', 'true');
+            expect(await page.evaluate((_) => window.alertClosedEventTriggered)).toBe(true);
             await expect(page.locator('#alert1')).toHaveCount(0);
             await expect(page.locator('#alert2')).toHaveCount(1);
         });

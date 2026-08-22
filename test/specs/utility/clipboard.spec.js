@@ -103,13 +103,15 @@ test.describe('Clipboard', () => {
             await page.evaluate((_) => {
                 document.body.innerHTML =
                     '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 8"></button>';
+                window.clipboardCopiedEventTriggered = false;
+
                 $.addEvent('#button', 'copied.ui.clipboard', (_) => {
-                    document.documentElement.dataset.clipboardCopied = 'true';
+                    window.clipboardCopiedEventTriggered = true;
                 });
             });
             await page.locator('#button').click();
 
-            await expect(page.locator('html')).toHaveAttribute('data-clipboard-copied', 'true');
+            expect(await page.evaluate((_) => window.clipboardCopiedEventTriggered)).toBe(true);
             expect(await page.evaluate((_) =>
                 navigator.clipboard.readText())).toBe('Test 8');
         });

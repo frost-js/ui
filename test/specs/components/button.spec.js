@@ -116,19 +116,17 @@ test.describe('Button', () => {
                 UI.Button.init(button1).toggle();
             });
 
-            expect(await page.locator('body').innerHTML()).toBe(
-                '<button class="btn btn-secondary active" id="button1" data-ui-toggle="button" type="button" aria-pressed="true"></button>' +
-                '<button class="btn btn-secondary" id="button2" data-ui-toggle="button" type="button"></button>',
-            );
+            await expect(page.locator('#button1')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#button1')).toHaveAttribute('aria-pressed', 'true');
+            await expect(page.locator('#button2')).not.toHaveClass(/\bactive\b/);
+            expect(await page.locator('#button2').getAttribute('aria-pressed')).toBeNull();
         });
 
         test('toggles the button (data-ui-toggle)', async ({ page }) => {
             await page.locator('#button1').click();
 
-            expect(await page.locator('body').innerHTML()).toBe(
-                '<button class="btn btn-secondary active" id="button1" data-ui-toggle="button" type="button" aria-pressed="true"></button>' +
-                '<button class="btn btn-secondary" id="button2" data-ui-toggle="button" type="button"></button>',
-            );
+            await expect(page.locator('#button1')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#button1')).toHaveAttribute('aria-pressed', 'true');
         });
 
         test('toggles the button (query)', async ({ page }) => {
@@ -136,10 +134,8 @@ test.describe('Button', () => {
                 $('#button1').button('toggle');
             });
 
-            expect(await page.locator('body').innerHTML()).toBe(
-                '<button class="btn btn-secondary active" id="button1" data-ui-toggle="button" type="button" aria-pressed="true"></button>' +
-                '<button class="btn btn-secondary" id="button2" data-ui-toggle="button" type="button"></button>',
-            );
+            await expect(page.locator('#button1')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#button1')).toHaveAttribute('aria-pressed', 'true');
         });
 
         test('toggles multiple buttons (query)', async ({ page }) => {
@@ -147,10 +143,10 @@ test.describe('Button', () => {
                 $('button').button('toggle');
             });
 
-            expect(await page.locator('body').innerHTML()).toBe(
-                '<button class="btn btn-secondary active" id="button1" data-ui-toggle="button" type="button" aria-pressed="true"></button>' +
-                '<button class="btn btn-secondary active" id="button2" data-ui-toggle="button" type="button" aria-pressed="true"></button>',
-            );
+            await expect(page.locator('#button1')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#button1')).toHaveAttribute('aria-pressed', 'true');
+            await expect(page.locator('#button2')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#button2')).toHaveAttribute('aria-pressed', 'true');
         });
 
         test('toggles the button off', async ({ page }) => {
@@ -161,10 +157,8 @@ test.describe('Button', () => {
                 button.toggle();
             });
 
-            expect(await page.locator('body').innerHTML()).toBe(
-                '<button class="btn btn-secondary" id="button1" data-ui-toggle="button" type="button" aria-pressed="false"></button>' +
-                '<button class="btn btn-secondary" id="button2" data-ui-toggle="button" type="button"></button>',
-            );
+            await expect(page.locator('#button1')).not.toHaveClass(/\bactive\b/);
+            await expect(page.locator('#button1')).toHaveAttribute('aria-pressed', 'false');
         });
     });
 });

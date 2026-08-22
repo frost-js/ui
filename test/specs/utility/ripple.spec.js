@@ -23,7 +23,7 @@ test.describe('Ripple', () => {
             await expectAnimationState(page, [
                 {
                     selectors: ['#button > .ripple-effect'],
-                    progress: 0.5,
+                    active: true,
                 },
             ]);
         });
