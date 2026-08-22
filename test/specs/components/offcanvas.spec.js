@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
 import { expectAnimationState } from '../../support/assertions/animation.js';
 import { expectStyles } from '../../support/assertions/styles.js';
+import { measureScrollbarSize } from '../../support/measurements/scrollbar.js';
 
 test.beforeEach(async ({ page }) => {
     await setupClock(page);
@@ -1210,6 +1211,8 @@ test.describe('Offcanvas', () => {
 
     test.describe('scroll padding', () => {
         test('adds scroll padding to document body', async ({ page }) => {
+            const scrollbarSize = await measureScrollbarSize(page);
+
             await page.evaluate((_) => {
                 $.setStyle(document.body, { height: '2000px' });
                 const offcanvas1 = $.findOne('#offcanvas1');
@@ -1221,12 +1224,7 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            await expectStyles(page, [
-                {
-                    selectors: ['body'],
-                    styles: { paddingRight: '15px' },
-                },
-            ]);
+            await expect(page.locator('body')).toHaveCSS('padding-right', `${scrollbarSize}px`);
         });
 
         test('does not add padding if scrollbars are hidden', async ({ page }) => {
@@ -1249,6 +1247,8 @@ test.describe('Offcanvas', () => {
         });
 
         test('works with existing padding', async ({ page }) => {
+            const scrollbarSize = await measureScrollbarSize(page);
+
             await page.evaluate((_) => {
                 $.setStyle(document.body, {
                     height: '2000px',
@@ -1263,12 +1263,7 @@ test.describe('Offcanvas', () => {
             });
             await advanceClock(page, 50);
 
-            await expectStyles(page, [
-                {
-                    selectors: ['body'],
-                    styles: { paddingRight: '25px' },
-                },
-            ]);
+            await expect(page.locator('body')).toHaveCSS('padding-right', `${scrollbarSize + 10}px`);
         });
 
         test('restores scroll padding to document body', async ({ page }) => {
