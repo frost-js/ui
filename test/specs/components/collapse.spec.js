@@ -581,6 +581,53 @@ test.describe('Collapse', () => {
         });
     });
 
+    test.describe('trigger selectors', () => {
+        test('updates an href trigger', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.body.innerHTML =
+                    '<a class="btn btn-secondary collapsed" id="collapseToggle" data-ui-toggle="collapse" href="#collapse"></a>' +
+                    '<div class="collapse" id="collapse"></div>';
+            });
+            await page.locator('#collapseToggle').click();
+            await advanceClock(page, 150);
+
+            await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary');
+            await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'true');
+            await expect(page.locator('#collapse')).toHaveClass('collapse show');
+
+            await page.locator('#collapseToggle').click();
+            await advanceClock(page, 150);
+
+            await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary collapsed');
+            await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#collapse')).toHaveClass('collapse');
+        });
+
+        test('updates a class-based multi-collapse trigger', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.body.innerHTML =
+                    '<button class="btn btn-secondary collapsed" id="collapseToggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button"></button>' +
+                    '<div class="collapse multi-collapse" id="collapse1"></div>' +
+                    '<div class="collapse multi-collapse" id="collapse2"></div>';
+            });
+            await page.locator('#collapseToggle').click();
+            await advanceClock(page, 150);
+
+            await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary');
+            await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'true');
+            await expect(page.locator('#collapse1')).toHaveClass('collapse multi-collapse show');
+            await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse show');
+
+            await page.locator('#collapseToggle').click();
+            await advanceClock(page, 150);
+
+            await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary collapsed');
+            await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#collapse1')).toHaveClass('collapse multi-collapse');
+            await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse');
+        });
+    });
+
     test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
             const eventTriggered = await page.evaluate((_) => {

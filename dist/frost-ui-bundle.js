@@ -11181,10 +11181,11 @@
         constructor(node, options) {
             super(node, options);
 
-            const id = $$1.getAttribute(this._node, 'id');
-            this._triggers = $$1.find(
-                `[data-ui-toggle="collapse"][data-ui-target="#${id}"]`,
-            );
+            this._triggers = $$1.find('[data-ui-toggle="collapse"]')
+                .filter((trigger) => {
+                    const selector = getTargetSelector(trigger);
+                    return selector && $$1.is(this._node, selector);
+                });
 
             if (this._options.parent) {
                 this._parent = $$1.closest(this._node, this._options.parent).shift();

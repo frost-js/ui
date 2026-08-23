@@ -985,10 +985,11 @@
         constructor(node, options) {
             super(node, options);
 
-            const id = $.getAttribute(this._node, 'id');
-            this._triggers = $.find(
-                `[data-ui-toggle="collapse"][data-ui-target="#${id}"]`,
-            );
+            this._triggers = $.find('[data-ui-toggle="collapse"]')
+                .filter((trigger) => {
+                    const selector = getTargetSelector(trigger);
+                    return selector && $.is(this._node, selector);
+                });
 
             if (this._options.parent) {
                 this._parent = $.closest(this._node, this._options.parent).shift();
