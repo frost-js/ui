@@ -42,6 +42,7 @@ hr:not([size]) {
     font-weight: vars.$headings-font-weight;
     line-height: vars.$headings-line-height;
     color: vars.$headings-color;
+    text-wrap: balance;
 }
 
 h1 {
