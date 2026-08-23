@@ -5,6 +5,7 @@
     --ui-popover-z-index: #{vars.$popover-z-index};
     --ui-popover-max-width: #{vars.$popover-max-width};
     --ui-popover-bg: #{vars.$popover-bg};
+    --ui-popover-backdrop-filter: #{vars.$popover-backdrop-filter};
     --ui-popover-border-width: #{vars.$popover-border-width};
     --ui-popover-border-color: #{vars.$popover-border-color};
     --ui-popover-border-radius: #{vars.$popover-border-radius};
@@ -32,6 +33,7 @@
     background-clip: padding-box;
     border: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);
     box-shadow: var(--ui-popover-box-shadow);
+    backdrop-filter: var(--ui-popover-backdrop-filter);
     @include mixins.border-radius(var(--ui-popover-border-radius));
 
     .popover-arrow {

@@ -332,7 +332,8 @@ $popover-max-width: 276px !default;
 $popover-padding-x: vars.$spacing * .5 !default;
 $popover-padding-y: vars.$spacing !default;
 $popover-font-size: var(--ui-font-size-sm) !default;
-$popover-bg: var(--ui-body-bg) !default;
+$popover-bg: helpers.color-alpha(body-bg, .88) !default;
+$popover-backdrop-filter: blur(.75rem) saturate(140%) !default;
 $popover-border-width: var(--ui-border-width) !default;
 $popover-border-color: var(--ui-border-color-translucent) !default;
 $popover-border-radius: var(--ui-border-radius-xl) !default;
@@ -341,7 +342,7 @@ $popover-box-shadow: var(--ui-shadow) !default;
 $popover-header-padding-x: $popover-padding-y !default;
 $popover-header-padding-y: $popover-padding-x !default;
 $popover-header-font-size: var(--ui-body-font-size) !default;
-$popover-header-bg: var(--ui-secondary-bg) !default;
+$popover-header-bg: helpers.color-alpha(secondary-bg, .8) !default;
 
 $popover-body-padding-x: $popover-padding-y !default;
 $popover-body-padding-y: $popover-padding-x !default;

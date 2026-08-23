@@ -109,7 +109,7 @@
   --ui-body-color: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-black));
   --ui-secondary-bg: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-white));
   --ui-secondary-color: rgb(from var(--ui-body-color) r g b/0.7);
-  --ui-tertiary-bg: color-mix(in srgb, var(--ui-gray) 10%, var(--ui-white));
+  --ui-tertiary-bg: color-mix(in srgb, var(--ui-gray) 12.5%, var(--ui-white));
   --ui-tertiary-color: rgb(from var(--ui-body-color) r g b/0.5);
   --ui-emphasis-color: #000;
   --ui-link-color: var(--ui-primary);
@@ -151,7 +151,7 @@
   --ui-body-color: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-white));
   --ui-secondary-bg: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-black));
   --ui-secondary-color: rgb(from var(--ui-body-color) r g b/0.7);
-  --ui-tertiary-bg: color-mix(in srgb, var(--ui-gray) 30%, var(--ui-black));
+  --ui-tertiary-bg: color-mix(in srgb, var(--ui-gray) 32.5%, var(--ui-black));
   --ui-tertiary-color: rgb(from var(--ui-body-color) r g b/0.5);
   --ui-emphasis-color: var(--ui-white);
   --ui-link-color: color-mix(in oklch, var(--ui-primary) 70%, var(--ui-white));
@@ -4557,14 +4557,15 @@ fieldset:disabled .btn {
 .popover {
   --ui-popover-z-index: 1070;
   --ui-popover-max-width: 276px;
-  --ui-popover-bg: var(--ui-body-bg);
+  --ui-popover-bg: rgb(from var(--ui-body-bg) r g b/0.88);
+  --ui-popover-backdrop-filter: blur(0.75rem) saturate(140%);
   --ui-popover-border-width: var(--ui-border-width);
   --ui-popover-border-color: var(--ui-border-color-translucent);
   --ui-popover-border-radius: var(--ui-border-radius-xl);
   --ui-popover-box-shadow: var(--ui-shadow);
   --ui-popover-header-padding-x: 1rem;
   --ui-popover-header-padding-y: 0.5rem;
-  --ui-popover-header-bg: var(--ui-secondary-bg);
+  --ui-popover-header-bg: rgb(from var(--ui-secondary-bg) r g b/0.8);
   --ui-popover-body-padding-x: 1rem;
   --ui-popover-body-padding-y: 0.5rem;
   --ui-popover-body-color: var(--ui-body-color);
@@ -4597,6 +4598,8 @@ fieldset:disabled .btn {
   background-clip: padding-box;
   border: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);
   box-shadow: var(--ui-popover-box-shadow);
+  -webkit-backdrop-filter: var(--ui-popover-backdrop-filter);
+  backdrop-filter: var(--ui-popover-backdrop-filter);
   border-radius: var(--ui-popover-border-radius);
 }
 .popover .popover-arrow {

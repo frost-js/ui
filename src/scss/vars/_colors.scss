@@ -39,7 +39,7 @@ $body-color: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-black)) !default;
 $body-secondary-bg: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-white)) !default;
 $body-secondary-color: helpers.color-alpha(body-color, .7) !default;
 
-$body-tertiary-bg: color-mix(in srgb, var(--ui-gray) 10%, var(--ui-white)) !default;
+$body-tertiary-bg: color-mix(in srgb, var(--ui-gray) 12.5%, var(--ui-white)) !default;
 $body-tertiary-color: helpers.color-alpha(body-color, .5) !default;
 
 $emphasis-color: $black !default;

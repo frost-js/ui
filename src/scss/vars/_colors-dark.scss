@@ -7,7 +7,7 @@ $body-color-dark: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-white)) !defau
 $body-secondary-bg-dark: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-black)) !default;
 $body-secondary-color-dark: helpers.color-alpha(body-color, .7) !default;
 
-$body-tertiary-bg-dark: color-mix(in srgb, var(--ui-gray) 30%, var(--ui-black)) !default;
+$body-tertiary-bg-dark: color-mix(in srgb, var(--ui-gray) 32.5%, var(--ui-black)) !default;
 $body-tertiary-color-dark: helpers.color-alpha(body-color, .5) !default;
 
 $emphasis-color-dark: var(--ui-white) !default;
