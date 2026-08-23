@@ -29,7 +29,8 @@
     appearance: none;
     background-color: vars.$input-check-bg;
     border: vars.$input-check-border-width var(--ui-border-style) var(--ui-input-border-color, #{vars.$input-check-border-color});
-    transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+    transition-timing-function: var(--ui-transition-timing-function);
+    transition-duration: var(--ui-transition-duration);
     transition-property: background-color, border-color, box-shadow;
 
     &[type="checkbox"] {
@@ -116,7 +117,8 @@
             content: "";
             background-color: currentcolor;
             translate: -50% -50%;
-            transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+            transition-timing-function: var(--ui-transition-timing-function);
+            transition-duration: var(--ui-transition-duration);
             transition-property: left;
             @include mixins.border-radius(50%);
         }

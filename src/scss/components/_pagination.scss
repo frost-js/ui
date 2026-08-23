@@ -36,7 +36,8 @@
     text-decoration: none;
     background-color: var(--ui-pagination-bg);
     border: var(--ui-pagination-border-width) var(--ui-border-style) var(--ui-pagination-border-color);
-    transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+    transition-timing-function: var(--ui-transition-timing-function);
+    transition-duration: var(--ui-transition-duration);
     transition-property: color, background-color, box-shadow;
 
     &:hover {

@@ -1996,7 +1996,8 @@ progress {
   color: var(--ui-accordion-btn-color);
   background-color: var(--ui-accordion-btn-bg);
   border: 0;
-  transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
   transition-property: color, background-color, border-color, border-radius;
   overflow-anchor: none;
   border-radius: 0;
@@ -2275,7 +2276,8 @@ progress {
   user-select: none;
   background-color: var(--ui-btn-bg);
   border: var(--ui-btn-border-width) var(--ui-border-style) var(--ui-btn-border-color);
-  transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
   transition-property: color, background-color, border-color, box-shadow;
   border-radius: var(--ui-btn-border-radius);
 }
@@ -3796,7 +3798,8 @@ fieldset:disabled .btn {
   text-decoration: none;
   background: none;
   border: 0;
-  transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
   transition-property: color, background-color, border-color;
 }
 .nav-link:hover, .nav-link:focus-visible {
@@ -4490,7 +4493,8 @@ fieldset:disabled .btn {
   text-decoration: none;
   background-color: var(--ui-pagination-bg);
   border: var(--ui-pagination-border-width) var(--ui-border-style) var(--ui-pagination-border-color);
-  transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
   transition-property: color, background-color, box-shadow;
 }
 .page-link:hover {
@@ -4779,7 +4783,7 @@ fieldset:disabled .btn {
 }
 .progress-vertical .progress-bar {
   width: 100%;
-  transition: height var(--ui-animation-duration) var(--ui-transition-timing-function);
+  transition: height var(--ui-transition-duration) var(--ui-transition-timing-function);
 }
 .progress-vertical .progress-bar:first-child {
   margin-top: auto;
@@ -5045,7 +5049,8 @@ fieldset:disabled .btn {
   appearance: none;
   background-color: var(--ui-tertiary-bg);
   border: var(--ui-border-width) var(--ui-border-style) var(--ui-input-border-color, var(--ui-border-color));
-  transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
   transition-property: background-color, border-color, box-shadow;
 }
 .input-check[type=checkbox] {
@@ -5118,7 +5123,8 @@ fieldset:disabled .btn {
   content: "";
   background-color: currentcolor;
   translate: -50% -50%;
-  transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
   transition-property: left;
   border-radius: 50%;
 }
@@ -5400,7 +5406,8 @@ select.input-lg[multiple] option {
   background-color: var(--ui-primary);
   opacity: 0;
   transform: scaleX(0);
-  transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
   transition-property: transform, opacity;
 }
 .input-filled:focus ~ .ripple-line,
@@ -5624,7 +5631,8 @@ select.input-lg[multiple] option {
   color: var(--ui-tertiary-color);
   pointer-events: none;
   cursor: text;
-  transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
   transition-property: padding, font-size, color;
 }
 

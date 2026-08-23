@@ -33,7 +33,8 @@
     color: var(--ui-accordion-btn-color);
     background-color: var(--ui-accordion-btn-bg);
     border: 0;
-    transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
+    transition-timing-function: var(--ui-transition-timing-function);
+    transition-duration: var(--ui-transition-duration);
     transition-property: color, background-color, border-color, border-radius;
     overflow-anchor: none;
     @include mixins.border-radius(0);

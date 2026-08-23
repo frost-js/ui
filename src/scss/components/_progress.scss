@@ -57,7 +57,7 @@
 
     .progress-bar {
         width: 100%;
-        transition: height var(--ui-animation-duration) var(--ui-transition-timing-function);
+        transition: height var(--ui-transition-duration) var(--ui-transition-timing-function);
 
         &:first-child {
             margin-top: auto;
