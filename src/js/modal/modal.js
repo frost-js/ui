@@ -124,7 +124,7 @@ export default class Modal extends BaseComponent {
             return;
         }
 
-        $.setDataset(this._dialog, { uiAnimating: true });
+        $.setDataset(this._dialog, { uiAnimating: 'in' });
 
         const stackSize = $.find('.modal.show').length;
 

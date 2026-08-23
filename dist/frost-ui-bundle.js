@@ -12305,7 +12305,7 @@
                 return;
             }
 
-            $$1.setDataset(this._dialog, { uiAnimating: true });
+            $$1.setDataset(this._dialog, { uiAnimating: 'in' });
 
             const stackSize = $$1.find('.modal.show').length;
 

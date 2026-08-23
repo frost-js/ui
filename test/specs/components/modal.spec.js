@@ -186,6 +186,21 @@ test.describe('Modal', () => {
             ]);
         });
 
+        test('clears animation state when showing is interrupted', async ({ page }) => {
+            await page.evaluate((_) => {
+                const modal1 = $.findOne('#modal1');
+                UI.Modal.init(modal1).show();
+            });
+            await advanceClock(page, 50);
+            await page.evaluate((_) => {
+                $.stop('#modalDialog1', { finish: false });
+                $.stop('.modal-backdrop', { finish: false });
+            });
+            await advanceClock(page, 0);
+
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('data-ui-animating');
+        });
+
         test('can be called on shown modal', async ({ page }) => {
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
