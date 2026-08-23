@@ -17,6 +17,10 @@
     --ui-btn-disabled-opacity: #{vars.$btn-disabled-opacity};
     --ui-btn-focus-shadow-color: var(--ui-primary);
     --ui-btn-focus-box-shadow: #{vars.$btn-focus-box-shadow};
+    --ui-btn-shadow-color: transparent;
+    --ui-btn-box-shadow: #{vars.$btn-box-shadow};
+    --ui-btn-hover-box-shadow: #{vars.$btn-hover-box-shadow};
+    --ui-btn-active-box-shadow: #{vars.$btn-active-box-shadow};
     --ui-btn-active-state-bg: var(--ui-btn-hover-bg);
     --ui-btn-active-state-border-color: var(--ui-btn-active-border-color);
     --ui-ripple-active-state-bg: var(--ui-ripple-bg);
@@ -38,9 +42,10 @@
     user-select: none;
     background-color: var(--ui-btn-bg);
     border: var(--ui-btn-border-width) var(--ui-border-style) var(--ui-btn-border-color);
+    box-shadow: var(--ui-btn-box-shadow);
     transition-timing-function: var(--ui-transition-timing-function);
     transition-duration: var(--ui-transition-duration);
-    transition-property: color, background-color, border-color, box-shadow;
+    transition-property: color, background-color, border-color, box-shadow, transform;
     @include mixins.border-radius(var(--ui-btn-border-radius));
 
     @at-root {
@@ -52,10 +57,8 @@
             border-color: var(--ui-btn-hover-border-color);
         }
 
-        .btn-check:focus-visible+#{&},
-        #{&}:focus-visible {
-            outline: 0;
-            box-shadow: var(--ui-btn-focus-box-shadow);
+        #{&}:hover {
+            box-shadow: var(--ui-btn-hover-box-shadow);
         }
 
         .btn-check:checked+#{&},
@@ -65,6 +68,7 @@
             color: var(--ui-btn-active-color, var(--ui-btn-color));
             background-color: var(--ui-btn-active-bg);
             border-color: var(--ui-btn-active-border-color);
+            box-shadow: var(--ui-btn-active-box-shadow);
         }
 
         #{&}:first-child:active,
@@ -74,13 +78,35 @@
             color: var(--ui-btn-active-state-color, var(--ui-btn-color));
             background-color: var(--ui-btn-active-state-bg);
             border-color: var(--ui-btn-active-state-border-color);
+            box-shadow: var(--ui-btn-active-box-shadow);
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            #{&}:hover {
+                transform: translateY(-1px);
+            }
+
+            .btn-check:checked+#{&},
+            #{&}.active,
+            #{&}:first-child:active,
+            :not(.btn-check)+#{&}:active {
+                transform: translateY(1px);
+            }
+        }
+
+        .btn-check:focus-visible+#{&},
+        #{&}:focus-visible {
+            outline: 0;
+            box-shadow: var(--ui-btn-focus-box-shadow), var(--ui-btn-box-shadow);
         }
 
         #{&}:disabled,
         #{&}.disabled,
         fieldset:disabled #{&} {
             pointer-events: none;
+            box-shadow: var(--ui-btn-box-shadow);
             opacity: var(--ui-btn-disabled-opacity);
+            transform: none;
         }
     }
 }
@@ -127,6 +153,7 @@
         --ui-ripple-bg: #{functions.color-alpha("#{$name}-contrast", vars.$btn-ripple-opacity)};
         --ui-btn-focus-shadow-color: var(--ui-#{$name});
         --ui-btn-active-state-bg: var(--ui-btn-active-bg);
+        --ui-btn-shadow-color: var(--ui-#{$name});
     }
 
     .btn-outline-#{$name} {
