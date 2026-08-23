@@ -61,9 +61,8 @@
     &.collapsing {
         &::before {
             position: absolute;
-            right: 0;
+            inset-inline: 0;
             bottom: calc(var(--ui-accordion-border-width) * -1);
-            left: 0;
             height: var(--ui-accordion-border-width);
             content: "";
             background-color: var(--ui-accordion-border-color);
@@ -74,7 +73,7 @@
         flex-shrink: 0;
         width: var(--ui-accordion-icon-width);
         height: var(--ui-accordion-icon-width);
-        margin-left: auto;
+        margin-inline-start: auto;
         content: "";
         background-color: currentcolor;
         mask-image: var(--ui-accordion-icon);
@@ -125,8 +124,7 @@
     }
 
     .accordion-item {
-        border-right: 0;
-        border-left: 0;
+        border-inline: 0;
 
         &:first-child {
             border-top: 0;

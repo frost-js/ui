@@ -22,8 +22,8 @@
 
 .label-floating {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
-    left: 0;
     display: block;
     width: 100%;
     padding: vars.$label-floating-padding-y vars.$input-padding-x;

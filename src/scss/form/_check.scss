@@ -6,17 +6,17 @@
 .form-check {
     display: block;
     min-height: vars.$form-check-min-height;
-    padding-left: vars.$form-check-padding-left;
+    padding-inline-start: vars.$form-check-padding-start;
 
     .input-check {
-        float: left;
-        margin-left: vars.$form-check-padding-left * -1;
+        float: inline-start;
+        margin-inline-start: vars.$form-check-padding-start * -1;
     }
 }
 
 .form-check-inline {
     display: inline-block;
-    margin-right: vars.$form-check-inline-margin-right;
+    margin-inline-end: vars.$form-check-inline-margin-end;
 }
 
 .input-check {
@@ -89,11 +89,11 @@
 }
 
 .form-switch {
-    padding-left: vars.$form-switch-padding-left;
+    padding-inline-start: vars.$form-switch-padding-start;
 
     .input-check {
         width: vars.$form-switch-input-check-width;
-        margin-left: vars.$form-switch-padding-left * -1;
+        margin-inline-start: vars.$form-switch-padding-start * -1;
         color: vars.$form-switch-input-check-color;
         @include mixins.border-radius(vars.$form-switch-input-check-border-radius);
 

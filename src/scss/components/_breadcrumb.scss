@@ -22,11 +22,11 @@
     }
 
     +.breadcrumb-item {
-        padding-left: var(--ui-breadcrumb-item-padding-x);
+        padding-inline-start: var(--ui-breadcrumb-item-padding-x);
 
         &::before {
             display: inline-block;
-            padding-right: var(--ui-breadcrumb-item-padding-x);
+            padding-inline-end: var(--ui-breadcrumb-item-padding-x);
             color: var(--ui-breadcrumb-divider-color);
             content: var(--ui-breadcrumb-divider);
         }

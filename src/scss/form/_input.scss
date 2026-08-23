@@ -223,8 +223,8 @@
 
 .ripple-line {
     position: absolute;
+    inset-inline-start: 0;
     bottom: 0;
-    left: 0;
     z-index: 4;
     width: 100%;
     height: calc(vars.$input-border-width * 2);

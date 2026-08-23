@@ -85,8 +85,8 @@ $legend-font-size: var(--ui-font-size-lg) !default;
 $legend-font-weight: map.get(vars.$font-weights, bold) !default;
 
 // list
-$list-padding-left: vars.$spacing * 2 !default;
-$list-inline-item-margin-right: vars.$spacing * .5 !default;
+$list-padding-start: vars.$spacing * 2 !default;
+$list-inline-item-margin-end: vars.$spacing * .5 !default;
 
 // mark
 $mark-padding: .2rem !default;

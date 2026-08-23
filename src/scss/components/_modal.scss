@@ -34,11 +34,8 @@
     --ui-modal-footer-border-color: #{vars.$modal-footer-border-color};
 
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     z-index: var(--ui-modal-z-index);
-    width: 100%;
-    height: 100%;
     overflow: hidden;
     outline: 0;
 
@@ -92,11 +89,8 @@
     --ui-backdrop-bg: #{vars.$modal-backdrop-bg};
 
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     z-index: var(--ui-backdrop-z-index);
-    width: 100vw;
-    height: 100vh;
     background-color: var(--ui-backdrop-bg);
 }
 
@@ -110,10 +104,9 @@
 
     .btn-close {
         padding: calc(var(--ui-modal-header-padding-y) * .5) calc(var(--ui-modal-header-padding-x) * .5);
-        margin-top: calc(var(--ui-modal-header-padding-y) * -.5);
-        margin-right: calc(var(--ui-modal-header-padding-x) * -.5);
-        margin-bottom: calc(var(--ui-modal-header-padding-y) * -.5);
-        margin-left: auto;
+        margin-block: calc(var(--ui-modal-header-padding-y) * -.5);
+        margin-inline-start: auto;
+        margin-inline-end: calc(var(--ui-modal-header-padding-x) * -.5);
     }
 }
 

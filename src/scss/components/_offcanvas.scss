@@ -35,10 +35,9 @@
 
     .btn-close {
         padding: calc(var(--ui-offcanvas-padding-y) * .5) calc(var(--ui-offcanvas-padding-x) * .5);
-        margin-top: calc(var(--ui-offcanvas-padding-y) * -.5);
-        margin-right: calc(var(--ui-offcanvas-padding-x) * -.5);
-        margin-bottom: calc(var(--ui-offcanvas-padding-y) * -.5);
-        margin-left: auto;
+        margin-block: calc(var(--ui-offcanvas-padding-y) * -.5);
+        margin-inline-start: auto;
+        margin-inline-end: calc(var(--ui-offcanvas-padding-x) * -.5);
     }
 }
 
@@ -68,17 +67,15 @@
 }
 
 .offcanvas-top {
+    inset-inline: 0;
     top: 0;
-    right: 0;
-    left: 0;
     height: var(--ui-offcanvas-height);
     max-height: 100%;
     border-bottom: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
 }
 
 .offcanvas-bottom {
-    right: 0;
-    left: 0;
+    inset-inline: 0;
     height: var(--ui-offcanvas-height);
     max-height: 100%;
     border-top: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
@@ -86,11 +83,8 @@
 
 .offcanvas-backdrop::before {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     z-index: vars.$offcanvas-z-index - 1;
-    width: 100vw;
-    height: 100vh;
     content: "";
     background-color: vars.$offcanvas-backdrop-bg;
 }

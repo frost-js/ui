@@ -4,8 +4,8 @@
 
 // check
 $form-check-min-height: 1.5rem !default;
-$form-check-padding-left: vars.$spacing * 2 !default;
-$form-check-inline-margin-right: vars.$spacing !default;
+$form-check-padding-start: vars.$spacing * 2 !default;
+$form-check-inline-margin-end: vars.$spacing !default;
 
 $input-check-size: 1em !default;
 $input-check-margin-top: vars.$spacing * .25 !default;
@@ -24,7 +24,7 @@ $input-check-checkbox-checked-background-image: url("data:image/svg+xml,%3csvg x
 
 $input-check-radio-border-radius: 50% !default;
 
-$form-switch-padding-left: vars.$spacing * 2.5 !default;
+$form-switch-padding-start: vars.$spacing * 2.5 !default;
 $form-switch-input-check-width: 2rem !default;
 $form-switch-input-check-color: var(--ui-secondary-color) !default;
 $form-switch-input-check-border-radius: 2rem !default;

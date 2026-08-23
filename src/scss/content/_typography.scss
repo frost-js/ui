@@ -93,7 +93,7 @@
 }
 
 .list-inline {
-    padding-left: 0;
+    padding-inline-start: 0;
     list-style: none;
 }
 
@@ -102,11 +102,11 @@
 }
 
 .list-inline-item:not(:last-child) {
-    margin-right: vars.$list-inline-item-margin-right;
+    margin-inline-end: vars.$list-inline-item-margin-end;
 }
 
 .list-unstyled {
-    padding-left: 0;
+    padding-inline-start: 0;
     list-style: none;
 }
 

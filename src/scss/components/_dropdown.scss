@@ -35,7 +35,7 @@
     margin: 0;
     font-size: vars.$dropdown-font-size;
     color: var(--ui-dropdown-color);
-    text-align: left;
+    text-align: start;
     list-style: none;
     background-color: var(--ui-dropdown-bg);
     border: var(--ui-dropdown-border-width) var(--ui-border-style) var(--ui-dropdown-border-color);
@@ -138,9 +138,9 @@
 }
 
 .dropdown-toggle-split::after {
-    margin-left: 0;
+    margin-inline-start: 0;
 }
 
 .dropdown-toggle-split::before {
-    margin-right: 0;
+    margin-inline-end: 0;
 }

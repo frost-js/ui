@@ -57,8 +57,8 @@
     @include mixins.border-top-radius(calc(var(--ui-toast-border-radius) - var(--ui-toast-border-width)));
 
     .btn-close {
-        margin-right: calc(var(--ui-toast-padding-x) * -.5);
-        margin-left: var(--ui-toast-padding-x);
+        margin-inline-start: var(--ui-toast-padding-x);
+        margin-inline-end: calc(var(--ui-toast-padding-x) * -.5);
     }
 }
 

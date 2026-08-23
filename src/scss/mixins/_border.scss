@@ -41,3 +41,21 @@
     border-top-left-radius: $amount;
     border-bottom-left-radius: $amount;
 }
+
+/// Applies a border radius to the inline-start corners.
+///
+/// @param {Number | String} $amount - The border-radius value.
+/// @output Start-start and end-start border-radius declarations.
+@mixin border-start-radius($amount) {
+    border-start-start-radius: $amount;
+    border-end-start-radius: $amount;
+}
+
+/// Applies a border radius to the inline-end corners.
+///
+/// @param {Number | String} $amount - The border-radius value.
+/// @output Start-end and end-end border-radius declarations.
+@mixin border-end-radius($amount) {
+    border-start-end-radius: $amount;
+    border-end-end-radius: $amount;
+}

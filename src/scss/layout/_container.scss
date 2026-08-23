@@ -5,10 +5,8 @@
 .container,
 .container-fluid {
     width: 100%;
-    padding-right: vars.$gutter-x * .5;
-    padding-left: vars.$gutter-x * .5;
-    margin-right: auto;
-    margin-left: auto;
+    padding-inline: vars.$gutter-x * .5;
+    margin-inline: auto;
 }
 
 @each $breakpoint, $max-width in vars.$containers {

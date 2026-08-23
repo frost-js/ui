@@ -11,16 +11,14 @@
 
     display: flex;
     flex-wrap: wrap;
+    margin-inline: calc(var(--ui-gutter-x) / -2);
     margin-top: calc(var(--ui-gutter-y) * -1);
-    margin-right: calc(var(--ui-gutter-x) / -2);
-    margin-left: calc(var(--ui-gutter-x) / -2);
 
     > * {
         flex-shrink: 0;
         width: 100%;
         max-width: 100%;
-        padding-right: calc(var(--ui-gutter-x) / 2);
-        padding-left: calc(var(--ui-gutter-x) / 2);
+        padding-inline: calc(var(--ui-gutter-x) / 2);
         margin-top: var(--ui-gutter-y);
     }
 }
@@ -61,9 +59,9 @@
                     $num: math.div($i, vars.$grid-size);
 
                     @if $num == 0 {
-                        margin-left: 0;
+                        margin-inline-start: 0;
                     } @else {
-                        margin-left: math.percentage($num);
+                        margin-inline-start: math.percentage($num);
                     }
                 }
             }

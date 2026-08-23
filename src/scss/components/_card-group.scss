@@ -14,35 +14,35 @@
             margin-bottom: 0;
 
             +.card {
-                margin-left: 0;
-                border-left: 0;
+                margin-inline-start: 0;
+                border-inline-start: 0;
             }
 
             &:not(:first-child) {
-                @include mixins.border-left-radius(0);
+                @include mixins.border-start-radius(0);
 
                 > .card-img-top,
                 > .card-header {
-                    border-top-left-radius: 0;
+                    border-start-start-radius: 0;
                 }
 
                 > .card-img-bottom,
                 > .card-footer {
-                    border-bottom-left-radius: 0;
+                    border-end-start-radius: 0;
                 }
             }
 
             &:not(:last-child) {
-                @include mixins.border-right-radius(0);
+                @include mixins.border-end-radius(0);
 
                 > .card-img-top,
                 > .card-header {
-                    border-top-right-radius: 0;
+                    border-start-end-radius: 0;
                 }
 
                 > .card-img-bottom,
                 > .card-footer {
-                    border-bottom-right-radius: 0;
+                    border-end-end-radius: 0;
                 }
             }
         }

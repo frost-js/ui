@@ -14,8 +14,8 @@
     display: flex;
     flex-wrap: wrap;
     padding: 0;
+    margin-inline-start: 0;
     margin-bottom: 0;
-    margin-left: 0;
     list-style: none;
 }
 
@@ -121,8 +121,7 @@
     gap: var(--ui-nav-underline-gap);
 
     .nav-link {
-        padding-right: 0;
-        padding-left: 0;
+        padding-inline: 0;
         border-bottom: var(--ui-nav-underline-border-width) solid transparent;
 
         &:focus,
@@ -169,13 +168,11 @@
 }
 
 .card-header-tabs {
-    margin-right: calc(var(--ui-card-cap-padding-x) * -.5);
+    margin-inline: calc(var(--ui-card-cap-padding-x) * -.5);
     margin-bottom: calc(var(--ui-card-cap-padding-y) * -1);
-    margin-left: calc(var(--ui-card-cap-padding-x) * -.5);
     border-bottom: 0;
 }
 
 .card-header-pills {
-    margin-right: calc(var(--ui-card-cap-padding-x) * -.5);
-    margin-left: calc(var(--ui-card-cap-padding-x) * -.5);
+    margin-inline: calc(var(--ui-card-cap-padding-x) * -.5);
 }

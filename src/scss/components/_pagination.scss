@@ -23,7 +23,7 @@
     --ui-pagination-disabled-border-color: #{vars.$pagination-disabled-border-color};
 
     display: flex;
-    padding-left: 0;
+    padding-inline-start: 0;
     list-style: none;
 }
 
@@ -76,15 +76,15 @@
 
 .page-item {
     &:first-child .page-link {
-        @include mixins.border-left-radius(var(--ui-pagination-border-radius));
+        @include mixins.border-start-radius(var(--ui-pagination-border-radius));
     }
 
     &:last-child .page-link {
-        @include mixins.border-right-radius(var(--ui-pagination-border-radius));
+        @include mixins.border-end-radius(var(--ui-pagination-border-radius));
     }
 
     &:not(:first-child) .page-link {
-        margin-left: calc(var(--ui-pagination-border-width) * -1);
+        margin-inline-start: calc(var(--ui-pagination-border-width) * -1);
     }
 }
 

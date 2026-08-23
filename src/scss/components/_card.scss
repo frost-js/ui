@@ -28,8 +28,7 @@
     @include mixins.border-radius(var(--ui-card-border-radius));
 
     >hr {
-        margin-right: 0;
-        margin-left: 0;
+        margin-inline: 0;
     }
 
     >.list-group {
@@ -95,15 +94,12 @@
 }
 
 .card-link + .card-link {
-    margin-left: var(--ui-card-spacer-x);
+    margin-inline-start: var(--ui-card-spacer-x);
 }
 
 .card-img-overlay {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     padding: var(--ui-card-img-overlay-padding);
     @include mixins.border-radius(var(--ui-card-inner-border-radius));
 }

@@ -43,7 +43,7 @@
     )
 ));
 @include mixins.utility((
-    property: border-right,
+    property: border-inline-end,
     class: border-end,
     values: (
         null: var(--ui-border-width) var(--ui-border-style) var(--ui-border-color),
@@ -58,7 +58,7 @@
     )
 ));
 @include mixins.utility((
-    property: border-left,
+    property: border-inline-start,
     class: border-start,
     values: (
         null: var(--ui-border-width) var(--ui-border-style) var(--ui-border-color),
@@ -120,7 +120,7 @@
     )
 ));
 @include mixins.utility((
-    property: border-top-right-radius border-bottom-right-radius,
+    property: border-start-end-radius border-end-end-radius,
     class: rounded-end,
     values: (
         null: var(--ui-border-radius),
@@ -150,7 +150,7 @@
     )
 ));
 @include mixins.utility((
-    property: border-top-left-radius border-bottom-left-radius,
+    property: border-start-start-radius border-end-start-radius,
     class: rounded-start,
     values: (
         null: var(--ui-border-radius),
@@ -298,8 +298,8 @@
 @include mixins.utility((
     property: float,
     values: (
-        start: left,
-        end: right,
+        start: inline-start,
+        end: inline-end,
         none: none
     ),
     responsive: true
@@ -409,7 +409,7 @@
     values: vars.$positions
 ));
 @include mixins.utility((
-    property: right,
+    property: inset-inline-end,
     class: end,
     values: vars.$positions
 ));
@@ -418,7 +418,7 @@
     values: vars.$positions
 ));
 @include mixins.utility((
-    property: left,
+    property: inset-inline-start,
     class: start,
     values: vars.$positions
 ));
@@ -543,7 +543,7 @@
     print: true
 ));
 @include mixins.utility((
-    property: padding-right,
+    property: padding-inline-end,
     class: pe,
     values: vars.$paddings,
     responsive: true,
@@ -557,7 +557,7 @@
     print: true
 ));
 @include mixins.utility((
-    property: padding-left,
+    property: padding-inline-start,
     class: ps,
     values: vars.$paddings,
     responsive: true,
@@ -593,7 +593,7 @@
     print: true
 ));
 @include mixins.utility((
-    property: margin-right,
+    property: margin-inline-end,
     class: me,
     values: vars.$margins,
     responsive: true,
@@ -607,7 +607,7 @@
     print: true
 ));
 @include mixins.utility((
-    property: margin-left,
+    property: margin-inline-start,
     class: ms,
     values: vars.$margins,
     responsive: true,
@@ -626,9 +626,9 @@
     property: text-align,
     class: text,
     values: (
-        start: left,
+        start: start,
         center: center,
-        end: right,
+        end: end,
         justify: justify
     ),
     responsive: true

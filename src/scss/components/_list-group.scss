@@ -24,8 +24,8 @@
     display: flex;
     flex-direction: column;
     padding: 0;
+    margin-inline-start: 0;
     margin-bottom: 0;
-    margin-left: 0;
     @include mixins.border-radius(var(--ui-list-group-border-radius));
 }
 
@@ -139,23 +139,23 @@
             .list-group-item {
 
                 &:first-child {
-                    @include mixins.border-radius(var(--ui-list-group-border-radius) 0 0 var(--ui-list-group-border-radius));
+                    @include mixins.border-start-radius(var(--ui-list-group-border-radius));
                 }
 
                 &:last-child {
-                    @include mixins.border-radius(0 var(--ui-list-group-border-radius) vars.$list-group-border-radius 0);
+                    @include mixins.border-end-radius(var(--ui-list-group-border-radius));
                 }
 
 
                 +.list-group-item {
+                    border-inline-start-width: 0;
                     border-top-width: var(--ui-list-group-border-width);
-                    border-left-width: 0;
                 }
 
                 &.active {
+                    margin-inline-start: calc(var(--ui-list-group-border-width) * -1);
                     margin-top: 0;
-                    margin-left: calc(var(--ui-list-group-border-width) * -1);
-                    border-left-width: var(--ui-list-group-border-width);
+                    border-inline-start-width: var(--ui-list-group-border-width);
                 }
             }
         }

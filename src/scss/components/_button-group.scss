@@ -36,18 +36,18 @@
 
     >:not(.btn-check:first-child) + .btn,
     >.btn-group:not(:first-child) > .btn:first-child {
-        margin-left: calc(var(--ui-btn-border-width) * -1);
+        margin-inline-start: calc(var(--ui-btn-border-width) * -1);
     }
 
     >.btn:not(:last-child):not(.dropdown-toggle),
     >.btn-group:not(:last-child) > .btn {
-        @include mixins.border-right-radius(0);
+        @include mixins.border-end-radius(0);
     }
 
     >.btn:nth-child(n + 3),
     > :not(.btn-check) + .btn,
     >.btn-group:not(:first-child) > .btn {
-        @include mixins.border-left-radius(0);
+        @include mixins.border-start-radius(0);
     }
 }
 
