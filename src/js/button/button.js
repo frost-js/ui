@@ -2,12 +2,11 @@ import BaseComponent from './../base-component.js';
 import { $ } from './../globals.js';
 
 /**
- * Button Class
- * @class
+ * Controls the pressed state of a toggle button.
  */
 export default class Button extends BaseComponent {
     /**
-     * Toggle the Button.
+     * Toggles the button state.
      */
     toggle() {
         $.toggleClass(this.node, 'active');

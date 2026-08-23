@@ -1,16 +1,15 @@
 import { $, document } from './../globals.js';
-import { initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
 import Tab from './tab.js';
 
-// Tab default options
+/** @type {import('./tab.js').TabOptions} */
 Tab.defaults = {
     duration: 100,
 };
 
-// Tab init
 initComponent('tab', Tab);
 
-// Tab events
+// Select a tab from pointer or Space-key activation.
 $.addEventDelegate(document, 'click.ui.tab keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => {
     if (e.code && e.code !== 'Space') {
         return;
@@ -22,6 +21,7 @@ $.addEventDelegate(document, 'click.ui.tab keydown.ui.tab', '[data-ui-toggle="ta
     tab.show();
 });
 
+// Move focus between tab controls with navigation keys.
 $.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => {
     let newTarget;
 

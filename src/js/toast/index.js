@@ -1,18 +1,18 @@
 import { $, document } from './../globals.js';
-import { getTarget, initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
+import { getTarget } from './../helpers/target.js';
 import Toast from './toast.js';
 
-// Toast default options
+/** @type {import('./toast.js').ToastOptions} */
 Toast.defaults = {
     autohide: true,
     delay: 5000,
     duration: 100,
 };
 
-// Toast init
 initComponent('toast', Toast);
 
-// Toast events
+// Hide the toast containing a dismiss control.
 $.addEventDelegate(document, 'click.ui.toast', '[data-ui-dismiss="toast"]', (e) => {
     e.preventDefault();
 

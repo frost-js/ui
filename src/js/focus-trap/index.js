@@ -1,12 +1,11 @@
-import { initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
 import FocusTrap from './focus-trap.js';
 
-// FocusTrap default options
+/** @type {import('./focus-trap.js').FocusTrapOptions} */
 FocusTrap.defaults = {
     autoFocus: true,
 };
 
-// FocusTrap init
 initComponent('focustrap', FocusTrap);
 
 export default FocusTrap;

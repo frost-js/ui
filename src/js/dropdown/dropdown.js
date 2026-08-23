@@ -2,9 +2,25 @@ import BaseComponent from './../base-component.js';
 import { $, window } from './../globals.js';
 import Popper from './../popper/popper.js';
 
+/** @typedef {import('../popper/popper.js').Placement} Placement */
+/** @typedef {import('../popper/popper.js').Position} Position */
+
 /**
- * Dropdown Class
- * @class
+ * @typedef {object} DropdownOptions
+ * @property {'dynamic'|'static'} [display='dynamic'] The positioning mode.
+ * @property {number} [duration=100] The transition duration in milliseconds.
+ * @property {Placement} [placement='bottom'] The preferred menu placement.
+ * @property {Position} [position='start'] The menu alignment.
+ * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
+ * @property {number} [spacing=3] The spacing between the toggle and menu.
+ * @property {number|false} [minContact=false] The minimum contact with the toggle.
+ * @property {'parent'|string|HTMLElement|null} [reference=null] The positioning reference.
+ * @property {boolean|'inside'|'outside'} [autoClose=true] Where interactions close the menu.
+ */
+
+/**
+ * Controls a dropdown menu.
+ * @extends {BaseComponent<DropdownOptions>}
  */
 export default class Dropdown extends BaseComponent {
     #display;
@@ -13,9 +29,9 @@ export default class Dropdown extends BaseComponent {
     #referenceNode;
 
     /**
-     * New Dropdown constructor.
+     * Creates a Dropdown.
      * @param {HTMLElement} node The input node.
-     * @param {object} [options] The options to create the Dropdown with.
+     * @param {DropdownOptions} [options] The dropdown options.
      */
     constructor(node, options) {
         super(node, options);
@@ -33,24 +49,22 @@ export default class Dropdown extends BaseComponent {
             this.#referenceNode = this.node;
         }
 
-        // Attach popper
+        // Navbar dropdowns use static positioning.
         if (this.#display !== 'static' && $.closest(this.node, '.navbar-nav').length) {
             this.#display = 'static';
         }
     }
 
     /**
-     * Check whether the Dropdown menu contains a target.
+     * Checks whether the dropdown menu contains a target.
      * @param {HTMLElement} target The target node.
-     * @return {boolean} Whether the menu contains the target.
+     * @returns {boolean} Whether the target is inside the menu.
      */
     containsMenuTarget(target) {
         return $.hasDescendent(this.#menuNode, target);
     }
 
-    /**
-     * Dispose the Dropdown.
-     */
+    /** @inheritdoc */
     dispose() {
         if (this.#popper) {
             this.#popper.dispose();
@@ -64,7 +78,7 @@ export default class Dropdown extends BaseComponent {
     }
 
     /**
-     * Focus the first Dropdown menu item.
+     * Focuses the first enabled dropdown item.
      */
     focusFirstItem() {
         const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', this.#menuNode);
@@ -72,7 +86,7 @@ export default class Dropdown extends BaseComponent {
     }
 
     /**
-     * Hide the Dropdown.
+     * Hides the dropdown menu.
      */
     hide() {
         if (
@@ -105,9 +119,9 @@ export default class Dropdown extends BaseComponent {
     }
 
     /**
-     * Check whether the Dropdown should close for a target.
+     * Checks whether an interaction target should close the dropdown.
      * @param {HTMLElement} target The target node.
-     * @return {boolean} Whether the Dropdown should close.
+     * @returns {boolean} Whether the dropdown should close.
      */
     shouldClose(target) {
         const hasDescendent = this.containsMenuTarget(target);
@@ -135,7 +149,7 @@ export default class Dropdown extends BaseComponent {
     }
 
     /**
-     * Show the Dropdown.
+     * Shows the dropdown menu.
      */
     show() {
         if (
@@ -178,7 +192,7 @@ export default class Dropdown extends BaseComponent {
     }
 
     /**
-     * Toggle the Dropdown.
+     * Toggles the dropdown menu.
      */
     toggle() {
         if ($.hasClass(this.#menuNode, 'show')) {
@@ -189,7 +203,7 @@ export default class Dropdown extends BaseComponent {
     }
 
     /**
-     * Update the Dropdown position.
+     * Updates the dropdown position.
      */
     update() {
         if (this.#popper) {

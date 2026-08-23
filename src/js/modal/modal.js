@@ -1,11 +1,20 @@
 import BaseComponent from './../base-component.js';
 import FocusTrap from './../focus-trap/index.js';
 import { $, document } from './../globals.js';
-import { addScrollPadding, resetScrollPadding } from './../helpers.js';
+import { addScrollPadding, resetScrollPadding } from './../helpers/scroll.js';
 
 /**
- * Modal Class
- * @class
+ * @typedef {object} ModalOptions
+ * @property {number} [duration=250] The transition duration in milliseconds.
+ * @property {boolean|'static'} [backdrop=true] Whether to show a dismissible or static backdrop.
+ * @property {boolean} [focus=true] Whether to trap focus while shown.
+ * @property {boolean} [show=false] Whether to show the modal immediately.
+ * @property {boolean} [keyboard=true] Whether Escape hides the modal.
+ */
+
+/**
+ * Controls a modal dialog and its backdrop.
+ * @extends {BaseComponent<ModalOptions>}
  */
 export default class Modal extends BaseComponent {
     #activeTarget;
@@ -15,9 +24,9 @@ export default class Modal extends BaseComponent {
     #scrollNodes;
 
     /**
-     * New Modal constructor.
+     * Creates a Modal.
      * @param {HTMLElement} node The input node.
-     * @param {object} [options] The options to create the Modal with.
+     * @param {ModalOptions} [options] The modal options.
      */
     constructor(node, options) {
         super(node, options);
@@ -33,9 +42,7 @@ export default class Modal extends BaseComponent {
         }
     }
 
-    /**
-     * Dispose the Modal.
-     */
+    /** @inheritdoc */
     dispose() {
         if (this.#focusTrap) {
             this.#focusTrap.dispose();
@@ -51,7 +58,7 @@ export default class Modal extends BaseComponent {
     }
 
     /**
-     * Handle a backdrop interaction.
+     * Handles an interaction outside the modal dialog.
      * @param {HTMLElement} target The interaction target.
      */
     handleBackdrop(target) {
@@ -71,7 +78,7 @@ export default class Modal extends BaseComponent {
     }
 
     /**
-     * Handle an escape key interaction.
+     * Handles an Escape-key interaction.
      */
     handleEscape() {
         if (!this.options.keyboard) {
@@ -87,7 +94,7 @@ export default class Modal extends BaseComponent {
     }
 
     /**
-     * Hide the Modal.
+     * Hides the modal.
      */
     hide() {
         if (
@@ -155,7 +162,7 @@ export default class Modal extends BaseComponent {
     }
 
     /**
-     * Show the Modal.
+     * Shows the modal.
      * @param {HTMLElement} [relatedTarget] The element that triggered the Modal.
      */
     show(relatedTarget) {
@@ -243,7 +250,7 @@ export default class Modal extends BaseComponent {
     }
 
     /**
-     * Toggle the Modal.
+     * Toggles the modal.
      */
     toggle() {
         if ($.hasClass(this.node, 'show')) {
@@ -254,7 +261,7 @@ export default class Modal extends BaseComponent {
     }
 
     /**
-     * Start a zoom in/out animation.
+     * Runs the static-backdrop feedback animation.
      */
     #zoom() {
         if ($.getDataset(this.#dialog, 'uiAnimating')) {

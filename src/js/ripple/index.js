@@ -1,6 +1,6 @@
 import { $, document } from './../globals.js';
 
-// Ripple events
+// Render a click-centered ripple animation.
 $.addEventDelegate(document, 'click.ui.ripple', '.ripple', (e) => {
     if (e.button !== 0) {
         return;

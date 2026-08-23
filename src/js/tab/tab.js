@@ -1,19 +1,24 @@
 import BaseComponent from './../base-component.js';
 import { $ } from './../globals.js';
-import { getTargetSelector } from './../helpers.js';
+import { getTargetSelector } from './../helpers/target.js';
 
 /**
- * Tab Class
- * @class
+ * @typedef {object} TabOptions
+ * @property {number} [duration=100] The transition duration in milliseconds.
+ */
+
+/**
+ * Controls a tab trigger and its associated panel.
+ * @extends {BaseComponent<TabOptions>}
  */
 export default class Tab extends BaseComponent {
     #siblings;
     #target;
 
     /**
-     * New Tab constructor.
+     * Creates a Tab.
      * @param {HTMLElement} node The input node.
-     * @param {object} [options] The options to create the Tab with.
+     * @param {TabOptions} [options] The tab options.
      */
     constructor(node, options) {
         super(node, options);
@@ -23,9 +28,7 @@ export default class Tab extends BaseComponent {
         this.#siblings = $.siblings(this.node);
     }
 
-    /**
-     * Dispose the Tab.
-     */
+    /** @inheritdoc */
     dispose() {
         this.#target = null;
         this.#siblings = null;
@@ -34,7 +37,7 @@ export default class Tab extends BaseComponent {
     }
 
     /**
-     * Hide the current Tab.
+     * Hides the current tab.
      */
     hide() {
         if (
@@ -49,7 +52,7 @@ export default class Tab extends BaseComponent {
     }
 
     /**
-     * Hide any active Tabs, and show the current Tab.
+     * Hides the active tab and shows the current tab.
      */
     show() {
         if (
@@ -86,7 +89,7 @@ export default class Tab extends BaseComponent {
     }
 
     /**
-     * Hide the current Tab (forcefully).
+     * Hides the current tab without checking its state or events.
      */
     #hide() {
         $.setDataset(this.#target, { uiAnimating: 'out' });
@@ -107,7 +110,7 @@ export default class Tab extends BaseComponent {
     }
 
     /**
-     * Show the current Tab (forcefully).
+     * Shows the current tab without checking its state or events.
      */
     #show() {
         $.setDataset(this.#target, { uiAnimating: 'in' });

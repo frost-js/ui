@@ -2,12 +2,17 @@ import BaseComponent from './../base-component.js';
 import { $ } from './../globals.js';
 
 /**
- * Alert Class
- * @class
+ * @typedef {object} AlertOptions
+ * @property {number} [duration=100] The transition duration in milliseconds.
+ */
+
+/**
+ * Controls a dismissible alert element.
+ * @extends {BaseComponent<AlertOptions>}
  */
 export default class Alert extends BaseComponent {
     /**
-     * Close the Alert.
+     * Closes the alert.
      */
     close() {
         if (

@@ -1,10 +1,11 @@
 import { getClickTarget } from './../click-target/index.js';
 import { $, document, window } from './../globals.js';
-import { getTarget, initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
+import { getTarget } from './../helpers/target.js';
 import { getTopModal } from './helpers.js';
 import Modal from './modal.js';
 
-// Modal default options
+/** @type {import('./modal.js').ModalOptions} */
 Modal.defaults = {
     duration: 250,
     backdrop: true,
@@ -13,10 +14,9 @@ Modal.defaults = {
     keyboard: true,
 };
 
-// Modal init
 initComponent('modal', Modal);
 
-// Modal events
+// Show the modal targeted by a toggle control.
 $.addEventDelegate(document, 'click.ui.modal', '[data-ui-toggle="modal"]', (e) => {
     e.preventDefault();
 
@@ -25,6 +25,7 @@ $.addEventDelegate(document, 'click.ui.modal', '[data-ui-toggle="modal"]', (e) =
     modal.show(e.currentTarget);
 });
 
+// Hide the modal containing a dismiss control.
 $.addEventDelegate(document, 'click.ui.modal', '[data-ui-dismiss="modal"]', (e) => {
     e.preventDefault();
 
@@ -33,7 +34,7 @@ $.addEventDelegate(document, 'click.ui.modal', '[data-ui-dismiss="modal"]', (e) 
     modal.hide();
 });
 
-// Events must be attached to the window, so offcanvas events are triggered first
+// Handle modal backdrops after offcanvas document listeners have run.
 $.addEvent(window, 'click.ui.modal', (e) => {
     const target = getClickTarget(e);
 
@@ -50,6 +51,7 @@ $.addEvent(window, 'click.ui.modal', (e) => {
     modal.handleBackdrop(target);
 });
 
+// Send Escape to the highest visible modal.
 $.addEvent(window, 'keydown.ui.modal', (e) => {
     if (e.code !== 'Escape') {
         return;

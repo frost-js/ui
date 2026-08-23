@@ -1,8 +1,9 @@
 import { $, document } from './../globals.js';
-import { getTarget, initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
+import { getTarget } from './../helpers/target.js';
 import Carousel from './carousel.js';
 
-// Carousel default options
+/** @type {import('./carousel.js').CarouselOptions} */
 Carousel.defaults = {
     interval: 5000,
     transition: 500,
@@ -13,10 +14,9 @@ Carousel.defaults = {
     swipe: true,
 };
 
-// Carousel init
 initComponent('carousel', Carousel);
 
-// Carousel events
+// Start ride-enabled carousels when the DOM is ready.
 $((_) => {
     const nodes = $.find('[data-ui-ride="carousel"]');
 
@@ -25,6 +25,7 @@ $((_) => {
     }
 });
 
+// Move a carousel to its previous or next item.
 $.addEventDelegate(document, 'click.ui.carousel', '[data-ui-slide]', (e) => {
     e.preventDefault();
 
@@ -39,6 +40,7 @@ $.addEventDelegate(document, 'click.ui.carousel', '[data-ui-slide]', (e) => {
     }
 });
 
+// Move a carousel directly to the requested item.
 $.addEventDelegate(document, 'click.ui.carousel', '[data-ui-slide-to]', (e) => {
     e.preventDefault();
 

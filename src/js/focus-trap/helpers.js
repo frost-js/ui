@@ -1,8 +1,6 @@
 import { $, document } from './../globals.js';
 
-/**
- * FocusTrap Helpers
- */
+/** @typedef {import('./focus-trap.js').default} FocusTrap */
 
 const focusTraps = new Set();
 
@@ -10,8 +8,8 @@ let running = false;
 let reverse = false;
 
 /**
- * Add a FocusTrap to the set, and attach the FocusTrap events.
- * @param {FocusTrap} focusTrap The FocusTrap.
+ * Registers a focus trap and attaches shared focus handlers when needed.
+ * @param {FocusTrap} focusTrap The focus trap to register.
  */
 export function addFocusTrap(focusTrap) {
     focusTraps.add(focusTrap);
@@ -58,8 +56,8 @@ export function addFocusTrap(focusTrap) {
 };
 
 /**
- * Remove a FocusTrap from the set, and detach the FocusTrap events.
- * @param {FocusTrap} focusTrap The FocusTrap.
+ * Unregisters a focus trap and removes shared handlers when none remain.
+ * @param {FocusTrap} focusTrap The focus trap to unregister.
  */
 export function removeFocusTrap(focusTrap) {
     focusTraps.delete(focusTrap);

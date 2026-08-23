@@ -1,11 +1,33 @@
 import BaseComponent from './../base-component.js';
 import { $, window } from './../globals.js';
-import { generateId } from './../helpers.js';
+import { generateId } from './../helpers/component.js';
 import Popper from './../popper/index.js';
 
+/** @typedef {import('../popper/popper.js').Placement} Placement */
+/** @typedef {import('../popper/popper.js').Position} Position */
+
 /**
- * Tooltip Class
- * @class
+ * @typedef {object} TooltipOptions
+ * @property {string} [template] The tooltip markup template.
+ * @property {string|null} [customClass=null] An additional class for the tooltip.
+ * @property {number} [duration=100] The transition duration in milliseconds.
+ * @property {boolean} [enable=true] Whether the tooltip starts enabled.
+ * @property {boolean} [html=false] Whether the title may contain HTML.
+ * @property {string} [trigger='hover focus'] The space-separated interaction triggers.
+ * @property {string|HTMLElement|null} [appendTo=null] The tooltip container.
+ * @property {false|((input: string) => string)} [sanitize] The HTML sanitizer, or `false` to disable sanitization.
+ * @property {Placement} [placement='auto'] The preferred tooltip placement.
+ * @property {Position} [position='center'] The tooltip alignment.
+ * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
+ * @property {number} [spacing=2] The spacing from the reference element.
+ * @property {number|false} [minContact=false] The minimum contact with the reference element.
+ * @property {boolean} [noAttributes=false] Whether to omit placement and accessibility attributes.
+ * @property {string} [title] The tooltip title.
+ */
+
+/**
+ * Controls a tooltip anchored to a reference element.
+ * @extends {BaseComponent<TooltipOptions>}
  */
 export default class Tooltip extends BaseComponent {
     #arrow;
@@ -18,9 +40,9 @@ export default class Tooltip extends BaseComponent {
     #triggers;
 
     /**
-     * New Tooltip constructor.
+     * Creates a Tooltip.
      * @param {HTMLElement} node The input node.
-     * @param {object} [options] The options to create the Tooltip with.
+     * @param {TooltipOptions} [options] The tooltip options.
      */
     constructor(node, options) {
         super(node, options);
@@ -40,15 +62,13 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Disable the Tooltip.
+     * Disables interaction-triggered tooltip changes.
      */
     disable() {
         this.#enabled = false;
     }
 
-    /**
-     * Dispose the Tooltip.
-     */
+    /** @inheritdoc */
     dispose() {
         if ($.hasDataset(this.node, 'uiOriginalTitle')) {
             const title = $.getDataset(this.node, 'uiOriginalTitle');
@@ -92,16 +112,15 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Enable the Tooltip.
+     * Enables interaction-triggered tooltip changes.
      */
     enable() {
         this.#enabled = true;
     }
 
     /**
-     * Hide the Tooltip.
-     * @param {object} [options] The hide options.
-     * @param {boolean} [options.force=true] Whether to force hiding when disabled.
+     * Hides the tooltip.
+     * @param {{force?: boolean}} [options] The hide options. Force defaults to `true`.
      */
     hide({ force = true } = {}) {
         if (
@@ -134,7 +153,7 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Refresh the Tooltip.
+     * Refreshes the tooltip title.
      */
     refresh() {
         if ($.hasAttribute(this.node, 'title')) {
@@ -165,7 +184,7 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Show the Tooltip.
+     * Shows the tooltip.
      */
     show() {
         if (
@@ -195,9 +214,8 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Toggle the Tooltip.
-     * @param {object} [options] The toggle options.
-     * @param {boolean} [options.force=true] Whether to force hiding when disabled.
+     * Toggles the tooltip.
+     * @param {{force?: boolean}} [options] The toggle options. Force defaults to `true`.
      */
     toggle({ force = true } = {}) {
         if ($.isConnected(this.#tooltip)) {
@@ -208,7 +226,7 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Update the Tooltip position.
+     * Updates the tooltip position.
      */
     update() {
         if (this.#popper) {
@@ -217,7 +235,7 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Attach events for the Tooltip.
+     * Attaches tooltip interaction handlers.
      */
     #events() {
         if (this.#triggers.includes('hover')) {
@@ -263,7 +281,7 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Render the Tooltip element.
+     * Creates the tooltip element from its template.
      */
     #render() {
         this.#tooltip = $.parseHTML(this.options.template).shift();
@@ -275,7 +293,7 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Update the Tooltip and append to the DOM.
+     * Appends and positions the tooltip element.
      */
     #show() {
         if (this.options.appendTo) {
@@ -310,7 +328,7 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Stop the animations.
+     * Stops the active tooltip transition.
      */
     #stop() {
         if (!this.#enabled) {

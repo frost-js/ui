@@ -1,11 +1,34 @@
 import BaseComponent from './../base-component.js';
 import { $, window } from './../globals.js';
-import { generateId } from './../helpers.js';
+import { generateId } from './../helpers/component.js';
 import Popper from './../popper/index.js';
 
+/** @typedef {import('../popper/popper.js').Placement} Placement */
+/** @typedef {import('../popper/popper.js').Position} Position */
+
 /**
- * Popover Class
- * @class
+ * @typedef {object} PopoverOptions
+ * @property {string} [template] The popover markup template.
+ * @property {string|null} [customClass=null] An additional class for the popover.
+ * @property {number} [duration=100] The transition duration in milliseconds.
+ * @property {boolean} [enable=true] Whether the popover starts enabled.
+ * @property {boolean} [html=false] Whether title and content may contain HTML.
+ * @property {string|HTMLElement|null} [appendTo=null] The popover container.
+ * @property {false|((input: string) => string)} [sanitize] The HTML sanitizer, or `false` to disable sanitization.
+ * @property {string} [trigger='click'] The space-separated interaction triggers.
+ * @property {Placement} [placement='auto'] The preferred popover placement.
+ * @property {Position} [position='center'] The popover alignment.
+ * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
+ * @property {number} [spacing=3] The spacing from the reference element.
+ * @property {number|false} [minContact=false] The minimum contact with the reference element.
+ * @property {boolean} [noAttributes=false] Whether to omit placement and accessibility attributes.
+ * @property {string} [title] The popover title.
+ * @property {string} [content] The popover body content.
+ */
+
+/**
+ * Controls a popover anchored to a reference element.
+ * @extends {BaseComponent<PopoverOptions>}
  */
 export default class Popover extends BaseComponent {
     #arrow;
@@ -19,9 +42,9 @@ export default class Popover extends BaseComponent {
     #triggers;
 
     /**
-     * New Popover constructor.
+     * Creates a Popover.
      * @param {HTMLElement} node The input node.
-     * @param {object} [options] The options to create the Popover with.
+     * @param {PopoverOptions} [options] The popover options.
      */
     constructor(node, options) {
         super(node, options);
@@ -41,15 +64,13 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Disable the Popover.
+     * Disables interaction-triggered popover changes.
      */
     disable() {
         this.#enabled = false;
     }
 
-    /**
-     * Dispose the Popover.
-     */
+    /** @inheritdoc */
     dispose() {
         if ($.hasDataset(this.node, 'uiOriginalTitle')) {
             const title = $.getDataset(this.node, 'uiOriginalTitle');
@@ -94,16 +115,15 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Enable the Popover.
+     * Enables interaction-triggered popover changes.
      */
     enable() {
         this.#enabled = true;
     }
 
     /**
-     * Hide the Popover.
-     * @param {object} [options] The hide options.
-     * @param {boolean} [options.force=true] Whether to force hiding when disabled.
+     * Hides the popover.
+     * @param {{force?: boolean}} [options] The hide options. Force defaults to `true`.
      */
     hide({ force = true } = {}) {
         if (
@@ -135,7 +155,7 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Refresh the Popover.
+     * Refreshes the popover title and body content.
      */
     refresh() {
         if ($.hasAttribute(this.node, 'title')) {
@@ -184,7 +204,7 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Show the Popover.
+     * Shows the popover.
      */
     show() {
         if (
@@ -213,9 +233,8 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Toggle the Popover.
-     * @param {object} [options] The toggle options.
-     * @param {boolean} [options.force=true] Whether to force hiding when disabled.
+     * Toggles the popover.
+     * @param {{force?: boolean}} [options] The toggle options. Force defaults to `true`.
      */
     toggle({ force = true } = {}) {
         if ($.isConnected(this.#popover)) {
@@ -226,7 +245,7 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Update the Popover position.
+     * Updates the popover position.
      */
     update() {
         if (this.#popper) {
@@ -235,7 +254,7 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Attach events for the Popover.
+     * Attaches popover interaction handlers.
      */
     #events() {
         if (this.#triggers.includes('hover')) {
@@ -281,7 +300,7 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Render the Popover element.
+     * Creates the popover element from its template.
      */
     #render() {
         this.#popover = $.parseHTML(this.options.template).shift();
@@ -294,7 +313,7 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Update the Popover and append to the DOM.
+     * Appends and positions the popover element.
      */
     #show() {
         if (this.options.appendTo) {
@@ -329,7 +348,7 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Stop the animations.
+     * Stops the active popover transition.
      */
     #stop() {
         if (!this.#enabled) {

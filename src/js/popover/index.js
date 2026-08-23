@@ -1,8 +1,8 @@
 import { $ } from './../globals.js';
-import { initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
 import Popover from './popover.js';
 
-// Popover default options
+/** @type {import('./popover.js').PopoverOptions} */
 Popover.defaults = {
     template: '<div class="popover" role="tooltip">' +
         '<div class="popover-arrow"></div>' +
@@ -24,7 +24,6 @@ Popover.defaults = {
     noAttributes: false,
 };
 
-// Popover init
 initComponent('popover', Popover);
 
 export default Popover;

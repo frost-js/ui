@@ -1,9 +1,9 @@
 import { getClickTarget } from './../click-target/index.js';
 import { $, document } from './../globals.js';
-import { initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
 import Dropdown from './dropdown.js';
 
-// Dropdown default options
+/** @type {import('./dropdown.js').DropdownOptions} */
 Dropdown.defaults = {
     display: 'dynamic',
     duration: 100,
@@ -14,10 +14,9 @@ Dropdown.defaults = {
     minContact: false,
 };
 
-// Dropdown init
 initComponent('dropdown', Dropdown);
 
-// Dropdown events
+// Toggle a dropdown from pointer or Space-key activation.
 $.addEventDelegate(document, 'click.ui.dropdown keydown.ui.dropdown', '[data-ui-toggle="dropdown"]', (e) => {
     if (e.code && e.code !== 'Space') {
         return;
@@ -29,6 +28,7 @@ $.addEventDelegate(document, 'click.ui.dropdown keydown.ui.dropdown', '[data-ui-
     dropdown.toggle();
 });
 
+// Open a dropdown and focus its first item with an arrow key.
 $.addEventDelegate(document, 'keydown.ui.dropdown', '[data-ui-toggle="dropdown"]', (e) => {
     switch (e.code) {
         case 'ArrowDown':
@@ -45,6 +45,7 @@ $.addEventDelegate(document, 'keydown.ui.dropdown', '[data-ui-toggle="dropdown"]
     }
 });
 
+// Move focus between dropdown items with the arrow keys.
 $.addEventDelegate(document, 'keydown.ui.dropdown', '.dropdown-menu.show .dropdown-item', (e) => {
     let focusNode;
 
@@ -64,6 +65,7 @@ $.addEventDelegate(document, 'keydown.ui.dropdown', '.dropdown-menu.show .dropdo
     $.focus(focusNode);
 });
 
+// Close open dropdowns when an eligible target is clicked.
 $.addEvent(document, 'click.ui.dropdown', (e) => {
     const target = getClickTarget(e);
     const nodes = $.find('.dropdown-menu.show');
@@ -80,6 +82,7 @@ $.addEvent(document, 'click.ui.dropdown', (e) => {
     }
 }, { capture: true });
 
+// Close open dropdowns when Escape is pressed.
 $.addEvent(document, 'keydown.ui.dropdown', (e) => {
     if (e.code !== 'Escape') {
         return;
@@ -101,6 +104,7 @@ $.addEvent(document, 'keydown.ui.dropdown', (e) => {
     }
 }, { capture: true });
 
+// Close a dropdown after focus leaves its menu with Tab.
 $.addEvent(document, 'keyup.ui.dropdown', (e) => {
     if (e.code !== 'Tab') {
         return;

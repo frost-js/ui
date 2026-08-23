@@ -1,18 +1,21 @@
 import { $ } from './globals.js';
-import { getDataset } from './helpers.js';
+import { getDataset } from './helpers/component.js';
+
+/** @typedef {Record<string, *>} ComponentOptions */
 
 /**
- * BaseComponent Class
- * @class
+ * Provides shared initialization, option handling, and disposal for UI components.
+ * @template {ComponentOptions} [Options=ComponentOptions]
  */
 export default class BaseComponent {
     #node;
     #options;
 
     /**
-     * Initialize a BaseComponent.
+     * Initializes a BaseComponent.
      * @param {HTMLElement} node The input node.
-     * @return {BaseComponent} A new BaseComponent object.
+     * @param {...*} args The constructor arguments.
+     * @returns {BaseComponent} The existing or newly created component.
      */
     static init(node, ...args) {
         return $.hasData(node, this.DATA_KEY) ?
@@ -21,9 +24,9 @@ export default class BaseComponent {
     }
 
     /**
-     * New BaseComponent constructor.
+     * Creates a BaseComponent.
      * @param {HTMLElement} node The input node.
-     * @param {object} [options] The options to create the BaseComponent with.
+     * @param {Options} [options] The component options.
      */
     constructor(node, options) {
         this.#node = node;
@@ -43,23 +46,23 @@ export default class BaseComponent {
     }
 
     /**
-     * Get the component node.
-     * @return {HTMLElement} The component node.
+     * Gets the component node.
+     * @returns {HTMLElement|null} The component node, or `null` after disposal.
      */
     get node() {
         return this.#node;
     }
 
     /**
-     * Get the component options.
-     * @return {object} The component options.
+     * Gets the component options.
+     * @returns {Readonly<Options>|null} The component options, or `null` after disposal.
      */
     get options() {
         return this.#options;
     }
 
     /**
-     * Dispose the BaseComponent.
+     * Releases the resources owned by the component.
      */
     dispose() {
         $.removeEvent(this.#node, this.constructor.REMOVE_EVENT);

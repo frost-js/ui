@@ -1,7 +1,7 @@
-import { initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
 import Popper from './popper.js';
 
-// Popper default options
+/** @type {import('./popper.js').PopperOptions} */
 Popper.defaults = {
     reference: null,
     container: null,
@@ -17,8 +17,6 @@ Popper.defaults = {
     noAttributes: false,
 };
 
-// Popper init
 initComponent('popper', Popper);
 
-// Popper events
 export default Popper;

@@ -1,16 +1,16 @@
 import { $, document } from './../globals.js';
-import { getTarget, initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
+import { getTarget } from './../helpers/target.js';
 import Alert from './alert.js';
 
-// Alert default options
+/** @type {import('./alert.js').AlertOptions} */
 Alert.defaults = {
     duration: 100,
 };
 
-// Alert init
 initComponent('alert', Alert);
 
-// Alert events
+// Dismiss the alert targeted by a dismiss control.
 $.addEventDelegate(document, 'click.ui.alert', '[data-ui-dismiss="alert"]', (e) => {
     e.preventDefault();
 

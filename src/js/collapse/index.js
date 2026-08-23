@@ -1,17 +1,17 @@
 import { $, document } from './../globals.js';
-import { getTargetSelector, initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
+import { getTargetSelector } from './../helpers/target.js';
 import Collapse from './collapse.js';
 
-// Collapse default options
+/** @type {import('./collapse.js').CollapseOptions} */
 Collapse.defaults = {
     direction: 'bottom',
     duration: 250,
 };
 
-// Collapse init
 initComponent('collapse', Collapse);
 
-// Collapse events
+// Toggle every collapse matched by a control.
 $.addEventDelegate(document, 'click.ui.collapse', '[data-ui-toggle="collapse"]', (e) => {
     e.preventDefault();
 

@@ -1,6 +1,6 @@
 import { $, document } from './../globals.js';
 
-// Text expand events
+// Resize expanding text areas as their content changes.
 $.addEventDelegate(document, 'change.ui.expand input.ui.expand', '.text-expand', (e) => {
     const textArea = e.currentTarget;
 

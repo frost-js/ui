@@ -3,14 +3,19 @@ import { $ } from './../globals.js';
 import { addFocusTrap, removeFocusTrap } from './helpers.js';
 
 /**
- * FocusTrap Class
- * @class
+ * @typedef {object} FocusTrapOptions
+ * @property {boolean} [autoFocus=true] Whether to focus the trapped element when activated.
+ */
+
+/**
+ * Keeps keyboard focus within an element while active.
+ * @extends {BaseComponent<FocusTrapOptions>}
  */
 export default class FocusTrap extends BaseComponent {
     #active;
 
     /**
-     * Activate the FocusTrap.
+     * Activates the focus trap.
      */
     activate() {
         if (this.#active) {
@@ -27,7 +32,7 @@ export default class FocusTrap extends BaseComponent {
     }
 
     /**
-     * Deactivate the FocusTrap.
+     * Deactivates the focus trap.
      */
     deactivate() {
         if (!this.#active) {
@@ -38,9 +43,7 @@ export default class FocusTrap extends BaseComponent {
         this.#active = false;
     }
 
-    /**
-     * Dispose the FocusTrap.
-     */
+    /** @inheritdoc */
     dispose() {
         this.deactivate();
 

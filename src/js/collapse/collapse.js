@@ -1,19 +1,28 @@
 import BaseComponent from './../base-component.js';
 import { $ } from './../globals.js';
-import { getTargetSelector } from './../helpers.js';
+import { getTargetSelector } from './../helpers/target.js';
+
+/** @typedef {import('../popper/popper.js').Direction} Direction */
 
 /**
- * Collapse Class
- * @class
+ * @typedef {object} CollapseOptions
+ * @property {Direction} [direction='bottom'] The collapse direction.
+ * @property {number} [duration=250] The transition duration in milliseconds.
+ * @property {string|null} [parent=null] The selector for an accordion parent.
+ */
+
+/**
+ * Controls a collapsible element and its triggers.
+ * @extends {BaseComponent<CollapseOptions>}
  */
 export default class Collapse extends BaseComponent {
     #parent;
     #triggers;
 
     /**
-     * New Collapse constructor.
+     * Creates a Collapse.
      * @param {HTMLElement} node The input node.
-     * @param {object} [options] The options to create the Collapse with.
+     * @param {CollapseOptions} [options] The collapse options.
      */
     constructor(node, options) {
         super(node, options);
@@ -29,9 +38,7 @@ export default class Collapse extends BaseComponent {
         }
     }
 
-    /**
-     * Dispose the Collapse.
-     */
+    /** @inheritdoc */
     dispose() {
         this.#triggers = null;
         this.#parent = null;
@@ -40,7 +47,7 @@ export default class Collapse extends BaseComponent {
     }
 
     /**
-     * Hide the element.
+     * Hides the collapsible element.
      */
     hide() {
         if (
@@ -72,7 +79,7 @@ export default class Collapse extends BaseComponent {
     }
 
     /**
-     * Show the element.
+     * Shows the collapsible element.
      */
     show() {
         if (
@@ -126,7 +133,7 @@ export default class Collapse extends BaseComponent {
     }
 
     /**
-     * Toggle the element.
+     * Toggles the collapsible element.
      */
     toggle() {
         if ($.hasClass(this.node, 'show')) {

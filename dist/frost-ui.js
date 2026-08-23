@@ -19,61 +19,13 @@
     const document = $.getContext();
     const window = $.getWindow();
 
-    let scrollbarSize;
-
     /**
-     * Add scrollbar padding to a node.
-     * @param {array} nodes The nodes.
-     */
-    function addScrollPadding(nodes) {
-        const scrollSizeY = getScrollbarSize(window, document, 'y');
-
-        if (!scrollSizeY) {
-            return;
-        }
-
-        for (const node of nodes) {
-            $.setDataset(node, {
-                uiPaddingRight: $.getStyle(node, 'paddingRight'),
-            });
-            $.setStyle(node, {
-                paddingRight: `${scrollSizeY + parseInt($.css(node, 'paddingRight'))}px`,
-            });
-        }
-    }
-    /**
-     * Get the size of the scrollbar.
-     * @return {number} The scrollbar size.
-     */
-    function calculateScrollbarSize() {
-        if (scrollbarSize) {
-            return scrollbarSize;
-        }
-
-        const div = $.create('div', {
-            style: {
-                width: '100px',
-                height: '100px',
-                overflow: 'scroll',
-                position: 'absolute',
-                top: '-9999px',
-            },
-        });
-        $.append(document.body, div);
-
-        scrollbarSize = $.getProperty(div, 'offsetWidth') - $.width(div);
-
-        $.detach(div);
-
-        return scrollbarSize;
-    }
-    /**
-     * Generate a unique element ID.
-     * @param {string} [prefix] The ID prefix.
-     * @return {string} The unique ID.
+     * Generates a unique component element ID.
+     * @param {string} prefix The ID prefix.
+     * @returns {string} The unique ID.
      */
     function generateId(prefix) {
-        const id = `${prefix}${$._randomInt(10000, 99999)}`;
+        const id = `${prefix}${$._randomString(5)}`;
 
         if ($.findOne(`#${id}`)) {
             return generateId(prefix);
@@ -82,9 +34,9 @@
         return id;
     }
     /**
-     * Get normalized UI data from a node.
+     * Gets normalized UI data attributes from an element.
      * @param {HTMLElement} node The input node.
-     * @return {object} The normalized data.
+     * @returns {Record<string, *>} The normalized data.
      */
     function getDataset(node) {
         const dataset = $.getDataset(node);
@@ -95,140 +47,9 @@
         );
     }
     /**
-     * Get position from a mouse/touch event.
-     * @param {Event} e The mouse/touch event.
-     * @return {object} The position.
-     */
-    function getPosition(e) {
-        if ('touches' in e && e.touches.length) {
-            return {
-                x: e.touches[0].pageX,
-                y: e.touches[0].pageY,
-            };
-        }
-
-        return {
-            x: e.pageX,
-            y: e.pageY,
-        };
-    }
-    /**
-     * Get the scrollbar size for a given axis.
-     * @param {HTMLElement|Window} [node=window] The input node.
-     * @param {HTMLElement|Document} [scrollNode=document] The scroll node.
-     * @param {string} [axis] The axis to check.
-     * @return {number} The scrollbar size.
-     */
-    function getScrollbarSize(node = window, scrollNode = document, axis) {
-        const method = axis === 'x' ? 'width' : 'height';
-        const size = $[method](node);
-        const scrollSize = $[method](scrollNode, { boxSize: $.SCROLL_BOX });
-
-        if (scrollSize > size) {
-            return calculateScrollbarSize();
-        }
-
-        return 0;
-    }
-    /**
-     * Calculate the computed bounding rectangle of a node (minus scroll bars).
-     * @param {HTMLElement|Window} node The input node.
-     * @param {HTMLElement|Document} scrollNode The scroll node.
-     * @return {object} The computed bounding rectangle of the node.
-     */
-    function getScrollContainer(node, scrollNode) {
-        const isWindow = $._isWindow(node);
-        const rect = isWindow ?
-            getWindowContainer(node) :
-            $.rect(node, { offset: true });
-
-        const scrollSizeX = getScrollbarSize(node, scrollNode, 'x');
-        const scrollSizeY = getScrollbarSize(node, scrollNode, 'y');
-
-        if (scrollSizeX) {
-            rect.height -= scrollSizeX;
-
-            if (isWindow) {
-                rect.bottom -= scrollSizeX;
-            }
-        }
-
-        if (scrollSizeY) {
-            rect.width -= scrollSizeY;
-
-            if (isWindow) {
-                rect.right -= scrollSizeY;
-            }
-        }
-
-        return rect;
-    }
-    /**
-     * Get a target from a node.
-     * @param {HTMLElement} node The input node.
-     * @param {string} [closestSelector] The default closest selector.
-     * @return {HTMLElement} The target node.
-     */
-    function getTarget(node, closestSelector) {
-        const selector = getTargetSelector(node);
-
-        let target;
-
-        if (selector && selector !== '#') {
-            target = $.findOne(selector);
-        } else if (closestSelector) {
-            target = $.closest(node, closestSelector).shift();
-        }
-
-        if (!target) {
-            throw new Error('Target not found');
-        }
-
-        return target;
-    }
-    /**
-     * Get the target selector from a node.
-     * @param {HTMLElement} node The input node.
-     * @return {string} The target selector.
-     */
-    function getTargetSelector(node) {
-        return $.getDataset(node, 'uiTarget') || $.getAttribute(node, 'href');
-    }
-    /**
-     * Get positions from a touch event.
-     * @param {Event} e The touch event.
-     * @return {array} The positions.
-     */
-    function getTouchPositions(e) {
-        return Array.from(e.touches)
-            .map((touch) => ({ x: touch.pageX, y: touch.pageY }));
-    }
-    /**
-     * Calculate the computed bounding rectangle of a window.
-     * @param {Window} node The window object.
-     * @return {object} The computed bounding rectangle of the window.
-     */
-    function getWindowContainer(node) {
-        const scrollX = $.getScrollX(node);
-        const scrollY = $.getScrollY(node);
-        const width = $.width(node);
-        const height = $.height(node);
-
-        return {
-            x: scrollX,
-            y: scrollY,
-            width,
-            height,
-            top: scrollY,
-            right: scrollX + width,
-            bottom: scrollY + height,
-            left: scrollX,
-        };
-    }
-    /**
-     * Initialize a UI component.
+     * Registers a UI component and its QuerySet method.
      * @param {string} key The component key.
-     * @param {class} component The component class.
+     * @param {typeof import('../base-component.js').default} component The component class.
      */
     function initComponent(key, component) {
         component.DATA_KEY = key;
@@ -267,31 +88,55 @@
             writable: true,
         });
     }
-    /**
-     * Reset body scrollbar padding.
-     * @param {array} nodes The nodes.
-     */
-    function resetScrollPadding(nodes) {
-        for (const node of nodes) {
-            $.setStyle(node, {
-                paddingRight: $.getDataset(node, 'uiPaddingRight'),
-            });
-            $.removeDataset(node, 'uiPaddingRight');
-        }
-    }
 
     /**
-     * BaseComponent Class
-     * @class
+     * Resolves a target element from a control.
+     * @param {HTMLElement} node The input node.
+     * @param {string} [closestSelector] The fallback closest selector.
+     * @returns {HTMLElement} The target node.
+     * @throws {Error} If no target can be resolved.
+     */
+    function getTarget(node, closestSelector) {
+        const selector = getTargetSelector(node);
+
+        let target;
+
+        if (selector && selector !== '#') {
+            target = $.findOne(selector);
+        } else if (closestSelector) {
+            target = $.closest(node, closestSelector).shift();
+        }
+
+        if (!target) {
+            throw new Error('Target not found');
+        }
+
+        return target;
+    }
+    /**
+     * Gets the target selector declared by a control.
+     * @param {HTMLElement} node The input node.
+     * @returns {string|null} The target selector, or `null` if none is declared.
+     */
+    function getTargetSelector(node) {
+        return $.getDataset(node, 'uiTarget') || $.getAttribute(node, 'href');
+    }
+
+    /** @typedef {Record<string, *>} ComponentOptions */
+
+    /**
+     * Provides shared initialization, option handling, and disposal for UI components.
+     * @template {ComponentOptions} [Options=ComponentOptions]
      */
     class BaseComponent {
         #node;
         #options;
 
         /**
-         * Initialize a BaseComponent.
+         * Initializes a BaseComponent.
          * @param {HTMLElement} node The input node.
-         * @return {BaseComponent} A new BaseComponent object.
+         * @param {...*} args The constructor arguments.
+         * @returns {BaseComponent} The existing or newly created component.
          */
         static init(node, ...args) {
             return $.hasData(node, this.DATA_KEY) ?
@@ -300,9 +145,9 @@
         }
 
         /**
-         * New BaseComponent constructor.
+         * Creates a BaseComponent.
          * @param {HTMLElement} node The input node.
-         * @param {object} [options] The options to create the BaseComponent with.
+         * @param {Options} [options] The component options.
          */
         constructor(node, options) {
             this.#node = node;
@@ -322,23 +167,23 @@
         }
 
         /**
-         * Get the component node.
-         * @return {HTMLElement} The component node.
+         * Gets the component node.
+         * @returns {HTMLElement|null} The component node, or `null` after disposal.
          */
         get node() {
             return this.#node;
         }
 
         /**
-         * Get the component options.
-         * @return {object} The component options.
+         * Gets the component options.
+         * @returns {Readonly<Options>|null} The component options, or `null` after disposal.
          */
         get options() {
             return this.#options;
         }
 
         /**
-         * Dispose the BaseComponent.
+         * Releases the resources owned by the component.
          */
         dispose() {
             $.removeEvent(this.#node, this.constructor.REMOVE_EVENT);
@@ -349,12 +194,17 @@
     }
 
     /**
-     * Alert Class
-     * @class
+     * @typedef {object} AlertOptions
+     * @property {number} [duration=100] The transition duration in milliseconds.
+     */
+
+    /**
+     * Controls a dismissible alert element.
+     * @extends {BaseComponent<AlertOptions>}
      */
     class Alert extends BaseComponent {
         /**
-         * Close the Alert.
+         * Closes the alert.
          */
         close() {
             if (
@@ -381,15 +231,14 @@
         }
     }
 
-    // Alert default options
+    /** @type {import('./alert.js').AlertOptions} */
     Alert.defaults = {
         duration: 100,
     };
 
-    // Alert init
     initComponent('alert', Alert);
 
-    // Alert events
+    // Dismiss the alert targeted by a dismiss control.
     $.addEventDelegate(document, 'click.ui.alert', '[data-ui-dismiss="alert"]', (e) => {
         e.preventDefault();
 
@@ -399,12 +248,11 @@
     });
 
     /**
-     * Button Class
-     * @class
+     * Controls the pressed state of a toggle button.
      */
     class Button extends BaseComponent {
         /**
-         * Toggle the Button.
+         * Toggles the button state.
          */
         toggle() {
             $.toggleClass(this.node, 'active');
@@ -414,10 +262,9 @@
         }
     }
 
-    // Button init
     initComponent('button', Button);
 
-    // Button events
+    // Toggle a button from pointer or Space-key activation.
     $.addEventDelegate(document, 'click.ui.button keydown.ui.button', '[data-ui-toggle="button"]', (e) => {
         if (e.code && e.code !== 'Space') {
             return;
@@ -430,10 +277,46 @@
     });
 
     /**
-     * Get the direction offset from an index.
+     * @typedef {object} Coordinates
+     * @property {number} x The X coordinate.
+     * @property {number} y The Y coordinate.
+     */
+
+    /**
+     * Gets page coordinates from a mouse or touch event.
+     * @param {MouseEvent|TouchEvent} e The input event.
+     * @returns {Coordinates} The page coordinates.
+     */
+    function getPosition(e) {
+        if ('touches' in e && e.touches.length) {
+            return {
+                x: e.touches[0].pageX,
+                y: e.touches[0].pageY,
+            };
+        }
+
+        return {
+            x: e.pageX,
+            y: e.pageY,
+        };
+    }
+    /**
+     * Gets page coordinates for every active touch.
+     * @param {TouchEvent} e The touch event.
+     * @returns {Coordinates[]} The active touch coordinates.
+     */
+    function getTouchPositions(e) {
+        return Array.from(e.touches)
+            .map((touch) => ({ x: touch.pageX, y: touch.pageY }));
+    }
+
+    /** @typedef {import('../popper/popper.js').Direction} Direction */
+
+    /**
+     * Gets the boundary offset for an item index.
      * @param {number} index The index.
      * @param {number} totalItems The total number of items.
-     * @return {number} The direction.
+     * @returns {-1|0|1} The boundary offset.
      */
     function getDirOffset(index, totalItems) {
         if (index < 0) {
@@ -447,11 +330,11 @@
         return 0;
     }
     /**
-     * Get the direction from an offset and index.
+     * Gets the transition direction for an item change.
      * @param {number} offset The direction offset.
      * @param {number} oldIndex The old item index.
      * @param {number} newIndex The new item index.
-     * @return {string} The direction.
+     * @returns {Direction} The transition direction.
      */
     function getDirection$1(offset, oldIndex, newIndex) {
         if (offset == -1 || (offset == 0 && newIndex < oldIndex)) {
@@ -461,10 +344,10 @@
         return 'right';
     }
     /**
-     * Get the real index from an index.
+     * Normalizes an item index to the available range.
      * @param {number} index The item index.
      * @param {number} totalItems The total number of items.
-     * @return {number} The real item index.
+     * @returns {number} The normalized item index.
      */
     function getIndex(index, totalItems) {
         index %= totalItems;
@@ -476,9 +359,28 @@
         return index;
     }
 
+    /** @typedef {import('../popper/popper.js').Direction} Direction */
+
     /**
-     * Carousel Class
-     * @class
+     * @typedef {object} CarouselOptions
+     * @property {number} [interval=5000] The cycle interval in milliseconds.
+     * @property {number} [transition=500] The transition duration in milliseconds.
+     * @property {boolean} [keyboard=true] Whether to support keyboard navigation.
+     * @property {false|'carousel'} [ride=false] Whether to cycle automatically.
+     * @property {boolean} [pause=true] Whether to pause while hovered.
+     * @property {boolean} [wrap=true] Whether navigation wraps at either end.
+     * @property {boolean} [swipe=true] Whether to support pointer and touch swiping.
+     */
+
+    /**
+     * @typedef {object} CarouselUpdateOptions
+     * @property {Direction} [direction] The transition direction.
+     * @property {boolean} [dragging=false] Whether the position is being updated by a drag.
+     */
+
+    /**
+     * Controls an animated carousel.
+     * @extends {BaseComponent<CarouselOptions>}
      */
     class Carousel extends BaseComponent {
         #index;
@@ -488,9 +390,9 @@
         #timer;
 
         /**
-         * New Carousel constructor.
+         * Creates a Carousel.
          * @param {HTMLElement} node The input node.
-         * @param {object} [options] The options to create the Carousel with.
+         * @param {CarouselOptions} [options] The carousel options.
          */
         constructor(node, options) {
             super(node, options);
@@ -509,7 +411,7 @@
         }
 
         /**
-         * Cycle to the next carousel item.
+         * Advances the carousel automatically when the document is visible.
          */
         cycle() {
             if (!$.isHidden(document)) {
@@ -520,9 +422,7 @@
             }
         }
 
-        /**
-         * Dispose the Carousel.
-         */
+        /** @inheritdoc */
         dispose() {
             clearTimeout(this.#timer);
             this.#timer = null;
@@ -546,14 +446,14 @@
         }
 
         /**
-         * Cycle to the next Carousel item.
+         * Shows the next carousel item.
          */
         next() {
             this.slide();
         }
 
         /**
-         * Stop the carousel from cycling through items.
+         * Stops automatic carousel cycling.
          */
         pause() {
             clearTimeout(this.#timer);
@@ -562,30 +462,30 @@
         }
 
         /**
-         * Cycle to the previous Carousel item.
+         * Shows the previous carousel item.
          */
         prev() {
             this.slide(-1);
         }
 
         /**
-         * Cycle to a specific Carousel item.
-         * @param {number} index The item index to cycle to.
+         * Shows a carousel item by index.
+         * @param {number|string} index The item index to show.
          */
         show(index) {
             this.#show(index);
         }
 
         /**
-         * Slide the Carousel in a specific direction.
-         * @param {number} [direction=1] The direction to slide to.
+         * Moves by a relative number of carousel items.
+         * @param {number} [direction=1] The relative item offset.
          */
         slide(direction = 1) {
             this.show(this.#index + direction);
         }
 
         /**
-         * Attach events for the Carousel.
+         * Attaches carousel interaction handlers.
          */
         #events() {
             if (this.options.keyboard) {
@@ -764,7 +664,7 @@
         }
 
         /**
-         * Reset styles of an item.
+         * Resets the transition styles of an item.
          * @param {number} index The item index.
          */
         #resetStyles(index) {
@@ -775,9 +675,9 @@
         }
 
         /**
-         * Set a new item index and update the items.
+         * Sets the active item index and updates item state.
          * @param {number} index The new item index.
-         * @return {number} The old item index.
+         * @returns {number} The old item index.
          */
         #setIndex(index) {
             const oldIndex = this.#index;
@@ -790,7 +690,7 @@
         }
 
         /**
-         * Set a timer for the next Carousel cycle.
+         * Schedules the next automatic cycle.
          */
         #setTimer() {
             if (this.#timer || this.#paused || this.#mousePaused) {
@@ -809,8 +709,8 @@
         }
 
         /**
-         * Cycle to a specific Carousel item.
-         * @param {number} index The item index to cycle to.
+         * Starts a transition to a carousel item.
+         * @param {number|string} index The item index to show.
          */
         #show(index) {
             if ($.getDataset(this.node, 'uiSliding')) {
@@ -878,13 +778,11 @@
         }
 
         /**
-         * Update the position of the Carousel items.
-         * @param {Node} nodeIn The new node.
-         * @param {Node} nodeOut The old node.
-         * @param {number} progress The progress of the cycle.
-         * @param {object} options The options for updating the item positions.
-         * @param {string} [options.direction] The direction to cycle to.
-         * @param {Boolean} [options.dragging] Whether the item is being dragged.
+         * Updates carousel item positions for a transition frame.
+         * @param {HTMLElement} nodeIn The incoming item.
+         * @param {HTMLElement} nodeOut The outgoing item.
+         * @param {number} progress The transition progress.
+         * @param {CarouselUpdateOptions} [options] The update options.
          */
         #update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
             const inStyles = {};
@@ -917,7 +815,7 @@
         }
 
         /**
-         * Update the carousel indicators.
+         * Updates the active carousel indicator.
          */
         #updateIndicators() {
             const oldIndicator = $.find('.active[data-ui-slide-to]', this.node);
@@ -927,7 +825,7 @@
         }
     }
 
-    // Carousel default options
+    /** @type {import('./carousel.js').CarouselOptions} */
     Carousel.defaults = {
         interval: 5000,
         transition: 500,
@@ -938,10 +836,9 @@
         swipe: true,
     };
 
-    // Carousel init
     initComponent('carousel', Carousel);
 
-    // Carousel events
+    // Start ride-enabled carousels when the DOM is ready.
     $((_) => {
         const nodes = $.find('[data-ui-ride="carousel"]');
 
@@ -950,6 +847,7 @@
         }
     });
 
+    // Move a carousel to its previous or next item.
     $.addEventDelegate(document, 'click.ui.carousel', '[data-ui-slide]', (e) => {
         e.preventDefault();
 
@@ -964,6 +862,7 @@
         }
     });
 
+    // Move a carousel directly to the requested item.
     $.addEventDelegate(document, 'click.ui.carousel', '[data-ui-slide-to]', (e) => {
         e.preventDefault();
 
@@ -974,13 +873,15 @@
         carousel.show(slideTo);
     });
 
+    /** @type {EventTarget|null|undefined} */
     let clickTarget;
 
-    // Track the target of mousedown events
+    // Preserve the press target for click handlers that run after mouseup.
     $.addEvent(window, 'mousedown.ui', (e) => {
         clickTarget = e.target;
     }, { capture: true });
 
+    // Clear the press target after the subsequent click has been dispatched.
     $.addEvent(window, 'mouseup.ui', (_) => {
         setTimeout((_) => {
             clickTarget = null;
@@ -988,26 +889,35 @@
     }, { capture: true });
 
     /**
-     * Get a click event target.
-     * @param {Event} e The click event.
-     * @return {HTMLElement} The click event target.
+     * Gets the original press target for a click event.
+     * @param {MouseEvent} e The click event.
+     * @returns {EventTarget|null} The original press target, or the click target as a fallback.
      */
     function getClickTarget(e) {
         return clickTarget || e.target;
     }
 
+    /** @typedef {import('../popper/popper.js').Direction} Direction */
+
     /**
-     * Collapse Class
-     * @class
+     * @typedef {object} CollapseOptions
+     * @property {Direction} [direction='bottom'] The collapse direction.
+     * @property {number} [duration=250] The transition duration in milliseconds.
+     * @property {string|null} [parent=null] The selector for an accordion parent.
+     */
+
+    /**
+     * Controls a collapsible element and its triggers.
+     * @extends {BaseComponent<CollapseOptions>}
      */
     class Collapse extends BaseComponent {
         #parent;
         #triggers;
 
         /**
-         * New Collapse constructor.
+         * Creates a Collapse.
          * @param {HTMLElement} node The input node.
-         * @param {object} [options] The options to create the Collapse with.
+         * @param {CollapseOptions} [options] The collapse options.
          */
         constructor(node, options) {
             super(node, options);
@@ -1023,9 +933,7 @@
             }
         }
 
-        /**
-         * Dispose the Collapse.
-         */
+        /** @inheritdoc */
         dispose() {
             this.#triggers = null;
             this.#parent = null;
@@ -1034,7 +942,7 @@
         }
 
         /**
-         * Hide the element.
+         * Hides the collapsible element.
          */
         hide() {
             if (
@@ -1066,7 +974,7 @@
         }
 
         /**
-         * Show the element.
+         * Shows the collapsible element.
          */
         show() {
             if (
@@ -1120,7 +1028,7 @@
         }
 
         /**
-         * Toggle the element.
+         * Toggles the collapsible element.
          */
         toggle() {
             if ($.hasClass(this.node, 'show')) {
@@ -1131,16 +1039,15 @@
         }
     }
 
-    // Collapse default options
+    /** @type {import('./collapse.js').CollapseOptions} */
     Collapse.defaults = {
         direction: 'bottom',
         duration: 250,
     };
 
-    // Collapse init
     initComponent('collapse', Collapse);
 
-    // Collapse events
+    // Toggle every collapse matched by a control.
     $.addEventDelegate(document, 'click.ui.collapse', '[data-ui-toggle="collapse"]', (e) => {
         e.preventDefault();
 
@@ -1153,17 +1060,167 @@
         }
     });
 
+    /** @typedef {'x'|'y'} Axis */
+
     /**
-     * Popper Helpers
+     * @typedef {object} BoundingRect
+     * @property {number} x The horizontal offset.
+     * @property {number} y The vertical offset.
+     * @property {number} width The width.
+     * @property {number} height The height.
+     * @property {number} top The top edge.
+     * @property {number} right The right edge.
+     * @property {number} bottom The bottom edge.
+     * @property {number} left The left edge.
      */
+
+    /** @type {number|undefined} */
+    let scrollbarSize;
+
+    /**
+     * Adds scrollbar compensation to a collection of elements.
+     * @param {Iterable<HTMLElement>} nodes The elements to update.
+     */
+    function addScrollPadding(nodes) {
+        const scrollSizeY = getScrollbarSize(window, document, 'y');
+
+        if (!scrollSizeY) {
+            return;
+        }
+
+        for (const node of nodes) {
+            $.setDataset(node, {
+                uiPaddingRight: $.getStyle(node, 'paddingRight'),
+            });
+            $.setStyle(node, {
+                paddingRight: `${scrollSizeY + parseInt($.css(node, 'paddingRight'))}px`,
+            });
+        }
+    }
+    /**
+     * Calculates the browser scrollbar size.
+     * @returns {number} The scrollbar size.
+     */
+    function calculateScrollbarSize() {
+        if (scrollbarSize) {
+            return scrollbarSize;
+        }
+
+        const div = $.create('div', {
+            style: {
+                width: '100px',
+                height: '100px',
+                overflow: 'scroll',
+                position: 'absolute',
+                top: '-9999px',
+            },
+        });
+        $.append(document.body, div);
+
+        scrollbarSize = $.getProperty(div, 'offsetWidth') - $.width(div);
+
+        $.detach(div);
+
+        return scrollbarSize;
+    }
+    /**
+     * Gets the scrollbar size for an element and axis.
+     * @param {HTMLElement|Window} [node=window] The viewport element or window.
+     * @param {HTMLElement|Document} [scrollNode=document] The scrolling element or document.
+     * @param {Axis} [axis='y'] The axis to measure.
+     * @returns {number} The scrollbar size.
+     */
+    function getScrollbarSize(node = window, scrollNode = document, axis) {
+        const method = axis === 'x' ? 'width' : 'height';
+        const size = $[method](node);
+        const scrollSize = $[method](scrollNode, { boxSize: $.SCROLL_BOX });
+
+        if (scrollSize > size) {
+            return calculateScrollbarSize();
+        }
+
+        return 0;
+    }
+    /**
+     * Gets the visible bounding rectangle of an element or window, excluding scrollbars.
+     * @param {HTMLElement|Window} node The viewport element or window.
+     * @param {HTMLElement|Document} scrollNode The scrolling element or document.
+     * @returns {BoundingRect} The visible bounding rectangle.
+     */
+    function getScrollContainer(node, scrollNode) {
+        const isWindow = $._isWindow(node);
+        const rect = isWindow ?
+            getWindowContainer(node) :
+            $.rect(node, { offset: true });
+
+        const scrollSizeX = getScrollbarSize(node, scrollNode, 'x');
+        const scrollSizeY = getScrollbarSize(node, scrollNode, 'y');
+
+        if (scrollSizeX) {
+            rect.height -= scrollSizeX;
+
+            if (isWindow) {
+                rect.bottom -= scrollSizeX;
+            }
+        }
+
+        if (scrollSizeY) {
+            rect.width -= scrollSizeY;
+
+            if (isWindow) {
+                rect.right -= scrollSizeY;
+            }
+        }
+
+        return rect;
+    }
+    /**
+     * Calculates the bounding rectangle of a window.
+     * @param {Window} node The window object.
+     * @returns {BoundingRect} The window bounding rectangle.
+     */
+    function getWindowContainer(node) {
+        const scrollX = $.getScrollX(node);
+        const scrollY = $.getScrollY(node);
+        const width = $.width(node);
+        const height = $.height(node);
+
+        return {
+            x: scrollX,
+            y: scrollY,
+            width,
+            height,
+            top: scrollY,
+            right: scrollX + width,
+            bottom: scrollY + height,
+            left: scrollX,
+        };
+    }
+    /**
+     * Restores scrollbar compensation on a collection of elements.
+     * @param {Iterable<HTMLElement>} nodes The elements to restore.
+     */
+    function resetScrollPadding(nodes) {
+        for (const node of nodes) {
+            $.setStyle(node, {
+                paddingRight: $.getDataset(node, 'uiPaddingRight'),
+            });
+            $.removeDataset(node, 'uiPaddingRight');
+        }
+    }
+
+    /** @typedef {import('./popper.js').default} Popper */
+    /** @typedef {import('../helpers/scroll.js').BoundingRect} BoundingRect */
+    /** @typedef {import('./popper.js').Direction} Direction */
+    /** @typedef {import('./popper.js').Placement} Placement */
 
     const poppers = new Set();
 
     let running$1 = false;
 
     /**
-     * Add a Popper to the set, and attach the Popper events.
-     * @param {Popper} popper The Popper.
+     * Registers a popper for viewport and ancestor-scroll updates.
+     * @param {Popper} popper The popper to register.
      */
     function addPopper(popper) {
         poppers.add(popper);
@@ -1203,13 +1260,13 @@
         running$1 = true;
     }
     /**
-     * Get the actual placement of the Popper.
+     * Resolves the best available popper placement.
      * @param {DOMRect} nodeBox The computed bounding rectangle of the node.
      * @param {DOMRect} referenceBox The computed bounding rectangle of the reference.
-     * @param {object} minimumBox The computed minimum bounding rectangle of the container.
-     * @param {string} placement The initial placement of the Popper.
+     * @param {BoundingRect} minimumBox The available positioning boundary.
+     * @param {Placement} placement The preferred placement.
      * @param {number} spacing The amount of spacing to use.
-     * @return {string} The new placement of the Popper.
+     * @returns {Direction} The resolved placement.
      */
     function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement, spacing) {
         const spaceTop = referenceBox.top - minimumBox.top;
@@ -1218,25 +1275,25 @@
         const spaceLeft = referenceBox.left - minimumBox.left;
 
         if (placement === 'top') {
-            // if node is bigger than space top and there is more room on bottom
+            // Flip below when it offers more vertical space.
             if (spaceTop < nodeBox.height + spacing &&
                 spaceBottom > spaceTop) {
                 return 'bottom';
             }
         } else if (placement === 'right') {
-            // if node is bigger than space right and there is more room on left
+            // Flip left when it offers more horizontal space.
             if (spaceRight < nodeBox.width + spacing &&
                 spaceLeft > spaceRight) {
                 return 'left';
             }
         } else if (placement === 'bottom') {
-            // if node is bigger than space bottom and there is more room on top
+            // Flip above when it offers more vertical space.
             if (spaceBottom < nodeBox.height + spacing &&
                 spaceTop > spaceBottom) {
                 return 'top';
             }
         } else if (placement === 'left') {
-            // if node is bigger than space left and there is more room on right
+            // Flip right when it offers more horizontal space.
             if (spaceLeft < nodeBox.width + spacing &&
                 spaceRight > spaceLeft) {
                 return 'right';
@@ -1291,8 +1348,8 @@
         return placement;
     }
     /**
-     * Remove a Popper from the set, and detach the Popper events.
-     * @param {Popper} popper The Popper.
+     * Unregisters a popper and removes shared listeners when no poppers remain.
+     * @param {Popper} popper The popper to unregister.
      */
     function removePopper(popper) {
         poppers.delete(popper);
@@ -1307,18 +1364,55 @@
         running$1 = false;
     }
 
+    /** @typedef {'top'|'right'|'bottom'|'left'} Direction */
+    /** @typedef {'auto'|Direction} Placement */
+    /** @typedef {'start'|'center'|'end'} Position */
+    /** @typedef {string|HTMLElement} ElementInput */
+
     /**
-     * Popper Class
-     * @class
+     * @callback PopperBeforeUpdateCallback
+     * @param {HTMLElement} node The positioned element.
+     * @param {ElementInput} reference The reference element.
+     * @returns {void} Nothing.
+     */
+
+    /**
+     * @callback PopperAfterUpdateCallback
+     * @param {HTMLElement} node The positioned element.
+     * @param {ElementInput} reference The reference element.
+     * @param {Direction} placement The resolved placement.
+     * @param {Position} position The resolved alignment.
+     * @returns {void} Nothing.
+     */
+
+    /**
+     * @typedef {object} PopperOptions
+     * @property {ElementInput|null} [reference=null] The reference element.
+     * @property {ElementInput|null} [container=null] The positioning boundary.
+     * @property {ElementInput|null} [arrow=null] The arrow element.
+     * @property {PopperAfterUpdateCallback|null} [afterUpdate=null] The callback after positioning.
+     * @property {PopperBeforeUpdateCallback|null} [beforeUpdate=null] The callback before positioning.
+     * @property {Placement} [placement='bottom'] The preferred placement.
+     * @property {Position} [position='center'] The alignment along the placement edge.
+     * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
+     * @property {number} [spacing=0] The spacing from the reference element.
+     * @property {number|false|null} [minContact=null] The minimum contact with the reference element.
+     * @property {boolean} [useGpu=true] Whether to position using a transform.
+     * @property {boolean} [noAttributes=false] Whether to omit placement attributes.
+     */
+
+    /**
+     * Positions an element relative to a reference element.
+     * @extends {BaseComponent<PopperOptions>}
      */
     class Popper extends BaseComponent {
         #placement;
         #referencePlacement;
 
         /**
-         * New Popper constructor.
+         * Creates a Popper.
          * @param {HTMLElement} node The input node.
-         * @param {object} options The options to create the Popper with.
+         * @param {PopperOptions} options The popper options.
          */
         constructor(node, options) {
             super(node, options);
@@ -1340,9 +1434,7 @@
             this.update();
         }
 
-        /**
-         * Dispose the Popper.
-         */
+        /** @inheritdoc */
         dispose() {
             if (this.#placement) {
                 $.setDataset(this.node, { uiPlacement: this.#placement });
@@ -1364,9 +1456,9 @@
         }
 
         /**
-         * Check whether a scroll target affects the Popper.
+         * Checks whether a scroll target affects the popper.
          * @param {HTMLElement|Document} target The scroll target.
-         * @return {boolean} Whether the Popper should update.
+         * @returns {boolean} Whether the popper should update.
          */
         shouldUpdateForScroll(target) {
             return $._isDocument(target) ||
@@ -1375,14 +1467,14 @@
         }
 
         /**
-         * Update the Popper position.
+         * Updates the popper position.
          */
         update() {
             if (!$.isConnected(this.node) || !$.isVisible(this.node)) {
                 return;
             }
 
-            // reset position
+            // Reset the previous position before measuring.
             const resetStyle = {};
 
             if (this.options.useGpu) {
@@ -1398,7 +1490,7 @@
                 this.options.beforeUpdate(this.node, this.options.reference);
             }
 
-            // calculate boxes
+            // Measure the element and its positioning boundaries.
             const nodeBox = $.rect(this.node, { offset: true });
             const referenceBox = $.rect(this.options.reference, { offset: true });
             const windowBox = getScrollContainer(window, document);
@@ -1448,7 +1540,7 @@
                 minimumBox.height = minimumBox.bottom - minimumBox.top;
             }
 
-            // get optimal placement
+            // Resolve the best placement for the available space.
             const placement = this.options.fixed && this.options.placement !== 'auto' ?
                 this.options.placement :
                 getPopperPlacement(
@@ -1465,16 +1557,15 @@
 
             $.setDataset(this.node, { uiPlacement: placement });
 
-            // get auto position
             const position = this.options.position;
 
-            // calculate actual offset
+            // Start from the reference element offset.
             const offset = {
                 x: Math.round(referenceBox.x),
                 y: Math.round(referenceBox.y),
             };
 
-            // offset for relative parent
+            // Adjust for the nearest positioned ancestor.
             const relativeParent = $.closest(
                 this.node,
                 (parent) =>
@@ -1490,7 +1581,7 @@
                 offset.y -= Math.round(relativeBox.y);
             }
 
-            // offset for placement
+            // Move the element onto the resolved placement edge.
             if (placement === 'top') {
                 offset.y -= Math.round(nodeBox.height) + this.options.spacing;
             } else if (placement === 'right') {
@@ -1501,7 +1592,7 @@
                 offset.x -= Math.round(nodeBox.width) + this.options.spacing;
             }
 
-            // offset for position
+            // Align the element along the placement edge.
             if (['top', 'bottom'].includes(placement)) {
                 const deltaX = Math.round(nodeBox.width) - Math.round(referenceBox.width);
 
@@ -1520,11 +1611,11 @@
                 }
             }
 
-            // compensate for margins
+            // Compensate for element margins.
             offset.x -= parseInt($.css(this.node, 'marginLeft'));
             offset.y -= parseInt($.css(this.node, 'marginTop'));
 
-            // corrective positioning
+            // Keep enough of the element in contact with its reference.
             if (['left', 'right'].includes(placement)) {
                 let offsetY = offset.y;
                 let refTop = referenceBox.top;
@@ -1539,7 +1630,7 @@
                     Math.min(referenceBox.height, nodeBox.height);
 
                 if (offsetY + nodeBox.height > minimumBox.bottom) {
-                    // bottom of offset node is below the container
+                    // Move the element above the lower boundary.
                     const diff = offsetY + nodeBox.height - minimumBox.bottom;
                     offset.y = Math.max(
                         refTop - nodeBox.height + minSize,
@@ -1548,7 +1639,7 @@
                 }
 
                 if (offsetY < minimumBox.top) {
-                    // top of offset node is above the container
+                    // Move the element below the upper boundary.
                     const diff = offsetY - minimumBox.top;
                     offset.y = Math.min(
                         refTop + referenceBox.height - minSize,
@@ -1569,7 +1660,7 @@
                     Math.min(referenceBox.width, nodeBox.width);
 
                 if (offsetX + nodeBox.width > minimumBox.right) {
-                    // right of offset node is to the right of the container
+                    // Move the element left of the right boundary.
                     const diff = offsetX + nodeBox.width - minimumBox.right;
                     offset.x = Math.max(
                         refLeft - nodeBox.width + minSize,
@@ -1578,7 +1669,7 @@
                 }
 
                 if (offsetX < minimumBox.left) {
-                    // left of offset node is to the left of the container
+                    // Move the element right of the left boundary.
                     const diff = offsetX - minimumBox.left;
                     offset.x = Math.min(
                         refLeft + referenceBox.width - minSize,
@@ -1590,13 +1681,13 @@
             offset.x = Math.round(offset.x);
             offset.y = Math.round(offset.y);
 
-            // compensate for scroll parent
+            // Compensate for the scrolling ancestor.
             if (scrollParent) {
                 offset.x += $.getScrollX(scrollParent);
                 offset.y += $.getScrollY(scrollParent);
             }
 
-            // update position
+            // Apply the final position.
             const style = {};
             if (this.options.useGpu) {
                 style.transform = `translate3d(${offset.x}px , ${offset.y}px , 0)`;
@@ -1607,7 +1698,7 @@
 
             $.setStyle(this.node, style);
 
-            // update arrow
+            // Align the arrow with the reference element.
             if (this.options.arrow) {
                 this.#updateArrow(placement, position);
             }
@@ -1618,9 +1709,9 @@
         }
 
         /**
-         * Update the arrow.
-         * @param {string} placement The placement of the Popper.
-         * @param {string} position The position of the Popper.
+         * Updates the popper arrow position.
+         * @param {Direction} placement The resolved placement.
+         * @param {Position} position The resolved alignment.
          */
         #updateArrow(placement, position) {
             const nodeBox = $.rect(this.node, { offset: true });
@@ -1694,9 +1785,25 @@
         }
     }
 
+    /** @typedef {import('../popper/popper.js').Placement} Placement */
+    /** @typedef {import('../popper/popper.js').Position} Position */
+
     /**
-     * Dropdown Class
-     * @class
+     * @typedef {object} DropdownOptions
+     * @property {'dynamic'|'static'} [display='dynamic'] The positioning mode.
+     * @property {number} [duration=100] The transition duration in milliseconds.
+     * @property {Placement} [placement='bottom'] The preferred menu placement.
+     * @property {Position} [position='start'] The menu alignment.
+     * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
+     * @property {number} [spacing=3] The spacing between the toggle and menu.
+     * @property {number|false} [minContact=false] The minimum contact with the toggle.
+     * @property {'parent'|string|HTMLElement|null} [reference=null] The positioning reference.
+     * @property {boolean|'inside'|'outside'} [autoClose=true] Where interactions close the menu.
+     */
+
+    /**
+     * Controls a dropdown menu.
+     * @extends {BaseComponent<DropdownOptions>}
      */
     class Dropdown extends BaseComponent {
         #display;
@@ -1705,9 +1812,9 @@
         #referenceNode;
 
         /**
-         * New Dropdown constructor.
+         * Creates a Dropdown.
          * @param {HTMLElement} node The input node.
-         * @param {object} [options] The options to create the Dropdown with.
+         * @param {DropdownOptions} [options] The dropdown options.
          */
         constructor(node, options) {
             super(node, options);
@@ -1725,24 +1832,22 @@
                 this.#referenceNode = this.node;
             }
 
-            // Attach popper
+            // Navbar dropdowns use static positioning.
             if (this.#display !== 'static' && $.closest(this.node, '.navbar-nav').length) {
                 this.#display = 'static';
             }
         }
 
         /**
-         * Check whether the Dropdown menu contains a target.
+         * Checks whether the dropdown menu contains a target.
          * @param {HTMLElement} target The target node.
-         * @return {boolean} Whether the menu contains the target.
+         * @returns {boolean} Whether the target is inside the menu.
          */
         containsMenuTarget(target) {
             return $.hasDescendent(this.#menuNode, target);
         }
 
-        /**
-         * Dispose the Dropdown.
-         */
+        /** @inheritdoc */
         dispose() {
             if (this.#popper) {
                 this.#popper.dispose();
@@ -1756,7 +1861,7 @@
         }
 
         /**
-         * Focus the first Dropdown menu item.
+         * Focuses the first enabled dropdown item.
          */
         focusFirstItem() {
             const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', this.#menuNode);
@@ -1764,7 +1869,7 @@
         }
 
         /**
-         * Hide the Dropdown.
+         * Hides the dropdown menu.
          */
         hide() {
             if (
@@ -1797,9 +1902,9 @@
         }
 
         /**
-         * Check whether the Dropdown should close for a target.
+         * Checks whether an interaction target should close the dropdown.
          * @param {HTMLElement} target The target node.
-         * @return {boolean} Whether the Dropdown should close.
+         * @returns {boolean} Whether the dropdown should close.
          */
         shouldClose(target) {
             const hasDescendent = this.containsMenuTarget(target);
@@ -1827,7 +1932,7 @@
         }
 
         /**
-         * Show the Dropdown.
+         * Shows the dropdown menu.
          */
         show() {
             if (
@@ -1870,7 +1975,7 @@
         }
 
         /**
-         * Toggle the Dropdown.
+         * Toggles the dropdown menu.
          */
         toggle() {
             if ($.hasClass(this.#menuNode, 'show')) {
@@ -1881,7 +1986,7 @@
         }
 
         /**
-         * Update the Dropdown position.
+         * Updates the dropdown position.
          */
         update() {
             if (this.#popper) {
@@ -1890,7 +1995,7 @@
         }
     }
 
-    // Dropdown default options
+    /** @type {import('./dropdown.js').DropdownOptions} */
     Dropdown.defaults = {
         display: 'dynamic',
         duration: 100,
@@ -1901,10 +2006,9 @@
         minContact: false,
     };
 
-    // Dropdown init
     initComponent('dropdown', Dropdown);
 
-    // Dropdown events
+    // Toggle a dropdown from pointer or Space-key activation.
     $.addEventDelegate(document, 'click.ui.dropdown keydown.ui.dropdown', '[data-ui-toggle="dropdown"]', (e) => {
         if (e.code && e.code !== 'Space') {
             return;
@@ -1916,6 +2020,7 @@
         dropdown.toggle();
     });
 
+    // Open a dropdown and focus its first item with an arrow key.
     $.addEventDelegate(document, 'keydown.ui.dropdown', '[data-ui-toggle="dropdown"]', (e) => {
         switch (e.code) {
             case 'ArrowDown':
@@ -1932,6 +2037,7 @@
         }
     });
 
+    // Move focus between dropdown items with the arrow keys.
     $.addEventDelegate(document, 'keydown.ui.dropdown', '.dropdown-menu.show .dropdown-item', (e) => {
         let focusNode;
 
@@ -1951,6 +2057,7 @@
         $.focus(focusNode);
     });
 
+    // Close open dropdowns when an eligible target is clicked.
     $.addEvent(document, 'click.ui.dropdown', (e) => {
         const target = getClickTarget(e);
         const nodes = $.find('.dropdown-menu.show');
@@ -1967,6 +2074,7 @@
         }
     }, { capture: true });
 
+    // Close open dropdowns when Escape is pressed.
     $.addEvent(document, 'keydown.ui.dropdown', (e) => {
         if (e.code !== 'Escape') {
             return;
@@ -1988,6 +2096,7 @@
         }
     }, { capture: true });
 
+    // Close a dropdown after focus leaves its menu with Tab.
     $.addEvent(document, 'keyup.ui.dropdown', (e) => {
         if (e.code !== 'Tab') {
             return;
@@ -2013,9 +2122,7 @@
         }
     }, { capture: true });
 
-    /**
-     * FocusTrap Helpers
-     */
+    /** @typedef {import('./focus-trap.js').default} FocusTrap */
 
     const focusTraps = new Set();
 
@@ -2023,8 +2130,8 @@
     let reverse = false;
 
     /**
-     * Add a FocusTrap to the set, and attach the FocusTrap events.
-     * @param {FocusTrap} focusTrap The FocusTrap.
+     * Registers a focus trap and attaches shared focus handlers when needed.
+     * @param {FocusTrap} focusTrap The focus trap to register.
      */
     function addFocusTrap(focusTrap) {
         focusTraps.add(focusTrap);
@@ -2070,8 +2177,8 @@
         reverse = false;
     }
     /**
-     * Remove a FocusTrap from the set, and detach the FocusTrap events.
-     * @param {FocusTrap} focusTrap The FocusTrap.
+     * Unregisters a focus trap and removes shared handlers when none remain.
+     * @param {FocusTrap} focusTrap The focus trap to unregister.
      */
     function removeFocusTrap(focusTrap) {
         focusTraps.delete(focusTrap);
@@ -2087,14 +2194,19 @@
     }
 
     /**
-     * FocusTrap Class
-     * @class
+     * @typedef {object} FocusTrapOptions
+     * @property {boolean} [autoFocus=true] Whether to focus the trapped element when activated.
+     */
+
+    /**
+     * Keeps keyboard focus within an element while active.
+     * @extends {BaseComponent<FocusTrapOptions>}
      */
     class FocusTrap extends BaseComponent {
         #active;
 
         /**
-         * Activate the FocusTrap.
+         * Activates the focus trap.
          */
         activate() {
             if (this.#active) {
@@ -2111,7 +2223,7 @@
         }
 
         /**
-         * Deactivate the FocusTrap.
+         * Deactivates the focus trap.
          */
         deactivate() {
             if (!this.#active) {
@@ -2122,9 +2234,7 @@
             this.#active = false;
         }
 
-        /**
-         * Dispose the FocusTrap.
-         */
+        /** @inheritdoc */
         dispose() {
             this.deactivate();
 
@@ -2132,17 +2242,25 @@
         }
     }
 
-    // FocusTrap default options
+    /** @type {import('./focus-trap.js').FocusTrapOptions} */
     FocusTrap.defaults = {
         autoFocus: true,
     };
 
-    // FocusTrap init
     initComponent('focustrap', FocusTrap);
 
     /**
-     * Modal Class
-     * @class
+     * @typedef {object} ModalOptions
+     * @property {number} [duration=250] The transition duration in milliseconds.
+     * @property {boolean|'static'} [backdrop=true] Whether to show a dismissible or static backdrop.
+     * @property {boolean} [focus=true] Whether to trap focus while shown.
+     * @property {boolean} [show=false] Whether to show the modal immediately.
+     * @property {boolean} [keyboard=true] Whether Escape hides the modal.
+     */
+
+    /**
+     * Controls a modal dialog and its backdrop.
+     * @extends {BaseComponent<ModalOptions>}
      */
     class Modal extends BaseComponent {
         #activeTarget;
@@ -2152,9 +2270,9 @@
         #scrollNodes;
 
         /**
-         * New Modal constructor.
+         * Creates a Modal.
          * @param {HTMLElement} node The input node.
-         * @param {object} [options] The options to create the Modal with.
+         * @param {ModalOptions} [options] The modal options.
          */
         constructor(node, options) {
             super(node, options);
@@ -2170,9 +2288,7 @@
             }
         }
 
-        /**
-         * Dispose the Modal.
-         */
+        /** @inheritdoc */
         dispose() {
             if (this.#focusTrap) {
                 this.#focusTrap.dispose();
@@ -2188,7 +2304,7 @@
         }
 
         /**
-         * Handle a backdrop interaction.
+         * Handles an interaction outside the modal dialog.
          * @param {HTMLElement} target The interaction target.
          */
         handleBackdrop(target) {
@@ -2208,7 +2324,7 @@
         }
 
         /**
-         * Handle an escape key interaction.
+         * Handles an Escape-key interaction.
          */
         handleEscape() {
             if (!this.options.keyboard) {
@@ -2224,7 +2340,7 @@
         }
 
         /**
-         * Hide the Modal.
+         * Hides the modal.
          */
         hide() {
             if (
@@ -2292,7 +2408,7 @@
         }
 
         /**
-         * Show the Modal.
+         * Shows the modal.
          * @param {HTMLElement} [relatedTarget] The element that triggered the Modal.
          */
         show(relatedTarget) {
@@ -2380,7 +2496,7 @@
         }
 
         /**
-         * Toggle the Modal.
+         * Toggles the modal.
          */
         toggle() {
             if ($.hasClass(this.node, 'show')) {
@@ -2391,7 +2507,7 @@
         }
 
         /**
-         * Start a zoom in/out animation.
+         * Runs the static-backdrop feedback animation.
          */
         #zoom() {
             if ($.getDataset(this.#dialog, 'uiAnimating')) {
@@ -2421,12 +2537,8 @@
     }
 
     /**
-     * Modal Helpers
-     */
-
-    /**
-     * Get the top modal.
-     * @return {Modal} The Modal.
+     * Gets the top modal.
+     * @returns {Modal|null} The highest visible modal, or `null` if none is shown.
      */
     function getTopModal() {
         const nodes = $.find('.modal.show');
@@ -2435,7 +2547,7 @@
             return null;
         }
 
-        // find modal with highest zIndex
+        // Select the modal with the highest stacking order.
         let node = nodes.shift();
         let highestZIndex = $.getStyle(node, 'zIndex');
 
@@ -2453,7 +2565,7 @@
         return Modal.init(node);
     }
 
-    // Modal default options
+    /** @type {import('./modal.js').ModalOptions} */
     Modal.defaults = {
         duration: 250,
         backdrop: true,
@@ -2462,10 +2574,9 @@
         keyboard: true,
     };
 
-    // Modal init
     initComponent('modal', Modal);
 
-    // Modal events
+    // Show the modal targeted by a toggle control.
     $.addEventDelegate(document, 'click.ui.modal', '[data-ui-toggle="modal"]', (e) => {
         e.preventDefault();
 
@@ -2474,6 +2585,7 @@
         modal.show(e.currentTarget);
     });
 
+    // Hide the modal containing a dismiss control.
     $.addEventDelegate(document, 'click.ui.modal', '[data-ui-dismiss="modal"]', (e) => {
         e.preventDefault();
 
@@ -2482,7 +2594,7 @@
         modal.hide();
     });
 
-    // Events must be attached to the window, so offcanvas events are triggered first
+    // Handle modal backdrops after offcanvas document listeners have run.
     $.addEvent(window, 'click.ui.modal', (e) => {
         const target = getClickTarget(e);
 
@@ -2499,6 +2611,7 @@
         modal.handleBackdrop(target);
     });
 
+    // Send Escape to the highest visible modal.
     $.addEvent(window, 'keydown.ui.modal', (e) => {
         if (e.code !== 'Escape') {
             return;
@@ -2513,14 +2626,12 @@
         modal.handleEscape();
     });
 
-    /**
-     * Offcanvas Helpers
-     */
+    /** @typedef {import('../popper/popper.js').Direction} Direction */
 
     /**
-     * Get the slide animation direction.
+     * Gets the slide animation direction.
      * @param {HTMLElement} node The offcanvas node.
-     * @return {string} The animation direction.
+     * @returns {Direction} The animation direction.
      */
     function getDirection(node) {
         if ($.hasClass(node, 'offcanvas-end')) {
@@ -2539,8 +2650,16 @@
     }
 
     /**
-     * Offcanvas Class
-     * @class
+     * @typedef {object} OffcanvasOptions
+     * @property {number} [duration=250] The transition duration in milliseconds.
+     * @property {boolean|'static'} [backdrop=true] Whether to show a dismissible or static backdrop.
+     * @property {boolean} [keyboard=true] Whether Escape hides the offcanvas element.
+     * @property {boolean} [scroll=false] Whether body scrolling remains enabled while shown.
+     */
+
+    /**
+     * Controls an offcanvas panel and its backdrop.
+     * @extends {BaseComponent<OffcanvasOptions>}
      */
     class Offcanvas extends BaseComponent {
         #activeTarget;
@@ -2548,9 +2667,9 @@
         #scrollNodes;
 
         /**
-         * New Offcanvas constructor.
+         * Creates an Offcanvas.
          * @param {HTMLElement} node The input node.
-         * @param {object} [options] The options to create the Offcanvas with.
+         * @param {OffcanvasOptions} [options] The offcanvas options.
          */
         constructor(node, options) {
             super(node, options);
@@ -2560,9 +2679,7 @@
             }
         }
 
-        /**
-         * Dispose the Offcanvas.
-         */
+        /** @inheritdoc */
         dispose() {
             if (this.#focusTrap) {
                 this.#focusTrap.dispose();
@@ -2576,7 +2693,7 @@
         }
 
         /**
-         * Handle a backdrop interaction.
+         * Handles an interaction outside the offcanvas panel.
          * @param {HTMLElement} target The interaction target.
          */
         handleBackdrop(target) {
@@ -2593,7 +2710,7 @@
         }
 
         /**
-         * Handle an escape key interaction.
+         * Handles an Escape-key interaction.
          */
         handleEscape() {
             if (this.options.keyboard) {
@@ -2602,7 +2719,7 @@
         }
 
         /**
-         * Hide the Offcanvas.
+         * Hides the offcanvas panel.
          */
         hide() {
             if (
@@ -2661,7 +2778,7 @@
         }
 
         /**
-         * Show the Offcanvas.
+         * Shows the offcanvas panel.
          * @param {HTMLElement} [relatedTarget] The element that triggered the Offcanvas.
          */
         show(relatedTarget) {
@@ -2724,7 +2841,7 @@
         }
 
         /**
-         * Toggle the Offcanvas.
+         * Toggles the offcanvas panel.
          */
         toggle() {
             if ($.hasClass(this.node, 'show')) {
@@ -2735,7 +2852,7 @@
         }
     }
 
-    // Offcanvas default options
+    /** @type {import('./offcanvas.js').OffcanvasOptions} */
     Offcanvas.defaults = {
         duration: 250,
         backdrop: true,
@@ -2743,10 +2860,9 @@
         scroll: false,
     };
 
-    // Offcanvas init
     initComponent('offcanvas', Offcanvas);
 
-    // Offcanvas events
+    // Show the offcanvas panel targeted by a toggle control.
     $.addEventDelegate(document, 'click.ui.offcanvas', '[data-ui-toggle="offcanvas"]', (e) => {
         e.preventDefault();
 
@@ -2755,6 +2871,7 @@
         offcanvas.show(e.currentTarget);
     });
 
+    // Hide the offcanvas panel containing a dismiss control.
     $.addEventDelegate(document, 'click.ui.offcanvas', '[data-ui-dismiss="offcanvas"]', (e) => {
         e.preventDefault();
 
@@ -2763,6 +2880,7 @@
         offcanvas.hide();
     });
 
+    // Handle backdrop clicks when no modal is covering the offcanvas panel.
     $.addEvent(document, 'click.ui.offcanvas', (e) => {
         const target = getClickTarget(e);
 
@@ -2782,6 +2900,7 @@
         }
     });
 
+    // Send Escape to visible offcanvas panels when no modal is shown.
     $.addEvent(document, 'keydown.ui.offcanvas', (e) => {
         if (e.code !== 'Escape' || $.findOne('.modal.show')) {
             return;
@@ -2799,7 +2918,7 @@
         }
     });
 
-    // Popper default options
+    /** @type {import('./popper.js').PopperOptions} */
     Popper.defaults = {
         reference: null,
         container: null,
@@ -2815,12 +2934,34 @@
         noAttributes: false,
     };
 
-    // Popper init
     initComponent('popper', Popper);
 
+    /** @typedef {import('../popper/popper.js').Placement} Placement */
+    /** @typedef {import('../popper/popper.js').Position} Position */
+
     /**
-     * Popover Class
-     * @class
+     * @typedef {object} PopoverOptions
+     * @property {string} [template] The popover markup template.
+     * @property {string|null} [customClass=null] An additional class for the popover.
+     * @property {number} [duration=100] The transition duration in milliseconds.
+     * @property {boolean} [enable=true] Whether the popover starts enabled.
+     * @property {boolean} [html=false] Whether title and content may contain HTML.
+     * @property {string|HTMLElement|null} [appendTo=null] The popover container.
+     * @property {false|((input: string) => string)} [sanitize] The HTML sanitizer, or `false` to disable sanitization.
+     * @property {string} [trigger='click'] The space-separated interaction triggers.
+     * @property {Placement} [placement='auto'] The preferred popover placement.
+     * @property {Position} [position='center'] The popover alignment.
+     * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
+     * @property {number} [spacing=3] The spacing from the reference element.
+     * @property {number|false} [minContact=false] The minimum contact with the reference element.
+     * @property {boolean} [noAttributes=false] Whether to omit placement and accessibility attributes.
+     * @property {string} [title] The popover title.
+     * @property {string} [content] The popover body content.
+     */
+
+    /**
+     * Controls a popover anchored to a reference element.
+     * @extends {BaseComponent<PopoverOptions>}
      */
     class Popover extends BaseComponent {
         #arrow;
@@ -2834,9 +2975,9 @@
         #triggers;
 
         /**
-         * New Popover constructor.
+         * Creates a Popover.
          * @param {HTMLElement} node The input node.
-         * @param {object} [options] The options to create the Popover with.
+         * @param {PopoverOptions} [options] The popover options.
          */
         constructor(node, options) {
             super(node, options);
@@ -2856,15 +2997,13 @@
         }
 
         /**
-         * Disable the Popover.
+         * Disables interaction-triggered popover changes.
          */
         disable() {
             this.#enabled = false;
         }
 
-        /**
-         * Dispose the Popover.
-         */
+        /** @inheritdoc */
         dispose() {
             if ($.hasDataset(this.node, 'uiOriginalTitle')) {
                 const title = $.getDataset(this.node, 'uiOriginalTitle');
@@ -2909,16 +3048,15 @@
         }
 
         /**
-         * Enable the Popover.
+         * Enables interaction-triggered popover changes.
          */
         enable() {
             this.#enabled = true;
         }
 
         /**
-         * Hide the Popover.
-         * @param {object} [options] The hide options.
-         * @param {boolean} [options.force=true] Whether to force hiding when disabled.
+         * Hides the popover.
+         * @param {{force?: boolean}} [options] The hide options. Force defaults to `true`.
          */
         hide({ force = true } = {}) {
             if (
@@ -2950,7 +3088,7 @@
         }
 
         /**
-         * Refresh the Popover.
+         * Refreshes the popover title and body content.
          */
         refresh() {
             if ($.hasAttribute(this.node, 'title')) {
@@ -2999,7 +3137,7 @@
         }
 
         /**
-         * Show the Popover.
+         * Shows the popover.
          */
         show() {
             if (
@@ -3028,9 +3166,8 @@
         }
 
         /**
-         * Toggle the Popover.
-         * @param {object} [options] The toggle options.
-         * @param {boolean} [options.force=true] Whether to force hiding when disabled.
+         * Toggles the popover.
+         * @param {{force?: boolean}} [options] The toggle options. Force defaults to `true`.
          */
         toggle({ force = true } = {}) {
             if ($.isConnected(this.#popover)) {
@@ -3041,7 +3178,7 @@
         }
 
         /**
-         * Update the Popover position.
+         * Updates the popover position.
          */
         update() {
             if (this.#popper) {
@@ -3050,7 +3187,7 @@
         }
 
         /**
-         * Attach events for the Popover.
+         * Attaches popover interaction handlers.
          */
         #events() {
             if (this.#triggers.includes('hover')) {
@@ -3096,7 +3233,7 @@
         }
 
         /**
-         * Render the Popover element.
+         * Creates the popover element from its template.
          */
         #render() {
             this.#popover = $.parseHTML(this.options.template).shift();
@@ -3109,7 +3246,7 @@
         }
 
         /**
-         * Update the Popover and append to the DOM.
+         * Appends and positions the popover element.
          */
         #show() {
             if (this.options.appendTo) {
@@ -3144,7 +3281,7 @@
         }
 
         /**
-         * Stop the animations.
+         * Stops the active popover transition.
          */
         #stop() {
             if (!this.#enabled) {
@@ -3169,7 +3306,7 @@
         }
     }
 
-    // Popover default options
+    /** @type {import('./popover.js').PopoverOptions} */
     Popover.defaults = {
         template: '<div class="popover" role="tooltip">' +
             '<div class="popover-arrow"></div>' +
@@ -3191,21 +3328,25 @@
         noAttributes: false,
     };
 
-    // Popover init
     initComponent('popover', Popover);
 
     /**
-     * Tab Class
-     * @class
+     * @typedef {object} TabOptions
+     * @property {number} [duration=100] The transition duration in milliseconds.
+     */
+
+    /**
+     * Controls a tab trigger and its associated panel.
+     * @extends {BaseComponent<TabOptions>}
      */
     class Tab extends BaseComponent {
         #siblings;
         #target;
 
         /**
-         * New Tab constructor.
+         * Creates a Tab.
          * @param {HTMLElement} node The input node.
-         * @param {object} [options] The options to create the Tab with.
+         * @param {TabOptions} [options] The tab options.
          */
         constructor(node, options) {
             super(node, options);
@@ -3215,9 +3356,7 @@
             this.#siblings = $.siblings(this.node);
         }
 
-        /**
-         * Dispose the Tab.
-         */
+        /** @inheritdoc */
         dispose() {
             this.#target = null;
             this.#siblings = null;
@@ -3226,7 +3365,7 @@
         }
 
         /**
-         * Hide the current Tab.
+         * Hides the current tab.
          */
         hide() {
             if (
@@ -3241,7 +3380,7 @@
         }
 
         /**
-         * Hide any active Tabs, and show the current Tab.
+         * Hides the active tab and shows the current tab.
          */
         show() {
             if (
@@ -3278,7 +3417,7 @@
         }
 
         /**
-         * Hide the current Tab (forcefully).
+         * Hides the current tab without checking its state or events.
          */
         #hide() {
             $.setDataset(this.#target, { uiAnimating: 'out' });
@@ -3299,7 +3438,7 @@
         }
 
         /**
-         * Show the current Tab (forcefully).
+         * Shows the current tab without checking its state or events.
          */
         #show() {
             $.setDataset(this.#target, { uiAnimating: 'in' });
@@ -3321,15 +3460,14 @@
         }
     }
 
-    // Tab default options
+    /** @type {import('./tab.js').TabOptions} */
     Tab.defaults = {
         duration: 100,
     };
 
-    // Tab init
     initComponent('tab', Tab);
 
-    // Tab events
+    // Select a tab from pointer or Space-key activation.
     $.addEventDelegate(document, 'click.ui.tab keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => {
         if (e.code && e.code !== 'Space') {
             return;
@@ -3341,6 +3479,7 @@
         tab.show();
     });
 
+    // Move focus between tab controls with navigation keys.
     $.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => {
         let newTarget;
 
@@ -3373,15 +3512,20 @@
     });
 
     /**
-     * Toast Class
-     * @class
+     * @typedef {object} ToastOptions
+     * @property {boolean} [autohide=true] Whether to hide the toast automatically.
+     * @property {number} [delay=5000] The autohide delay in milliseconds.
+     * @property {number} [duration=100] The transition duration in milliseconds.
+     */
+
+    /**
+     * Controls a transient toast notification.
+     * @extends {BaseComponent<ToastOptions>}
      */
     class Toast extends BaseComponent {
         #timer;
 
-        /**
-         * Dispose the Toast.
-         */
+        /** @inheritdoc */
         dispose() {
             clearTimeout(this.#timer);
             this.#timer = null;
@@ -3390,7 +3534,7 @@
         }
 
         /**
-         * Hide the Toast.
+         * Hides the toast.
          */
         hide() {
             if (
@@ -3421,7 +3565,7 @@
         }
 
         /**
-         * Show the Toast.
+         * Shows the toast.
          */
         show() {
             if (
@@ -3462,17 +3606,16 @@
         }
     }
 
-    // Toast default options
+    /** @type {import('./toast.js').ToastOptions} */
     Toast.defaults = {
         autohide: true,
         delay: 5000,
         duration: 100,
     };
 
-    // Toast init
     initComponent('toast', Toast);
 
-    // Toast events
+    // Hide the toast containing a dismiss control.
     $.addEventDelegate(document, 'click.ui.toast', '[data-ui-dismiss="toast"]', (e) => {
         e.preventDefault();
 
@@ -3481,9 +3624,31 @@
         toast.hide();
     });
 
+    /** @typedef {import('../popper/popper.js').Placement} Placement */
+    /** @typedef {import('../popper/popper.js').Position} Position */
+
     /**
-     * Tooltip Class
-     * @class
+     * @typedef {object} TooltipOptions
+     * @property {string} [template] The tooltip markup template.
+     * @property {string|null} [customClass=null] An additional class for the tooltip.
+     * @property {number} [duration=100] The transition duration in milliseconds.
+     * @property {boolean} [enable=true] Whether the tooltip starts enabled.
+     * @property {boolean} [html=false] Whether the title may contain HTML.
+     * @property {string} [trigger='hover focus'] The space-separated interaction triggers.
+     * @property {string|HTMLElement|null} [appendTo=null] The tooltip container.
+     * @property {false|((input: string) => string)} [sanitize] The HTML sanitizer, or `false` to disable sanitization.
+     * @property {Placement} [placement='auto'] The preferred tooltip placement.
+     * @property {Position} [position='center'] The tooltip alignment.
+     * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
+     * @property {number} [spacing=2] The spacing from the reference element.
+     * @property {number|false} [minContact=false] The minimum contact with the reference element.
+     * @property {boolean} [noAttributes=false] Whether to omit placement and accessibility attributes.
+     * @property {string} [title] The tooltip title.
+     */
+
+    /**
+     * Controls a tooltip anchored to a reference element.
+     * @extends {BaseComponent<TooltipOptions>}
      */
     class Tooltip extends BaseComponent {
         #arrow;
@@ -3496,9 +3661,9 @@
         #triggers;
 
         /**
-         * New Tooltip constructor.
+         * Creates a Tooltip.
          * @param {HTMLElement} node The input node.
-         * @param {object} [options] The options to create the Tooltip with.
+         * @param {TooltipOptions} [options] The tooltip options.
          */
         constructor(node, options) {
             super(node, options);
@@ -3518,15 +3683,13 @@
         }
 
         /**
-         * Disable the Tooltip.
+         * Disables interaction-triggered tooltip changes.
          */
         disable() {
             this.#enabled = false;
         }
 
-        /**
-         * Dispose the Tooltip.
-         */
+        /** @inheritdoc */
         dispose() {
             if ($.hasDataset(this.node, 'uiOriginalTitle')) {
                 const title = $.getDataset(this.node, 'uiOriginalTitle');
@@ -3570,16 +3733,15 @@
         }
 
         /**
-         * Enable the Tooltip.
+         * Enables interaction-triggered tooltip changes.
          */
         enable() {
             this.#enabled = true;
         }
 
         /**
-         * Hide the Tooltip.
-         * @param {object} [options] The hide options.
-         * @param {boolean} [options.force=true] Whether to force hiding when disabled.
+         * Hides the tooltip.
+         * @param {{force?: boolean}} [options] The hide options. Force defaults to `true`.
          */
         hide({ force = true } = {}) {
             if (
@@ -3612,7 +3774,7 @@
         }
 
         /**
-         * Refresh the Tooltip.
+         * Refreshes the tooltip title.
          */
         refresh() {
             if ($.hasAttribute(this.node, 'title')) {
@@ -3643,7 +3805,7 @@
         }
 
         /**
-         * Show the Tooltip.
+         * Shows the tooltip.
          */
         show() {
             if (
@@ -3673,9 +3835,8 @@
         }
 
         /**
-         * Toggle the Tooltip.
-         * @param {object} [options] The toggle options.
-         * @param {boolean} [options.force=true] Whether to force hiding when disabled.
+         * Toggles the tooltip.
+         * @param {{force?: boolean}} [options] The toggle options. Force defaults to `true`.
          */
         toggle({ force = true } = {}) {
             if ($.isConnected(this.#tooltip)) {
@@ -3686,7 +3847,7 @@
         }
 
         /**
-         * Update the Tooltip position.
+         * Updates the tooltip position.
          */
         update() {
             if (this.#popper) {
@@ -3695,7 +3856,7 @@
         }
 
         /**
-         * Attach events for the Tooltip.
+         * Attaches tooltip interaction handlers.
          */
         #events() {
             if (this.#triggers.includes('hover')) {
@@ -3741,7 +3902,7 @@
         }
 
         /**
-         * Render the Tooltip element.
+         * Creates the tooltip element from its template.
          */
         #render() {
             this.#tooltip = $.parseHTML(this.options.template).shift();
@@ -3753,7 +3914,7 @@
         }
 
         /**
-         * Update the Tooltip and append to the DOM.
+         * Appends and positions the tooltip element.
          */
         #show() {
             if (this.options.appendTo) {
@@ -3788,7 +3949,7 @@
         }
 
         /**
-         * Stop the animations.
+         * Stops the active tooltip transition.
          */
         #stop() {
             if (!this.#enabled) {
@@ -3814,7 +3975,7 @@
         }
     }
 
-    // Tooltip default options
+    /** @type {import('./tooltip.js').TooltipOptions} */
     Tooltip.defaults = {
         template: '<div class="tooltip" role="tooltip">' +
             '<div class="tooltip-arrow"></div>' +
@@ -3835,10 +3996,9 @@
         noAttributes: false,
     };
 
-    // Tooltip init
     initComponent('tooltip', Tooltip);
 
-    // Clipboard events
+    // Copy or cut text requested by a clipboard control.
     $.addEventDelegate(document, 'click', '[data-ui-toggle="clipboard"]', (e) => {
         e.preventDefault();
 
@@ -3889,7 +4049,7 @@
         }
     });
 
-    // Ripple events
+    // Render a click-centered ripple animation.
     $.addEventDelegate(document, 'click.ui.ripple', '.ripple', (e) => {
         if (e.button !== 0) {
             return;
@@ -3937,7 +4097,7 @@
         });
     });
 
-    // Text expand events
+    // Resize expanding text areas as their content changes.
     $.addEventDelegate(document, 'change.ui.expand input.ui.expand', '.text-expand', (e) => {
         const textArea = e.currentTarget;
 

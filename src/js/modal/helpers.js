@@ -2,12 +2,8 @@ import { $ } from './../globals.js';
 import Modal from './modal.js';
 
 /**
- * Modal Helpers
- */
-
-/**
- * Get the top modal.
- * @return {Modal} The Modal.
+ * Gets the top modal.
+ * @returns {Modal|null} The highest visible modal, or `null` if none is shown.
  */
 export function getTopModal() {
     const nodes = $.find('.modal.show');
@@ -16,7 +12,7 @@ export function getTopModal() {
         return null;
     }
 
-    // find modal with highest zIndex
+    // Select the modal with the highest stacking order.
     let node = nodes.shift();
     let highestZIndex = $.getStyle(node, 'zIndex');
 

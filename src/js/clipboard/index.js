@@ -1,7 +1,8 @@
 import { $, document } from './../globals.js';
-import { getDataset, getTarget } from './../helpers.js';
+import { getDataset } from './../helpers/component.js';
+import { getTarget } from './../helpers/target.js';
 
-// Clipboard events
+// Copy or cut text requested by a clipboard control.
 $.addEventDelegate(document, 'click', '[data-ui-toggle="clipboard"]', (e) => {
     e.preventDefault();
 

@@ -1,12 +1,20 @@
 import BaseComponent from './../base-component.js';
 import FocusTrap from './../focus-trap/index.js';
 import { $, document } from './../globals.js';
-import { addScrollPadding, resetScrollPadding } from './../helpers.js';
+import { addScrollPadding, resetScrollPadding } from './../helpers/scroll.js';
 import { getDirection } from './helpers.js';
 
 /**
- * Offcanvas Class
- * @class
+ * @typedef {object} OffcanvasOptions
+ * @property {number} [duration=250] The transition duration in milliseconds.
+ * @property {boolean|'static'} [backdrop=true] Whether to show a dismissible or static backdrop.
+ * @property {boolean} [keyboard=true] Whether Escape hides the offcanvas element.
+ * @property {boolean} [scroll=false] Whether body scrolling remains enabled while shown.
+ */
+
+/**
+ * Controls an offcanvas panel and its backdrop.
+ * @extends {BaseComponent<OffcanvasOptions>}
  */
 export default class Offcanvas extends BaseComponent {
     #activeTarget;
@@ -14,9 +22,9 @@ export default class Offcanvas extends BaseComponent {
     #scrollNodes;
 
     /**
-     * New Offcanvas constructor.
+     * Creates an Offcanvas.
      * @param {HTMLElement} node The input node.
-     * @param {object} [options] The options to create the Offcanvas with.
+     * @param {OffcanvasOptions} [options] The offcanvas options.
      */
     constructor(node, options) {
         super(node, options);
@@ -26,9 +34,7 @@ export default class Offcanvas extends BaseComponent {
         }
     }
 
-    /**
-     * Dispose the Offcanvas.
-     */
+    /** @inheritdoc */
     dispose() {
         if (this.#focusTrap) {
             this.#focusTrap.dispose();
@@ -42,7 +48,7 @@ export default class Offcanvas extends BaseComponent {
     }
 
     /**
-     * Handle a backdrop interaction.
+     * Handles an interaction outside the offcanvas panel.
      * @param {HTMLElement} target The interaction target.
      */
     handleBackdrop(target) {
@@ -59,7 +65,7 @@ export default class Offcanvas extends BaseComponent {
     }
 
     /**
-     * Handle an escape key interaction.
+     * Handles an Escape-key interaction.
      */
     handleEscape() {
         if (this.options.keyboard) {
@@ -68,7 +74,7 @@ export default class Offcanvas extends BaseComponent {
     }
 
     /**
-     * Hide the Offcanvas.
+     * Hides the offcanvas panel.
      */
     hide() {
         if (
@@ -127,7 +133,7 @@ export default class Offcanvas extends BaseComponent {
     }
 
     /**
-     * Show the Offcanvas.
+     * Shows the offcanvas panel.
      * @param {HTMLElement} [relatedTarget] The element that triggered the Offcanvas.
      */
     show(relatedTarget) {
@@ -190,7 +196,7 @@ export default class Offcanvas extends BaseComponent {
     }
 
     /**
-     * Toggle the Offcanvas.
+     * Toggles the offcanvas panel.
      */
     toggle() {
         if ($.hasClass(this.node, 'show')) {

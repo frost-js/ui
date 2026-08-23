@@ -1,11 +1,30 @@
 import BaseComponent from './../base-component.js';
 import { $, document } from './../globals.js';
-import { getPosition } from './../helpers.js';
+import { getPosition } from './../helpers/pointer.js';
 import { getDirOffset, getDirection, getIndex } from './helpers.js';
 
+/** @typedef {import('../popper/popper.js').Direction} Direction */
+
 /**
- * Carousel Class
- * @class
+ * @typedef {object} CarouselOptions
+ * @property {number} [interval=5000] The cycle interval in milliseconds.
+ * @property {number} [transition=500] The transition duration in milliseconds.
+ * @property {boolean} [keyboard=true] Whether to support keyboard navigation.
+ * @property {false|'carousel'} [ride=false] Whether to cycle automatically.
+ * @property {boolean} [pause=true] Whether to pause while hovered.
+ * @property {boolean} [wrap=true] Whether navigation wraps at either end.
+ * @property {boolean} [swipe=true] Whether to support pointer and touch swiping.
+ */
+
+/**
+ * @typedef {object} CarouselUpdateOptions
+ * @property {Direction} [direction] The transition direction.
+ * @property {boolean} [dragging=false] Whether the position is being updated by a drag.
+ */
+
+/**
+ * Controls an animated carousel.
+ * @extends {BaseComponent<CarouselOptions>}
  */
 export default class Carousel extends BaseComponent {
     #index;
@@ -15,9 +34,9 @@ export default class Carousel extends BaseComponent {
     #timer;
 
     /**
-     * New Carousel constructor.
+     * Creates a Carousel.
      * @param {HTMLElement} node The input node.
-     * @param {object} [options] The options to create the Carousel with.
+     * @param {CarouselOptions} [options] The carousel options.
      */
     constructor(node, options) {
         super(node, options);
@@ -36,7 +55,7 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Cycle to the next carousel item.
+     * Advances the carousel automatically when the document is visible.
      */
     cycle() {
         if (!$.isHidden(document)) {
@@ -47,9 +66,7 @@ export default class Carousel extends BaseComponent {
         }
     }
 
-    /**
-     * Dispose the Carousel.
-     */
+    /** @inheritdoc */
     dispose() {
         clearTimeout(this.#timer);
         this.#timer = null;
@@ -73,14 +90,14 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Cycle to the next Carousel item.
+     * Shows the next carousel item.
      */
     next() {
         this.slide();
     }
 
     /**
-     * Stop the carousel from cycling through items.
+     * Stops automatic carousel cycling.
      */
     pause() {
         clearTimeout(this.#timer);
@@ -89,30 +106,30 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Cycle to the previous Carousel item.
+     * Shows the previous carousel item.
      */
     prev() {
         this.slide(-1);
     }
 
     /**
-     * Cycle to a specific Carousel item.
-     * @param {number} index The item index to cycle to.
+     * Shows a carousel item by index.
+     * @param {number|string} index The item index to show.
      */
     show(index) {
         this.#show(index);
     }
 
     /**
-     * Slide the Carousel in a specific direction.
-     * @param {number} [direction=1] The direction to slide to.
+     * Moves by a relative number of carousel items.
+     * @param {number} [direction=1] The relative item offset.
      */
     slide(direction = 1) {
         this.show(this.#index + direction);
     }
 
     /**
-     * Attach events for the Carousel.
+     * Attaches carousel interaction handlers.
      */
     #events() {
         if (this.options.keyboard) {
@@ -291,7 +308,7 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Reset styles of an item.
+     * Resets the transition styles of an item.
      * @param {number} index The item index.
      */
     #resetStyles(index) {
@@ -302,9 +319,9 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Set a new item index and update the items.
+     * Sets the active item index and updates item state.
      * @param {number} index The new item index.
-     * @return {number} The old item index.
+     * @returns {number} The old item index.
      */
     #setIndex(index) {
         const oldIndex = this.#index;
@@ -317,7 +334,7 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Set a timer for the next Carousel cycle.
+     * Schedules the next automatic cycle.
      */
     #setTimer() {
         if (this.#timer || this.#paused || this.#mousePaused) {
@@ -336,8 +353,8 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Cycle to a specific Carousel item.
-     * @param {number} index The item index to cycle to.
+     * Starts a transition to a carousel item.
+     * @param {number|string} index The item index to show.
      */
     #show(index) {
         if ($.getDataset(this.node, 'uiSliding')) {
@@ -405,13 +422,11 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Update the position of the Carousel items.
-     * @param {Node} nodeIn The new node.
-     * @param {Node} nodeOut The old node.
-     * @param {number} progress The progress of the cycle.
-     * @param {object} options The options for updating the item positions.
-     * @param {string} [options.direction] The direction to cycle to.
-     * @param {Boolean} [options.dragging] Whether the item is being dragged.
+     * Updates carousel item positions for a transition frame.
+     * @param {HTMLElement} nodeIn The incoming item.
+     * @param {HTMLElement} nodeOut The outgoing item.
+     * @param {number} progress The transition progress.
+     * @param {CarouselUpdateOptions} [options] The update options.
      */
     #update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
         const inStyles = {};
@@ -444,7 +459,7 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Update the carousel indicators.
+     * Updates the active carousel indicator.
      */
     #updateIndicators() {
         const oldIndicator = $.find('.active[data-ui-slide-to]', this.node);

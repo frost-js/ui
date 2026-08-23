@@ -1,9 +1,10 @@
+/** @typedef {import('../popper/popper.js').Direction} Direction */
 
 /**
- * Get the direction offset from an index.
+ * Gets the boundary offset for an item index.
  * @param {number} index The index.
  * @param {number} totalItems The total number of items.
- * @return {number} The direction.
+ * @returns {-1|0|1} The boundary offset.
  */
 export function getDirOffset(index, totalItems) {
     if (index < 0) {
@@ -18,11 +19,11 @@ export function getDirOffset(index, totalItems) {
 };
 
 /**
- * Get the direction from an offset and index.
+ * Gets the transition direction for an item change.
  * @param {number} offset The direction offset.
  * @param {number} oldIndex The old item index.
  * @param {number} newIndex The new item index.
- * @return {string} The direction.
+ * @returns {Direction} The transition direction.
  */
 export function getDirection(offset, oldIndex, newIndex) {
     if (offset == -1 || (offset == 0 && newIndex < oldIndex)) {
@@ -33,10 +34,10 @@ export function getDirection(offset, oldIndex, newIndex) {
 };
 
 /**
- * Get the real index from an index.
+ * Normalizes an item index to the available range.
  * @param {number} index The item index.
  * @param {number} totalItems The total number of items.
- * @return {number} The real item index.
+ * @returns {number} The normalized item index.
  */
 export function getIndex(index, totalItems) {
     index %= totalItems;

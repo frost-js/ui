@@ -2,15 +2,20 @@ import BaseComponent from './../base-component.js';
 import { $ } from './../globals.js';
 
 /**
- * Toast Class
- * @class
+ * @typedef {object} ToastOptions
+ * @property {boolean} [autohide=true] Whether to hide the toast automatically.
+ * @property {number} [delay=5000] The autohide delay in milliseconds.
+ * @property {number} [duration=100] The transition duration in milliseconds.
+ */
+
+/**
+ * Controls a transient toast notification.
+ * @extends {BaseComponent<ToastOptions>}
  */
 export default class Toast extends BaseComponent {
     #timer;
 
-    /**
-     * Dispose the Toast.
-     */
+    /** @inheritdoc */
     dispose() {
         clearTimeout(this.#timer);
         this.#timer = null;
@@ -19,7 +24,7 @@ export default class Toast extends BaseComponent {
     }
 
     /**
-     * Hide the Toast.
+     * Hides the toast.
      */
     hide() {
         if (
@@ -50,7 +55,7 @@ export default class Toast extends BaseComponent {
     }
 
     /**
-     * Show the Toast.
+     * Shows the toast.
      */
     show() {
         if (

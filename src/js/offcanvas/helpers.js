@@ -1,13 +1,11 @@
 import { $ } from './../globals.js';
 
-/**
- * Offcanvas Helpers
- */
+/** @typedef {import('../popper/popper.js').Direction} Direction */
 
 /**
- * Get the slide animation direction.
+ * Gets the slide animation direction.
  * @param {HTMLElement} node The offcanvas node.
- * @return {string} The animation direction.
+ * @returns {Direction} The animation direction.
  */
 export function getDirection(node) {
     if ($.hasClass(node, 'offcanvas-end')) {

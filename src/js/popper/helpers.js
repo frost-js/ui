@@ -1,16 +1,17 @@
 import { $, document, window } from './../globals.js';
 
-/**
- * Popper Helpers
- */
+/** @typedef {import('./popper.js').default} Popper */
+/** @typedef {import('../helpers/scroll.js').BoundingRect} BoundingRect */
+/** @typedef {import('./popper.js').Direction} Direction */
+/** @typedef {import('./popper.js').Placement} Placement */
 
 const poppers = new Set();
 
 let running = false;
 
 /**
- * Add a Popper to the set, and attach the Popper events.
- * @param {Popper} popper The Popper.
+ * Registers a popper for viewport and ancestor-scroll updates.
+ * @param {Popper} popper The popper to register.
  */
 export function addPopper(popper) {
     poppers.add(popper);
@@ -51,13 +52,13 @@ export function addPopper(popper) {
 };
 
 /**
- * Get the actual placement of the Popper.
+ * Resolves the best available popper placement.
  * @param {DOMRect} nodeBox The computed bounding rectangle of the node.
  * @param {DOMRect} referenceBox The computed bounding rectangle of the reference.
- * @param {object} minimumBox The computed minimum bounding rectangle of the container.
- * @param {string} placement The initial placement of the Popper.
+ * @param {BoundingRect} minimumBox The available positioning boundary.
+ * @param {Placement} placement The preferred placement.
  * @param {number} spacing The amount of spacing to use.
- * @return {string} The new placement of the Popper.
+ * @returns {Direction} The resolved placement.
  */
 export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement, spacing) {
     const spaceTop = referenceBox.top - minimumBox.top;
@@ -66,25 +67,25 @@ export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement,
     const spaceLeft = referenceBox.left - minimumBox.left;
 
     if (placement === 'top') {
-        // if node is bigger than space top and there is more room on bottom
+        // Flip below when it offers more vertical space.
         if (spaceTop < nodeBox.height + spacing &&
             spaceBottom > spaceTop) {
             return 'bottom';
         }
     } else if (placement === 'right') {
-        // if node is bigger than space right and there is more room on left
+        // Flip left when it offers more horizontal space.
         if (spaceRight < nodeBox.width + spacing &&
             spaceLeft > spaceRight) {
             return 'left';
         }
     } else if (placement === 'bottom') {
-        // if node is bigger than space bottom and there is more room on top
+        // Flip above when it offers more vertical space.
         if (spaceBottom < nodeBox.height + spacing &&
             spaceTop > spaceBottom) {
             return 'top';
         }
     } else if (placement === 'left') {
-        // if node is bigger than space left and there is more room on right
+        // Flip right when it offers more horizontal space.
         if (spaceLeft < nodeBox.width + spacing &&
             spaceRight > spaceLeft) {
             return 'right';
@@ -140,8 +141,8 @@ export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement,
 };
 
 /**
- * Remove a Popper from the set, and detach the Popper events.
- * @param {Popper} popper The Popper.
+ * Unregisters a popper and removes shared listeners when no poppers remain.
+ * @param {Popper} popper The popper to unregister.
  */
 export function removePopper(popper) {
     poppers.delete(popper);

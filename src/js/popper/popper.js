@@ -1,20 +1,57 @@
 import BaseComponent from './../base-component.js';
 import { $, document, window } from './../globals.js';
-import { getScrollContainer } from './../helpers.js';
+import { getScrollContainer } from './../helpers/scroll.js';
 import { addPopper, getPopperPlacement, removePopper } from './helpers.js';
 
+/** @typedef {'top'|'right'|'bottom'|'left'} Direction */
+/** @typedef {'auto'|Direction} Placement */
+/** @typedef {'start'|'center'|'end'} Position */
+/** @typedef {string|HTMLElement} ElementInput */
+
 /**
- * Popper Class
- * @class
+ * @callback PopperBeforeUpdateCallback
+ * @param {HTMLElement} node The positioned element.
+ * @param {ElementInput} reference The reference element.
+ * @returns {void} Nothing.
+ */
+
+/**
+ * @callback PopperAfterUpdateCallback
+ * @param {HTMLElement} node The positioned element.
+ * @param {ElementInput} reference The reference element.
+ * @param {Direction} placement The resolved placement.
+ * @param {Position} position The resolved alignment.
+ * @returns {void} Nothing.
+ */
+
+/**
+ * @typedef {object} PopperOptions
+ * @property {ElementInput|null} [reference=null] The reference element.
+ * @property {ElementInput|null} [container=null] The positioning boundary.
+ * @property {ElementInput|null} [arrow=null] The arrow element.
+ * @property {PopperAfterUpdateCallback|null} [afterUpdate=null] The callback after positioning.
+ * @property {PopperBeforeUpdateCallback|null} [beforeUpdate=null] The callback before positioning.
+ * @property {Placement} [placement='bottom'] The preferred placement.
+ * @property {Position} [position='center'] The alignment along the placement edge.
+ * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
+ * @property {number} [spacing=0] The spacing from the reference element.
+ * @property {number|false|null} [minContact=null] The minimum contact with the reference element.
+ * @property {boolean} [useGpu=true] Whether to position using a transform.
+ * @property {boolean} [noAttributes=false] Whether to omit placement attributes.
+ */
+
+/**
+ * Positions an element relative to a reference element.
+ * @extends {BaseComponent<PopperOptions>}
  */
 export default class Popper extends BaseComponent {
     #placement;
     #referencePlacement;
 
     /**
-     * New Popper constructor.
+     * Creates a Popper.
      * @param {HTMLElement} node The input node.
-     * @param {object} options The options to create the Popper with.
+     * @param {PopperOptions} options The popper options.
      */
     constructor(node, options) {
         super(node, options);
@@ -36,9 +73,7 @@ export default class Popper extends BaseComponent {
         this.update();
     }
 
-    /**
-     * Dispose the Popper.
-     */
+    /** @inheritdoc */
     dispose() {
         if (this.#placement) {
             $.setDataset(this.node, { uiPlacement: this.#placement });
@@ -60,9 +95,9 @@ export default class Popper extends BaseComponent {
     }
 
     /**
-     * Check whether a scroll target affects the Popper.
+     * Checks whether a scroll target affects the popper.
      * @param {HTMLElement|Document} target The scroll target.
-     * @return {boolean} Whether the Popper should update.
+     * @returns {boolean} Whether the popper should update.
      */
     shouldUpdateForScroll(target) {
         return $._isDocument(target) ||
@@ -71,14 +106,14 @@ export default class Popper extends BaseComponent {
     }
 
     /**
-     * Update the Popper position.
+     * Updates the popper position.
      */
     update() {
         if (!$.isConnected(this.node) || !$.isVisible(this.node)) {
             return;
         }
 
-        // reset position
+        // Reset the previous position before measuring.
         const resetStyle = {};
 
         if (this.options.useGpu) {
@@ -94,7 +129,7 @@ export default class Popper extends BaseComponent {
             this.options.beforeUpdate(this.node, this.options.reference);
         }
 
-        // calculate boxes
+        // Measure the element and its positioning boundaries.
         const nodeBox = $.rect(this.node, { offset: true });
         const referenceBox = $.rect(this.options.reference, { offset: true });
         const windowBox = getScrollContainer(window, document);
@@ -144,7 +179,7 @@ export default class Popper extends BaseComponent {
             minimumBox.height = minimumBox.bottom - minimumBox.top;
         }
 
-        // get optimal placement
+        // Resolve the best placement for the available space.
         const placement = this.options.fixed && this.options.placement !== 'auto' ?
             this.options.placement :
             getPopperPlacement(
@@ -161,16 +196,15 @@ export default class Popper extends BaseComponent {
 
         $.setDataset(this.node, { uiPlacement: placement });
 
-        // get auto position
         const position = this.options.position;
 
-        // calculate actual offset
+        // Start from the reference element offset.
         const offset = {
             x: Math.round(referenceBox.x),
             y: Math.round(referenceBox.y),
         };
 
-        // offset for relative parent
+        // Adjust for the nearest positioned ancestor.
         const relativeParent = $.closest(
             this.node,
             (parent) =>
@@ -186,7 +220,7 @@ export default class Popper extends BaseComponent {
             offset.y -= Math.round(relativeBox.y);
         }
 
-        // offset for placement
+        // Move the element onto the resolved placement edge.
         if (placement === 'top') {
             offset.y -= Math.round(nodeBox.height) + this.options.spacing;
         } else if (placement === 'right') {
@@ -197,7 +231,7 @@ export default class Popper extends BaseComponent {
             offset.x -= Math.round(nodeBox.width) + this.options.spacing;
         }
 
-        // offset for position
+        // Align the element along the placement edge.
         if (['top', 'bottom'].includes(placement)) {
             const deltaX = Math.round(nodeBox.width) - Math.round(referenceBox.width);
 
@@ -216,11 +250,11 @@ export default class Popper extends BaseComponent {
             }
         }
 
-        // compensate for margins
+        // Compensate for element margins.
         offset.x -= parseInt($.css(this.node, 'marginLeft'));
         offset.y -= parseInt($.css(this.node, 'marginTop'));
 
-        // corrective positioning
+        // Keep enough of the element in contact with its reference.
         if (['left', 'right'].includes(placement)) {
             let offsetY = offset.y;
             let refTop = referenceBox.top;
@@ -235,7 +269,7 @@ export default class Popper extends BaseComponent {
                 Math.min(referenceBox.height, nodeBox.height);
 
             if (offsetY + nodeBox.height > minimumBox.bottom) {
-                // bottom of offset node is below the container
+                // Move the element above the lower boundary.
                 const diff = offsetY + nodeBox.height - minimumBox.bottom;
                 offset.y = Math.max(
                     refTop - nodeBox.height + minSize,
@@ -244,7 +278,7 @@ export default class Popper extends BaseComponent {
             }
 
             if (offsetY < minimumBox.top) {
-                // top of offset node is above the container
+                // Move the element below the upper boundary.
                 const diff = offsetY - minimumBox.top;
                 offset.y = Math.min(
                     refTop + referenceBox.height - minSize,
@@ -265,7 +299,7 @@ export default class Popper extends BaseComponent {
                 Math.min(referenceBox.width, nodeBox.width);
 
             if (offsetX + nodeBox.width > minimumBox.right) {
-                // right of offset node is to the right of the container
+                // Move the element left of the right boundary.
                 const diff = offsetX + nodeBox.width - minimumBox.right;
                 offset.x = Math.max(
                     refLeft - nodeBox.width + minSize,
@@ -274,7 +308,7 @@ export default class Popper extends BaseComponent {
             }
 
             if (offsetX < minimumBox.left) {
-                // left of offset node is to the left of the container
+                // Move the element right of the left boundary.
                 const diff = offsetX - minimumBox.left;
                 offset.x = Math.min(
                     refLeft + referenceBox.width - minSize,
@@ -286,13 +320,13 @@ export default class Popper extends BaseComponent {
         offset.x = Math.round(offset.x);
         offset.y = Math.round(offset.y);
 
-        // compensate for scroll parent
+        // Compensate for the scrolling ancestor.
         if (scrollParent) {
             offset.x += $.getScrollX(scrollParent);
             offset.y += $.getScrollY(scrollParent);
         }
 
-        // update position
+        // Apply the final position.
         const style = {};
         if (this.options.useGpu) {
             style.transform = `translate3d(${offset.x}px , ${offset.y}px , 0)`;
@@ -303,7 +337,7 @@ export default class Popper extends BaseComponent {
 
         $.setStyle(this.node, style);
 
-        // update arrow
+        // Align the arrow with the reference element.
         if (this.options.arrow) {
             this.#updateArrow(placement, position);
         }
@@ -314,9 +348,9 @@ export default class Popper extends BaseComponent {
     }
 
     /**
-     * Update the arrow.
-     * @param {string} placement The placement of the Popper.
-     * @param {string} position The position of the Popper.
+     * Updates the popper arrow position.
+     * @param {Direction} placement The resolved placement.
+     * @param {Position} position The resolved alignment.
      */
     #updateArrow(placement, position) {
         const nodeBox = $.rect(this.node, { offset: true });

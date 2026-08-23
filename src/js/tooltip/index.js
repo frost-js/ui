@@ -1,8 +1,8 @@
 import { $ } from './../globals.js';
-import { initComponent } from './../helpers.js';
+import { initComponent } from './../helpers/component.js';
 import Tooltip from './tooltip.js';
 
-// Tooltip default options
+/** @type {import('./tooltip.js').TooltipOptions} */
 Tooltip.defaults = {
     template: '<div class="tooltip" role="tooltip">' +
         '<div class="tooltip-arrow"></div>' +
@@ -23,7 +23,6 @@ Tooltip.defaults = {
     noAttributes: false,
 };
 
-// Tooltip init
 initComponent('tooltip', Tooltip);
 
 export default Tooltip;
