@@ -120,9 +120,16 @@ $carousel-indicator-active-opacity: 1 !default;
 $carousel-indicator-border-radius: var(--ui-border-radius) !default;
 
 $carousel-caption-width: 70% !default;
-$carousel-caption-padding-y: vars.$spacing !default;
+$carousel-caption-padding-x: vars.$spacing * 1.25 !default;
+$carousel-caption-padding-y: vars.$spacing * .75 !default;
 $carousel-caption-spacer: vars.$spacing * 2 !default;
-$carousel-caption-color: var(--ui-body-bg) !default;
+$carousel-caption-color: var(--ui-body-color) !default;
+$carousel-caption-bg: helpers.color-alpha(body-bg, .88) !default;
+$carousel-caption-backdrop-filter: blur(1rem) saturate(140%) !default;
+$carousel-caption-border-width: var(--ui-border-width) !default;
+$carousel-caption-border-color: var(--ui-border-color-translucent) !default;
+$carousel-caption-border-radius: var(--ui-border-radius-xl) !default;
+$carousel-caption-box-shadow: inset 0 1px 0 helpers.color-alpha("white", .12), var(--ui-shadow) !default;
 
 // close button
 $btn-close-width: 1em !default;

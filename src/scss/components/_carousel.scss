@@ -18,9 +18,16 @@
     --ui-carousel-indicator-opacity: #{vars.$carousel-indicator-opacity};
     --ui-carousel-indicator-border-radius: #{vars.$carousel-indicator-border-radius};
     --ui-carousel-caption-width: #{vars.$carousel-caption-width};
+    --ui-carousel-caption-padding-x: #{vars.$carousel-caption-padding-x};
     --ui-carousel-caption-padding-y: #{vars.$carousel-caption-padding-y};
     --ui-carousel-caption-spacer: #{vars.$carousel-caption-spacer};
     --ui-carousel-caption-color: #{vars.$carousel-caption-color};
+    --ui-carousel-caption-bg: #{vars.$carousel-caption-bg};
+    --ui-carousel-caption-backdrop-filter: #{vars.$carousel-caption-backdrop-filter};
+    --ui-carousel-caption-border-width: #{vars.$carousel-caption-border-width};
+    --ui-carousel-caption-border-color: #{vars.$carousel-caption-border-color};
+    --ui-carousel-caption-border-radius: #{vars.$carousel-caption-border-radius};
+    --ui-carousel-caption-box-shadow: #{vars.$carousel-caption-box-shadow};
 
     position: relative;
     user-select: none;
@@ -135,10 +142,21 @@
 
 .carousel-caption {
     position: absolute;
-    inset-inline: calc((100% - var(--ui-carousel-caption-width)) / 2);
+    inset-inline: 0;
     bottom: var(--ui-carousel-caption-spacer);
-    padding-top: var(--ui-carousel-caption-padding-y);
-    padding-bottom: var(--ui-carousel-caption-padding-y);
+    width: fit-content;
+    max-width: var(--ui-carousel-caption-width);
+    padding: var(--ui-carousel-caption-padding-y) var(--ui-carousel-caption-padding-x);
+    margin-inline: auto;
     color: var(--ui-carousel-caption-color);
     text-align: center;
+    background-color: var(--ui-carousel-caption-bg);
+    border: var(--ui-carousel-caption-border-width) var(--ui-border-style) var(--ui-carousel-caption-border-color);
+    box-shadow: var(--ui-carousel-caption-box-shadow);
+    backdrop-filter: var(--ui-carousel-caption-backdrop-filter);
+    @include mixins.border-radius(var(--ui-carousel-caption-border-radius));
+
+    > :last-child {
+        margin-bottom: 0;
+    }
 }
