@@ -25,13 +25,15 @@
      * @returns {string} The unique ID.
      */
     function generateId(prefix) {
-        const id = `${prefix}${$._randomString(5)}`;
+        while (true) {
+            const id = `${prefix}${$._randomString(5)}`;
 
-        if ($.findOne(`#${id}`)) {
-            return generateId(prefix);
+            if ($.findOneById(id)) {
+                continue;
+            }
+
+            return id;
         }
-
-        return id;
     }
     /**
      * Gets normalized UI data attributes from an element.

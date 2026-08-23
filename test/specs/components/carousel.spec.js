@@ -97,22 +97,23 @@ test.describe('Carousel', () => {
         });
 
         test('removes the touch swipe event', async ({ page }) => {
-            await page.evaluate((_) => {
+            const defaultPrevented = await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).dispose();
-                window.carouselTouchEventPrevented = false;
 
-                carousel1.addEventListener('touchstart', (event) => {
-                    window.carouselTouchEventPrevented = event.defaultPrevented;
+                const event = new Event('touchstart', {
+                    bubbles: true,
+                    cancelable: true,
                 });
-            });
-            await page.locator('#carousel1').dispatchEvent('touchstart', {
-                cancelable: true,
-                touches: [{ pageX: 400, pageY: 0 }],
+                Object.defineProperty(event, 'touches', {
+                    value: [{ pageX: 400, pageY: 0 }],
+                });
+                carousel1.dispatchEvent(event);
+
+                return event.defaultPrevented;
             });
 
-            expect(await page.evaluate((_) =>
-                window.carouselTouchEventPrevented)).toBe(false);
+            expect(defaultPrevented).toBe(false);
         });
     });
 
