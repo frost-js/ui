@@ -1,8 +1,6 @@
 import { $, document } from './../globals.js';
 import { getTarget, initComponent } from './../helpers.js';
 import Carousel from './carousel.js';
-import { _events } from './prototype/events.js';
-import { _resetStyles, _setIndex, _setTimer, _show, _update, _updateIndicators } from './prototype/helpers.js';
 
 // Carousel default options
 Carousel.defaults = {
@@ -14,17 +12,6 @@ Carousel.defaults = {
     wrap: true,
     swipe: true,
 };
-
-// Carousel prototype
-const proto = Carousel.prototype;
-
-proto._events = _events;
-proto._resetStyles = _resetStyles;
-proto._setIndex = _setIndex;
-proto._setTimer = _setTimer;
-proto._show = _show;
-proto._update = _update;
-proto._updateIndicators = _updateIndicators;
 
 // Carousel init
 initComponent('carousel', Carousel);

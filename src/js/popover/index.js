@@ -1,9 +1,6 @@
 import { $ } from './../globals.js';
 import { initComponent } from './../helpers.js';
 import Popover from './popover.js';
-import { _events } from './prototype/events.js';
-import { _show, _stop } from './prototype/helpers.js';
-import { _render } from './prototype/render.js';
 
 // Popover default options
 Popover.defaults = {
@@ -26,14 +23,6 @@ Popover.defaults = {
     minContact: false,
     noAttributes: false,
 };
-
-// Popover prototype
-const proto = Popover.prototype;
-
-proto._events = _events;
-proto._render = _render;
-proto._show = _show;
-proto._stop = _stop;
 
 // Popover init
 initComponent('popover', Popover);

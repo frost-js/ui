@@ -1,5 +1,7 @@
 import BaseComponent from './../base-component.js';
-import { $ } from './../globals.js';
+import { $, window } from './../globals.js';
+import { generateId } from './../helpers.js';
+import Popper from './../popper/index.js';
 
 /**
  * Popover Class
@@ -26,6 +28,125 @@ export default class Popover extends BaseComponent {
         }
 
         this.refresh();
+    }
+
+    /**
+     * Attach events for the Popover.
+     */
+    _events() {
+        if (this._triggers.includes('hover')) {
+            $.addEvent(this._node, 'mouseover.ui.popover', (_) => {
+                this._stop();
+                this.show();
+            });
+
+            $.addEvent(this._node, 'mouseout.ui.popover', (_) => {
+                this._stop();
+                this.hide({ force: false });
+            });
+        }
+
+        if (this._triggers.includes('focus')) {
+            $.addEvent(this._node, 'focus.ui.popover', (_) => {
+                this._stop();
+                this.show();
+            });
+
+            $.addEvent(this._node, 'blur.ui.popover', (_) => {
+                this._stop();
+                this.hide({ force: false });
+            });
+        }
+
+        if (this._triggers.includes('click')) {
+            $.addEvent(this._node, 'click.ui.popover', (e) => {
+                e.preventDefault();
+
+                this._stop();
+                this.toggle({ force: false });
+            });
+        }
+
+        if (this._modal) {
+            this._hideModalEvent = (_) => {
+                this._stop();
+                this.hide();
+            };
+            $.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
+        }
+    }
+
+    /**
+     * Render the Popover element.
+     */
+    _render() {
+        this._popover = $.parseHTML(this._options.template).shift();
+        if (this._options.customClass) {
+            $.addClass(this._popover, this._options.customClass);
+        }
+        this._arrow = $.findOne('.popover-arrow', this._popover);
+        this._popoverHeader = $.findOne('.popover-header', this._popover);
+        this._popoverBody = $.findOne('.popover-body', this._popover);
+    }
+
+    /**
+     * Update the Popover and append to the DOM.
+     */
+    _show() {
+        if (this._options.appendTo) {
+            $.append(this._options.appendTo, this._popover);
+        } else {
+            $.after(this._node, this._popover);
+        }
+
+        if (!this._options.noAttributes) {
+            const id = generateId(this.constructor.DATA_KEY);
+            $.setAttribute(this._popover, { id });
+            $.setAttribute(this._node, { 'aria-described-by': id });
+        }
+
+        this._popper = new Popper(
+            this._popover,
+            {
+                reference: this._node,
+                arrow: this._arrow,
+                placement: this._options.placement,
+                position: this._options.position,
+                fixed: this._options.fixed,
+                spacing: this._options.spacing,
+                minContact: this._options.minContact,
+                noAttributes: this._options.noAttributes,
+            },
+        );
+
+        window.requestAnimationFrame((_) => {
+            this.update();
+        });
+    }
+
+    /**
+     * Stop the animations.
+     */
+    _stop() {
+        if (!this._enabled) {
+            return;
+        }
+
+        const animating = $.getDataset(this._popover, 'uiAnimating');
+
+        if (!animating) {
+            return;
+        }
+
+        $.stop(this._popover, { finish: false });
+        $.removeDataset(this._popover, 'uiAnimating');
+
+        if (animating === 'out') {
+            this._popper.dispose();
+            this._popper = null;
+
+            $.detach(this._popover);
+        }
     }
 
     /**

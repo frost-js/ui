@@ -3,7 +3,6 @@ import { $, document, window } from './../globals.js';
 import { getTarget, initComponent } from './../helpers.js';
 import { getTopModal } from './helpers.js';
 import Modal from './modal.js';
-import { _zoom } from './prototype/helpers.js';
 
 // Modal default options
 Modal.defaults = {
@@ -13,11 +12,6 @@ Modal.defaults = {
     show: false,
     keyboard: true,
 };
-
-// Modal prototype
-const proto = Modal.prototype;
-
-proto._zoom = _zoom;
 
 // Modal init
 initComponent('modal', Modal);
