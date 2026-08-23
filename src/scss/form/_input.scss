@@ -17,6 +17,9 @@
     font-size: vars.$input-font-size;
     line-height: vars.$input-line-height;
     color: vars.$input-color;
+    transition-timing-function: var(--ui-transition-timing-function);
+    transition-duration: var(--ui-transition-duration);
+    transition-property: background-color, border-color, box-shadow;
 
     &::placeholder {
         color: vars.$input-placeholder-color;

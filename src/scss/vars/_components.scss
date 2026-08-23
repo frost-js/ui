@@ -66,9 +66,9 @@ $btn-active-border-color: var(--ui-border-color) !default;
 $btn-border-radius: var(--ui-border-radius) !default;
 $btn-disabled-opacity: var(--ui-disabled-opacity) !default;
 $btn-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) helpers.color-alpha(btn-focus-shadow-color, var(--ui-focus-ring-opacity)) !default;
-$btn-box-shadow: var(--ui-shadow-sm), 0 .125rem .375rem helpers.color-alpha(btn-shadow-color, .16) !default;
-$btn-hover-box-shadow: var(--ui-shadow), 0 .25rem .75rem helpers.color-alpha(btn-shadow-color, .24) !default;
-$btn-active-box-shadow: var(--ui-shadow-sm), 0 .125rem .25rem helpers.color-alpha(btn-shadow-color, .2) !default;
+$btn-box-shadow: var(--ui-btn-highlight-box-shadow), var(--ui-shadow-sm), 0 .125rem .375rem helpers.color-alpha(btn-shadow-color, .16) !default;
+$btn-hover-box-shadow: var(--ui-btn-highlight-box-shadow), var(--ui-shadow), 0 .25rem .75rem helpers.color-alpha(btn-shadow-color, .24) !default;
+$btn-active-box-shadow: var(--ui-btn-highlight-box-shadow), var(--ui-shadow-sm), 0 .125rem .25rem helpers.color-alpha(btn-shadow-color, .2) !default;
 
 $btn-lg-padding-x: vars.$spacing !default;
 $btn-lg-padding-y: vars.$spacing * .5 !default;

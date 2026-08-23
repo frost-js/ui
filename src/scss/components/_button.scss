@@ -18,6 +18,7 @@
     --ui-btn-focus-shadow-color: var(--ui-primary);
     --ui-btn-focus-box-shadow: #{vars.$btn-focus-box-shadow};
     --ui-btn-shadow-color: transparent;
+    --ui-btn-highlight-box-shadow: inset 0 1px 0 transparent;
     --ui-btn-box-shadow: #{vars.$btn-box-shadow};
     --ui-btn-hover-box-shadow: #{vars.$btn-hover-box-shadow};
     --ui-btn-active-box-shadow: #{vars.$btn-active-box-shadow};
@@ -44,7 +45,7 @@
     border: var(--ui-btn-border-width) var(--ui-border-style) var(--ui-btn-border-color);
     box-shadow: var(--ui-btn-box-shadow);
     transition-timing-function: var(--ui-transition-timing-function);
-    transition-duration: var(--ui-transition-duration);
+    transition-duration: var(--ui-transition-duration-fast);
     transition-property: color, background-color, border-color, box-shadow, transform;
     @include mixins.border-radius(var(--ui-btn-border-radius));
 
@@ -82,10 +83,6 @@
         }
 
         @media (prefers-reduced-motion: no-preference) {
-            #{&}:hover {
-                transform: translateY(-1px);
-            }
-
             .btn-check:checked+#{&},
             #{&}.active,
             #{&}:first-child:active,
@@ -154,6 +151,7 @@
         --ui-btn-focus-shadow-color: var(--ui-#{$name});
         --ui-btn-active-state-bg: var(--ui-btn-active-bg);
         --ui-btn-shadow-color: var(--ui-#{$name});
+        --ui-btn-highlight-box-shadow: inset 0 1px 0 #{functions.color-alpha("white", .2)};
     }
 
     .btn-outline-#{$name} {
