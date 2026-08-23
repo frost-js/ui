@@ -11,6 +11,8 @@
     --ui-toast-border-width: #{vars.$toast-border-width};
     --ui-toast-border-color: #{vars.$toast-border-color};
     --ui-toast-border-radius: #{vars.$toast-border-radius};
+    --ui-toast-box-shadow: #{vars.$toast-box-shadow};
+    --ui-toast-backdrop-filter: #{vars.$toast-backdrop-filter};
     --ui-toast-header-color: #{vars.$toast-header-color};
     --ui-toast-header-bg: #{vars.$toast-header-bg};
     --ui-toast-header-border-color: #{vars.$toast-header-border-color};
@@ -22,8 +24,9 @@
     background-color: var(--ui-toast-bg);
     background-clip: padding-box;
     border: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-border-color);
+    box-shadow: var(--ui-toast-box-shadow);
     opacity: 0;
-    backdrop-filter: vars.$toast-backdrop-filter;
+    backdrop-filter: var(--ui-toast-backdrop-filter);
     @include mixins.border-radius(var(--ui-toast-border-radius));
 
     &.show {

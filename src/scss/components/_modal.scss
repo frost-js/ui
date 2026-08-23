@@ -24,6 +24,7 @@
     --ui-modal-border-color: #{vars.$modal-border-color};
     --ui-modal-border-radius: #{vars.$modal-border-radius};
     --ui-modal-inner-border-radius: calc(var(--ui-modal-border-radius) - var(--ui-modal-border-width));
+    --ui-modal-box-shadow: #{vars.$modal-content-box-shadow};
     --ui-modal-header-padding-x: #{vars.$modal-header-padding-x};
     --ui-modal-header-padding-y: #{vars.$modal-header-padding-y};
     --ui-modal-header-border-width: #{vars.$modal-header-border-width};
@@ -83,7 +84,7 @@
     background-clip: padding-box;
     border: var(--ui-modal-border-width) var(--ui-border-style) var(--ui-modal-border-color);
     @include mixins.border-radius(var(--ui-modal-border-radius));
-    box-shadow: vars.$modal-content-box-shadow;
+    box-shadow: var(--ui-modal-box-shadow);
 }
 
 .modal-backdrop {

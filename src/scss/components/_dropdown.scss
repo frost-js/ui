@@ -12,6 +12,7 @@
     --ui-dropdown-border-color: #{vars.$dropdown-border-color};
     --ui-dropdown-border-radius: #{vars.$dropdown-border-radius};
     --ui-dropdown-inner-border-radius: calc(var(--ui-dropdown-border-radius) - var(--ui-dropdown-border-width));
+    --ui-dropdown-box-shadow: #{vars.$dropdown-box-shadow};
     --ui-dropdown-divider-margin-y: #{vars.$dropdown-divider-margin-y};
     --ui-dropdown-divider-border-width: #{vars.$dropdown-divider-border-width};
     --ui-dropdown-divider-border-color: #{vars.$dropdown-divider-border-color};
@@ -39,6 +40,7 @@
     list-style: none;
     background-color: var(--ui-dropdown-bg);
     border: var(--ui-dropdown-border-width) var(--ui-border-style) var(--ui-dropdown-border-color);
+    box-shadow: var(--ui-dropdown-box-shadow);
     @include mixins.border-radius(var(--ui-dropdown-border-radius));
 
     &.show {

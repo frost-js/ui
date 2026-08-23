@@ -2991,6 +2991,7 @@ fieldset:disabled .btn {
   --ui-dropdown-border-color: var(--ui-border-color-translucent);
   --ui-dropdown-border-radius: var(--ui-border-radius);
   --ui-dropdown-inner-border-radius: calc(var(--ui-dropdown-border-radius) - var(--ui-dropdown-border-width));
+  --ui-dropdown-box-shadow: var(--ui-shadow);
   --ui-dropdown-divider-margin-y: 0.5rem;
   --ui-dropdown-divider-border-width: var(--ui-border-width);
   --ui-dropdown-divider-border-color: var(--ui-border-color-translucent);
@@ -3017,6 +3018,7 @@ fieldset:disabled .btn {
   list-style: none;
   background-color: var(--ui-dropdown-bg);
   border: var(--ui-dropdown-border-width) var(--ui-border-style) var(--ui-dropdown-border-color);
+  box-shadow: var(--ui-dropdown-box-shadow);
   border-radius: var(--ui-dropdown-border-radius);
 }
 .dropdown-menu.show {
@@ -3513,6 +3515,7 @@ fieldset:disabled .btn {
   --ui-modal-border-color: var(--ui-border-color);
   --ui-modal-border-radius: var(--ui-border-radius);
   --ui-modal-inner-border-radius: calc(var(--ui-modal-border-radius) - var(--ui-modal-border-width));
+  --ui-modal-box-shadow: var(--ui-shadow-lg);
   --ui-modal-header-padding-x: var(--ui-modal-padding-x);
   --ui-modal-header-padding-y: var(--ui-modal-padding-y);
   --ui-modal-header-border-width: var(--ui-modal-border-width);
@@ -3568,7 +3571,7 @@ fieldset:disabled .btn {
   background-clip: padding-box;
   border: var(--ui-modal-border-width) var(--ui-border-style) var(--ui-modal-border-color);
   border-radius: var(--ui-modal-border-radius);
-  box-shadow: var(--ui-shadow-lg);
+  box-shadow: var(--ui-modal-box-shadow);
 }
 
 .modal-backdrop {
@@ -4370,6 +4373,7 @@ fieldset:disabled .btn {
   --ui-offcanvas-bg: var(--ui-body-bg);
   --ui-offcanvas-border-width: var(--ui-border-width);
   --ui-offcanvas-border-color: var(--ui-border-color);
+  --ui-offcanvas-box-shadow: var(--ui-shadow-lg);
   --ui-offcanvas-title-line-height: 1.5;
   position: fixed;
   bottom: 0;
@@ -4382,6 +4386,7 @@ fieldset:disabled .btn {
   outline: 0;
   background-color: var(--ui-offcanvas-bg);
   background-clip: padding-box;
+  box-shadow: var(--ui-offcanvas-box-shadow);
 }
 .offcanvas:not(.show) {
   display: none;
@@ -4594,6 +4599,7 @@ fieldset:disabled .btn {
   --ui-popover-border-width: var(--ui-border-width);
   --ui-popover-border-color: var(--ui-border-color);
   --ui-popover-border-radius: var(--ui-border-radius);
+  --ui-popover-box-shadow: var(--ui-shadow);
   --ui-popover-header-padding-x: 1rem;
   --ui-popover-header-padding-y: 0.5rem;
   --ui-popover-header-bg: var(--ui-secondary-bg);
@@ -4628,6 +4634,7 @@ fieldset:disabled .btn {
   background-color: var(--ui-popover-bg);
   background-clip: padding-box;
   border: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);
+  box-shadow: var(--ui-popover-box-shadow);
   border-radius: var(--ui-popover-border-radius);
 }
 .popover .popover-arrow {
@@ -4862,6 +4869,8 @@ fieldset:disabled .btn {
   --ui-toast-border-width: var(--ui-border-width);
   --ui-toast-border-color: var(--ui-border-color-translucent);
   --ui-toast-border-radius: var(--ui-border-radius);
+  --ui-toast-box-shadow: var(--ui-shadow-lg);
+  --ui-toast-backdrop-filter: blur(10px);
   --ui-toast-header-color: var(--ui-secondary-color);
   --ui-toast-header-bg: rgba(var(--ui-body-bg-rgb), 0.85);
   --ui-toast-header-border-color: var(--ui-border-color-translucent);
@@ -4872,9 +4881,10 @@ fieldset:disabled .btn {
   background-color: var(--ui-toast-bg);
   background-clip: padding-box;
   border: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-border-color);
+  box-shadow: var(--ui-toast-box-shadow);
   opacity: 0;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: var(--ui-toast-backdrop-filter);
+  backdrop-filter: var(--ui-toast-backdrop-filter);
   border-radius: var(--ui-toast-border-radius);
 }
 .toast.show {

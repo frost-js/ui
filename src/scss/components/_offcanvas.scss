@@ -10,6 +10,7 @@
     --ui-offcanvas-bg: #{vars.$offcanvas-bg};
     --ui-offcanvas-border-width: #{vars.$offcanvas-border-width};
     --ui-offcanvas-border-color: #{vars.$offcanvas-border-color};
+    --ui-offcanvas-box-shadow: #{vars.$offcanvas-box-shadow};
     --ui-offcanvas-title-line-height: #{vars.$offcanvas-title-line-height};
 
     position: fixed;
@@ -23,6 +24,7 @@
     outline: 0;
     background-color: var(--ui-offcanvas-bg);
     background-clip: padding-box;
+    box-shadow: var(--ui-offcanvas-box-shadow);
 
     &:not(.show) {
         display: none;

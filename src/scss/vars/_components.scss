@@ -143,6 +143,7 @@ $dropdown-bg: var(--ui-body-bg) !default;
 $dropdown-border-width: var(--ui-border-width) !default;
 $dropdown-border-color: var(--ui-border-color-translucent) !default;
 $dropdown-border-radius: var(--ui-border-radius) !default;
+$dropdown-box-shadow: var(--ui-shadow) !default;
 
 $dropdown-divider-margin-y: $dropdown-padding-y !default;
 $dropdown-divider-border-width: var(--ui-border-width) !default;
@@ -283,6 +284,7 @@ $offcanvas-color: var(--ui-body-color) !default;
 $offcanvas-bg: var(--ui-body-bg) !default;
 $offcanvas-border-width: var(--ui-border-width) !default;
 $offcanvas-border-color: var(--ui-border-color) !default;
+$offcanvas-box-shadow: var(--ui-shadow-lg) !default;
 $offcanvas-title-line-height: map.get(vars.$line-heights, base) !default;
 $offcanvas-backdrop-bg: rgba(0, 0, 0, .5) !default;
 
@@ -332,6 +334,7 @@ $popover-bg: var(--ui-body-bg) !default;
 $popover-border-width: var(--ui-border-width) !default;
 $popover-border-color: var(--ui-border-color) !default;
 $popover-border-radius: var(--ui-border-radius) !default;
+$popover-box-shadow: var(--ui-shadow) !default;
 
 $popover-header-padding-x: $popover-padding-y !default;
 $popover-header-padding-y: $popover-padding-x !default;
@@ -381,6 +384,7 @@ $toast-bg: rgba(var(--ui-body-bg-rgb), .85) !default;
 $toast-border-width: var(--ui-border-width) !default;
 $toast-border-color: var(--ui-border-color-translucent) !default;
 $toast-border-radius: var(--ui-border-radius) !default;
+$toast-box-shadow: var(--ui-shadow-lg) !default;
 $toast-backdrop-filter: blur(10px) !default;
 
 $toast-header-color: var(--ui-secondary-color) !default;
