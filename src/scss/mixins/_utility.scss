@@ -17,17 +17,36 @@
         $values: list.zip($values, $values);
     }
 
-    $class: if(map.has-key($utility, class), map.get($utility, class), list.nth($properties, 1));
-    $class: if($class == null, "", $class);
+    $class: list.nth($properties, 1);
 
-    $state: if(map.has-key($utility, state), map.get($utility, state), ());
+    @if map.has-key($utility, class) {
+        $class: map.get($utility, class);
+    }
 
-    $local-vars: if(map.has-key($utility, local-vars), map.get($utility, local-vars), ());
+    @if $class == null {
+        $class: "";
+    }
+
+    $state: ();
+
+    @if map.has-key($utility, state) {
+        $state: map.get($utility, state);
+    }
+
+    $local-vars: ();
+
+    @if map.has-key($utility, local-vars) {
+        $local-vars: map.get($utility, local-vars);
+    }
 
     $print: map.get($utility, print);
     $responsive: map.get($utility, responsive);
     $css-var: map.get($utility, css-var);
-    $important: if(map.has-key($utility, important), map.get($utility, important), true);
+    $important: true;
+
+    @if map.has-key($utility, important) {
+        $important: map.get($utility, important);
+    }
 
     @each $breakpoint in map.keys($breakpoints) {
         @include media-breakpoint-up($breakpoint) {
@@ -56,10 +75,20 @@
 // @param $css-var
 // @param $important
 @mixin utility-class($properties, $values, $infix, $class, $state, $local-vars, $css-var, $important) {
-    $infix: if($class == "" and string.slice($infix, 1, 1) == "-", string.slice($infix, 2), $infix);
+    @if $class == "" and string.slice($infix, 1, 1) == "-" {
+        $infix: string.slice($infix, 2);
+    }
 
     @each $key, $value in $values {
-        $class-modifier: if($key, if($class == "" and $infix == "", "", "-") + $key, "");
+        $class-modifier: "";
+
+        @if $key {
+            @if $class == "" and $infix == "" {
+                $class-modifier: "" + $key;
+            } @else {
+                $class-modifier: "-" + $key;
+            }
+        }
 
         @if $value != null {
             .#{$class + $infix + $class-modifier} {
@@ -68,8 +97,15 @@
                 }
 
                 @each $property in $properties {
-                    $property: if($css-var, --ui-#{$property}, $property);
-                    #{$property}: $value if($important, !important, null);
+                    @if $css-var {
+                        $property: --ui-#{$property};
+                    }
+
+                    @if $important {
+                        #{$property}: $value !important;
+                    } @else {
+                        #{$property}: $value;
+                    }
                 }
             }
 
@@ -80,8 +116,15 @@
                     }
 
                     @each $property in $properties {
-                        $property: if($css-var, --ui-#{$property}, $property);
-                        #{$property}: #{$value} if($important, !important, null);
+                        @if $css-var {
+                            $property: --ui-#{$property};
+                        }
+
+                        @if $important {
+                            #{$property}: #{$value} !important;
+                        } @else {
+                            #{$property}: #{$value};
+                        }
                     }
                 }
             }

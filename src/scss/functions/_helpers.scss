@@ -13,7 +13,15 @@
         // allow to pass the $key and $value of the map as an function argument
         $temp: ();
         @each $arg in $args {
-            $temp: list.append($temp, if($arg == "$key", $key, if($arg == "$value", $value, $arg)));
+            $item: $arg;
+
+            @if $arg == "$key" {
+                $item: $key;
+            } @else if $arg == "$value" {
+                $item: $value;
+            }
+
+            $temp: list.append($temp, $item);
         }
 
         $result: map.merge($result, ($key: meta.call(meta.get-function($func), $temp...)));

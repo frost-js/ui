@@ -47,7 +47,11 @@
         $i: $i + $step-size;
     }
 
-    @return if($result == null, text-color($background), $result);
+    @if $result == null {
+        @return text-color($background);
+    }
+
+    @return $result;
 }
 
 // Calculate the contrast ratio between two colors.
@@ -57,7 +61,11 @@
     $luma1: luma($background);
     $luma2: luma($foreground);
 
-    @return if($luma1 > $luma2, math.div($luma1 + .05, $luma2 + .05), math.div($luma2 + .05, $luma1 + .05));
+    @if $luma1 > $luma2 {
+        @return math.div($luma1 + .05, $luma2 + .05);
+    }
+
+    @return math.div($luma2 + .05, $luma1 + .05);
 }
 
 // Fade a color to a specified opacity (0-1).
@@ -79,7 +87,13 @@
     @each $name,
         $value in $rgb {
         $value: math.div($value, 255);
-        $value: if($value < .04045, math.div($value, 12.92), math.pow((math.div($value + .055, 1.055)), 2.4));
+
+        @if $value < .04045 {
+            $value: math.div($value, 12.92);
+        } @else {
+            $value: math.pow((math.div($value + .055, 1.055)), 2.4);
+        }
+
         $rgb: map.merge($rgb, ($name: $value));
     }
 
@@ -99,7 +113,11 @@
 // @param $foreground2: #fff
 // @param $threshold: 4.5
 @function text-color($background, $foreground1: #fff, $foreground2: #000, $threshold: 4.5) {
-    @return if(contrast-ratio($background, $foreground1) > $threshold, $foreground1, $foreground2);
+    @if contrast-ratio($background, $foreground1) > $threshold {
+        @return $foreground1;
+    }
+
+    @return $foreground2;
 }
 
 // Tint a color by a specified amount (1-100).

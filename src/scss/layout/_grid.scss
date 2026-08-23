@@ -55,7 +55,12 @@
             @for $i from 0 through ($grid-size - 1) {
                 .offset#{$infix}-#{$i} {
                     $num: math.div($i, $grid-size);
-                    margin-left: if($num == 0, 0, math.percentage($num));
+
+                    @if $num == 0 {
+                        margin-left: 0;
+                    } @else {
+                        margin-left: math.percentage($num);
+                    }
                 }
             }
         }

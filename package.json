@@ -37,7 +37,7 @@
     "scripts": {
         "build": "npm run css && npm run js && npm run js-bundle",
         "css": "npm run css-compile && npm run css-prefix && npm run css-minify",
-        "css-compile": "sass --style expanded --source-map --embed-sources --no-error-css --silence-deprecation=import,if-function src/scss/ui.scss dist/frost-ui.css",
+        "css-compile": "sass --style expanded --source-map --embed-sources --no-error-css --silence-deprecation=import src/scss/ui.scss dist/frost-ui.css",
         "css-lint": "stylelint \"src/scss/**/*.scss\"",
         "css-minify": "cleancss -O1 --format breakWith=lf --with-rebase --source-map --source-map-inline-sources --output dist/frost-ui.min.css dist/frost-ui.css",
         "css-prefix": "postcss --replace dist/frost-ui.css",

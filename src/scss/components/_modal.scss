@@ -174,7 +174,10 @@
 
 @each $breakpoint in map.keys($breakpoints) {
     $infix: breakpoint-infix($breakpoint);
-    $infix: if($infix != "", $infix + "-down", "");
+
+    @if $infix != "" {
+        $infix: $infix + "-down";
+    }
 
     @include media-breakpoint-down($breakpoint) {
         .modal-fullscreen#{$infix} {
