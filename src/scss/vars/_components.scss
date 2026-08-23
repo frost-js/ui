@@ -388,10 +388,10 @@ $toast-border-width: var(--ui-border-width) !default;
 $toast-border-color: var(--ui-border-color-translucent) !default;
 $toast-border-radius: var(--ui-border-radius-xl) !default;
 $toast-box-shadow: var(--ui-shadow-lg) !default;
-$toast-backdrop-filter: blur(10px) !default;
+$toast-backdrop-filter: blur(.75rem) saturate(140%) !default;
 
 $toast-header-color: var(--ui-secondary-color) !default;
-$toast-header-bg: helpers.color-alpha(body-bg, .85) !default;
+$toast-header-bg: helpers.color-alpha(secondary-bg, .65) !default;
 $toast-header-border-color: $toast-border-color !default;
 
 // tooltip

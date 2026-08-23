@@ -4835,9 +4835,9 @@ fieldset:disabled .btn {
   --ui-toast-border-color: var(--ui-border-color-translucent);
   --ui-toast-border-radius: var(--ui-border-radius-xl);
   --ui-toast-box-shadow: var(--ui-shadow-lg);
-  --ui-toast-backdrop-filter: blur(10px);
+  --ui-toast-backdrop-filter: blur(0.75rem) saturate(140%);
   --ui-toast-header-color: var(--ui-secondary-color);
-  --ui-toast-header-bg: rgb(from var(--ui-body-bg) r g b/0.85);
+  --ui-toast-header-bg: rgb(from var(--ui-secondary-bg) r g b/0.65);
   --ui-toast-header-border-color: var(--ui-border-color-translucent);
   width: var(--ui-toast-max-width);
   max-width: 100%;
