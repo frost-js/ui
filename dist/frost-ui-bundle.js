@@ -10643,9 +10643,8 @@
          * Dispose the Carousel.
          */
         dispose() {
-            if (this._timer) {
-                clearTimeout(this._timer);
-            }
+            clearTimeout(this._timer);
+            this._timer = null;
 
             if (this._options.keyboard) {
                 $$1.removeEvent(this._node, 'keydown.ui.carousel');
@@ -10657,7 +10656,7 @@
             }
 
             if (this._options.swipe) {
-                $$1.removeEvent(this._node, 'mousedown.ui.carousel');
+                $$1.removeEvent(this._node, 'mousedown.ui.carousel touchstart.ui.carousel');
             }
 
             this._items = null;
@@ -10966,7 +10965,10 @@
         const interval = $$1.getDataset(this._items[this._index], 'uiInterval');
 
         this._timer = setTimeout(
-            (_) => this.cycle(),
+            (_) => {
+                this._timer = null;
+                this.cycle();
+            },
             interval || this._options.interval,
         );
     }

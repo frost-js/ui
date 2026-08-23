@@ -43,9 +43,8 @@ export default class Carousel extends BaseComponent {
      * Dispose the Carousel.
      */
     dispose() {
-        if (this._timer) {
-            clearTimeout(this._timer);
-        }
+        clearTimeout(this._timer);
+        this._timer = null;
 
         if (this._options.keyboard) {
             $.removeEvent(this._node, 'keydown.ui.carousel');
@@ -57,7 +56,7 @@ export default class Carousel extends BaseComponent {
         }
 
         if (this._options.swipe) {
-            $.removeEvent(this._node, 'mousedown.ui.carousel');
+            $.removeEvent(this._node, 'mousedown.ui.carousel touchstart.ui.carousel');
         }
 
         this._items = null;

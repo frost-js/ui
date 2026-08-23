@@ -38,7 +38,10 @@ export function _setTimer() {
     const interval = $.getDataset(this._items[this._index], 'uiInterval');
 
     this._timer = setTimeout(
-        (_) => this.cycle(),
+        (_) => {
+            this._timer = null;
+            this.cycle();
+        },
         interval || this._options.interval,
     );
 };

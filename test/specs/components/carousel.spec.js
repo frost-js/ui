@@ -96,6 +96,25 @@ test.describe('Carousel', () => {
             })).toBe(false);
         });
 
+        test('removes the touch swipe event', async ({ page }) => {
+            await page.evaluate((_) => {
+                const carousel1 = $.findOne('#carousel1');
+                UI.Carousel.init(carousel1).dispose();
+                window.carouselTouchEventPrevented = false;
+
+                carousel1.addEventListener('touchstart', (event) => {
+                    window.carouselTouchEventPrevented = event.defaultPrevented;
+                });
+            });
+            await page.locator('#carousel1').dispatchEvent('touchstart', {
+                cancelable: true,
+                touches: [{ pageX: 400, pageY: 0 }],
+            });
+
+            expect(await page.evaluate((_) =>
+                window.carouselTouchEventPrevented)).toBe(false);
+        });
+
         test('clears carousel memory', async ({ page }) => {
             expect(await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
@@ -1533,6 +1552,40 @@ test.describe('Carousel', () => {
     });
 
     test.describe('cycle', () => {
+        test('continues cycling after the document becomes visible', async ({ page }) => {
+            await page.evaluate((_) => {
+                Object.defineProperty(document, 'visibilityState', {
+                    configurable: true,
+                    value: 'hidden',
+                });
+
+                const carousel1 = $.findOne('#carousel1');
+                UI.Carousel.init(carousel1).cycle();
+            });
+            await advanceClock(page, 250);
+            await page.evaluate((_) => {
+                Object.defineProperty(document, 'visibilityState', {
+                    configurable: true,
+                    value: 'visible',
+                });
+            });
+            await advanceClock(page, 150);
+
+            await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
+            await expectAnimationState(page, [
+                {
+                    selectors: ['#carousel1Item2'],
+                    active: true,
+                },
+            ]);
+            await advanceClock(page, 100);
+
+            await expect(page.locator('#carousel1Item1')).not.toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide0')).not.toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+        });
+
         test('starts cycling (cycle)', async ({ page }) => {
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
