@@ -10,6 +10,7 @@
     --ui-tooltip-color: #{vars.$tooltip-color};
     --ui-tooltip-bg: #{vars.$tooltip-bg};
     --ui-tooltip-border-radius: #{vars.$tooltip-border-radius};
+    --ui-tooltip-box-shadow: #{vars.$tooltip-box-shadow};
     --ui-tooltip-opacity: #{vars.$tooltip-opacity};
     --ui-tooltip-arrow-width: #{vars.$tooltip-arrow-width};
     --ui-tooltip-arrow-height: #{vars.$tooltip-arrow-height};
@@ -89,5 +90,6 @@
     color: var(--ui-tooltip-color);
     text-align: center;
     background-color: var(--ui-tooltip-bg);
+    box-shadow: var(--ui-tooltip-box-shadow);
     @include mixins.border-radius(var(--ui-tooltip-border-radius));
 }

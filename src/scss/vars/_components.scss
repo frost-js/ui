@@ -174,6 +174,7 @@ $dropdown-link-disabled-color: var(--ui-secondary-color) !default;
 $dropdown-item-padding-x: vars.$spacing !default;
 $dropdown-item-padding-y: vars.$spacing * .5 !default;
 $dropdown-item-font-weight: map.get(vars.$font-weights, normal) !default;
+$dropdown-item-active-font-weight: map.get(vars.$font-weights, bold) !default;
 
 $dropdown-header-padding-x: vars.$spacing !default;
 $dropdown-header-padding-y: $dropdown-padding-y !default;
@@ -424,12 +425,13 @@ $toast-header-border-color: $toast-border-color !default;
 
 // tooltip
 $tooltip-max-width: 200px !default;
-$tooltip-padding-x: vars.$spacing * .5 !default;
-$tooltip-padding-y: vars.$spacing * .25 !default;
+$tooltip-padding-x: vars.$spacing * .75 !default;
+$tooltip-padding-y: vars.$spacing * .5 !default;
 $tooltip-font-size: var(--ui-font-size-sm) !default;
 $tooltip-color: var(--ui-body-bg) !default;
-$tooltip-bg: var(--ui-emphasis-color) !default;
+$tooltip-bg: helpers.color-alpha(emphasis-color, .92) !default;
 $tooltip-border-radius: var(--ui-border-radius-lg) !default;
-$tooltip-opacity: .9 !default;
+$tooltip-box-shadow: var(--ui-shadow-sm) !default;
+$tooltip-opacity: 1 !default;
 $tooltip-arrow-width: .8rem !default;
 $tooltip-arrow-height: .4rem !default;

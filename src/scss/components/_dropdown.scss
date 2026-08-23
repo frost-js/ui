@@ -25,6 +25,8 @@
     --ui-dropdown-link-disabled-color: #{vars.$dropdown-link-disabled-color};
     --ui-dropdown-item-padding-x: #{vars.$dropdown-item-padding-x};
     --ui-dropdown-item-padding-y: #{vars.$dropdown-item-padding-y};
+    --ui-dropdown-item-font-weight: #{vars.$dropdown-item-font-weight};
+    --ui-dropdown-item-active-font-weight: #{vars.$dropdown-item-active-font-weight};
     --ui-dropdown-header-padding-x: #{vars.$dropdown-header-padding-x};
     --ui-dropdown-header-padding-y: #{vars.$dropdown-header-padding-y};
     --ui-dropdown-header-color: #{vars.$dropdown-header-color};
@@ -56,13 +58,16 @@
     display: block;
     width: 100%;
     padding: var(--ui-dropdown-item-padding-y) var(--ui-dropdown-item-padding-x);
-    font-weight: vars.$dropdown-item-font-weight;
+    font-weight: var(--ui-dropdown-item-font-weight);
     color: var(--ui-dropdown-link-color);
     text-align: inherit;
     white-space: nowrap;
     text-decoration: none;
     background-color: transparent;
     border: 0;
+    transition-timing-function: var(--ui-transition-timing-function);
+    transition-duration: var(--ui-transition-duration-fast);
+    transition-property: color, background-color, box-shadow;
     @include mixins.border-radius(var(--ui-border-radius));
 
     &:hover,
@@ -77,6 +82,7 @@
     }
 
     &.active {
+        font-weight: var(--ui-dropdown-item-active-font-weight);
         color: var(--ui-dropdown-link-active-color);
         background-color: var(--ui-dropdown-link-active-bg);
     }
