@@ -52,11 +52,9 @@
             }
 
             @for $i from 0 through ($grid-size - 1) {
-                @if $infix != "" and $i > 0 {
-                    .offset#{$infix}-#{$i} {
-                        $num: math.div($i, $grid-size);
-                        margin-left: if($num == 0, 0, percentage($num));
-                    }
+                .offset#{$infix}-#{$i} {
+                    $num: math.div($i, $grid-size);
+                    margin-left: if($num == 0, 0, percentage($num));
                 }
             }
         }
