@@ -1,3 +1,5 @@
+@use "sass:map";
+
 .navbar {
     --ui-navbar-padding-x: #{$navbar-padding-x};
     --ui-navbar-padding-y: #{$navbar-padding-y};
@@ -105,7 +107,7 @@
 .navbar-toggler {
     padding: var(--ui-navbar-toggler-padding-y) var(--ui-navbar-toggler-padding-x);
     font-size: var(--ui-navbar-toggler-font-size);
-    line-height: map-get($line-heights, 1);
+    line-height: map.get($line-heights, 1);
     color: var(--ui-navbar-color);
     background-color: transparent;
     border: var(--ui-navbar-toggler-border-width) var(--ui-border-style) var(--ui-navbar-toggler-border-color);
@@ -133,7 +135,7 @@
     mask-size: var(--ui-navbar-toggler-icon-width);
 }
 
-@each $breakpoint in map-keys($breakpoints) {
+@each $breakpoint in map.keys($breakpoints) {
     $infix: breakpoint-infix($breakpoint);
 
     @include media-breakpoint-up($breakpoint) {

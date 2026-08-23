@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "sass:math";
 
 // address
@@ -12,14 +13,14 @@ $blockquote-footer-color: var(--ui-secondary-color) !default;
 $blockquote-footer-prefix: "\2014 \00A0" !default;
 
 // body
-$body-font-weight: map-get($font-weights, normal) !default;
-$body-line-height: map-get($line-heights, base) !default;
+$body-font-weight: map.get($font-weights, normal) !default;
+$body-line-height: map.get($line-heights, base) !default;
 
 // dd
 $dd-margin-bottom: $spacing * .5 !default;
 
 // dt
-$dt-font-weight: map-get($font-weights, bolder) !default;
+$dt-font-weight: map.get($font-weights, bolder) !default;
 
 // figure
 $figure-margin-bottom: $spacing !default;
@@ -31,7 +32,7 @@ $figure-caption-color: var(--ui-secondary-color) !default;
 $headings-margin-bottom: $spacing * .5 !default;
 $headings-font-family: null !default;
 $headings-font-style: null !default;
-$headings-font-weight: map-get($font-weights, bold) !default;
+$headings-font-weight: map.get($font-weights, bold) !default;
 $headings-line-height: 1.2 !default;
 $headings-color: null !default;
 
@@ -42,7 +43,7 @@ $h4-font-size: 1.5 !default;
 $h5-font-size: 1.25 !default;
 $h6-font-size: 1 !default;
 
-$display-font-weight: map-get($font-weights, light) !default;
+$display-font-weight: map.get($font-weights, light) !default;
 $display-line-height: 1.2 !default;
 $display-1-font-size: 5 !default;
 $display-2-font-size: 4.5 !default;
@@ -66,19 +67,19 @@ $img-thumbnail-border-radius: var(--ui-border-radius) !default;
 // kbd
 $kbd-padding-x: .4rem !default;
 $kbd-padding-y: .2rem !default;
-$kbd-kbd-font-weight: map-get($font-weights, bolder) !default;
+$kbd-kbd-font-weight: map.get($font-weights, bolder) !default;
 $kbd-bg: var(--ui-body-color) !default;
 $kbd-color: var(--ui-body-bg) !default;
 $kbd-border-radius: var(--ui-border-radius) !default;
 
 // lead
 $lead-font-size: 1.25 !default;
-$lead-font-weight: map-get($font-weights, light) !default;
+$lead-font-weight: map.get($font-weights, light) !default;
 
 // legend
 $legend-margin-bottom: $spacing * .5 !default;
 $legend-font-size: var(--ui-font-size-lg) !default;
-$legend-font-weight: map-get($font-weights, bold) !default;
+$legend-font-weight: map.get($font-weights, bold) !default;
 
 // list
 $list-padding-left: $spacing * 2 !default;
@@ -91,7 +92,7 @@ $mark-padding: .2rem !default;
 $p-margin-bottom: $spacing !default;
 
 // strong
-$strong-font-weight: map-get($font-weights, bolder) !default;
+$strong-font-weight: map.get($font-weights, bolder) !default;
 
 // sub/sup
 $sub-sup-font-size: .75em !default;
@@ -111,7 +112,7 @@ $table-variants: (
 $table-margin-bottom: $spacing !default;
 $table-cell-padding-x: $spacing !default;
 $table-cell-padding-y: $spacing * .5 !default;
-$table-th-font-weight: map-get($font-weights, bold) !default;
+$table-th-font-weight: map.get($font-weights, bold) !default;
 
 $table-bg: var(--ui-body-bg) !default;
 $table-color: var(--ui-body-color) !default;

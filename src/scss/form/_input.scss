@@ -1,3 +1,5 @@
+@use "sass:selector";
+
 .form-input {
     position: relative;
     width: 100%;
@@ -45,17 +47,17 @@
         color: $input-placeholder-color;
     }
 
-    @at-root #{selector-append("select", &)} {
+    @at-root #{selector.append("select", &)} {
         appearance: none;
 
         &:not([multiple]) {
             @at-root {
                 #{&},
-                #{selector-nest("[data-ui-theme=\"light\"]", &)} {
+                #{selector.nest("[data-ui-theme=\"light\"]", &)} {
                     --ui-select-arrow-background-image: #{$input-select-arrow-background-image};
                 }
 
-                #{selector-nest("[data-ui-theme=\"dark\"]", &)} {
+                #{selector.nest("[data-ui-theme=\"dark\"]", &)} {
                     --ui-select-arrow-background-image: #{$input-select-arrow-background-image-dark};
                 }
             }

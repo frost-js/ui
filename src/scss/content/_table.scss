@@ -1,3 +1,5 @@
+@use "sass:map";
+
 .table {
     --ui-table-margin-bottom: #{$table-margin-bottom};
     --ui-table-bg: #{$table-bg};
@@ -88,7 +90,7 @@
     --ui-table-hover-bg: rgba(var(--ui-body-bg-rgb), .05);
 }
 
-@each $breakpoint in map-keys($breakpoints) {
+@each $breakpoint in map.keys($breakpoints) {
     $infix: breakpoint-infix($breakpoint);
 
     @include media-breakpoint-down($breakpoint) {

@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // check
 $form-check-min-height: 1.5rem !default;
 $form-check-padding-left: $spacing * 2 !default;
@@ -34,7 +36,7 @@ $form-text-color: var(--ui-body-color) !default;
 
 $input-plain-text-color: var(--ui-body-color) !default;
 
-$input-group-text-font-weight: map-get($font-weights, normal) !default;
+$input-group-text-font-weight: map.get($font-weights, normal) !default;
 $input-group-text-color: var(--ui-secondary-color) !default;
 $input-group-text-bg: var(--ui-tertiary-bg) !default;
 
@@ -42,7 +44,7 @@ $input-group-text-bg: var(--ui-tertiary-bg) !default;
 $input-padding-x: $spacing * .5 !default;
 $input-padding-y: $spacing * .5 !default;
 $input-font-size: var(--ui-font-size) !default;
-$input-line-height: map-get($line-heights, base) !default;
+$input-line-height: map.get($line-heights, base) !default;
 $input-color: var(--ui-body-color) !default;
 $input-border-width: var(--ui-border-width) !default;
 $input-border-color: var(--ui-border-color) !default;

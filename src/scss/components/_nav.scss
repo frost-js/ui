@@ -1,3 +1,5 @@
+@use "sass:map";
+
 .nav {
     --ui-nav-link-padding-x: #{$nav-link-padding-x};
     --ui-nav-link-padding-y: #{$nav-link-padding-y};
@@ -128,7 +130,7 @@
 
     .nav-link.active,
     .show > .nav-link {
-        font-weight: map-get($font-weights, bold);
+        font-weight: map.get($font-weights, bold);
         color: var(--ui-nav-underline-link-active-color);
         border-bottom-color: currentcolor;
     }

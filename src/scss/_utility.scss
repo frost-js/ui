@@ -1,8 +1,10 @@
+@use "sass:map";
+
 // background
 @include utility((
     property: background-color,
     class: bg,
-    values: map-merge($utilities-bg-colors, (
+    values: map.merge($utilities-bg-colors, (
         body-secondary: var(--ui-secondary-bg),
         body-tertiary: var(--ui-tertiary-bg),
         transparent: transparent
@@ -164,7 +166,7 @@
 @include utility((
     property: color,
     class: text,
-    values: map-merge($utilities-text-colors, (
+    values: map.merge($utilities-text-colors, (
         body: var(--ui-body-color),
         body-secondary: var(--ui-secondary-color),
         body-tertiary: var(--ui-tertiary-color),
@@ -338,7 +340,7 @@
 @include utility((
     property: text-decoration-color,
     class: link-underline,
-    values: map-merge(
+    values: map.merge(
         $utilities-link-underline-colors,
         (
             null: rgba(var(--ui-link-color-rgb), var(--ui-link-underline-opacity))

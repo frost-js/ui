@@ -1,3 +1,7 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+
 // Loop a map and call a function on each value.
 // @param $map
 // @param $func
@@ -9,10 +13,10 @@
         // allow to pass the $key and $value of the map as an function argument
         $temp: ();
         @each $arg in $args {
-            $temp: append($temp, if($arg == "$key", $key, if($arg == "$value", $value, $arg)));
+            $temp: list.append($temp, if($arg == "$key", $key, if($arg == "$value", $value, $arg)));
         }
 
-        $result: map-merge($result, ($key: call(get-function($func), $temp...)));
+        $result: map.merge($result, ($key: meta.call(meta.get-function($func), $temp...)));
     }
 
     @return $result;

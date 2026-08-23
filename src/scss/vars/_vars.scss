@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $spacing: 1rem !default;
 
 $disabled-opacity: .5 !default;
@@ -154,7 +156,7 @@ $font-sizes: (
 
 @each $key, $size in $font-sizes {
     $size: text-size($size);
-    $font-sizes: map-merge($font-sizes, ($key: $size));
+    $font-sizes: map.merge($font-sizes, ($key: $size));
 }
 
 $font-size-sm: .875rem !default;

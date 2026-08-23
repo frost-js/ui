@@ -1,3 +1,5 @@
+@use "sass:map";
+
 :root,
 [data-ui-theme="light"] {
     --ui-white: #{$white};
@@ -179,12 +181,12 @@
     --ui-ripple-opacity: #{$ripple-opacity};
     --ui-ripple-bg: #{$ripple-bg};
 
-    --ui-breakpoint-xs: #{map-get($breakpoints, xs)};
-    --ui-breakpoint-sm: #{map-get($breakpoints, sm)};
-    --ui-breakpoint-md: #{map-get($breakpoints, md)};
-    --ui-breakpoint-lg: #{map-get($breakpoints, lg)};
-    --ui-breakpoint-xl: #{map-get($breakpoints, xl)};
-    --ui-breakpoint-xxl: #{map-get($breakpoints, xxl)};
+    --ui-breakpoint-xs: #{map.get($breakpoints, xs)};
+    --ui-breakpoint-sm: #{map.get($breakpoints, sm)};
+    --ui-breakpoint-md: #{map.get($breakpoints, md)};
+    --ui-breakpoint-lg: #{map.get($breakpoints, lg)};
+    --ui-breakpoint-xl: #{map.get($breakpoints, xl)};
+    --ui-breakpoint-xxl: #{map.get($breakpoints, xxl)};
 
     --ui-text-opacity: 1;
     --ui-bg-opacity: 1;

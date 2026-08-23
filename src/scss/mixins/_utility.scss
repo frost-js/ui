@@ -1,30 +1,35 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+
 // Generate utility classes
 // @param $utility
 @mixin utility($utility) {
-    $properties: map-get($utility, property);
-    $values: map-get($utility, values);
+    $properties: map.get($utility, property);
+    $values: map.get($utility, values);
 
-    @if type-of($properties) == "string" {
-        $properties: append((), $properties);
+    @if meta.type-of($properties) == "string" {
+        $properties: list.append((), $properties);
     }
 
-    @if type-of($values) == "string" or type-of(nth($values, 1)) != "list" {
-        $values: zip($values, $values);
+    @if meta.type-of($values) == "string" or meta.type-of(list.nth($values, 1)) != "list" {
+        $values: list.zip($values, $values);
     }
 
-    $class: if(map-has-key($utility, class), map-get($utility, class), nth($properties, 1));
+    $class: if(map.has-key($utility, class), map.get($utility, class), list.nth($properties, 1));
     $class: if($class == null, "", $class);
 
-    $state: if(map-has-key($utility, state), map-get($utility, state), ());
+    $state: if(map.has-key($utility, state), map.get($utility, state), ());
 
-    $local-vars: if(map-has-key($utility, local-vars), map-get($utility, local-vars), ());
+    $local-vars: if(map.has-key($utility, local-vars), map.get($utility, local-vars), ());
 
-    $print: map-get($utility, print);
-    $responsive: map-get($utility, responsive);
-    $css-var: map-get($utility, css-var);
-    $important: if(map-has-key($utility, important), map-get($utility, important), true);
+    $print: map.get($utility, print);
+    $responsive: map.get($utility, responsive);
+    $css-var: map.get($utility, css-var);
+    $important: if(map.has-key($utility, important), map.get($utility, important), true);
 
-    @each $breakpoint in map-keys($breakpoints) {
+    @each $breakpoint in map.keys($breakpoints) {
         @include media-breakpoint-up($breakpoint) {
             $infix: breakpoint-infix($breakpoint);
 
@@ -51,7 +56,7 @@
 // @param $css-var
 // @param $important
 @mixin utility-class($properties, $values, $infix, $class, $state, $local-vars, $css-var, $important) {
-    $infix: if($class == "" and str-slice($infix, 1, 1) == "-", str-slice($infix, 2), $infix);
+    $infix: if($class == "" and string.slice($infix, 1, 1) == "-", string.slice($infix, 2), $infix);
 
     @each $key, $value in $values {
         $class-modifier: if($key, if($class == "" and $infix == "", "", "-") + $key, "");

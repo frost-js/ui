@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $color-variants: (
     primary: $primary,
     secondary: $secondary,
@@ -31,7 +33,7 @@ $emphasis-colors: (
     dark-emphasis: $dark-emphasis
 ) !default;
 
-$utilities-colors: map-merge(
+$utilities-colors: map.merge(
     $color-variants,
     (
         black: $black,
@@ -39,8 +41,8 @@ $utilities-colors: map-merge(
     )
 ) !default;
 
-$utilities-text-colors: map-loop(map-merge($utilities-colors, $emphasis-colors), rgba-css-var, "$key", "text") !default;
-$utilities-border-colors: map-loop(map-merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "border") !default;
-$utilities-bg-colors: map-loop(map-merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "bg") !default;
-$utilities-link-underline-colors: map-loop(map-merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "link-underline") !default;
+$utilities-text-colors: map-loop(map.merge($utilities-colors, $emphasis-colors), rgba-css-var, "$key", "text") !default;
+$utilities-border-colors: map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "border") !default;
+$utilities-bg-colors: map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "bg") !default;
+$utilities-link-underline-colors: map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "link-underline") !default;
 $utilities-focus-ring-colors: map-loop($utilities-colors, rgba-css-var, "$key", "focus-ring") !default;

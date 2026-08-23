@@ -1,3 +1,5 @@
+@use "sass:map";
+
 .figure {
     --ui-figure-caption-color: #{$figure-caption-color};
 
@@ -6,7 +8,7 @@
 
 .figure-img {
     margin-bottom: $figure-img-margin-bottom;
-    line-height: map-get($line-heights, 1);
+    line-height: map.get($line-heights, 1);
 }
 
 .figure-caption {
