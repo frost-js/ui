@@ -87,6 +87,7 @@ $btn-outline-hover-opacity: .2 !default;
 $card-spacer-x: vars.$spacing !default;
 $card-spacer-y: vars.$spacing !default;
 $card-title-spacer-y: vars.$spacing * .5 !default;
+$card-title-font-weight: map.get(vars.$font-weights, bolder) !default;
 $card-border-width: var(--ui-border-width) !default;
 $card-border-color: var(--ui-border-color-translucent) !default;
 $card-border-radius: var(--ui-border-radius-lg) !default;
@@ -95,6 +96,7 @@ $card-box-shadow: var(--ui-shadow-sm) !default;
 $card-cap-padding-x: $card-spacer-x !default;
 $card-cap-padding-y: $card-spacer-y * .5 !default;
 $card-cap-bg: helpers.color-alpha(body-color, .1) !default;
+$card-header-font-weight: map.get(vars.$font-weights, bolder) !default;
 $card-img-overlay-padding: vars.$spacing !default;
 $card-group-margin: vars.$spacing !default;
 
@@ -220,7 +222,9 @@ $modal-header-padding-x: var(--ui-modal-padding-x) !default;
 $modal-header-padding-y: var(--ui-modal-padding-y) !default;
 $modal-header-border-width: var(--ui-modal-border-width) !default;
 $modal-header-border-color: var(--ui-modal-border-color) !default;
-$modal-title-line-height: map.get(vars.$line-heights, base) !default;
+$modal-title-font-size: var(--ui-font-size-lg) !default;
+$modal-title-font-weight: map.get(vars.$font-weights, bolder) !default;
+$modal-title-line-height: map.get(vars.$line-heights, sm) !default;
 
 $modal-footer-gap: vars.$spacing * .5 !default;
 $modal-footer-border-width: var(--ui-modal-border-width) !default;
@@ -356,6 +360,8 @@ $popover-box-shadow: var(--ui-shadow) !default;
 $popover-header-padding-x: $popover-padding-y !default;
 $popover-header-padding-y: $popover-padding-x !default;
 $popover-header-font-size: var(--ui-body-font-size) !default;
+$popover-header-font-weight: map.get(vars.$font-weights, bolder) !default;
+$popover-header-line-height: map.get(vars.$line-heights, sm) !default;
 $popover-header-bg: helpers.color-alpha(secondary-bg, .8) !default;
 
 $popover-body-padding-x: $popover-padding-y !default;

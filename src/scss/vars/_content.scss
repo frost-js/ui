@@ -36,8 +36,8 @@ $figure-caption-color: var(--ui-secondary-color) !default;
 $headings-margin-bottom: vars.$spacing * .5 !default;
 $headings-font-family: null !default;
 $headings-font-style: null !default;
-$headings-font-weight: map.get(vars.$font-weights, bold) !default;
-$headings-line-height: 1.2 !default;
+$headings-font-weight: map.get(vars.$font-weights, bolder) !default;
+$headings-line-height: 1.1 !default;
 $headings-letter-spacing: -.02em !default;
 $headings-color: null !default;
 
@@ -48,8 +48,8 @@ $h4-font-size: 1.5 !default;
 $h5-font-size: 1.25 !default;
 $h6-font-size: 1 !default;
 
-$display-font-weight: map.get(vars.$font-weights, light) !default;
-$display-line-height: 1.2 !default;
+$display-font-weight: map.get(vars.$font-weights, bolder) !default;
+$display-line-height: 1.05 !default;
 $display-letter-spacing: -.03em !default;
 $display-1-font-size: 5 !default;
 $display-2-font-size: 4.5 !default;

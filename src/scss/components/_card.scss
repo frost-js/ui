@@ -5,6 +5,7 @@
     --ui-card-spacer-x: #{vars.$card-spacer-x};
     --ui-card-spacer-y: #{vars.$card-spacer-y};
     --ui-card-title-spacer-y: #{vars.$card-title-spacer-y};
+    --ui-card-title-font-weight: #{vars.$card-title-font-weight};
     --ui-card-border-width: #{vars.$card-border-width};
     --ui-card-border-color: #{vars.$card-border-color};
     --ui-card-border-radius: #{vars.$card-border-radius};
@@ -14,6 +15,7 @@
     --ui-card-cap-padding-x: #{vars.$card-cap-padding-x};
     --ui-card-cap-padding-y: #{vars.$card-cap-padding-y};
     --ui-card-cap-bg: #{vars.$card-cap-bg};
+    --ui-card-header-font-weight: #{vars.$card-header-font-weight};
     --ui-card-img-overlay-padding: #{vars.$card-img-overlay-padding};
     --ui-card-group-margin: #{vars.$card-group-margin};
 
@@ -57,6 +59,7 @@
 .card-header {
     padding: var(--ui-card-cap-padding-y) var(--ui-card-cap-padding-x);
     margin-bottom: 0;
+    font-weight: var(--ui-card-header-font-weight);
     background-color: var(--ui-card-cap-bg);
     border-bottom: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
 
@@ -84,6 +87,7 @@
 
 .card-title {
     margin-bottom: var(--ui-card-title-spacer-y);
+    font-weight: var(--ui-card-title-font-weight);
 }
 
 .card-subtitle {

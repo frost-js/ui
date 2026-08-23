@@ -12,6 +12,9 @@
     --ui-popover-box-shadow: #{vars.$popover-box-shadow};
     --ui-popover-header-padding-x: #{vars.$popover-header-padding-x};
     --ui-popover-header-padding-y: #{vars.$popover-header-padding-y};
+    --ui-popover-header-font-size: #{vars.$popover-header-font-size};
+    --ui-popover-header-font-weight: #{vars.$popover-header-font-weight};
+    --ui-popover-header-line-height: #{vars.$popover-header-line-height};
     --ui-popover-header-bg: #{vars.$popover-header-bg};
     --ui-popover-body-padding-x: #{vars.$popover-body-padding-x};
     --ui-popover-body-padding-y: #{vars.$popover-body-padding-y};
@@ -121,7 +124,9 @@
 .popover-header {
     padding: var(--ui-popover-header-padding-y) var(--ui-popover-header-padding-x);
     margin-bottom: 0;
-    font-size: vars.$popover-header-font-size;
+    font-size: var(--ui-popover-header-font-size);
+    font-weight: var(--ui-popover-header-font-weight);
+    line-height: var(--ui-popover-header-line-height);
     color: inherit;
     background-color: var(--ui-popover-header-bg);
     border-bottom: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);

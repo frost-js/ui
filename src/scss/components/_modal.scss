@@ -30,6 +30,8 @@
     --ui-modal-header-padding-y: #{vars.$modal-header-padding-y};
     --ui-modal-header-border-width: #{vars.$modal-header-border-width};
     --ui-modal-header-border-color: #{vars.$modal-header-border-color};
+    --ui-modal-title-font-size: #{vars.$modal-title-font-size};
+    --ui-modal-title-font-weight: #{vars.$modal-title-font-weight};
     --ui-modal-title-line-height: #{vars.$modal-title-line-height};
     --ui-modal-footer-gap: #{vars.$modal-footer-gap};
     --ui-modal-footer-border-width: #{vars.$modal-footer-border-width};
@@ -119,6 +121,8 @@
 
 .modal-title {
     margin-bottom: 0;
+    font-size: var(--ui-modal-title-font-size);
+    font-weight: var(--ui-modal-title-font-weight);
     line-height: var(--ui-modal-title-line-height);
 }
 

@@ -136,7 +136,8 @@ $gaps: (
 ) !default;
 
 // text
-$font-sans-serif: -apple-system,
+$font-sans-serif: system-ui,
+    -apple-system,
     blinkmacsystemfont,
     "Segoe UI",
     tahoma,
