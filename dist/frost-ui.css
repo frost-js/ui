@@ -8,6 +8,38 @@
   --ui-transition-duration-fast: 0.15s;
   --ui-transition-duration: 0.25s;
   --ui-transition-timing-function: ease-in-out;
+  --ui-font-sans-serif: -apple-system, blinkmacsystemfont, Segoe UI, tahoma, geneva, verdana, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  --ui-font-monospace: sfmono-regular, menlo, monaco, consolas, Liberation Mono, Courier New, monospace;
+  --ui-font-size: 1rem;
+  --ui-font-size-sm: 0.875rem;
+  --ui-font-size-lg: 1.25rem;
+  --ui-body-font-family: var(--ui-font-sans-serif);
+  --ui-body-font-size: 1.1rem;
+  --ui-body-font-weight: 400;
+  --ui-body-line-height: 1.5;
+  --ui-link-decoration: underline;
+  --ui-link-hover-decoration: underline;
+  --ui-border-width: 1px;
+  --ui-border-style: solid;
+  --ui-border-radius: 0.375rem;
+  --ui-border-radius-sm: 0.25rem;
+  --ui-border-radius-lg: 0.5rem;
+  --ui-border-radius-xl: 1rem;
+  --ui-border-radius-xxl: 2rem;
+  --ui-border-radius-pill: 50rem;
+  --ui-focus-ring-width: 0.25rem;
+  --ui-focus-ring-opacity: 0.5;
+  --ui-ripple-opacity: 0.3;
+  --ui-breakpoint-xs: 0;
+  --ui-breakpoint-sm: 576px;
+  --ui-breakpoint-md: 768px;
+  --ui-breakpoint-lg: 992px;
+  --ui-breakpoint-xl: 1200px;
+  --ui-breakpoint-xxl: 1400px;
+  --ui-text-opacity: 1;
+  --ui-bg-opacity: 1;
+  --ui-border-opacity: 1;
+  --ui-disabled-opacity: 0.5;
 }
 
 :root,
@@ -115,15 +147,6 @@
   --ui-dark-subtle-rgb: 214, 214, 214;
   --ui-dark-contrast-rgb: 255, 255, 255;
   --ui-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
-  --ui-font-sans-serif: -apple-system, blinkmacsystemfont, Segoe UI, tahoma, geneva, verdana, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-  --ui-font-monospace: sfmono-regular, menlo, monaco, consolas, Liberation Mono, Courier New, monospace;
-  --ui-font-size: 1rem;
-  --ui-font-size-sm: 0.875rem;
-  --ui-font-size-lg: 1.25rem;
-  --ui-body-font-family: var(--ui-font-sans-serif);
-  --ui-body-font-size: 1.1rem;
-  --ui-body-font-weight: 400;
-  --ui-body-line-height: 1.5;
   --ui-body-bg: #fff;
   --ui-body-bg-rgb: 255, 255, 255;
   --ui-body-color: rgb(10.0392156863%, 10.0392156863%, 10.0392156863%);
@@ -140,40 +163,17 @@
   --ui-emphasis-color-rgb: 0, 0, 0;
   --ui-link-color: #2759bc;
   --ui-link-color-rgb: 39, 89, 188;
-  --ui-link-decoration: underline;
   --ui-link-hover-color: rgb(9.1764705882%, 20.9411764706%, 44.2352941176%);
   --ui-link-hover-color-rgb: 23, 53, 113;
-  --ui-link-hover-decoration: underline;
   --ui-code-color: rgb(82.431372549%, 25.0196078431%, 25.0196078431%);
   --ui-mark-bg: rgb(100%, 97.3333333333%, 83.7647058824%);
   --ui-border-color: rgb(80.0784313725%, 80.0784313725%, 80.0784313725%);
   --ui-border-color-translucent: rgba(0, 0, 0, 0.15);
-  --ui-border-width: 1px;
-  --ui-border-style: solid;
-  --ui-border-radius: 0.375rem;
-  --ui-border-radius-sm: 0.25rem;
-  --ui-border-radius-lg: 0.5rem;
-  --ui-border-radius-xl: 1rem;
-  --ui-border-radius-xxl: 2rem;
-  --ui-border-radius-pill: 50rem;
-  --ui-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.05), 0 1px 10px 0 rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
-  --ui-shadow-sm: 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 3px 1px -2px rgba(0, 0, 0, 0.15), 0 1px 5px 0 rgba(0, 0, 0, 0.05);
-  --ui-shadow-lg: 0 8px 10px 1px rgba(0, 0, 0, 0.05), 0 3px 14px 2px rgba(0, 0, 0, 0.05), 0 5px 5px -3px rgba(0, 0, 0, 0.15);
-  --ui-focus-ring-width: 0.25rem;
-  --ui-focus-ring-opacity: 0.5;
+  --ui-shadow: 0 2px 4px rgba(var(--ui-black-rgb), 0.1), 0 8px 24px rgba(var(--ui-black-rgb), 0.14);
+  --ui-shadow-sm: 0 1px 2px rgba(var(--ui-black-rgb), 0.08), 0 2px 6px rgba(var(--ui-black-rgb), 0.1);
+  --ui-shadow-lg: 0 4px 12px rgba(var(--ui-black-rgb), 0.12), 0 16px 48px rgba(var(--ui-black-rgb), 0.2);
   --ui-focus-ring-color: rgba(var(--ui-primary-rgb), var(--ui-focus-ring-opacity));
-  --ui-ripple-opacity: 0.3;
   --ui-ripple-bg: rgba(var(--ui-white-rgb), var(--ui-ripple-opacity));
-  --ui-breakpoint-xs: 0;
-  --ui-breakpoint-sm: 576px;
-  --ui-breakpoint-md: 768px;
-  --ui-breakpoint-lg: 992px;
-  --ui-breakpoint-xl: 1200px;
-  --ui-breakpoint-xxl: 1400px;
-  --ui-text-opacity: 1;
-  --ui-bg-opacity: 1;
-  --ui-border-opacity: 1;
-  --ui-disabled-opacity: 0.5;
 }
 
 [data-ui-theme=light] {
@@ -182,6 +182,9 @@
 
 [data-ui-theme=dark] {
   color-scheme: dark;
+  --ui-shadow: 0 0 0 1px rgba(var(--ui-white-rgb), 0.08), 0 2px 4px rgba(var(--ui-black-rgb), 0.25), 0 8px 24px rgba(var(--ui-black-rgb), 0.45);
+  --ui-shadow-sm: 0 0 0 1px rgba(var(--ui-white-rgb), 0.06), 0 1px 2px rgba(var(--ui-black-rgb), 0.2), 0 2px 6px rgba(var(--ui-black-rgb), 0.3);
+  --ui-shadow-lg: 0 0 0 1px rgba(var(--ui-white-rgb), 0.1), 0 4px 12px rgba(var(--ui-black-rgb), 0.35), 0 16px 48px rgba(var(--ui-black-rgb), 0.6);
   --ui-primary-emphasis: rgb(23.7647058824%, 41.4117647059%, 76.3529411765%);
   --ui-primary-subtle: rgb(6.1176470588%, 13.9607843137%, 29.4901960784%);
   --ui-primary-subtle-emphasis: rgb(7.6470588235%, 17.4509803922%, 36.862745098%);

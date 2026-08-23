@@ -12,6 +12,45 @@
     --ui-transition-duration-fast: #{vars.$transition-time-fast};
     --ui-transition-duration: #{vars.$transition-time};
     --ui-transition-timing-function: #{vars.$transition-type};
+
+    --ui-font-sans-serif: #{vars.$font-sans-serif};
+    --ui-font-monospace: #{vars.$font-monospace};
+    --ui-font-size: #{vars.$font-size};
+    --ui-font-size-sm: #{vars.$font-size-sm};
+    --ui-font-size-lg: #{vars.$font-size-lg};
+
+    --ui-body-font-family: var(--ui-font-sans-serif);
+    --ui-body-font-size: #{vars.$body-font-size};
+    --ui-body-font-weight: #{vars.$body-font-weight};
+    --ui-body-line-height: #{vars.$body-line-height};
+
+    --ui-link-decoration: underline;
+    --ui-link-hover-decoration: underline;
+
+    --ui-border-width: #{vars.$border-width};
+    --ui-border-style: #{vars.$border-style};
+    --ui-border-radius: #{vars.$border-radius};
+    --ui-border-radius-sm: #{vars.$border-radius-sm};
+    --ui-border-radius-lg: #{vars.$border-radius-lg};
+    --ui-border-radius-xl: #{vars.$border-radius-xl};
+    --ui-border-radius-xxl: #{vars.$border-radius-xxl};
+    --ui-border-radius-pill: #{vars.$border-radius-pill};
+
+    --ui-focus-ring-width: #{vars.$focus-ring-width};
+    --ui-focus-ring-opacity: #{vars.$focus-ring-opacity};
+    --ui-ripple-opacity: #{vars.$ripple-opacity};
+
+    --ui-breakpoint-xs: #{map.get(vars.$breakpoints, xs)};
+    --ui-breakpoint-sm: #{map.get(vars.$breakpoints, sm)};
+    --ui-breakpoint-md: #{map.get(vars.$breakpoints, md)};
+    --ui-breakpoint-lg: #{map.get(vars.$breakpoints, lg)};
+    --ui-breakpoint-xl: #{map.get(vars.$breakpoints, xl)};
+    --ui-breakpoint-xxl: #{map.get(vars.$breakpoints, xxl)};
+
+    --ui-text-opacity: 1;
+    --ui-bg-opacity: 1;
+    --ui-border-opacity: 1;
+    --ui-disabled-opacity: #{vars.$disabled-opacity};
 }
 
 :root,
@@ -131,17 +170,6 @@
 
     --ui-gradient: #{vars.$gradient};
 
-    --ui-font-sans-serif: #{vars.$font-sans-serif};
-    --ui-font-monospace: #{vars.$font-monospace};
-    --ui-font-size: #{vars.$font-size};
-    --ui-font-size-sm: #{vars.$font-size-sm};
-    --ui-font-size-lg: #{vars.$font-size-lg};
-
-    --ui-body-font-family: var(--ui-font-sans-serif);
-    --ui-body-font-size: #{vars.$body-font-size};
-    --ui-body-font-weight: #{vars.$body-font-weight};
-    --ui-body-line-height: #{vars.$body-line-height};
-
     --ui-body-bg: #{vars.$body-bg};
     --ui-body-bg-rgb: #{functions.to-rgb(vars.$body-bg)};
 
@@ -163,49 +191,22 @@
 
     --ui-link-color: #{vars.$link-color};
     --ui-link-color-rgb: #{functions.to-rgb(vars.$link-color)};
-    --ui-link-decoration: underline;
     --ui-link-hover-color: #{vars.$link-color-hover};
     --ui-link-hover-color-rgb: #{functions.to-rgb(vars.$link-color-hover)};
-    --ui-link-hover-decoration: underline;
 
     --ui-code-color: #{vars.$code-color};
     --ui-mark-bg: #{vars.$mark-bg};
 
     --ui-border-color: #{vars.$border-color};
     --ui-border-color-translucent: #{vars.$border-color-translucent};
-    --ui-border-width: #{vars.$border-width};
-    --ui-border-style: #{vars.$border-style};
-
-    --ui-border-radius: #{vars.$border-radius};
-
-    --ui-border-radius-sm: #{vars.$border-radius-sm};
-    --ui-border-radius-lg: #{vars.$border-radius-lg};
-    --ui-border-radius-xl: #{vars.$border-radius-xl};
-    --ui-border-radius-xxl: #{vars.$border-radius-xxl};
-    --ui-border-radius-pill: #{vars.$border-radius-pill};
 
     --ui-shadow: #{vars.$shadow};
     --ui-shadow-sm: #{vars.$shadow-sm};
     --ui-shadow-lg: #{vars.$shadow-lg};
 
-    --ui-focus-ring-width: #{vars.$focus-ring-width};
-    --ui-focus-ring-opacity: #{vars.$focus-ring-opacity};
     --ui-focus-ring-color: #{vars.$focus-ring-color};
 
-    --ui-ripple-opacity: #{vars.$ripple-opacity};
     --ui-ripple-bg: #{vars.$ripple-bg};
-
-    --ui-breakpoint-xs: #{map.get(vars.$breakpoints, xs)};
-    --ui-breakpoint-sm: #{map.get(vars.$breakpoints, sm)};
-    --ui-breakpoint-md: #{map.get(vars.$breakpoints, md)};
-    --ui-breakpoint-lg: #{map.get(vars.$breakpoints, lg)};
-    --ui-breakpoint-xl: #{map.get(vars.$breakpoints, xl)};
-    --ui-breakpoint-xxl: #{map.get(vars.$breakpoints, xxl)};
-
-    --ui-text-opacity: 1;
-    --ui-bg-opacity: 1;
-    --ui-border-opacity: 1;
-    --ui-disabled-opacity: #{vars.$disabled-opacity};
 }
 
 [data-ui-theme="light"] {
@@ -214,6 +215,10 @@
 
 [data-ui-theme="dark"] {
     color-scheme: dark;
+
+    --ui-shadow: #{vars.$shadow-dark};
+    --ui-shadow-sm: #{vars.$shadow-sm-dark};
+    --ui-shadow-lg: #{vars.$shadow-lg-dark};
 
     --ui-primary-emphasis: #{vars.$primary-emphasis-dark};
     --ui-primary-subtle: #{vars.$primary-subtle-dark};
