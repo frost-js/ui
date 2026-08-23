@@ -8,6 +8,7 @@
     --ui-accordion-border-width: #{vars.$accordion-border-width};
     --ui-accordion-border-radius: #{vars.$accordion-border-radius};
     --ui-accordion-inner-border-radius: calc(var(--ui-accordion-border-radius) - var(--ui-accordion-border-width));
+    --ui-accordion-gap: #{vars.$accordion-gap};
     --ui-accordion-btn-padding-x: #{vars.$accordion-button-padding-x};
     --ui-accordion-btn-padding-y: #{vars.$accordion-button-padding-y};
     --ui-accordion-btn-bg: #{vars.$accordion-button-bg};
@@ -21,6 +22,9 @@
     --ui-accordion-icon: #{vars.$accordion-icon};
     --ui-accordion-body-padding-x: #{vars.$accordion-body-padding-x};
     --ui-accordion-body-padding-y: #{vars.$accordion-body-padding-y};
+
+    display: grid;
+    gap: var(--ui-accordion-gap);
 }
 
 .accordion-button {
@@ -89,29 +93,17 @@
 }
 
 .accordion-item {
+    color: var(--ui-accordion-color);
+    background-color: var(--ui-accordion-bg);
     border: var(--ui-accordion-border-width) var(--ui-border-style) var(--ui-accordion-border-color);
-    border-bottom-width: 0;
+    @include mixins.border-radius(var(--ui-accordion-border-radius));
 
-    &:first-of-type {
-        @include mixins.border-top-radius(var(--ui-accordion-border-radius));
-
-        > .accordion-header .accordion-button {
-            @include mixins.border-top-radius(var(--ui-accordion-inner-border-radius));
-        }
+    > .accordion-header .accordion-button {
+        @include mixins.border-radius(var(--ui-accordion-inner-border-radius));
     }
 
-    &:last-of-type {
-        margin-bottom: 0;
-        border-bottom-width: var(--ui-accordion-border-width);
-        @include mixins.border-bottom-radius(var(--ui-accordion-border-radius));
-
-        > .accordion-header .accordion-button.collapsed {
-            @include mixins.border-bottom-radius(var(--ui-accordion-inner-border-radius));
-        }
-
-        > .accordion-collapse {
-            @include mixins.border-bottom-radius(var(--ui-accordion-border-radius));
-        }
+    > .accordion-header .accordion-button:not(.collapsed) {
+        @include mixins.border-bottom-radius(0);
     }
 }
 
@@ -120,16 +112,12 @@
 }
 
 .accordion-flush {
-    .accordion-collapse {
-        border-width: 0;
-    }
+    --ui-accordion-gap: 0;
 
     .accordion-item {
         border-inline: 0;
-
-        &:first-child {
-            border-top: 0;
-        }
+        border-top: 0;
+        @include mixins.border-radius(0);
 
         &:last-child {
             border-bottom: 0;

@@ -1915,6 +1915,7 @@ progress {
   --ui-accordion-border-width: var(--ui-border-width);
   --ui-accordion-border-radius: var(--ui-border-radius-lg);
   --ui-accordion-inner-border-radius: calc(var(--ui-accordion-border-radius) - var(--ui-accordion-border-width));
+  --ui-accordion-gap: 0.75rem;
   --ui-accordion-btn-padding-x: 1.25rem;
   --ui-accordion-btn-padding-y: 1rem;
   --ui-accordion-btn-bg: var(--ui-accordion-bg);
@@ -1928,6 +1929,8 @@ progress {
   --ui-accordion-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
   --ui-accordion-body-padding-x: 1.25rem;
   --ui-accordion-body-padding-y: 1rem;
+  display: grid;
+  gap: var(--ui-accordion-gap);
 }
 
 .accordion-button {
@@ -1987,44 +1990,30 @@ progress {
 }
 
 .accordion-item {
+  color: var(--ui-accordion-color);
+  background-color: var(--ui-accordion-bg);
   border: var(--ui-accordion-border-width) var(--ui-border-style) var(--ui-accordion-border-color);
-  border-bottom-width: 0;
+  border-radius: var(--ui-accordion-border-radius);
 }
-.accordion-item:first-of-type {
-  border-top-left-radius: var(--ui-accordion-border-radius);
-  border-top-right-radius: var(--ui-accordion-border-radius);
+.accordion-item > .accordion-header .accordion-button {
+  border-radius: var(--ui-accordion-inner-border-radius);
 }
-.accordion-item:first-of-type > .accordion-header .accordion-button {
-  border-top-left-radius: var(--ui-accordion-inner-border-radius);
-  border-top-right-radius: var(--ui-accordion-inner-border-radius);
-}
-.accordion-item:last-of-type {
-  margin-bottom: 0;
-  border-bottom-width: var(--ui-accordion-border-width);
-  border-bottom-right-radius: var(--ui-accordion-border-radius);
-  border-bottom-left-radius: var(--ui-accordion-border-radius);
-}
-.accordion-item:last-of-type > .accordion-header .accordion-button.collapsed {
-  border-bottom-right-radius: var(--ui-accordion-inner-border-radius);
-  border-bottom-left-radius: var(--ui-accordion-inner-border-radius);
-}
-.accordion-item:last-of-type > .accordion-collapse {
-  border-bottom-right-radius: var(--ui-accordion-border-radius);
-  border-bottom-left-radius: var(--ui-accordion-border-radius);
+.accordion-item > .accordion-header .accordion-button:not(.collapsed) {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .accordion-body {
   padding: var(--ui-accordion-body-padding-y) var(--ui-accordion-body-padding-x);
 }
 
-.accordion-flush .accordion-collapse {
-  border-width: 0;
+.accordion-flush {
+  --ui-accordion-gap: 0;
 }
 .accordion-flush .accordion-item {
   border-inline: 0;
-}
-.accordion-flush .accordion-item:first-child {
   border-top: 0;
+  border-radius: 0;
 }
 .accordion-flush .accordion-item:last-child {
   border-bottom: 0;
@@ -4814,6 +4803,8 @@ fieldset:disabled .btn {
   --ui-progress-vertical-width: 1rem;
   --ui-progress-bar-color: var(--ui-white);
   --ui-progress-bar-bg: var(--ui-primary);
+  --ui-progress-bar-background-image: var(--ui-gradient);
+  --ui-progress-bar-box-shadow: 0 0 0.5rem rgb(from var(--ui-primary) r g b/0.35);
   display: flex;
   height: var(--ui-progress-height);
   overflow: hidden;
@@ -4832,6 +4823,12 @@ fieldset:disabled .btn {
   white-space: nowrap;
   background-color: var(--ui-progress-bar-bg);
   transition: width var(--ui-transition-duration) var(--ui-transition-timing-function);
+}
+.progress-bar:not([class*=bg-]) {
+  box-shadow: var(--ui-progress-bar-box-shadow);
+}
+.progress-bar:not(.progress-bar-striped):not([class*=bg-]) {
+  background-image: var(--ui-progress-bar-background-image);
 }
 
 .progress-bar-striped {

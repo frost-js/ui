@@ -8,6 +8,7 @@
 // accordion
 $accordion-padding-x: vars.$spacing * 1.25 !default;
 $accordion-padding-y: vars.$spacing !default;
+$accordion-gap: vars.$spacing * .75 !default;
 $accordion-bg: var(--ui-body-bg) !default;
 $accordion-color: var(--ui-body-color) !default;
 $accordion-border-width: var(--ui-border-width) !default;
@@ -383,6 +384,8 @@ $progress-bg: var(--ui-secondary-bg) !default;
 $progress-border-radius: var(--ui-border-radius-pill) !default;
 $progress-bar-color: var(--ui-white) !default;
 $progress-bar-bg: var(--ui-primary) !default;
+$progress-bar-background-image: var(--ui-gradient) !default;
+$progress-bar-box-shadow: 0 0 .5rem helpers.color-alpha(primary, .35) !default;
 
 $progress-bar-striped-background-image: linear-gradient(-45deg, transparent 50%, helpers.color-alpha("white", .15) 50%, helpers.color-alpha("white", .15) 70%, transparent 70%) !default;
 $progress-bar-striped-background-size-x: 2rem !default;
