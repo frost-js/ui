@@ -135,7 +135,7 @@ $btn-close-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/sv
 
 // dropdown
 $dropdown-min-width: 10rem !default;
-$dropdown-padding-x: 0 !default;
+$dropdown-padding-x: vars.$spacing * .5 !default;
 $dropdown-padding-y: vars.$spacing * .5 !default;
 $dropdown-font-size: var(--ui-font-size) !default;
 $dropdown-color: var(--ui-body-color) !default;
@@ -157,7 +157,7 @@ $dropdown-link-active-bg: var(--ui-primary) !default;
 $dropdown-link-disabled-color: var(--ui-secondary-color) !default;
 
 $dropdown-item-padding-x: vars.$spacing !default;
-$dropdown-item-padding-y: vars.$spacing * .25 !default;
+$dropdown-item-padding-y: vars.$spacing * .5 !default;
 $dropdown-item-font-weight: map.get(vars.$font-weights, normal) !default;
 
 $dropdown-header-padding-x: vars.$spacing !default;

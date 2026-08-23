@@ -61,6 +61,7 @@
     text-decoration: none;
     background-color: transparent;
     border: 0;
+    @include mixins.border-radius(var(--ui-border-radius));
 
     &:hover,
     &:focus-visible {
