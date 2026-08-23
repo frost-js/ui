@@ -13445,6 +13445,16 @@
      */
     class Toast extends BaseComponent {
         /**
+         * Dispose the Toast.
+         */
+        dispose() {
+            clearTimeout(this._timer);
+            this._timer = null;
+
+            super.dispose();
+        }
+
+        /**
          * Hide the Toast.
          */
         hide() {
@@ -13455,6 +13465,9 @@
             ) {
                 return;
             }
+
+            clearTimeout(this._timer);
+            this._timer = null;
 
             $$1.setDataset(this._node, { uiAnimating: 'out' });
 
@@ -13484,6 +13497,9 @@
                 return;
             }
 
+            clearTimeout(this._timer);
+            this._timer = null;
+
             $$1.setDataset(this._node, { uiAnimating: 'in' });
             $$1.setStyle(this._node, { display: '' });
             $$1.addClass(this._node, 'show');
@@ -13495,8 +13511,11 @@
                 $$1.triggerEvent(this._node, 'shown.ui.toast');
 
                 if (this._options.autohide) {
-                    setTimeout(
-                        (_) => this.hide(),
+                    this._timer = setTimeout(
+                        (_) => {
+                            this._timer = null;
+                            this.hide();
+                        },
                         this._options.delay,
                     );
                 }

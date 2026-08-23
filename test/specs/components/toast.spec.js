@@ -82,6 +82,25 @@ test.describe('Toast', () => {
             })).toBe(false);
         });
 
+        test('clears the autohide timer', async ({ page }) => {
+            await page.evaluate((_) => {
+                const toast1 = $.findOne('#toast1');
+                UI.Toast.init(toast1).hide();
+            });
+            await advanceClock(page, 150);
+            await page.evaluate((_) => {
+                const toast1 = $.findOne('#toast1');
+                UI.Toast.init(toast1).show();
+            });
+            await advanceClock(page, 150);
+
+            expect(await page.evaluate((_) => {
+                const toast = UI.Toast.init($.findOne('#toast1'));
+                toast.dispose();
+                return toast._timer === null;
+            })).toBe(true);
+        });
+
         test('clears toast memory', async ({ page }) => {
             expect(await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
@@ -703,6 +722,36 @@ test.describe('Toast', () => {
 
             await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#toast1')).toBeHidden();
+        });
+
+        test('restarts the delay when shown again', async ({ page }) => {
+            await page.evaluate((_) => {
+                const toast1 = $.findOne('#toast1');
+                UI.Toast.init(toast1, { delay: 500 }).hide();
+            });
+            await advanceClock(page, 150);
+            await page.evaluate((_) => {
+                UI.Toast.init($.findOne('#toast1')).show();
+            });
+            await advanceClock(page, 150);
+            await page.evaluate((_) => {
+                UI.Toast.init($.findOne('#toast1')).hide();
+            });
+            await advanceClock(page, 150);
+            await page.evaluate((_) => {
+                UI.Toast.init($.findOne('#toast1')).show();
+            });
+            await advanceClock(page, 150);
+            await advanceClock(page, 300);
+
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
+            await expect(page.locator('#toast1')).toHaveAttribute('style', '');
+            await expectAnimationState(page, [
+                {
+                    selectors: ['#toast1'],
+                },
+            ]);
         });
 
         test('works with autohide option', async ({ page }) => {
