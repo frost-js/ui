@@ -59,7 +59,7 @@ $btn-padding-x: vars.$spacing * .75 !default;
 $btn-padding-y: vars.$spacing * .375 !default;
 $btn-font-family: vars.$font-sans-serif !default;
 $btn-font-size: var(--ui-font-size) !default;
-$btn-font-weight: map.get(vars.$font-weights, normal) !default;
+$btn-font-weight: map.get(vars.$font-weights, bold) !default;
 $btn-line-height: map.get(vars.$line-heights, base) !default;
 $btn-border-width: var(--ui-border-width) !default;
 $btn-active-border-color: var(--ui-border-color) !default;
