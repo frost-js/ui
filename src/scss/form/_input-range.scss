@@ -47,7 +47,6 @@
         background-color: vars.$input-range-track-bg;
         border-color: transparent;
         @include mixins.border-radius(vars.$input-range-track-border-radius);
-        box-shadow: vars.$input-range-thumb-box-shadow;
     }
 
     &::-moz-range-thumb {

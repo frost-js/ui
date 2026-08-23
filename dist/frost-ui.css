@@ -44,6 +44,7 @@
 
 :root,
 [data-ui-theme=light] {
+  color-scheme: light;
   --ui-white: #fff;
   --ui-white-rgb: 255, 255, 255;
   --ui-black: #000;
@@ -174,10 +175,6 @@
   --ui-shadow-lg: 0 4px 12px rgba(var(--ui-black-rgb), 0.12), 0 16px 48px rgba(var(--ui-black-rgb), 0.2);
   --ui-focus-ring-color: rgba(var(--ui-primary-rgb), var(--ui-focus-ring-opacity));
   --ui-ripple-bg: rgba(var(--ui-white-rgb), var(--ui-ripple-opacity));
-}
-
-[data-ui-theme=light] {
-  color-scheme: light;
 }
 
 [data-ui-theme=dark] {
@@ -5063,7 +5060,7 @@ fieldset:disabled .btn {
   transition-property: background-color, border-color, box-shadow;
 }
 .input-check[type=checkbox] {
-  border-radius: var(--ui-border-radius);
+  border-radius: var(--ui-border-radius-sm);
 }
 .input-check[type=radio] {
   border-radius: 50%;
@@ -5124,24 +5121,24 @@ fieldset:disabled .btn {
 }
 .form-switch .input-check::after {
   position: absolute;
+  inset-inline-start: calc(25% - 0.25em);
   top: 50%;
-  left: 25%;
   display: inline-block;
   width: 0.5em;
   height: 0.5em;
   content: "";
   background-color: currentcolor;
-  translate: -50% -50%;
+  translate: 0 -50%;
   transition-timing-function: var(--ui-transition-timing-function);
   transition-duration: var(--ui-transition-duration);
-  transition-property: left;
+  transition-property: inset-inline-start;
   border-radius: 50%;
 }
 .form-switch .input-check:checked {
   color: var(--ui-primary-contrast);
 }
 .form-switch .input-check:checked::after {
-  left: 75%;
+  inset-inline-start: calc(75% - 0.25em);
 }
 
 .btn-check {
@@ -5548,7 +5545,6 @@ select.input-lg[multiple] option {
   background-color: var(--ui-secondary-bg);
   border-color: transparent;
   border-radius: var(--ui-border-radius);
-  box-shadow: 0 0.1rem 0.25rem rgba(var(--ui-body-color-rgb), 0.1);
 }
 .input-range::-moz-range-thumb {
   width: 1rem;

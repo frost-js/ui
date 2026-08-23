@@ -109,17 +109,17 @@
 
         &::after {
             position: absolute;
+            inset-inline-start: calc(25% - #{math.div(vars.$input-check-size, 4)});
             top: 50%;
-            left: 25%;
             display: inline-block;
             width: math.div(vars.$input-check-size, 2);
             height: math.div(vars.$input-check-size, 2);
             content: "";
             background-color: currentcolor;
-            translate: -50% -50%;
+            translate: 0 -50%;
             transition-timing-function: var(--ui-transition-timing-function);
             transition-duration: var(--ui-transition-duration);
-            transition-property: left;
+            transition-property: inset-inline-start;
             @include mixins.border-radius(50%);
         }
 
@@ -127,7 +127,7 @@
             color: vars.$form-switch-input-check-checked-color;
 
             &::after {
-                left: 75%;
+                inset-inline-start: calc(75% - #{math.div(vars.$input-check-size, 4)});
             }
         }
     }
