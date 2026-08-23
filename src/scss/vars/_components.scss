@@ -3,7 +3,6 @@
 @use "vars";
 
 @use "sass:map";
-@use "sass:math";
 @use "sass:string";
 
 // accordion
@@ -55,8 +54,8 @@ $breadcrumb-divider: string.quote("/") !default;
 $breadcrumb-divider-color: rgba(var(--ui-body-color-rgb), .5) !default;
 
 // button
-$btn-padding-x: vars.$spacing * .5 !default;
-$btn-padding-y: vars.$spacing * .25 !default;
+$btn-padding-x: vars.$spacing * .75 !default;
+$btn-padding-y: vars.$spacing * .375 !default;
 $btn-font-family: vars.$font-sans-serif !default;
 $btn-font-size: var(--ui-font-size) !default;
 $btn-font-weight: map.get(vars.$font-weights, normal) !default;
@@ -68,7 +67,7 @@ $btn-disabled-opacity: var(--ui-disabled-opacity) !default;
 $btn-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) rgba(var(--ui-btn-focus-shadow-rgb), var(--ui-focus-ring-opacity)) !default;
 
 $btn-lg-padding-x: vars.$spacing !default;
-$btn-lg-padding-y: math.div(vars.$spacing, 3) !default;
+$btn-lg-padding-y: vars.$spacing * .5 !default;
 $btn-lg-font-size: var(--ui-font-size-lg) !default;
 $btn-lg-border-radius: var(--ui-border-radius-lg) !default;
 
@@ -86,8 +85,9 @@ $card-spacer-y: vars.$spacing !default;
 $card-title-spacer-y: vars.$spacing * .5 !default;
 $card-border-width: var(--ui-border-width) !default;
 $card-border-color: var(--ui-border-color-translucent) !default;
-$card-border-radius: var(--ui-border-radius) !default;
+$card-border-radius: var(--ui-border-radius-lg) !default;
 $card-bg: var(--ui-body-bg) !default;
+$card-box-shadow: var(--ui-shadow-sm) !default;
 $card-cap-padding-x: $card-spacer-x !default;
 $card-cap-padding-y: $card-spacer-y * .5 !default;
 $card-cap-bg: rgba(var(--ui-body-color-rgb), .1) !default;
@@ -142,7 +142,7 @@ $dropdown-color: var(--ui-body-color) !default;
 $dropdown-bg: var(--ui-body-bg) !default;
 $dropdown-border-width: var(--ui-border-width) !default;
 $dropdown-border-color: var(--ui-border-color-translucent) !default;
-$dropdown-border-radius: var(--ui-border-radius) !default;
+$dropdown-border-radius: var(--ui-border-radius-xl) !default;
 $dropdown-box-shadow: var(--ui-shadow) !default;
 
 $dropdown-divider-margin-y: $dropdown-padding-y !default;
@@ -201,7 +201,7 @@ $modal-bg: var(--ui-body-bg) !default;
 $modal-content-color: var(--ui-body-color) !default;
 $modal-border-width: var(--ui-border-width) !default;
 $modal-border-color: var(--ui-border-color) !default;
-$modal-border-radius: var(--ui-border-radius) !default;
+$modal-border-radius: var(--ui-border-radius-xl) !default;
 
 $modal-header-padding-x: var(--ui-modal-padding-x) !default;
 $modal-header-padding-y: var(--ui-modal-padding-y) !default;
@@ -333,7 +333,7 @@ $popover-font-size: var(--ui-font-size-sm) !default;
 $popover-bg: var(--ui-body-bg) !default;
 $popover-border-width: var(--ui-border-width) !default;
 $popover-border-color: var(--ui-border-color) !default;
-$popover-border-radius: var(--ui-border-radius) !default;
+$popover-border-radius: var(--ui-border-radius-xl) !default;
 $popover-box-shadow: var(--ui-shadow) !default;
 
 $popover-header-padding-x: $popover-padding-y !default;
@@ -383,7 +383,7 @@ $toast-font-size: var(--ui-font-size-sm) !default;
 $toast-bg: rgba(var(--ui-body-bg-rgb), .85) !default;
 $toast-border-width: var(--ui-border-width) !default;
 $toast-border-color: var(--ui-border-color-translucent) !default;
-$toast-border-radius: var(--ui-border-radius) !default;
+$toast-border-radius: var(--ui-border-radius-xl) !default;
 $toast-box-shadow: var(--ui-shadow-lg) !default;
 $toast-backdrop-filter: blur(10px) !default;
 
@@ -398,7 +398,7 @@ $tooltip-padding-y: vars.$spacing * .25 !default;
 $tooltip-font-size: var(--ui-font-size-sm) !default;
 $tooltip-color: var(--ui-body-bg) !default;
 $tooltip-bg: var(--ui-emphasis-color) !default;
-$tooltip-border-radius: var(--ui-border-radius) !default;
+$tooltip-border-radius: var(--ui-border-radius-lg) !default;
 $tooltip-opacity: .9 !default;
 $tooltip-arrow-width: .8rem !default;
 $tooltip-arrow-height: .4rem !default;

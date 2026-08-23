@@ -20,7 +20,9 @@
     --ui-btn-active-state-border-color: var(--ui-btn-active-border-color);
     --ui-ripple-active-state-bg: var(--ui-ripple-bg);
 
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: var(--ui-btn-padding-y) var(--ui-btn-padding-x);
     font-family: var(--ui-btn-font-family);
     font-size: var(--ui-btn-font-size);

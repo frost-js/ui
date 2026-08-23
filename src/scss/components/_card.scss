@@ -10,6 +10,7 @@
     --ui-card-border-radius: #{vars.$card-border-radius};
     --ui-card-inner-border-radius: calc(var(--ui-card-border-radius) - var(--ui-card-border-width));
     --ui-card-bg: #{vars.$card-bg};
+    --ui-card-box-shadow: #{vars.$card-box-shadow};
     --ui-card-cap-padding-x: #{vars.$card-cap-padding-x};
     --ui-card-cap-padding-y: #{vars.$card-cap-padding-y};
     --ui-card-cap-bg: #{vars.$card-cap-bg};
@@ -26,6 +27,7 @@
     background-clip: border-box;
     border: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
     @include mixins.border-radius(var(--ui-card-border-radius));
+    box-shadow: var(--ui-card-box-shadow);
 
     >hr {
         margin-inline: 0;

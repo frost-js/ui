@@ -12,6 +12,7 @@
 .input-outline {
     display: block;
     width: 100%;
+    min-height: vars.$input-min-height;
     padding: vars.$input-padding-y vars.$input-padding-x;
     font-size: vars.$input-font-size;
     line-height: vars.$input-line-height;
