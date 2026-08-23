@@ -10430,33 +10430,38 @@
         component.DATA_KEY = key;
         component.REMOVE_EVENT = `remove.ui.${key}`;
 
-        $$1.QuerySet.prototype[key] = function(a, ...args) {
-            let settings; let method; let firstResult;
+        Object.defineProperty($$1.QuerySet.prototype, key, {
+            configurable: true,
+            enumerable: false,
+            value(a, ...args) {
+                let settings; let method; let firstResult;
 
-            if ($$1._isObject(a)) {
-                settings = a;
-            } else if ($$1._isString(a)) {
-                method = a;
-            }
-
-            for (const [index, node] of this.get().entries()) {
-                if (!$$1._isElement(node)) {
-                    continue;
+                if ($$1._isObject(a)) {
+                    settings = a;
+                } else if ($$1._isString(a)) {
+                    method = a;
                 }
 
-                let result = component.init(node, settings);
+                for (const [index, node] of this.get().entries()) {
+                    if (!$$1._isElement(node)) {
+                        continue;
+                    }
 
-                if (method) {
-                    result = result[method](...args);
+                    let result = component.init(node, settings);
+
+                    if (method) {
+                        result = result[method](...args);
+                    }
+
+                    if (index === 0) {
+                        firstResult = result;
+                    }
                 }
 
-                if (index === 0) {
-                    firstResult = result;
-                }
-            }
-
-            return firstResult;
-        };
+                return firstResult;
+            },
+            writable: true,
+        });
     }
     /**
      * Reset body scrollbar padding.
