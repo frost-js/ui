@@ -11,7 +11,7 @@
     --ui-dropdown-border-width: #{vars.$dropdown-border-width};
     --ui-dropdown-border-color: #{vars.$dropdown-border-color};
     --ui-dropdown-border-radius: #{vars.$dropdown-border-radius};
-    --ui-dropdown-inner-border-radius: calc(var(--ui-border-radius) - var(--ui-border-width));
+    --ui-dropdown-inner-border-radius: calc(var(--ui-dropdown-border-radius) - var(--ui-dropdown-border-width));
     --ui-dropdown-divider-margin-y: #{vars.$dropdown-divider-margin-y};
     --ui-dropdown-divider-border-width: #{vars.$dropdown-divider-border-width};
     --ui-dropdown-divider-border-color: #{vars.$dropdown-divider-border-color};

@@ -20,7 +20,7 @@ $accordion-button-padding-y: $accordion-padding-y !default;
 $accordion-button-bg: var(--ui-accordion-bg) !default;
 $accordion-button-color: var(--ui-body-color) !default;
 $accordion-active-bg: var(--ui-primary-subtle) !default;
-$accordion-active-color: var(--ui-primary-text) !default;
+$accordion-active-color: var(--ui-primary-subtle-text) !default;
 $accordion-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color) !default;
 
 $accordion-icon-width: 1.25rem !default;
@@ -208,7 +208,7 @@ $modal-header-border-width: var(--ui-modal-border-width) !default;
 $modal-header-border-color: var(--ui-modal-border-color) !default;
 $modal-title-line-height: map.get(vars.$line-heights, base) !default;
 
-$model-footer-gap: vars.$spacing * .5 !default;
+$modal-footer-gap: vars.$spacing * .5 !default;
 $modal-footer-border-width: var(--ui-modal-border-width) !default;
 $modal-footer-border-color: var(--ui-modal-border-color) !default;
 

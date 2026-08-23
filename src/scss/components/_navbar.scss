@@ -60,7 +60,7 @@
 .navbar-brand {
     padding-top: var(--ui-navbar-brand-padding-y);
     padding-bottom: var(--ui-navbar-brand-padding-y);
-    margin-right: var(--ui-navbar-brand-margin-right);
+    margin-inline-end: var(--ui-navbar-brand-margin-end);
     font-size: var(--ui-navbar-brand-font-size);
     color: var(--ui-navbar-brand-color);
     white-space: nowrap;
@@ -75,8 +75,6 @@
 .navbar-nav {
     --ui-nav-link-padding-x: #{vars.$nav-link-padding-x};
     --ui-nav-link-padding-y: #{vars.$nav-link-padding-y};
-    --ui-nav-link-font-size: var(--ui-nav-link-font-size);
-    --ui-nav-link-font-weight: var(--ui-nav-link-font-weight);
     --ui-nav-link-color: var(--ui-navbar-color);
     --ui-nav-link-hover-color: var(--ui-navbar-hover-color);
     --ui-nav-link-disabled-color: var(--ui-navbar-disabled-color);
