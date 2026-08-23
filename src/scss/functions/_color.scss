@@ -1,5 +1,4 @@
 @use "sass:color";
-@use "sass:map";
 @use "sass:math";
 
 /// Returns a palette color for a shade value.
@@ -27,85 +26,6 @@
     }
 }
 
-/// Finds the foreground shade nearest the base value that meets a contrast ratio.
-///
-/// Falls back to `text-color()` when no candidate meets the threshold.
-///
-/// @param {Color} $background - The background color.
-/// @param {Color | Null} $foreground [null] - The foreground palette color.
-/// @param {Number} $threshold [4.5] - The minimum contrast ratio.
-/// @param {Number} $base [500] - The preferred shade value.
-/// @param {Number} $min [100] - The first shade value to test.
-/// @param {Number} $max [900] - The final shade value to test.
-/// @param {Number} $step-size [100] - The amount between tested shade values.
-/// @return {Color} A foreground color that meets the threshold, or a fallback color.
-@function text-color-contrast($background, $foreground: null, $threshold: 4.5, $base: 500, $min: 100, $max: 900, $step-size: 100) {
-    $min-diff: $max - $min;
-    $i: $min;
-    $result: null;
-
-    @while $i <= $max {
-        $temp: color-shade($foreground, $i);
-        $diff: math.abs($base - $i);
-
-        @if contrast-ratio($background, $temp) >= $threshold and $diff < $min-diff {
-            $result: $temp;
-            $min-diff: $diff;
-        }
-
-        $i: $i + $step-size;
-    }
-
-    @if $result == null {
-        @return text-color($background);
-    }
-
-    @return $result;
-}
-
-/// Calculates the contrast ratio between two colors.
-///
-/// @param {Color} $background - The background color.
-/// @param {Color} $foreground - The foreground color.
-/// @return {Number} The contrast ratio.
-@function contrast-ratio($background, $foreground) {
-    $luma1: luma($background);
-    $luma2: luma($foreground);
-
-    @if $luma1 > $luma2 {
-        @return math.div($luma1 + .05, $luma2 + .05);
-    }
-
-    @return math.div($luma2 + .05, $luma1 + .05);
-}
-
-/// Calculates the relative luminance of a color.
-///
-/// @param {Color} $color - The input color.
-/// @return {Number} The relative luminance.
-@function luma($color) {
-    $rgb: (
-        r: math.round(color.channel($color, "red", $space: rgb)),
-        g: math.round(color.channel($color, "green", $space: rgb)),
-        b: math.round(color.channel($color, "blue", $space: rgb))
-    );
-
-    @each $name,
-        $value in $rgb {
-        $value: math.div($value, 255);
-
-        @if $value < .04045 {
-            $value: math.div($value, 12.92);
-        } @else {
-            $value: math.pow((math.div($value + .055, 1.055)), 2.4);
-        }
-
-        $rgb: map.merge($rgb, ($name: $value));
-    }
-
-    @return (map.get($rgb, "r") * .2126) + (map.get($rgb, "g") * .7152) + (map.get($rgb, "b") * .0722);
-}
-
 /// Mixes a color with black by a specified percentage.
 ///
 /// @param {Color} $color - The input color.
@@ -113,21 +33,6 @@
 /// @return {Color} The shaded color.
 @function shade($color, $amount) {
     @return color.mix($color, #000, 100 - $amount);
-}
-
-/// Chooses a text color for a background.
-///
-/// @param {Color} $background - The background color.
-/// @param {Color} $foreground1 [#fff] - The preferred foreground color.
-/// @param {Color} $foreground2 [#000] - The fallback foreground color.
-/// @param {Number} $threshold [4.5] - The minimum contrast ratio.
-/// @return {Color} The preferred color when it exceeds the threshold, otherwise the fallback.
-@function text-color($background, $foreground1: #fff, $foreground2: #000, $threshold: 4.5) {
-    @if contrast-ratio($background, $foreground1) > $threshold {
-        @return $foreground1;
-    }
-
-    @return $foreground2;
 }
 
 /// Mixes a color with white by a specified percentage.

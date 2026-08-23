@@ -15,25 +15,25 @@ $color-variants: (
 ) !default;
 
 $subtle-colors: (
-    primary-subtle: colors.$primary-subtle,
-    secondary-subtle: colors.$secondary-subtle,
-    success-subtle: colors.$success-subtle,
-    info-subtle: colors.$info-subtle,
-    warning-subtle: colors.$warning-subtle,
-    danger-subtle: colors.$danger-subtle,
-    light-subtle: colors.$light-subtle,
-    dark-subtle: colors.$dark-subtle
+    primary-subtle: var(--ui-primary-subtle),
+    secondary-subtle: var(--ui-secondary-subtle),
+    success-subtle: var(--ui-success-subtle),
+    info-subtle: var(--ui-info-subtle),
+    warning-subtle: var(--ui-warning-subtle),
+    danger-subtle: var(--ui-danger-subtle),
+    light-subtle: var(--ui-light-subtle),
+    dark-subtle: var(--ui-dark-subtle)
 ) !default;
 
 $emphasis-colors: (
-    primary-emphasis: colors.$primary-emphasis,
-    secondary-emphasis: colors.$secondary-emphasis,
-    success-emphasis: colors.$success-emphasis,
-    info-emphasis: colors.$info-emphasis,
-    warning-emphasis: colors.$warning-emphasis,
-    danger-emphasis: colors.$danger-emphasis,
-    light-emphasis: colors.$light-emphasis,
-    dark-emphasis: colors.$dark-emphasis
+    primary-emphasis: var(--ui-primary-emphasis),
+    secondary-emphasis: var(--ui-secondary-emphasis),
+    success-emphasis: var(--ui-success-emphasis),
+    info-emphasis: var(--ui-info-emphasis),
+    warning-emphasis: var(--ui-warning-emphasis),
+    danger-emphasis: var(--ui-danger-emphasis),
+    light-emphasis: var(--ui-light-emphasis),
+    dark-emphasis: var(--ui-dark-emphasis)
 ) !default;
 
 $utilities-colors: map.merge(
