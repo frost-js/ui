@@ -8,7 +8,7 @@
     appearance: none;
     background-color: transparent;
 
-    &:focus {
+    &:focus-visible {
         outline: 0;
 
         &::-webkit-slider-thumb {
@@ -84,6 +84,40 @@
 
         &::-moz-range-thumb {
             background-color: vars.$input-range-thumb-disabled-bg;
+        }
+    }
+}
+
+@media (forced-colors: active) {
+    .input-range {
+        forced-color-adjust: none;
+
+        &::-webkit-slider-thumb {
+            background-color: ButtonText;
+        }
+
+        &::-webkit-slider-runnable-track {
+            background-color: ButtonFace;
+            border: 1px solid ButtonText;
+        }
+
+        &::-moz-range-thumb {
+            background-color: ButtonText;
+        }
+
+        &::-moz-range-track {
+            background-color: ButtonFace;
+            border: 1px solid ButtonText;
+        }
+
+        &:disabled {
+            &::-webkit-slider-thumb {
+                background-color: GrayText;
+            }
+
+            &::-moz-range-thumb {
+                background-color: GrayText;
+            }
         }
     }
 }

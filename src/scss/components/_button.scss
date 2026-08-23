@@ -35,7 +35,7 @@
     user-select: none;
     background-color: var(--ui-btn-bg);
     border: var(--ui-btn-border-width) var(--ui-border-style) var(--ui-btn-border-color);
-    transition: all vars.$transition-time vars.$transition-type;
+    transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
     transition-property: color, background-color, border-color, box-shadow;
     @include mixins.border-radius(var(--ui-btn-border-radius));
 

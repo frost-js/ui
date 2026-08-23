@@ -35,14 +35,14 @@
     text-align: inherit;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         z-index: 1;
         color: var(--ui-list-group-action-hover-color);
         text-decoration: none;
         background-color: var(--ui-list-group-action-hover-bg);
     }
 
-    &:focus {
+    &:focus-visible {
         outline: 0;
         box-shadow: #{vars.$list-group-action-focus-box-shadow};
     }

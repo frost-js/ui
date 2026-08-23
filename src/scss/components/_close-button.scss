@@ -18,22 +18,31 @@
     height: var(--ui-btn-close-height);
     padding: var(--ui-btn-close-padding-y) var(--ui-btn-close-padding-x);
     color: inherit;
-    background-color: currentcolor;
+    background-color: transparent;
     border: 0;
     opacity: var(--ui-btn-close-opacity);
-    mask-image: var(--ui-btn-close-icon);
-    mask-repeat: no-repeat;
-    mask-position: center center;
-    mask-size: var(--ui-btn-close-width);
     @include mixins.border-radius(var(--ui-btn-close-border-radius));
+
+    &::before {
+        display: block;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background-color: currentcolor;
+        mask-image: var(--ui-btn-close-icon);
+        mask-repeat: no-repeat;
+        mask-position: center center;
+        mask-size: var(--ui-btn-close-width);
+    }
 
     &:hover {
         text-decoration: none;
         opacity: var(--ui-btn-close-hover-opacity);
     }
 
-    &:focus {
+    &:focus-visible {
         outline: 0;
+        box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
         opacity: var(--ui-btn-close-focus-opacity);
     }
 

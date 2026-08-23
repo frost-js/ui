@@ -33,7 +33,7 @@
     color: vars.$input-placeholder-color;
     pointer-events: none;
     cursor: text;
-    transition: all vars.$transition-time vars.$transition-type;
+    transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
     transition-property: padding, font-size, color;
 }
 

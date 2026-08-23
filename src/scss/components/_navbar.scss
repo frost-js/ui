@@ -67,7 +67,7 @@
     text-decoration: none;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         color: var(--ui-navbar-brand-hover-color);
     }
 }
@@ -126,7 +126,7 @@
         text-decoration: none;
     }
 
-    &:focus {
+    &:focus-visible {
         text-decoration: none;
         outline: 0;
         box-shadow: var(--ui-navbar-toggler-focus-box-shadow);

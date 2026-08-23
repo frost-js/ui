@@ -1,4 +1,11 @@
-.focus-ring:focus {
+.focus-ring:focus-visible {
     outline: 0;
     box-shadow: var(--ui-focus-ring-x, 0) var(--ui-focus-ring-y, 0) var(--ui-focus-ring-blur, 0) var(--ui-focus-ring-width) var(--ui-focus-ring-color);
+}
+
+@media (forced-colors: active) {
+    :root :focus-visible {
+        outline: 2px solid Highlight !important;
+        outline-offset: 2px;
+    }
 }

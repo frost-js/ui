@@ -8,6 +8,10 @@
     --ui-safe-area-inset-right: env(safe-area-inset-right, 0px);
     --ui-safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
     --ui-safe-area-inset-left: env(safe-area-inset-left, 0px);
+    --ui-animation-duration: #{vars.$animation-time};
+    --ui-transition-duration-fast: #{vars.$transition-time-fast};
+    --ui-transition-duration: #{vars.$transition-time};
+    --ui-transition-timing-function: #{vars.$transition-type};
 }
 
 :root,
@@ -296,7 +300,14 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    :root{
+    :root {
         scroll-behavior: smooth;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --ui-transition-duration-fast: 0s;
+        --ui-transition-duration: 0s;
     }
 }

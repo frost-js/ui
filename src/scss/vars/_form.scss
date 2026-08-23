@@ -94,7 +94,9 @@ $input-range-thumb-focus-box-shadow: 0 0 0 1px var(--ui-body-bg), 0 0 0 var(--ui
 $input-range-thumb-focus-box-shadow-width: var(--ui-focus-ring-width);
 $input-range-thumb-active-bg: var(--ui-primary-active) !default;
 $input-range-thumb-disabled-bg: var(--ui-secondary-color) !default;
-$input-range-thumb-transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
+$input-range-thumb-transition: background-color var(--ui-transition-duration-fast) var(--ui-transition-timing-function),
+    border-color var(--ui-transition-duration-fast) var(--ui-transition-timing-function),
+    box-shadow var(--ui-transition-duration-fast) var(--ui-transition-timing-function) !default;
 
 $ripple-line-bg: var(--ui-primary) !default;
 

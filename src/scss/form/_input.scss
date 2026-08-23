@@ -231,7 +231,7 @@
     background-color: vars.$ripple-line-bg;
     opacity: 0;
     transform: scaleX(0);
-    transition: all vars.$transition-time vars.$transition-type;
+    transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
     transition-property: transform, opacity;
 
     @at-root {

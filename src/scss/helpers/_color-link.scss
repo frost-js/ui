@@ -6,7 +6,7 @@
         text-decoration-color: rgba(var(--ui-#{$name}-rgb), var(--ui-link-underline-opacity, 1));
 
         &:hover,
-        &:focus {
+        &:focus-visible {
             color: rgba(var(--ui-#{$name}-emphasis-rgb), var(--ui-link-opacity, 1));
             text-decoration-color: rgba(var(--ui-#{$name}-emphasis-rgb), var(--ui-link-underline-opacity, 1));
         }
@@ -18,7 +18,7 @@
     text-decoration-color: rgba(var(--ui-emphasis-color-rgb), var(--ui-link-underline-opacity, 1));
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         color: rgba(var(--ui-emphasis-color-rgb), var(--ui-link-opacity, .75));
         text-decoration-color: rgba(var(--ui-emphasis-color-rgb), var(--ui-link-underline-opacity, .75));
     }

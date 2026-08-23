@@ -36,7 +36,7 @@
     text-decoration: none;
     background-color: var(--ui-pagination-bg);
     border: var(--ui-pagination-border-width) var(--ui-border-style) var(--ui-pagination-border-color);
-    transition: all vars.$transition-time vars.$transition-type;
+    transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
     transition-property: color, background-color, box-shadow;
 
     &:hover {
@@ -46,7 +46,7 @@
         z-index: 2;
     }
 
-    &:focus {
+    &:focus-visible {
         --ui-pagination-color: var(--ui-pagination-focus-color);
         --ui-pagination-bg: var(--ui-pagination-focus-bg);
 

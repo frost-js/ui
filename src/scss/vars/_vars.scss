@@ -184,7 +184,7 @@ $line-heights: (
 
 // animation and transition
 $animation-time: 1s !default;
-$animation-time-reduced-motion: 5s !default;
+$transition-time-fast: .15s !default;
 $transition-time: .25s !default;
 $transition-type: ease-in-out !default;
 

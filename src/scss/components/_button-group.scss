@@ -13,9 +13,9 @@
     }
 
     >.btn-check:checked + .btn,
-    >.btn-check:focus + .btn,
+    >.btn-check:focus-visible + .btn,
     >.btn:hover,
-    >.btn:focus,
+    >.btn:focus-visible,
     >.btn:active,
     >.btn.active {
         z-index: 1;

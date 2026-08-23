@@ -26,11 +26,11 @@
     text-decoration: none;
     background: none;
     border: 0;
-    transition: all vars.$transition-time vars.$transition-type;
+    transition: all var(--ui-transition-duration) var(--ui-transition-timing-function);
     transition-property: color, background-color, border-color;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         color: var(--ui-nav-link-hover-color);
         text-decoration: none;
     }
@@ -65,7 +65,7 @@
         @include mixins.border-top-radius(var(--ui-nav-tabs-border-radius));
 
         &:hover,
-        &:focus {
+        &:focus-visible {
             border-color: var(--ui-nav-tabs-link-hover-border-color) transparent;
             isolation: isolate;
         }
@@ -124,7 +124,7 @@
         padding-inline: 0;
         border-bottom: var(--ui-nav-underline-border-width) solid transparent;
 
-        &:focus,
+        &:focus-visible,
         &:hover {
             border-bottom-color: currentcolor;
         }

@@ -37,7 +37,7 @@
     text-align: center;
     white-space: nowrap;
     background-color: var(--ui-progress-bar-bg);
-    transition: width vars.$transition-time vars.$transition-type;
+    transition: width var(--ui-transition-duration) var(--ui-transition-timing-function);
 }
 
 .progress-bar-striped {
@@ -46,7 +46,7 @@
 }
 
 .progress-bar-animated {
-    animation: progress-bar-stripes vars.$animation-time linear infinite;
+    animation: progress-bar-stripes var(--ui-animation-duration) linear infinite;
 }
 
 .progress-vertical {
@@ -57,7 +57,7 @@
 
     .progress-bar {
         width: 100%;
-        transition: height vars.$animation-time vars.$transition-type;
+        transition: height var(--ui-animation-duration) var(--ui-transition-timing-function);
 
         &:first-child {
             margin-top: auto;
@@ -65,8 +65,8 @@
     }
 }
 
-@media (prefers-reduced-motion) {
+@media (prefers-reduced-motion: reduce) {
     .progress-bar-animated {
-        animation-duration: vars.$animation-time-reduced-motion;
+        animation: none;
     }
 }
