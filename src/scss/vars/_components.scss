@@ -12,7 +12,7 @@ $accordion-bg: var(--ui-body-bg) !default;
 $accordion-color: var(--ui-body-color) !default;
 $accordion-border-width: var(--ui-border-width) !default;
 $accordion-border-color: var(--ui-border-color) !default;
-$accordion-border-radius: var(--ui-border-radius) !default;
+$accordion-border-radius: var(--ui-border-radius-lg) !default;
 
 $accordion-button-padding-x: $accordion-padding-x !default;
 $accordion-button-padding-y: $accordion-padding-y !default;
@@ -171,7 +171,7 @@ $list-group-color: var(--ui-body-color) !default;
 $list-group-bg: var(--ui-body-bg) !default;
 $list-group-border-width: var(--ui-border-width) !default;
 $list-group-border-color: var(--ui-border-color) !default;
-$list-group-border-radius: var(--ui-border-radius) !default;
+$list-group-border-radius: var(--ui-border-radius-lg) !default;
 
 $list-group-item-padding-x: vars.$spacing !default;
 $list-group-item-padding-y: vars.$spacing * .5 !default;
@@ -201,7 +201,7 @@ $modal-margin: vars.$spacing * .5 !default;
 $modal-bg: var(--ui-body-bg) !default;
 $modal-content-color: var(--ui-body-color) !default;
 $modal-border-width: var(--ui-border-width) !default;
-$modal-border-color: var(--ui-border-color) !default;
+$modal-border-color: var(--ui-border-color-translucent) !default;
 $modal-border-radius: var(--ui-border-radius-xl) !default;
 
 $modal-header-padding-x: var(--ui-modal-padding-x) !default;
@@ -333,7 +333,7 @@ $popover-padding-y: vars.$spacing !default;
 $popover-font-size: var(--ui-font-size-sm) !default;
 $popover-bg: var(--ui-body-bg) !default;
 $popover-border-width: var(--ui-border-width) !default;
-$popover-border-color: var(--ui-border-color) !default;
+$popover-border-color: var(--ui-border-color-translucent) !default;
 $popover-border-radius: var(--ui-border-radius-xl) !default;
 $popover-box-shadow: var(--ui-shadow) !default;
 
@@ -350,10 +350,10 @@ $popover-arrow-width: 1rem !default;
 $popover-arrow-height: .5rem !default;
 
 // progress
-$progress-height: 1rem !default;
+$progress-height: .75rem !default;
 $progress-font-size: .65rem !default;
 $progress-bg: var(--ui-secondary-bg) !default;
-$progress-border-radius: var(--ui-border-radius) !default;
+$progress-border-radius: var(--ui-border-radius-pill) !default;
 $progress-bar-color: var(--ui-white) !default;
 $progress-bar-bg: var(--ui-primary) !default;
 

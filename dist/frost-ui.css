@@ -1971,7 +1971,7 @@ progress {
   --ui-accordion-color: var(--ui-body-color);
   --ui-accordion-border-color: var(--ui-border-color);
   --ui-accordion-border-width: var(--ui-border-width);
-  --ui-accordion-border-radius: var(--ui-border-radius);
+  --ui-accordion-border-radius: var(--ui-border-radius-lg);
   --ui-accordion-inner-border-radius: calc(var(--ui-accordion-border-radius) - var(--ui-accordion-border-width));
   --ui-accordion-btn-padding-x: 1.25rem;
   --ui-accordion-btn-padding-y: 1rem;
@@ -3175,7 +3175,7 @@ fieldset:disabled .btn {
   --ui-list-group-bg: var(--ui-body-bg);
   --ui-list-group-border-color: var(--ui-border-color);
   --ui-list-group-border-width: var(--ui-border-width);
-  --ui-list-group-border-radius: var(--ui-border-radius);
+  --ui-list-group-border-radius: var(--ui-border-radius-lg);
   --ui-list-group-item-padding-x: 1rem;
   --ui-list-group-item-padding-y: 0.5rem;
   --ui-list-group-item-disabled-color: var(--ui-secondary-color);
@@ -3526,7 +3526,7 @@ fieldset:disabled .btn {
   --ui-modal-margin: 0.5rem;
   --ui-modal-bg: var(--ui-body-bg);
   --ui-modal-border-width: var(--ui-border-width);
-  --ui-modal-border-color: var(--ui-border-color);
+  --ui-modal-border-color: var(--ui-border-color-translucent);
   --ui-modal-border-radius: var(--ui-border-radius-xl);
   --ui-modal-inner-border-radius: calc(var(--ui-modal-border-radius) - var(--ui-modal-border-width));
   --ui-modal-box-shadow: var(--ui-shadow-lg);
@@ -4613,7 +4613,7 @@ fieldset:disabled .btn {
   --ui-popover-max-width: 276px;
   --ui-popover-bg: var(--ui-body-bg);
   --ui-popover-border-width: var(--ui-border-width);
-  --ui-popover-border-color: var(--ui-border-color);
+  --ui-popover-border-color: var(--ui-border-color-translucent);
   --ui-popover-border-radius: var(--ui-border-radius-xl);
   --ui-popover-box-shadow: var(--ui-shadow);
   --ui-popover-header-padding-x: 1rem;
@@ -4748,9 +4748,9 @@ fieldset:disabled .btn {
   }
 }
 .progress {
-  --ui-progress-height: 1rem;
+  --ui-progress-height: 0.75rem;
   --ui-progress-bg: var(--ui-secondary-bg);
-  --ui-progress-border-radius: var(--ui-border-radius);
+  --ui-progress-border-radius: var(--ui-border-radius-pill);
   --ui-progress-vertical-height: 200px;
   --ui-progress-vertical-width: 1rem;
   --ui-progress-bar-color: var(--ui-white);
