@@ -79,15 +79,6 @@
     @return math.div($luma2 + .05, $luma1 + .05);
 }
 
-/// Sets the opacity of a color.
-///
-/// @param {Color} $color - The input color.
-/// @param {Number} $amount - The opacity from `0` through `1`.
-/// @return {Color} The color with the requested opacity.
-@function fade($color, $amount) {
-    @return color.change($color, $alpha: $amount);
-}
-
 /// Calculates the relative luminance of a color.
 ///
 /// @param {Color} $color - The input color.
@@ -146,14 +137,4 @@
 /// @return {Color} The tinted color.
 @function tint($color, $amount) {
     @return color.mix($color, #fff, 100 - $amount);
-}
-
-/// Returns the RGB channels of a color.
-///
-/// @param {Color} $color - The input color.
-/// @return {List} The red, green, and blue channels.
-@function to-rgb($color) {
-    @return math.round(color.channel($color, "red", $space: rgb)),
-        math.round(color.channel($color, "green", $space: rgb)),
-        math.round(color.channel($color, "blue", $space: rgb));
 }

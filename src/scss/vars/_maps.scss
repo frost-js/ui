@@ -44,8 +44,8 @@ $utilities-colors: map.merge(
     )
 ) !default;
 
-$utilities-text-colors: helpers.map-loop(map.merge($utilities-colors, $emphasis-colors), rgba-css-var, "$key", "text") !default;
-$utilities-border-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "border") !default;
-$utilities-bg-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "bg") !default;
-$utilities-link-underline-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "link-underline") !default;
-$utilities-focus-ring-colors: helpers.map-loop($utilities-colors, rgba-css-var, "$key", "focus-ring") !default;
+$utilities-text-colors: helpers.map-loop(map.merge($utilities-colors, $emphasis-colors), color-alpha, "$key", var(--ui-text-opacity)) !default;
+$utilities-border-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), color-alpha, "$key", var(--ui-border-opacity)) !default;
+$utilities-bg-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), color-alpha, "$key", var(--ui-bg-opacity)) !default;
+$utilities-link-underline-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), color-alpha, "$key", var(--ui-link-underline-opacity)) !default;
+$utilities-focus-ring-colors: helpers.map-loop($utilities-colors, color-alpha, "$key", var(--ui-focus-ring-opacity)) !default;

@@ -1,4 +1,5 @@
 @use "../functions/color";
+@use "../functions/helpers";
 
 // colors
 $white: #fff !default;
@@ -25,10 +26,10 @@ $body-bg: $white !default;
 $body-color: color.color-shade($gray, 900) !default;
 
 $body-secondary-bg: color.color-shade($gray, 100) !default;
-$body-secondary-color: color.fade($body-color, .7) !default;
+$body-secondary-color: helpers.color-alpha(body-color, .7) !default;
 
 $body-tertiary-bg: color.color-shade($gray, 50) !default;
-$body-tertiary-color: color.fade($body-color, .5) !default;
+$body-tertiary-color: helpers.color-alpha(body-color, .5) !default;
 
 $emphasis-color: $black !default;
 
@@ -36,12 +37,12 @@ $link-color: $blue !default;
 $link-color-hover: color.color-shade($blue, 700) !default;
 
 $border-color: color.color-shade($gray, 200) !default;
-$border-color-translucent: color.fade($black, .15) !default;
+$border-color-translucent: helpers.color-alpha("black", .15) !default;
 
 $code-color: color.color-shade($red, 400) !default;
 $mark-bg: color.color-shade($yellow, 100) !default;
 
-$gradient: linear-gradient(180deg, color.fade($white, .25), color.fade($white, 0)) !default;
+$gradient: linear-gradient(180deg, helpers.color-alpha("white", .25), helpers.color-alpha("white", 0)) !default;
 
 // theme colors
 $primary: $blue !default;

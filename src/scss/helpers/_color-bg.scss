@@ -1,8 +1,9 @@
+@use "../functions";
 @use "../vars";
 
 @each $name, $color in vars.$color-variants {
     .text-bg-#{$name} {
         color: var(--ui-#{$name}-contrast) !important;
-        background-color: rgba(var(--ui-#{$name}-rgb), var(--ui-bg-opacity)) !important;
+        background-color: functions.color-alpha($name, var(--ui-bg-opacity)) !important;
     }
 }

@@ -181,12 +181,12 @@ sup {
 // links
 
 a {
-    color: rgba(var(--ui-link-color-rgb), var(--ui-link-opacity, 1));
+    color: functions.color-alpha(link-color, var(--ui-link-opacity, 1));
     text-decoration: var(--ui-link-decoration);
 
     &:hover {
-        --ui-link-color-rgb: var(--ui-link-hover-color-rgb);
         --ui-link-decoration: var(--ui-link-hover-decoration);
+        color: functions.color-alpha(link-hover-color, var(--ui-link-opacity, 1));
     }
 }
 

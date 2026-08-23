@@ -1,4 +1,4 @@
-@use "../functions/color";
+@use "../functions/helpers";
 @use "colors";
 @use "vars";
 
@@ -52,7 +52,7 @@ $breadcrumb-margin-bottom: vars.$spacing !default;
 $breadcrumb-item-padding-x: vars.$spacing * .5 !default;
 $breadcrumb-active-color: var(--ui-gray) !default;
 $breadcrumb-divider: string.quote("/") !default;
-$breadcrumb-divider-color: rgba(var(--ui-body-color-rgb), .5) !default;
+$breadcrumb-divider-color: helpers.color-alpha(body-color, .5) !default;
 
 // button
 $btn-padding-x: vars.$spacing * .75 !default;
@@ -65,7 +65,7 @@ $btn-border-width: var(--ui-border-width) !default;
 $btn-active-border-color: var(--ui-border-color) !default;
 $btn-border-radius: var(--ui-border-radius) !default;
 $btn-disabled-opacity: var(--ui-disabled-opacity) !default;
-$btn-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) rgba(var(--ui-btn-focus-shadow-rgb), var(--ui-focus-ring-opacity)) !default;
+$btn-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) helpers.color-alpha(btn-focus-shadow-color, var(--ui-focus-ring-opacity)) !default;
 
 $btn-lg-padding-x: vars.$spacing !default;
 $btn-lg-padding-y: vars.$spacing * .5 !default;
@@ -91,7 +91,7 @@ $card-bg: var(--ui-body-bg) !default;
 $card-box-shadow: var(--ui-shadow-sm) !default;
 $card-cap-padding-x: $card-spacer-x !default;
 $card-cap-padding-y: $card-spacer-y * .5 !default;
-$card-cap-bg: rgba(var(--ui-body-color-rgb), .1) !default;
+$card-cap-bg: helpers.color-alpha(body-color, .1) !default;
 $card-img-overlay-padding: vars.$spacing !default;
 $card-group-margin: vars.$spacing !default;
 
@@ -101,7 +101,7 @@ $carousel-bg: var(--ui-body-color) !default;
 $carousel-control-padding-x: vars.$spacing !default;
 $carousel-control-padding-y: vars.$spacing !default;
 $carousel-control-font-size: 2em !default;
-$carousel-control-color-rgb: var(--ui-body-bg-rgb) !default;
+$carousel-control-color: var(--ui-body-bg) !default;
 $carousel-control-opacity: .5 !default;
 $carousel-control-hover-opacity: .75 !default;
 $carousel-control-icon-width: 2rem !default;
@@ -181,7 +181,7 @@ $list-group-item-disabled-bg: var(--ui-body-bg) !default;
 $list-group-action-color: var(--ui-secondary-color) !default;
 $list-group-action-hover-color: var(--ui-emphasis-color) !default;
 $list-group-action-hover-bg: var(--ui-tertiary-bg) !default;
-$list-group-action-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) rgba(var(--ui-list-group-focus-shadow-rgb, var(--ui-primary-rgb)), var(--ui-focus-ring-opacity)) !default;
+$list-group-action-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) helpers.color-alpha(list-group-focus-shadow-color, var(--ui-focus-ring-opacity)) !default;
 
 $list-group-active-color: var(--ui-primary-contrast) !default;
 $list-group-active-bg: var(--ui-primary) !default;
@@ -218,7 +218,7 @@ $modal-dialog-scrollable-gap: vars.$spacing !default;
 $modal-dialog-centered-gap: vars.$spacing !default;
 
 $modal-content-box-shadow: var(--ui-shadow-lg) !default;
-$modal-backdrop-bg: rgba(0, 0, 0, .5) !default;
+$modal-backdrop-bg: helpers.color-alpha("black", .5) !default;
 
 // nav
 $nav-link-padding-x: vars.$spacing !default;
@@ -247,10 +247,10 @@ $nav-underline-link-active-color: var(--ui-emphasis-color) !default;
 // navbar
 $navbar-padding-x: 0 !default;
 $navbar-padding-y: vars.$spacing * .5 !default;
-$navbar-color: rgba(var(--ui-emphasis-color-rgb), .6) !default;
-$navbar-hover-color: rgba(var(--ui-emphasis-color-rgb), .9) !default;
+$navbar-color: helpers.color-alpha(emphasis-color, .6) !default;
+$navbar-hover-color: helpers.color-alpha(emphasis-color, .9) !default;
 $navbar-active-color: var(--ui-emphasis-color) !default;
-$navbar-disabled-color: rgba(var(--ui-emphasis-color-rgb), .3) !default;
+$navbar-disabled-color: helpers.color-alpha(emphasis-color, .3) !default;
 $navbar-brand-color: #{$navbar-active-color} !default;
 $navbar-brand-hover-color: #{$navbar-active-color} !default;
 $navbar-text-color: var(--ui-secondary-color) !default;
@@ -268,7 +268,7 @@ $navbar-nav-scroll-height: 75dvh !default;
 $navbar-toggler-padding-x: vars.$spacing * .75 !default;
 $navbar-toggler-padding-y: vars.$spacing * .25 !default;
 $navbar-toggler-font-size: var(--ui-font-size-lg) !default;
-$navbar-toggler-border-color: rgba(var(--ui-emphasis-color-rgb), .15) !default;
+$navbar-toggler-border-color: helpers.color-alpha(emphasis-color, .15) !default;
 $navbar-toggler-border-width: var(--ui-border-width) !default;
 $navbar-toggler-border-radius: var(--ui-border-radius) !default;
 $navbar-toggler-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) !default;
@@ -287,7 +287,7 @@ $offcanvas-border-width: var(--ui-border-width) !default;
 $offcanvas-border-color: var(--ui-border-color) !default;
 $offcanvas-box-shadow: var(--ui-shadow-lg) !default;
 $offcanvas-title-line-height: map.get(vars.$line-heights, base) !default;
-$offcanvas-backdrop-bg: rgba(0, 0, 0, .5) !default;
+$offcanvas-backdrop-bg: helpers.color-alpha("black", .5) !default;
 
 // pagination
 $pagination-padding-x: vars.$spacing * .75 !default;
@@ -357,7 +357,7 @@ $progress-border-radius: var(--ui-border-radius-pill) !default;
 $progress-bar-color: var(--ui-white) !default;
 $progress-bar-bg: var(--ui-primary) !default;
 
-$progress-bar-striped-background-image: linear-gradient(-45deg, transparent 50%, color.fade(colors.$white, .15) 50%, color.fade(colors.$white, .15) 70%, transparent 70%) !default;
+$progress-bar-striped-background-image: linear-gradient(-45deg, transparent 50%, helpers.color-alpha("white", .15) 50%, helpers.color-alpha("white", .15) 70%, transparent 70%) !default;
 $progress-bar-striped-background-size-x: 2rem !default;
 $progress-bar-striped-background-size-y: 1rem !default;
 
@@ -381,7 +381,7 @@ $toast-padding-x: vars.$spacing * .75 !default;
 $toast-padding-y: vars.$spacing * .75 !default;
 $toast-margin-bottom: vars.$spacing !default;
 $toast-font-size: var(--ui-font-size-sm) !default;
-$toast-bg: rgba(var(--ui-body-bg-rgb), .85) !default;
+$toast-bg: helpers.color-alpha(body-bg, .85) !default;
 $toast-border-width: var(--ui-border-width) !default;
 $toast-border-color: var(--ui-border-color-translucent) !default;
 $toast-border-radius: var(--ui-border-radius-xl) !default;
@@ -389,7 +389,7 @@ $toast-box-shadow: var(--ui-shadow-lg) !default;
 $toast-backdrop-filter: blur(10px) !default;
 
 $toast-header-color: var(--ui-secondary-color) !default;
-$toast-header-bg: rgba(var(--ui-body-bg-rgb), .85) !default;
+$toast-header-bg: helpers.color-alpha(body-bg, .85) !default;
 $toast-header-border-color: $toast-border-color !default;
 
 // tooltip

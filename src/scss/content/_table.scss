@@ -76,7 +76,7 @@
 
 .table-active {
     --ui-table-color: var(--ui-body-color);
-    --ui-table-bg: rgba(var(--ui-body-color-rgb), .1);
+    --ui-table-bg: #{functions.color-alpha(body-color, .1)};
     --ui-table-border-color: var(--ui-border-color);
 }
 
@@ -90,8 +90,8 @@
     --ui-table-color: var(--ui-dark-contrast);
     --ui-table-bg: var(--ui-dark);
     --ui-table-border-color: var(--ui-dark-emphasis);
-    --ui-table-striped-bg: rgba(var(--ui-body-bg-rgb), .1);
-    --ui-table-hover-bg: rgba(var(--ui-body-bg-rgb), .05);
+    --ui-table-striped-bg: #{functions.color-alpha(body-bg, .1)};
+    --ui-table-hover-bg: #{functions.color-alpha(body-bg, .05)};
 }
 
 @each $breakpoint in map.keys(vars.$breakpoints) {

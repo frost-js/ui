@@ -1,3 +1,4 @@
+@use "../functions/helpers";
 @use "vars";
 
 @use "sass:map";
@@ -58,10 +59,10 @@ $input-select-arrow-size: 16px !default;
 $input-select-arrow-background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%230008' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !default;
 $input-select-arrow-background-image-dark: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23FFF8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !default;
 
-$input-filled-bg: rgba(var(--ui-body-color-rgb), .05) !default;
+$input-filled-bg: helpers.color-alpha(body-color, .05) !default;
 $input-filled-border-color: var(--ui-tertiary-color) !default;
-$input-filled-hover-bg: rgba(var(--ui-body-color-rgb), .075) !default;
-$input-filled-focus-bg: rgba(var(--ui-body-color-rgb), .12) !default;
+$input-filled-hover-bg: helpers.color-alpha(body-color, .075) !default;
+$input-filled-focus-bg: helpers.color-alpha(body-color, .12) !default;
 $input-outline-bg: var(--ui-body-bg) !default;
 $input-outline-border-radius: var(--ui-border-radius) !default;
 $input-outline-hover-border-color: var(--ui-tertiary-color) !default;
@@ -90,7 +91,7 @@ $input-range-thumb-width: 1rem !default;
 $input-range-thumb-height: $input-range-thumb-width !default;
 $input-range-thumb-bg: var(--ui-primary) !default;
 $input-range-thumb-border-radius: var(--ui-border-radius) !default;
-$input-range-thumb-box-shadow: 0 .1rem .25rem rgba(var(--ui-body-color-rgb), .1) !default;
+$input-range-thumb-box-shadow: 0 .1rem .25rem helpers.color-alpha(body-color, .1) !default;
 $input-range-thumb-focus-box-shadow: 0 0 0 1px var(--ui-body-bg), 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color) !default;
 $input-range-thumb-focus-box-shadow-width: var(--ui-focus-ring-width);
 $input-range-thumb-active-bg: var(--ui-primary-active) !default;
@@ -112,10 +113,10 @@ $form-feedback-font-size: 80% !default;
 $valid-feedback-color: var(--ui-success) !default;
 $invalid-feedback-color: var(--ui-danger) !default;
 
-$input-filled-success-bg: rgba(var(--ui-success-rgb), .05) !default;
-$input-filled-success-hover-bg: rgba(var(--ui-success-rgb), .075) !default;
-$input-filled-success-focus-bg: rgba(var(--ui-success-rgb), .12) !default;
+$input-filled-success-bg: helpers.color-alpha(success, .05) !default;
+$input-filled-success-hover-bg: helpers.color-alpha(success, .075) !default;
+$input-filled-success-focus-bg: helpers.color-alpha(success, .12) !default;
 
-$input-filled-error-bg: rgba(var(--ui-danger-rgb), .05) !default;
-$input-filled-error-hover-bg: rgba(var(--ui-danger-rgb), .075) !default;
-$input-filled-error-focus-bg: rgba(var(--ui-danger-rgb), .12) !default;
+$input-filled-error-bg: helpers.color-alpha(danger, .05) !default;
+$input-filled-error-hover-bg: helpers.color-alpha(danger, .075) !default;
+$input-filled-error-focus-bg: helpers.color-alpha(danger, .12) !default;

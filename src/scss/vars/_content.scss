@@ -1,3 +1,4 @@
+@use "../functions/helpers";
 @use "colors";
 @use "vars";
 
@@ -123,8 +124,8 @@ $table-bg: var(--ui-body-bg) !default;
 $table-color: var(--ui-body-color) !default;
 $table-border-color: var(--ui-border-color) !default;
 $table-border-width: var(--ui-border-width) !default;
-$table-hover-bg: rgba(var(--ui-body-color-rgb), .1) !default;
-$table-striped-bg: rgba(var(--ui-body-color-rgb), .05) !default;
+$table-hover-bg: helpers.color-alpha(body-color, .1) !default;
+$table-striped-bg: helpers.color-alpha(body-color, .05) !default;
 
 $table-sm-cell-padding-x: math.div(vars.$spacing, 3) !default;
 $table-sm-cell-padding-y: vars.$spacing * .25 !default;

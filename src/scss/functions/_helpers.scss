@@ -35,13 +35,13 @@
     @return $result;
 }
 
-/// Creates an `rgba()` value from component color and opacity properties.
+/// Creates a relative color with an alpha value from a color custom property.
 ///
-/// @param {String} $rgbVar - The color custom-property name without its prefix or suffix.
-/// @param {String} $opacityVar - The opacity custom-property name without its prefix or suffix.
-/// @return {String} The CSS `rgba()` value.
-@function rgba-css-var($rgbVar, $opacityVar) {
-    @return rgba(var(--ui-#{$rgbVar}-rgb), var(--ui-#{$opacityVar}-opacity));
+/// @param {String} $colorVar - The color custom-property name without its prefix.
+/// @param {Number | String} $alpha - The output alpha channel.
+/// @return {String} The relative CSS `rgb()` value.
+@function color-alpha($colorVar, $alpha) {
+    @return rgb(from var(--ui-#{$colorVar}) r g b / #{$alpha});
 }
 
 /// Returns a responsive font size.

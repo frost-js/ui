@@ -1,3 +1,4 @@
+@use "../functions/helpers";
 @use "maps";
 @use "vars";
 
@@ -21,4 +22,4 @@ $ratios: (
 
 // ripple
 $ripple-opacity: .3 !default;
-$ripple-bg: rgba(var(--ui-white-rgb), var(--ui-ripple-opacity)) !default;
+$ripple-bg: helpers.color-alpha("white", var(--ui-ripple-opacity)) !default;

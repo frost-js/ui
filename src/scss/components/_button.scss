@@ -1,3 +1,4 @@
+@use "../functions";
 @use "../mixins";
 @use "../vars";
 
@@ -14,7 +15,7 @@
     --ui-btn-hover-border-color: transparent;
     --ui-btn-active-border-color: #{vars.$btn-active-border-color};
     --ui-btn-disabled-opacity: #{vars.$btn-disabled-opacity};
-    --ui-btn-focus-shadow-rgb: var(--ui-primary-rgb);
+    --ui-btn-focus-shadow-color: var(--ui-primary);
     --ui-btn-focus-box-shadow: #{vars.$btn-focus-box-shadow};
     --ui-btn-active-state-bg: var(--ui-btn-hover-bg);
     --ui-btn-active-state-border-color: var(--ui-btn-active-border-color);
@@ -104,7 +105,7 @@
     --ui-btn-hover-border-color: transparent;
     --ui-btn-active-border-color: transparent;
     --ui-btn-active-color: var(--ui-link-hover-color);
-    --ui-btn-focus-shadow-rgb: var(--ui-link-color-rgb);
+    --ui-btn-focus-shadow-color: var(--ui-link-color);
 
     text-decoration: var(--ui-link-decoration);
 
@@ -123,22 +124,22 @@
         --ui-btn-hover-border-color: var(--ui-#{$name}-highlight);
         --ui-btn-active-bg: var(--ui-#{$name}-active);
         --ui-btn-active-border-color: var(--ui-#{$name}-active);
-        --ui-ripple-bg: rgba(var(--ui-#{$name}-contrast-rgb), #{vars.$btn-ripple-opacity});
-        --ui-btn-focus-shadow-rgb: var(--ui-#{$name}-rgb);
+        --ui-ripple-bg: #{functions.color-alpha("#{$name}-contrast", vars.$btn-ripple-opacity)};
+        --ui-btn-focus-shadow-color: var(--ui-#{$name});
         --ui-btn-active-state-bg: var(--ui-btn-active-bg);
     }
 
     .btn-outline-#{$name} {
         --ui-btn-color: var(--ui-#{$name}-emphasis);
         --ui-btn-border-color: var(--ui-#{$name}-emphasis);
-        --ui-btn-hover-bg: rgba(var(--ui-#{$name}-emphasis-rgb), #{vars.$btn-outline-hover-opacity});
+        --ui-btn-hover-bg: #{functions.color-alpha("#{$name}-emphasis", vars.$btn-outline-hover-opacity)};
         --ui-btn-hover-border-color: var(--ui-#{$name}-emphasis);
         --ui-btn-active-bg: var(--ui-#{$name});
         --ui-btn-active-color: var(--ui-#{$name}-contrast);
         --ui-btn-active-border-color: var(--ui-#{$name});
-        --ui-ripple-bg: rgba(var(--ui-#{$name}-rgb), #{vars.$btn-ripple-opacity});
-        --ui-ripple-active-bg: rgba(var(--ui-#{$name}-contrast-rgb), #{vars.$btn-ripple-opacity});
-        --ui-btn-focus-shadow-rgb: var(--ui-#{$name}-rgb);
+        --ui-ripple-bg: #{functions.color-alpha($name, vars.$btn-ripple-opacity)};
+        --ui-ripple-active-bg: #{functions.color-alpha("#{$name}-contrast", vars.$btn-ripple-opacity)};
+        --ui-btn-focus-shadow-color: var(--ui-#{$name});
         --ui-btn-active-state-bg: var(--ui-btn-hover-bg);
         --ui-btn-active-state-border-color: var(--ui-btn-hover-border-color);
     }

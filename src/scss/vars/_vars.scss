@@ -73,24 +73,24 @@ $positions: (
 // focus ring and shadows
 $focus-ring-width: .25rem !default;
 $focus-ring-opacity: .5 !default;
-$focus-ring-color: rgba(var(--ui-primary-rgb), var(--ui-focus-ring-opacity)) !default;
+$focus-ring-color: helpers.color-alpha(primary, var(--ui-focus-ring-opacity)) !default;
 
-$shadow: 0 2px 4px rgba(var(--ui-black-rgb), .1),
-    0 8px 24px rgba(var(--ui-black-rgb), .14) !default;
-$shadow-sm: 0 1px 2px rgba(var(--ui-black-rgb), .08),
-    0 2px 6px rgba(var(--ui-black-rgb), .1) !default;
-$shadow-lg: 0 4px 12px rgba(var(--ui-black-rgb), .12),
-    0 16px 48px rgba(var(--ui-black-rgb), .2) !default;
+$shadow: 0 2px 4px helpers.color-alpha("black", .1),
+    0 8px 24px helpers.color-alpha("black", .14) !default;
+$shadow-sm: 0 1px 2px helpers.color-alpha("black", .08),
+    0 2px 6px helpers.color-alpha("black", .1) !default;
+$shadow-lg: 0 4px 12px helpers.color-alpha("black", .12),
+    0 16px 48px helpers.color-alpha("black", .2) !default;
 
-$shadow-dark: 0 0 0 1px rgba(var(--ui-white-rgb), .08),
-    0 2px 4px rgba(var(--ui-black-rgb), .25),
-    0 8px 24px rgba(var(--ui-black-rgb), .45) !default;
-$shadow-sm-dark: 0 0 0 1px rgba(var(--ui-white-rgb), .06),
-    0 1px 2px rgba(var(--ui-black-rgb), .2),
-    0 2px 6px rgba(var(--ui-black-rgb), .3) !default;
-$shadow-lg-dark: 0 0 0 1px rgba(var(--ui-white-rgb), .1),
-    0 4px 12px rgba(var(--ui-black-rgb), .35),
-    0 16px 48px rgba(var(--ui-black-rgb), .6) !default;
+$shadow-dark: 0 0 0 1px helpers.color-alpha("white", .08),
+    0 2px 4px helpers.color-alpha("black", .25),
+    0 8px 24px helpers.color-alpha("black", .45) !default;
+$shadow-sm-dark: 0 0 0 1px helpers.color-alpha("white", .06),
+    0 1px 2px helpers.color-alpha("black", .2),
+    0 2px 6px helpers.color-alpha("black", .3) !default;
+$shadow-lg-dark: 0 0 0 1px helpers.color-alpha("white", .1),
+    0 4px 12px helpers.color-alpha("black", .35),
+    0 16px 48px helpers.color-alpha("black", .6) !default;
 
 // sizing
 $sizes: (

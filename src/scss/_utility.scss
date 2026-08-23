@@ -1,3 +1,4 @@
+@use "functions";
 @use "mixins";
 @use "vars";
 
@@ -346,7 +347,7 @@
     values: map.merge(
         vars.$utilities-link-underline-colors,
         (
-            null: rgba(var(--ui-link-color-rgb), var(--ui-link-underline-opacity))
+            null: functions.color-alpha(link-color, var(--ui-link-underline-opacity))
         )
     ),
     local-vars: (
