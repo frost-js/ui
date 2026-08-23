@@ -51,42 +51,55 @@
 .nav-tabs {
     --ui-nav-tabs-border-width: #{vars.$nav-tabs-border-width};
     --ui-nav-tabs-border-color: #{vars.$nav-tabs-border-color};
-    --ui-nav-tabs-border-radius: #{vars.$nav-tabs-border-radius};
-    --ui-nav-tabs-link-hover-border-color: #{vars.$nav-tabs-link-hover-border-color};
+    --ui-nav-tabs-link-padding-x: #{vars.$nav-tabs-link-padding-x};
+    --ui-nav-tabs-link-padding-y: #{vars.$nav-tabs-link-padding-y};
+    --ui-nav-tabs-link-min-height: #{vars.$nav-tabs-link-min-height};
+    --ui-nav-tabs-link-font-size: #{vars.$nav-tabs-link-font-size};
+    --ui-nav-tabs-link-color: #{vars.$nav-tabs-link-color};
+    --ui-nav-tabs-link-font-weight: #{vars.$nav-tabs-link-font-weight};
+    --ui-nav-tabs-link-hover-color: #{vars.$nav-tabs-link-hover-color};
+    --ui-nav-tabs-link-hover-bg: #{vars.$nav-tabs-link-hover-bg};
     --ui-nav-tabs-link-active-color: #{vars.$nav-tabs-link-active-color};
-    --ui-nav-tabs-link-active-bg: #{vars.$nav-tabs-link-active-bg};
-    --ui-nav-tabs-link-active-border-color: #{vars.$nav-tabs-link-active-border-color};
+    --ui-nav-tabs-link-active-border-width: #{vars.$nav-tabs-link-active-border-width};
 
     border-bottom: var(--ui-nav-tabs-border-width) var(--ui-border-style) var(--ui-nav-tabs-border-color);
 
     .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: var(--ui-nav-tabs-link-min-height);
+        padding: var(--ui-nav-tabs-link-padding-y) var(--ui-nav-tabs-link-padding-x);
         margin-bottom: calc(var(--ui-nav-tabs-border-width) * -1);
+        font-size: var(--ui-nav-tabs-link-font-size);
+        font-weight: var(--ui-nav-tabs-link-font-weight);
+        color: var(--ui-nav-tabs-link-color);
         background-color: transparent;
-        border: var(--ui-nav-tabs-border-width) var(--ui-border-style) transparent;
-        @include mixins.border-top-radius(var(--ui-nav-tabs-border-radius));
+        background-image: linear-gradient(var(--ui-nav-tabs-link-active-color), var(--ui-nav-tabs-link-active-color));
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-size: 0 var(--ui-nav-tabs-link-active-border-width);
+        border: 0;
+        transition-duration: var(--ui-transition-duration-fast);
+        transition-property: color, background-color, background-size, box-shadow;
 
         &:hover,
         &:focus-visible {
-            border-color: var(--ui-nav-tabs-link-hover-border-color) transparent;
+            color: var(--ui-nav-tabs-link-hover-color);
+            background-color: var(--ui-nav-tabs-link-hover-bg);
             isolation: isolate;
         }
 
         &.disabled {
             color: var(--ui-nav-link-disabled-color);
             background-color: transparent;
-            border-color: transparent;
         }
     }
 
     .nav-link.active,
     .nav-item.show .nav-link {
         color: var(--ui-nav-tabs-link-active-color);
-        background-color: var(--ui-nav-tabs-link-active-bg);
-        border-color: var(--ui-nav-tabs-link-active-border-color) transparent;
-    }
-
-    [data-ui-placement="bottom"] + .dropdown-menu {
-        @include mixins.border-top-radius(0);
+        background-size: calc(100% - (var(--ui-nav-tabs-link-padding-x) + var(--ui-nav-tabs-link-padding-x))) var(--ui-nav-tabs-link-active-border-width);
     }
 }
 
@@ -186,6 +199,9 @@
 }
 
 .card-header-tabs {
+    --ui-nav-tabs-link-padding-y: #{vars.$card-header-tabs-link-padding-y};
+    --ui-nav-tabs-link-min-height: #{vars.$card-header-tabs-link-min-height};
+
     margin-inline: calc(var(--ui-card-cap-padding-x) * -.5);
     margin-bottom: calc(var(--ui-card-cap-padding-y) * -1);
     border-bottom: 0;

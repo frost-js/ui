@@ -98,6 +98,8 @@ $card-cap-padding-x: $card-spacer-x !default;
 $card-cap-padding-y: $card-spacer-y * .5 !default;
 $card-cap-bg: helpers.color-alpha(body-color, .05) !default;
 $card-header-font-weight: map.get(vars.$font-weights, bolder) !default;
+$card-header-tabs-link-padding-y: vars.$spacing * .5 !default;
+$card-header-tabs-link-min-height: 2.5rem !default;
 $card-img-overlay-padding: vars.$spacing !default;
 $card-group-margin: vars.$spacing !default;
 
@@ -255,11 +257,16 @@ $nav-link-disabled-color: var(--ui-secondary-color) !default;
 
 $nav-tabs-border-color: var(--ui-border-color) !default;
 $nav-tabs-border-width: var(--ui-border-width) !default;
-$nav-tabs-border-radius: var(--ui-border-radius) !default;
-$nav-tabs-link-hover-border-color: var(--ui-border-color-translucent) var(--ui-border-color-translucent) !default;
-$nav-tabs-link-active-color: var(--ui-emphasis-color) !default;
-$nav-tabs-link-active-bg: var(--ui-body-bg) !default;
-$nav-tabs-link-active-border-color: var(--ui-border-color) var(--ui-border-color) !default;
+$nav-tabs-link-padding-x: vars.$spacing * 1.5 !default;
+$nav-tabs-link-padding-y: vars.$spacing * .75 !default;
+$nav-tabs-link-min-height: 3rem !default;
+$nav-tabs-link-font-size: var(--ui-font-size-sm) !default;
+$nav-tabs-link-color: var(--ui-secondary-color) !default;
+$nav-tabs-link-font-weight: map.get(vars.$font-weights, bold) !default;
+$nav-tabs-link-hover-color: var(--ui-emphasis-color) !default;
+$nav-tabs-link-hover-bg: helpers.color-alpha(primary, .08) !default;
+$nav-tabs-link-active-color: var(--ui-primary) !default;
+$nav-tabs-link-active-border-width: .1875rem !default;
 
 $nav-pills-border-radius: var(--ui-border-radius) !default;
 $nav-pills-padding: vars.$spacing * .25 !default;

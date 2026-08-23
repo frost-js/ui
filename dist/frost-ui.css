@@ -3855,38 +3855,50 @@ fieldset:disabled .btn {
 .nav-tabs {
   --ui-nav-tabs-border-width: var(--ui-border-width);
   --ui-nav-tabs-border-color: var(--ui-border-color);
-  --ui-nav-tabs-border-radius: var(--ui-border-radius);
-  --ui-nav-tabs-link-hover-border-color: var(--ui-border-color-translucent) var(--ui-border-color-translucent);
-  --ui-nav-tabs-link-active-color: var(--ui-emphasis-color);
-  --ui-nav-tabs-link-active-bg: var(--ui-body-bg);
-  --ui-nav-tabs-link-active-border-color: var(--ui-border-color) var(--ui-border-color);
+  --ui-nav-tabs-link-padding-x: 1.5rem;
+  --ui-nav-tabs-link-padding-y: 0.75rem;
+  --ui-nav-tabs-link-min-height: 3rem;
+  --ui-nav-tabs-link-font-size: var(--ui-font-size-sm);
+  --ui-nav-tabs-link-color: var(--ui-secondary-color);
+  --ui-nav-tabs-link-font-weight: 500;
+  --ui-nav-tabs-link-hover-color: var(--ui-emphasis-color);
+  --ui-nav-tabs-link-hover-bg: rgb(from var(--ui-primary) r g b/0.08);
+  --ui-nav-tabs-link-active-color: var(--ui-primary);
+  --ui-nav-tabs-link-active-border-width: 0.1875rem;
   border-bottom: var(--ui-nav-tabs-border-width) var(--ui-border-style) var(--ui-nav-tabs-border-color);
 }
 .nav-tabs .nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--ui-nav-tabs-link-min-height);
+  padding: var(--ui-nav-tabs-link-padding-y) var(--ui-nav-tabs-link-padding-x);
   margin-bottom: calc(var(--ui-nav-tabs-border-width) * -1);
+  font-size: var(--ui-nav-tabs-link-font-size);
+  font-weight: var(--ui-nav-tabs-link-font-weight);
+  color: var(--ui-nav-tabs-link-color);
   background-color: transparent;
-  border: var(--ui-nav-tabs-border-width) var(--ui-border-style) transparent;
-  border-top-left-radius: var(--ui-nav-tabs-border-radius);
-  border-top-right-radius: var(--ui-nav-tabs-border-radius);
+  background-image: linear-gradient(var(--ui-nav-tabs-link-active-color), var(--ui-nav-tabs-link-active-color));
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 0 var(--ui-nav-tabs-link-active-border-width);
+  border: 0;
+  transition-duration: var(--ui-transition-duration-fast);
+  transition-property: color, background-color, background-size, box-shadow;
 }
 .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus-visible {
-  border-color: var(--ui-nav-tabs-link-hover-border-color) transparent;
+  color: var(--ui-nav-tabs-link-hover-color);
+  background-color: var(--ui-nav-tabs-link-hover-bg);
   isolation: isolate;
 }
 .nav-tabs .nav-link.disabled {
   color: var(--ui-nav-link-disabled-color);
   background-color: transparent;
-  border-color: transparent;
 }
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: var(--ui-nav-tabs-link-active-color);
-  background-color: var(--ui-nav-tabs-link-active-bg);
-  border-color: var(--ui-nav-tabs-link-active-border-color) transparent;
-}
-.nav-tabs [data-ui-placement=bottom] + .dropdown-menu {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  background-size: calc(100% - (var(--ui-nav-tabs-link-padding-x) + var(--ui-nav-tabs-link-padding-x))) var(--ui-nav-tabs-link-active-border-width);
 }
 
 .nav-pills {
@@ -3965,6 +3977,8 @@ fieldset:disabled .btn {
 }
 
 .card-header-tabs {
+  --ui-nav-tabs-link-padding-y: 0.5rem;
+  --ui-nav-tabs-link-min-height: 2.5rem;
   margin-inline: calc(var(--ui-card-cap-padding-x) * -0.5);
   margin-bottom: calc(var(--ui-card-cap-padding-y) * -1);
   border-bottom: 0;
