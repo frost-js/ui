@@ -31,20 +31,10 @@
     border: vars.$input-check-border-width var(--ui-border-style) var(--ui-input-border-color, #{vars.$input-check-border-color});
     transition-timing-function: var(--ui-transition-timing-function);
     transition-duration: var(--ui-transition-duration);
-    transition-property: background-color, border-color, box-shadow;
+    transition-property: color, background-color, border-color, box-shadow, transform;
 
-    &[type="checkbox"] {
-        @include mixins.border-radius(vars.$input-check-checkbox-border-radius);
-    }
-
-    &[type="radio"] {
-        @include mixins.border-radius(vars.$input-check-radio-border-radius);
-    }
-
-    &:focus-visible,
-    &.focus {
-        outline: 0;
-        box-shadow: 0 0 0 vars.$input-check-focus-shadow-width vars.$input-check-focus-shadow-color;
+    &:hover:not(:disabled) {
+        border-color: var(--ui-input-border-color, #{vars.$input-check-hover-border-color});
     }
 
     &::before {
@@ -54,30 +44,63 @@
         display: inline-block;
         content: "";
         background-color: currentcolor;
+        opacity: 0;
+        scale: .5;
         translate: -50% -50%;
+        transition-timing-function: var(--ui-transition-timing-function);
+        transition-duration: var(--ui-transition-duration-fast);
+        transition-property: opacity, scale;
     }
 
-    &:checked {
-        background-color: var(--ui-input-check-checked-bg, #{vars.$input-check-checked-bg});
-        border-color: var(--ui-input-border-color, #{vars.$input-check-checked-border-color});
+    &[type="checkbox"] {
+        @include mixins.border-radius(vars.$input-check-checkbox-border-radius);
 
-        &[type="checkbox"]::before {
+        &::before {
             width: vars.$input-check-size;
             height: vars.$input-check-size;
             mask-image: vars.$input-check-checkbox-checked-background-image;
             mask-size: vars.$input-check-size;
         }
+    }
 
-        &[type="radio"]::before {
+    &[type="radio"] {
+        @include mixins.border-radius(vars.$input-check-radio-border-radius);
+
+        &::before {
             width: math.div(vars.$input-check-size, 2);
             height: math.div(vars.$input-check-size, 2);
             @include mixins.border-radius(50%);
         }
     }
 
+    &:checked {
+        background-color: var(--ui-input-check-checked-bg, #{vars.$input-check-checked-bg});
+        border-color: var(--ui-input-border-color, #{vars.$input-check-checked-border-color});
+        box-shadow: vars.$input-check-checked-box-shadow;
+
+        &::before {
+            opacity: 1;
+            scale: 1;
+        }
+    }
+
+    &:focus-visible,
+    &.focus {
+        outline: 0;
+        box-shadow: 0 0 0 vars.$input-check-focus-shadow-width vars.$input-check-focus-shadow-color;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        &:not(:disabled):active {
+            transform: scale(.92);
+        }
+    }
+
     &:disabled {
         pointer-events: none;
+        box-shadow: none;
         opacity: vars.$input-check-disabled-opacity;
+        transform: none;
 
         ~.form-check-label {
             opacity: vars.$input-check-disabled-opacity;
@@ -109,17 +132,18 @@
 
         &::after {
             position: absolute;
-            inset-inline-start: calc(25% - #{math.div(vars.$input-check-size, 4)});
+            inset-inline-start: vars.$form-switch-input-check-padding;
             top: 50%;
             display: inline-block;
-            width: math.div(vars.$input-check-size, 2);
-            height: math.div(vars.$input-check-size, 2);
+            width: vars.$form-switch-input-check-thumb-size;
+            height: vars.$form-switch-input-check-thumb-size;
             content: "";
             background-color: currentcolor;
+            box-shadow: vars.$form-switch-input-check-thumb-box-shadow;
             translate: 0 -50%;
             transition-timing-function: var(--ui-transition-timing-function);
             transition-duration: var(--ui-transition-duration);
-            transition-property: inset-inline-start;
+            transition-property: inset-inline-start, box-shadow;
             @include mixins.border-radius(50%);
         }
 
@@ -127,7 +151,7 @@
             color: vars.$form-switch-input-check-checked-color;
 
             &::after {
-                inset-inline-start: calc(75% - #{math.div(vars.$input-check-size, 4)});
+                inset-inline-start: calc(100% - #{vars.$form-switch-input-check-thumb-size} - #{vars.$form-switch-input-check-padding});
             }
         }
     }

@@ -47,6 +47,7 @@
         background-color: vars.$input-range-track-bg;
         border-color: transparent;
         @include mixins.border-radius(vars.$input-range-track-border-radius);
+        box-shadow: vars.$input-range-track-box-shadow;
     }
 
     &::-moz-range-thumb {
@@ -72,6 +73,29 @@
         background-color: vars.$input-range-track-bg;
         border-color: transparent;
         @include mixins.border-radius(vars.$input-range-track-border-radius);
+        box-shadow: vars.$input-range-track-box-shadow;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        &:not(:disabled):hover {
+            &::-webkit-slider-thumb {
+                transform: scale(1.08);
+            }
+
+            &::-moz-range-thumb {
+                transform: scale(1.08);
+            }
+        }
+
+        &:not(:disabled):active {
+            &::-webkit-slider-thumb {
+                transform: scale(.94);
+            }
+
+            &::-moz-range-thumb {
+                transform: scale(.94);
+            }
+        }
     }
 
     &:disabled {
@@ -79,10 +103,12 @@
 
         &::-webkit-slider-thumb {
             background-color: vars.$input-range-thumb-disabled-bg;
+            box-shadow: none;
         }
 
         &::-moz-range-thumb {
             background-color: vars.$input-range-thumb-disabled-bg;
+            box-shadow: none;
         }
     }
 }
@@ -98,6 +124,7 @@
         &::-webkit-slider-runnable-track {
             background-color: ButtonFace;
             border: 1px solid ButtonText;
+            box-shadow: none;
         }
 
         &::-moz-range-thumb {
@@ -107,6 +134,7 @@
         &::-moz-range-track {
             background-color: ButtonFace;
             border: 1px solid ButtonText;
+            box-shadow: none;
         }
 
         &:disabled {
