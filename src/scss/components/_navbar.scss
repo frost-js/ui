@@ -186,6 +186,8 @@
                 flex-grow: 1;
                 background-color: transparent;
                 border-inline: 0;
+                box-shadow: none;
+                backdrop-filter: none;
                 transform: none;
 
                 &:not(.show) {

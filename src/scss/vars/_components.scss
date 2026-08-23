@@ -202,7 +202,8 @@ $modal-md-dialog-margin-y: vars.$spacing * 2 !default;
 $modal-padding-x: vars.$spacing !default;
 $modal-padding-y: vars.$spacing !default;
 $modal-margin: vars.$spacing * .5 !default;
-$modal-bg: var(--ui-body-bg) !default;
+$modal-bg: helpers.color-alpha(body-bg, .92) !default;
+$modal-content-backdrop-filter: blur(1rem) saturate(140%) !default;
 $modal-content-color: var(--ui-body-color) !default;
 $modal-border-width: var(--ui-border-width) !default;
 $modal-border-color: var(--ui-border-color-translucent) !default;
@@ -221,8 +222,9 @@ $modal-footer-border-color: var(--ui-modal-border-color) !default;
 $modal-dialog-scrollable-gap: vars.$spacing !default;
 $modal-dialog-centered-gap: vars.$spacing !default;
 
-$modal-content-box-shadow: var(--ui-shadow-lg) !default;
-$modal-backdrop-bg: helpers.color-alpha("black", .5) !default;
+$modal-content-box-shadow: inset 0 1px 0 helpers.color-alpha("white", .12), var(--ui-shadow-lg) !default;
+$modal-backdrop-bg: color-mix(in srgb, helpers.color-alpha("black", .5) 92%, helpers.color-alpha(primary, .5)) !default;
+$modal-backdrop-filter: blur(.375rem) saturate(110%) !default;
 
 // nav
 $nav-link-padding-x: vars.$spacing !default;
@@ -286,12 +288,14 @@ $offcanvas-vertical-height: 30dvh !default;
 $offcanvas-padding-x: vars.$spacing !default;
 $offcanvas-padding-y: vars.$spacing !default;
 $offcanvas-color: var(--ui-body-color) !default;
-$offcanvas-bg: var(--ui-body-bg) !default;
+$offcanvas-bg: helpers.color-alpha(body-bg, .92) !default;
+$offcanvas-content-backdrop-filter: blur(1rem) saturate(140%) !default;
 $offcanvas-border-width: var(--ui-border-width) !default;
-$offcanvas-border-color: var(--ui-border-color) !default;
-$offcanvas-box-shadow: var(--ui-shadow-lg) !default;
+$offcanvas-border-color: var(--ui-border-color-translucent) !default;
+$offcanvas-box-shadow: inset 0 1px 0 helpers.color-alpha("white", .12), var(--ui-shadow-lg) !default;
 $offcanvas-title-line-height: map.get(vars.$line-heights, base) !default;
-$offcanvas-backdrop-bg: helpers.color-alpha("black", .5) !default;
+$offcanvas-backdrop-bg: color-mix(in srgb, helpers.color-alpha("black", .5) 92%, helpers.color-alpha(primary, .5)) !default;
+$offcanvas-backdrop-filter: blur(.375rem) saturate(110%) !default;
 
 // pagination
 $pagination-padding-x: vars.$spacing * .75 !default;

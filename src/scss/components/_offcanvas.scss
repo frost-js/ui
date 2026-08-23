@@ -8,6 +8,7 @@
     --ui-offcanvas-padding-y: #{vars.$offcanvas-padding-y};
     --ui-offcanvas-color: #{vars.$offcanvas-color};
     --ui-offcanvas-bg: #{vars.$offcanvas-bg};
+    --ui-offcanvas-content-backdrop-filter: #{vars.$offcanvas-content-backdrop-filter};
     --ui-offcanvas-border-width: #{vars.$offcanvas-border-width};
     --ui-offcanvas-border-color: #{vars.$offcanvas-border-color};
     --ui-offcanvas-box-shadow: #{vars.$offcanvas-box-shadow};
@@ -25,6 +26,7 @@
     background-color: var(--ui-offcanvas-bg);
     background-clip: padding-box;
     box-shadow: var(--ui-offcanvas-box-shadow);
+    backdrop-filter: var(--ui-offcanvas-content-backdrop-filter);
 
     &:not(.show) {
         display: none;
@@ -85,10 +87,16 @@
     border-top: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
 }
 
-.offcanvas-backdrop::before {
-    position: fixed;
-    inset: 0;
-    z-index: vars.$offcanvas-z-index - 1;
-    content: "";
-    background-color: vars.$offcanvas-backdrop-bg;
+.offcanvas-backdrop {
+    --ui-backdrop-bg: #{vars.$offcanvas-backdrop-bg};
+    --ui-backdrop-filter: #{vars.$offcanvas-backdrop-filter};
+
+    &::before {
+        position: fixed;
+        inset: 0;
+        z-index: vars.$offcanvas-z-index - 1;
+        content: "";
+        background-color: var(--ui-backdrop-bg);
+        backdrop-filter: var(--ui-backdrop-filter);
+    }
 }

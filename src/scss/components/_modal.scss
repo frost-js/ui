@@ -20,6 +20,7 @@
     --ui-modal-padding-y: #{vars.$modal-padding-y};
     --ui-modal-margin: #{vars.$modal-margin};
     --ui-modal-bg: #{vars.$modal-bg};
+    --ui-modal-content-backdrop-filter: #{vars.$modal-content-backdrop-filter};
     --ui-modal-border-width: #{vars.$modal-border-width};
     --ui-modal-border-color: #{vars.$modal-border-color};
     --ui-modal-border-radius: #{vars.$modal-border-radius};
@@ -83,18 +84,21 @@
     background-color: var(--ui-modal-bg);
     background-clip: padding-box;
     border: var(--ui-modal-border-width) var(--ui-border-style) var(--ui-modal-border-color);
-    @include mixins.border-radius(var(--ui-modal-border-radius));
     box-shadow: var(--ui-modal-box-shadow);
+    backdrop-filter: var(--ui-modal-content-backdrop-filter);
+    @include mixins.border-radius(var(--ui-modal-border-radius));
 }
 
 .modal-backdrop {
     --ui-backdrop-z-index: #{vars.$modal-backdrop-z-index};
     --ui-backdrop-bg: #{vars.$modal-backdrop-bg};
+    --ui-backdrop-filter: #{vars.$modal-backdrop-filter};
 
     position: fixed;
     inset: 0;
     z-index: var(--ui-backdrop-z-index);
     background-color: var(--ui-backdrop-bg);
+    backdrop-filter: var(--ui-backdrop-filter);
 }
 
 .modal-header {
