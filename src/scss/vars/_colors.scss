@@ -4,15 +4,19 @@ $gray: #808080 !default;
 $black: #000 !default;
 
 $blue: #2759bc !default;
-$indigo: #320270 !default;
-$purple: #7d0e7d !default;
-$pink: #e854c8 !default;
 $red: #c71010 !default;
 $orange: #f77625 !default;
 $yellow: #ffdd30 !default;
 $green: #008442 !default;
 $teal: #0ebbbb !default;
+
+// Public extension colors.
+// fusv-disable
+$indigo: #320270 !default;
+$purple: #7d0e7d !default;
+$pink: #e854c8 !default;
 $cyan: #2ad4fa !default;
+// fusv-enable
 
 // base colors
 $body-bg: $white !default;
