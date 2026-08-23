@@ -2126,7 +2126,7 @@ progress {
   --ui-badge-font-size: 0.75em;
   --ui-badge-font-weight: 700;
   --ui-badge-color: var(--ui-white);
-  --ui-badge-border-radius: var(--ui-border-radius);
+  --ui-badge-border-radius: var(--ui-border-radius-pill);
   display: inline-block;
   padding: var(--ui-badge-padding-y) var(--ui-badge-padding-x);
   font-size: var(--ui-badge-font-size);
@@ -2779,11 +2779,18 @@ fieldset:disabled .btn {
 
 .carousel {
   --ui-carousel-bg: var(--ui-body-color);
-  --ui-carousel-control-padding-x: 1rem;
-  --ui-carousel-control-padding-y: 1rem;
-  --ui-carousel-control-color: var(--ui-body-bg);
-  --ui-carousel-control-opacity: 0.5;
-  --ui-carousel-control-icon-width: 2rem;
+  --ui-carousel-control-size: 3rem;
+  --ui-carousel-control-spacer: 1rem;
+  --ui-carousel-control-color: var(--ui-body-color);
+  --ui-carousel-control-bg: rgb(from var(--ui-body-bg) r g b/0.8);
+  --ui-carousel-control-backdrop-filter: blur(0.75rem) saturate(140%);
+  --ui-carousel-control-border-width: var(--ui-border-width);
+  --ui-carousel-control-border-color: var(--ui-border-color-translucent);
+  --ui-carousel-control-border-radius: var(--ui-border-radius-pill);
+  --ui-carousel-control-box-shadow: inset 0 1px 0 rgb(from var(--ui-white) r g b/0.16), var(--ui-shadow-sm);
+  --ui-carousel-control-hover-box-shadow: inset 0 1px 0 rgb(from var(--ui-white) r g b/0.16), var(--ui-shadow);
+  --ui-carousel-control-opacity: 0.75;
+  --ui-carousel-control-icon-width: 1.25rem;
   --ui-carousel-control-prev-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e");
   --ui-carousel-control-next-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
   --ui-carousel-indicator-width: 0.5rem;
@@ -2832,36 +2839,45 @@ fieldset:disabled .btn {
 .carousel-control-prev,
 .carousel-control-next {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: 50%;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--ui-carousel-control-padding-y) var(--ui-carousel-control-padding-x);
-  font-size: 2em;
+  width: var(--ui-carousel-control-size);
+  height: var(--ui-carousel-control-size);
+  padding: 0;
   color: rgb(from var(--ui-carousel-control-color) r g b/var(--ui-carousel-control-opacity));
   text-align: center;
-  background: transparent;
-  border: 0;
+  background-color: var(--ui-carousel-control-bg);
+  border: var(--ui-carousel-control-border-width) var(--ui-border-style) var(--ui-carousel-control-border-color);
+  box-shadow: var(--ui-carousel-control-box-shadow);
+  -webkit-backdrop-filter: var(--ui-carousel-control-backdrop-filter);
+  backdrop-filter: var(--ui-carousel-control-backdrop-filter);
+  transform: translateY(-50%);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration-fast);
+  transition-property: color, background-color, border-color, box-shadow;
+  border-radius: var(--ui-carousel-control-border-radius);
 }
 .carousel-control-prev:hover, .carousel-control-prev:focus-visible,
 .carousel-control-next:hover,
 .carousel-control-next:focus-visible {
-  --ui-carousel-control-opacity: 0.75;
+  --ui-carousel-control-opacity: 1;
+  box-shadow: var(--ui-carousel-control-hover-box-shadow);
 }
 .carousel-control-prev:focus-visible,
 .carousel-control-next:focus-visible {
   outline: 0;
-  box-shadow: inset 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
+  box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color), var(--ui-carousel-control-hover-box-shadow);
 }
 
 .carousel-control-prev {
-  left: 0;
+  inset-inline-start: var(--ui-carousel-control-spacer);
 }
 
 .carousel-control-next {
-  right: 0;
+  inset-inline-end: var(--ui-carousel-control-spacer);
 }
 
 .carousel-control-prev-icon,
@@ -6744,6 +6760,46 @@ select.input-lg[multiple] option {
 .text-dark-emphasis {
   --ui-text-opacity: 1;
   color: rgb(from var(--ui-dark-emphasis) r g b/var(--ui-text-opacity)) !important;
+}
+
+.text-primary-subtle {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-primary-subtle-text) r g b/var(--ui-text-opacity)) !important;
+}
+
+.text-secondary-subtle {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-secondary-subtle-text) r g b/var(--ui-text-opacity)) !important;
+}
+
+.text-success-subtle {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-success-subtle-text) r g b/var(--ui-text-opacity)) !important;
+}
+
+.text-info-subtle {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-info-subtle-text) r g b/var(--ui-text-opacity)) !important;
+}
+
+.text-warning-subtle {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-warning-subtle-text) r g b/var(--ui-text-opacity)) !important;
+}
+
+.text-danger-subtle {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-danger-subtle-text) r g b/var(--ui-text-opacity)) !important;
+}
+
+.text-light-subtle {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-light-subtle-text) r g b/var(--ui-text-opacity)) !important;
+}
+
+.text-dark-subtle {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-dark-subtle-text) r g b/var(--ui-text-opacity)) !important;
 }
 
 .text-body {

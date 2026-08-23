@@ -4,9 +4,16 @@
 
 .carousel {
     --ui-carousel-bg: #{vars.$carousel-bg};
-    --ui-carousel-control-padding-x: #{vars.$carousel-control-padding-x};
-    --ui-carousel-control-padding-y: #{vars.$carousel-control-padding-y};
+    --ui-carousel-control-size: #{vars.$carousel-control-size};
+    --ui-carousel-control-spacer: #{vars.$carousel-control-spacer};
     --ui-carousel-control-color: #{vars.$carousel-control-color};
+    --ui-carousel-control-bg: #{vars.$carousel-control-bg};
+    --ui-carousel-control-backdrop-filter: #{vars.$carousel-control-backdrop-filter};
+    --ui-carousel-control-border-width: #{vars.$carousel-control-border-width};
+    --ui-carousel-control-border-color: #{vars.$carousel-control-border-color};
+    --ui-carousel-control-border-radius: #{vars.$carousel-control-border-radius};
+    --ui-carousel-control-box-shadow: #{vars.$carousel-control-box-shadow};
+    --ui-carousel-control-hover-box-shadow: #{vars.$carousel-control-hover-box-shadow};
     --ui-carousel-control-opacity: #{vars.$carousel-control-opacity};
     --ui-carousel-control-icon-width: #{vars.$carousel-control-icon-width};
     --ui-carousel-control-prev-icon: #{vars.$carousel-control-prev-icon};
@@ -59,36 +66,45 @@
 .carousel-control-prev,
 .carousel-control-next {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    top: 50%;
     z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--ui-carousel-control-padding-y) var(--ui-carousel-control-padding-x);
-    font-size: vars.$carousel-control-font-size;
+    width: var(--ui-carousel-control-size);
+    height: var(--ui-carousel-control-size);
+    padding: 0;
     color: functions.color-alpha(carousel-control-color, var(--ui-carousel-control-opacity));
     text-align: center;
-    background: transparent;
-    border: 0;
+    background-color: var(--ui-carousel-control-bg);
+    border: var(--ui-carousel-control-border-width) var(--ui-border-style) var(--ui-carousel-control-border-color);
+    box-shadow: var(--ui-carousel-control-box-shadow);
+    backdrop-filter: var(--ui-carousel-control-backdrop-filter);
+    transform: translateY(-50%);
+    transition-timing-function: var(--ui-transition-timing-function);
+    transition-duration: var(--ui-transition-duration-fast);
+    transition-property: color, background-color, border-color, box-shadow;
+    @include mixins.border-radius(var(--ui-carousel-control-border-radius));
 
     &:hover,
     &:focus-visible {
         --ui-carousel-control-opacity: #{vars.$carousel-control-hover-opacity};
+
+        box-shadow: var(--ui-carousel-control-hover-box-shadow);
     }
 
     &:focus-visible {
         outline: 0;
-        box-shadow: inset 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
+        box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color), var(--ui-carousel-control-hover-box-shadow);
     }
 }
 
 .carousel-control-prev {
-    left: 0;
+    inset-inline-start: var(--ui-carousel-control-spacer);
 }
 
 .carousel-control-next {
-    right: 0;
+    inset-inline-end: var(--ui-carousel-control-spacer);
 }
 
 .carousel-control-prev-icon,

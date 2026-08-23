@@ -25,6 +25,17 @@ $subtle-colors: (
     dark-subtle: var(--ui-dark-subtle)
 ) !default;
 
+$subtle-text-colors: (
+    primary-subtle: helpers.color-alpha(primary-subtle-text, var(--ui-text-opacity)),
+    secondary-subtle: helpers.color-alpha(secondary-subtle-text, var(--ui-text-opacity)),
+    success-subtle: helpers.color-alpha(success-subtle-text, var(--ui-text-opacity)),
+    info-subtle: helpers.color-alpha(info-subtle-text, var(--ui-text-opacity)),
+    warning-subtle: helpers.color-alpha(warning-subtle-text, var(--ui-text-opacity)),
+    danger-subtle: helpers.color-alpha(danger-subtle-text, var(--ui-text-opacity)),
+    light-subtle: helpers.color-alpha(light-subtle-text, var(--ui-text-opacity)),
+    dark-subtle: helpers.color-alpha(dark-subtle-text, var(--ui-text-opacity))
+) !default;
+
 $emphasis-colors: (
     primary-emphasis: var(--ui-primary-emphasis),
     secondary-emphasis: var(--ui-secondary-emphasis),
@@ -44,7 +55,7 @@ $utilities-colors: map.merge(
     )
 ) !default;
 
-$utilities-text-colors: helpers.map-loop(map.merge($utilities-colors, $emphasis-colors), color-alpha, "$key", var(--ui-text-opacity)) !default;
+$utilities-text-colors: map.merge(helpers.map-loop(map.merge($utilities-colors, $emphasis-colors), color-alpha, "$key", var(--ui-text-opacity)), $subtle-text-colors) !default;
 $utilities-border-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), color-alpha, "$key", var(--ui-border-opacity)) !default;
 $utilities-bg-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), color-alpha, "$key", var(--ui-bg-opacity)) !default;
 $utilities-link-underline-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), color-alpha, "$key", var(--ui-link-underline-opacity)) !default;

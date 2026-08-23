@@ -46,7 +46,7 @@ $badge-padding-y: .35em !default;
 $badge-font-size: .75em !default;
 $badge-font-weight: map.get(vars.$font-weights, bolder) !default;
 $badge-color: var(--ui-white) !default;
-$badge-border-radius: var(--ui-border-radius) !default;
+$badge-border-radius: var(--ui-border-radius-pill) !default;
 
 // breadcrumb
 $breadcrumb-margin-bottom: vars.$spacing !default;
@@ -104,13 +104,19 @@ $card-group-margin: vars.$spacing !default;
 // carousel
 $carousel-bg: var(--ui-body-color) !default;
 
-$carousel-control-padding-x: vars.$spacing !default;
-$carousel-control-padding-y: vars.$spacing !default;
-$carousel-control-font-size: 2em !default;
-$carousel-control-color: var(--ui-body-bg) !default;
-$carousel-control-opacity: .5 !default;
-$carousel-control-hover-opacity: .75 !default;
-$carousel-control-icon-width: 2rem !default;
+$carousel-control-size: 3rem !default;
+$carousel-control-spacer: vars.$spacing !default;
+$carousel-control-color: var(--ui-body-color) !default;
+$carousel-control-bg: helpers.color-alpha(body-bg, .8) !default;
+$carousel-control-backdrop-filter: blur(.75rem) saturate(140%) !default;
+$carousel-control-border-width: var(--ui-border-width) !default;
+$carousel-control-border-color: var(--ui-border-color-translucent) !default;
+$carousel-control-border-radius: var(--ui-border-radius-pill) !default;
+$carousel-control-box-shadow: inset 0 1px 0 helpers.color-alpha("white", .16), var(--ui-shadow-sm) !default;
+$carousel-control-hover-box-shadow: inset 0 1px 0 helpers.color-alpha("white", .16), var(--ui-shadow) !default;
+$carousel-control-opacity: .75 !default;
+$carousel-control-hover-opacity: 1 !default;
+$carousel-control-icon-width: 1.25rem !default;
 $carousel-control-prev-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e") !default;
 $carousel-control-next-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !default;
 
