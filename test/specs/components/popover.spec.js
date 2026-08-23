@@ -102,38 +102,6 @@ test.describe('Popover', () => {
             await expect(page.locator('.popover')).toHaveCount(0);
         });
 
-        test('clears popover memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popoverToggle1');
-                const popover = UI.Popover.init(popoverToggle1);
-                popover.dispose();
-
-                for (const key in popover) {
-                    if ($._isObject(popover[key]) && !$._isFunction(popover[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears popover memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popoverToggle1');
-                const popover = UI.Popover.init(popoverToggle1);
-                $.remove(popoverToggle1);
-
-                for (const key in popover) {
-                    if ($._isObject(popover[key]) && !$._isFunction(popover[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
         test('restores the title attribute', async ({ page }) => {
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');

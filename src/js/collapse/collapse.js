@@ -7,6 +7,9 @@ import { getTargetSelector } from './../helpers.js';
  * @class
  */
 export default class Collapse extends BaseComponent {
+    #parent;
+    #triggers;
+
     /**
      * New Collapse constructor.
      * @param {HTMLElement} node The input node.
@@ -15,14 +18,14 @@ export default class Collapse extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this._triggers = $.find('[data-ui-toggle="collapse"]')
+        this.#triggers = $.find('[data-ui-toggle="collapse"]')
             .filter((trigger) => {
                 const selector = getTargetSelector(trigger);
                 return selector && $.is(this.node, selector);
             });
 
         if (this.options.parent) {
-            this._parent = $.closest(this.node, this.options.parent).shift();
+            this.#parent = $.closest(this.node, this.options.parent).shift();
         }
     }
 
@@ -30,8 +33,8 @@ export default class Collapse extends BaseComponent {
      * Dispose the Collapse.
      */
     dispose() {
-        this._triggers = null;
-        this._parent = null;
+        this.#triggers = null;
+        this.#parent = null;
 
         super.dispose();
     }
@@ -49,16 +52,16 @@ export default class Collapse extends BaseComponent {
         }
 
         $.setDataset(this.node, { uiAnimating: 'out' });
-        $.addClass(this._triggers, 'collapsed');
-        $.addClass(this._triggers, 'collapsing');
+        $.addClass(this.#triggers, 'collapsed');
+        $.addClass(this.#triggers, 'collapsing');
 
         $.squeezeOut(this.node, {
             direction: this.options.direction,
             duration: this.options.duration,
         }).then((_) => {
             $.removeClass(this.node, 'show');
-            $.removeClass(this._triggers, 'collapsing');
-            $.setAttribute(this._triggers, { 'aria-expanded': false });
+            $.removeClass(this.#triggers, 'collapsing');
+            $.setAttribute(this.#triggers, { 'aria-expanded': false });
             $.removeDataset(this.node, 'uiAnimating');
             $.triggerEvent(this.node, 'hidden.ui.collapse');
         }).catch((_) => {
@@ -80,13 +83,13 @@ export default class Collapse extends BaseComponent {
         }
 
         const collapses = [];
-        if (this._parent) {
-            const siblings = $.find('.collapse.show', this._parent);
+        if (this.#parent) {
+            const siblings = $.find('.collapse.show', this.#parent);
 
             for (const sibling of siblings) {
                 const collapse = this.constructor.init(sibling);
 
-                if (!$.isSame(this._parent, collapse._parent)) {
+                if (!$.isSame(this.#parent, collapse.#parent)) {
                     continue;
                 }
 
@@ -104,15 +107,15 @@ export default class Collapse extends BaseComponent {
 
         $.setDataset(this.node, { uiAnimating: 'in' });
         $.addClass(this.node, 'show');
-        $.removeClass(this._triggers, 'collapsed');
-        $.addClass(this._triggers, 'collapsing');
+        $.removeClass(this.#triggers, 'collapsed');
+        $.addClass(this.#triggers, 'collapsing');
 
         $.squeezeIn(this.node, {
             direction: this.options.direction,
             duration: this.options.duration,
         }).then((_) => {
-            $.removeClass(this._triggers, 'collapsing');
-            $.setAttribute(this._triggers, { 'aria-expanded': true });
+            $.removeClass(this.#triggers, 'collapsing');
+            $.setAttribute(this.#triggers, { 'aria-expanded': true });
             $.removeDataset(this.node, 'uiAnimating');
             $.triggerEvent(this.node, 'shown.ui.collapse');
         }).catch((_) => {

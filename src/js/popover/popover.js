@@ -8,6 +8,16 @@ import Popper from './../popper/index.js';
  * @class
  */
 export default class Popover extends BaseComponent {
+    #arrow;
+    #enabled;
+    #hideModalEvent;
+    #modal;
+    #popover;
+    #popoverBody;
+    #popoverHeader;
+    #popper;
+    #triggers;
+
     /**
      * New Popover constructor.
      * @param {HTMLElement} node The input node.
@@ -16,12 +26,12 @@ export default class Popover extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this._modal = $.closest(this.node, '.modal').shift();
+        this.#modal = $.closest(this.node, '.modal').shift();
 
-        this._triggers = this.options.trigger.split(' ');
+        this.#triggers = this.options.trigger.split(' ');
 
-        this._render();
-        this._events();
+        this.#render();
+        this.#events();
 
         if (this.options.enable) {
             this.enable();
@@ -31,129 +41,10 @@ export default class Popover extends BaseComponent {
     }
 
     /**
-     * Attach events for the Popover.
-     */
-    _events() {
-        if (this._triggers.includes('hover')) {
-            $.addEvent(this.node, 'mouseover.ui.popover', (_) => {
-                this._stop();
-                this.show();
-            });
-
-            $.addEvent(this.node, 'mouseout.ui.popover', (_) => {
-                this._stop();
-                this.hide({ force: false });
-            });
-        }
-
-        if (this._triggers.includes('focus')) {
-            $.addEvent(this.node, 'focus.ui.popover', (_) => {
-                this._stop();
-                this.show();
-            });
-
-            $.addEvent(this.node, 'blur.ui.popover', (_) => {
-                this._stop();
-                this.hide({ force: false });
-            });
-        }
-
-        if (this._triggers.includes('click')) {
-            $.addEvent(this.node, 'click.ui.popover', (e) => {
-                e.preventDefault();
-
-                this._stop();
-                this.toggle({ force: false });
-            });
-        }
-
-        if (this._modal) {
-            this._hideModalEvent = (_) => {
-                this._stop();
-                this.hide();
-            };
-            $.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
-        }
-    }
-
-    /**
-     * Render the Popover element.
-     */
-    _render() {
-        this._popover = $.parseHTML(this.options.template).shift();
-        if (this.options.customClass) {
-            $.addClass(this._popover, this.options.customClass);
-        }
-        this._arrow = $.findOne('.popover-arrow', this._popover);
-        this._popoverHeader = $.findOne('.popover-header', this._popover);
-        this._popoverBody = $.findOne('.popover-body', this._popover);
-    }
-
-    /**
-     * Update the Popover and append to the DOM.
-     */
-    _show() {
-        if (this.options.appendTo) {
-            $.append(this.options.appendTo, this._popover);
-        } else {
-            $.after(this.node, this._popover);
-        }
-
-        if (!this.options.noAttributes) {
-            const id = generateId(this.constructor.DATA_KEY);
-            $.setAttribute(this._popover, { id });
-            $.setAttribute(this.node, { 'aria-described-by': id });
-        }
-
-        this._popper = new Popper(
-            this._popover,
-            {
-                reference: this.node,
-                arrow: this._arrow,
-                placement: this.options.placement,
-                position: this.options.position,
-                fixed: this.options.fixed,
-                spacing: this.options.spacing,
-                minContact: this.options.minContact,
-                noAttributes: this.options.noAttributes,
-            },
-        );
-
-        window.requestAnimationFrame((_) => {
-            this.update();
-        });
-    }
-
-    /**
-     * Stop the animations.
-     */
-    _stop() {
-        if (!this._enabled) {
-            return;
-        }
-
-        const animating = $.getDataset(this._popover, 'uiAnimating');
-
-        if (!animating) {
-            return;
-        }
-
-        $.stop(this._popover, { finish: false });
-        $.removeDataset(this._popover, 'uiAnimating');
-
-        if (animating === 'out') {
-            this._popper.dispose();
-            this._popper = null;
-
-            $.detach(this._popover);
-        }
-    }
-
-    /**
      * Disable the Popover.
      */
     disable() {
-        this._enabled = false;
+        this.#enabled = false;
     }
 
     /**
@@ -166,38 +57,38 @@ export default class Popover extends BaseComponent {
             $.removeDataset(this.node, 'uiOriginalTitle');
         }
 
-        if (this._popper) {
-            this._popper.dispose();
-            this._popper = null;
+        if (this.#popper) {
+            this.#popper.dispose();
+            this.#popper = null;
         }
 
-        $.remove(this._popover);
+        $.remove(this.#popover);
 
-        if (this._triggers.includes('hover')) {
+        if (this.#triggers.includes('hover')) {
             $.removeEvent(this.node, 'mouseover.ui.popover');
             $.removeEvent(this.node, 'mouseout.ui.popover');
         }
 
-        if (this._triggers.includes('focus')) {
+        if (this.#triggers.includes('focus')) {
             $.removeEvent(this.node, 'focus.ui.popover');
             $.removeEvent(this.node, 'blur.ui.popover');
         }
 
-        if (this._triggers.includes('click')) {
+        if (this.#triggers.includes('click')) {
             $.removeEvent(this.node, 'click.ui.popover');
         }
 
-        if (this._modal) {
-            $.removeEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
+        if (this.#modal) {
+            $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
         }
 
-        this._modal = null;
-        this._triggers = null;
-        this._popover = null;
-        this._popoverHeader = null;
-        this._popoverBody = null;
-        this._arrow = null;
-        this._hideModalEvent = null;
+        this.#modal = null;
+        this.#triggers = null;
+        this.#popover = null;
+        this.#popoverHeader = null;
+        this.#popoverBody = null;
+        this.#arrow = null;
+        this.#hideModalEvent = null;
 
         super.dispose();
     }
@@ -206,7 +97,7 @@ export default class Popover extends BaseComponent {
      * Enable the Popover.
      */
     enable() {
-        this._enabled = true;
+        this.#enabled = true;
     }
 
     /**
@@ -216,29 +107,29 @@ export default class Popover extends BaseComponent {
      */
     hide({ force = true } = {}) {
         if (
-            (!force && !this._enabled) ||
-            $.getDataset(this._popover, 'uiAnimating') ||
-            !$.isConnected(this._popover) ||
+            (!force && !this.#enabled) ||
+            $.getDataset(this.#popover, 'uiAnimating') ||
+            !$.isConnected(this.#popover) ||
             !$.triggerOne(this.node, 'hide.ui.popover')
         ) {
             return;
         }
 
-        $.setDataset(this._popover, { uiAnimating: 'out' });
+        $.setDataset(this.#popover, { uiAnimating: 'out' });
 
-        $.fadeOut(this._popover, {
+        $.fadeOut(this.#popover, {
             duration: this.options.duration,
         }).then((_) => {
-            this._popper.dispose();
-            this._popper = null;
+            this.#popper.dispose();
+            this.#popper = null;
 
-            $.detach(this._popover);
-            $.removeDataset(this._popover, 'uiAnimating');
+            $.detach(this.#popover);
+            $.removeDataset(this.#popover, 'uiAnimating');
             $.removeAttribute(this.node, 'aria-described-by');
             $.triggerEvent(this.node, 'hidden.ui.popover');
         }).catch((_) => {
-            if ($.getDataset(this._popover, 'uiAnimating') === 'out') {
-                $.removeDataset(this._popover, 'uiAnimating');
+            if ($.getDataset(this.#popover, 'uiAnimating') === 'out') {
+                $.removeDataset(this.#popover, 'uiAnimating');
             }
         });
     }
@@ -272,20 +163,20 @@ export default class Popover extends BaseComponent {
         const method = this.options.html ? 'setHTML' : 'setText';
 
         $[method](
-            this._popoverHeader,
+            this.#popoverHeader,
             this.options.html && this.options.sanitize ?
                 this.options.sanitize(title) :
                 title,
         );
 
         if (!title) {
-            $.hide(this._popoverHeader);
+            $.hide(this.#popoverHeader);
         } else {
-            $.show(this._popoverHeader);
+            $.show(this.#popoverHeader);
         }
 
         $[method](
-            this._popoverBody,
+            this.#popoverBody,
             this.options.html && this.options.sanitize ?
                 this.options.sanitize(content) :
                 content,
@@ -297,26 +188,26 @@ export default class Popover extends BaseComponent {
      */
     show() {
         if (
-            !this._enabled ||
-            $.getDataset(this._popover, 'uiAnimating') ||
-            $.isConnected(this._popover) ||
+            !this.#enabled ||
+            $.getDataset(this.#popover, 'uiAnimating') ||
+            $.isConnected(this.#popover) ||
             !$.triggerOne(this.node, 'show.ui.popover')
         ) {
             return;
         }
 
-        $.setDataset(this._popover, { uiAnimating: 'in' });
+        $.setDataset(this.#popover, { uiAnimating: 'in' });
         this.refresh();
-        this._show();
+        this.#show();
 
-        $.fadeIn(this._popover, {
+        $.fadeIn(this.#popover, {
             duration: this.options.duration,
         }).then((_) => {
-            $.removeDataset(this._popover, 'uiAnimating');
+            $.removeDataset(this.#popover, 'uiAnimating');
             $.triggerEvent(this.node, 'shown.ui.popover');
         }).catch((_) => {
-            if ($.getDataset(this._popover, 'uiAnimating') === 'in') {
-                $.removeDataset(this._popover, 'uiAnimating');
+            if ($.getDataset(this.#popover, 'uiAnimating') === 'in') {
+                $.removeDataset(this.#popover, 'uiAnimating');
             }
         });
     }
@@ -327,7 +218,7 @@ export default class Popover extends BaseComponent {
      * @param {boolean} [options.force=true] Whether to force hiding when disabled.
      */
     toggle({ force = true } = {}) {
-        if ($.isConnected(this._popover)) {
+        if ($.isConnected(this.#popover)) {
             this.hide({ force });
         } else {
             this.show();
@@ -338,8 +229,127 @@ export default class Popover extends BaseComponent {
      * Update the Popover position.
      */
     update() {
-        if (this._popper) {
-            this._popper.update();
+        if (this.#popper) {
+            this.#popper.update();
+        }
+    }
+
+    /**
+     * Attach events for the Popover.
+     */
+    #events() {
+        if (this.#triggers.includes('hover')) {
+            $.addEvent(this.node, 'mouseover.ui.popover', (_) => {
+                this.#stop();
+                this.show();
+            });
+
+            $.addEvent(this.node, 'mouseout.ui.popover', (_) => {
+                this.#stop();
+                this.hide({ force: false });
+            });
+        }
+
+        if (this.#triggers.includes('focus')) {
+            $.addEvent(this.node, 'focus.ui.popover', (_) => {
+                this.#stop();
+                this.show();
+            });
+
+            $.addEvent(this.node, 'blur.ui.popover', (_) => {
+                this.#stop();
+                this.hide({ force: false });
+            });
+        }
+
+        if (this.#triggers.includes('click')) {
+            $.addEvent(this.node, 'click.ui.popover', (e) => {
+                e.preventDefault();
+
+                this.#stop();
+                this.toggle({ force: false });
+            });
+        }
+
+        if (this.#modal) {
+            this.#hideModalEvent = (_) => {
+                this.#stop();
+                this.hide();
+            };
+            $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+        }
+    }
+
+    /**
+     * Render the Popover element.
+     */
+    #render() {
+        this.#popover = $.parseHTML(this.options.template).shift();
+        if (this.options.customClass) {
+            $.addClass(this.#popover, this.options.customClass);
+        }
+        this.#arrow = $.findOne('.popover-arrow', this.#popover);
+        this.#popoverHeader = $.findOne('.popover-header', this.#popover);
+        this.#popoverBody = $.findOne('.popover-body', this.#popover);
+    }
+
+    /**
+     * Update the Popover and append to the DOM.
+     */
+    #show() {
+        if (this.options.appendTo) {
+            $.append(this.options.appendTo, this.#popover);
+        } else {
+            $.after(this.node, this.#popover);
+        }
+
+        if (!this.options.noAttributes) {
+            const id = generateId(this.constructor.DATA_KEY);
+            $.setAttribute(this.#popover, { id });
+            $.setAttribute(this.node, { 'aria-described-by': id });
+        }
+
+        this.#popper = new Popper(
+            this.#popover,
+            {
+                reference: this.node,
+                arrow: this.#arrow,
+                placement: this.options.placement,
+                position: this.options.position,
+                fixed: this.options.fixed,
+                spacing: this.options.spacing,
+                minContact: this.options.minContact,
+                noAttributes: this.options.noAttributes,
+            },
+        );
+
+        window.requestAnimationFrame((_) => {
+            this.update();
+        });
+    }
+
+    /**
+     * Stop the animations.
+     */
+    #stop() {
+        if (!this.#enabled) {
+            return;
+        }
+
+        const animating = $.getDataset(this.#popover, 'uiAnimating');
+
+        if (!animating) {
+            return;
+        }
+
+        $.stop(this.#popover, { finish: false });
+        $.removeDataset(this.#popover, 'uiAnimating');
+
+        if (animating === 'out') {
+            this.#popper.dispose();
+            this.#popper = null;
+
+            $.detach(this.#popover);
         }
     }
 }

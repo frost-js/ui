@@ -7,11 +7,13 @@ import { addFocusTrap, removeFocusTrap } from './helpers.js';
  * @class
  */
 export default class FocusTrap extends BaseComponent {
+    #active;
+
     /**
      * Activate the FocusTrap.
      */
     activate() {
-        if (this._active) {
+        if (this.#active) {
             return;
         }
 
@@ -21,19 +23,19 @@ export default class FocusTrap extends BaseComponent {
             $.focus(this.node);
         }
 
-        this._active = true;
+        this.#active = true;
     }
 
     /**
      * Deactivate the FocusTrap.
      */
     deactivate() {
-        if (!this._active) {
+        if (!this.#active) {
             return;
         }
 
         removeFocusTrap(this);
-        this._active = false;
+        this.#active = false;
     }
 
     /**

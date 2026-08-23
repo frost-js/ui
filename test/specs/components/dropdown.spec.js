@@ -91,38 +91,6 @@ test.describe('Dropdown', () => {
                 );
             })).toBe(false);
         });
-
-        test('clears dropdown memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const dropdownToggle1 = $.findOne('#dropdownToggle1');
-                const dropdown = UI.Dropdown.init(dropdownToggle1);
-                dropdown.dispose();
-
-                for (const key in dropdown) {
-                    if ($._isObject(dropdown[key]) && !$._isFunction(dropdown[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears dropdown memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const dropdownToggle1 = $.findOne('#dropdownToggle1');
-                const dropdown = UI.Dropdown.init(dropdownToggle1);
-                $.remove(dropdownToggle1);
-
-                for (const key in dropdown) {
-                    if ($._isObject(dropdown[key]) && !$._isFunction(dropdown[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
     });
 
     test.describe('#show', () => {

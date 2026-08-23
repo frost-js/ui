@@ -6,12 +6,14 @@ import { $ } from './../globals.js';
  * @class
  */
 export default class Toast extends BaseComponent {
+    #timer;
+
     /**
      * Dispose the Toast.
      */
     dispose() {
-        clearTimeout(this._timer);
-        this._timer = null;
+        clearTimeout(this.#timer);
+        this.#timer = null;
 
         super.dispose();
     }
@@ -28,8 +30,8 @@ export default class Toast extends BaseComponent {
             return;
         }
 
-        clearTimeout(this._timer);
-        this._timer = null;
+        clearTimeout(this.#timer);
+        this.#timer = null;
 
         $.setDataset(this.node, { uiAnimating: 'out' });
 
@@ -59,8 +61,8 @@ export default class Toast extends BaseComponent {
             return;
         }
 
-        clearTimeout(this._timer);
-        this._timer = null;
+        clearTimeout(this.#timer);
+        this.#timer = null;
 
         $.setDataset(this.node, { uiAnimating: 'in' });
         $.setStyle(this.node, { display: '' });
@@ -73,9 +75,9 @@ export default class Toast extends BaseComponent {
             $.triggerEvent(this.node, 'shown.ui.toast');
 
             if (this.options.autohide) {
-                this._timer = setTimeout(
+                this.#timer = setTimeout(
                     (_) => {
-                        this._timer = null;
+                        this.#timer = null;
                         this.hide();
                     },
                     this.options.delay,

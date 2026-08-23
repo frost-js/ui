@@ -481,6 +481,12 @@
      * @class
      */
     class Carousel extends BaseComponent {
+        #index;
+        #items;
+        #mousePaused;
+        #paused;
+        #timer;
+
         /**
          * New Carousel constructor.
          * @param {HTMLElement} node The input node.
@@ -489,23 +495,99 @@
         constructor(node, options) {
             super(node, options);
 
-            this._items = $.find('.carousel-item', this.node);
+            this.#items = $.find('.carousel-item', this.node);
 
-            this._index = this._items.findIndex((item) =>
+            this.#index = this.#items.findIndex((item) =>
                 $.hasClass(item, 'active'),
             );
 
-            this._events();
+            this.#events();
 
             if (this.options.ride === 'carousel') {
-                this._setTimer();
+                this.#setTimer();
             }
+        }
+
+        /**
+         * Cycle to the next carousel item.
+         */
+        cycle() {
+            if (!$.isHidden(document)) {
+                this.slide(1);
+            } else {
+                this.#paused = false;
+                this.#setTimer();
+            }
+        }
+
+        /**
+         * Dispose the Carousel.
+         */
+        dispose() {
+            clearTimeout(this.#timer);
+            this.#timer = null;
+
+            if (this.options.keyboard) {
+                $.removeEvent(this.node, 'keydown.ui.carousel');
+            }
+
+            if (this.options.pause) {
+                $.removeEvent(this.node, 'mouseenter.ui.carousel');
+                $.removeEvent(this.node, 'mouseleave.ui.carousel');
+            }
+
+            if (this.options.swipe) {
+                $.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
+            }
+
+            this.#items = null;
+
+            super.dispose();
+        }
+
+        /**
+         * Cycle to the next Carousel item.
+         */
+        next() {
+            this.slide();
+        }
+
+        /**
+         * Stop the carousel from cycling through items.
+         */
+        pause() {
+            clearTimeout(this.#timer);
+            this.#timer = null;
+            this.#paused = true;
+        }
+
+        /**
+         * Cycle to the previous Carousel item.
+         */
+        prev() {
+            this.slide(-1);
+        }
+
+        /**
+         * Cycle to a specific Carousel item.
+         * @param {number} index The item index to cycle to.
+         */
+        show(index) {
+            this.#show(index);
+        }
+
+        /**
+         * Slide the Carousel in a specific direction.
+         * @param {number} [direction=1] The direction to slide to.
+         */
+        slide(direction = 1) {
+            this.show(this.#index + direction);
         }
 
         /**
          * Attach events for the Carousel.
          */
-        _events() {
+        #events() {
             if (this.options.keyboard) {
                 $.addEvent(this.node, 'keydown.ui.carousel', (e) => {
                     const target = e.target;
@@ -528,16 +610,16 @@
 
             if (this.options.pause) {
                 $.addEvent(this.node, 'mouseenter.ui.carousel', (_) => {
-                    this._mousePaused = true;
+                    this.#mousePaused = true;
                     this.pause();
                 });
 
                 $.addEvent(this.node, 'mouseleave.ui.carousel', (_) => {
-                    this._mousePaused = false;
-                    this._paused = false;
+                    this.#mousePaused = false;
+                    this.#paused = false;
 
                     if (!$.getDataset(this.node, 'uiSliding')) {
-                        this._setTimer();
+                        this.#setTimer();
                     }
                 });
             }
@@ -580,8 +662,8 @@
                     if (!this.options.wrap) {
                         mouseDiffX = $._clamp(
                             mouseDiffX,
-                            -(this._items.length - 1 - this._index) * scrollX,
-                            this._index * scrollX,
+                            -(this.#items.length - 1 - this.#index) * scrollX,
+                            this.#index * scrollX,
                         );
                     }
 
@@ -591,52 +673,52 @@
                         const lastIndex = index;
 
                         if (mouseDiffX < 0) {
-                            index = this._index + 1;
+                            index = this.#index + 1;
                         } else if (mouseDiffX > 0) {
-                            index = this._index - 1;
+                            index = this.#index - 1;
                         } else {
-                            index = this._index;
+                            index = this.#index;
                             return;
                         }
 
-                        const offset = getDirOffset(index, this._items.length);
-                        index = getIndex(index, this._items.length);
-                        direction = getDirection$1(offset, this._index, index);
+                        const offset = getDirOffset(index, this.#items.length);
+                        index = getIndex(index, this.#items.length);
+                        direction = getDirection$1(offset, this.#index, index);
 
                         if (progress >= 1) {
                             startX = currentX;
 
-                            const oldIndex = this._setIndex(index);
-                            this._update(this._items[this._index], this._items[oldIndex], progress, { direction });
-                            this._updateIndicators();
+                            const oldIndex = this.#setIndex(index);
+                            this.#update(this.#items[this.#index], this.#items[oldIndex], progress, { direction });
+                            this.#updateIndicators();
 
-                            if (lastIndex !== this._index) {
-                                this._resetStyles(lastIndex);
+                            if (lastIndex !== this.#index) {
+                                this.#resetStyles(lastIndex);
                             }
 
                             progress--;
                         } else {
-                            this._update(this._items[index], this._items[this._index], progress, { direction, dragging: true });
+                            this.#update(this.#items[index], this.#items[this.#index], progress, { direction, dragging: true });
 
                             if (lastIndex !== index) {
-                                this._resetStyles(lastIndex);
+                                this.#resetStyles(lastIndex);
                             }
                         }
                     } while (progress > 1);
                 };
 
                 const upEvent = (_) => {
-                    if (index === null || index === this._index) {
-                        this._paused = false;
+                    if (index === null || index === this.#index) {
+                        this.#paused = false;
                         $.removeDataset(this.node, 'uiSliding');
-                        this._setTimer();
+                        this.#setTimer();
                         return;
                     }
 
                     let oldIndex;
                     let progressRemaining;
                     if (progress > .25) {
-                        oldIndex = this._setIndex(index);
+                        oldIndex = this.#setIndex(index);
                         progressRemaining = 1 - progress;
                     } else {
                         oldIndex = index;
@@ -644,32 +726,32 @@
                         direction = direction === 'right' ? 'left' : 'right';
                     }
 
-                    this._resetStyles(this._index);
+                    this.#resetStyles(this.#index);
 
                     index = null;
 
                     $.animate(
-                        this._items[this._index],
+                        this.#items[this.#index],
                         (node, newProgress) => {
-                            if (!this._items) {
+                            if (!this.#items) {
                                 return;
                             }
 
                             if (progress > .25) {
-                                this._update(node, this._items[oldIndex], progress + (newProgress * progressRemaining), { direction });
+                                this.#update(node, this.#items[oldIndex], progress + (newProgress * progressRemaining), { direction });
                             } else {
-                                this._update(node, this._items[oldIndex], (1 - progress) + (newProgress * progressRemaining), { direction });
+                                this.#update(node, this.#items[oldIndex], (1 - progress) + (newProgress * progressRemaining), { direction });
                             }
                         },
                         {
                             duration: this.options.transition * progressRemaining,
                         },
                     ).then((_) => {
-                        this._updateIndicators();
+                        this.#updateIndicators();
                         $.removeDataset(this.node, 'uiSliding');
 
-                        this._paused = false;
-                        this._setTimer();
+                        this.#paused = false;
+                        this.#setTimer();
                     }).catch((_) => {
                         $.removeDataset(this.node, 'uiSliding');
                     });
@@ -685,8 +767,8 @@
          * Reset styles of an item.
          * @param {number} index The item index.
          */
-        _resetStyles(index) {
-            $.setStyle(this._items[index], {
+        #resetStyles(index) {
+            $.setStyle(this.#items[index], {
                 display: '',
                 transform: '',
             });
@@ -697,12 +779,12 @@
          * @param {number} index The new item index.
          * @return {number} The old item index.
          */
-        _setIndex(index) {
-            const oldIndex = this._index;
-            this._index = index;
+        #setIndex(index) {
+            const oldIndex = this.#index;
+            this.#index = index;
 
-            $.addClass(this._items[this._index], 'active');
-            $.removeClass(this._items[oldIndex], 'active');
+            $.addClass(this.#items[this.#index], 'active');
+            $.removeClass(this.#items[oldIndex], 'active');
 
             return oldIndex;
         }
@@ -710,16 +792,16 @@
         /**
          * Set a timer for the next Carousel cycle.
          */
-        _setTimer() {
-            if (this._timer || this._paused || this._mousePaused) {
+        #setTimer() {
+            if (this.#timer || this.#paused || this.#mousePaused) {
                 return;
             }
 
-            const interval = $.getDataset(this._items[this._index], 'uiInterval');
+            const interval = $.getDataset(this.#items[this.#index], 'uiInterval');
 
-            this._timer = setTimeout(
+            this.#timer = setTimeout(
                 (_) => {
-                    this._timer = null;
+                    this.#timer = null;
                     this.cycle();
                 },
                 interval || this.options.interval,
@@ -730,7 +812,7 @@
          * Cycle to a specific Carousel item.
          * @param {number} index The item index to cycle to.
          */
-        _show(index) {
+        #show(index) {
             if ($.getDataset(this.node, 'uiSliding')) {
                 return;
             }
@@ -740,25 +822,25 @@
             if (!this.options.wrap &&
                 (
                     index < 0 ||
-                    index > this._items.length - 1
+                    index > this.#items.length - 1
                 )
             ) {
                 return;
             }
 
-            const offset = getDirOffset(index, this._items.length);
-            index = getIndex(index, this._items.length);
+            const offset = getDirOffset(index, this.#items.length);
+            index = getIndex(index, this.#items.length);
 
-            if (index === this._index) {
+            if (index === this.#index) {
                 return;
             }
 
-            const direction = getDirection$1(offset, this._index, index);
+            const direction = getDirection$1(offset, this.#index, index);
 
             const eventData = {
                 direction,
-                relatedTarget: this._items[index],
-                from: this._index,
+                relatedTarget: this.#items[index],
+                from: this.#index,
                 to: index,
             };
 
@@ -769,27 +851,27 @@
             $.setDataset(this.node, { uiSliding: true });
             this.pause();
 
-            const oldIndex = this._setIndex(index);
+            const oldIndex = this.#setIndex(index);
 
             $.animate(
-                this._items[this._index],
+                this.#items[this.#index],
                 (node, progress) => {
-                    if (!this._items) {
+                    if (!this.#items) {
                         return;
                     }
 
-                    this._update(node, this._items[oldIndex], progress, { direction });
+                    this.#update(node, this.#items[oldIndex], progress, { direction });
                 },
                 {
                     duration: this.options.transition,
                 },
             ).then((_) => {
-                this._updateIndicators();
+                this.#updateIndicators();
                 $.removeDataset(this.node, 'uiSliding');
                 $.triggerEvent(this.node, 'slid.ui.carousel', { data: eventData });
 
-                this._paused = false;
-                this._setTimer();
+                this.#paused = false;
+                this.#setTimer();
             }).catch((_) => {
                 $.removeDataset(this.node, 'uiSliding');
             });
@@ -804,7 +886,7 @@
          * @param {string} [options.direction] The direction to cycle to.
          * @param {Boolean} [options.dragging] Whether the item is being dragged.
          */
-        _update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
+        #update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
             const inStyles = {};
             const outStyles = {};
 
@@ -837,87 +919,11 @@
         /**
          * Update the carousel indicators.
          */
-        _updateIndicators() {
+        #updateIndicators() {
             const oldIndicator = $.find('.active[data-ui-slide-to]', this.node);
-            const newIndicator = $.find('[data-ui-slide-to="' + this._index + '"]', this.node);
+            const newIndicator = $.find('[data-ui-slide-to="' + this.#index + '"]', this.node);
             $.removeClass(oldIndicator, 'active');
             $.addClass(newIndicator, 'active');
-        }
-
-        /**
-         * Cycle to the next carousel item.
-         */
-        cycle() {
-            if (!$.isHidden(document)) {
-                this.slide(1);
-            } else {
-                this._paused = false;
-                this._setTimer();
-            }
-        }
-
-        /**
-         * Dispose the Carousel.
-         */
-        dispose() {
-            clearTimeout(this._timer);
-            this._timer = null;
-
-            if (this.options.keyboard) {
-                $.removeEvent(this.node, 'keydown.ui.carousel');
-            }
-
-            if (this.options.pause) {
-                $.removeEvent(this.node, 'mouseenter.ui.carousel');
-                $.removeEvent(this.node, 'mouseleave.ui.carousel');
-            }
-
-            if (this.options.swipe) {
-                $.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
-            }
-
-            this._items = null;
-
-            super.dispose();
-        }
-
-        /**
-         * Cycle to the next Carousel item.
-         */
-        next() {
-            this.slide();
-        }
-
-        /**
-         * Stop the carousel from cycling through items.
-         */
-        pause() {
-            clearTimeout(this._timer);
-            this._timer = null;
-            this._paused = true;
-        }
-
-        /**
-         * Cycle to the previous Carousel item.
-         */
-        prev() {
-            this.slide(-1);
-        }
-
-        /**
-         * Cycle to a specific Carousel item.
-         * @param {number} index The item index to cycle to.
-         */
-        show(index) {
-            this._show(index);
-        }
-
-        /**
-         * Slide the Carousel in a specific direction.
-         * @param {number} [direction=1] The direction to slide to.
-         */
-        slide(direction = 1) {
-            this.show(this._index + direction);
         }
     }
 
@@ -995,6 +1001,9 @@
      * @class
      */
     class Collapse extends BaseComponent {
+        #parent;
+        #triggers;
+
         /**
          * New Collapse constructor.
          * @param {HTMLElement} node The input node.
@@ -1003,14 +1012,14 @@
         constructor(node, options) {
             super(node, options);
 
-            this._triggers = $.find('[data-ui-toggle="collapse"]')
+            this.#triggers = $.find('[data-ui-toggle="collapse"]')
                 .filter((trigger) => {
                     const selector = getTargetSelector(trigger);
                     return selector && $.is(this.node, selector);
                 });
 
             if (this.options.parent) {
-                this._parent = $.closest(this.node, this.options.parent).shift();
+                this.#parent = $.closest(this.node, this.options.parent).shift();
             }
         }
 
@@ -1018,8 +1027,8 @@
          * Dispose the Collapse.
          */
         dispose() {
-            this._triggers = null;
-            this._parent = null;
+            this.#triggers = null;
+            this.#parent = null;
 
             super.dispose();
         }
@@ -1037,16 +1046,16 @@
             }
 
             $.setDataset(this.node, { uiAnimating: 'out' });
-            $.addClass(this._triggers, 'collapsed');
-            $.addClass(this._triggers, 'collapsing');
+            $.addClass(this.#triggers, 'collapsed');
+            $.addClass(this.#triggers, 'collapsing');
 
             $.squeezeOut(this.node, {
                 direction: this.options.direction,
                 duration: this.options.duration,
             }).then((_) => {
                 $.removeClass(this.node, 'show');
-                $.removeClass(this._triggers, 'collapsing');
-                $.setAttribute(this._triggers, { 'aria-expanded': false });
+                $.removeClass(this.#triggers, 'collapsing');
+                $.setAttribute(this.#triggers, { 'aria-expanded': false });
                 $.removeDataset(this.node, 'uiAnimating');
                 $.triggerEvent(this.node, 'hidden.ui.collapse');
             }).catch((_) => {
@@ -1068,13 +1077,13 @@
             }
 
             const collapses = [];
-            if (this._parent) {
-                const siblings = $.find('.collapse.show', this._parent);
+            if (this.#parent) {
+                const siblings = $.find('.collapse.show', this.#parent);
 
                 for (const sibling of siblings) {
                     const collapse = this.constructor.init(sibling);
 
-                    if (!$.isSame(this._parent, collapse._parent)) {
+                    if (!$.isSame(this.#parent, collapse.#parent)) {
                         continue;
                     }
 
@@ -1092,15 +1101,15 @@
 
             $.setDataset(this.node, { uiAnimating: 'in' });
             $.addClass(this.node, 'show');
-            $.removeClass(this._triggers, 'collapsed');
-            $.addClass(this._triggers, 'collapsing');
+            $.removeClass(this.#triggers, 'collapsed');
+            $.addClass(this.#triggers, 'collapsing');
 
             $.squeezeIn(this.node, {
                 direction: this.options.direction,
                 duration: this.options.duration,
             }).then((_) => {
-                $.removeClass(this._triggers, 'collapsing');
-                $.setAttribute(this._triggers, { 'aria-expanded': true });
+                $.removeClass(this.#triggers, 'collapsing');
+                $.setAttribute(this.#triggers, { 'aria-expanded': true });
                 $.removeDataset(this.node, 'uiAnimating');
                 $.triggerEvent(this.node, 'shown.ui.collapse');
             }).catch((_) => {
@@ -1303,6 +1312,9 @@
      * @class
      */
     class Popper extends BaseComponent {
+        #placement;
+        #referencePlacement;
+
         /**
          * New Popper constructor.
          * @param {HTMLElement} node The input node.
@@ -1311,8 +1323,8 @@
         constructor(node, options) {
             super(node, options);
 
-            this._placement = $.getDataset(this.node, 'uiPlacement');
-            this._referencePlacement = $.getDataset(this.options.reference, 'uiPlacement');
+            this.#placement = $.getDataset(this.node, 'uiPlacement');
+            this.#referencePlacement = $.getDataset(this.options.reference, 'uiPlacement');
 
             $.setStyle(this.node, {
                 margin: 0,
@@ -1329,94 +1341,18 @@
         }
 
         /**
-         * Update the arrow.
-         * @param {string} placement The placement of the Popper.
-         * @param {string} position The position of the Popper.
-         */
-        _updateArrow(placement, position) {
-            const nodeBox = $.rect(this.node, { offset: true });
-            const referenceBox = $.rect(this.options.reference, { offset: true });
-
-            const arrowStyles = {
-                position: 'absolute',
-                top: '',
-                right: '',
-                bottom: '',
-                left: '',
-            };
-            $.setStyle(this.options.arrow, arrowStyles);
-
-            const arrowBox = $.rect(this.options.arrow, { offset: true });
-
-            if (['top', 'bottom'].includes(placement)) {
-                arrowStyles[placement === 'top' ? 'bottom' : 'top'] = -Math.floor(arrowBox.height);
-                const diff = (referenceBox.width - nodeBox.width) / 2;
-
-                let offset = (nodeBox.width / 2) - (arrowBox.width / 2);
-                if (position === 'start') {
-                    offset += diff;
-                } else if (position === 'end') {
-                    offset -= diff;
-                }
-
-                let min = Math.max(referenceBox.left, nodeBox.left) - arrowBox.left;
-                let max = Math.min(referenceBox.right, nodeBox.right) - arrowBox.left - arrowBox.width;
-
-                if (referenceBox.width < arrowBox.width) {
-                    min -= arrowBox.width / 2 - referenceBox.width / 2;
-                    max -= arrowBox.width / 2 - referenceBox.width / 2;
-                }
-
-                offset = Math.round(offset);
-                min = Math.round(min);
-                max = Math.round(max);
-
-                arrowStyles.left = $._clamp(offset, min, max);
-            } else {
-                arrowStyles[placement === 'right' ? 'left' : 'right'] = -Math.floor(arrowBox.width);
-
-                const diff = (referenceBox.height - nodeBox.height) / 2;
-
-                let offset = (nodeBox.height / 2) - arrowBox.height;
-                if (position === 'start') {
-                    offset += diff;
-                } else if (position === 'end') {
-                    offset -= diff;
-                }
-
-                let min = Math.max(referenceBox.top, nodeBox.top) - arrowBox.top;
-                let max = Math.min(referenceBox.bottom, nodeBox.bottom) - arrowBox.top - arrowBox.height;
-
-                if (referenceBox.height < arrowBox.height * 2) {
-                    min -= arrowBox.height - referenceBox.height / 2;
-                    max -= arrowBox.height - referenceBox.height / 2;
-                } else {
-                    max -= arrowBox.height;
-                }
-
-                offset = Math.round(offset);
-                min = Math.round(min);
-                max = Math.round(max);
-
-                arrowStyles.top = $._clamp(offset, min, max);
-            }
-
-            $.setStyle(this.options.arrow, arrowStyles);
-        }
-
-        /**
          * Dispose the Popper.
          */
         dispose() {
-            if (this._placement) {
-                $.setDataset(this.node, { uiPlacement: this._placement });
+            if (this.#placement) {
+                $.setDataset(this.node, { uiPlacement: this.#placement });
             } else {
                 $.removeDataset(this.node, 'uiPlacement');
             }
 
             if (!this.options.noAttributes) {
-                if (this._referencePlacement) {
-                    $.setDataset(this.options.reference, { uiPlacement: this._referencePlacement });
+                if (this.#referencePlacement) {
+                    $.setDataset(this.options.reference, { uiPlacement: this.#referencePlacement });
                 } else {
                     $.removeDataset(this.options.reference, 'uiPlacement');
                 }
@@ -1673,12 +1609,88 @@
 
             // update arrow
             if (this.options.arrow) {
-                this._updateArrow(placement, position);
+                this.#updateArrow(placement, position);
             }
 
             if (this.options.afterUpdate) {
                 this.options.afterUpdate(this.node, this.options.reference, placement, position);
             }
+        }
+
+        /**
+         * Update the arrow.
+         * @param {string} placement The placement of the Popper.
+         * @param {string} position The position of the Popper.
+         */
+        #updateArrow(placement, position) {
+            const nodeBox = $.rect(this.node, { offset: true });
+            const referenceBox = $.rect(this.options.reference, { offset: true });
+
+            const arrowStyles = {
+                position: 'absolute',
+                top: '',
+                right: '',
+                bottom: '',
+                left: '',
+            };
+            $.setStyle(this.options.arrow, arrowStyles);
+
+            const arrowBox = $.rect(this.options.arrow, { offset: true });
+
+            if (['top', 'bottom'].includes(placement)) {
+                arrowStyles[placement === 'top' ? 'bottom' : 'top'] = -Math.floor(arrowBox.height);
+                const diff = (referenceBox.width - nodeBox.width) / 2;
+
+                let offset = (nodeBox.width / 2) - (arrowBox.width / 2);
+                if (position === 'start') {
+                    offset += diff;
+                } else if (position === 'end') {
+                    offset -= diff;
+                }
+
+                let min = Math.max(referenceBox.left, nodeBox.left) - arrowBox.left;
+                let max = Math.min(referenceBox.right, nodeBox.right) - arrowBox.left - arrowBox.width;
+
+                if (referenceBox.width < arrowBox.width) {
+                    min -= arrowBox.width / 2 - referenceBox.width / 2;
+                    max -= arrowBox.width / 2 - referenceBox.width / 2;
+                }
+
+                offset = Math.round(offset);
+                min = Math.round(min);
+                max = Math.round(max);
+
+                arrowStyles.left = $._clamp(offset, min, max);
+            } else {
+                arrowStyles[placement === 'right' ? 'left' : 'right'] = -Math.floor(arrowBox.width);
+
+                const diff = (referenceBox.height - nodeBox.height) / 2;
+
+                let offset = (nodeBox.height / 2) - arrowBox.height;
+                if (position === 'start') {
+                    offset += diff;
+                } else if (position === 'end') {
+                    offset -= diff;
+                }
+
+                let min = Math.max(referenceBox.top, nodeBox.top) - arrowBox.top;
+                let max = Math.min(referenceBox.bottom, nodeBox.bottom) - arrowBox.top - arrowBox.height;
+
+                if (referenceBox.height < arrowBox.height * 2) {
+                    min -= arrowBox.height - referenceBox.height / 2;
+                    max -= arrowBox.height - referenceBox.height / 2;
+                } else {
+                    max -= arrowBox.height;
+                }
+
+                offset = Math.round(offset);
+                min = Math.round(min);
+                max = Math.round(max);
+
+                arrowStyles.top = $._clamp(offset, min, max);
+            }
+
+            $.setStyle(this.options.arrow, arrowStyles);
         }
     }
 
@@ -1688,6 +1700,9 @@
      */
     class Dropdown extends BaseComponent {
         #display;
+        #menuNode;
+        #popper;
+        #referenceNode;
 
         /**
          * New Dropdown constructor.
@@ -1698,16 +1713,16 @@
             super(node, options);
 
             this.#display = this.options.display;
-            this._menuNode = $.next(this.node, '.dropdown-menu').shift();
+            this.#menuNode = $.next(this.node, '.dropdown-menu').shift();
 
             if (this.options.reference) {
                 if (this.options.reference === 'parent') {
-                    this._referenceNode = $.parent(this.node).shift();
+                    this.#referenceNode = $.parent(this.node).shift();
                 } else {
-                    this._referenceNode = $.findOne(this.options.reference);
+                    this.#referenceNode = $.findOne(this.options.reference);
                 }
             } else {
-                this._referenceNode = this.node;
+                this.#referenceNode = this.node;
             }
 
             // Attach popper
@@ -1722,20 +1737,20 @@
          * @return {boolean} Whether the menu contains the target.
          */
         containsMenuTarget(target) {
-            return $.hasDescendent(this._menuNode, target);
+            return $.hasDescendent(this.#menuNode, target);
         }
 
         /**
          * Dispose the Dropdown.
          */
         dispose() {
-            if (this._popper) {
-                this._popper.dispose();
-                this._popper = null;
+            if (this.#popper) {
+                this.#popper.dispose();
+                this.#popper = null;
             }
 
-            this._menuNode = null;
-            this._referenceNode = null;
+            this.#menuNode = null;
+            this.#referenceNode = null;
 
             super.dispose();
         }
@@ -1744,7 +1759,7 @@
          * Focus the first Dropdown menu item.
          */
         focusFirstItem() {
-            const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', this._menuNode);
+            const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', this.#menuNode);
             $.focus(focusNode);
         }
 
@@ -1753,30 +1768,30 @@
          */
         hide() {
             if (
-                $.getDataset(this._menuNode, 'uiAnimating') ||
-                !$.hasClass(this._menuNode, 'show') ||
+                $.getDataset(this.#menuNode, 'uiAnimating') ||
+                !$.hasClass(this.#menuNode, 'show') ||
                 !$.triggerOne(this.node, 'hide.ui.dropdown')
             ) {
                 return;
             }
 
-            $.setDataset(this._menuNode, { uiAnimating: 'out' });
+            $.setDataset(this.#menuNode, { uiAnimating: 'out' });
 
-            $.fadeOut(this._menuNode, {
+            $.fadeOut(this.#menuNode, {
                 duration: this.options.duration,
             }).then((_) => {
-                if (this._popper) {
-                    this._popper.dispose();
-                    this._popper = null;
+                if (this.#popper) {
+                    this.#popper.dispose();
+                    this.#popper = null;
                 }
 
-                $.removeClass(this._menuNode, 'show');
+                $.removeClass(this.#menuNode, 'show');
                 $.setAttribute(this.node, { 'aria-expanded': false });
-                $.removeDataset(this._menuNode, 'uiAnimating');
+                $.removeDataset(this.#menuNode, 'uiAnimating');
                 $.triggerEvent(this.node, 'hidden.ui.dropdown');
             }).catch((_) => {
-                if ($.getDataset(this._menuNode, 'uiAnimating') === 'out') {
-                    $.removeDataset(this._menuNode, 'uiAnimating');
+                if ($.getDataset(this.#menuNode, 'uiAnimating') === 'out') {
+                    $.removeDataset(this.#menuNode, 'uiAnimating');
                 }
             });
         }
@@ -1802,7 +1817,7 @@
                 ) ||
                 (
                     !hasDescendent &&
-                    !$.isSame(this._menuNode, target) &&
+                    !$.isSame(this.#menuNode, target) &&
                     (
                         autoClose === 'inside' ||
                         autoClose === false
@@ -1816,19 +1831,19 @@
          */
         show() {
             if (
-                $.getDataset(this._menuNode, 'uiAnimating') ||
-                $.hasClass(this._menuNode, 'show') ||
+                $.getDataset(this.#menuNode, 'uiAnimating') ||
+                $.hasClass(this.#menuNode, 'show') ||
                 !$.triggerOne(this.node, 'show.ui.dropdown')
             ) {
                 return;
             }
 
-            $.setDataset(this._menuNode, { uiAnimating: 'in' });
-            $.addClass(this._menuNode, 'show');
+            $.setDataset(this.#menuNode, { uiAnimating: 'in' });
+            $.addClass(this.#menuNode, 'show');
 
             if (this.#display === 'dynamic') {
-                this._popper = new Popper(this._menuNode, {
-                    reference: this._referenceNode,
+                this.#popper = new Popper(this.#menuNode, {
+                    reference: this.#referenceNode,
                     placement: this.options.placement,
                     position: this.options.position,
                     fixed: this.options.fixed,
@@ -1841,15 +1856,15 @@
                 this.update();
             });
 
-            $.fadeIn(this._menuNode, {
+            $.fadeIn(this.#menuNode, {
                 duration: this.options.duration,
             }).then((_) => {
                 $.setAttribute(this.node, { 'aria-expanded': true });
-                $.removeDataset(this._menuNode, 'uiAnimating');
+                $.removeDataset(this.#menuNode, 'uiAnimating');
                 $.triggerEvent(this.node, 'shown.ui.dropdown');
             }).catch((_) => {
-                if ($.getDataset(this._menuNode, 'uiAnimating') === 'in') {
-                    $.removeDataset(this._menuNode, 'uiAnimating');
+                if ($.getDataset(this.#menuNode, 'uiAnimating') === 'in') {
+                    $.removeDataset(this.#menuNode, 'uiAnimating');
                 }
             });
         }
@@ -1858,7 +1873,7 @@
          * Toggle the Dropdown.
          */
         toggle() {
-            if ($.hasClass(this._menuNode, 'show')) {
+            if ($.hasClass(this.#menuNode, 'show')) {
                 this.hide();
             } else {
                 this.show();
@@ -1869,8 +1884,8 @@
          * Update the Dropdown position.
          */
         update() {
-            if (this._popper) {
-                this._popper.update();
+            if (this.#popper) {
+                this.#popper.update();
             }
         }
     }
@@ -2076,11 +2091,13 @@
      * @class
      */
     class FocusTrap extends BaseComponent {
+        #active;
+
         /**
          * Activate the FocusTrap.
          */
         activate() {
-            if (this._active) {
+            if (this.#active) {
                 return;
             }
 
@@ -2090,19 +2107,19 @@
                 $.focus(this.node);
             }
 
-            this._active = true;
+            this.#active = true;
         }
 
         /**
          * Deactivate the FocusTrap.
          */
         deactivate() {
-            if (!this._active) {
+            if (!this.#active) {
                 return;
             }
 
             removeFocusTrap(this);
-            this._active = false;
+            this.#active = false;
         }
 
         /**
@@ -2128,6 +2145,12 @@
      * @class
      */
     class Modal extends BaseComponent {
+        #activeTarget;
+        #backdrop;
+        #dialog;
+        #focusTrap;
+        #scrollNodes;
+
         /**
          * New Modal constructor.
          * @param {HTMLElement} node The input node.
@@ -2136,59 +2159,30 @@
         constructor(node, options) {
             super(node, options);
 
-            this._dialog = $.child(this.node, '.modal-dialog').shift();
+            this.#dialog = $.child(this.node, '.modal-dialog').shift();
 
             if (this.options.show) {
                 this.show();
             }
 
             if (this.options.focus) {
-                this._focusTrap = FocusTrap.init(this.node);
+                this.#focusTrap = FocusTrap.init(this.node);
             }
-        }
-
-        /**
-         * Start a zoom in/out animation.
-         */
-        _zoom() {
-            if ($.getDataset(this._dialog, 'uiAnimating')) {
-                return;
-            }
-
-            $.stop(this._dialog);
-
-            $.animate(
-                this._dialog,
-                (node, progress) => {
-                    if (progress >= 1) {
-                        $.setStyle(node, { transform: '' });
-                        return;
-                    }
-
-                    const zoomOffset = (progress < .5 ? progress : (1 - progress)) / 20;
-                    $.setStyle(node, { transform: `scale(${1 + zoomOffset})` });
-                },
-                {
-                    duration: 200,
-                },
-            ).catch((_) => {
-                //
-            });
         }
 
         /**
          * Dispose the Modal.
          */
         dispose() {
-            if (this._focusTrap) {
-                this._focusTrap.dispose();
-                this._focusTrap = null;
+            if (this.#focusTrap) {
+                this.#focusTrap.dispose();
+                this.#focusTrap = null;
             }
 
-            this._dialog = null;
-            this._activeTarget = null;
-            this._backdrop = null;
-            this._scrollNodes = null;
+            this.#dialog = null;
+            this.#activeTarget = null;
+            this.#backdrop = null;
+            this.#scrollNodes = null;
 
             super.dispose();
         }
@@ -2206,7 +2200,7 @@
             }
 
             if (this.options.backdrop === 'static') {
-                this._zoom();
+                this.#zoom();
                 return;
             }
 
@@ -2222,7 +2216,7 @@
             }
 
             if (this.options.backdrop === 'static') {
-                this._zoom();
+                this.#zoom();
                 return;
             }
 
@@ -2234,31 +2228,31 @@
          */
         hide() {
             if (
-                $.getDataset(this._dialog, 'uiAnimating') ||
+                $.getDataset(this.#dialog, 'uiAnimating') ||
                 !$.hasClass(this.node, 'show') ||
                 !$.triggerOne(this.node, 'hide.ui.modal')
             ) {
                 return;
             }
 
-            $.stop(this._dialog);
-            $.setDataset(this._dialog, { uiAnimating: 'out' });
+            $.stop(this.#dialog);
+            $.setDataset(this.#dialog, { uiAnimating: 'out' });
 
-            if (this._focusTrap) {
-                this._focusTrap.deactivate();
+            if (this.#focusTrap) {
+                this.#focusTrap.deactivate();
             }
 
             const stackSize = $.find('.modal.show').length - 1;
 
             Promise.all([
-                $.fadeOut(this._dialog, {
+                $.fadeOut(this.#dialog, {
                     duration: this.options.duration,
                 }),
-                $.dropOut(this._dialog, {
+                $.dropOut(this.#dialog, {
                     duration: this.options.duration,
                     direction: 'top',
                 }),
-                $.fadeOut(this._backdrop, {
+                $.fadeOut(this.#backdrop, {
                     duration: this.options.duration,
                 }),
             ]).then((_) => {
@@ -2267,8 +2261,8 @@
                     'aria-modal': false,
                 });
 
-                resetScrollPadding(this._scrollNodes);
-                this._scrollNodes = [];
+                resetScrollPadding(this.#scrollNodes);
+                this.#scrollNodes = [];
 
                 if (stackSize) {
                     $.setStyle(this.node, { zIndex: '' });
@@ -2279,20 +2273,20 @@
                 $.removeClass(this.node, 'show');
 
                 if (this.options.backdrop) {
-                    $.remove(this._backdrop);
-                    this._backdrop = null;
+                    $.remove(this.#backdrop);
+                    this.#backdrop = null;
                 }
 
-                if (this._activeTarget) {
-                    $.focus(this._activeTarget);
-                    this._activeTarget = null;
+                if (this.#activeTarget) {
+                    $.focus(this.#activeTarget);
+                    this.#activeTarget = null;
                 }
 
-                $.removeDataset(this._dialog, 'uiAnimating');
+                $.removeDataset(this.#dialog, 'uiAnimating');
                 $.triggerEvent(this.node, 'hidden.ui.modal');
             }).catch((_) => {
-                if ($.getDataset(this._dialog, 'uiAnimating') === 'out') {
-                    $.removeDataset(this._dialog, 'uiAnimating');
+                if ($.getDataset(this.#dialog, 'uiAnimating') === 'out') {
+                    $.removeDataset(this.#dialog, 'uiAnimating');
                 }
             });
         }
@@ -2303,24 +2297,24 @@
          */
         show(relatedTarget) {
             if (relatedTarget) {
-                this._activeTarget = relatedTarget;
+                this.#activeTarget = relatedTarget;
             }
 
             if (
-                $.getDataset(this._dialog, 'uiAnimating') ||
+                $.getDataset(this.#dialog, 'uiAnimating') ||
                 $.hasClass(this.node, 'show') ||
-                !$.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this._activeTarget } })
+                !$.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this.#activeTarget } })
             ) {
                 return;
             }
 
-            $.setDataset(this._dialog, { uiAnimating: 'in' });
+            $.setDataset(this.#dialog, { uiAnimating: 'in' });
 
             const stackSize = $.find('.modal.show').length;
 
             $.removeClass(document.body, 'modal-open');
 
-            this._scrollNodes = [this._dialog];
+            this.#scrollNodes = [this.#dialog];
 
             if (stackSize) {
                 let zIndex = $.css(this.node, 'zIndex');
@@ -2329,41 +2323,41 @@
 
                 $.setStyle(this.node, { zIndex });
             } else if (!$.findOne('.offcanvas.show')) {
-                this._scrollNodes.push(document.body);
-                this._scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
+                this.#scrollNodes.push(document.body);
+                this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
             }
 
-            addScrollPadding(this._scrollNodes);
+            addScrollPadding(this.#scrollNodes);
 
             $.addClass(document.body, 'modal-open');
 
             $.addClass(this.node, 'show');
 
             if (this.options.backdrop) {
-                this._backdrop = $.create('div', {
+                this.#backdrop = $.create('div', {
                     class: 'modal-backdrop',
                 });
 
-                $.append(document.body, this._backdrop);
+                $.append(document.body, this.#backdrop);
 
                 if (stackSize) {
-                    let zIndex = $.css(this._backdrop, 'zIndex');
+                    let zIndex = $.css(this.#backdrop, 'zIndex');
                     zIndex = parseInt(zIndex);
                     zIndex += stackSize * 20;
 
-                    $.setStyle(this._backdrop, { zIndex });
+                    $.setStyle(this.#backdrop, { zIndex });
                 }
             }
 
             Promise.all([
-                $.fadeIn(this._dialog, {
+                $.fadeIn(this.#dialog, {
                     duration: this.options.duration,
                 }),
-                $.dropIn(this._dialog, {
+                $.dropIn(this.#dialog, {
                     duration: this.options.duration,
                     direction: 'top',
                 }),
-                $.fadeIn(this._backdrop, {
+                $.fadeIn(this.#backdrop, {
                     duration: this.options.duration,
                 }),
             ]).then((_) => {
@@ -2372,15 +2366,15 @@
                     'aria-modal': true,
                 });
 
-                if (this._focusTrap) {
-                    this._focusTrap.activate();
+                if (this.#focusTrap) {
+                    this.#focusTrap.activate();
                 }
 
-                $.removeDataset(this._dialog, 'uiAnimating');
+                $.removeDataset(this.#dialog, 'uiAnimating');
                 $.triggerEvent(this.node, 'shown.ui.modal');
             }).catch((_) => {
-                if ($.getDataset(this._dialog, 'uiAnimating') === 'in') {
-                    $.removeDataset(this._dialog, 'uiAnimating');
+                if ($.getDataset(this.#dialog, 'uiAnimating') === 'in') {
+                    $.removeDataset(this.#dialog, 'uiAnimating');
                 }
             });
         }
@@ -2394,6 +2388,35 @@
             } else {
                 this.show();
             }
+        }
+
+        /**
+         * Start a zoom in/out animation.
+         */
+        #zoom() {
+            if ($.getDataset(this.#dialog, 'uiAnimating')) {
+                return;
+            }
+
+            $.stop(this.#dialog);
+
+            $.animate(
+                this.#dialog,
+                (node, progress) => {
+                    if (progress >= 1) {
+                        $.setStyle(node, { transform: '' });
+                        return;
+                    }
+
+                    const zoomOffset = (progress < .5 ? progress : (1 - progress)) / 20;
+                    $.setStyle(node, { transform: `scale(${1 + zoomOffset})` });
+                },
+                {
+                    duration: 200,
+                },
+            ).catch((_) => {
+                //
+            });
         }
     }
 
@@ -2520,6 +2543,10 @@
      * @class
      */
     class Offcanvas extends BaseComponent {
+        #activeTarget;
+        #focusTrap;
+        #scrollNodes;
+
         /**
          * New Offcanvas constructor.
          * @param {HTMLElement} node The input node.
@@ -2529,7 +2556,7 @@
             super(node, options);
 
             if (!this.options.scroll || this.options.backdrop) {
-                this._focusTrap = FocusTrap.init(this.node);
+                this.#focusTrap = FocusTrap.init(this.node);
             }
         }
 
@@ -2537,13 +2564,13 @@
          * Dispose the Offcanvas.
          */
         dispose() {
-            if (this._focusTrap) {
-                this._focusTrap.dispose();
-                this._focusTrap = null;
+            if (this.#focusTrap) {
+                this.#focusTrap.dispose();
+                this.#focusTrap = null;
             }
 
-            this._activeTarget = null;
-            this._scrollNodes = null;
+            this.#activeTarget = null;
+            this.#scrollNodes = null;
 
             super.dispose();
         }
@@ -2588,8 +2615,8 @@
 
             $.setDataset(this.node, { uiAnimating: 'out' });
 
-            if (this._focusTrap) {
-                this._focusTrap.deactivate();
+            if (this.#focusTrap) {
+                this.#focusTrap.deactivate();
             }
 
             Promise.all([
@@ -2613,15 +2640,15 @@
                 }
 
                 if (!this.options.scroll) {
-                    resetScrollPadding(this._scrollNodes);
-                    this._scrollNodes = [];
+                    resetScrollPadding(this.#scrollNodes);
+                    this.#scrollNodes = [];
 
                     $.setStyle(document.body, { overflow: '' });
                 }
 
-                if (this._activeTarget) {
-                    $.focus(this._activeTarget);
-                    this._activeTarget = null;
+                if (this.#activeTarget) {
+                    $.focus(this.#activeTarget);
+                    this.#activeTarget = null;
                 }
 
                 $.removeDataset(this.node, 'uiAnimating');
@@ -2639,7 +2666,7 @@
          */
         show(relatedTarget) {
             if (relatedTarget) {
-                this._activeTarget = relatedTarget;
+                this.#activeTarget = relatedTarget;
             }
 
             if (
@@ -2658,13 +2685,13 @@
                 $.addClass(document.body, 'offcanvas-backdrop');
             }
 
-            this._scrollNodes = [];
+            this.#scrollNodes = [];
 
             if (!this.options.scroll) {
-                this._scrollNodes.push(document.body);
-                this._scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
+                this.#scrollNodes.push(document.body);
+                this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
 
-                addScrollPadding(this._scrollNodes);
+                addScrollPadding(this.#scrollNodes);
 
                 $.setStyle(document.body, { overflow: 'hidden' });
             }
@@ -2683,8 +2710,8 @@
                     'aria-modal': true,
                 });
 
-                if (this._focusTrap) {
-                    this._focusTrap.activate();
+                if (this.#focusTrap) {
+                    this.#focusTrap.activate();
                 }
 
                 $.removeDataset(this.node, 'uiAnimating');
@@ -2796,6 +2823,16 @@
      * @class
      */
     class Popover extends BaseComponent {
+        #arrow;
+        #enabled;
+        #hideModalEvent;
+        #modal;
+        #popover;
+        #popoverBody;
+        #popoverHeader;
+        #popper;
+        #triggers;
+
         /**
          * New Popover constructor.
          * @param {HTMLElement} node The input node.
@@ -2804,12 +2841,12 @@
         constructor(node, options) {
             super(node, options);
 
-            this._modal = $.closest(this.node, '.modal').shift();
+            this.#modal = $.closest(this.node, '.modal').shift();
 
-            this._triggers = this.options.trigger.split(' ');
+            this.#triggers = this.options.trigger.split(' ');
 
-            this._render();
-            this._events();
+            this.#render();
+            this.#events();
 
             if (this.options.enable) {
                 this.enable();
@@ -2819,129 +2856,10 @@
         }
 
         /**
-         * Attach events for the Popover.
-         */
-        _events() {
-            if (this._triggers.includes('hover')) {
-                $.addEvent(this.node, 'mouseover.ui.popover', (_) => {
-                    this._stop();
-                    this.show();
-                });
-
-                $.addEvent(this.node, 'mouseout.ui.popover', (_) => {
-                    this._stop();
-                    this.hide({ force: false });
-                });
-            }
-
-            if (this._triggers.includes('focus')) {
-                $.addEvent(this.node, 'focus.ui.popover', (_) => {
-                    this._stop();
-                    this.show();
-                });
-
-                $.addEvent(this.node, 'blur.ui.popover', (_) => {
-                    this._stop();
-                    this.hide({ force: false });
-                });
-            }
-
-            if (this._triggers.includes('click')) {
-                $.addEvent(this.node, 'click.ui.popover', (e) => {
-                    e.preventDefault();
-
-                    this._stop();
-                    this.toggle({ force: false });
-                });
-            }
-
-            if (this._modal) {
-                this._hideModalEvent = (_) => {
-                    this._stop();
-                    this.hide();
-                };
-                $.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
-            }
-        }
-
-        /**
-         * Render the Popover element.
-         */
-        _render() {
-            this._popover = $.parseHTML(this.options.template).shift();
-            if (this.options.customClass) {
-                $.addClass(this._popover, this.options.customClass);
-            }
-            this._arrow = $.findOne('.popover-arrow', this._popover);
-            this._popoverHeader = $.findOne('.popover-header', this._popover);
-            this._popoverBody = $.findOne('.popover-body', this._popover);
-        }
-
-        /**
-         * Update the Popover and append to the DOM.
-         */
-        _show() {
-            if (this.options.appendTo) {
-                $.append(this.options.appendTo, this._popover);
-            } else {
-                $.after(this.node, this._popover);
-            }
-
-            if (!this.options.noAttributes) {
-                const id = generateId(this.constructor.DATA_KEY);
-                $.setAttribute(this._popover, { id });
-                $.setAttribute(this.node, { 'aria-described-by': id });
-            }
-
-            this._popper = new Popper(
-                this._popover,
-                {
-                    reference: this.node,
-                    arrow: this._arrow,
-                    placement: this.options.placement,
-                    position: this.options.position,
-                    fixed: this.options.fixed,
-                    spacing: this.options.spacing,
-                    minContact: this.options.minContact,
-                    noAttributes: this.options.noAttributes,
-                },
-            );
-
-            window.requestAnimationFrame((_) => {
-                this.update();
-            });
-        }
-
-        /**
-         * Stop the animations.
-         */
-        _stop() {
-            if (!this._enabled) {
-                return;
-            }
-
-            const animating = $.getDataset(this._popover, 'uiAnimating');
-
-            if (!animating) {
-                return;
-            }
-
-            $.stop(this._popover, { finish: false });
-            $.removeDataset(this._popover, 'uiAnimating');
-
-            if (animating === 'out') {
-                this._popper.dispose();
-                this._popper = null;
-
-                $.detach(this._popover);
-            }
-        }
-
-        /**
          * Disable the Popover.
          */
         disable() {
-            this._enabled = false;
+            this.#enabled = false;
         }
 
         /**
@@ -2954,38 +2872,38 @@
                 $.removeDataset(this.node, 'uiOriginalTitle');
             }
 
-            if (this._popper) {
-                this._popper.dispose();
-                this._popper = null;
+            if (this.#popper) {
+                this.#popper.dispose();
+                this.#popper = null;
             }
 
-            $.remove(this._popover);
+            $.remove(this.#popover);
 
-            if (this._triggers.includes('hover')) {
+            if (this.#triggers.includes('hover')) {
                 $.removeEvent(this.node, 'mouseover.ui.popover');
                 $.removeEvent(this.node, 'mouseout.ui.popover');
             }
 
-            if (this._triggers.includes('focus')) {
+            if (this.#triggers.includes('focus')) {
                 $.removeEvent(this.node, 'focus.ui.popover');
                 $.removeEvent(this.node, 'blur.ui.popover');
             }
 
-            if (this._triggers.includes('click')) {
+            if (this.#triggers.includes('click')) {
                 $.removeEvent(this.node, 'click.ui.popover');
             }
 
-            if (this._modal) {
-                $.removeEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
+            if (this.#modal) {
+                $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
             }
 
-            this._modal = null;
-            this._triggers = null;
-            this._popover = null;
-            this._popoverHeader = null;
-            this._popoverBody = null;
-            this._arrow = null;
-            this._hideModalEvent = null;
+            this.#modal = null;
+            this.#triggers = null;
+            this.#popover = null;
+            this.#popoverHeader = null;
+            this.#popoverBody = null;
+            this.#arrow = null;
+            this.#hideModalEvent = null;
 
             super.dispose();
         }
@@ -2994,7 +2912,7 @@
          * Enable the Popover.
          */
         enable() {
-            this._enabled = true;
+            this.#enabled = true;
         }
 
         /**
@@ -3004,29 +2922,29 @@
          */
         hide({ force = true } = {}) {
             if (
-                (!force && !this._enabled) ||
-                $.getDataset(this._popover, 'uiAnimating') ||
-                !$.isConnected(this._popover) ||
+                (!force && !this.#enabled) ||
+                $.getDataset(this.#popover, 'uiAnimating') ||
+                !$.isConnected(this.#popover) ||
                 !$.triggerOne(this.node, 'hide.ui.popover')
             ) {
                 return;
             }
 
-            $.setDataset(this._popover, { uiAnimating: 'out' });
+            $.setDataset(this.#popover, { uiAnimating: 'out' });
 
-            $.fadeOut(this._popover, {
+            $.fadeOut(this.#popover, {
                 duration: this.options.duration,
             }).then((_) => {
-                this._popper.dispose();
-                this._popper = null;
+                this.#popper.dispose();
+                this.#popper = null;
 
-                $.detach(this._popover);
-                $.removeDataset(this._popover, 'uiAnimating');
+                $.detach(this.#popover);
+                $.removeDataset(this.#popover, 'uiAnimating');
                 $.removeAttribute(this.node, 'aria-described-by');
                 $.triggerEvent(this.node, 'hidden.ui.popover');
             }).catch((_) => {
-                if ($.getDataset(this._popover, 'uiAnimating') === 'out') {
-                    $.removeDataset(this._popover, 'uiAnimating');
+                if ($.getDataset(this.#popover, 'uiAnimating') === 'out') {
+                    $.removeDataset(this.#popover, 'uiAnimating');
                 }
             });
         }
@@ -3060,20 +2978,20 @@
             const method = this.options.html ? 'setHTML' : 'setText';
 
             $[method](
-                this._popoverHeader,
+                this.#popoverHeader,
                 this.options.html && this.options.sanitize ?
                     this.options.sanitize(title) :
                     title,
             );
 
             if (!title) {
-                $.hide(this._popoverHeader);
+                $.hide(this.#popoverHeader);
             } else {
-                $.show(this._popoverHeader);
+                $.show(this.#popoverHeader);
             }
 
             $[method](
-                this._popoverBody,
+                this.#popoverBody,
                 this.options.html && this.options.sanitize ?
                     this.options.sanitize(content) :
                     content,
@@ -3085,26 +3003,26 @@
          */
         show() {
             if (
-                !this._enabled ||
-                $.getDataset(this._popover, 'uiAnimating') ||
-                $.isConnected(this._popover) ||
+                !this.#enabled ||
+                $.getDataset(this.#popover, 'uiAnimating') ||
+                $.isConnected(this.#popover) ||
                 !$.triggerOne(this.node, 'show.ui.popover')
             ) {
                 return;
             }
 
-            $.setDataset(this._popover, { uiAnimating: 'in' });
+            $.setDataset(this.#popover, { uiAnimating: 'in' });
             this.refresh();
-            this._show();
+            this.#show();
 
-            $.fadeIn(this._popover, {
+            $.fadeIn(this.#popover, {
                 duration: this.options.duration,
             }).then((_) => {
-                $.removeDataset(this._popover, 'uiAnimating');
+                $.removeDataset(this.#popover, 'uiAnimating');
                 $.triggerEvent(this.node, 'shown.ui.popover');
             }).catch((_) => {
-                if ($.getDataset(this._popover, 'uiAnimating') === 'in') {
-                    $.removeDataset(this._popover, 'uiAnimating');
+                if ($.getDataset(this.#popover, 'uiAnimating') === 'in') {
+                    $.removeDataset(this.#popover, 'uiAnimating');
                 }
             });
         }
@@ -3115,7 +3033,7 @@
          * @param {boolean} [options.force=true] Whether to force hiding when disabled.
          */
         toggle({ force = true } = {}) {
-            if ($.isConnected(this._popover)) {
+            if ($.isConnected(this.#popover)) {
                 this.hide({ force });
             } else {
                 this.show();
@@ -3126,8 +3044,127 @@
          * Update the Popover position.
          */
         update() {
-            if (this._popper) {
-                this._popper.update();
+            if (this.#popper) {
+                this.#popper.update();
+            }
+        }
+
+        /**
+         * Attach events for the Popover.
+         */
+        #events() {
+            if (this.#triggers.includes('hover')) {
+                $.addEvent(this.node, 'mouseover.ui.popover', (_) => {
+                    this.#stop();
+                    this.show();
+                });
+
+                $.addEvent(this.node, 'mouseout.ui.popover', (_) => {
+                    this.#stop();
+                    this.hide({ force: false });
+                });
+            }
+
+            if (this.#triggers.includes('focus')) {
+                $.addEvent(this.node, 'focus.ui.popover', (_) => {
+                    this.#stop();
+                    this.show();
+                });
+
+                $.addEvent(this.node, 'blur.ui.popover', (_) => {
+                    this.#stop();
+                    this.hide({ force: false });
+                });
+            }
+
+            if (this.#triggers.includes('click')) {
+                $.addEvent(this.node, 'click.ui.popover', (e) => {
+                    e.preventDefault();
+
+                    this.#stop();
+                    this.toggle({ force: false });
+                });
+            }
+
+            if (this.#modal) {
+                this.#hideModalEvent = (_) => {
+                    this.#stop();
+                    this.hide();
+                };
+                $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+            }
+        }
+
+        /**
+         * Render the Popover element.
+         */
+        #render() {
+            this.#popover = $.parseHTML(this.options.template).shift();
+            if (this.options.customClass) {
+                $.addClass(this.#popover, this.options.customClass);
+            }
+            this.#arrow = $.findOne('.popover-arrow', this.#popover);
+            this.#popoverHeader = $.findOne('.popover-header', this.#popover);
+            this.#popoverBody = $.findOne('.popover-body', this.#popover);
+        }
+
+        /**
+         * Update the Popover and append to the DOM.
+         */
+        #show() {
+            if (this.options.appendTo) {
+                $.append(this.options.appendTo, this.#popover);
+            } else {
+                $.after(this.node, this.#popover);
+            }
+
+            if (!this.options.noAttributes) {
+                const id = generateId(this.constructor.DATA_KEY);
+                $.setAttribute(this.#popover, { id });
+                $.setAttribute(this.node, { 'aria-described-by': id });
+            }
+
+            this.#popper = new Popper(
+                this.#popover,
+                {
+                    reference: this.node,
+                    arrow: this.#arrow,
+                    placement: this.options.placement,
+                    position: this.options.position,
+                    fixed: this.options.fixed,
+                    spacing: this.options.spacing,
+                    minContact: this.options.minContact,
+                    noAttributes: this.options.noAttributes,
+                },
+            );
+
+            window.requestAnimationFrame((_) => {
+                this.update();
+            });
+        }
+
+        /**
+         * Stop the animations.
+         */
+        #stop() {
+            if (!this.#enabled) {
+                return;
+            }
+
+            const animating = $.getDataset(this.#popover, 'uiAnimating');
+
+            if (!animating) {
+                return;
+            }
+
+            $.stop(this.#popover, { finish: false });
+            $.removeDataset(this.#popover, 'uiAnimating');
+
+            if (animating === 'out') {
+                this.#popper.dispose();
+                this.#popper = null;
+
+                $.detach(this.#popover);
             }
         }
     }
@@ -3162,6 +3199,9 @@
      * @class
      */
     class Tab extends BaseComponent {
+        #siblings;
+        #target;
+
         /**
          * New Tab constructor.
          * @param {HTMLElement} node The input node.
@@ -3171,59 +3211,16 @@
             super(node, options);
 
             const selector = getTargetSelector(this.node);
-            this._target = $.findOne(selector);
-            this._siblings = $.siblings(this.node);
-        }
-
-        /**
-         * Hide the current Tab (forcefully).
-         */
-        _hide() {
-            $.setDataset(this._target, { uiAnimating: 'out' });
-
-            $.fadeOut(this._target, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $.removeClass(this._target, 'active');
-                $.removeClass(this.node, 'active');
-                $.removeDataset(this._target, 'uiAnimating');
-                $.setAttribute(this.node, { 'aria-selected': false });
-                $.triggerEvent(this.node, 'hidden.ui.tab');
-            }).catch((_) => {
-                if ($.getDataset(this._target, 'uiAnimating') === 'out') {
-                    $.removeDataset(this._target, 'uiAnimating');
-                }
-            });
-        }
-
-        /**
-         * Show the current Tab (forcefully).
-         */
-        _show() {
-            $.setDataset(this._target, { uiAnimating: 'in' });
-
-            $.addClass(this._target, 'active');
-            $.addClass(this.node, 'active');
-
-            $.fadeIn(this._target, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $.setAttribute(this.node, { 'aria-selected': true });
-                $.removeDataset(this._target, 'uiAnimating');
-                $.triggerEvent(this.node, 'shown.ui.tab');
-            }).catch((_) => {
-                if ($.getDataset(this._target, 'uiAnimating') === 'in') {
-                    $.removeDataset(this._target, 'uiAnimating');
-                }
-            });
+            this.#target = $.findOne(selector);
+            this.#siblings = $.siblings(this.node);
         }
 
         /**
          * Dispose the Tab.
          */
         dispose() {
-            this._target = null;
-            this._siblings = null;
+            this.#target = null;
+            this.#siblings = null;
 
             super.dispose();
         }
@@ -3233,14 +3230,14 @@
          */
         hide() {
             if (
-                $.getDataset(this._target, 'uiAnimating') ||
-                !$.hasClass(this._target, 'active') ||
+                $.getDataset(this.#target, 'uiAnimating') ||
+                !$.hasClass(this.#target, 'active') ||
                 !$.triggerOne(this.node, 'hide.ui.tab')
             ) {
                 return;
             }
 
-            this._hide();
+            this.#hide();
         }
 
         /**
@@ -3248,23 +3245,23 @@
          */
         show() {
             if (
-                $.getDataset(this._target, 'uiAnimating') ||
-                $.hasClass(this._target, 'active') ||
+                $.getDataset(this.#target, 'uiAnimating') ||
+                $.hasClass(this.#target, 'active') ||
                 !$.triggerOne(this.node, 'show.ui.tab')
             ) {
                 return;
             }
 
-            const active = this._siblings.find((sibling) =>
+            const active = this.#siblings.find((sibling) =>
                 $.hasClass(sibling, 'active'),
             );
 
             if (!active) {
-                this._show();
+                this.#show();
             } else {
                 const activeTab = this.constructor.init(active);
 
-                if ($.getDataset(activeTab._target, 'uiAnimating')) {
+                if ($.getDataset(activeTab.#target, 'uiAnimating')) {
                     return;
                 }
 
@@ -3273,11 +3270,54 @@
                 }
 
                 $.addEventOnce(active, 'hidden.ui.tab', (_) => {
-                    this._show();
+                    this.#show();
                 });
 
-                activeTab._hide();
+                activeTab.#hide();
             }
+        }
+
+        /**
+         * Hide the current Tab (forcefully).
+         */
+        #hide() {
+            $.setDataset(this.#target, { uiAnimating: 'out' });
+
+            $.fadeOut(this.#target, {
+                duration: this.options.duration,
+            }).then((_) => {
+                $.removeClass(this.#target, 'active');
+                $.removeClass(this.node, 'active');
+                $.removeDataset(this.#target, 'uiAnimating');
+                $.setAttribute(this.node, { 'aria-selected': false });
+                $.triggerEvent(this.node, 'hidden.ui.tab');
+            }).catch((_) => {
+                if ($.getDataset(this.#target, 'uiAnimating') === 'out') {
+                    $.removeDataset(this.#target, 'uiAnimating');
+                }
+            });
+        }
+
+        /**
+         * Show the current Tab (forcefully).
+         */
+        #show() {
+            $.setDataset(this.#target, { uiAnimating: 'in' });
+
+            $.addClass(this.#target, 'active');
+            $.addClass(this.node, 'active');
+
+            $.fadeIn(this.#target, {
+                duration: this.options.duration,
+            }).then((_) => {
+                $.setAttribute(this.node, { 'aria-selected': true });
+                $.removeDataset(this.#target, 'uiAnimating');
+                $.triggerEvent(this.node, 'shown.ui.tab');
+            }).catch((_) => {
+                if ($.getDataset(this.#target, 'uiAnimating') === 'in') {
+                    $.removeDataset(this.#target, 'uiAnimating');
+                }
+            });
         }
     }
 
@@ -3337,12 +3377,14 @@
      * @class
      */
     class Toast extends BaseComponent {
+        #timer;
+
         /**
          * Dispose the Toast.
          */
         dispose() {
-            clearTimeout(this._timer);
-            this._timer = null;
+            clearTimeout(this.#timer);
+            this.#timer = null;
 
             super.dispose();
         }
@@ -3359,8 +3401,8 @@
                 return;
             }
 
-            clearTimeout(this._timer);
-            this._timer = null;
+            clearTimeout(this.#timer);
+            this.#timer = null;
 
             $.setDataset(this.node, { uiAnimating: 'out' });
 
@@ -3390,8 +3432,8 @@
                 return;
             }
 
-            clearTimeout(this._timer);
-            this._timer = null;
+            clearTimeout(this.#timer);
+            this.#timer = null;
 
             $.setDataset(this.node, { uiAnimating: 'in' });
             $.setStyle(this.node, { display: '' });
@@ -3404,9 +3446,9 @@
                 $.triggerEvent(this.node, 'shown.ui.toast');
 
                 if (this.options.autohide) {
-                    this._timer = setTimeout(
+                    this.#timer = setTimeout(
                         (_) => {
-                            this._timer = null;
+                            this.#timer = null;
                             this.hide();
                         },
                         this.options.delay,
@@ -3444,6 +3486,15 @@
      * @class
      */
     class Tooltip extends BaseComponent {
+        #arrow;
+        #enabled;
+        #hideModalEvent;
+        #modal;
+        #popper;
+        #tooltip;
+        #tooltipInner;
+        #triggers;
+
         /**
          * New Tooltip constructor.
          * @param {HTMLElement} node The input node.
@@ -3452,12 +3503,12 @@
         constructor(node, options) {
             super(node, options);
 
-            this._modal = $.closest(this.node, '.modal').shift();
+            this.#modal = $.closest(this.node, '.modal').shift();
 
-            this._triggers = this.options.trigger.split(' ');
+            this.#triggers = this.options.trigger.split(' ');
 
-            this._render();
-            this._events();
+            this.#render();
+            this.#events();
 
             if (this.options.enable) {
                 this.enable();
@@ -3467,129 +3518,10 @@
         }
 
         /**
-         * Attach events for the Tooltip.
-         */
-        _events() {
-            if (this._triggers.includes('hover')) {
-                $.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
-                    this._stop();
-                    this.show();
-                });
-
-                $.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
-                    this._stop();
-                    this.hide({ force: false });
-                });
-            }
-
-            if (this._triggers.includes('focus')) {
-                $.addEvent(this.node, 'focus.ui.tooltip', (_) => {
-                    this._stop();
-                    this.show();
-                });
-
-                $.addEvent(this.node, 'blur.ui.tooltip', (_) => {
-                    this._stop();
-                    this.hide({ force: false });
-                });
-            }
-
-            if (this._triggers.includes('click')) {
-                $.addEvent(this.node, 'click.ui.tooltip', (e) => {
-                    e.preventDefault();
-
-                    this._stop();
-                    this.toggle({ force: false });
-                });
-            }
-
-            if (this._modal) {
-                this._hideModalEvent = (_) => {
-                    this._stop();
-                    this.hide();
-                };
-                $.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
-            }
-        }
-
-        /**
-         * Render the Tooltip element.
-         */
-        _render() {
-            this._tooltip = $.parseHTML(this.options.template).shift();
-            if (this.options.customClass) {
-                $.addClass(this._tooltip, this.options.customClass);
-            }
-            this._arrow = $.findOne('.tooltip-arrow', this._tooltip);
-            this._tooltipInner = $.findOne('.tooltip-inner', this._tooltip);
-        }
-
-        /**
-         * Update the Tooltip and append to the DOM.
-         */
-        _show() {
-            if (this.options.appendTo) {
-                $.append(this.options.appendTo, this._tooltip);
-            } else {
-                $.after(this.node, this._tooltip);
-            }
-
-            if (!this.options.noAttributes) {
-                const id = generateId(this.constructor.DATA_KEY);
-                $.setAttribute(this._tooltip, { id });
-                $.setAttribute(this.node, { 'aria-described-by': id });
-            }
-
-            this._popper = new Popper(
-                this._tooltip,
-                {
-                    reference: this.node,
-                    arrow: this._arrow,
-                    placement: this.options.placement,
-                    position: this.options.position,
-                    fixed: this.options.fixed,
-                    spacing: this.options.spacing,
-                    minContact: this.options.minContact,
-                    noAttributes: this.options.noAttributes,
-                },
-            );
-
-            window.requestAnimationFrame((_) => {
-                this.update();
-            });
-        }
-
-        /**
-         * Stop the animations.
-         */
-        _stop() {
-            if (!this._enabled) {
-                return;
-            }
-
-            const animating = $.getDataset(this._tooltip, 'uiAnimating');
-
-            if (!animating) {
-                return;
-            }
-
-            $.stop(this._tooltip, { finish: false });
-            $.removeDataset(this._tooltip, 'uiAnimating');
-
-            if (animating === 'out') {
-                this._popper.dispose();
-                this._popper = null;
-
-                $.removeClass(this._tooltip, 'show');
-                $.detach(this._tooltip);
-            }
-        }
-
-        /**
          * Disable the Tooltip.
          */
         disable() {
-            this._enabled = false;
+            this.#enabled = false;
         }
 
         /**
@@ -3602,37 +3534,37 @@
                 $.removeDataset(this.node, 'uiOriginalTitle');
             }
 
-            if (this._popper) {
-                this._popper.dispose();
-                this._popper = null;
+            if (this.#popper) {
+                this.#popper.dispose();
+                this.#popper = null;
             }
 
-            $.remove(this._tooltip);
+            $.remove(this.#tooltip);
 
-            if (this._triggers.includes('hover')) {
+            if (this.#triggers.includes('hover')) {
                 $.removeEvent(this.node, 'mouseover.ui.tooltip');
                 $.removeEvent(this.node, 'mouseout.ui.tooltip');
             }
 
-            if (this._triggers.includes('focus')) {
+            if (this.#triggers.includes('focus')) {
                 $.removeEvent(this.node, 'focus.ui.tooltip');
                 $.removeEvent(this.node, 'blur.ui.tooltip');
             }
 
-            if (this._triggers.includes('click')) {
+            if (this.#triggers.includes('click')) {
                 $.removeEvent(this.node, 'click.ui.tooltip');
             }
 
-            if (this._modal) {
-                $.removeEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
+            if (this.#modal) {
+                $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
             }
 
-            this._modal = null;
-            this._triggers = null;
-            this._tooltip = null;
-            this._tooltipInner = null;
-            this._arrow = null;
-            this._hideModalEvent = null;
+            this.#modal = null;
+            this.#triggers = null;
+            this.#tooltip = null;
+            this.#tooltipInner = null;
+            this.#arrow = null;
+            this.#hideModalEvent = null;
 
             super.dispose();
         }
@@ -3641,7 +3573,7 @@
          * Enable the Tooltip.
          */
         enable() {
-            this._enabled = true;
+            this.#enabled = true;
         }
 
         /**
@@ -3651,30 +3583,30 @@
          */
         hide({ force = true } = {}) {
             if (
-                (!force && !this._enabled) ||
-                $.getDataset(this._tooltip, 'uiAnimating') ||
-                !$.isConnected(this._tooltip) ||
+                (!force && !this.#enabled) ||
+                $.getDataset(this.#tooltip, 'uiAnimating') ||
+                !$.isConnected(this.#tooltip) ||
                 !$.triggerOne(this.node, 'hide.ui.tooltip')
             ) {
                 return;
             }
 
-            $.setDataset(this._tooltip, { uiAnimating: 'out' });
+            $.setDataset(this.#tooltip, { uiAnimating: 'out' });
 
-            $.fadeOut(this._tooltip, {
+            $.fadeOut(this.#tooltip, {
                 duration: this.options.duration,
             }).then((_) => {
-                this._popper.dispose();
-                this._popper = null;
+                this.#popper.dispose();
+                this.#popper = null;
 
-                $.removeClass(this._tooltip, 'show');
-                $.detach(this._tooltip);
-                $.removeDataset(this._tooltip, 'uiAnimating');
+                $.removeClass(this.#tooltip, 'show');
+                $.detach(this.#tooltip);
+                $.removeDataset(this.#tooltip, 'uiAnimating');
                 $.removeAttribute(this.node, 'aria-described-by');
                 $.triggerEvent(this.node, 'hidden.ui.tooltip');
             }).catch((_) => {
-                if ($.getDataset(this._tooltip, 'uiAnimating') === 'out') {
-                    $.removeDataset(this._tooltip, 'uiAnimating');
+                if ($.getDataset(this.#tooltip, 'uiAnimating') === 'out') {
+                    $.removeDataset(this.#tooltip, 'uiAnimating');
                 }
             });
         }
@@ -3701,7 +3633,7 @@
             const method = this.options.html ? 'setHTML' : 'setText';
 
             $[method](
-                this._tooltipInner,
+                this.#tooltipInner,
                 this.options.html && this.options.sanitize ?
                     this.options.sanitize(title) :
                     title,
@@ -3715,27 +3647,27 @@
          */
         show() {
             if (
-                !this._enabled ||
-                $.getDataset(this._tooltip, 'uiAnimating') ||
-                $.isConnected(this._tooltip) ||
+                !this.#enabled ||
+                $.getDataset(this.#tooltip, 'uiAnimating') ||
+                $.isConnected(this.#tooltip) ||
                 !$.triggerOne(this.node, 'show.ui.tooltip')
             ) {
                 return;
             }
 
-            $.setDataset(this._tooltip, { uiAnimating: 'in' });
-            $.addClass(this._tooltip, 'show');
+            $.setDataset(this.#tooltip, { uiAnimating: 'in' });
+            $.addClass(this.#tooltip, 'show');
             this.refresh();
-            this._show();
+            this.#show();
 
-            $.fadeIn(this._tooltip, {
+            $.fadeIn(this.#tooltip, {
                 duration: this.options.duration,
             }).then((_) => {
-                $.removeDataset(this._tooltip, 'uiAnimating');
+                $.removeDataset(this.#tooltip, 'uiAnimating');
                 $.triggerEvent(this.node, 'shown.ui.tooltip');
             }).catch((_) => {
-                if ($.getDataset(this._tooltip, 'uiAnimating') === 'in') {
-                    $.removeDataset(this._tooltip, 'uiAnimating');
+                if ($.getDataset(this.#tooltip, 'uiAnimating') === 'in') {
+                    $.removeDataset(this.#tooltip, 'uiAnimating');
                 }
             });
         }
@@ -3746,7 +3678,7 @@
          * @param {boolean} [options.force=true] Whether to force hiding when disabled.
          */
         toggle({ force = true } = {}) {
-            if ($.isConnected(this._tooltip)) {
+            if ($.isConnected(this.#tooltip)) {
                 this.hide({ force });
             } else {
                 this.show();
@@ -3757,8 +3689,127 @@
          * Update the Tooltip position.
          */
         update() {
-            if (this._popper) {
-                this._popper.update();
+            if (this.#popper) {
+                this.#popper.update();
+            }
+        }
+
+        /**
+         * Attach events for the Tooltip.
+         */
+        #events() {
+            if (this.#triggers.includes('hover')) {
+                $.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
+                    this.#stop();
+                    this.show();
+                });
+
+                $.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
+                    this.#stop();
+                    this.hide({ force: false });
+                });
+            }
+
+            if (this.#triggers.includes('focus')) {
+                $.addEvent(this.node, 'focus.ui.tooltip', (_) => {
+                    this.#stop();
+                    this.show();
+                });
+
+                $.addEvent(this.node, 'blur.ui.tooltip', (_) => {
+                    this.#stop();
+                    this.hide({ force: false });
+                });
+            }
+
+            if (this.#triggers.includes('click')) {
+                $.addEvent(this.node, 'click.ui.tooltip', (e) => {
+                    e.preventDefault();
+
+                    this.#stop();
+                    this.toggle({ force: false });
+                });
+            }
+
+            if (this.#modal) {
+                this.#hideModalEvent = (_) => {
+                    this.#stop();
+                    this.hide();
+                };
+                $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+            }
+        }
+
+        /**
+         * Render the Tooltip element.
+         */
+        #render() {
+            this.#tooltip = $.parseHTML(this.options.template).shift();
+            if (this.options.customClass) {
+                $.addClass(this.#tooltip, this.options.customClass);
+            }
+            this.#arrow = $.findOne('.tooltip-arrow', this.#tooltip);
+            this.#tooltipInner = $.findOne('.tooltip-inner', this.#tooltip);
+        }
+
+        /**
+         * Update the Tooltip and append to the DOM.
+         */
+        #show() {
+            if (this.options.appendTo) {
+                $.append(this.options.appendTo, this.#tooltip);
+            } else {
+                $.after(this.node, this.#tooltip);
+            }
+
+            if (!this.options.noAttributes) {
+                const id = generateId(this.constructor.DATA_KEY);
+                $.setAttribute(this.#tooltip, { id });
+                $.setAttribute(this.node, { 'aria-described-by': id });
+            }
+
+            this.#popper = new Popper(
+                this.#tooltip,
+                {
+                    reference: this.node,
+                    arrow: this.#arrow,
+                    placement: this.options.placement,
+                    position: this.options.position,
+                    fixed: this.options.fixed,
+                    spacing: this.options.spacing,
+                    minContact: this.options.minContact,
+                    noAttributes: this.options.noAttributes,
+                },
+            );
+
+            window.requestAnimationFrame((_) => {
+                this.update();
+            });
+        }
+
+        /**
+         * Stop the animations.
+         */
+        #stop() {
+            if (!this.#enabled) {
+                return;
+            }
+
+            const animating = $.getDataset(this.#tooltip, 'uiAnimating');
+
+            if (!animating) {
+                return;
+            }
+
+            $.stop(this.#tooltip, { finish: false });
+            $.removeDataset(this.#tooltip, 'uiAnimating');
+
+            if (animating === 'out') {
+                this.#popper.dispose();
+                this.#popper = null;
+
+                $.removeClass(this.#tooltip, 'show');
+                $.detach(this.#tooltip);
             }
         }
     }

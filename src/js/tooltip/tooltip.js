@@ -8,6 +8,15 @@ import Popper from './../popper/index.js';
  * @class
  */
 export default class Tooltip extends BaseComponent {
+    #arrow;
+    #enabled;
+    #hideModalEvent;
+    #modal;
+    #popper;
+    #tooltip;
+    #tooltipInner;
+    #triggers;
+
     /**
      * New Tooltip constructor.
      * @param {HTMLElement} node The input node.
@@ -16,12 +25,12 @@ export default class Tooltip extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this._modal = $.closest(this.node, '.modal').shift();
+        this.#modal = $.closest(this.node, '.modal').shift();
 
-        this._triggers = this.options.trigger.split(' ');
+        this.#triggers = this.options.trigger.split(' ');
 
-        this._render();
-        this._events();
+        this.#render();
+        this.#events();
 
         if (this.options.enable) {
             this.enable();
@@ -31,129 +40,10 @@ export default class Tooltip extends BaseComponent {
     }
 
     /**
-     * Attach events for the Tooltip.
-     */
-    _events() {
-        if (this._triggers.includes('hover')) {
-            $.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
-                this._stop();
-                this.show();
-            });
-
-            $.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
-                this._stop();
-                this.hide({ force: false });
-            });
-        }
-
-        if (this._triggers.includes('focus')) {
-            $.addEvent(this.node, 'focus.ui.tooltip', (_) => {
-                this._stop();
-                this.show();
-            });
-
-            $.addEvent(this.node, 'blur.ui.tooltip', (_) => {
-                this._stop();
-                this.hide({ force: false });
-            });
-        }
-
-        if (this._triggers.includes('click')) {
-            $.addEvent(this.node, 'click.ui.tooltip', (e) => {
-                e.preventDefault();
-
-                this._stop();
-                this.toggle({ force: false });
-            });
-        }
-
-        if (this._modal) {
-            this._hideModalEvent = (_) => {
-                this._stop();
-                this.hide();
-            };
-            $.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
-        }
-    }
-
-    /**
-     * Render the Tooltip element.
-     */
-    _render() {
-        this._tooltip = $.parseHTML(this.options.template).shift();
-        if (this.options.customClass) {
-            $.addClass(this._tooltip, this.options.customClass);
-        }
-        this._arrow = $.findOne('.tooltip-arrow', this._tooltip);
-        this._tooltipInner = $.findOne('.tooltip-inner', this._tooltip);
-    }
-
-    /**
-     * Update the Tooltip and append to the DOM.
-     */
-    _show() {
-        if (this.options.appendTo) {
-            $.append(this.options.appendTo, this._tooltip);
-        } else {
-            $.after(this.node, this._tooltip);
-        }
-
-        if (!this.options.noAttributes) {
-            const id = generateId(this.constructor.DATA_KEY);
-            $.setAttribute(this._tooltip, { id });
-            $.setAttribute(this.node, { 'aria-described-by': id });
-        }
-
-        this._popper = new Popper(
-            this._tooltip,
-            {
-                reference: this.node,
-                arrow: this._arrow,
-                placement: this.options.placement,
-                position: this.options.position,
-                fixed: this.options.fixed,
-                spacing: this.options.spacing,
-                minContact: this.options.minContact,
-                noAttributes: this.options.noAttributes,
-            },
-        );
-
-        window.requestAnimationFrame((_) => {
-            this.update();
-        });
-    }
-
-    /**
-     * Stop the animations.
-     */
-    _stop() {
-        if (!this._enabled) {
-            return;
-        }
-
-        const animating = $.getDataset(this._tooltip, 'uiAnimating');
-
-        if (!animating) {
-            return;
-        }
-
-        $.stop(this._tooltip, { finish: false });
-        $.removeDataset(this._tooltip, 'uiAnimating');
-
-        if (animating === 'out') {
-            this._popper.dispose();
-            this._popper = null;
-
-            $.removeClass(this._tooltip, 'show');
-            $.detach(this._tooltip);
-        }
-    }
-
-    /**
      * Disable the Tooltip.
      */
     disable() {
-        this._enabled = false;
+        this.#enabled = false;
     }
 
     /**
@@ -166,37 +56,37 @@ export default class Tooltip extends BaseComponent {
             $.removeDataset(this.node, 'uiOriginalTitle');
         }
 
-        if (this._popper) {
-            this._popper.dispose();
-            this._popper = null;
+        if (this.#popper) {
+            this.#popper.dispose();
+            this.#popper = null;
         }
 
-        $.remove(this._tooltip);
+        $.remove(this.#tooltip);
 
-        if (this._triggers.includes('hover')) {
+        if (this.#triggers.includes('hover')) {
             $.removeEvent(this.node, 'mouseover.ui.tooltip');
             $.removeEvent(this.node, 'mouseout.ui.tooltip');
         }
 
-        if (this._triggers.includes('focus')) {
+        if (this.#triggers.includes('focus')) {
             $.removeEvent(this.node, 'focus.ui.tooltip');
             $.removeEvent(this.node, 'blur.ui.tooltip');
         }
 
-        if (this._triggers.includes('click')) {
+        if (this.#triggers.includes('click')) {
             $.removeEvent(this.node, 'click.ui.tooltip');
         }
 
-        if (this._modal) {
-            $.removeEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
+        if (this.#modal) {
+            $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
         }
 
-        this._modal = null;
-        this._triggers = null;
-        this._tooltip = null;
-        this._tooltipInner = null;
-        this._arrow = null;
-        this._hideModalEvent = null;
+        this.#modal = null;
+        this.#triggers = null;
+        this.#tooltip = null;
+        this.#tooltipInner = null;
+        this.#arrow = null;
+        this.#hideModalEvent = null;
 
         super.dispose();
     }
@@ -205,7 +95,7 @@ export default class Tooltip extends BaseComponent {
      * Enable the Tooltip.
      */
     enable() {
-        this._enabled = true;
+        this.#enabled = true;
     }
 
     /**
@@ -215,30 +105,30 @@ export default class Tooltip extends BaseComponent {
      */
     hide({ force = true } = {}) {
         if (
-            (!force && !this._enabled) ||
-            $.getDataset(this._tooltip, 'uiAnimating') ||
-            !$.isConnected(this._tooltip) ||
+            (!force && !this.#enabled) ||
+            $.getDataset(this.#tooltip, 'uiAnimating') ||
+            !$.isConnected(this.#tooltip) ||
             !$.triggerOne(this.node, 'hide.ui.tooltip')
         ) {
             return;
         }
 
-        $.setDataset(this._tooltip, { uiAnimating: 'out' });
+        $.setDataset(this.#tooltip, { uiAnimating: 'out' });
 
-        $.fadeOut(this._tooltip, {
+        $.fadeOut(this.#tooltip, {
             duration: this.options.duration,
         }).then((_) => {
-            this._popper.dispose();
-            this._popper = null;
+            this.#popper.dispose();
+            this.#popper = null;
 
-            $.removeClass(this._tooltip, 'show');
-            $.detach(this._tooltip);
-            $.removeDataset(this._tooltip, 'uiAnimating');
+            $.removeClass(this.#tooltip, 'show');
+            $.detach(this.#tooltip);
+            $.removeDataset(this.#tooltip, 'uiAnimating');
             $.removeAttribute(this.node, 'aria-described-by');
             $.triggerEvent(this.node, 'hidden.ui.tooltip');
         }).catch((_) => {
-            if ($.getDataset(this._tooltip, 'uiAnimating') === 'out') {
-                $.removeDataset(this._tooltip, 'uiAnimating');
+            if ($.getDataset(this.#tooltip, 'uiAnimating') === 'out') {
+                $.removeDataset(this.#tooltip, 'uiAnimating');
             }
         });
     }
@@ -265,7 +155,7 @@ export default class Tooltip extends BaseComponent {
         const method = this.options.html ? 'setHTML' : 'setText';
 
         $[method](
-            this._tooltipInner,
+            this.#tooltipInner,
             this.options.html && this.options.sanitize ?
                 this.options.sanitize(title) :
                 title,
@@ -279,27 +169,27 @@ export default class Tooltip extends BaseComponent {
      */
     show() {
         if (
-            !this._enabled ||
-            $.getDataset(this._tooltip, 'uiAnimating') ||
-            $.isConnected(this._tooltip) ||
+            !this.#enabled ||
+            $.getDataset(this.#tooltip, 'uiAnimating') ||
+            $.isConnected(this.#tooltip) ||
             !$.triggerOne(this.node, 'show.ui.tooltip')
         ) {
             return;
         }
 
-        $.setDataset(this._tooltip, { uiAnimating: 'in' });
-        $.addClass(this._tooltip, 'show');
+        $.setDataset(this.#tooltip, { uiAnimating: 'in' });
+        $.addClass(this.#tooltip, 'show');
         this.refresh();
-        this._show();
+        this.#show();
 
-        $.fadeIn(this._tooltip, {
+        $.fadeIn(this.#tooltip, {
             duration: this.options.duration,
         }).then((_) => {
-            $.removeDataset(this._tooltip, 'uiAnimating');
+            $.removeDataset(this.#tooltip, 'uiAnimating');
             $.triggerEvent(this.node, 'shown.ui.tooltip');
         }).catch((_) => {
-            if ($.getDataset(this._tooltip, 'uiAnimating') === 'in') {
-                $.removeDataset(this._tooltip, 'uiAnimating');
+            if ($.getDataset(this.#tooltip, 'uiAnimating') === 'in') {
+                $.removeDataset(this.#tooltip, 'uiAnimating');
             }
         });
     }
@@ -310,7 +200,7 @@ export default class Tooltip extends BaseComponent {
      * @param {boolean} [options.force=true] Whether to force hiding when disabled.
      */
     toggle({ force = true } = {}) {
-        if ($.isConnected(this._tooltip)) {
+        if ($.isConnected(this.#tooltip)) {
             this.hide({ force });
         } else {
             this.show();
@@ -321,8 +211,127 @@ export default class Tooltip extends BaseComponent {
      * Update the Tooltip position.
      */
     update() {
-        if (this._popper) {
-            this._popper.update();
+        if (this.#popper) {
+            this.#popper.update();
+        }
+    }
+
+    /**
+     * Attach events for the Tooltip.
+     */
+    #events() {
+        if (this.#triggers.includes('hover')) {
+            $.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
+                this.#stop();
+                this.show();
+            });
+
+            $.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
+                this.#stop();
+                this.hide({ force: false });
+            });
+        }
+
+        if (this.#triggers.includes('focus')) {
+            $.addEvent(this.node, 'focus.ui.tooltip', (_) => {
+                this.#stop();
+                this.show();
+            });
+
+            $.addEvent(this.node, 'blur.ui.tooltip', (_) => {
+                this.#stop();
+                this.hide({ force: false });
+            });
+        }
+
+        if (this.#triggers.includes('click')) {
+            $.addEvent(this.node, 'click.ui.tooltip', (e) => {
+                e.preventDefault();
+
+                this.#stop();
+                this.toggle({ force: false });
+            });
+        }
+
+        if (this.#modal) {
+            this.#hideModalEvent = (_) => {
+                this.#stop();
+                this.hide();
+            };
+            $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+        }
+    }
+
+    /**
+     * Render the Tooltip element.
+     */
+    #render() {
+        this.#tooltip = $.parseHTML(this.options.template).shift();
+        if (this.options.customClass) {
+            $.addClass(this.#tooltip, this.options.customClass);
+        }
+        this.#arrow = $.findOne('.tooltip-arrow', this.#tooltip);
+        this.#tooltipInner = $.findOne('.tooltip-inner', this.#tooltip);
+    }
+
+    /**
+     * Update the Tooltip and append to the DOM.
+     */
+    #show() {
+        if (this.options.appendTo) {
+            $.append(this.options.appendTo, this.#tooltip);
+        } else {
+            $.after(this.node, this.#tooltip);
+        }
+
+        if (!this.options.noAttributes) {
+            const id = generateId(this.constructor.DATA_KEY);
+            $.setAttribute(this.#tooltip, { id });
+            $.setAttribute(this.node, { 'aria-described-by': id });
+        }
+
+        this.#popper = new Popper(
+            this.#tooltip,
+            {
+                reference: this.node,
+                arrow: this.#arrow,
+                placement: this.options.placement,
+                position: this.options.position,
+                fixed: this.options.fixed,
+                spacing: this.options.spacing,
+                minContact: this.options.minContact,
+                noAttributes: this.options.noAttributes,
+            },
+        );
+
+        window.requestAnimationFrame((_) => {
+            this.update();
+        });
+    }
+
+    /**
+     * Stop the animations.
+     */
+    #stop() {
+        if (!this.#enabled) {
+            return;
+        }
+
+        const animating = $.getDataset(this.#tooltip, 'uiAnimating');
+
+        if (!animating) {
+            return;
+        }
+
+        $.stop(this.#tooltip, { finish: false });
+        $.removeDataset(this.#tooltip, 'uiAnimating');
+
+        if (animating === 'out') {
+            this.#popper.dispose();
+            this.#popper = null;
+
+            $.removeClass(this.#tooltip, 'show');
+            $.detach(this.#tooltip);
         }
     }
 }

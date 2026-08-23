@@ -8,6 +8,12 @@ import { getDirOffset, getDirection, getIndex } from './helpers.js';
  * @class
  */
 export default class Carousel extends BaseComponent {
+    #index;
+    #items;
+    #mousePaused;
+    #paused;
+    #timer;
+
     /**
      * New Carousel constructor.
      * @param {HTMLElement} node The input node.
@@ -16,23 +22,99 @@ export default class Carousel extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this._items = $.find('.carousel-item', this.node);
+        this.#items = $.find('.carousel-item', this.node);
 
-        this._index = this._items.findIndex((item) =>
+        this.#index = this.#items.findIndex((item) =>
             $.hasClass(item, 'active'),
         );
 
-        this._events();
+        this.#events();
 
         if (this.options.ride === 'carousel') {
-            this._setTimer();
+            this.#setTimer();
         }
+    }
+
+    /**
+     * Cycle to the next carousel item.
+     */
+    cycle() {
+        if (!$.isHidden(document)) {
+            this.slide(1);
+        } else {
+            this.#paused = false;
+            this.#setTimer();
+        }
+    }
+
+    /**
+     * Dispose the Carousel.
+     */
+    dispose() {
+        clearTimeout(this.#timer);
+        this.#timer = null;
+
+        if (this.options.keyboard) {
+            $.removeEvent(this.node, 'keydown.ui.carousel');
+        }
+
+        if (this.options.pause) {
+            $.removeEvent(this.node, 'mouseenter.ui.carousel');
+            $.removeEvent(this.node, 'mouseleave.ui.carousel');
+        }
+
+        if (this.options.swipe) {
+            $.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
+        }
+
+        this.#items = null;
+
+        super.dispose();
+    }
+
+    /**
+     * Cycle to the next Carousel item.
+     */
+    next() {
+        this.slide();
+    }
+
+    /**
+     * Stop the carousel from cycling through items.
+     */
+    pause() {
+        clearTimeout(this.#timer);
+        this.#timer = null;
+        this.#paused = true;
+    }
+
+    /**
+     * Cycle to the previous Carousel item.
+     */
+    prev() {
+        this.slide(-1);
+    }
+
+    /**
+     * Cycle to a specific Carousel item.
+     * @param {number} index The item index to cycle to.
+     */
+    show(index) {
+        this.#show(index);
+    }
+
+    /**
+     * Slide the Carousel in a specific direction.
+     * @param {number} [direction=1] The direction to slide to.
+     */
+    slide(direction = 1) {
+        this.show(this.#index + direction);
     }
 
     /**
      * Attach events for the Carousel.
      */
-    _events() {
+    #events() {
         if (this.options.keyboard) {
             $.addEvent(this.node, 'keydown.ui.carousel', (e) => {
                 const target = e.target;
@@ -55,16 +137,16 @@ export default class Carousel extends BaseComponent {
 
         if (this.options.pause) {
             $.addEvent(this.node, 'mouseenter.ui.carousel', (_) => {
-                this._mousePaused = true;
+                this.#mousePaused = true;
                 this.pause();
             });
 
             $.addEvent(this.node, 'mouseleave.ui.carousel', (_) => {
-                this._mousePaused = false;
-                this._paused = false;
+                this.#mousePaused = false;
+                this.#paused = false;
 
                 if (!$.getDataset(this.node, 'uiSliding')) {
-                    this._setTimer();
+                    this.#setTimer();
                 }
             });
         }
@@ -107,8 +189,8 @@ export default class Carousel extends BaseComponent {
                 if (!this.options.wrap) {
                     mouseDiffX = $._clamp(
                         mouseDiffX,
-                        -(this._items.length - 1 - this._index) * scrollX,
-                        this._index * scrollX,
+                        -(this.#items.length - 1 - this.#index) * scrollX,
+                        this.#index * scrollX,
                     );
                 }
 
@@ -118,52 +200,52 @@ export default class Carousel extends BaseComponent {
                     const lastIndex = index;
 
                     if (mouseDiffX < 0) {
-                        index = this._index + 1;
+                        index = this.#index + 1;
                     } else if (mouseDiffX > 0) {
-                        index = this._index - 1;
+                        index = this.#index - 1;
                     } else {
-                        index = this._index;
+                        index = this.#index;
                         return;
                     }
 
-                    const offset = getDirOffset(index, this._items.length);
-                    index = getIndex(index, this._items.length);
-                    direction = getDirection(offset, this._index, index);
+                    const offset = getDirOffset(index, this.#items.length);
+                    index = getIndex(index, this.#items.length);
+                    direction = getDirection(offset, this.#index, index);
 
                     if (progress >= 1) {
                         startX = currentX;
 
-                        const oldIndex = this._setIndex(index);
-                        this._update(this._items[this._index], this._items[oldIndex], progress, { direction });
-                        this._updateIndicators();
+                        const oldIndex = this.#setIndex(index);
+                        this.#update(this.#items[this.#index], this.#items[oldIndex], progress, { direction });
+                        this.#updateIndicators();
 
-                        if (lastIndex !== this._index) {
-                            this._resetStyles(lastIndex);
+                        if (lastIndex !== this.#index) {
+                            this.#resetStyles(lastIndex);
                         }
 
                         progress--;
                     } else {
-                        this._update(this._items[index], this._items[this._index], progress, { direction, dragging: true });
+                        this.#update(this.#items[index], this.#items[this.#index], progress, { direction, dragging: true });
 
                         if (lastIndex !== index) {
-                            this._resetStyles(lastIndex);
+                            this.#resetStyles(lastIndex);
                         }
                     }
                 } while (progress > 1);
             };
 
             const upEvent = (_) => {
-                if (index === null || index === this._index) {
-                    this._paused = false;
+                if (index === null || index === this.#index) {
+                    this.#paused = false;
                     $.removeDataset(this.node, 'uiSliding');
-                    this._setTimer();
+                    this.#setTimer();
                     return;
                 }
 
                 let oldIndex;
                 let progressRemaining;
                 if (progress > .25) {
-                    oldIndex = this._setIndex(index);
+                    oldIndex = this.#setIndex(index);
                     progressRemaining = 1 - progress;
                 } else {
                     oldIndex = index;
@@ -171,32 +253,32 @@ export default class Carousel extends BaseComponent {
                     direction = direction === 'right' ? 'left' : 'right';
                 }
 
-                this._resetStyles(this._index);
+                this.#resetStyles(this.#index);
 
                 index = null;
 
                 $.animate(
-                    this._items[this._index],
+                    this.#items[this.#index],
                     (node, newProgress) => {
-                        if (!this._items) {
+                        if (!this.#items) {
                             return;
                         }
 
                         if (progress > .25) {
-                            this._update(node, this._items[oldIndex], progress + (newProgress * progressRemaining), { direction });
+                            this.#update(node, this.#items[oldIndex], progress + (newProgress * progressRemaining), { direction });
                         } else {
-                            this._update(node, this._items[oldIndex], (1 - progress) + (newProgress * progressRemaining), { direction });
+                            this.#update(node, this.#items[oldIndex], (1 - progress) + (newProgress * progressRemaining), { direction });
                         }
                     },
                     {
                         duration: this.options.transition * progressRemaining,
                     },
                 ).then((_) => {
-                    this._updateIndicators();
+                    this.#updateIndicators();
                     $.removeDataset(this.node, 'uiSliding');
 
-                    this._paused = false;
-                    this._setTimer();
+                    this.#paused = false;
+                    this.#setTimer();
                 }).catch((_) => {
                     $.removeDataset(this.node, 'uiSliding');
                 });
@@ -212,8 +294,8 @@ export default class Carousel extends BaseComponent {
      * Reset styles of an item.
      * @param {number} index The item index.
      */
-    _resetStyles(index) {
-        $.setStyle(this._items[index], {
+    #resetStyles(index) {
+        $.setStyle(this.#items[index], {
             display: '',
             transform: '',
         });
@@ -224,12 +306,12 @@ export default class Carousel extends BaseComponent {
      * @param {number} index The new item index.
      * @return {number} The old item index.
      */
-    _setIndex(index) {
-        const oldIndex = this._index;
-        this._index = index;
+    #setIndex(index) {
+        const oldIndex = this.#index;
+        this.#index = index;
 
-        $.addClass(this._items[this._index], 'active');
-        $.removeClass(this._items[oldIndex], 'active');
+        $.addClass(this.#items[this.#index], 'active');
+        $.removeClass(this.#items[oldIndex], 'active');
 
         return oldIndex;
     }
@@ -237,16 +319,16 @@ export default class Carousel extends BaseComponent {
     /**
      * Set a timer for the next Carousel cycle.
      */
-    _setTimer() {
-        if (this._timer || this._paused || this._mousePaused) {
+    #setTimer() {
+        if (this.#timer || this.#paused || this.#mousePaused) {
             return;
         }
 
-        const interval = $.getDataset(this._items[this._index], 'uiInterval');
+        const interval = $.getDataset(this.#items[this.#index], 'uiInterval');
 
-        this._timer = setTimeout(
+        this.#timer = setTimeout(
             (_) => {
-                this._timer = null;
+                this.#timer = null;
                 this.cycle();
             },
             interval || this.options.interval,
@@ -257,7 +339,7 @@ export default class Carousel extends BaseComponent {
      * Cycle to a specific Carousel item.
      * @param {number} index The item index to cycle to.
      */
-    _show(index) {
+    #show(index) {
         if ($.getDataset(this.node, 'uiSliding')) {
             return;
         }
@@ -267,25 +349,25 @@ export default class Carousel extends BaseComponent {
         if (!this.options.wrap &&
             (
                 index < 0 ||
-                index > this._items.length - 1
+                index > this.#items.length - 1
             )
         ) {
             return;
         }
 
-        const offset = getDirOffset(index, this._items.length);
-        index = getIndex(index, this._items.length);
+        const offset = getDirOffset(index, this.#items.length);
+        index = getIndex(index, this.#items.length);
 
-        if (index === this._index) {
+        if (index === this.#index) {
             return;
         }
 
-        const direction = getDirection(offset, this._index, index);
+        const direction = getDirection(offset, this.#index, index);
 
         const eventData = {
             direction,
-            relatedTarget: this._items[index],
-            from: this._index,
+            relatedTarget: this.#items[index],
+            from: this.#index,
             to: index,
         };
 
@@ -296,27 +378,27 @@ export default class Carousel extends BaseComponent {
         $.setDataset(this.node, { uiSliding: true });
         this.pause();
 
-        const oldIndex = this._setIndex(index);
+        const oldIndex = this.#setIndex(index);
 
         $.animate(
-            this._items[this._index],
+            this.#items[this.#index],
             (node, progress) => {
-                if (!this._items) {
+                if (!this.#items) {
                     return;
                 }
 
-                this._update(node, this._items[oldIndex], progress, { direction });
+                this.#update(node, this.#items[oldIndex], progress, { direction });
             },
             {
                 duration: this.options.transition,
             },
         ).then((_) => {
-            this._updateIndicators();
+            this.#updateIndicators();
             $.removeDataset(this.node, 'uiSliding');
             $.triggerEvent(this.node, 'slid.ui.carousel', { data: eventData });
 
-            this._paused = false;
-            this._setTimer();
+            this.#paused = false;
+            this.#setTimer();
         }).catch((_) => {
             $.removeDataset(this.node, 'uiSliding');
         });
@@ -331,7 +413,7 @@ export default class Carousel extends BaseComponent {
      * @param {string} [options.direction] The direction to cycle to.
      * @param {Boolean} [options.dragging] Whether the item is being dragged.
      */
-    _update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
+    #update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
         const inStyles = {};
         const outStyles = {};
 
@@ -364,86 +446,10 @@ export default class Carousel extends BaseComponent {
     /**
      * Update the carousel indicators.
      */
-    _updateIndicators() {
+    #updateIndicators() {
         const oldIndicator = $.find('.active[data-ui-slide-to]', this.node);
-        const newIndicator = $.find('[data-ui-slide-to="' + this._index + '"]', this.node);
+        const newIndicator = $.find('[data-ui-slide-to="' + this.#index + '"]', this.node);
         $.removeClass(oldIndicator, 'active');
         $.addClass(newIndicator, 'active');
-    }
-
-    /**
-     * Cycle to the next carousel item.
-     */
-    cycle() {
-        if (!$.isHidden(document)) {
-            this.slide(1);
-        } else {
-            this._paused = false;
-            this._setTimer();
-        }
-    }
-
-    /**
-     * Dispose the Carousel.
-     */
-    dispose() {
-        clearTimeout(this._timer);
-        this._timer = null;
-
-        if (this.options.keyboard) {
-            $.removeEvent(this.node, 'keydown.ui.carousel');
-        }
-
-        if (this.options.pause) {
-            $.removeEvent(this.node, 'mouseenter.ui.carousel');
-            $.removeEvent(this.node, 'mouseleave.ui.carousel');
-        }
-
-        if (this.options.swipe) {
-            $.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
-        }
-
-        this._items = null;
-
-        super.dispose();
-    }
-
-    /**
-     * Cycle to the next Carousel item.
-     */
-    next() {
-        this.slide();
-    }
-
-    /**
-     * Stop the carousel from cycling through items.
-     */
-    pause() {
-        clearTimeout(this._timer);
-        this._timer = null;
-        this._paused = true;
-    }
-
-    /**
-     * Cycle to the previous Carousel item.
-     */
-    prev() {
-        this.slide(-1);
-    }
-
-    /**
-     * Cycle to a specific Carousel item.
-     * @param {number} index The item index to cycle to.
-     */
-    show(index) {
-        this._show(index);
-    }
-
-    /**
-     * Slide the Carousel in a specific direction.
-     * @param {number} [direction=1] The direction to slide to.
-     */
-    slide(direction = 1) {
-        this.show(this._index + direction);
     }
 }

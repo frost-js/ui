@@ -48,4 +48,19 @@ test.describe('BaseComponent', () => {
             options: null,
         });
     });
+
+    test('clears the node and options when removed', async ({ page }) => {
+        expect(await page.evaluate((_) => {
+            const node = $.findOne('#alert1');
+            const alert = UI.Alert.init(node);
+            $.remove(node);
+            return {
+                node: alert.node,
+                options: alert.options,
+            };
+        })).toEqual({
+            node: null,
+            options: null,
+        });
+    });
 });

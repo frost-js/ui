@@ -9,6 +9,10 @@ import { getDirection } from './helpers.js';
  * @class
  */
 export default class Offcanvas extends BaseComponent {
+    #activeTarget;
+    #focusTrap;
+    #scrollNodes;
+
     /**
      * New Offcanvas constructor.
      * @param {HTMLElement} node The input node.
@@ -18,7 +22,7 @@ export default class Offcanvas extends BaseComponent {
         super(node, options);
 
         if (!this.options.scroll || this.options.backdrop) {
-            this._focusTrap = FocusTrap.init(this.node);
+            this.#focusTrap = FocusTrap.init(this.node);
         }
     }
 
@@ -26,13 +30,13 @@ export default class Offcanvas extends BaseComponent {
      * Dispose the Offcanvas.
      */
     dispose() {
-        if (this._focusTrap) {
-            this._focusTrap.dispose();
-            this._focusTrap = null;
+        if (this.#focusTrap) {
+            this.#focusTrap.dispose();
+            this.#focusTrap = null;
         }
 
-        this._activeTarget = null;
-        this._scrollNodes = null;
+        this.#activeTarget = null;
+        this.#scrollNodes = null;
 
         super.dispose();
     }
@@ -77,8 +81,8 @@ export default class Offcanvas extends BaseComponent {
 
         $.setDataset(this.node, { uiAnimating: 'out' });
 
-        if (this._focusTrap) {
-            this._focusTrap.deactivate();
+        if (this.#focusTrap) {
+            this.#focusTrap.deactivate();
         }
 
         Promise.all([
@@ -102,15 +106,15 @@ export default class Offcanvas extends BaseComponent {
             }
 
             if (!this.options.scroll) {
-                resetScrollPadding(this._scrollNodes);
-                this._scrollNodes = [];
+                resetScrollPadding(this.#scrollNodes);
+                this.#scrollNodes = [];
 
                 $.setStyle(document.body, { overflow: '' });
             }
 
-            if (this._activeTarget) {
-                $.focus(this._activeTarget);
-                this._activeTarget = null;
+            if (this.#activeTarget) {
+                $.focus(this.#activeTarget);
+                this.#activeTarget = null;
             }
 
             $.removeDataset(this.node, 'uiAnimating');
@@ -128,7 +132,7 @@ export default class Offcanvas extends BaseComponent {
      */
     show(relatedTarget) {
         if (relatedTarget) {
-            this._activeTarget = relatedTarget;
+            this.#activeTarget = relatedTarget;
         }
 
         if (
@@ -147,13 +151,13 @@ export default class Offcanvas extends BaseComponent {
             $.addClass(document.body, 'offcanvas-backdrop');
         }
 
-        this._scrollNodes = [];
+        this.#scrollNodes = [];
 
         if (!this.options.scroll) {
-            this._scrollNodes.push(document.body);
-            this._scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
+            this.#scrollNodes.push(document.body);
+            this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
 
-            addScrollPadding(this._scrollNodes);
+            addScrollPadding(this.#scrollNodes);
 
             $.setStyle(document.body, { overflow: 'hidden' });
         }
@@ -172,8 +176,8 @@ export default class Offcanvas extends BaseComponent {
                 'aria-modal': true,
             });
 
-            if (this._focusTrap) {
-                this._focusTrap.activate();
+            if (this.#focusTrap) {
+                this.#focusTrap.activate();
             }
 
             $.removeDataset(this.node, 'uiAnimating');

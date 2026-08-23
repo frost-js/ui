@@ -114,38 +114,6 @@ test.describe('Carousel', () => {
             expect(await page.evaluate((_) =>
                 window.carouselTouchEventPrevented)).toBe(false);
         });
-
-        test('clears carousel memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                const carousel = UI.Carousel.init(carousel1);
-                carousel.dispose();
-
-                for (const key in carousel) {
-                    if ($._isObject(carousel[key]) && !$._isFunction(carousel[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears carousel memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                const carousel = UI.Carousel.init(carousel1);
-                $.remove(carousel1);
-
-                for (const key in carousel) {
-                    if ($._isObject(carousel[key]) && !$._isFunction(carousel[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
     });
 
     test.describe('#cycle', () => {

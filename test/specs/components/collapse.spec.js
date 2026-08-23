@@ -79,38 +79,6 @@ test.describe('Collapse', () => {
                 );
             })).toBe(false);
         });
-
-        test('clears collapse memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const collapse1 = $.findOne('#collapse1');
-                const collapse = UI.Collapse.init(collapse1);
-                collapse.dispose();
-
-                for (const key in collapse) {
-                    if ($._isObject(collapse[key]) && !$._isFunction(collapse[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears collapse memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const collapse1 = $.findOne('#collapse1');
-                const collapse = UI.Collapse.init(collapse1);
-                $.remove(collapse1);
-
-                for (const key in collapse) {
-                    if ($._isObject(collapse[key]) && !$._isFunction(collapse[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
     });
 
     test.describe('#show', () => {

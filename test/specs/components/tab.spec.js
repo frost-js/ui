@@ -91,38 +91,6 @@ test.describe('Tab', () => {
                 );
             })).toBe(false);
         });
-
-        test('clears tab memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const tabToggle1 = $.findOne('#tabToggle1');
-                const tab = UI.Tab.init(tabToggle1);
-                tab.dispose();
-
-                for (const key in tab) {
-                    if ($._isObject(tab[key]) && !$._isFunction(tab[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears tab memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const tabToggle1 = $.findOne('#tabToggle1');
-                const tab = UI.Tab.init(tabToggle1);
-                $.remove(tabToggle1);
-
-                for (const key in tab) {
-                    if ($._isObject(tab[key]) && !$._isFunction(tab[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
     });
 
     test.describe('#hide', () => {

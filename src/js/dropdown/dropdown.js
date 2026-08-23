@@ -8,6 +8,9 @@ import Popper from './../popper/popper.js';
  */
 export default class Dropdown extends BaseComponent {
     #display;
+    #menuNode;
+    #popper;
+    #referenceNode;
 
     /**
      * New Dropdown constructor.
@@ -18,16 +21,16 @@ export default class Dropdown extends BaseComponent {
         super(node, options);
 
         this.#display = this.options.display;
-        this._menuNode = $.next(this.node, '.dropdown-menu').shift();
+        this.#menuNode = $.next(this.node, '.dropdown-menu').shift();
 
         if (this.options.reference) {
             if (this.options.reference === 'parent') {
-                this._referenceNode = $.parent(this.node).shift();
+                this.#referenceNode = $.parent(this.node).shift();
             } else {
-                this._referenceNode = $.findOne(this.options.reference);
+                this.#referenceNode = $.findOne(this.options.reference);
             }
         } else {
-            this._referenceNode = this.node;
+            this.#referenceNode = this.node;
         }
 
         // Attach popper
@@ -42,20 +45,20 @@ export default class Dropdown extends BaseComponent {
      * @return {boolean} Whether the menu contains the target.
      */
     containsMenuTarget(target) {
-        return $.hasDescendent(this._menuNode, target);
+        return $.hasDescendent(this.#menuNode, target);
     }
 
     /**
      * Dispose the Dropdown.
      */
     dispose() {
-        if (this._popper) {
-            this._popper.dispose();
-            this._popper = null;
+        if (this.#popper) {
+            this.#popper.dispose();
+            this.#popper = null;
         }
 
-        this._menuNode = null;
-        this._referenceNode = null;
+        this.#menuNode = null;
+        this.#referenceNode = null;
 
         super.dispose();
     }
@@ -64,7 +67,7 @@ export default class Dropdown extends BaseComponent {
      * Focus the first Dropdown menu item.
      */
     focusFirstItem() {
-        const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', this._menuNode);
+        const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', this.#menuNode);
         $.focus(focusNode);
     }
 
@@ -73,30 +76,30 @@ export default class Dropdown extends BaseComponent {
      */
     hide() {
         if (
-            $.getDataset(this._menuNode, 'uiAnimating') ||
-            !$.hasClass(this._menuNode, 'show') ||
+            $.getDataset(this.#menuNode, 'uiAnimating') ||
+            !$.hasClass(this.#menuNode, 'show') ||
             !$.triggerOne(this.node, 'hide.ui.dropdown')
         ) {
             return;
         }
 
-        $.setDataset(this._menuNode, { uiAnimating: 'out' });
+        $.setDataset(this.#menuNode, { uiAnimating: 'out' });
 
-        $.fadeOut(this._menuNode, {
+        $.fadeOut(this.#menuNode, {
             duration: this.options.duration,
         }).then((_) => {
-            if (this._popper) {
-                this._popper.dispose();
-                this._popper = null;
+            if (this.#popper) {
+                this.#popper.dispose();
+                this.#popper = null;
             }
 
-            $.removeClass(this._menuNode, 'show');
+            $.removeClass(this.#menuNode, 'show');
             $.setAttribute(this.node, { 'aria-expanded': false });
-            $.removeDataset(this._menuNode, 'uiAnimating');
+            $.removeDataset(this.#menuNode, 'uiAnimating');
             $.triggerEvent(this.node, 'hidden.ui.dropdown');
         }).catch((_) => {
-            if ($.getDataset(this._menuNode, 'uiAnimating') === 'out') {
-                $.removeDataset(this._menuNode, 'uiAnimating');
+            if ($.getDataset(this.#menuNode, 'uiAnimating') === 'out') {
+                $.removeDataset(this.#menuNode, 'uiAnimating');
             }
         });
     }
@@ -122,7 +125,7 @@ export default class Dropdown extends BaseComponent {
             ) ||
             (
                 !hasDescendent &&
-                !$.isSame(this._menuNode, target) &&
+                !$.isSame(this.#menuNode, target) &&
                 (
                     autoClose === 'inside' ||
                     autoClose === false
@@ -136,19 +139,19 @@ export default class Dropdown extends BaseComponent {
      */
     show() {
         if (
-            $.getDataset(this._menuNode, 'uiAnimating') ||
-            $.hasClass(this._menuNode, 'show') ||
+            $.getDataset(this.#menuNode, 'uiAnimating') ||
+            $.hasClass(this.#menuNode, 'show') ||
             !$.triggerOne(this.node, 'show.ui.dropdown')
         ) {
             return;
         }
 
-        $.setDataset(this._menuNode, { uiAnimating: 'in' });
-        $.addClass(this._menuNode, 'show');
+        $.setDataset(this.#menuNode, { uiAnimating: 'in' });
+        $.addClass(this.#menuNode, 'show');
 
         if (this.#display === 'dynamic') {
-            this._popper = new Popper(this._menuNode, {
-                reference: this._referenceNode,
+            this.#popper = new Popper(this.#menuNode, {
+                reference: this.#referenceNode,
                 placement: this.options.placement,
                 position: this.options.position,
                 fixed: this.options.fixed,
@@ -161,15 +164,15 @@ export default class Dropdown extends BaseComponent {
             this.update();
         });
 
-        $.fadeIn(this._menuNode, {
+        $.fadeIn(this.#menuNode, {
             duration: this.options.duration,
         }).then((_) => {
             $.setAttribute(this.node, { 'aria-expanded': true });
-            $.removeDataset(this._menuNode, 'uiAnimating');
+            $.removeDataset(this.#menuNode, 'uiAnimating');
             $.triggerEvent(this.node, 'shown.ui.dropdown');
         }).catch((_) => {
-            if ($.getDataset(this._menuNode, 'uiAnimating') === 'in') {
-                $.removeDataset(this._menuNode, 'uiAnimating');
+            if ($.getDataset(this.#menuNode, 'uiAnimating') === 'in') {
+                $.removeDataset(this.#menuNode, 'uiAnimating');
             }
         });
     }
@@ -178,7 +181,7 @@ export default class Dropdown extends BaseComponent {
      * Toggle the Dropdown.
      */
     toggle() {
-        if ($.hasClass(this._menuNode, 'show')) {
+        if ($.hasClass(this.#menuNode, 'show')) {
             this.hide();
         } else {
             this.show();
@@ -189,8 +192,8 @@ export default class Dropdown extends BaseComponent {
      * Update the Dropdown position.
      */
     update() {
-        if (this._popper) {
-            this._popper.update();
+        if (this.#popper) {
+            this.#popper.update();
         }
     }
 }

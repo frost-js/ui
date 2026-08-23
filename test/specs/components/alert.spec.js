@@ -81,38 +81,6 @@ test.describe('Alert', () => {
                 );
             })).toBe(false);
         });
-
-        test('clears alert memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const alert1 = $.findOne('#alert1');
-                const alert = UI.Alert.init(alert1);
-                alert.dispose();
-
-                for (const key in alert) {
-                    if ($._isObject(alert[key]) && !$._isFunction(alert[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears alert memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const alert1 = $.findOne('#alert1');
-                const alert = UI.Alert.init(alert1);
-                $.remove(alert1);
-
-                for (const key in alert) {
-                    if ($._isObject(alert[key]) && !$._isFunction(alert[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
     });
 
     test.describe('#close', () => {

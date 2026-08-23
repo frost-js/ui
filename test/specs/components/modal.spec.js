@@ -71,38 +71,6 @@ test.describe('Modal', () => {
                 return $.hasData('#modal1', 'modal');
             })).toBe(false);
         });
-
-        test('clears modal memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                const modal = UI.Modal.init(modal1);
-                modal.dispose();
-
-                for (const key in modal) {
-                    if ($._isObject(modal[key]) && !$._isFunction(modal[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears modal memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                const modal = UI.Modal.init(modal1);
-                $.setHTML(document.body, '');
-
-                for (const key in modal) {
-                    if ($._isObject(modal[key]) && !$._isFunction(modal[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
     });
 
     test.describe('#show', () => {

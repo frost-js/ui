@@ -67,38 +67,6 @@ test.describe('Offcanvas', () => {
                 return $.hasData('#offcanvas1', 'offcanvas');
             })).toBe(false);
         });
-
-        test('clears offcanvas memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                const offcanvas = UI.Offcanvas.init(offcanvas1);
-                offcanvas.dispose();
-
-                for (const key in offcanvas) {
-                    if ($._isObject(offcanvas[key]) && !$._isFunction(offcanvas[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears offcanvas memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                const offcanvas = UI.Offcanvas.init(offcanvas1);
-                $.setHTML(document.body, '');
-
-                for (const key in offcanvas) {
-                    if ($._isObject(offcanvas[key]) && !$._isFunction(offcanvas[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
     });
 
     test.describe('#show', () => {

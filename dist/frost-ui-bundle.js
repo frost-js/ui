@@ -10677,6 +10677,12 @@
      * @class
      */
     class Carousel extends BaseComponent {
+        #index;
+        #items;
+        #mousePaused;
+        #paused;
+        #timer;
+
         /**
          * New Carousel constructor.
          * @param {HTMLElement} node The input node.
@@ -10685,23 +10691,99 @@
         constructor(node, options) {
             super(node, options);
 
-            this._items = $$1.find('.carousel-item', this.node);
+            this.#items = $$1.find('.carousel-item', this.node);
 
-            this._index = this._items.findIndex((item) =>
+            this.#index = this.#items.findIndex((item) =>
                 $$1.hasClass(item, 'active'),
             );
 
-            this._events();
+            this.#events();
 
             if (this.options.ride === 'carousel') {
-                this._setTimer();
+                this.#setTimer();
             }
+        }
+
+        /**
+         * Cycle to the next carousel item.
+         */
+        cycle() {
+            if (!$$1.isHidden(document)) {
+                this.slide(1);
+            } else {
+                this.#paused = false;
+                this.#setTimer();
+            }
+        }
+
+        /**
+         * Dispose the Carousel.
+         */
+        dispose() {
+            clearTimeout(this.#timer);
+            this.#timer = null;
+
+            if (this.options.keyboard) {
+                $$1.removeEvent(this.node, 'keydown.ui.carousel');
+            }
+
+            if (this.options.pause) {
+                $$1.removeEvent(this.node, 'mouseenter.ui.carousel');
+                $$1.removeEvent(this.node, 'mouseleave.ui.carousel');
+            }
+
+            if (this.options.swipe) {
+                $$1.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
+            }
+
+            this.#items = null;
+
+            super.dispose();
+        }
+
+        /**
+         * Cycle to the next Carousel item.
+         */
+        next() {
+            this.slide();
+        }
+
+        /**
+         * Stop the carousel from cycling through items.
+         */
+        pause() {
+            clearTimeout(this.#timer);
+            this.#timer = null;
+            this.#paused = true;
+        }
+
+        /**
+         * Cycle to the previous Carousel item.
+         */
+        prev() {
+            this.slide(-1);
+        }
+
+        /**
+         * Cycle to a specific Carousel item.
+         * @param {number} index The item index to cycle to.
+         */
+        show(index) {
+            this.#show(index);
+        }
+
+        /**
+         * Slide the Carousel in a specific direction.
+         * @param {number} [direction=1] The direction to slide to.
+         */
+        slide(direction = 1) {
+            this.show(this.#index + direction);
         }
 
         /**
          * Attach events for the Carousel.
          */
-        _events() {
+        #events() {
             if (this.options.keyboard) {
                 $$1.addEvent(this.node, 'keydown.ui.carousel', (e) => {
                     const target = e.target;
@@ -10724,16 +10806,16 @@
 
             if (this.options.pause) {
                 $$1.addEvent(this.node, 'mouseenter.ui.carousel', (_) => {
-                    this._mousePaused = true;
+                    this.#mousePaused = true;
                     this.pause();
                 });
 
                 $$1.addEvent(this.node, 'mouseleave.ui.carousel', (_) => {
-                    this._mousePaused = false;
-                    this._paused = false;
+                    this.#mousePaused = false;
+                    this.#paused = false;
 
                     if (!$$1.getDataset(this.node, 'uiSliding')) {
-                        this._setTimer();
+                        this.#setTimer();
                     }
                 });
             }
@@ -10776,8 +10858,8 @@
                     if (!this.options.wrap) {
                         mouseDiffX = $$1._clamp(
                             mouseDiffX,
-                            -(this._items.length - 1 - this._index) * scrollX,
-                            this._index * scrollX,
+                            -(this.#items.length - 1 - this.#index) * scrollX,
+                            this.#index * scrollX,
                         );
                     }
 
@@ -10787,52 +10869,52 @@
                         const lastIndex = index;
 
                         if (mouseDiffX < 0) {
-                            index = this._index + 1;
+                            index = this.#index + 1;
                         } else if (mouseDiffX > 0) {
-                            index = this._index - 1;
+                            index = this.#index - 1;
                         } else {
-                            index = this._index;
+                            index = this.#index;
                             return;
                         }
 
-                        const offset = getDirOffset(index, this._items.length);
-                        index = getIndex(index, this._items.length);
-                        direction = getDirection$1(offset, this._index, index);
+                        const offset = getDirOffset(index, this.#items.length);
+                        index = getIndex(index, this.#items.length);
+                        direction = getDirection$1(offset, this.#index, index);
 
                         if (progress >= 1) {
                             startX = currentX;
 
-                            const oldIndex = this._setIndex(index);
-                            this._update(this._items[this._index], this._items[oldIndex], progress, { direction });
-                            this._updateIndicators();
+                            const oldIndex = this.#setIndex(index);
+                            this.#update(this.#items[this.#index], this.#items[oldIndex], progress, { direction });
+                            this.#updateIndicators();
 
-                            if (lastIndex !== this._index) {
-                                this._resetStyles(lastIndex);
+                            if (lastIndex !== this.#index) {
+                                this.#resetStyles(lastIndex);
                             }
 
                             progress--;
                         } else {
-                            this._update(this._items[index], this._items[this._index], progress, { direction, dragging: true });
+                            this.#update(this.#items[index], this.#items[this.#index], progress, { direction, dragging: true });
 
                             if (lastIndex !== index) {
-                                this._resetStyles(lastIndex);
+                                this.#resetStyles(lastIndex);
                             }
                         }
                     } while (progress > 1);
                 };
 
                 const upEvent = (_) => {
-                    if (index === null || index === this._index) {
-                        this._paused = false;
+                    if (index === null || index === this.#index) {
+                        this.#paused = false;
                         $$1.removeDataset(this.node, 'uiSliding');
-                        this._setTimer();
+                        this.#setTimer();
                         return;
                     }
 
                     let oldIndex;
                     let progressRemaining;
                     if (progress > .25) {
-                        oldIndex = this._setIndex(index);
+                        oldIndex = this.#setIndex(index);
                         progressRemaining = 1 - progress;
                     } else {
                         oldIndex = index;
@@ -10840,32 +10922,32 @@
                         direction = direction === 'right' ? 'left' : 'right';
                     }
 
-                    this._resetStyles(this._index);
+                    this.#resetStyles(this.#index);
 
                     index = null;
 
                     $$1.animate(
-                        this._items[this._index],
+                        this.#items[this.#index],
                         (node, newProgress) => {
-                            if (!this._items) {
+                            if (!this.#items) {
                                 return;
                             }
 
                             if (progress > .25) {
-                                this._update(node, this._items[oldIndex], progress + (newProgress * progressRemaining), { direction });
+                                this.#update(node, this.#items[oldIndex], progress + (newProgress * progressRemaining), { direction });
                             } else {
-                                this._update(node, this._items[oldIndex], (1 - progress) + (newProgress * progressRemaining), { direction });
+                                this.#update(node, this.#items[oldIndex], (1 - progress) + (newProgress * progressRemaining), { direction });
                             }
                         },
                         {
                             duration: this.options.transition * progressRemaining,
                         },
                     ).then((_) => {
-                        this._updateIndicators();
+                        this.#updateIndicators();
                         $$1.removeDataset(this.node, 'uiSliding');
 
-                        this._paused = false;
-                        this._setTimer();
+                        this.#paused = false;
+                        this.#setTimer();
                     }).catch((_) => {
                         $$1.removeDataset(this.node, 'uiSliding');
                     });
@@ -10881,8 +10963,8 @@
          * Reset styles of an item.
          * @param {number} index The item index.
          */
-        _resetStyles(index) {
-            $$1.setStyle(this._items[index], {
+        #resetStyles(index) {
+            $$1.setStyle(this.#items[index], {
                 display: '',
                 transform: '',
             });
@@ -10893,12 +10975,12 @@
          * @param {number} index The new item index.
          * @return {number} The old item index.
          */
-        _setIndex(index) {
-            const oldIndex = this._index;
-            this._index = index;
+        #setIndex(index) {
+            const oldIndex = this.#index;
+            this.#index = index;
 
-            $$1.addClass(this._items[this._index], 'active');
-            $$1.removeClass(this._items[oldIndex], 'active');
+            $$1.addClass(this.#items[this.#index], 'active');
+            $$1.removeClass(this.#items[oldIndex], 'active');
 
             return oldIndex;
         }
@@ -10906,16 +10988,16 @@
         /**
          * Set a timer for the next Carousel cycle.
          */
-        _setTimer() {
-            if (this._timer || this._paused || this._mousePaused) {
+        #setTimer() {
+            if (this.#timer || this.#paused || this.#mousePaused) {
                 return;
             }
 
-            const interval = $$1.getDataset(this._items[this._index], 'uiInterval');
+            const interval = $$1.getDataset(this.#items[this.#index], 'uiInterval');
 
-            this._timer = setTimeout(
+            this.#timer = setTimeout(
                 (_) => {
-                    this._timer = null;
+                    this.#timer = null;
                     this.cycle();
                 },
                 interval || this.options.interval,
@@ -10926,7 +11008,7 @@
          * Cycle to a specific Carousel item.
          * @param {number} index The item index to cycle to.
          */
-        _show(index) {
+        #show(index) {
             if ($$1.getDataset(this.node, 'uiSliding')) {
                 return;
             }
@@ -10936,25 +11018,25 @@
             if (!this.options.wrap &&
                 (
                     index < 0 ||
-                    index > this._items.length - 1
+                    index > this.#items.length - 1
                 )
             ) {
                 return;
             }
 
-            const offset = getDirOffset(index, this._items.length);
-            index = getIndex(index, this._items.length);
+            const offset = getDirOffset(index, this.#items.length);
+            index = getIndex(index, this.#items.length);
 
-            if (index === this._index) {
+            if (index === this.#index) {
                 return;
             }
 
-            const direction = getDirection$1(offset, this._index, index);
+            const direction = getDirection$1(offset, this.#index, index);
 
             const eventData = {
                 direction,
-                relatedTarget: this._items[index],
-                from: this._index,
+                relatedTarget: this.#items[index],
+                from: this.#index,
                 to: index,
             };
 
@@ -10965,27 +11047,27 @@
             $$1.setDataset(this.node, { uiSliding: true });
             this.pause();
 
-            const oldIndex = this._setIndex(index);
+            const oldIndex = this.#setIndex(index);
 
             $$1.animate(
-                this._items[this._index],
+                this.#items[this.#index],
                 (node, progress) => {
-                    if (!this._items) {
+                    if (!this.#items) {
                         return;
                     }
 
-                    this._update(node, this._items[oldIndex], progress, { direction });
+                    this.#update(node, this.#items[oldIndex], progress, { direction });
                 },
                 {
                     duration: this.options.transition,
                 },
             ).then((_) => {
-                this._updateIndicators();
+                this.#updateIndicators();
                 $$1.removeDataset(this.node, 'uiSliding');
                 $$1.triggerEvent(this.node, 'slid.ui.carousel', { data: eventData });
 
-                this._paused = false;
-                this._setTimer();
+                this.#paused = false;
+                this.#setTimer();
             }).catch((_) => {
                 $$1.removeDataset(this.node, 'uiSliding');
             });
@@ -11000,7 +11082,7 @@
          * @param {string} [options.direction] The direction to cycle to.
          * @param {Boolean} [options.dragging] Whether the item is being dragged.
          */
-        _update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
+        #update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
             const inStyles = {};
             const outStyles = {};
 
@@ -11033,87 +11115,11 @@
         /**
          * Update the carousel indicators.
          */
-        _updateIndicators() {
+        #updateIndicators() {
             const oldIndicator = $$1.find('.active[data-ui-slide-to]', this.node);
-            const newIndicator = $$1.find('[data-ui-slide-to="' + this._index + '"]', this.node);
+            const newIndicator = $$1.find('[data-ui-slide-to="' + this.#index + '"]', this.node);
             $$1.removeClass(oldIndicator, 'active');
             $$1.addClass(newIndicator, 'active');
-        }
-
-        /**
-         * Cycle to the next carousel item.
-         */
-        cycle() {
-            if (!$$1.isHidden(document)) {
-                this.slide(1);
-            } else {
-                this._paused = false;
-                this._setTimer();
-            }
-        }
-
-        /**
-         * Dispose the Carousel.
-         */
-        dispose() {
-            clearTimeout(this._timer);
-            this._timer = null;
-
-            if (this.options.keyboard) {
-                $$1.removeEvent(this.node, 'keydown.ui.carousel');
-            }
-
-            if (this.options.pause) {
-                $$1.removeEvent(this.node, 'mouseenter.ui.carousel');
-                $$1.removeEvent(this.node, 'mouseleave.ui.carousel');
-            }
-
-            if (this.options.swipe) {
-                $$1.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
-            }
-
-            this._items = null;
-
-            super.dispose();
-        }
-
-        /**
-         * Cycle to the next Carousel item.
-         */
-        next() {
-            this.slide();
-        }
-
-        /**
-         * Stop the carousel from cycling through items.
-         */
-        pause() {
-            clearTimeout(this._timer);
-            this._timer = null;
-            this._paused = true;
-        }
-
-        /**
-         * Cycle to the previous Carousel item.
-         */
-        prev() {
-            this.slide(-1);
-        }
-
-        /**
-         * Cycle to a specific Carousel item.
-         * @param {number} index The item index to cycle to.
-         */
-        show(index) {
-            this._show(index);
-        }
-
-        /**
-         * Slide the Carousel in a specific direction.
-         * @param {number} [direction=1] The direction to slide to.
-         */
-        slide(direction = 1) {
-            this.show(this._index + direction);
         }
     }
 
@@ -11191,6 +11197,9 @@
      * @class
      */
     class Collapse extends BaseComponent {
+        #parent;
+        #triggers;
+
         /**
          * New Collapse constructor.
          * @param {HTMLElement} node The input node.
@@ -11199,14 +11208,14 @@
         constructor(node, options) {
             super(node, options);
 
-            this._triggers = $$1.find('[data-ui-toggle="collapse"]')
+            this.#triggers = $$1.find('[data-ui-toggle="collapse"]')
                 .filter((trigger) => {
                     const selector = getTargetSelector(trigger);
                     return selector && $$1.is(this.node, selector);
                 });
 
             if (this.options.parent) {
-                this._parent = $$1.closest(this.node, this.options.parent).shift();
+                this.#parent = $$1.closest(this.node, this.options.parent).shift();
             }
         }
 
@@ -11214,8 +11223,8 @@
          * Dispose the Collapse.
          */
         dispose() {
-            this._triggers = null;
-            this._parent = null;
+            this.#triggers = null;
+            this.#parent = null;
 
             super.dispose();
         }
@@ -11233,16 +11242,16 @@
             }
 
             $$1.setDataset(this.node, { uiAnimating: 'out' });
-            $$1.addClass(this._triggers, 'collapsed');
-            $$1.addClass(this._triggers, 'collapsing');
+            $$1.addClass(this.#triggers, 'collapsed');
+            $$1.addClass(this.#triggers, 'collapsing');
 
             $$1.squeezeOut(this.node, {
                 direction: this.options.direction,
                 duration: this.options.duration,
             }).then((_) => {
                 $$1.removeClass(this.node, 'show');
-                $$1.removeClass(this._triggers, 'collapsing');
-                $$1.setAttribute(this._triggers, { 'aria-expanded': false });
+                $$1.removeClass(this.#triggers, 'collapsing');
+                $$1.setAttribute(this.#triggers, { 'aria-expanded': false });
                 $$1.removeDataset(this.node, 'uiAnimating');
                 $$1.triggerEvent(this.node, 'hidden.ui.collapse');
             }).catch((_) => {
@@ -11264,13 +11273,13 @@
             }
 
             const collapses = [];
-            if (this._parent) {
-                const siblings = $$1.find('.collapse.show', this._parent);
+            if (this.#parent) {
+                const siblings = $$1.find('.collapse.show', this.#parent);
 
                 for (const sibling of siblings) {
                     const collapse = this.constructor.init(sibling);
 
-                    if (!$$1.isSame(this._parent, collapse._parent)) {
+                    if (!$$1.isSame(this.#parent, collapse.#parent)) {
                         continue;
                     }
 
@@ -11288,15 +11297,15 @@
 
             $$1.setDataset(this.node, { uiAnimating: 'in' });
             $$1.addClass(this.node, 'show');
-            $$1.removeClass(this._triggers, 'collapsed');
-            $$1.addClass(this._triggers, 'collapsing');
+            $$1.removeClass(this.#triggers, 'collapsed');
+            $$1.addClass(this.#triggers, 'collapsing');
 
             $$1.squeezeIn(this.node, {
                 direction: this.options.direction,
                 duration: this.options.duration,
             }).then((_) => {
-                $$1.removeClass(this._triggers, 'collapsing');
-                $$1.setAttribute(this._triggers, { 'aria-expanded': true });
+                $$1.removeClass(this.#triggers, 'collapsing');
+                $$1.setAttribute(this.#triggers, { 'aria-expanded': true });
                 $$1.removeDataset(this.node, 'uiAnimating');
                 $$1.triggerEvent(this.node, 'shown.ui.collapse');
             }).catch((_) => {
@@ -11499,6 +11508,9 @@
      * @class
      */
     class Popper extends BaseComponent {
+        #placement;
+        #referencePlacement;
+
         /**
          * New Popper constructor.
          * @param {HTMLElement} node The input node.
@@ -11507,8 +11519,8 @@
         constructor(node, options) {
             super(node, options);
 
-            this._placement = $$1.getDataset(this.node, 'uiPlacement');
-            this._referencePlacement = $$1.getDataset(this.options.reference, 'uiPlacement');
+            this.#placement = $$1.getDataset(this.node, 'uiPlacement');
+            this.#referencePlacement = $$1.getDataset(this.options.reference, 'uiPlacement');
 
             $$1.setStyle(this.node, {
                 margin: 0,
@@ -11525,94 +11537,18 @@
         }
 
         /**
-         * Update the arrow.
-         * @param {string} placement The placement of the Popper.
-         * @param {string} position The position of the Popper.
-         */
-        _updateArrow(placement, position) {
-            const nodeBox = $$1.rect(this.node, { offset: true });
-            const referenceBox = $$1.rect(this.options.reference, { offset: true });
-
-            const arrowStyles = {
-                position: 'absolute',
-                top: '',
-                right: '',
-                bottom: '',
-                left: '',
-            };
-            $$1.setStyle(this.options.arrow, arrowStyles);
-
-            const arrowBox = $$1.rect(this.options.arrow, { offset: true });
-
-            if (['top', 'bottom'].includes(placement)) {
-                arrowStyles[placement === 'top' ? 'bottom' : 'top'] = -Math.floor(arrowBox.height);
-                const diff = (referenceBox.width - nodeBox.width) / 2;
-
-                let offset = (nodeBox.width / 2) - (arrowBox.width / 2);
-                if (position === 'start') {
-                    offset += diff;
-                } else if (position === 'end') {
-                    offset -= diff;
-                }
-
-                let min = Math.max(referenceBox.left, nodeBox.left) - arrowBox.left;
-                let max = Math.min(referenceBox.right, nodeBox.right) - arrowBox.left - arrowBox.width;
-
-                if (referenceBox.width < arrowBox.width) {
-                    min -= arrowBox.width / 2 - referenceBox.width / 2;
-                    max -= arrowBox.width / 2 - referenceBox.width / 2;
-                }
-
-                offset = Math.round(offset);
-                min = Math.round(min);
-                max = Math.round(max);
-
-                arrowStyles.left = $$1._clamp(offset, min, max);
-            } else {
-                arrowStyles[placement === 'right' ? 'left' : 'right'] = -Math.floor(arrowBox.width);
-
-                const diff = (referenceBox.height - nodeBox.height) / 2;
-
-                let offset = (nodeBox.height / 2) - arrowBox.height;
-                if (position === 'start') {
-                    offset += diff;
-                } else if (position === 'end') {
-                    offset -= diff;
-                }
-
-                let min = Math.max(referenceBox.top, nodeBox.top) - arrowBox.top;
-                let max = Math.min(referenceBox.bottom, nodeBox.bottom) - arrowBox.top - arrowBox.height;
-
-                if (referenceBox.height < arrowBox.height * 2) {
-                    min -= arrowBox.height - referenceBox.height / 2;
-                    max -= arrowBox.height - referenceBox.height / 2;
-                } else {
-                    max -= arrowBox.height;
-                }
-
-                offset = Math.round(offset);
-                min = Math.round(min);
-                max = Math.round(max);
-
-                arrowStyles.top = $$1._clamp(offset, min, max);
-            }
-
-            $$1.setStyle(this.options.arrow, arrowStyles);
-        }
-
-        /**
          * Dispose the Popper.
          */
         dispose() {
-            if (this._placement) {
-                $$1.setDataset(this.node, { uiPlacement: this._placement });
+            if (this.#placement) {
+                $$1.setDataset(this.node, { uiPlacement: this.#placement });
             } else {
                 $$1.removeDataset(this.node, 'uiPlacement');
             }
 
             if (!this.options.noAttributes) {
-                if (this._referencePlacement) {
-                    $$1.setDataset(this.options.reference, { uiPlacement: this._referencePlacement });
+                if (this.#referencePlacement) {
+                    $$1.setDataset(this.options.reference, { uiPlacement: this.#referencePlacement });
                 } else {
                     $$1.removeDataset(this.options.reference, 'uiPlacement');
                 }
@@ -11869,12 +11805,88 @@
 
             // update arrow
             if (this.options.arrow) {
-                this._updateArrow(placement, position);
+                this.#updateArrow(placement, position);
             }
 
             if (this.options.afterUpdate) {
                 this.options.afterUpdate(this.node, this.options.reference, placement, position);
             }
+        }
+
+        /**
+         * Update the arrow.
+         * @param {string} placement The placement of the Popper.
+         * @param {string} position The position of the Popper.
+         */
+        #updateArrow(placement, position) {
+            const nodeBox = $$1.rect(this.node, { offset: true });
+            const referenceBox = $$1.rect(this.options.reference, { offset: true });
+
+            const arrowStyles = {
+                position: 'absolute',
+                top: '',
+                right: '',
+                bottom: '',
+                left: '',
+            };
+            $$1.setStyle(this.options.arrow, arrowStyles);
+
+            const arrowBox = $$1.rect(this.options.arrow, { offset: true });
+
+            if (['top', 'bottom'].includes(placement)) {
+                arrowStyles[placement === 'top' ? 'bottom' : 'top'] = -Math.floor(arrowBox.height);
+                const diff = (referenceBox.width - nodeBox.width) / 2;
+
+                let offset = (nodeBox.width / 2) - (arrowBox.width / 2);
+                if (position === 'start') {
+                    offset += diff;
+                } else if (position === 'end') {
+                    offset -= diff;
+                }
+
+                let min = Math.max(referenceBox.left, nodeBox.left) - arrowBox.left;
+                let max = Math.min(referenceBox.right, nodeBox.right) - arrowBox.left - arrowBox.width;
+
+                if (referenceBox.width < arrowBox.width) {
+                    min -= arrowBox.width / 2 - referenceBox.width / 2;
+                    max -= arrowBox.width / 2 - referenceBox.width / 2;
+                }
+
+                offset = Math.round(offset);
+                min = Math.round(min);
+                max = Math.round(max);
+
+                arrowStyles.left = $$1._clamp(offset, min, max);
+            } else {
+                arrowStyles[placement === 'right' ? 'left' : 'right'] = -Math.floor(arrowBox.width);
+
+                const diff = (referenceBox.height - nodeBox.height) / 2;
+
+                let offset = (nodeBox.height / 2) - arrowBox.height;
+                if (position === 'start') {
+                    offset += diff;
+                } else if (position === 'end') {
+                    offset -= diff;
+                }
+
+                let min = Math.max(referenceBox.top, nodeBox.top) - arrowBox.top;
+                let max = Math.min(referenceBox.bottom, nodeBox.bottom) - arrowBox.top - arrowBox.height;
+
+                if (referenceBox.height < arrowBox.height * 2) {
+                    min -= arrowBox.height - referenceBox.height / 2;
+                    max -= arrowBox.height - referenceBox.height / 2;
+                } else {
+                    max -= arrowBox.height;
+                }
+
+                offset = Math.round(offset);
+                min = Math.round(min);
+                max = Math.round(max);
+
+                arrowStyles.top = $$1._clamp(offset, min, max);
+            }
+
+            $$1.setStyle(this.options.arrow, arrowStyles);
         }
     }
 
@@ -11884,6 +11896,9 @@
      */
     class Dropdown extends BaseComponent {
         #display;
+        #menuNode;
+        #popper;
+        #referenceNode;
 
         /**
          * New Dropdown constructor.
@@ -11894,16 +11909,16 @@
             super(node, options);
 
             this.#display = this.options.display;
-            this._menuNode = $$1.next(this.node, '.dropdown-menu').shift();
+            this.#menuNode = $$1.next(this.node, '.dropdown-menu').shift();
 
             if (this.options.reference) {
                 if (this.options.reference === 'parent') {
-                    this._referenceNode = $$1.parent(this.node).shift();
+                    this.#referenceNode = $$1.parent(this.node).shift();
                 } else {
-                    this._referenceNode = $$1.findOne(this.options.reference);
+                    this.#referenceNode = $$1.findOne(this.options.reference);
                 }
             } else {
-                this._referenceNode = this.node;
+                this.#referenceNode = this.node;
             }
 
             // Attach popper
@@ -11918,20 +11933,20 @@
          * @return {boolean} Whether the menu contains the target.
          */
         containsMenuTarget(target) {
-            return $$1.hasDescendent(this._menuNode, target);
+            return $$1.hasDescendent(this.#menuNode, target);
         }
 
         /**
          * Dispose the Dropdown.
          */
         dispose() {
-            if (this._popper) {
-                this._popper.dispose();
-                this._popper = null;
+            if (this.#popper) {
+                this.#popper.dispose();
+                this.#popper = null;
             }
 
-            this._menuNode = null;
-            this._referenceNode = null;
+            this.#menuNode = null;
+            this.#referenceNode = null;
 
             super.dispose();
         }
@@ -11940,7 +11955,7 @@
          * Focus the first Dropdown menu item.
          */
         focusFirstItem() {
-            const focusNode = $$1.findOne('.dropdown-item:not([tabindex="-1"])', this._menuNode);
+            const focusNode = $$1.findOne('.dropdown-item:not([tabindex="-1"])', this.#menuNode);
             $$1.focus(focusNode);
         }
 
@@ -11949,30 +11964,30 @@
          */
         hide() {
             if (
-                $$1.getDataset(this._menuNode, 'uiAnimating') ||
-                !$$1.hasClass(this._menuNode, 'show') ||
+                $$1.getDataset(this.#menuNode, 'uiAnimating') ||
+                !$$1.hasClass(this.#menuNode, 'show') ||
                 !$$1.triggerOne(this.node, 'hide.ui.dropdown')
             ) {
                 return;
             }
 
-            $$1.setDataset(this._menuNode, { uiAnimating: 'out' });
+            $$1.setDataset(this.#menuNode, { uiAnimating: 'out' });
 
-            $$1.fadeOut(this._menuNode, {
+            $$1.fadeOut(this.#menuNode, {
                 duration: this.options.duration,
             }).then((_) => {
-                if (this._popper) {
-                    this._popper.dispose();
-                    this._popper = null;
+                if (this.#popper) {
+                    this.#popper.dispose();
+                    this.#popper = null;
                 }
 
-                $$1.removeClass(this._menuNode, 'show');
+                $$1.removeClass(this.#menuNode, 'show');
                 $$1.setAttribute(this.node, { 'aria-expanded': false });
-                $$1.removeDataset(this._menuNode, 'uiAnimating');
+                $$1.removeDataset(this.#menuNode, 'uiAnimating');
                 $$1.triggerEvent(this.node, 'hidden.ui.dropdown');
             }).catch((_) => {
-                if ($$1.getDataset(this._menuNode, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this._menuNode, 'uiAnimating');
+                if ($$1.getDataset(this.#menuNode, 'uiAnimating') === 'out') {
+                    $$1.removeDataset(this.#menuNode, 'uiAnimating');
                 }
             });
         }
@@ -11998,7 +12013,7 @@
                 ) ||
                 (
                     !hasDescendent &&
-                    !$$1.isSame(this._menuNode, target) &&
+                    !$$1.isSame(this.#menuNode, target) &&
                     (
                         autoClose === 'inside' ||
                         autoClose === false
@@ -12012,19 +12027,19 @@
          */
         show() {
             if (
-                $$1.getDataset(this._menuNode, 'uiAnimating') ||
-                $$1.hasClass(this._menuNode, 'show') ||
+                $$1.getDataset(this.#menuNode, 'uiAnimating') ||
+                $$1.hasClass(this.#menuNode, 'show') ||
                 !$$1.triggerOne(this.node, 'show.ui.dropdown')
             ) {
                 return;
             }
 
-            $$1.setDataset(this._menuNode, { uiAnimating: 'in' });
-            $$1.addClass(this._menuNode, 'show');
+            $$1.setDataset(this.#menuNode, { uiAnimating: 'in' });
+            $$1.addClass(this.#menuNode, 'show');
 
             if (this.#display === 'dynamic') {
-                this._popper = new Popper(this._menuNode, {
-                    reference: this._referenceNode,
+                this.#popper = new Popper(this.#menuNode, {
+                    reference: this.#referenceNode,
                     placement: this.options.placement,
                     position: this.options.position,
                     fixed: this.options.fixed,
@@ -12037,15 +12052,15 @@
                 this.update();
             });
 
-            $$1.fadeIn(this._menuNode, {
+            $$1.fadeIn(this.#menuNode, {
                 duration: this.options.duration,
             }).then((_) => {
                 $$1.setAttribute(this.node, { 'aria-expanded': true });
-                $$1.removeDataset(this._menuNode, 'uiAnimating');
+                $$1.removeDataset(this.#menuNode, 'uiAnimating');
                 $$1.triggerEvent(this.node, 'shown.ui.dropdown');
             }).catch((_) => {
-                if ($$1.getDataset(this._menuNode, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this._menuNode, 'uiAnimating');
+                if ($$1.getDataset(this.#menuNode, 'uiAnimating') === 'in') {
+                    $$1.removeDataset(this.#menuNode, 'uiAnimating');
                 }
             });
         }
@@ -12054,7 +12069,7 @@
          * Toggle the Dropdown.
          */
         toggle() {
-            if ($$1.hasClass(this._menuNode, 'show')) {
+            if ($$1.hasClass(this.#menuNode, 'show')) {
                 this.hide();
             } else {
                 this.show();
@@ -12065,8 +12080,8 @@
          * Update the Dropdown position.
          */
         update() {
-            if (this._popper) {
-                this._popper.update();
+            if (this.#popper) {
+                this.#popper.update();
             }
         }
     }
@@ -12272,11 +12287,13 @@
      * @class
      */
     class FocusTrap extends BaseComponent {
+        #active;
+
         /**
          * Activate the FocusTrap.
          */
         activate() {
-            if (this._active) {
+            if (this.#active) {
                 return;
             }
 
@@ -12286,19 +12303,19 @@
                 $$1.focus(this.node);
             }
 
-            this._active = true;
+            this.#active = true;
         }
 
         /**
          * Deactivate the FocusTrap.
          */
         deactivate() {
-            if (!this._active) {
+            if (!this.#active) {
                 return;
             }
 
             removeFocusTrap(this);
-            this._active = false;
+            this.#active = false;
         }
 
         /**
@@ -12324,6 +12341,12 @@
      * @class
      */
     class Modal extends BaseComponent {
+        #activeTarget;
+        #backdrop;
+        #dialog;
+        #focusTrap;
+        #scrollNodes;
+
         /**
          * New Modal constructor.
          * @param {HTMLElement} node The input node.
@@ -12332,59 +12355,30 @@
         constructor(node, options) {
             super(node, options);
 
-            this._dialog = $$1.child(this.node, '.modal-dialog').shift();
+            this.#dialog = $$1.child(this.node, '.modal-dialog').shift();
 
             if (this.options.show) {
                 this.show();
             }
 
             if (this.options.focus) {
-                this._focusTrap = FocusTrap.init(this.node);
+                this.#focusTrap = FocusTrap.init(this.node);
             }
-        }
-
-        /**
-         * Start a zoom in/out animation.
-         */
-        _zoom() {
-            if ($$1.getDataset(this._dialog, 'uiAnimating')) {
-                return;
-            }
-
-            $$1.stop(this._dialog);
-
-            $$1.animate(
-                this._dialog,
-                (node, progress) => {
-                    if (progress >= 1) {
-                        $$1.setStyle(node, { transform: '' });
-                        return;
-                    }
-
-                    const zoomOffset = (progress < .5 ? progress : (1 - progress)) / 20;
-                    $$1.setStyle(node, { transform: `scale(${1 + zoomOffset})` });
-                },
-                {
-                    duration: 200,
-                },
-            ).catch((_) => {
-                //
-            });
         }
 
         /**
          * Dispose the Modal.
          */
         dispose() {
-            if (this._focusTrap) {
-                this._focusTrap.dispose();
-                this._focusTrap = null;
+            if (this.#focusTrap) {
+                this.#focusTrap.dispose();
+                this.#focusTrap = null;
             }
 
-            this._dialog = null;
-            this._activeTarget = null;
-            this._backdrop = null;
-            this._scrollNodes = null;
+            this.#dialog = null;
+            this.#activeTarget = null;
+            this.#backdrop = null;
+            this.#scrollNodes = null;
 
             super.dispose();
         }
@@ -12402,7 +12396,7 @@
             }
 
             if (this.options.backdrop === 'static') {
-                this._zoom();
+                this.#zoom();
                 return;
             }
 
@@ -12418,7 +12412,7 @@
             }
 
             if (this.options.backdrop === 'static') {
-                this._zoom();
+                this.#zoom();
                 return;
             }
 
@@ -12430,31 +12424,31 @@
          */
         hide() {
             if (
-                $$1.getDataset(this._dialog, 'uiAnimating') ||
+                $$1.getDataset(this.#dialog, 'uiAnimating') ||
                 !$$1.hasClass(this.node, 'show') ||
                 !$$1.triggerOne(this.node, 'hide.ui.modal')
             ) {
                 return;
             }
 
-            $$1.stop(this._dialog);
-            $$1.setDataset(this._dialog, { uiAnimating: 'out' });
+            $$1.stop(this.#dialog);
+            $$1.setDataset(this.#dialog, { uiAnimating: 'out' });
 
-            if (this._focusTrap) {
-                this._focusTrap.deactivate();
+            if (this.#focusTrap) {
+                this.#focusTrap.deactivate();
             }
 
             const stackSize = $$1.find('.modal.show').length - 1;
 
             Promise.all([
-                $$1.fadeOut(this._dialog, {
+                $$1.fadeOut(this.#dialog, {
                     duration: this.options.duration,
                 }),
-                $$1.dropOut(this._dialog, {
+                $$1.dropOut(this.#dialog, {
                     duration: this.options.duration,
                     direction: 'top',
                 }),
-                $$1.fadeOut(this._backdrop, {
+                $$1.fadeOut(this.#backdrop, {
                     duration: this.options.duration,
                 }),
             ]).then((_) => {
@@ -12463,8 +12457,8 @@
                     'aria-modal': false,
                 });
 
-                resetScrollPadding(this._scrollNodes);
-                this._scrollNodes = [];
+                resetScrollPadding(this.#scrollNodes);
+                this.#scrollNodes = [];
 
                 if (stackSize) {
                     $$1.setStyle(this.node, { zIndex: '' });
@@ -12475,20 +12469,20 @@
                 $$1.removeClass(this.node, 'show');
 
                 if (this.options.backdrop) {
-                    $$1.remove(this._backdrop);
-                    this._backdrop = null;
+                    $$1.remove(this.#backdrop);
+                    this.#backdrop = null;
                 }
 
-                if (this._activeTarget) {
-                    $$1.focus(this._activeTarget);
-                    this._activeTarget = null;
+                if (this.#activeTarget) {
+                    $$1.focus(this.#activeTarget);
+                    this.#activeTarget = null;
                 }
 
-                $$1.removeDataset(this._dialog, 'uiAnimating');
+                $$1.removeDataset(this.#dialog, 'uiAnimating');
                 $$1.triggerEvent(this.node, 'hidden.ui.modal');
             }).catch((_) => {
-                if ($$1.getDataset(this._dialog, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this._dialog, 'uiAnimating');
+                if ($$1.getDataset(this.#dialog, 'uiAnimating') === 'out') {
+                    $$1.removeDataset(this.#dialog, 'uiAnimating');
                 }
             });
         }
@@ -12499,24 +12493,24 @@
          */
         show(relatedTarget) {
             if (relatedTarget) {
-                this._activeTarget = relatedTarget;
+                this.#activeTarget = relatedTarget;
             }
 
             if (
-                $$1.getDataset(this._dialog, 'uiAnimating') ||
+                $$1.getDataset(this.#dialog, 'uiAnimating') ||
                 $$1.hasClass(this.node, 'show') ||
-                !$$1.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this._activeTarget } })
+                !$$1.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this.#activeTarget } })
             ) {
                 return;
             }
 
-            $$1.setDataset(this._dialog, { uiAnimating: 'in' });
+            $$1.setDataset(this.#dialog, { uiAnimating: 'in' });
 
             const stackSize = $$1.find('.modal.show').length;
 
             $$1.removeClass(document.body, 'modal-open');
 
-            this._scrollNodes = [this._dialog];
+            this.#scrollNodes = [this.#dialog];
 
             if (stackSize) {
                 let zIndex = $$1.css(this.node, 'zIndex');
@@ -12525,41 +12519,41 @@
 
                 $$1.setStyle(this.node, { zIndex });
             } else if (!$$1.findOne('.offcanvas.show')) {
-                this._scrollNodes.push(document.body);
-                this._scrollNodes.push(...$$1.find('.fixed-top, .fixed-bottom, .sticky-top'));
+                this.#scrollNodes.push(document.body);
+                this.#scrollNodes.push(...$$1.find('.fixed-top, .fixed-bottom, .sticky-top'));
             }
 
-            addScrollPadding(this._scrollNodes);
+            addScrollPadding(this.#scrollNodes);
 
             $$1.addClass(document.body, 'modal-open');
 
             $$1.addClass(this.node, 'show');
 
             if (this.options.backdrop) {
-                this._backdrop = $$1.create('div', {
+                this.#backdrop = $$1.create('div', {
                     class: 'modal-backdrop',
                 });
 
-                $$1.append(document.body, this._backdrop);
+                $$1.append(document.body, this.#backdrop);
 
                 if (stackSize) {
-                    let zIndex = $$1.css(this._backdrop, 'zIndex');
+                    let zIndex = $$1.css(this.#backdrop, 'zIndex');
                     zIndex = parseInt(zIndex);
                     zIndex += stackSize * 20;
 
-                    $$1.setStyle(this._backdrop, { zIndex });
+                    $$1.setStyle(this.#backdrop, { zIndex });
                 }
             }
 
             Promise.all([
-                $$1.fadeIn(this._dialog, {
+                $$1.fadeIn(this.#dialog, {
                     duration: this.options.duration,
                 }),
-                $$1.dropIn(this._dialog, {
+                $$1.dropIn(this.#dialog, {
                     duration: this.options.duration,
                     direction: 'top',
                 }),
-                $$1.fadeIn(this._backdrop, {
+                $$1.fadeIn(this.#backdrop, {
                     duration: this.options.duration,
                 }),
             ]).then((_) => {
@@ -12568,15 +12562,15 @@
                     'aria-modal': true,
                 });
 
-                if (this._focusTrap) {
-                    this._focusTrap.activate();
+                if (this.#focusTrap) {
+                    this.#focusTrap.activate();
                 }
 
-                $$1.removeDataset(this._dialog, 'uiAnimating');
+                $$1.removeDataset(this.#dialog, 'uiAnimating');
                 $$1.triggerEvent(this.node, 'shown.ui.modal');
             }).catch((_) => {
-                if ($$1.getDataset(this._dialog, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this._dialog, 'uiAnimating');
+                if ($$1.getDataset(this.#dialog, 'uiAnimating') === 'in') {
+                    $$1.removeDataset(this.#dialog, 'uiAnimating');
                 }
             });
         }
@@ -12590,6 +12584,35 @@
             } else {
                 this.show();
             }
+        }
+
+        /**
+         * Start a zoom in/out animation.
+         */
+        #zoom() {
+            if ($$1.getDataset(this.#dialog, 'uiAnimating')) {
+                return;
+            }
+
+            $$1.stop(this.#dialog);
+
+            $$1.animate(
+                this.#dialog,
+                (node, progress) => {
+                    if (progress >= 1) {
+                        $$1.setStyle(node, { transform: '' });
+                        return;
+                    }
+
+                    const zoomOffset = (progress < .5 ? progress : (1 - progress)) / 20;
+                    $$1.setStyle(node, { transform: `scale(${1 + zoomOffset})` });
+                },
+                {
+                    duration: 200,
+                },
+            ).catch((_) => {
+                //
+            });
         }
     }
 
@@ -12716,6 +12739,10 @@
      * @class
      */
     class Offcanvas extends BaseComponent {
+        #activeTarget;
+        #focusTrap;
+        #scrollNodes;
+
         /**
          * New Offcanvas constructor.
          * @param {HTMLElement} node The input node.
@@ -12725,7 +12752,7 @@
             super(node, options);
 
             if (!this.options.scroll || this.options.backdrop) {
-                this._focusTrap = FocusTrap.init(this.node);
+                this.#focusTrap = FocusTrap.init(this.node);
             }
         }
 
@@ -12733,13 +12760,13 @@
          * Dispose the Offcanvas.
          */
         dispose() {
-            if (this._focusTrap) {
-                this._focusTrap.dispose();
-                this._focusTrap = null;
+            if (this.#focusTrap) {
+                this.#focusTrap.dispose();
+                this.#focusTrap = null;
             }
 
-            this._activeTarget = null;
-            this._scrollNodes = null;
+            this.#activeTarget = null;
+            this.#scrollNodes = null;
 
             super.dispose();
         }
@@ -12784,8 +12811,8 @@
 
             $$1.setDataset(this.node, { uiAnimating: 'out' });
 
-            if (this._focusTrap) {
-                this._focusTrap.deactivate();
+            if (this.#focusTrap) {
+                this.#focusTrap.deactivate();
             }
 
             Promise.all([
@@ -12809,15 +12836,15 @@
                 }
 
                 if (!this.options.scroll) {
-                    resetScrollPadding(this._scrollNodes);
-                    this._scrollNodes = [];
+                    resetScrollPadding(this.#scrollNodes);
+                    this.#scrollNodes = [];
 
                     $$1.setStyle(document.body, { overflow: '' });
                 }
 
-                if (this._activeTarget) {
-                    $$1.focus(this._activeTarget);
-                    this._activeTarget = null;
+                if (this.#activeTarget) {
+                    $$1.focus(this.#activeTarget);
+                    this.#activeTarget = null;
                 }
 
                 $$1.removeDataset(this.node, 'uiAnimating');
@@ -12835,7 +12862,7 @@
          */
         show(relatedTarget) {
             if (relatedTarget) {
-                this._activeTarget = relatedTarget;
+                this.#activeTarget = relatedTarget;
             }
 
             if (
@@ -12854,13 +12881,13 @@
                 $$1.addClass(document.body, 'offcanvas-backdrop');
             }
 
-            this._scrollNodes = [];
+            this.#scrollNodes = [];
 
             if (!this.options.scroll) {
-                this._scrollNodes.push(document.body);
-                this._scrollNodes.push(...$$1.find('.fixed-top, .fixed-bottom, .sticky-top'));
+                this.#scrollNodes.push(document.body);
+                this.#scrollNodes.push(...$$1.find('.fixed-top, .fixed-bottom, .sticky-top'));
 
-                addScrollPadding(this._scrollNodes);
+                addScrollPadding(this.#scrollNodes);
 
                 $$1.setStyle(document.body, { overflow: 'hidden' });
             }
@@ -12879,8 +12906,8 @@
                     'aria-modal': true,
                 });
 
-                if (this._focusTrap) {
-                    this._focusTrap.activate();
+                if (this.#focusTrap) {
+                    this.#focusTrap.activate();
                 }
 
                 $$1.removeDataset(this.node, 'uiAnimating');
@@ -12992,6 +13019,16 @@
      * @class
      */
     class Popover extends BaseComponent {
+        #arrow;
+        #enabled;
+        #hideModalEvent;
+        #modal;
+        #popover;
+        #popoverBody;
+        #popoverHeader;
+        #popper;
+        #triggers;
+
         /**
          * New Popover constructor.
          * @param {HTMLElement} node The input node.
@@ -13000,12 +13037,12 @@
         constructor(node, options) {
             super(node, options);
 
-            this._modal = $$1.closest(this.node, '.modal').shift();
+            this.#modal = $$1.closest(this.node, '.modal').shift();
 
-            this._triggers = this.options.trigger.split(' ');
+            this.#triggers = this.options.trigger.split(' ');
 
-            this._render();
-            this._events();
+            this.#render();
+            this.#events();
 
             if (this.options.enable) {
                 this.enable();
@@ -13015,129 +13052,10 @@
         }
 
         /**
-         * Attach events for the Popover.
-         */
-        _events() {
-            if (this._triggers.includes('hover')) {
-                $$1.addEvent(this.node, 'mouseover.ui.popover', (_) => {
-                    this._stop();
-                    this.show();
-                });
-
-                $$1.addEvent(this.node, 'mouseout.ui.popover', (_) => {
-                    this._stop();
-                    this.hide({ force: false });
-                });
-            }
-
-            if (this._triggers.includes('focus')) {
-                $$1.addEvent(this.node, 'focus.ui.popover', (_) => {
-                    this._stop();
-                    this.show();
-                });
-
-                $$1.addEvent(this.node, 'blur.ui.popover', (_) => {
-                    this._stop();
-                    this.hide({ force: false });
-                });
-            }
-
-            if (this._triggers.includes('click')) {
-                $$1.addEvent(this.node, 'click.ui.popover', (e) => {
-                    e.preventDefault();
-
-                    this._stop();
-                    this.toggle({ force: false });
-                });
-            }
-
-            if (this._modal) {
-                this._hideModalEvent = (_) => {
-                    this._stop();
-                    this.hide();
-                };
-                $$1.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
-            }
-        }
-
-        /**
-         * Render the Popover element.
-         */
-        _render() {
-            this._popover = $$1.parseHTML(this.options.template).shift();
-            if (this.options.customClass) {
-                $$1.addClass(this._popover, this.options.customClass);
-            }
-            this._arrow = $$1.findOne('.popover-arrow', this._popover);
-            this._popoverHeader = $$1.findOne('.popover-header', this._popover);
-            this._popoverBody = $$1.findOne('.popover-body', this._popover);
-        }
-
-        /**
-         * Update the Popover and append to the DOM.
-         */
-        _show() {
-            if (this.options.appendTo) {
-                $$1.append(this.options.appendTo, this._popover);
-            } else {
-                $$1.after(this.node, this._popover);
-            }
-
-            if (!this.options.noAttributes) {
-                const id = generateId(this.constructor.DATA_KEY);
-                $$1.setAttribute(this._popover, { id });
-                $$1.setAttribute(this.node, { 'aria-described-by': id });
-            }
-
-            this._popper = new Popper(
-                this._popover,
-                {
-                    reference: this.node,
-                    arrow: this._arrow,
-                    placement: this.options.placement,
-                    position: this.options.position,
-                    fixed: this.options.fixed,
-                    spacing: this.options.spacing,
-                    minContact: this.options.minContact,
-                    noAttributes: this.options.noAttributes,
-                },
-            );
-
-            window$1.requestAnimationFrame((_) => {
-                this.update();
-            });
-        }
-
-        /**
-         * Stop the animations.
-         */
-        _stop() {
-            if (!this._enabled) {
-                return;
-            }
-
-            const animating = $$1.getDataset(this._popover, 'uiAnimating');
-
-            if (!animating) {
-                return;
-            }
-
-            $$1.stop(this._popover, { finish: false });
-            $$1.removeDataset(this._popover, 'uiAnimating');
-
-            if (animating === 'out') {
-                this._popper.dispose();
-                this._popper = null;
-
-                $$1.detach(this._popover);
-            }
-        }
-
-        /**
          * Disable the Popover.
          */
         disable() {
-            this._enabled = false;
+            this.#enabled = false;
         }
 
         /**
@@ -13150,38 +13068,38 @@
                 $$1.removeDataset(this.node, 'uiOriginalTitle');
             }
 
-            if (this._popper) {
-                this._popper.dispose();
-                this._popper = null;
+            if (this.#popper) {
+                this.#popper.dispose();
+                this.#popper = null;
             }
 
-            $$1.remove(this._popover);
+            $$1.remove(this.#popover);
 
-            if (this._triggers.includes('hover')) {
+            if (this.#triggers.includes('hover')) {
                 $$1.removeEvent(this.node, 'mouseover.ui.popover');
                 $$1.removeEvent(this.node, 'mouseout.ui.popover');
             }
 
-            if (this._triggers.includes('focus')) {
+            if (this.#triggers.includes('focus')) {
                 $$1.removeEvent(this.node, 'focus.ui.popover');
                 $$1.removeEvent(this.node, 'blur.ui.popover');
             }
 
-            if (this._triggers.includes('click')) {
+            if (this.#triggers.includes('click')) {
                 $$1.removeEvent(this.node, 'click.ui.popover');
             }
 
-            if (this._modal) {
-                $$1.removeEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
+            if (this.#modal) {
+                $$1.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
             }
 
-            this._modal = null;
-            this._triggers = null;
-            this._popover = null;
-            this._popoverHeader = null;
-            this._popoverBody = null;
-            this._arrow = null;
-            this._hideModalEvent = null;
+            this.#modal = null;
+            this.#triggers = null;
+            this.#popover = null;
+            this.#popoverHeader = null;
+            this.#popoverBody = null;
+            this.#arrow = null;
+            this.#hideModalEvent = null;
 
             super.dispose();
         }
@@ -13190,7 +13108,7 @@
          * Enable the Popover.
          */
         enable() {
-            this._enabled = true;
+            this.#enabled = true;
         }
 
         /**
@@ -13200,29 +13118,29 @@
          */
         hide({ force = true } = {}) {
             if (
-                (!force && !this._enabled) ||
-                $$1.getDataset(this._popover, 'uiAnimating') ||
-                !$$1.isConnected(this._popover) ||
+                (!force && !this.#enabled) ||
+                $$1.getDataset(this.#popover, 'uiAnimating') ||
+                !$$1.isConnected(this.#popover) ||
                 !$$1.triggerOne(this.node, 'hide.ui.popover')
             ) {
                 return;
             }
 
-            $$1.setDataset(this._popover, { uiAnimating: 'out' });
+            $$1.setDataset(this.#popover, { uiAnimating: 'out' });
 
-            $$1.fadeOut(this._popover, {
+            $$1.fadeOut(this.#popover, {
                 duration: this.options.duration,
             }).then((_) => {
-                this._popper.dispose();
-                this._popper = null;
+                this.#popper.dispose();
+                this.#popper = null;
 
-                $$1.detach(this._popover);
-                $$1.removeDataset(this._popover, 'uiAnimating');
+                $$1.detach(this.#popover);
+                $$1.removeDataset(this.#popover, 'uiAnimating');
                 $$1.removeAttribute(this.node, 'aria-described-by');
                 $$1.triggerEvent(this.node, 'hidden.ui.popover');
             }).catch((_) => {
-                if ($$1.getDataset(this._popover, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this._popover, 'uiAnimating');
+                if ($$1.getDataset(this.#popover, 'uiAnimating') === 'out') {
+                    $$1.removeDataset(this.#popover, 'uiAnimating');
                 }
             });
         }
@@ -13256,20 +13174,20 @@
             const method = this.options.html ? 'setHTML' : 'setText';
 
             $$1[method](
-                this._popoverHeader,
+                this.#popoverHeader,
                 this.options.html && this.options.sanitize ?
                     this.options.sanitize(title) :
                     title,
             );
 
             if (!title) {
-                $$1.hide(this._popoverHeader);
+                $$1.hide(this.#popoverHeader);
             } else {
-                $$1.show(this._popoverHeader);
+                $$1.show(this.#popoverHeader);
             }
 
             $$1[method](
-                this._popoverBody,
+                this.#popoverBody,
                 this.options.html && this.options.sanitize ?
                     this.options.sanitize(content) :
                     content,
@@ -13281,26 +13199,26 @@
          */
         show() {
             if (
-                !this._enabled ||
-                $$1.getDataset(this._popover, 'uiAnimating') ||
-                $$1.isConnected(this._popover) ||
+                !this.#enabled ||
+                $$1.getDataset(this.#popover, 'uiAnimating') ||
+                $$1.isConnected(this.#popover) ||
                 !$$1.triggerOne(this.node, 'show.ui.popover')
             ) {
                 return;
             }
 
-            $$1.setDataset(this._popover, { uiAnimating: 'in' });
+            $$1.setDataset(this.#popover, { uiAnimating: 'in' });
             this.refresh();
-            this._show();
+            this.#show();
 
-            $$1.fadeIn(this._popover, {
+            $$1.fadeIn(this.#popover, {
                 duration: this.options.duration,
             }).then((_) => {
-                $$1.removeDataset(this._popover, 'uiAnimating');
+                $$1.removeDataset(this.#popover, 'uiAnimating');
                 $$1.triggerEvent(this.node, 'shown.ui.popover');
             }).catch((_) => {
-                if ($$1.getDataset(this._popover, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this._popover, 'uiAnimating');
+                if ($$1.getDataset(this.#popover, 'uiAnimating') === 'in') {
+                    $$1.removeDataset(this.#popover, 'uiAnimating');
                 }
             });
         }
@@ -13311,7 +13229,7 @@
          * @param {boolean} [options.force=true] Whether to force hiding when disabled.
          */
         toggle({ force = true } = {}) {
-            if ($$1.isConnected(this._popover)) {
+            if ($$1.isConnected(this.#popover)) {
                 this.hide({ force });
             } else {
                 this.show();
@@ -13322,8 +13240,127 @@
          * Update the Popover position.
          */
         update() {
-            if (this._popper) {
-                this._popper.update();
+            if (this.#popper) {
+                this.#popper.update();
+            }
+        }
+
+        /**
+         * Attach events for the Popover.
+         */
+        #events() {
+            if (this.#triggers.includes('hover')) {
+                $$1.addEvent(this.node, 'mouseover.ui.popover', (_) => {
+                    this.#stop();
+                    this.show();
+                });
+
+                $$1.addEvent(this.node, 'mouseout.ui.popover', (_) => {
+                    this.#stop();
+                    this.hide({ force: false });
+                });
+            }
+
+            if (this.#triggers.includes('focus')) {
+                $$1.addEvent(this.node, 'focus.ui.popover', (_) => {
+                    this.#stop();
+                    this.show();
+                });
+
+                $$1.addEvent(this.node, 'blur.ui.popover', (_) => {
+                    this.#stop();
+                    this.hide({ force: false });
+                });
+            }
+
+            if (this.#triggers.includes('click')) {
+                $$1.addEvent(this.node, 'click.ui.popover', (e) => {
+                    e.preventDefault();
+
+                    this.#stop();
+                    this.toggle({ force: false });
+                });
+            }
+
+            if (this.#modal) {
+                this.#hideModalEvent = (_) => {
+                    this.#stop();
+                    this.hide();
+                };
+                $$1.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+            }
+        }
+
+        /**
+         * Render the Popover element.
+         */
+        #render() {
+            this.#popover = $$1.parseHTML(this.options.template).shift();
+            if (this.options.customClass) {
+                $$1.addClass(this.#popover, this.options.customClass);
+            }
+            this.#arrow = $$1.findOne('.popover-arrow', this.#popover);
+            this.#popoverHeader = $$1.findOne('.popover-header', this.#popover);
+            this.#popoverBody = $$1.findOne('.popover-body', this.#popover);
+        }
+
+        /**
+         * Update the Popover and append to the DOM.
+         */
+        #show() {
+            if (this.options.appendTo) {
+                $$1.append(this.options.appendTo, this.#popover);
+            } else {
+                $$1.after(this.node, this.#popover);
+            }
+
+            if (!this.options.noAttributes) {
+                const id = generateId(this.constructor.DATA_KEY);
+                $$1.setAttribute(this.#popover, { id });
+                $$1.setAttribute(this.node, { 'aria-described-by': id });
+            }
+
+            this.#popper = new Popper(
+                this.#popover,
+                {
+                    reference: this.node,
+                    arrow: this.#arrow,
+                    placement: this.options.placement,
+                    position: this.options.position,
+                    fixed: this.options.fixed,
+                    spacing: this.options.spacing,
+                    minContact: this.options.minContact,
+                    noAttributes: this.options.noAttributes,
+                },
+            );
+
+            window$1.requestAnimationFrame((_) => {
+                this.update();
+            });
+        }
+
+        /**
+         * Stop the animations.
+         */
+        #stop() {
+            if (!this.#enabled) {
+                return;
+            }
+
+            const animating = $$1.getDataset(this.#popover, 'uiAnimating');
+
+            if (!animating) {
+                return;
+            }
+
+            $$1.stop(this.#popover, { finish: false });
+            $$1.removeDataset(this.#popover, 'uiAnimating');
+
+            if (animating === 'out') {
+                this.#popper.dispose();
+                this.#popper = null;
+
+                $$1.detach(this.#popover);
             }
         }
     }
@@ -13358,6 +13395,9 @@
      * @class
      */
     class Tab extends BaseComponent {
+        #siblings;
+        #target;
+
         /**
          * New Tab constructor.
          * @param {HTMLElement} node The input node.
@@ -13367,59 +13407,16 @@
             super(node, options);
 
             const selector = getTargetSelector(this.node);
-            this._target = $$1.findOne(selector);
-            this._siblings = $$1.siblings(this.node);
-        }
-
-        /**
-         * Hide the current Tab (forcefully).
-         */
-        _hide() {
-            $$1.setDataset(this._target, { uiAnimating: 'out' });
-
-            $$1.fadeOut(this._target, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.removeClass(this._target, 'active');
-                $$1.removeClass(this.node, 'active');
-                $$1.removeDataset(this._target, 'uiAnimating');
-                $$1.setAttribute(this.node, { 'aria-selected': false });
-                $$1.triggerEvent(this.node, 'hidden.ui.tab');
-            }).catch((_) => {
-                if ($$1.getDataset(this._target, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this._target, 'uiAnimating');
-                }
-            });
-        }
-
-        /**
-         * Show the current Tab (forcefully).
-         */
-        _show() {
-            $$1.setDataset(this._target, { uiAnimating: 'in' });
-
-            $$1.addClass(this._target, 'active');
-            $$1.addClass(this.node, 'active');
-
-            $$1.fadeIn(this._target, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.setAttribute(this.node, { 'aria-selected': true });
-                $$1.removeDataset(this._target, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'shown.ui.tab');
-            }).catch((_) => {
-                if ($$1.getDataset(this._target, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this._target, 'uiAnimating');
-                }
-            });
+            this.#target = $$1.findOne(selector);
+            this.#siblings = $$1.siblings(this.node);
         }
 
         /**
          * Dispose the Tab.
          */
         dispose() {
-            this._target = null;
-            this._siblings = null;
+            this.#target = null;
+            this.#siblings = null;
 
             super.dispose();
         }
@@ -13429,14 +13426,14 @@
          */
         hide() {
             if (
-                $$1.getDataset(this._target, 'uiAnimating') ||
-                !$$1.hasClass(this._target, 'active') ||
+                $$1.getDataset(this.#target, 'uiAnimating') ||
+                !$$1.hasClass(this.#target, 'active') ||
                 !$$1.triggerOne(this.node, 'hide.ui.tab')
             ) {
                 return;
             }
 
-            this._hide();
+            this.#hide();
         }
 
         /**
@@ -13444,23 +13441,23 @@
          */
         show() {
             if (
-                $$1.getDataset(this._target, 'uiAnimating') ||
-                $$1.hasClass(this._target, 'active') ||
+                $$1.getDataset(this.#target, 'uiAnimating') ||
+                $$1.hasClass(this.#target, 'active') ||
                 !$$1.triggerOne(this.node, 'show.ui.tab')
             ) {
                 return;
             }
 
-            const active = this._siblings.find((sibling) =>
+            const active = this.#siblings.find((sibling) =>
                 $$1.hasClass(sibling, 'active'),
             );
 
             if (!active) {
-                this._show();
+                this.#show();
             } else {
                 const activeTab = this.constructor.init(active);
 
-                if ($$1.getDataset(activeTab._target, 'uiAnimating')) {
+                if ($$1.getDataset(activeTab.#target, 'uiAnimating')) {
                     return;
                 }
 
@@ -13469,11 +13466,54 @@
                 }
 
                 $$1.addEventOnce(active, 'hidden.ui.tab', (_) => {
-                    this._show();
+                    this.#show();
                 });
 
-                activeTab._hide();
+                activeTab.#hide();
             }
+        }
+
+        /**
+         * Hide the current Tab (forcefully).
+         */
+        #hide() {
+            $$1.setDataset(this.#target, { uiAnimating: 'out' });
+
+            $$1.fadeOut(this.#target, {
+                duration: this.options.duration,
+            }).then((_) => {
+                $$1.removeClass(this.#target, 'active');
+                $$1.removeClass(this.node, 'active');
+                $$1.removeDataset(this.#target, 'uiAnimating');
+                $$1.setAttribute(this.node, { 'aria-selected': false });
+                $$1.triggerEvent(this.node, 'hidden.ui.tab');
+            }).catch((_) => {
+                if ($$1.getDataset(this.#target, 'uiAnimating') === 'out') {
+                    $$1.removeDataset(this.#target, 'uiAnimating');
+                }
+            });
+        }
+
+        /**
+         * Show the current Tab (forcefully).
+         */
+        #show() {
+            $$1.setDataset(this.#target, { uiAnimating: 'in' });
+
+            $$1.addClass(this.#target, 'active');
+            $$1.addClass(this.node, 'active');
+
+            $$1.fadeIn(this.#target, {
+                duration: this.options.duration,
+            }).then((_) => {
+                $$1.setAttribute(this.node, { 'aria-selected': true });
+                $$1.removeDataset(this.#target, 'uiAnimating');
+                $$1.triggerEvent(this.node, 'shown.ui.tab');
+            }).catch((_) => {
+                if ($$1.getDataset(this.#target, 'uiAnimating') === 'in') {
+                    $$1.removeDataset(this.#target, 'uiAnimating');
+                }
+            });
         }
     }
 
@@ -13533,12 +13573,14 @@
      * @class
      */
     class Toast extends BaseComponent {
+        #timer;
+
         /**
          * Dispose the Toast.
          */
         dispose() {
-            clearTimeout(this._timer);
-            this._timer = null;
+            clearTimeout(this.#timer);
+            this.#timer = null;
 
             super.dispose();
         }
@@ -13555,8 +13597,8 @@
                 return;
             }
 
-            clearTimeout(this._timer);
-            this._timer = null;
+            clearTimeout(this.#timer);
+            this.#timer = null;
 
             $$1.setDataset(this.node, { uiAnimating: 'out' });
 
@@ -13586,8 +13628,8 @@
                 return;
             }
 
-            clearTimeout(this._timer);
-            this._timer = null;
+            clearTimeout(this.#timer);
+            this.#timer = null;
 
             $$1.setDataset(this.node, { uiAnimating: 'in' });
             $$1.setStyle(this.node, { display: '' });
@@ -13600,9 +13642,9 @@
                 $$1.triggerEvent(this.node, 'shown.ui.toast');
 
                 if (this.options.autohide) {
-                    this._timer = setTimeout(
+                    this.#timer = setTimeout(
                         (_) => {
-                            this._timer = null;
+                            this.#timer = null;
                             this.hide();
                         },
                         this.options.delay,
@@ -13640,6 +13682,15 @@
      * @class
      */
     class Tooltip extends BaseComponent {
+        #arrow;
+        #enabled;
+        #hideModalEvent;
+        #modal;
+        #popper;
+        #tooltip;
+        #tooltipInner;
+        #triggers;
+
         /**
          * New Tooltip constructor.
          * @param {HTMLElement} node The input node.
@@ -13648,12 +13699,12 @@
         constructor(node, options) {
             super(node, options);
 
-            this._modal = $$1.closest(this.node, '.modal').shift();
+            this.#modal = $$1.closest(this.node, '.modal').shift();
 
-            this._triggers = this.options.trigger.split(' ');
+            this.#triggers = this.options.trigger.split(' ');
 
-            this._render();
-            this._events();
+            this.#render();
+            this.#events();
 
             if (this.options.enable) {
                 this.enable();
@@ -13663,129 +13714,10 @@
         }
 
         /**
-         * Attach events for the Tooltip.
-         */
-        _events() {
-            if (this._triggers.includes('hover')) {
-                $$1.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
-                    this._stop();
-                    this.show();
-                });
-
-                $$1.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
-                    this._stop();
-                    this.hide({ force: false });
-                });
-            }
-
-            if (this._triggers.includes('focus')) {
-                $$1.addEvent(this.node, 'focus.ui.tooltip', (_) => {
-                    this._stop();
-                    this.show();
-                });
-
-                $$1.addEvent(this.node, 'blur.ui.tooltip', (_) => {
-                    this._stop();
-                    this.hide({ force: false });
-                });
-            }
-
-            if (this._triggers.includes('click')) {
-                $$1.addEvent(this.node, 'click.ui.tooltip', (e) => {
-                    e.preventDefault();
-
-                    this._stop();
-                    this.toggle({ force: false });
-                });
-            }
-
-            if (this._modal) {
-                this._hideModalEvent = (_) => {
-                    this._stop();
-                    this.hide();
-                };
-                $$1.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
-            }
-        }
-
-        /**
-         * Render the Tooltip element.
-         */
-        _render() {
-            this._tooltip = $$1.parseHTML(this.options.template).shift();
-            if (this.options.customClass) {
-                $$1.addClass(this._tooltip, this.options.customClass);
-            }
-            this._arrow = $$1.findOne('.tooltip-arrow', this._tooltip);
-            this._tooltipInner = $$1.findOne('.tooltip-inner', this._tooltip);
-        }
-
-        /**
-         * Update the Tooltip and append to the DOM.
-         */
-        _show() {
-            if (this.options.appendTo) {
-                $$1.append(this.options.appendTo, this._tooltip);
-            } else {
-                $$1.after(this.node, this._tooltip);
-            }
-
-            if (!this.options.noAttributes) {
-                const id = generateId(this.constructor.DATA_KEY);
-                $$1.setAttribute(this._tooltip, { id });
-                $$1.setAttribute(this.node, { 'aria-described-by': id });
-            }
-
-            this._popper = new Popper(
-                this._tooltip,
-                {
-                    reference: this.node,
-                    arrow: this._arrow,
-                    placement: this.options.placement,
-                    position: this.options.position,
-                    fixed: this.options.fixed,
-                    spacing: this.options.spacing,
-                    minContact: this.options.minContact,
-                    noAttributes: this.options.noAttributes,
-                },
-            );
-
-            window$1.requestAnimationFrame((_) => {
-                this.update();
-            });
-        }
-
-        /**
-         * Stop the animations.
-         */
-        _stop() {
-            if (!this._enabled) {
-                return;
-            }
-
-            const animating = $$1.getDataset(this._tooltip, 'uiAnimating');
-
-            if (!animating) {
-                return;
-            }
-
-            $$1.stop(this._tooltip, { finish: false });
-            $$1.removeDataset(this._tooltip, 'uiAnimating');
-
-            if (animating === 'out') {
-                this._popper.dispose();
-                this._popper = null;
-
-                $$1.removeClass(this._tooltip, 'show');
-                $$1.detach(this._tooltip);
-            }
-        }
-
-        /**
          * Disable the Tooltip.
          */
         disable() {
-            this._enabled = false;
+            this.#enabled = false;
         }
 
         /**
@@ -13798,37 +13730,37 @@
                 $$1.removeDataset(this.node, 'uiOriginalTitle');
             }
 
-            if (this._popper) {
-                this._popper.dispose();
-                this._popper = null;
+            if (this.#popper) {
+                this.#popper.dispose();
+                this.#popper = null;
             }
 
-            $$1.remove(this._tooltip);
+            $$1.remove(this.#tooltip);
 
-            if (this._triggers.includes('hover')) {
+            if (this.#triggers.includes('hover')) {
                 $$1.removeEvent(this.node, 'mouseover.ui.tooltip');
                 $$1.removeEvent(this.node, 'mouseout.ui.tooltip');
             }
 
-            if (this._triggers.includes('focus')) {
+            if (this.#triggers.includes('focus')) {
                 $$1.removeEvent(this.node, 'focus.ui.tooltip');
                 $$1.removeEvent(this.node, 'blur.ui.tooltip');
             }
 
-            if (this._triggers.includes('click')) {
+            if (this.#triggers.includes('click')) {
                 $$1.removeEvent(this.node, 'click.ui.tooltip');
             }
 
-            if (this._modal) {
-                $$1.removeEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
+            if (this.#modal) {
+                $$1.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
             }
 
-            this._modal = null;
-            this._triggers = null;
-            this._tooltip = null;
-            this._tooltipInner = null;
-            this._arrow = null;
-            this._hideModalEvent = null;
+            this.#modal = null;
+            this.#triggers = null;
+            this.#tooltip = null;
+            this.#tooltipInner = null;
+            this.#arrow = null;
+            this.#hideModalEvent = null;
 
             super.dispose();
         }
@@ -13837,7 +13769,7 @@
          * Enable the Tooltip.
          */
         enable() {
-            this._enabled = true;
+            this.#enabled = true;
         }
 
         /**
@@ -13847,30 +13779,30 @@
          */
         hide({ force = true } = {}) {
             if (
-                (!force && !this._enabled) ||
-                $$1.getDataset(this._tooltip, 'uiAnimating') ||
-                !$$1.isConnected(this._tooltip) ||
+                (!force && !this.#enabled) ||
+                $$1.getDataset(this.#tooltip, 'uiAnimating') ||
+                !$$1.isConnected(this.#tooltip) ||
                 !$$1.triggerOne(this.node, 'hide.ui.tooltip')
             ) {
                 return;
             }
 
-            $$1.setDataset(this._tooltip, { uiAnimating: 'out' });
+            $$1.setDataset(this.#tooltip, { uiAnimating: 'out' });
 
-            $$1.fadeOut(this._tooltip, {
+            $$1.fadeOut(this.#tooltip, {
                 duration: this.options.duration,
             }).then((_) => {
-                this._popper.dispose();
-                this._popper = null;
+                this.#popper.dispose();
+                this.#popper = null;
 
-                $$1.removeClass(this._tooltip, 'show');
-                $$1.detach(this._tooltip);
-                $$1.removeDataset(this._tooltip, 'uiAnimating');
+                $$1.removeClass(this.#tooltip, 'show');
+                $$1.detach(this.#tooltip);
+                $$1.removeDataset(this.#tooltip, 'uiAnimating');
                 $$1.removeAttribute(this.node, 'aria-described-by');
                 $$1.triggerEvent(this.node, 'hidden.ui.tooltip');
             }).catch((_) => {
-                if ($$1.getDataset(this._tooltip, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this._tooltip, 'uiAnimating');
+                if ($$1.getDataset(this.#tooltip, 'uiAnimating') === 'out') {
+                    $$1.removeDataset(this.#tooltip, 'uiAnimating');
                 }
             });
         }
@@ -13897,7 +13829,7 @@
             const method = this.options.html ? 'setHTML' : 'setText';
 
             $$1[method](
-                this._tooltipInner,
+                this.#tooltipInner,
                 this.options.html && this.options.sanitize ?
                     this.options.sanitize(title) :
                     title,
@@ -13911,27 +13843,27 @@
          */
         show() {
             if (
-                !this._enabled ||
-                $$1.getDataset(this._tooltip, 'uiAnimating') ||
-                $$1.isConnected(this._tooltip) ||
+                !this.#enabled ||
+                $$1.getDataset(this.#tooltip, 'uiAnimating') ||
+                $$1.isConnected(this.#tooltip) ||
                 !$$1.triggerOne(this.node, 'show.ui.tooltip')
             ) {
                 return;
             }
 
-            $$1.setDataset(this._tooltip, { uiAnimating: 'in' });
-            $$1.addClass(this._tooltip, 'show');
+            $$1.setDataset(this.#tooltip, { uiAnimating: 'in' });
+            $$1.addClass(this.#tooltip, 'show');
             this.refresh();
-            this._show();
+            this.#show();
 
-            $$1.fadeIn(this._tooltip, {
+            $$1.fadeIn(this.#tooltip, {
                 duration: this.options.duration,
             }).then((_) => {
-                $$1.removeDataset(this._tooltip, 'uiAnimating');
+                $$1.removeDataset(this.#tooltip, 'uiAnimating');
                 $$1.triggerEvent(this.node, 'shown.ui.tooltip');
             }).catch((_) => {
-                if ($$1.getDataset(this._tooltip, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this._tooltip, 'uiAnimating');
+                if ($$1.getDataset(this.#tooltip, 'uiAnimating') === 'in') {
+                    $$1.removeDataset(this.#tooltip, 'uiAnimating');
                 }
             });
         }
@@ -13942,7 +13874,7 @@
          * @param {boolean} [options.force=true] Whether to force hiding when disabled.
          */
         toggle({ force = true } = {}) {
-            if ($$1.isConnected(this._tooltip)) {
+            if ($$1.isConnected(this.#tooltip)) {
                 this.hide({ force });
             } else {
                 this.show();
@@ -13953,8 +13885,127 @@
          * Update the Tooltip position.
          */
         update() {
-            if (this._popper) {
-                this._popper.update();
+            if (this.#popper) {
+                this.#popper.update();
+            }
+        }
+
+        /**
+         * Attach events for the Tooltip.
+         */
+        #events() {
+            if (this.#triggers.includes('hover')) {
+                $$1.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
+                    this.#stop();
+                    this.show();
+                });
+
+                $$1.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
+                    this.#stop();
+                    this.hide({ force: false });
+                });
+            }
+
+            if (this.#triggers.includes('focus')) {
+                $$1.addEvent(this.node, 'focus.ui.tooltip', (_) => {
+                    this.#stop();
+                    this.show();
+                });
+
+                $$1.addEvent(this.node, 'blur.ui.tooltip', (_) => {
+                    this.#stop();
+                    this.hide({ force: false });
+                });
+            }
+
+            if (this.#triggers.includes('click')) {
+                $$1.addEvent(this.node, 'click.ui.tooltip', (e) => {
+                    e.preventDefault();
+
+                    this.#stop();
+                    this.toggle({ force: false });
+                });
+            }
+
+            if (this.#modal) {
+                this.#hideModalEvent = (_) => {
+                    this.#stop();
+                    this.hide();
+                };
+                $$1.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+            }
+        }
+
+        /**
+         * Render the Tooltip element.
+         */
+        #render() {
+            this.#tooltip = $$1.parseHTML(this.options.template).shift();
+            if (this.options.customClass) {
+                $$1.addClass(this.#tooltip, this.options.customClass);
+            }
+            this.#arrow = $$1.findOne('.tooltip-arrow', this.#tooltip);
+            this.#tooltipInner = $$1.findOne('.tooltip-inner', this.#tooltip);
+        }
+
+        /**
+         * Update the Tooltip and append to the DOM.
+         */
+        #show() {
+            if (this.options.appendTo) {
+                $$1.append(this.options.appendTo, this.#tooltip);
+            } else {
+                $$1.after(this.node, this.#tooltip);
+            }
+
+            if (!this.options.noAttributes) {
+                const id = generateId(this.constructor.DATA_KEY);
+                $$1.setAttribute(this.#tooltip, { id });
+                $$1.setAttribute(this.node, { 'aria-described-by': id });
+            }
+
+            this.#popper = new Popper(
+                this.#tooltip,
+                {
+                    reference: this.node,
+                    arrow: this.#arrow,
+                    placement: this.options.placement,
+                    position: this.options.position,
+                    fixed: this.options.fixed,
+                    spacing: this.options.spacing,
+                    minContact: this.options.minContact,
+                    noAttributes: this.options.noAttributes,
+                },
+            );
+
+            window$1.requestAnimationFrame((_) => {
+                this.update();
+            });
+        }
+
+        /**
+         * Stop the animations.
+         */
+        #stop() {
+            if (!this.#enabled) {
+                return;
+            }
+
+            const animating = $$1.getDataset(this.#tooltip, 'uiAnimating');
+
+            if (!animating) {
+                return;
+            }
+
+            $$1.stop(this.#tooltip, { finish: false });
+            $$1.removeDataset(this.#tooltip, 'uiAnimating');
+
+            if (animating === 'out') {
+                this.#popper.dispose();
+                this.#popper = null;
+
+                $$1.removeClass(this.#tooltip, 'show');
+                $$1.detach(this.#tooltip);
             }
         }
     }

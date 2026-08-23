@@ -96,40 +96,20 @@ test.describe('Toast', () => {
 
             expect(await page.evaluate((_) => {
                 const toast = UI.Toast.init($.findOne('#toast1'));
-                toast.dispose();
-                return toast._timer === null;
-            })).toBe(true);
-        });
+                const originalClearTimeout = window.clearTimeout;
+                let timerCleared = false;
 
-        test('clears toast memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                const toast = UI.Toast.init(toast1);
-                toast.dispose();
+                window.clearTimeout = (timer) => {
+                    timerCleared = true;
+                    originalClearTimeout(timer);
+                };
 
-                for (const key in toast) {
-                    if ($._isObject(toast[key]) && !$._isFunction(toast[key])) {
-                        return false;
-                    }
+                try {
+                    toast.dispose();
+                    return timerCleared;
+                } finally {
+                    window.clearTimeout = originalClearTimeout;
                 }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears toast memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                const toast = UI.Toast.init(toast1);
-                $.remove(toast1);
-
-                for (const key in toast) {
-                    if ($._isObject(toast[key]) && !$._isFunction(toast[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
             })).toBe(true);
         });
     });

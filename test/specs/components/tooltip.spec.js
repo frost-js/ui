@@ -102,38 +102,6 @@ test.describe('Tooltip', () => {
             await expect(page.locator('.tooltip')).toHaveCount(0);
         });
 
-        test('clears tooltip memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltipToggle1');
-                const tooltip = UI.Tooltip.init(tooltipToggle1);
-                tooltip.dispose();
-
-                for (const key in tooltip) {
-                    if ($._isObject(tooltip[key]) && !$._isFunction(tooltip[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears tooltip memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltipToggle1');
-                const tooltip = UI.Tooltip.init(tooltipToggle1);
-                $.remove(tooltipToggle1);
-
-                for (const key in tooltip) {
-                    if ($._isObject(tooltip[key]) && !$._isFunction(tooltip[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
         test('restores the title attribute', async ({ page }) => {
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');

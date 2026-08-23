@@ -62,42 +62,6 @@ test.describe('Popper', () => {
                 return $.hasData('#badge', 'popper');
             })).toBe(false);
         });
-
-        test('clears popper memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const badge = $.findOne('#badge');
-                const popper = UI.Popper.init(badge, {
-                    reference: $.findOne('#button'),
-                });
-                popper.dispose();
-
-                for (const key in popper) {
-                    if ($._isObject(popper[key]) && !$._isFunction(popper[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears popper memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const badge = $.findOne('#badge');
-                const popper = UI.Popper.init(badge, {
-                    reference: $.findOne('#button'),
-                });
-                $.remove(badge);
-
-                for (const key in popper) {
-                    if ($._isObject(popper[key]) && !$._isFunction(popper[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
     });
 
     test.describe('#update', () => {

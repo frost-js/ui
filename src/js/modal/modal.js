@@ -8,6 +8,12 @@ import { addScrollPadding, resetScrollPadding } from './../helpers.js';
  * @class
  */
 export default class Modal extends BaseComponent {
+    #activeTarget;
+    #backdrop;
+    #dialog;
+    #focusTrap;
+    #scrollNodes;
+
     /**
      * New Modal constructor.
      * @param {HTMLElement} node The input node.
@@ -16,59 +22,30 @@ export default class Modal extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this._dialog = $.child(this.node, '.modal-dialog').shift();
+        this.#dialog = $.child(this.node, '.modal-dialog').shift();
 
         if (this.options.show) {
             this.show();
         }
 
         if (this.options.focus) {
-            this._focusTrap = FocusTrap.init(this.node);
+            this.#focusTrap = FocusTrap.init(this.node);
         }
-    }
-
-    /**
-     * Start a zoom in/out animation.
-     */
-    _zoom() {
-        if ($.getDataset(this._dialog, 'uiAnimating')) {
-            return;
-        }
-
-        $.stop(this._dialog);
-
-        $.animate(
-            this._dialog,
-            (node, progress) => {
-                if (progress >= 1) {
-                    $.setStyle(node, { transform: '' });
-                    return;
-                }
-
-                const zoomOffset = (progress < .5 ? progress : (1 - progress)) / 20;
-                $.setStyle(node, { transform: `scale(${1 + zoomOffset})` });
-            },
-            {
-                duration: 200,
-            },
-        ).catch((_) => {
-            //
-        });
     }
 
     /**
      * Dispose the Modal.
      */
     dispose() {
-        if (this._focusTrap) {
-            this._focusTrap.dispose();
-            this._focusTrap = null;
+        if (this.#focusTrap) {
+            this.#focusTrap.dispose();
+            this.#focusTrap = null;
         }
 
-        this._dialog = null;
-        this._activeTarget = null;
-        this._backdrop = null;
-        this._scrollNodes = null;
+        this.#dialog = null;
+        this.#activeTarget = null;
+        this.#backdrop = null;
+        this.#scrollNodes = null;
 
         super.dispose();
     }
@@ -86,7 +63,7 @@ export default class Modal extends BaseComponent {
         }
 
         if (this.options.backdrop === 'static') {
-            this._zoom();
+            this.#zoom();
             return;
         }
 
@@ -102,7 +79,7 @@ export default class Modal extends BaseComponent {
         }
 
         if (this.options.backdrop === 'static') {
-            this._zoom();
+            this.#zoom();
             return;
         }
 
@@ -114,31 +91,31 @@ export default class Modal extends BaseComponent {
      */
     hide() {
         if (
-            $.getDataset(this._dialog, 'uiAnimating') ||
+            $.getDataset(this.#dialog, 'uiAnimating') ||
             !$.hasClass(this.node, 'show') ||
             !$.triggerOne(this.node, 'hide.ui.modal')
         ) {
             return;
         }
 
-        $.stop(this._dialog);
-        $.setDataset(this._dialog, { uiAnimating: 'out' });
+        $.stop(this.#dialog);
+        $.setDataset(this.#dialog, { uiAnimating: 'out' });
 
-        if (this._focusTrap) {
-            this._focusTrap.deactivate();
+        if (this.#focusTrap) {
+            this.#focusTrap.deactivate();
         }
 
         const stackSize = $.find('.modal.show').length - 1;
 
         Promise.all([
-            $.fadeOut(this._dialog, {
+            $.fadeOut(this.#dialog, {
                 duration: this.options.duration,
             }),
-            $.dropOut(this._dialog, {
+            $.dropOut(this.#dialog, {
                 duration: this.options.duration,
                 direction: 'top',
             }),
-            $.fadeOut(this._backdrop, {
+            $.fadeOut(this.#backdrop, {
                 duration: this.options.duration,
             }),
         ]).then((_) => {
@@ -147,8 +124,8 @@ export default class Modal extends BaseComponent {
                 'aria-modal': false,
             });
 
-            resetScrollPadding(this._scrollNodes);
-            this._scrollNodes = [];
+            resetScrollPadding(this.#scrollNodes);
+            this.#scrollNodes = [];
 
             if (stackSize) {
                 $.setStyle(this.node, { zIndex: '' });
@@ -159,20 +136,20 @@ export default class Modal extends BaseComponent {
             $.removeClass(this.node, 'show');
 
             if (this.options.backdrop) {
-                $.remove(this._backdrop);
-                this._backdrop = null;
+                $.remove(this.#backdrop);
+                this.#backdrop = null;
             }
 
-            if (this._activeTarget) {
-                $.focus(this._activeTarget);
-                this._activeTarget = null;
+            if (this.#activeTarget) {
+                $.focus(this.#activeTarget);
+                this.#activeTarget = null;
             }
 
-            $.removeDataset(this._dialog, 'uiAnimating');
+            $.removeDataset(this.#dialog, 'uiAnimating');
             $.triggerEvent(this.node, 'hidden.ui.modal');
         }).catch((_) => {
-            if ($.getDataset(this._dialog, 'uiAnimating') === 'out') {
-                $.removeDataset(this._dialog, 'uiAnimating');
+            if ($.getDataset(this.#dialog, 'uiAnimating') === 'out') {
+                $.removeDataset(this.#dialog, 'uiAnimating');
             }
         });
     }
@@ -183,24 +160,24 @@ export default class Modal extends BaseComponent {
      */
     show(relatedTarget) {
         if (relatedTarget) {
-            this._activeTarget = relatedTarget;
+            this.#activeTarget = relatedTarget;
         }
 
         if (
-            $.getDataset(this._dialog, 'uiAnimating') ||
+            $.getDataset(this.#dialog, 'uiAnimating') ||
             $.hasClass(this.node, 'show') ||
-            !$.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this._activeTarget } })
+            !$.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this.#activeTarget } })
         ) {
             return;
         }
 
-        $.setDataset(this._dialog, { uiAnimating: 'in' });
+        $.setDataset(this.#dialog, { uiAnimating: 'in' });
 
         const stackSize = $.find('.modal.show').length;
 
         $.removeClass(document.body, 'modal-open');
 
-        this._scrollNodes = [this._dialog];
+        this.#scrollNodes = [this.#dialog];
 
         if (stackSize) {
             let zIndex = $.css(this.node, 'zIndex');
@@ -209,41 +186,41 @@ export default class Modal extends BaseComponent {
 
             $.setStyle(this.node, { zIndex });
         } else if (!$.findOne('.offcanvas.show')) {
-            this._scrollNodes.push(document.body);
-            this._scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
+            this.#scrollNodes.push(document.body);
+            this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
         }
 
-        addScrollPadding(this._scrollNodes);
+        addScrollPadding(this.#scrollNodes);
 
         $.addClass(document.body, 'modal-open');
 
         $.addClass(this.node, 'show');
 
         if (this.options.backdrop) {
-            this._backdrop = $.create('div', {
+            this.#backdrop = $.create('div', {
                 class: 'modal-backdrop',
             });
 
-            $.append(document.body, this._backdrop);
+            $.append(document.body, this.#backdrop);
 
             if (stackSize) {
-                let zIndex = $.css(this._backdrop, 'zIndex');
+                let zIndex = $.css(this.#backdrop, 'zIndex');
                 zIndex = parseInt(zIndex);
                 zIndex += stackSize * 20;
 
-                $.setStyle(this._backdrop, { zIndex });
+                $.setStyle(this.#backdrop, { zIndex });
             }
         }
 
         Promise.all([
-            $.fadeIn(this._dialog, {
+            $.fadeIn(this.#dialog, {
                 duration: this.options.duration,
             }),
-            $.dropIn(this._dialog, {
+            $.dropIn(this.#dialog, {
                 duration: this.options.duration,
                 direction: 'top',
             }),
-            $.fadeIn(this._backdrop, {
+            $.fadeIn(this.#backdrop, {
                 duration: this.options.duration,
             }),
         ]).then((_) => {
@@ -252,15 +229,15 @@ export default class Modal extends BaseComponent {
                 'aria-modal': true,
             });
 
-            if (this._focusTrap) {
-                this._focusTrap.activate();
+            if (this.#focusTrap) {
+                this.#focusTrap.activate();
             }
 
-            $.removeDataset(this._dialog, 'uiAnimating');
+            $.removeDataset(this.#dialog, 'uiAnimating');
             $.triggerEvent(this.node, 'shown.ui.modal');
         }).catch((_) => {
-            if ($.getDataset(this._dialog, 'uiAnimating') === 'in') {
-                $.removeDataset(this._dialog, 'uiAnimating');
+            if ($.getDataset(this.#dialog, 'uiAnimating') === 'in') {
+                $.removeDataset(this.#dialog, 'uiAnimating');
             }
         });
     }
@@ -274,5 +251,34 @@ export default class Modal extends BaseComponent {
         } else {
             this.show();
         }
+    }
+
+    /**
+     * Start a zoom in/out animation.
+     */
+    #zoom() {
+        if ($.getDataset(this.#dialog, 'uiAnimating')) {
+            return;
+        }
+
+        $.stop(this.#dialog);
+
+        $.animate(
+            this.#dialog,
+            (node, progress) => {
+                if (progress >= 1) {
+                    $.setStyle(node, { transform: '' });
+                    return;
+                }
+
+                const zoomOffset = (progress < .5 ? progress : (1 - progress)) / 20;
+                $.setStyle(node, { transform: `scale(${1 + zoomOffset})` });
+            },
+            {
+                duration: 200,
+            },
+        ).catch((_) => {
+            //
+        });
     }
 }

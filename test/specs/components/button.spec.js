@@ -75,38 +75,6 @@ test.describe('Button', () => {
                 );
             })).toBe(false);
         });
-
-        test('clears button memory', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const button1 = $.findOne('#button1');
-                const button = UI.Button.init(button1);
-                button.dispose();
-
-                for (const key in button) {
-                    if ($._isObject(button[key]) && !$._isFunction(button[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
-
-        test('clears button memory when node is removed', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const button1 = $.findOne('#button1');
-                const button = UI.Button.init(button1);
-                $.remove(button1);
-
-                for (const key in button) {
-                    if ($._isObject(button[key]) && !$._isFunction(button[key])) {
-                        return false;
-                    }
-                }
-
-                return true;
-            })).toBe(true);
-        });
     });
 
     test.describe('#toggle', () => {
