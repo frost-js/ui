@@ -17,8 +17,8 @@ export default class Offcanvas extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        if (!this._options.scroll || this._options.backdrop) {
-            this._focusTrap = FocusTrap.init(this._node);
+        if (!this.options.scroll || this.options.backdrop) {
+            this._focusTrap = FocusTrap.init(this.node);
         }
     }
 
@@ -43,10 +43,10 @@ export default class Offcanvas extends BaseComponent {
      */
     handleBackdrop(target) {
         if (
-            !this._options.backdrop ||
-            this._options.backdrop === 'static' ||
-            $.isSame(this._node, target) ||
-            $.hasDescendent(this._node, target)
+            !this.options.backdrop ||
+            this.options.backdrop === 'static' ||
+            $.isSame(this.node, target) ||
+            $.hasDescendent(this.node, target)
         ) {
             return;
         }
@@ -58,7 +58,7 @@ export default class Offcanvas extends BaseComponent {
      * Handle an escape key interaction.
      */
     handleEscape() {
-        if (this._options.keyboard) {
+        if (this.options.keyboard) {
             this.hide();
         }
     }
@@ -68,40 +68,40 @@ export default class Offcanvas extends BaseComponent {
      */
     hide() {
         if (
-            $.getDataset(this._node, 'uiAnimating') ||
-            !$.hasClass(this._node, 'show') ||
-            !$.triggerOne(this._node, 'hide.ui.offcanvas')
+            $.getDataset(this.node, 'uiAnimating') ||
+            !$.hasClass(this.node, 'show') ||
+            !$.triggerOne(this.node, 'hide.ui.offcanvas')
         ) {
             return;
         }
 
-        $.setDataset(this._node, { uiAnimating: 'out' });
+        $.setDataset(this.node, { uiAnimating: 'out' });
 
         if (this._focusTrap) {
             this._focusTrap.deactivate();
         }
 
         Promise.all([
-            $.fadeOut(this._node, {
-                duration: this._options.duration,
+            $.fadeOut(this.node, {
+                duration: this.options.duration,
             }),
-            $.dropOut(this._node, {
-                duration: this._options.duration,
-                direction: getDirection(this._node),
+            $.dropOut(this.node, {
+                duration: this.options.duration,
+                direction: getDirection(this.node),
             }),
         ]).then((_) => {
-            $.setAttribute(this._node, {
+            $.setAttribute(this.node, {
                 'aria-hidden': true,
                 'aria-modal': false,
             });
 
-            $.removeClass(this._node, 'show');
+            $.removeClass(this.node, 'show');
 
-            if (this._options.backdrop) {
+            if (this.options.backdrop) {
                 $.removeClass(document.body, 'offcanvas-backdrop');
             }
 
-            if (!this._options.scroll) {
+            if (!this.options.scroll) {
                 resetScrollPadding(this._scrollNodes);
                 this._scrollNodes = [];
 
@@ -113,11 +113,11 @@ export default class Offcanvas extends BaseComponent {
                 this._activeTarget = null;
             }
 
-            $.removeDataset(this._node, 'uiAnimating');
-            $.triggerEvent(this._node, 'hidden.ui.offcanvas');
+            $.removeDataset(this.node, 'uiAnimating');
+            $.triggerEvent(this.node, 'hidden.ui.offcanvas');
         }).catch((_) => {
-            if ($.getDataset(this._node, 'uiAnimating') === 'out') {
-                $.removeDataset(this._node, 'uiAnimating');
+            if ($.getDataset(this.node, 'uiAnimating') === 'out') {
+                $.removeDataset(this.node, 'uiAnimating');
             }
         });
     }
@@ -132,24 +132,24 @@ export default class Offcanvas extends BaseComponent {
         }
 
         if (
-            $.getDataset(this._node, 'uiAnimating') ||
-            $.hasClass(this._node, 'show') ||
+            $.getDataset(this.node, 'uiAnimating') ||
+            $.hasClass(this.node, 'show') ||
             $.findOne('.offcanvas.show') ||
-            !$.triggerOne(this._node, 'show.ui.offcanvas')
+            !$.triggerOne(this.node, 'show.ui.offcanvas')
         ) {
             return;
         }
 
-        $.setDataset(this._node, { uiAnimating: 'in' });
-        $.addClass(this._node, 'show');
+        $.setDataset(this.node, { uiAnimating: 'in' });
+        $.addClass(this.node, 'show');
 
-        if (this._options.backdrop) {
+        if (this.options.backdrop) {
             $.addClass(document.body, 'offcanvas-backdrop');
         }
 
         this._scrollNodes = [];
 
-        if (!this._options.scroll) {
+        if (!this.options.scroll) {
             this._scrollNodes.push(document.body);
             this._scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
 
@@ -159,15 +159,15 @@ export default class Offcanvas extends BaseComponent {
         }
 
         Promise.all([
-            $.fadeIn(this._node, {
-                duration: this._options.duration,
+            $.fadeIn(this.node, {
+                duration: this.options.duration,
             }),
-            $.dropIn(this._node, {
-                duration: this._options.duration,
-                direction: getDirection(this._node),
+            $.dropIn(this.node, {
+                duration: this.options.duration,
+                direction: getDirection(this.node),
             }),
         ]).then((_) => {
-            $.setAttribute(this._node, {
+            $.setAttribute(this.node, {
                 'aria-hidden': false,
                 'aria-modal': true,
             });
@@ -176,11 +176,11 @@ export default class Offcanvas extends BaseComponent {
                 this._focusTrap.activate();
             }
 
-            $.removeDataset(this._node, 'uiAnimating');
-            $.triggerEvent(this._node, 'shown.ui.offcanvas');
+            $.removeDataset(this.node, 'uiAnimating');
+            $.triggerEvent(this.node, 'shown.ui.offcanvas');
         }).catch((_) => {
-            if ($.getDataset(this._node, 'uiAnimating') === 'in') {
-                $.removeDataset(this._node, 'uiAnimating');
+            if ($.getDataset(this.node, 'uiAnimating') === 'in') {
+                $.removeDataset(this.node, 'uiAnimating');
             }
         });
     }
@@ -189,7 +189,7 @@ export default class Offcanvas extends BaseComponent {
      * Toggle the Offcanvas.
      */
     toggle() {
-        if ($.hasClass(this._node, 'show')) {
+        if ($.hasClass(this.node, 'show')) {
             this.hide();
         } else {
             this.show();

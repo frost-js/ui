@@ -16,14 +16,14 @@ export default class Modal extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this._dialog = $.child(this._node, '.modal-dialog').shift();
+        this._dialog = $.child(this.node, '.modal-dialog').shift();
 
-        if (this._options.show) {
+        if (this.options.show) {
             this.show();
         }
 
-        if (this._options.focus) {
-            this._focusTrap = FocusTrap.init(this._node);
+        if (this.options.focus) {
+            this._focusTrap = FocusTrap.init(this.node);
         }
     }
 
@@ -79,13 +79,13 @@ export default class Modal extends BaseComponent {
      */
     handleBackdrop(target) {
         if (
-            !this._options.backdrop ||
-            (this._node !== target && $.hasDescendent(this._node, target))
+            !this.options.backdrop ||
+            (this.node !== target && $.hasDescendent(this.node, target))
         ) {
             return;
         }
 
-        if (this._options.backdrop === 'static') {
+        if (this.options.backdrop === 'static') {
             this._zoom();
             return;
         }
@@ -97,11 +97,11 @@ export default class Modal extends BaseComponent {
      * Handle an escape key interaction.
      */
     handleEscape() {
-        if (!this._options.keyboard) {
+        if (!this.options.keyboard) {
             return;
         }
 
-        if (this._options.backdrop === 'static') {
+        if (this.options.backdrop === 'static') {
             this._zoom();
             return;
         }
@@ -115,8 +115,8 @@ export default class Modal extends BaseComponent {
     hide() {
         if (
             $.getDataset(this._dialog, 'uiAnimating') ||
-            !$.hasClass(this._node, 'show') ||
-            !$.triggerOne(this._node, 'hide.ui.modal')
+            !$.hasClass(this.node, 'show') ||
+            !$.triggerOne(this.node, 'hide.ui.modal')
         ) {
             return;
         }
@@ -132,17 +132,17 @@ export default class Modal extends BaseComponent {
 
         Promise.all([
             $.fadeOut(this._dialog, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }),
             $.dropOut(this._dialog, {
-                duration: this._options.duration,
+                duration: this.options.duration,
                 direction: 'top',
             }),
             $.fadeOut(this._backdrop, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }),
         ]).then((_) => {
-            $.setAttribute(this._node, {
+            $.setAttribute(this.node, {
                 'aria-hidden': true,
                 'aria-modal': false,
             });
@@ -151,14 +151,14 @@ export default class Modal extends BaseComponent {
             this._scrollNodes = [];
 
             if (stackSize) {
-                $.setStyle(this._node, { zIndex: '' });
+                $.setStyle(this.node, { zIndex: '' });
             } else {
                 $.removeClass(document.body, 'modal-open');
             }
 
-            $.removeClass(this._node, 'show');
+            $.removeClass(this.node, 'show');
 
-            if (this._options.backdrop) {
+            if (this.options.backdrop) {
                 $.remove(this._backdrop);
                 this._backdrop = null;
             }
@@ -169,7 +169,7 @@ export default class Modal extends BaseComponent {
             }
 
             $.removeDataset(this._dialog, 'uiAnimating');
-            $.triggerEvent(this._node, 'hidden.ui.modal');
+            $.triggerEvent(this.node, 'hidden.ui.modal');
         }).catch((_) => {
             if ($.getDataset(this._dialog, 'uiAnimating') === 'out') {
                 $.removeDataset(this._dialog, 'uiAnimating');
@@ -188,8 +188,8 @@ export default class Modal extends BaseComponent {
 
         if (
             $.getDataset(this._dialog, 'uiAnimating') ||
-            $.hasClass(this._node, 'show') ||
-            !$.triggerOne(this._node, 'show.ui.modal', { data: { relatedTarget: this._activeTarget } })
+            $.hasClass(this.node, 'show') ||
+            !$.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this._activeTarget } })
         ) {
             return;
         }
@@ -203,11 +203,11 @@ export default class Modal extends BaseComponent {
         this._scrollNodes = [this._dialog];
 
         if (stackSize) {
-            let zIndex = $.css(this._node, 'zIndex');
+            let zIndex = $.css(this.node, 'zIndex');
             zIndex = parseInt(zIndex);
             zIndex += stackSize * 20;
 
-            $.setStyle(this._node, { zIndex });
+            $.setStyle(this.node, { zIndex });
         } else if (!$.findOne('.offcanvas.show')) {
             this._scrollNodes.push(document.body);
             this._scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
@@ -217,9 +217,9 @@ export default class Modal extends BaseComponent {
 
         $.addClass(document.body, 'modal-open');
 
-        $.addClass(this._node, 'show');
+        $.addClass(this.node, 'show');
 
-        if (this._options.backdrop) {
+        if (this.options.backdrop) {
             this._backdrop = $.create('div', {
                 class: 'modal-backdrop',
             });
@@ -237,17 +237,17 @@ export default class Modal extends BaseComponent {
 
         Promise.all([
             $.fadeIn(this._dialog, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }),
             $.dropIn(this._dialog, {
-                duration: this._options.duration,
+                duration: this.options.duration,
                 direction: 'top',
             }),
             $.fadeIn(this._backdrop, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }),
         ]).then((_) => {
-            $.setAttribute(this._node, {
+            $.setAttribute(this.node, {
                 'aria-hidden': false,
                 'aria-modal': true,
             });
@@ -257,7 +257,7 @@ export default class Modal extends BaseComponent {
             }
 
             $.removeDataset(this._dialog, 'uiAnimating');
-            $.triggerEvent(this._node, 'shown.ui.modal');
+            $.triggerEvent(this.node, 'shown.ui.modal');
         }).catch((_) => {
             if ($.getDataset(this._dialog, 'uiAnimating') === 'in') {
                 $.removeDataset(this._dialog, 'uiAnimating');
@@ -269,7 +269,7 @@ export default class Modal extends BaseComponent {
      * Toggle the Modal.
      */
     toggle() {
-        if ($.hasClass(this._node, 'show')) {
+        if ($.hasClass(this.node, 'show')) {
             this.hide();
         } else {
             this.show();

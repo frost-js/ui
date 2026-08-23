@@ -18,11 +18,11 @@ export default class Collapse extends BaseComponent {
         this._triggers = $.find('[data-ui-toggle="collapse"]')
             .filter((trigger) => {
                 const selector = getTargetSelector(trigger);
-                return selector && $.is(this._node, selector);
+                return selector && $.is(this.node, selector);
             });
 
-        if (this._options.parent) {
-            this._parent = $.closest(this._node, this._options.parent).shift();
+        if (this.options.parent) {
+            this._parent = $.closest(this.node, this.options.parent).shift();
         }
     }
 
@@ -41,29 +41,29 @@ export default class Collapse extends BaseComponent {
      */
     hide() {
         if (
-            $.getDataset(this._node, 'uiAnimating') ||
-            !$.hasClass(this._node, 'show') ||
-            !$.triggerOne(this._node, 'hide.ui.collapse')
+            $.getDataset(this.node, 'uiAnimating') ||
+            !$.hasClass(this.node, 'show') ||
+            !$.triggerOne(this.node, 'hide.ui.collapse')
         ) {
             return;
         }
 
-        $.setDataset(this._node, { uiAnimating: 'out' });
+        $.setDataset(this.node, { uiAnimating: 'out' });
         $.addClass(this._triggers, 'collapsed');
         $.addClass(this._triggers, 'collapsing');
 
-        $.squeezeOut(this._node, {
-            direction: this._options.direction,
-            duration: this._options.duration,
+        $.squeezeOut(this.node, {
+            direction: this.options.direction,
+            duration: this.options.duration,
         }).then((_) => {
-            $.removeClass(this._node, 'show');
+            $.removeClass(this.node, 'show');
             $.removeClass(this._triggers, 'collapsing');
             $.setAttribute(this._triggers, { 'aria-expanded': false });
-            $.removeDataset(this._node, 'uiAnimating');
-            $.triggerEvent(this._node, 'hidden.ui.collapse');
+            $.removeDataset(this.node, 'uiAnimating');
+            $.triggerEvent(this.node, 'hidden.ui.collapse');
         }).catch((_) => {
-            if ($.getDataset(this._node, 'uiAnimating') === 'out') {
-                $.removeDataset(this._node, 'uiAnimating');
+            if ($.getDataset(this.node, 'uiAnimating') === 'out') {
+                $.removeDataset(this.node, 'uiAnimating');
             }
         });
     }
@@ -73,8 +73,8 @@ export default class Collapse extends BaseComponent {
      */
     show() {
         if (
-            $.getDataset(this._node, 'uiAnimating') ||
-            $.hasClass(this._node, 'show')
+            $.getDataset(this.node, 'uiAnimating') ||
+            $.hasClass(this.node, 'show')
         ) {
             return;
         }
@@ -94,7 +94,7 @@ export default class Collapse extends BaseComponent {
             }
         }
 
-        if (!$.triggerOne(this._node, 'show.ui.collapse')) {
+        if (!$.triggerOne(this.node, 'show.ui.collapse')) {
             return;
         }
 
@@ -102,22 +102,22 @@ export default class Collapse extends BaseComponent {
             collapse.hide();
         }
 
-        $.setDataset(this._node, { uiAnimating: 'in' });
-        $.addClass(this._node, 'show');
+        $.setDataset(this.node, { uiAnimating: 'in' });
+        $.addClass(this.node, 'show');
         $.removeClass(this._triggers, 'collapsed');
         $.addClass(this._triggers, 'collapsing');
 
-        $.squeezeIn(this._node, {
-            direction: this._options.direction,
-            duration: this._options.duration,
+        $.squeezeIn(this.node, {
+            direction: this.options.direction,
+            duration: this.options.duration,
         }).then((_) => {
             $.removeClass(this._triggers, 'collapsing');
             $.setAttribute(this._triggers, { 'aria-expanded': true });
-            $.removeDataset(this._node, 'uiAnimating');
-            $.triggerEvent(this._node, 'shown.ui.collapse');
+            $.removeDataset(this.node, 'uiAnimating');
+            $.triggerEvent(this.node, 'shown.ui.collapse');
         }).catch((_) => {
-            if ($.getDataset(this._node, 'uiAnimating') === 'in') {
-                $.removeDataset(this._node, 'uiAnimating');
+            if ($.getDataset(this.node, 'uiAnimating') === 'in') {
+                $.removeDataset(this.node, 'uiAnimating');
             }
         });
     }
@@ -126,7 +126,7 @@ export default class Collapse extends BaseComponent {
      * Toggle the element.
      */
     toggle() {
-        if ($.hasClass(this._node, 'show')) {
+        if ($.hasClass(this.node, 'show')) {
             this.hide();
         } else {
             this.show();

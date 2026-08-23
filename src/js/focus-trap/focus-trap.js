@@ -17,8 +17,8 @@ export default class FocusTrap extends BaseComponent {
 
         addFocusTrap(this);
 
-        if (this._options.autoFocus) {
-            $.focus(this._node);
+        if (this.options.autoFocus) {
+            $.focus(this.node);
         }
 
         this._active = true;

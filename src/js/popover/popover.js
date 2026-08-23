@@ -16,14 +16,14 @@ export default class Popover extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this._modal = $.closest(this._node, '.modal').shift();
+        this._modal = $.closest(this.node, '.modal').shift();
 
-        this._triggers = this._options.trigger.split(' ');
+        this._triggers = this.options.trigger.split(' ');
 
         this._render();
         this._events();
 
-        if (this._options.enable) {
+        if (this.options.enable) {
             this.enable();
         }
 
@@ -35,31 +35,31 @@ export default class Popover extends BaseComponent {
      */
     _events() {
         if (this._triggers.includes('hover')) {
-            $.addEvent(this._node, 'mouseover.ui.popover', (_) => {
+            $.addEvent(this.node, 'mouseover.ui.popover', (_) => {
                 this._stop();
                 this.show();
             });
 
-            $.addEvent(this._node, 'mouseout.ui.popover', (_) => {
+            $.addEvent(this.node, 'mouseout.ui.popover', (_) => {
                 this._stop();
                 this.hide({ force: false });
             });
         }
 
         if (this._triggers.includes('focus')) {
-            $.addEvent(this._node, 'focus.ui.popover', (_) => {
+            $.addEvent(this.node, 'focus.ui.popover', (_) => {
                 this._stop();
                 this.show();
             });
 
-            $.addEvent(this._node, 'blur.ui.popover', (_) => {
+            $.addEvent(this.node, 'blur.ui.popover', (_) => {
                 this._stop();
                 this.hide({ force: false });
             });
         }
 
         if (this._triggers.includes('click')) {
-            $.addEvent(this._node, 'click.ui.popover', (e) => {
+            $.addEvent(this.node, 'click.ui.popover', (e) => {
                 e.preventDefault();
 
                 this._stop();
@@ -80,9 +80,9 @@ export default class Popover extends BaseComponent {
      * Render the Popover element.
      */
     _render() {
-        this._popover = $.parseHTML(this._options.template).shift();
-        if (this._options.customClass) {
-            $.addClass(this._popover, this._options.customClass);
+        this._popover = $.parseHTML(this.options.template).shift();
+        if (this.options.customClass) {
+            $.addClass(this._popover, this.options.customClass);
         }
         this._arrow = $.findOne('.popover-arrow', this._popover);
         this._popoverHeader = $.findOne('.popover-header', this._popover);
@@ -93,29 +93,29 @@ export default class Popover extends BaseComponent {
      * Update the Popover and append to the DOM.
      */
     _show() {
-        if (this._options.appendTo) {
-            $.append(this._options.appendTo, this._popover);
+        if (this.options.appendTo) {
+            $.append(this.options.appendTo, this._popover);
         } else {
-            $.after(this._node, this._popover);
+            $.after(this.node, this._popover);
         }
 
-        if (!this._options.noAttributes) {
+        if (!this.options.noAttributes) {
             const id = generateId(this.constructor.DATA_KEY);
             $.setAttribute(this._popover, { id });
-            $.setAttribute(this._node, { 'aria-described-by': id });
+            $.setAttribute(this.node, { 'aria-described-by': id });
         }
 
         this._popper = new Popper(
             this._popover,
             {
-                reference: this._node,
+                reference: this.node,
                 arrow: this._arrow,
-                placement: this._options.placement,
-                position: this._options.position,
-                fixed: this._options.fixed,
-                spacing: this._options.spacing,
-                minContact: this._options.minContact,
-                noAttributes: this._options.noAttributes,
+                placement: this.options.placement,
+                position: this.options.position,
+                fixed: this.options.fixed,
+                spacing: this.options.spacing,
+                minContact: this.options.minContact,
+                noAttributes: this.options.noAttributes,
             },
         );
 
@@ -160,10 +160,10 @@ export default class Popover extends BaseComponent {
      * Dispose the Popover.
      */
     dispose() {
-        if ($.hasDataset(this._node, 'uiOriginalTitle')) {
-            const title = $.getDataset(this._node, 'uiOriginalTitle');
-            $.setAttribute(this._node, { title });
-            $.removeDataset(this._node, 'uiOriginalTitle');
+        if ($.hasDataset(this.node, 'uiOriginalTitle')) {
+            const title = $.getDataset(this.node, 'uiOriginalTitle');
+            $.setAttribute(this.node, { title });
+            $.removeDataset(this.node, 'uiOriginalTitle');
         }
 
         if (this._popper) {
@@ -174,17 +174,17 @@ export default class Popover extends BaseComponent {
         $.remove(this._popover);
 
         if (this._triggers.includes('hover')) {
-            $.removeEvent(this._node, 'mouseover.ui.popover');
-            $.removeEvent(this._node, 'mouseout.ui.popover');
+            $.removeEvent(this.node, 'mouseover.ui.popover');
+            $.removeEvent(this.node, 'mouseout.ui.popover');
         }
 
         if (this._triggers.includes('focus')) {
-            $.removeEvent(this._node, 'focus.ui.popover');
-            $.removeEvent(this._node, 'blur.ui.popover');
+            $.removeEvent(this.node, 'focus.ui.popover');
+            $.removeEvent(this.node, 'blur.ui.popover');
         }
 
         if (this._triggers.includes('click')) {
-            $.removeEvent(this._node, 'click.ui.popover');
+            $.removeEvent(this.node, 'click.ui.popover');
         }
 
         if (this._modal) {
@@ -219,7 +219,7 @@ export default class Popover extends BaseComponent {
             (!force && !this._enabled) ||
             $.getDataset(this._popover, 'uiAnimating') ||
             !$.isConnected(this._popover) ||
-            !$.triggerOne(this._node, 'hide.ui.popover')
+            !$.triggerOne(this.node, 'hide.ui.popover')
         ) {
             return;
         }
@@ -227,15 +227,15 @@ export default class Popover extends BaseComponent {
         $.setDataset(this._popover, { uiAnimating: 'out' });
 
         $.fadeOut(this._popover, {
-            duration: this._options.duration,
+            duration: this.options.duration,
         }).then((_) => {
             this._popper.dispose();
             this._popper = null;
 
             $.detach(this._popover);
             $.removeDataset(this._popover, 'uiAnimating');
-            $.removeAttribute(this._node, 'aria-described-by');
-            $.triggerEvent(this._node, 'hidden.ui.popover');
+            $.removeAttribute(this.node, 'aria-described-by');
+            $.triggerEvent(this.node, 'hidden.ui.popover');
         }).catch((_) => {
             if ($.getDataset(this._popover, 'uiAnimating') === 'out') {
                 $.removeDataset(this._popover, 'uiAnimating');
@@ -247,34 +247,34 @@ export default class Popover extends BaseComponent {
      * Refresh the Popover.
      */
     refresh() {
-        if ($.hasAttribute(this._node, 'title')) {
-            const originalTitle = $.getAttribute(this._node, 'title');
-            $.setDataset(this._node, { uiOriginalTitle: originalTitle });
-            $.removeAttribute(this._node, 'title');
+        if ($.hasAttribute(this.node, 'title')) {
+            const originalTitle = $.getAttribute(this.node, 'title');
+            $.setDataset(this.node, { uiOriginalTitle: originalTitle });
+            $.removeAttribute(this.node, 'title');
         }
 
         let title = '';
-        if ($.hasDataset(this._node, 'uiTitle')) {
-            title = $.getDataset(this._node, 'uiTitle');
-        } else if (this._options.title) {
-            title = this._options.title;
-        } else if ($.hasDataset(this._node, 'uiOriginalTitle')) {
-            title = $.getDataset(this._node, 'uiOriginalTitle', title);
+        if ($.hasDataset(this.node, 'uiTitle')) {
+            title = $.getDataset(this.node, 'uiTitle');
+        } else if (this.options.title) {
+            title = this.options.title;
+        } else if ($.hasDataset(this.node, 'uiOriginalTitle')) {
+            title = $.getDataset(this.node, 'uiOriginalTitle', title);
         }
 
         let content = '';
-        if ($.hasDataset(this._node, 'uiContent')) {
-            content = $.getDataset(this._node, 'uiContent');
-        } else if (this._options.content) {
-            content = this._options.content;
+        if ($.hasDataset(this.node, 'uiContent')) {
+            content = $.getDataset(this.node, 'uiContent');
+        } else if (this.options.content) {
+            content = this.options.content;
         }
 
-        const method = this._options.html ? 'setHTML' : 'setText';
+        const method = this.options.html ? 'setHTML' : 'setText';
 
         $[method](
             this._popoverHeader,
-            this._options.html && this._options.sanitize ?
-                this._options.sanitize(title) :
+            this.options.html && this.options.sanitize ?
+                this.options.sanitize(title) :
                 title,
         );
 
@@ -286,8 +286,8 @@ export default class Popover extends BaseComponent {
 
         $[method](
             this._popoverBody,
-            this._options.html && this._options.sanitize ?
-                this._options.sanitize(content) :
+            this.options.html && this.options.sanitize ?
+                this.options.sanitize(content) :
                 content,
         );
     }
@@ -300,7 +300,7 @@ export default class Popover extends BaseComponent {
             !this._enabled ||
             $.getDataset(this._popover, 'uiAnimating') ||
             $.isConnected(this._popover) ||
-            !$.triggerOne(this._node, 'show.ui.popover')
+            !$.triggerOne(this.node, 'show.ui.popover')
         ) {
             return;
         }
@@ -310,10 +310,10 @@ export default class Popover extends BaseComponent {
         this._show();
 
         $.fadeIn(this._popover, {
-            duration: this._options.duration,
+            duration: this.options.duration,
         }).then((_) => {
             $.removeDataset(this._popover, 'uiAnimating');
-            $.triggerEvent(this._node, 'shown.ui.popover');
+            $.triggerEvent(this.node, 'shown.ui.popover');
         }).catch((_) => {
             if ($.getDataset(this._popover, 'uiAnimating') === 'in') {
                 $.removeDataset(this._popover, 'uiAnimating');

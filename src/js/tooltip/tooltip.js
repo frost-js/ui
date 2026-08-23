@@ -16,14 +16,14 @@ export default class Tooltip extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this._modal = $.closest(this._node, '.modal').shift();
+        this._modal = $.closest(this.node, '.modal').shift();
 
-        this._triggers = this._options.trigger.split(' ');
+        this._triggers = this.options.trigger.split(' ');
 
         this._render();
         this._events();
 
-        if (this._options.enable) {
+        if (this.options.enable) {
             this.enable();
         }
 
@@ -35,31 +35,31 @@ export default class Tooltip extends BaseComponent {
      */
     _events() {
         if (this._triggers.includes('hover')) {
-            $.addEvent(this._node, 'mouseover.ui.tooltip', (_) => {
+            $.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
                 this._stop();
                 this.show();
             });
 
-            $.addEvent(this._node, 'mouseout.ui.tooltip', (_) => {
+            $.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
                 this._stop();
                 this.hide({ force: false });
             });
         }
 
         if (this._triggers.includes('focus')) {
-            $.addEvent(this._node, 'focus.ui.tooltip', (_) => {
+            $.addEvent(this.node, 'focus.ui.tooltip', (_) => {
                 this._stop();
                 this.show();
             });
 
-            $.addEvent(this._node, 'blur.ui.tooltip', (_) => {
+            $.addEvent(this.node, 'blur.ui.tooltip', (_) => {
                 this._stop();
                 this.hide({ force: false });
             });
         }
 
         if (this._triggers.includes('click')) {
-            $.addEvent(this._node, 'click.ui.tooltip', (e) => {
+            $.addEvent(this.node, 'click.ui.tooltip', (e) => {
                 e.preventDefault();
 
                 this._stop();
@@ -80,9 +80,9 @@ export default class Tooltip extends BaseComponent {
      * Render the Tooltip element.
      */
     _render() {
-        this._tooltip = $.parseHTML(this._options.template).shift();
-        if (this._options.customClass) {
-            $.addClass(this._tooltip, this._options.customClass);
+        this._tooltip = $.parseHTML(this.options.template).shift();
+        if (this.options.customClass) {
+            $.addClass(this._tooltip, this.options.customClass);
         }
         this._arrow = $.findOne('.tooltip-arrow', this._tooltip);
         this._tooltipInner = $.findOne('.tooltip-inner', this._tooltip);
@@ -92,29 +92,29 @@ export default class Tooltip extends BaseComponent {
      * Update the Tooltip and append to the DOM.
      */
     _show() {
-        if (this._options.appendTo) {
-            $.append(this._options.appendTo, this._tooltip);
+        if (this.options.appendTo) {
+            $.append(this.options.appendTo, this._tooltip);
         } else {
-            $.after(this._node, this._tooltip);
+            $.after(this.node, this._tooltip);
         }
 
-        if (!this._options.noAttributes) {
+        if (!this.options.noAttributes) {
             const id = generateId(this.constructor.DATA_KEY);
             $.setAttribute(this._tooltip, { id });
-            $.setAttribute(this._node, { 'aria-described-by': id });
+            $.setAttribute(this.node, { 'aria-described-by': id });
         }
 
         this._popper = new Popper(
             this._tooltip,
             {
-                reference: this._node,
+                reference: this.node,
                 arrow: this._arrow,
-                placement: this._options.placement,
-                position: this._options.position,
-                fixed: this._options.fixed,
-                spacing: this._options.spacing,
-                minContact: this._options.minContact,
-                noAttributes: this._options.noAttributes,
+                placement: this.options.placement,
+                position: this.options.position,
+                fixed: this.options.fixed,
+                spacing: this.options.spacing,
+                minContact: this.options.minContact,
+                noAttributes: this.options.noAttributes,
             },
         );
 
@@ -160,10 +160,10 @@ export default class Tooltip extends BaseComponent {
      * Dispose the Tooltip.
      */
     dispose() {
-        if ($.hasDataset(this._node, 'uiOriginalTitle')) {
-            const title = $.getDataset(this._node, 'uiOriginalTitle');
-            $.setAttribute(this._node, { title });
-            $.removeDataset(this._node, 'uiOriginalTitle');
+        if ($.hasDataset(this.node, 'uiOriginalTitle')) {
+            const title = $.getDataset(this.node, 'uiOriginalTitle');
+            $.setAttribute(this.node, { title });
+            $.removeDataset(this.node, 'uiOriginalTitle');
         }
 
         if (this._popper) {
@@ -174,17 +174,17 @@ export default class Tooltip extends BaseComponent {
         $.remove(this._tooltip);
 
         if (this._triggers.includes('hover')) {
-            $.removeEvent(this._node, 'mouseover.ui.tooltip');
-            $.removeEvent(this._node, 'mouseout.ui.tooltip');
+            $.removeEvent(this.node, 'mouseover.ui.tooltip');
+            $.removeEvent(this.node, 'mouseout.ui.tooltip');
         }
 
         if (this._triggers.includes('focus')) {
-            $.removeEvent(this._node, 'focus.ui.tooltip');
-            $.removeEvent(this._node, 'blur.ui.tooltip');
+            $.removeEvent(this.node, 'focus.ui.tooltip');
+            $.removeEvent(this.node, 'blur.ui.tooltip');
         }
 
         if (this._triggers.includes('click')) {
-            $.removeEvent(this._node, 'click.ui.tooltip');
+            $.removeEvent(this.node, 'click.ui.tooltip');
         }
 
         if (this._modal) {
@@ -218,7 +218,7 @@ export default class Tooltip extends BaseComponent {
             (!force && !this._enabled) ||
             $.getDataset(this._tooltip, 'uiAnimating') ||
             !$.isConnected(this._tooltip) ||
-            !$.triggerOne(this._node, 'hide.ui.tooltip')
+            !$.triggerOne(this.node, 'hide.ui.tooltip')
         ) {
             return;
         }
@@ -226,7 +226,7 @@ export default class Tooltip extends BaseComponent {
         $.setDataset(this._tooltip, { uiAnimating: 'out' });
 
         $.fadeOut(this._tooltip, {
-            duration: this._options.duration,
+            duration: this.options.duration,
         }).then((_) => {
             this._popper.dispose();
             this._popper = null;
@@ -234,8 +234,8 @@ export default class Tooltip extends BaseComponent {
             $.removeClass(this._tooltip, 'show');
             $.detach(this._tooltip);
             $.removeDataset(this._tooltip, 'uiAnimating');
-            $.removeAttribute(this._node, 'aria-described-by');
-            $.triggerEvent(this._node, 'hidden.ui.tooltip');
+            $.removeAttribute(this.node, 'aria-described-by');
+            $.triggerEvent(this.node, 'hidden.ui.tooltip');
         }).catch((_) => {
             if ($.getDataset(this._tooltip, 'uiAnimating') === 'out') {
                 $.removeDataset(this._tooltip, 'uiAnimating');
@@ -247,27 +247,27 @@ export default class Tooltip extends BaseComponent {
      * Refresh the Tooltip.
      */
     refresh() {
-        if ($.hasAttribute(this._node, 'title')) {
-            const originalTitle = $.getAttribute(this._node, 'title');
-            $.setDataset(this._node, { uiOriginalTitle: originalTitle });
-            $.removeAttribute(this._node, 'title');
+        if ($.hasAttribute(this.node, 'title')) {
+            const originalTitle = $.getAttribute(this.node, 'title');
+            $.setDataset(this.node, { uiOriginalTitle: originalTitle });
+            $.removeAttribute(this.node, 'title');
         }
 
         let title = '';
-        if ($.hasDataset(this._node, 'uiTitle')) {
-            title = $.getDataset(this._node, 'uiTitle');
-        } else if (this._options.title) {
-            title = this._options.title;
-        } else if ($.hasDataset(this._node, 'uiOriginalTitle')) {
-            title = $.getDataset(this._node, 'uiOriginalTitle', title);
+        if ($.hasDataset(this.node, 'uiTitle')) {
+            title = $.getDataset(this.node, 'uiTitle');
+        } else if (this.options.title) {
+            title = this.options.title;
+        } else if ($.hasDataset(this.node, 'uiOriginalTitle')) {
+            title = $.getDataset(this.node, 'uiOriginalTitle', title);
         }
 
-        const method = this._options.html ? 'setHTML' : 'setText';
+        const method = this.options.html ? 'setHTML' : 'setText';
 
         $[method](
             this._tooltipInner,
-            this._options.html && this._options.sanitize ?
-                this._options.sanitize(title) :
+            this.options.html && this.options.sanitize ?
+                this.options.sanitize(title) :
                 title,
         );
 
@@ -282,7 +282,7 @@ export default class Tooltip extends BaseComponent {
             !this._enabled ||
             $.getDataset(this._tooltip, 'uiAnimating') ||
             $.isConnected(this._tooltip) ||
-            !$.triggerOne(this._node, 'show.ui.tooltip')
+            !$.triggerOne(this.node, 'show.ui.tooltip')
         ) {
             return;
         }
@@ -293,10 +293,10 @@ export default class Tooltip extends BaseComponent {
         this._show();
 
         $.fadeIn(this._tooltip, {
-            duration: this._options.duration,
+            duration: this.options.duration,
         }).then((_) => {
             $.removeDataset(this._tooltip, 'uiAnimating');
-            $.triggerEvent(this._node, 'shown.ui.tooltip');
+            $.triggerEvent(this.node, 'shown.ui.tooltip');
         }).catch((_) => {
             if ($.getDataset(this._tooltip, 'uiAnimating') === 'in') {
                 $.removeDataset(this._tooltip, 'uiAnimating');

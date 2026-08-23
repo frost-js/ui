@@ -16,10 +16,10 @@ export default class Popper extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this._placement = $.getDataset(this._node, 'uiPlacement');
-        this._referencePlacement = $.getDataset(this._options.reference, 'uiPlacement');
+        this._placement = $.getDataset(this.node, 'uiPlacement');
+        this._referencePlacement = $.getDataset(this.options.reference, 'uiPlacement');
 
-        $.setStyle(this._node, {
+        $.setStyle(this.node, {
             margin: 0,
             position: 'absolute',
             top: 0,
@@ -39,8 +39,8 @@ export default class Popper extends BaseComponent {
      * @param {string} position The position of the Popper.
      */
     _updateArrow(placement, position) {
-        const nodeBox = $.rect(this._node, { offset: true });
-        const referenceBox = $.rect(this._options.reference, { offset: true });
+        const nodeBox = $.rect(this.node, { offset: true });
+        const referenceBox = $.rect(this.options.reference, { offset: true });
 
         const arrowStyles = {
             position: 'absolute',
@@ -49,9 +49,9 @@ export default class Popper extends BaseComponent {
             bottom: '',
             left: '',
         };
-        $.setStyle(this._options.arrow, arrowStyles);
+        $.setStyle(this.options.arrow, arrowStyles);
 
-        const arrowBox = $.rect(this._options.arrow, { offset: true });
+        const arrowBox = $.rect(this.options.arrow, { offset: true });
 
         if (['top', 'bottom'].includes(placement)) {
             arrowStyles[placement === 'top' ? 'bottom' : 'top'] = -Math.floor(arrowBox.height);
@@ -106,7 +106,7 @@ export default class Popper extends BaseComponent {
             arrowStyles.top = $._clamp(offset, min, max);
         }
 
-        $.setStyle(this._options.arrow, arrowStyles);
+        $.setStyle(this.options.arrow, arrowStyles);
     }
 
     /**
@@ -114,16 +114,16 @@ export default class Popper extends BaseComponent {
      */
     dispose() {
         if (this._placement) {
-            $.setDataset(this._node, { uiPlacement: this._placement });
+            $.setDataset(this.node, { uiPlacement: this._placement });
         } else {
-            $.removeDataset(this._node, 'uiPlacement');
+            $.removeDataset(this.node, 'uiPlacement');
         }
 
-        if (!this._options.noAttributes) {
+        if (!this.options.noAttributes) {
             if (this._referencePlacement) {
-                $.setDataset(this._options.reference, { uiPlacement: this._referencePlacement });
+                $.setDataset(this.options.reference, { uiPlacement: this._referencePlacement });
             } else {
-                $.removeDataset(this._options.reference, 'uiPlacement');
+                $.removeDataset(this.options.reference, 'uiPlacement');
             }
         }
 
@@ -139,41 +139,41 @@ export default class Popper extends BaseComponent {
      */
     shouldUpdateForScroll(target) {
         return $._isDocument(target) ||
-            $.hasDescendent(target, this._node) ||
-            $.hasDescendent(target, this._options.reference);
+            $.hasDescendent(target, this.node) ||
+            $.hasDescendent(target, this.options.reference);
     }
 
     /**
      * Update the Popper position.
      */
     update() {
-        if (!$.isConnected(this._node) || !$.isVisible(this._node)) {
+        if (!$.isConnected(this.node) || !$.isVisible(this.node)) {
             return;
         }
 
         // reset position
         const resetStyle = {};
 
-        if (this._options.useGpu) {
+        if (this.options.useGpu) {
             resetStyle.transform = '';
         } else {
             resetStyle.marginLeft = 0;
             resetStyle.marginTop = 0;
         }
 
-        $.setStyle(this._node, resetStyle);
+        $.setStyle(this.node, resetStyle);
 
-        if (this._options.beforeUpdate) {
-            this._options.beforeUpdate(this._node, this._options.reference);
+        if (this.options.beforeUpdate) {
+            this.options.beforeUpdate(this.node, this.options.reference);
         }
 
         // calculate boxes
-        const nodeBox = $.rect(this._node, { offset: true });
-        const referenceBox = $.rect(this._options.reference, { offset: true });
+        const nodeBox = $.rect(this.node, { offset: true });
+        const referenceBox = $.rect(this.options.reference, { offset: true });
         const windowBox = getScrollContainer(window, document);
 
         const scrollParent = $.closest(
-            this._node,
+            this.node,
             (parent) =>
                 $.css(parent, 'position') === 'relative' &&
                 ['overflow', 'overflowX', 'overflowY'].some((overflow) =>
@@ -188,8 +188,8 @@ export default class Popper extends BaseComponent {
             getScrollContainer(scrollParent, scrollParent) :
             null;
 
-        const containerBox = this._options.container ?
-            $.rect(this._options.container, { offset: true }) :
+        const containerBox = this.options.container ?
+            $.rect(this.options.container, { offset: true }) :
             null;
 
         const minimumBox = {
@@ -218,24 +218,24 @@ export default class Popper extends BaseComponent {
         }
 
         // get optimal placement
-        const placement = this._options.fixed && this._options.placement !== 'auto' ?
-            this._options.placement :
+        const placement = this.options.fixed && this.options.placement !== 'auto' ?
+            this.options.placement :
             getPopperPlacement(
                 nodeBox,
                 referenceBox,
                 minimumBox,
-                this._options.placement,
-                this._options.spacing + 2,
+                this.options.placement,
+                this.options.spacing + 2,
             );
 
-        if (!this._options.noAttributes) {
-            $.setDataset(this._options.reference, { uiPlacement: placement });
+        if (!this.options.noAttributes) {
+            $.setDataset(this.options.reference, { uiPlacement: placement });
         }
 
-        $.setDataset(this._node, { uiPlacement: placement });
+        $.setDataset(this.node, { uiPlacement: placement });
 
         // get auto position
-        const position = this._options.position;
+        const position = this.options.position;
 
         // calculate actual offset
         const offset = {
@@ -245,7 +245,7 @@ export default class Popper extends BaseComponent {
 
         // offset for relative parent
         const relativeParent = $.closest(
-            this._node,
+            this.node,
             (parent) =>
                 $.css(parent, 'position') === 'relative',
             document.body,
@@ -261,13 +261,13 @@ export default class Popper extends BaseComponent {
 
         // offset for placement
         if (placement === 'top') {
-            offset.y -= Math.round(nodeBox.height) + this._options.spacing;
+            offset.y -= Math.round(nodeBox.height) + this.options.spacing;
         } else if (placement === 'right') {
-            offset.x += Math.round(referenceBox.width) + this._options.spacing;
+            offset.x += Math.round(referenceBox.width) + this.options.spacing;
         } else if (placement === 'bottom') {
-            offset.y += Math.round(referenceBox.height) + this._options.spacing;
+            offset.y += Math.round(referenceBox.height) + this.options.spacing;
         } else if (placement === 'left') {
-            offset.x -= Math.round(nodeBox.width) + this._options.spacing;
+            offset.x -= Math.round(nodeBox.width) + this.options.spacing;
         }
 
         // offset for position
@@ -290,8 +290,8 @@ export default class Popper extends BaseComponent {
         }
 
         // compensate for margins
-        offset.x -= parseInt($.css(this._node, 'marginLeft'));
-        offset.y -= parseInt($.css(this._node, 'marginTop'));
+        offset.x -= parseInt($.css(this.node, 'marginLeft'));
+        offset.y -= parseInt($.css(this.node, 'marginTop'));
 
         // corrective positioning
         if (['left', 'right'].includes(placement)) {
@@ -303,8 +303,8 @@ export default class Popper extends BaseComponent {
                 refTop -= relativeBox.top;
             }
 
-            const minSize = this._options.minContact !== null ?
-                this._options.minContact :
+            const minSize = this.options.minContact !== null ?
+                this.options.minContact :
                 Math.min(referenceBox.height, nodeBox.height);
 
             if (offsetY + nodeBox.height > minimumBox.bottom) {
@@ -333,8 +333,8 @@ export default class Popper extends BaseComponent {
                 refLeft -= relativeBox.left;
             }
 
-            const minSize = this._options.minContact !== null ?
-                this._options.minContact :
+            const minSize = this.options.minContact !== null ?
+                this.options.minContact :
                 Math.min(referenceBox.width, nodeBox.width);
 
             if (offsetX + nodeBox.width > minimumBox.right) {
@@ -367,22 +367,22 @@ export default class Popper extends BaseComponent {
 
         // update position
         const style = {};
-        if (this._options.useGpu) {
+        if (this.options.useGpu) {
             style.transform = `translate3d(${offset.x}px , ${offset.y}px , 0)`;
         } else {
             style.marginLeft = `${offset.x}px`;
             style.marginTop = `${offset.y}px`;
         }
 
-        $.setStyle(this._node, style);
+        $.setStyle(this.node, style);
 
         // update arrow
-        if (this._options.arrow) {
+        if (this.options.arrow) {
             this._updateArrow(placement, position);
         }
 
-        if (this._options.afterUpdate) {
-            this._options.afterUpdate(this._node, this._options.reference, placement, position);
+        if (this.options.afterUpdate) {
+            this.options.afterUpdate(this.node, this.options.reference, placement, position);
         }
     }
 }

@@ -21,7 +21,7 @@ export function addFocusTrap(focusTrap) {
     }
 
     $.addEvent(document, 'focusin.ui.focustrap', (e) => {
-        const activeTarget = [...focusTraps].pop()._node;
+        const activeTarget = [...focusTraps].pop().node;
 
         if (
             $._isDocument(e.target) ||

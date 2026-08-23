@@ -15,9 +15,9 @@ export default class Tab extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        const selector = getTargetSelector(this._node);
+        const selector = getTargetSelector(this.node);
         this._target = $.findOne(selector);
-        this._siblings = $.siblings(this._node);
+        this._siblings = $.siblings(this.node);
     }
 
     /**
@@ -27,13 +27,13 @@ export default class Tab extends BaseComponent {
         $.setDataset(this._target, { uiAnimating: 'out' });
 
         $.fadeOut(this._target, {
-            duration: this._options.duration,
+            duration: this.options.duration,
         }).then((_) => {
             $.removeClass(this._target, 'active');
-            $.removeClass(this._node, 'active');
+            $.removeClass(this.node, 'active');
             $.removeDataset(this._target, 'uiAnimating');
-            $.setAttribute(this._node, { 'aria-selected': false });
-            $.triggerEvent(this._node, 'hidden.ui.tab');
+            $.setAttribute(this.node, { 'aria-selected': false });
+            $.triggerEvent(this.node, 'hidden.ui.tab');
         }).catch((_) => {
             if ($.getDataset(this._target, 'uiAnimating') === 'out') {
                 $.removeDataset(this._target, 'uiAnimating');
@@ -48,14 +48,14 @@ export default class Tab extends BaseComponent {
         $.setDataset(this._target, { uiAnimating: 'in' });
 
         $.addClass(this._target, 'active');
-        $.addClass(this._node, 'active');
+        $.addClass(this.node, 'active');
 
         $.fadeIn(this._target, {
-            duration: this._options.duration,
+            duration: this.options.duration,
         }).then((_) => {
-            $.setAttribute(this._node, { 'aria-selected': true });
+            $.setAttribute(this.node, { 'aria-selected': true });
             $.removeDataset(this._target, 'uiAnimating');
-            $.triggerEvent(this._node, 'shown.ui.tab');
+            $.triggerEvent(this.node, 'shown.ui.tab');
         }).catch((_) => {
             if ($.getDataset(this._target, 'uiAnimating') === 'in') {
                 $.removeDataset(this._target, 'uiAnimating');
@@ -80,7 +80,7 @@ export default class Tab extends BaseComponent {
         if (
             $.getDataset(this._target, 'uiAnimating') ||
             !$.hasClass(this._target, 'active') ||
-            !$.triggerOne(this._node, 'hide.ui.tab')
+            !$.triggerOne(this.node, 'hide.ui.tab')
         ) {
             return;
         }
@@ -95,7 +95,7 @@ export default class Tab extends BaseComponent {
         if (
             $.getDataset(this._target, 'uiAnimating') ||
             $.hasClass(this._target, 'active') ||
-            !$.triggerOne(this._node, 'show.ui.tab')
+            !$.triggerOne(this.node, 'show.ui.tab')
         ) {
             return;
         }

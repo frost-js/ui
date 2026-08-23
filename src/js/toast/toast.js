@@ -21,9 +21,9 @@ export default class Toast extends BaseComponent {
      */
     hide() {
         if (
-            $.getDataset(this._node, 'uiAnimating') ||
-            !$.isVisible(this._node) ||
-            !$.triggerOne(this._node, 'hide.ui.toast')
+            $.getDataset(this.node, 'uiAnimating') ||
+            !$.isVisible(this.node) ||
+            !$.triggerOne(this.node, 'hide.ui.toast')
         ) {
             return;
         }
@@ -31,18 +31,18 @@ export default class Toast extends BaseComponent {
         clearTimeout(this._timer);
         this._timer = null;
 
-        $.setDataset(this._node, { uiAnimating: 'out' });
+        $.setDataset(this.node, { uiAnimating: 'out' });
 
-        $.fadeOut(this._node, {
-            duration: this._options.duration,
+        $.fadeOut(this.node, {
+            duration: this.options.duration,
         }).then((_) => {
-            $.setStyle(this._node, { display: 'none' }, null, { important: true });
-            $.removeClass(this._node, 'show');
-            $.removeDataset(this._node, 'uiAnimating');
-            $.triggerEvent(this._node, 'hidden.ui.toast');
+            $.setStyle(this.node, { display: 'none' }, null, { important: true });
+            $.removeClass(this.node, 'show');
+            $.removeDataset(this.node, 'uiAnimating');
+            $.triggerEvent(this.node, 'hidden.ui.toast');
         }).catch((_) => {
-            if ($.getDataset(this._node, 'uiAnimating') === 'out') {
-                $.removeDataset(this._node, 'uiAnimating');
+            if ($.getDataset(this.node, 'uiAnimating') === 'out') {
+                $.removeDataset(this.node, 'uiAnimating');
             }
         });
     }
@@ -52,9 +52,9 @@ export default class Toast extends BaseComponent {
      */
     show() {
         if (
-            $.getDataset(this._node, 'uiAnimating') ||
-            $.isVisible(this._node) ||
-            !$.triggerOne(this._node, 'show.ui.toast')
+            $.getDataset(this.node, 'uiAnimating') ||
+            $.isVisible(this.node) ||
+            !$.triggerOne(this.node, 'show.ui.toast')
         ) {
             return;
         }
@@ -62,28 +62,28 @@ export default class Toast extends BaseComponent {
         clearTimeout(this._timer);
         this._timer = null;
 
-        $.setDataset(this._node, { uiAnimating: 'in' });
-        $.setStyle(this._node, { display: '' });
-        $.addClass(this._node, 'show');
+        $.setDataset(this.node, { uiAnimating: 'in' });
+        $.setStyle(this.node, { display: '' });
+        $.addClass(this.node, 'show');
 
-        $.fadeIn(this._node, {
-            duration: this._options.duration,
+        $.fadeIn(this.node, {
+            duration: this.options.duration,
         }).then((_) => {
-            $.removeDataset(this._node, 'uiAnimating');
-            $.triggerEvent(this._node, 'shown.ui.toast');
+            $.removeDataset(this.node, 'uiAnimating');
+            $.triggerEvent(this.node, 'shown.ui.toast');
 
-            if (this._options.autohide) {
+            if (this.options.autohide) {
                 this._timer = setTimeout(
                     (_) => {
                         this._timer = null;
                         this.hide();
                     },
-                    this._options.delay,
+                    this.options.delay,
                 );
             }
         }).catch((_) => {
-            if ($.getDataset(this._node, 'uiAnimating') === 'in') {
-                $.removeDataset(this._node, 'uiAnimating');
+            if ($.getDataset(this.node, 'uiAnimating') === 'in') {
+                $.removeDataset(this.node, 'uiAnimating');
             }
         });
     }

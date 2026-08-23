@@ -6,6 +6,9 @@ import { getDataset } from './helpers.js';
  * @class
  */
 export default class BaseComponent {
+    #node;
+    #options;
+
     /**
      * Initialize a BaseComponent.
      * @param {HTMLElement} node The input node.
@@ -23,29 +26,45 @@ export default class BaseComponent {
      * @param {object} [options] The options to create the BaseComponent with.
      */
     constructor(node, options) {
-        this._node = node;
+        this.#node = node;
 
-        this._options = $._extend(
+        this.#options = Object.freeze($._extend(
             {},
             this.constructor.defaults,
-            getDataset(this._node),
+            getDataset(this.#node),
             options,
-        );
+        ));
 
-        $.addEvent(this._node, this.constructor.REMOVE_EVENT, (_) => {
+        $.addEvent(this.#node, this.constructor.REMOVE_EVENT, (_) => {
             this.dispose();
         });
 
-        $.setData(this._node, { [this.constructor.DATA_KEY]: this });
+        $.setData(this.#node, { [this.constructor.DATA_KEY]: this });
+    }
+
+    /**
+     * Get the component node.
+     * @return {HTMLElement} The component node.
+     */
+    get node() {
+        return this.#node;
+    }
+
+    /**
+     * Get the component options.
+     * @return {object} The component options.
+     */
+    get options() {
+        return this.#options;
     }
 
     /**
      * Dispose the BaseComponent.
      */
     dispose() {
-        $.removeEvent(this._node, this.constructor.REMOVE_EVENT);
-        $.removeData(this._node, this.constructor.DATA_KEY);
-        this._node = null;
-        this._options = null;
+        $.removeEvent(this.#node, this.constructor.REMOVE_EVENT);
+        $.removeData(this.#node, this.constructor.DATA_KEY);
+        this.#node = null;
+        this.#options = null;
     }
 }

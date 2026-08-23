@@ -11,24 +11,24 @@ export default class Alert extends BaseComponent {
      */
     close() {
         if (
-            $.getDataset(this._node, 'uiAnimating') ||
-            !$.triggerOne(this._node, 'close.ui.alert')
+            $.getDataset(this.node, 'uiAnimating') ||
+            !$.triggerOne(this.node, 'close.ui.alert')
         ) {
             return;
         }
 
-        $.setDataset(this._node, { uiAnimating: 'out' });
+        $.setDataset(this.node, { uiAnimating: 'out' });
 
-        $.fadeOut(this._node, {
-            duration: this._options.duration,
+        $.fadeOut(this.node, {
+            duration: this.options.duration,
         }).then((_) => {
-            $.detach(this._node);
-            $.removeDataset(this._node, 'uiAnimating');
-            $.triggerEvent(this._node, 'closed.ui.alert');
-            $.remove(this._node);
+            $.detach(this.node);
+            $.removeDataset(this.node, 'uiAnimating');
+            $.triggerEvent(this.node, 'closed.ui.alert');
+            $.remove(this.node);
         }).catch((_) => {
-            if ($.getDataset(this._node, 'uiAnimating') === 'out') {
-                $.removeDataset(this._node, 'uiAnimating');
+            if ($.getDataset(this.node, 'uiAnimating') === 'out') {
+                $.removeDataset(this.node, 'uiAnimating');
             }
         });
     }

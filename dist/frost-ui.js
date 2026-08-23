@@ -285,6 +285,9 @@
      * @class
      */
     class BaseComponent {
+        #node;
+        #options;
+
         /**
          * Initialize a BaseComponent.
          * @param {HTMLElement} node The input node.
@@ -302,30 +305,46 @@
          * @param {object} [options] The options to create the BaseComponent with.
          */
         constructor(node, options) {
-            this._node = node;
+            this.#node = node;
 
-            this._options = $._extend(
+            this.#options = Object.freeze($._extend(
                 {},
                 this.constructor.defaults,
-                getDataset(this._node),
+                getDataset(this.#node),
                 options,
-            );
+            ));
 
-            $.addEvent(this._node, this.constructor.REMOVE_EVENT, (_) => {
+            $.addEvent(this.#node, this.constructor.REMOVE_EVENT, (_) => {
                 this.dispose();
             });
 
-            $.setData(this._node, { [this.constructor.DATA_KEY]: this });
+            $.setData(this.#node, { [this.constructor.DATA_KEY]: this });
+        }
+
+        /**
+         * Get the component node.
+         * @return {HTMLElement} The component node.
+         */
+        get node() {
+            return this.#node;
+        }
+
+        /**
+         * Get the component options.
+         * @return {object} The component options.
+         */
+        get options() {
+            return this.#options;
         }
 
         /**
          * Dispose the BaseComponent.
          */
         dispose() {
-            $.removeEvent(this._node, this.constructor.REMOVE_EVENT);
-            $.removeData(this._node, this.constructor.DATA_KEY);
-            this._node = null;
-            this._options = null;
+            $.removeEvent(this.#node, this.constructor.REMOVE_EVENT);
+            $.removeData(this.#node, this.constructor.DATA_KEY);
+            this.#node = null;
+            this.#options = null;
         }
     }
 
@@ -339,24 +358,24 @@
          */
         close() {
             if (
-                $.getDataset(this._node, 'uiAnimating') ||
-                !$.triggerOne(this._node, 'close.ui.alert')
+                $.getDataset(this.node, 'uiAnimating') ||
+                !$.triggerOne(this.node, 'close.ui.alert')
             ) {
                 return;
             }
 
-            $.setDataset(this._node, { uiAnimating: 'out' });
+            $.setDataset(this.node, { uiAnimating: 'out' });
 
-            $.fadeOut(this._node, {
-                duration: this._options.duration,
+            $.fadeOut(this.node, {
+                duration: this.options.duration,
             }).then((_) => {
-                $.detach(this._node);
-                $.removeDataset(this._node, 'uiAnimating');
-                $.triggerEvent(this._node, 'closed.ui.alert');
-                $.remove(this._node);
+                $.detach(this.node);
+                $.removeDataset(this.node, 'uiAnimating');
+                $.triggerEvent(this.node, 'closed.ui.alert');
+                $.remove(this.node);
             }).catch((_) => {
-                if ($.getDataset(this._node, 'uiAnimating') === 'out') {
-                    $.removeDataset(this._node, 'uiAnimating');
+                if ($.getDataset(this.node, 'uiAnimating') === 'out') {
+                    $.removeDataset(this.node, 'uiAnimating');
                 }
             });
         }
@@ -388,10 +407,10 @@
          * Toggle the Button.
          */
         toggle() {
-            $.toggleClass(this._node, 'active');
+            $.toggleClass(this.node, 'active');
 
-            const active = $.hasClass(this._node, 'active');
-            $.setAttribute(this._node, { 'aria-pressed': active });
+            const active = $.hasClass(this.node, 'active');
+            $.setAttribute(this.node, { 'aria-pressed': active });
         }
     }
 
@@ -470,7 +489,7 @@
         constructor(node, options) {
             super(node, options);
 
-            this._items = $.find('.carousel-item', this._node);
+            this._items = $.find('.carousel-item', this.node);
 
             this._index = this._items.findIndex((item) =>
                 $.hasClass(item, 'active'),
@@ -478,7 +497,7 @@
 
             this._events();
 
-            if (this._options.ride === 'carousel') {
+            if (this.options.ride === 'carousel') {
                 this._setTimer();
             }
         }
@@ -487,8 +506,8 @@
          * Attach events for the Carousel.
          */
         _events() {
-            if (this._options.keyboard) {
-                $.addEvent(this._node, 'keydown.ui.carousel', (e) => {
+            if (this.options.keyboard) {
+                $.addEvent(this.node, 'keydown.ui.carousel', (e) => {
                     const target = e.target;
                     if ($.is(target, 'input, select')) {
                         return;
@@ -507,23 +526,23 @@
                 });
             }
 
-            if (this._options.pause) {
-                $.addEvent(this._node, 'mouseenter.ui.carousel', (_) => {
+            if (this.options.pause) {
+                $.addEvent(this.node, 'mouseenter.ui.carousel', (_) => {
                     this._mousePaused = true;
                     this.pause();
                 });
 
-                $.addEvent(this._node, 'mouseleave.ui.carousel', (_) => {
+                $.addEvent(this.node, 'mouseleave.ui.carousel', (_) => {
                     this._mousePaused = false;
                     this._paused = false;
 
-                    if (!$.getDataset(this._node, 'uiSliding')) {
+                    if (!$.getDataset(this.node, 'uiSliding')) {
                         this._setTimer();
                     }
                 });
             }
 
-            if (this._options.swipe) {
+            if (this.options.swipe) {
                 let startX;
                 let index = null;
                 let progress;
@@ -532,12 +551,12 @@
                 const downEvent = (e) => {
                     if (
                         e.button ||
-                        $.getDataset(this._node, 'uiSliding') ||
+                        $.getDataset(this.node, 'uiSliding') ||
                         (
                             !$.is(e.target, ':disabled, .disabled') &&
                             (
                                 $.is(e.target, '[data-ui-slide-to], [data-ui-slide], a, button, input, textarea, select') ||
-                                $.closest(e.target, '[data-ui-slide], a, button', (parent) => $.isSame(parent, this._node) || $.is(parent, ':disabled, .disabled')).length
+                                $.closest(e.target, '[data-ui-slide], a, button', (parent) => $.isSame(parent, this.node) || $.is(parent, ':disabled, .disabled')).length
                             )
                         )
                     ) {
@@ -545,7 +564,7 @@
                     }
 
                     this.pause();
-                    $.setDataset(this._node, { uiSliding: true });
+                    $.setDataset(this.node, { uiSliding: true });
 
                     const pos = getPosition(e);
                     startX = pos.x;
@@ -554,11 +573,11 @@
                 const moveEvent = (e) => {
                     const pos = getPosition(e);
                     const currentX = pos.x;
-                    const width = $.width(this._node);
+                    const width = $.width(this.node);
                     const scrollX = width / 2;
 
                     let mouseDiffX = currentX - startX;
-                    if (!this._options.wrap) {
+                    if (!this.options.wrap) {
                         mouseDiffX = $._clamp(
                             mouseDiffX,
                             -(this._items.length - 1 - this._index) * scrollX,
@@ -609,7 +628,7 @@
                 const upEvent = (_) => {
                     if (index === null || index === this._index) {
                         this._paused = false;
-                        $.removeDataset(this._node, 'uiSliding');
+                        $.removeDataset(this.node, 'uiSliding');
                         this._setTimer();
                         return;
                     }
@@ -643,22 +662,22 @@
                             }
                         },
                         {
-                            duration: this._options.transition * progressRemaining,
+                            duration: this.options.transition * progressRemaining,
                         },
                     ).then((_) => {
                         this._updateIndicators();
-                        $.removeDataset(this._node, 'uiSliding');
+                        $.removeDataset(this.node, 'uiSliding');
 
                         this._paused = false;
                         this._setTimer();
                     }).catch((_) => {
-                        $.removeDataset(this._node, 'uiSliding');
+                        $.removeDataset(this.node, 'uiSliding');
                     });
                 };
 
                 const dragEvent = $.mouseDragFactory(downEvent, moveEvent, upEvent);
 
-                $.addEvent(this._node, 'mousedown.ui.carousel touchstart.ui.carousel', dragEvent);
+                $.addEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel', dragEvent);
             }
         }
 
@@ -703,7 +722,7 @@
                     this._timer = null;
                     this.cycle();
                 },
-                interval || this._options.interval,
+                interval || this.options.interval,
             );
         }
 
@@ -712,13 +731,13 @@
          * @param {number} index The item index to cycle to.
          */
         _show(index) {
-            if ($.getDataset(this._node, 'uiSliding')) {
+            if ($.getDataset(this.node, 'uiSliding')) {
                 return;
             }
 
             index = parseInt(index);
 
-            if (!this._options.wrap &&
+            if (!this.options.wrap &&
                 (
                     index < 0 ||
                     index > this._items.length - 1
@@ -743,11 +762,11 @@
                 to: index,
             };
 
-            if (!$.triggerOne(this._node, 'slide.ui.carousel', { data: eventData })) {
+            if (!$.triggerOne(this.node, 'slide.ui.carousel', { data: eventData })) {
                 return;
             }
 
-            $.setDataset(this._node, { uiSliding: true });
+            $.setDataset(this.node, { uiSliding: true });
             this.pause();
 
             const oldIndex = this._setIndex(index);
@@ -762,17 +781,17 @@
                     this._update(node, this._items[oldIndex], progress, { direction });
                 },
                 {
-                    duration: this._options.transition,
+                    duration: this.options.transition,
                 },
             ).then((_) => {
                 this._updateIndicators();
-                $.removeDataset(this._node, 'uiSliding');
-                $.triggerEvent(this._node, 'slid.ui.carousel', { data: eventData });
+                $.removeDataset(this.node, 'uiSliding');
+                $.triggerEvent(this.node, 'slid.ui.carousel', { data: eventData });
 
                 this._paused = false;
                 this._setTimer();
             }).catch((_) => {
-                $.removeDataset(this._node, 'uiSliding');
+                $.removeDataset(this.node, 'uiSliding');
             });
         }
 
@@ -819,8 +838,8 @@
          * Update the carousel indicators.
          */
         _updateIndicators() {
-            const oldIndicator = $.find('.active[data-ui-slide-to]', this._node);
-            const newIndicator = $.find('[data-ui-slide-to="' + this._index + '"]', this._node);
+            const oldIndicator = $.find('.active[data-ui-slide-to]', this.node);
+            const newIndicator = $.find('[data-ui-slide-to="' + this._index + '"]', this.node);
             $.removeClass(oldIndicator, 'active');
             $.addClass(newIndicator, 'active');
         }
@@ -844,17 +863,17 @@
             clearTimeout(this._timer);
             this._timer = null;
 
-            if (this._options.keyboard) {
-                $.removeEvent(this._node, 'keydown.ui.carousel');
+            if (this.options.keyboard) {
+                $.removeEvent(this.node, 'keydown.ui.carousel');
             }
 
-            if (this._options.pause) {
-                $.removeEvent(this._node, 'mouseenter.ui.carousel');
-                $.removeEvent(this._node, 'mouseleave.ui.carousel');
+            if (this.options.pause) {
+                $.removeEvent(this.node, 'mouseenter.ui.carousel');
+                $.removeEvent(this.node, 'mouseleave.ui.carousel');
             }
 
-            if (this._options.swipe) {
-                $.removeEvent(this._node, 'mousedown.ui.carousel touchstart.ui.carousel');
+            if (this.options.swipe) {
+                $.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
             }
 
             this._items = null;
@@ -987,11 +1006,11 @@
             this._triggers = $.find('[data-ui-toggle="collapse"]')
                 .filter((trigger) => {
                     const selector = getTargetSelector(trigger);
-                    return selector && $.is(this._node, selector);
+                    return selector && $.is(this.node, selector);
                 });
 
-            if (this._options.parent) {
-                this._parent = $.closest(this._node, this._options.parent).shift();
+            if (this.options.parent) {
+                this._parent = $.closest(this.node, this.options.parent).shift();
             }
         }
 
@@ -1010,29 +1029,29 @@
          */
         hide() {
             if (
-                $.getDataset(this._node, 'uiAnimating') ||
-                !$.hasClass(this._node, 'show') ||
-                !$.triggerOne(this._node, 'hide.ui.collapse')
+                $.getDataset(this.node, 'uiAnimating') ||
+                !$.hasClass(this.node, 'show') ||
+                !$.triggerOne(this.node, 'hide.ui.collapse')
             ) {
                 return;
             }
 
-            $.setDataset(this._node, { uiAnimating: 'out' });
+            $.setDataset(this.node, { uiAnimating: 'out' });
             $.addClass(this._triggers, 'collapsed');
             $.addClass(this._triggers, 'collapsing');
 
-            $.squeezeOut(this._node, {
-                direction: this._options.direction,
-                duration: this._options.duration,
+            $.squeezeOut(this.node, {
+                direction: this.options.direction,
+                duration: this.options.duration,
             }).then((_) => {
-                $.removeClass(this._node, 'show');
+                $.removeClass(this.node, 'show');
                 $.removeClass(this._triggers, 'collapsing');
                 $.setAttribute(this._triggers, { 'aria-expanded': false });
-                $.removeDataset(this._node, 'uiAnimating');
-                $.triggerEvent(this._node, 'hidden.ui.collapse');
+                $.removeDataset(this.node, 'uiAnimating');
+                $.triggerEvent(this.node, 'hidden.ui.collapse');
             }).catch((_) => {
-                if ($.getDataset(this._node, 'uiAnimating') === 'out') {
-                    $.removeDataset(this._node, 'uiAnimating');
+                if ($.getDataset(this.node, 'uiAnimating') === 'out') {
+                    $.removeDataset(this.node, 'uiAnimating');
                 }
             });
         }
@@ -1042,8 +1061,8 @@
          */
         show() {
             if (
-                $.getDataset(this._node, 'uiAnimating') ||
-                $.hasClass(this._node, 'show')
+                $.getDataset(this.node, 'uiAnimating') ||
+                $.hasClass(this.node, 'show')
             ) {
                 return;
             }
@@ -1063,7 +1082,7 @@
                 }
             }
 
-            if (!$.triggerOne(this._node, 'show.ui.collapse')) {
+            if (!$.triggerOne(this.node, 'show.ui.collapse')) {
                 return;
             }
 
@@ -1071,22 +1090,22 @@
                 collapse.hide();
             }
 
-            $.setDataset(this._node, { uiAnimating: 'in' });
-            $.addClass(this._node, 'show');
+            $.setDataset(this.node, { uiAnimating: 'in' });
+            $.addClass(this.node, 'show');
             $.removeClass(this._triggers, 'collapsed');
             $.addClass(this._triggers, 'collapsing');
 
-            $.squeezeIn(this._node, {
-                direction: this._options.direction,
-                duration: this._options.duration,
+            $.squeezeIn(this.node, {
+                direction: this.options.direction,
+                duration: this.options.duration,
             }).then((_) => {
                 $.removeClass(this._triggers, 'collapsing');
                 $.setAttribute(this._triggers, { 'aria-expanded': true });
-                $.removeDataset(this._node, 'uiAnimating');
-                $.triggerEvent(this._node, 'shown.ui.collapse');
+                $.removeDataset(this.node, 'uiAnimating');
+                $.triggerEvent(this.node, 'shown.ui.collapse');
             }).catch((_) => {
-                if ($.getDataset(this._node, 'uiAnimating') === 'in') {
-                    $.removeDataset(this._node, 'uiAnimating');
+                if ($.getDataset(this.node, 'uiAnimating') === 'in') {
+                    $.removeDataset(this.node, 'uiAnimating');
                 }
             });
         }
@@ -1095,7 +1114,7 @@
          * Toggle the element.
          */
         toggle() {
-            if ($.hasClass(this._node, 'show')) {
+            if ($.hasClass(this.node, 'show')) {
                 this.hide();
             } else {
                 this.show();
@@ -1292,10 +1311,10 @@
         constructor(node, options) {
             super(node, options);
 
-            this._placement = $.getDataset(this._node, 'uiPlacement');
-            this._referencePlacement = $.getDataset(this._options.reference, 'uiPlacement');
+            this._placement = $.getDataset(this.node, 'uiPlacement');
+            this._referencePlacement = $.getDataset(this.options.reference, 'uiPlacement');
 
-            $.setStyle(this._node, {
+            $.setStyle(this.node, {
                 margin: 0,
                 position: 'absolute',
                 top: 0,
@@ -1315,8 +1334,8 @@
          * @param {string} position The position of the Popper.
          */
         _updateArrow(placement, position) {
-            const nodeBox = $.rect(this._node, { offset: true });
-            const referenceBox = $.rect(this._options.reference, { offset: true });
+            const nodeBox = $.rect(this.node, { offset: true });
+            const referenceBox = $.rect(this.options.reference, { offset: true });
 
             const arrowStyles = {
                 position: 'absolute',
@@ -1325,9 +1344,9 @@
                 bottom: '',
                 left: '',
             };
-            $.setStyle(this._options.arrow, arrowStyles);
+            $.setStyle(this.options.arrow, arrowStyles);
 
-            const arrowBox = $.rect(this._options.arrow, { offset: true });
+            const arrowBox = $.rect(this.options.arrow, { offset: true });
 
             if (['top', 'bottom'].includes(placement)) {
                 arrowStyles[placement === 'top' ? 'bottom' : 'top'] = -Math.floor(arrowBox.height);
@@ -1382,7 +1401,7 @@
                 arrowStyles.top = $._clamp(offset, min, max);
             }
 
-            $.setStyle(this._options.arrow, arrowStyles);
+            $.setStyle(this.options.arrow, arrowStyles);
         }
 
         /**
@@ -1390,16 +1409,16 @@
          */
         dispose() {
             if (this._placement) {
-                $.setDataset(this._node, { uiPlacement: this._placement });
+                $.setDataset(this.node, { uiPlacement: this._placement });
             } else {
-                $.removeDataset(this._node, 'uiPlacement');
+                $.removeDataset(this.node, 'uiPlacement');
             }
 
-            if (!this._options.noAttributes) {
+            if (!this.options.noAttributes) {
                 if (this._referencePlacement) {
-                    $.setDataset(this._options.reference, { uiPlacement: this._referencePlacement });
+                    $.setDataset(this.options.reference, { uiPlacement: this._referencePlacement });
                 } else {
-                    $.removeDataset(this._options.reference, 'uiPlacement');
+                    $.removeDataset(this.options.reference, 'uiPlacement');
                 }
             }
 
@@ -1415,41 +1434,41 @@
          */
         shouldUpdateForScroll(target) {
             return $._isDocument(target) ||
-                $.hasDescendent(target, this._node) ||
-                $.hasDescendent(target, this._options.reference);
+                $.hasDescendent(target, this.node) ||
+                $.hasDescendent(target, this.options.reference);
         }
 
         /**
          * Update the Popper position.
          */
         update() {
-            if (!$.isConnected(this._node) || !$.isVisible(this._node)) {
+            if (!$.isConnected(this.node) || !$.isVisible(this.node)) {
                 return;
             }
 
             // reset position
             const resetStyle = {};
 
-            if (this._options.useGpu) {
+            if (this.options.useGpu) {
                 resetStyle.transform = '';
             } else {
                 resetStyle.marginLeft = 0;
                 resetStyle.marginTop = 0;
             }
 
-            $.setStyle(this._node, resetStyle);
+            $.setStyle(this.node, resetStyle);
 
-            if (this._options.beforeUpdate) {
-                this._options.beforeUpdate(this._node, this._options.reference);
+            if (this.options.beforeUpdate) {
+                this.options.beforeUpdate(this.node, this.options.reference);
             }
 
             // calculate boxes
-            const nodeBox = $.rect(this._node, { offset: true });
-            const referenceBox = $.rect(this._options.reference, { offset: true });
+            const nodeBox = $.rect(this.node, { offset: true });
+            const referenceBox = $.rect(this.options.reference, { offset: true });
             const windowBox = getScrollContainer(window, document);
 
             const scrollParent = $.closest(
-                this._node,
+                this.node,
                 (parent) =>
                     $.css(parent, 'position') === 'relative' &&
                     ['overflow', 'overflowX', 'overflowY'].some((overflow) =>
@@ -1464,8 +1483,8 @@
                 getScrollContainer(scrollParent, scrollParent) :
                 null;
 
-            const containerBox = this._options.container ?
-                $.rect(this._options.container, { offset: true }) :
+            const containerBox = this.options.container ?
+                $.rect(this.options.container, { offset: true }) :
                 null;
 
             const minimumBox = {
@@ -1494,24 +1513,24 @@
             }
 
             // get optimal placement
-            const placement = this._options.fixed && this._options.placement !== 'auto' ?
-                this._options.placement :
+            const placement = this.options.fixed && this.options.placement !== 'auto' ?
+                this.options.placement :
                 getPopperPlacement(
                     nodeBox,
                     referenceBox,
                     minimumBox,
-                    this._options.placement,
-                    this._options.spacing + 2,
+                    this.options.placement,
+                    this.options.spacing + 2,
                 );
 
-            if (!this._options.noAttributes) {
-                $.setDataset(this._options.reference, { uiPlacement: placement });
+            if (!this.options.noAttributes) {
+                $.setDataset(this.options.reference, { uiPlacement: placement });
             }
 
-            $.setDataset(this._node, { uiPlacement: placement });
+            $.setDataset(this.node, { uiPlacement: placement });
 
             // get auto position
-            const position = this._options.position;
+            const position = this.options.position;
 
             // calculate actual offset
             const offset = {
@@ -1521,7 +1540,7 @@
 
             // offset for relative parent
             const relativeParent = $.closest(
-                this._node,
+                this.node,
                 (parent) =>
                     $.css(parent, 'position') === 'relative',
                 document.body,
@@ -1537,13 +1556,13 @@
 
             // offset for placement
             if (placement === 'top') {
-                offset.y -= Math.round(nodeBox.height) + this._options.spacing;
+                offset.y -= Math.round(nodeBox.height) + this.options.spacing;
             } else if (placement === 'right') {
-                offset.x += Math.round(referenceBox.width) + this._options.spacing;
+                offset.x += Math.round(referenceBox.width) + this.options.spacing;
             } else if (placement === 'bottom') {
-                offset.y += Math.round(referenceBox.height) + this._options.spacing;
+                offset.y += Math.round(referenceBox.height) + this.options.spacing;
             } else if (placement === 'left') {
-                offset.x -= Math.round(nodeBox.width) + this._options.spacing;
+                offset.x -= Math.round(nodeBox.width) + this.options.spacing;
             }
 
             // offset for position
@@ -1566,8 +1585,8 @@
             }
 
             // compensate for margins
-            offset.x -= parseInt($.css(this._node, 'marginLeft'));
-            offset.y -= parseInt($.css(this._node, 'marginTop'));
+            offset.x -= parseInt($.css(this.node, 'marginLeft'));
+            offset.y -= parseInt($.css(this.node, 'marginTop'));
 
             // corrective positioning
             if (['left', 'right'].includes(placement)) {
@@ -1579,8 +1598,8 @@
                     refTop -= relativeBox.top;
                 }
 
-                const minSize = this._options.minContact !== null ?
-                    this._options.minContact :
+                const minSize = this.options.minContact !== null ?
+                    this.options.minContact :
                     Math.min(referenceBox.height, nodeBox.height);
 
                 if (offsetY + nodeBox.height > minimumBox.bottom) {
@@ -1609,8 +1628,8 @@
                     refLeft -= relativeBox.left;
                 }
 
-                const minSize = this._options.minContact !== null ?
-                    this._options.minContact :
+                const minSize = this.options.minContact !== null ?
+                    this.options.minContact :
                     Math.min(referenceBox.width, nodeBox.width);
 
                 if (offsetX + nodeBox.width > minimumBox.right) {
@@ -1643,22 +1662,22 @@
 
             // update position
             const style = {};
-            if (this._options.useGpu) {
+            if (this.options.useGpu) {
                 style.transform = `translate3d(${offset.x}px , ${offset.y}px , 0)`;
             } else {
                 style.marginLeft = `${offset.x}px`;
                 style.marginTop = `${offset.y}px`;
             }
 
-            $.setStyle(this._node, style);
+            $.setStyle(this.node, style);
 
             // update arrow
-            if (this._options.arrow) {
+            if (this.options.arrow) {
                 this._updateArrow(placement, position);
             }
 
-            if (this._options.afterUpdate) {
-                this._options.afterUpdate(this._node, this._options.reference, placement, position);
+            if (this.options.afterUpdate) {
+                this.options.afterUpdate(this.node, this.options.reference, placement, position);
             }
         }
     }
@@ -1668,6 +1687,8 @@
      * @class
      */
     class Dropdown extends BaseComponent {
+        #display;
+
         /**
          * New Dropdown constructor.
          * @param {HTMLElement} node The input node.
@@ -1676,21 +1697,22 @@
         constructor(node, options) {
             super(node, options);
 
-            this._menuNode = $.next(this._node, '.dropdown-menu').shift();
+            this.#display = this.options.display;
+            this._menuNode = $.next(this.node, '.dropdown-menu').shift();
 
-            if (this._options.reference) {
-                if (this._options.reference === 'parent') {
-                    this._referenceNode = $.parent(this._node).shift();
+            if (this.options.reference) {
+                if (this.options.reference === 'parent') {
+                    this._referenceNode = $.parent(this.node).shift();
                 } else {
-                    this._referenceNode = $.findOne(this._options.reference);
+                    this._referenceNode = $.findOne(this.options.reference);
                 }
             } else {
-                this._referenceNode = this._node;
+                this._referenceNode = this.node;
             }
 
             // Attach popper
-            if (this._options.display !== 'static' && $.closest(this._node, '.navbar-nav').length) {
-                this._options.display = 'static';
+            if (this.#display !== 'static' && $.closest(this.node, '.navbar-nav').length) {
+                this.#display = 'static';
             }
         }
 
@@ -1733,7 +1755,7 @@
             if (
                 $.getDataset(this._menuNode, 'uiAnimating') ||
                 !$.hasClass(this._menuNode, 'show') ||
-                !$.triggerOne(this._node, 'hide.ui.dropdown')
+                !$.triggerOne(this.node, 'hide.ui.dropdown')
             ) {
                 return;
             }
@@ -1741,7 +1763,7 @@
             $.setDataset(this._menuNode, { uiAnimating: 'out' });
 
             $.fadeOut(this._menuNode, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }).then((_) => {
                 if (this._popper) {
                     this._popper.dispose();
@@ -1749,9 +1771,9 @@
                 }
 
                 $.removeClass(this._menuNode, 'show');
-                $.setAttribute(this._node, { 'aria-expanded': false });
+                $.setAttribute(this.node, { 'aria-expanded': false });
                 $.removeDataset(this._menuNode, 'uiAnimating');
-                $.triggerEvent(this._node, 'hidden.ui.dropdown');
+                $.triggerEvent(this.node, 'hidden.ui.dropdown');
             }).catch((_) => {
                 if ($.getDataset(this._menuNode, 'uiAnimating') === 'out') {
                     $.removeDataset(this._menuNode, 'uiAnimating');
@@ -1766,10 +1788,10 @@
          */
         shouldClose(target) {
             const hasDescendent = this.containsMenuTarget(target);
-            const autoClose = this._options.autoClose;
+            const autoClose = this.options.autoClose;
 
             return !(
-                $.isSame(this._node, target) ||
+                $.isSame(this.node, target) ||
                 (
                     hasDescendent &&
                     (
@@ -1796,7 +1818,7 @@
             if (
                 $.getDataset(this._menuNode, 'uiAnimating') ||
                 $.hasClass(this._menuNode, 'show') ||
-                !$.triggerOne(this._node, 'show.ui.dropdown')
+                !$.triggerOne(this.node, 'show.ui.dropdown')
             ) {
                 return;
             }
@@ -1804,14 +1826,14 @@
             $.setDataset(this._menuNode, { uiAnimating: 'in' });
             $.addClass(this._menuNode, 'show');
 
-            if (this._options.display === 'dynamic') {
+            if (this.#display === 'dynamic') {
                 this._popper = new Popper(this._menuNode, {
                     reference: this._referenceNode,
-                    placement: this._options.placement,
-                    position: this._options.position,
-                    fixed: this._options.fixed,
-                    spacing: this._options.spacing,
-                    minContact: this._options.minContact,
+                    placement: this.options.placement,
+                    position: this.options.position,
+                    fixed: this.options.fixed,
+                    spacing: this.options.spacing,
+                    minContact: this.options.minContact,
                 });
             }
 
@@ -1820,11 +1842,11 @@
             });
 
             $.fadeIn(this._menuNode, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }).then((_) => {
-                $.setAttribute(this._node, { 'aria-expanded': true });
+                $.setAttribute(this.node, { 'aria-expanded': true });
                 $.removeDataset(this._menuNode, 'uiAnimating');
-                $.triggerEvent(this._node, 'shown.ui.dropdown');
+                $.triggerEvent(this.node, 'shown.ui.dropdown');
             }).catch((_) => {
                 if ($.getDataset(this._menuNode, 'uiAnimating') === 'in') {
                     $.removeDataset(this._menuNode, 'uiAnimating');
@@ -1997,7 +2019,7 @@
         }
 
         $.addEvent(document, 'focusin.ui.focustrap', (e) => {
-            const activeTarget = [...focusTraps].pop()._node;
+            const activeTarget = [...focusTraps].pop().node;
 
             if (
                 $._isDocument(e.target) ||
@@ -2064,8 +2086,8 @@
 
             addFocusTrap(this);
 
-            if (this._options.autoFocus) {
-                $.focus(this._node);
+            if (this.options.autoFocus) {
+                $.focus(this.node);
             }
 
             this._active = true;
@@ -2114,14 +2136,14 @@
         constructor(node, options) {
             super(node, options);
 
-            this._dialog = $.child(this._node, '.modal-dialog').shift();
+            this._dialog = $.child(this.node, '.modal-dialog').shift();
 
-            if (this._options.show) {
+            if (this.options.show) {
                 this.show();
             }
 
-            if (this._options.focus) {
-                this._focusTrap = FocusTrap.init(this._node);
+            if (this.options.focus) {
+                this._focusTrap = FocusTrap.init(this.node);
             }
         }
 
@@ -2177,13 +2199,13 @@
          */
         handleBackdrop(target) {
             if (
-                !this._options.backdrop ||
-                (this._node !== target && $.hasDescendent(this._node, target))
+                !this.options.backdrop ||
+                (this.node !== target && $.hasDescendent(this.node, target))
             ) {
                 return;
             }
 
-            if (this._options.backdrop === 'static') {
+            if (this.options.backdrop === 'static') {
                 this._zoom();
                 return;
             }
@@ -2195,11 +2217,11 @@
          * Handle an escape key interaction.
          */
         handleEscape() {
-            if (!this._options.keyboard) {
+            if (!this.options.keyboard) {
                 return;
             }
 
-            if (this._options.backdrop === 'static') {
+            if (this.options.backdrop === 'static') {
                 this._zoom();
                 return;
             }
@@ -2213,8 +2235,8 @@
         hide() {
             if (
                 $.getDataset(this._dialog, 'uiAnimating') ||
-                !$.hasClass(this._node, 'show') ||
-                !$.triggerOne(this._node, 'hide.ui.modal')
+                !$.hasClass(this.node, 'show') ||
+                !$.triggerOne(this.node, 'hide.ui.modal')
             ) {
                 return;
             }
@@ -2230,17 +2252,17 @@
 
             Promise.all([
                 $.fadeOut(this._dialog, {
-                    duration: this._options.duration,
+                    duration: this.options.duration,
                 }),
                 $.dropOut(this._dialog, {
-                    duration: this._options.duration,
+                    duration: this.options.duration,
                     direction: 'top',
                 }),
                 $.fadeOut(this._backdrop, {
-                    duration: this._options.duration,
+                    duration: this.options.duration,
                 }),
             ]).then((_) => {
-                $.setAttribute(this._node, {
+                $.setAttribute(this.node, {
                     'aria-hidden': true,
                     'aria-modal': false,
                 });
@@ -2249,14 +2271,14 @@
                 this._scrollNodes = [];
 
                 if (stackSize) {
-                    $.setStyle(this._node, { zIndex: '' });
+                    $.setStyle(this.node, { zIndex: '' });
                 } else {
                     $.removeClass(document.body, 'modal-open');
                 }
 
-                $.removeClass(this._node, 'show');
+                $.removeClass(this.node, 'show');
 
-                if (this._options.backdrop) {
+                if (this.options.backdrop) {
                     $.remove(this._backdrop);
                     this._backdrop = null;
                 }
@@ -2267,7 +2289,7 @@
                 }
 
                 $.removeDataset(this._dialog, 'uiAnimating');
-                $.triggerEvent(this._node, 'hidden.ui.modal');
+                $.triggerEvent(this.node, 'hidden.ui.modal');
             }).catch((_) => {
                 if ($.getDataset(this._dialog, 'uiAnimating') === 'out') {
                     $.removeDataset(this._dialog, 'uiAnimating');
@@ -2286,8 +2308,8 @@
 
             if (
                 $.getDataset(this._dialog, 'uiAnimating') ||
-                $.hasClass(this._node, 'show') ||
-                !$.triggerOne(this._node, 'show.ui.modal', { data: { relatedTarget: this._activeTarget } })
+                $.hasClass(this.node, 'show') ||
+                !$.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this._activeTarget } })
             ) {
                 return;
             }
@@ -2301,11 +2323,11 @@
             this._scrollNodes = [this._dialog];
 
             if (stackSize) {
-                let zIndex = $.css(this._node, 'zIndex');
+                let zIndex = $.css(this.node, 'zIndex');
                 zIndex = parseInt(zIndex);
                 zIndex += stackSize * 20;
 
-                $.setStyle(this._node, { zIndex });
+                $.setStyle(this.node, { zIndex });
             } else if (!$.findOne('.offcanvas.show')) {
                 this._scrollNodes.push(document.body);
                 this._scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
@@ -2315,9 +2337,9 @@
 
             $.addClass(document.body, 'modal-open');
 
-            $.addClass(this._node, 'show');
+            $.addClass(this.node, 'show');
 
-            if (this._options.backdrop) {
+            if (this.options.backdrop) {
                 this._backdrop = $.create('div', {
                     class: 'modal-backdrop',
                 });
@@ -2335,17 +2357,17 @@
 
             Promise.all([
                 $.fadeIn(this._dialog, {
-                    duration: this._options.duration,
+                    duration: this.options.duration,
                 }),
                 $.dropIn(this._dialog, {
-                    duration: this._options.duration,
+                    duration: this.options.duration,
                     direction: 'top',
                 }),
                 $.fadeIn(this._backdrop, {
-                    duration: this._options.duration,
+                    duration: this.options.duration,
                 }),
             ]).then((_) => {
-                $.setAttribute(this._node, {
+                $.setAttribute(this.node, {
                     'aria-hidden': false,
                     'aria-modal': true,
                 });
@@ -2355,7 +2377,7 @@
                 }
 
                 $.removeDataset(this._dialog, 'uiAnimating');
-                $.triggerEvent(this._node, 'shown.ui.modal');
+                $.triggerEvent(this.node, 'shown.ui.modal');
             }).catch((_) => {
                 if ($.getDataset(this._dialog, 'uiAnimating') === 'in') {
                     $.removeDataset(this._dialog, 'uiAnimating');
@@ -2367,7 +2389,7 @@
          * Toggle the Modal.
          */
         toggle() {
-            if ($.hasClass(this._node, 'show')) {
+            if ($.hasClass(this.node, 'show')) {
                 this.hide();
             } else {
                 this.show();
@@ -2506,8 +2528,8 @@
         constructor(node, options) {
             super(node, options);
 
-            if (!this._options.scroll || this._options.backdrop) {
-                this._focusTrap = FocusTrap.init(this._node);
+            if (!this.options.scroll || this.options.backdrop) {
+                this._focusTrap = FocusTrap.init(this.node);
             }
         }
 
@@ -2532,10 +2554,10 @@
          */
         handleBackdrop(target) {
             if (
-                !this._options.backdrop ||
-                this._options.backdrop === 'static' ||
-                $.isSame(this._node, target) ||
-                $.hasDescendent(this._node, target)
+                !this.options.backdrop ||
+                this.options.backdrop === 'static' ||
+                $.isSame(this.node, target) ||
+                $.hasDescendent(this.node, target)
             ) {
                 return;
             }
@@ -2547,7 +2569,7 @@
          * Handle an escape key interaction.
          */
         handleEscape() {
-            if (this._options.keyboard) {
+            if (this.options.keyboard) {
                 this.hide();
             }
         }
@@ -2557,40 +2579,40 @@
          */
         hide() {
             if (
-                $.getDataset(this._node, 'uiAnimating') ||
-                !$.hasClass(this._node, 'show') ||
-                !$.triggerOne(this._node, 'hide.ui.offcanvas')
+                $.getDataset(this.node, 'uiAnimating') ||
+                !$.hasClass(this.node, 'show') ||
+                !$.triggerOne(this.node, 'hide.ui.offcanvas')
             ) {
                 return;
             }
 
-            $.setDataset(this._node, { uiAnimating: 'out' });
+            $.setDataset(this.node, { uiAnimating: 'out' });
 
             if (this._focusTrap) {
                 this._focusTrap.deactivate();
             }
 
             Promise.all([
-                $.fadeOut(this._node, {
-                    duration: this._options.duration,
+                $.fadeOut(this.node, {
+                    duration: this.options.duration,
                 }),
-                $.dropOut(this._node, {
-                    duration: this._options.duration,
-                    direction: getDirection(this._node),
+                $.dropOut(this.node, {
+                    duration: this.options.duration,
+                    direction: getDirection(this.node),
                 }),
             ]).then((_) => {
-                $.setAttribute(this._node, {
+                $.setAttribute(this.node, {
                     'aria-hidden': true,
                     'aria-modal': false,
                 });
 
-                $.removeClass(this._node, 'show');
+                $.removeClass(this.node, 'show');
 
-                if (this._options.backdrop) {
+                if (this.options.backdrop) {
                     $.removeClass(document.body, 'offcanvas-backdrop');
                 }
 
-                if (!this._options.scroll) {
+                if (!this.options.scroll) {
                     resetScrollPadding(this._scrollNodes);
                     this._scrollNodes = [];
 
@@ -2602,11 +2624,11 @@
                     this._activeTarget = null;
                 }
 
-                $.removeDataset(this._node, 'uiAnimating');
-                $.triggerEvent(this._node, 'hidden.ui.offcanvas');
+                $.removeDataset(this.node, 'uiAnimating');
+                $.triggerEvent(this.node, 'hidden.ui.offcanvas');
             }).catch((_) => {
-                if ($.getDataset(this._node, 'uiAnimating') === 'out') {
-                    $.removeDataset(this._node, 'uiAnimating');
+                if ($.getDataset(this.node, 'uiAnimating') === 'out') {
+                    $.removeDataset(this.node, 'uiAnimating');
                 }
             });
         }
@@ -2621,24 +2643,24 @@
             }
 
             if (
-                $.getDataset(this._node, 'uiAnimating') ||
-                $.hasClass(this._node, 'show') ||
+                $.getDataset(this.node, 'uiAnimating') ||
+                $.hasClass(this.node, 'show') ||
                 $.findOne('.offcanvas.show') ||
-                !$.triggerOne(this._node, 'show.ui.offcanvas')
+                !$.triggerOne(this.node, 'show.ui.offcanvas')
             ) {
                 return;
             }
 
-            $.setDataset(this._node, { uiAnimating: 'in' });
-            $.addClass(this._node, 'show');
+            $.setDataset(this.node, { uiAnimating: 'in' });
+            $.addClass(this.node, 'show');
 
-            if (this._options.backdrop) {
+            if (this.options.backdrop) {
                 $.addClass(document.body, 'offcanvas-backdrop');
             }
 
             this._scrollNodes = [];
 
-            if (!this._options.scroll) {
+            if (!this.options.scroll) {
                 this._scrollNodes.push(document.body);
                 this._scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
 
@@ -2648,15 +2670,15 @@
             }
 
             Promise.all([
-                $.fadeIn(this._node, {
-                    duration: this._options.duration,
+                $.fadeIn(this.node, {
+                    duration: this.options.duration,
                 }),
-                $.dropIn(this._node, {
-                    duration: this._options.duration,
-                    direction: getDirection(this._node),
+                $.dropIn(this.node, {
+                    duration: this.options.duration,
+                    direction: getDirection(this.node),
                 }),
             ]).then((_) => {
-                $.setAttribute(this._node, {
+                $.setAttribute(this.node, {
                     'aria-hidden': false,
                     'aria-modal': true,
                 });
@@ -2665,11 +2687,11 @@
                     this._focusTrap.activate();
                 }
 
-                $.removeDataset(this._node, 'uiAnimating');
-                $.triggerEvent(this._node, 'shown.ui.offcanvas');
+                $.removeDataset(this.node, 'uiAnimating');
+                $.triggerEvent(this.node, 'shown.ui.offcanvas');
             }).catch((_) => {
-                if ($.getDataset(this._node, 'uiAnimating') === 'in') {
-                    $.removeDataset(this._node, 'uiAnimating');
+                if ($.getDataset(this.node, 'uiAnimating') === 'in') {
+                    $.removeDataset(this.node, 'uiAnimating');
                 }
             });
         }
@@ -2678,7 +2700,7 @@
          * Toggle the Offcanvas.
          */
         toggle() {
-            if ($.hasClass(this._node, 'show')) {
+            if ($.hasClass(this.node, 'show')) {
                 this.hide();
             } else {
                 this.show();
@@ -2782,14 +2804,14 @@
         constructor(node, options) {
             super(node, options);
 
-            this._modal = $.closest(this._node, '.modal').shift();
+            this._modal = $.closest(this.node, '.modal').shift();
 
-            this._triggers = this._options.trigger.split(' ');
+            this._triggers = this.options.trigger.split(' ');
 
             this._render();
             this._events();
 
-            if (this._options.enable) {
+            if (this.options.enable) {
                 this.enable();
             }
 
@@ -2801,31 +2823,31 @@
          */
         _events() {
             if (this._triggers.includes('hover')) {
-                $.addEvent(this._node, 'mouseover.ui.popover', (_) => {
+                $.addEvent(this.node, 'mouseover.ui.popover', (_) => {
                     this._stop();
                     this.show();
                 });
 
-                $.addEvent(this._node, 'mouseout.ui.popover', (_) => {
+                $.addEvent(this.node, 'mouseout.ui.popover', (_) => {
                     this._stop();
                     this.hide({ force: false });
                 });
             }
 
             if (this._triggers.includes('focus')) {
-                $.addEvent(this._node, 'focus.ui.popover', (_) => {
+                $.addEvent(this.node, 'focus.ui.popover', (_) => {
                     this._stop();
                     this.show();
                 });
 
-                $.addEvent(this._node, 'blur.ui.popover', (_) => {
+                $.addEvent(this.node, 'blur.ui.popover', (_) => {
                     this._stop();
                     this.hide({ force: false });
                 });
             }
 
             if (this._triggers.includes('click')) {
-                $.addEvent(this._node, 'click.ui.popover', (e) => {
+                $.addEvent(this.node, 'click.ui.popover', (e) => {
                     e.preventDefault();
 
                     this._stop();
@@ -2846,9 +2868,9 @@
          * Render the Popover element.
          */
         _render() {
-            this._popover = $.parseHTML(this._options.template).shift();
-            if (this._options.customClass) {
-                $.addClass(this._popover, this._options.customClass);
+            this._popover = $.parseHTML(this.options.template).shift();
+            if (this.options.customClass) {
+                $.addClass(this._popover, this.options.customClass);
             }
             this._arrow = $.findOne('.popover-arrow', this._popover);
             this._popoverHeader = $.findOne('.popover-header', this._popover);
@@ -2859,29 +2881,29 @@
          * Update the Popover and append to the DOM.
          */
         _show() {
-            if (this._options.appendTo) {
-                $.append(this._options.appendTo, this._popover);
+            if (this.options.appendTo) {
+                $.append(this.options.appendTo, this._popover);
             } else {
-                $.after(this._node, this._popover);
+                $.after(this.node, this._popover);
             }
 
-            if (!this._options.noAttributes) {
+            if (!this.options.noAttributes) {
                 const id = generateId(this.constructor.DATA_KEY);
                 $.setAttribute(this._popover, { id });
-                $.setAttribute(this._node, { 'aria-described-by': id });
+                $.setAttribute(this.node, { 'aria-described-by': id });
             }
 
             this._popper = new Popper(
                 this._popover,
                 {
-                    reference: this._node,
+                    reference: this.node,
                     arrow: this._arrow,
-                    placement: this._options.placement,
-                    position: this._options.position,
-                    fixed: this._options.fixed,
-                    spacing: this._options.spacing,
-                    minContact: this._options.minContact,
-                    noAttributes: this._options.noAttributes,
+                    placement: this.options.placement,
+                    position: this.options.position,
+                    fixed: this.options.fixed,
+                    spacing: this.options.spacing,
+                    minContact: this.options.minContact,
+                    noAttributes: this.options.noAttributes,
                 },
             );
 
@@ -2926,10 +2948,10 @@
          * Dispose the Popover.
          */
         dispose() {
-            if ($.hasDataset(this._node, 'uiOriginalTitle')) {
-                const title = $.getDataset(this._node, 'uiOriginalTitle');
-                $.setAttribute(this._node, { title });
-                $.removeDataset(this._node, 'uiOriginalTitle');
+            if ($.hasDataset(this.node, 'uiOriginalTitle')) {
+                const title = $.getDataset(this.node, 'uiOriginalTitle');
+                $.setAttribute(this.node, { title });
+                $.removeDataset(this.node, 'uiOriginalTitle');
             }
 
             if (this._popper) {
@@ -2940,17 +2962,17 @@
             $.remove(this._popover);
 
             if (this._triggers.includes('hover')) {
-                $.removeEvent(this._node, 'mouseover.ui.popover');
-                $.removeEvent(this._node, 'mouseout.ui.popover');
+                $.removeEvent(this.node, 'mouseover.ui.popover');
+                $.removeEvent(this.node, 'mouseout.ui.popover');
             }
 
             if (this._triggers.includes('focus')) {
-                $.removeEvent(this._node, 'focus.ui.popover');
-                $.removeEvent(this._node, 'blur.ui.popover');
+                $.removeEvent(this.node, 'focus.ui.popover');
+                $.removeEvent(this.node, 'blur.ui.popover');
             }
 
             if (this._triggers.includes('click')) {
-                $.removeEvent(this._node, 'click.ui.popover');
+                $.removeEvent(this.node, 'click.ui.popover');
             }
 
             if (this._modal) {
@@ -2985,7 +3007,7 @@
                 (!force && !this._enabled) ||
                 $.getDataset(this._popover, 'uiAnimating') ||
                 !$.isConnected(this._popover) ||
-                !$.triggerOne(this._node, 'hide.ui.popover')
+                !$.triggerOne(this.node, 'hide.ui.popover')
             ) {
                 return;
             }
@@ -2993,15 +3015,15 @@
             $.setDataset(this._popover, { uiAnimating: 'out' });
 
             $.fadeOut(this._popover, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }).then((_) => {
                 this._popper.dispose();
                 this._popper = null;
 
                 $.detach(this._popover);
                 $.removeDataset(this._popover, 'uiAnimating');
-                $.removeAttribute(this._node, 'aria-described-by');
-                $.triggerEvent(this._node, 'hidden.ui.popover');
+                $.removeAttribute(this.node, 'aria-described-by');
+                $.triggerEvent(this.node, 'hidden.ui.popover');
             }).catch((_) => {
                 if ($.getDataset(this._popover, 'uiAnimating') === 'out') {
                     $.removeDataset(this._popover, 'uiAnimating');
@@ -3013,34 +3035,34 @@
          * Refresh the Popover.
          */
         refresh() {
-            if ($.hasAttribute(this._node, 'title')) {
-                const originalTitle = $.getAttribute(this._node, 'title');
-                $.setDataset(this._node, { uiOriginalTitle: originalTitle });
-                $.removeAttribute(this._node, 'title');
+            if ($.hasAttribute(this.node, 'title')) {
+                const originalTitle = $.getAttribute(this.node, 'title');
+                $.setDataset(this.node, { uiOriginalTitle: originalTitle });
+                $.removeAttribute(this.node, 'title');
             }
 
             let title = '';
-            if ($.hasDataset(this._node, 'uiTitle')) {
-                title = $.getDataset(this._node, 'uiTitle');
-            } else if (this._options.title) {
-                title = this._options.title;
-            } else if ($.hasDataset(this._node, 'uiOriginalTitle')) {
-                title = $.getDataset(this._node, 'uiOriginalTitle', title);
+            if ($.hasDataset(this.node, 'uiTitle')) {
+                title = $.getDataset(this.node, 'uiTitle');
+            } else if (this.options.title) {
+                title = this.options.title;
+            } else if ($.hasDataset(this.node, 'uiOriginalTitle')) {
+                title = $.getDataset(this.node, 'uiOriginalTitle', title);
             }
 
             let content = '';
-            if ($.hasDataset(this._node, 'uiContent')) {
-                content = $.getDataset(this._node, 'uiContent');
-            } else if (this._options.content) {
-                content = this._options.content;
+            if ($.hasDataset(this.node, 'uiContent')) {
+                content = $.getDataset(this.node, 'uiContent');
+            } else if (this.options.content) {
+                content = this.options.content;
             }
 
-            const method = this._options.html ? 'setHTML' : 'setText';
+            const method = this.options.html ? 'setHTML' : 'setText';
 
             $[method](
                 this._popoverHeader,
-                this._options.html && this._options.sanitize ?
-                    this._options.sanitize(title) :
+                this.options.html && this.options.sanitize ?
+                    this.options.sanitize(title) :
                     title,
             );
 
@@ -3052,8 +3074,8 @@
 
             $[method](
                 this._popoverBody,
-                this._options.html && this._options.sanitize ?
-                    this._options.sanitize(content) :
+                this.options.html && this.options.sanitize ?
+                    this.options.sanitize(content) :
                     content,
             );
         }
@@ -3066,7 +3088,7 @@
                 !this._enabled ||
                 $.getDataset(this._popover, 'uiAnimating') ||
                 $.isConnected(this._popover) ||
-                !$.triggerOne(this._node, 'show.ui.popover')
+                !$.triggerOne(this.node, 'show.ui.popover')
             ) {
                 return;
             }
@@ -3076,10 +3098,10 @@
             this._show();
 
             $.fadeIn(this._popover, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }).then((_) => {
                 $.removeDataset(this._popover, 'uiAnimating');
-                $.triggerEvent(this._node, 'shown.ui.popover');
+                $.triggerEvent(this.node, 'shown.ui.popover');
             }).catch((_) => {
                 if ($.getDataset(this._popover, 'uiAnimating') === 'in') {
                     $.removeDataset(this._popover, 'uiAnimating');
@@ -3148,9 +3170,9 @@
         constructor(node, options) {
             super(node, options);
 
-            const selector = getTargetSelector(this._node);
+            const selector = getTargetSelector(this.node);
             this._target = $.findOne(selector);
-            this._siblings = $.siblings(this._node);
+            this._siblings = $.siblings(this.node);
         }
 
         /**
@@ -3160,13 +3182,13 @@
             $.setDataset(this._target, { uiAnimating: 'out' });
 
             $.fadeOut(this._target, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }).then((_) => {
                 $.removeClass(this._target, 'active');
-                $.removeClass(this._node, 'active');
+                $.removeClass(this.node, 'active');
                 $.removeDataset(this._target, 'uiAnimating');
-                $.setAttribute(this._node, { 'aria-selected': false });
-                $.triggerEvent(this._node, 'hidden.ui.tab');
+                $.setAttribute(this.node, { 'aria-selected': false });
+                $.triggerEvent(this.node, 'hidden.ui.tab');
             }).catch((_) => {
                 if ($.getDataset(this._target, 'uiAnimating') === 'out') {
                     $.removeDataset(this._target, 'uiAnimating');
@@ -3181,14 +3203,14 @@
             $.setDataset(this._target, { uiAnimating: 'in' });
 
             $.addClass(this._target, 'active');
-            $.addClass(this._node, 'active');
+            $.addClass(this.node, 'active');
 
             $.fadeIn(this._target, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }).then((_) => {
-                $.setAttribute(this._node, { 'aria-selected': true });
+                $.setAttribute(this.node, { 'aria-selected': true });
                 $.removeDataset(this._target, 'uiAnimating');
-                $.triggerEvent(this._node, 'shown.ui.tab');
+                $.triggerEvent(this.node, 'shown.ui.tab');
             }).catch((_) => {
                 if ($.getDataset(this._target, 'uiAnimating') === 'in') {
                     $.removeDataset(this._target, 'uiAnimating');
@@ -3213,7 +3235,7 @@
             if (
                 $.getDataset(this._target, 'uiAnimating') ||
                 !$.hasClass(this._target, 'active') ||
-                !$.triggerOne(this._node, 'hide.ui.tab')
+                !$.triggerOne(this.node, 'hide.ui.tab')
             ) {
                 return;
             }
@@ -3228,7 +3250,7 @@
             if (
                 $.getDataset(this._target, 'uiAnimating') ||
                 $.hasClass(this._target, 'active') ||
-                !$.triggerOne(this._node, 'show.ui.tab')
+                !$.triggerOne(this.node, 'show.ui.tab')
             ) {
                 return;
             }
@@ -3330,9 +3352,9 @@
          */
         hide() {
             if (
-                $.getDataset(this._node, 'uiAnimating') ||
-                !$.isVisible(this._node) ||
-                !$.triggerOne(this._node, 'hide.ui.toast')
+                $.getDataset(this.node, 'uiAnimating') ||
+                !$.isVisible(this.node) ||
+                !$.triggerOne(this.node, 'hide.ui.toast')
             ) {
                 return;
             }
@@ -3340,18 +3362,18 @@
             clearTimeout(this._timer);
             this._timer = null;
 
-            $.setDataset(this._node, { uiAnimating: 'out' });
+            $.setDataset(this.node, { uiAnimating: 'out' });
 
-            $.fadeOut(this._node, {
-                duration: this._options.duration,
+            $.fadeOut(this.node, {
+                duration: this.options.duration,
             }).then((_) => {
-                $.setStyle(this._node, { display: 'none' }, null, { important: true });
-                $.removeClass(this._node, 'show');
-                $.removeDataset(this._node, 'uiAnimating');
-                $.triggerEvent(this._node, 'hidden.ui.toast');
+                $.setStyle(this.node, { display: 'none' }, null, { important: true });
+                $.removeClass(this.node, 'show');
+                $.removeDataset(this.node, 'uiAnimating');
+                $.triggerEvent(this.node, 'hidden.ui.toast');
             }).catch((_) => {
-                if ($.getDataset(this._node, 'uiAnimating') === 'out') {
-                    $.removeDataset(this._node, 'uiAnimating');
+                if ($.getDataset(this.node, 'uiAnimating') === 'out') {
+                    $.removeDataset(this.node, 'uiAnimating');
                 }
             });
         }
@@ -3361,9 +3383,9 @@
          */
         show() {
             if (
-                $.getDataset(this._node, 'uiAnimating') ||
-                $.isVisible(this._node) ||
-                !$.triggerOne(this._node, 'show.ui.toast')
+                $.getDataset(this.node, 'uiAnimating') ||
+                $.isVisible(this.node) ||
+                !$.triggerOne(this.node, 'show.ui.toast')
             ) {
                 return;
             }
@@ -3371,28 +3393,28 @@
             clearTimeout(this._timer);
             this._timer = null;
 
-            $.setDataset(this._node, { uiAnimating: 'in' });
-            $.setStyle(this._node, { display: '' });
-            $.addClass(this._node, 'show');
+            $.setDataset(this.node, { uiAnimating: 'in' });
+            $.setStyle(this.node, { display: '' });
+            $.addClass(this.node, 'show');
 
-            $.fadeIn(this._node, {
-                duration: this._options.duration,
+            $.fadeIn(this.node, {
+                duration: this.options.duration,
             }).then((_) => {
-                $.removeDataset(this._node, 'uiAnimating');
-                $.triggerEvent(this._node, 'shown.ui.toast');
+                $.removeDataset(this.node, 'uiAnimating');
+                $.triggerEvent(this.node, 'shown.ui.toast');
 
-                if (this._options.autohide) {
+                if (this.options.autohide) {
                     this._timer = setTimeout(
                         (_) => {
                             this._timer = null;
                             this.hide();
                         },
-                        this._options.delay,
+                        this.options.delay,
                     );
                 }
             }).catch((_) => {
-                if ($.getDataset(this._node, 'uiAnimating') === 'in') {
-                    $.removeDataset(this._node, 'uiAnimating');
+                if ($.getDataset(this.node, 'uiAnimating') === 'in') {
+                    $.removeDataset(this.node, 'uiAnimating');
                 }
             });
         }
@@ -3430,14 +3452,14 @@
         constructor(node, options) {
             super(node, options);
 
-            this._modal = $.closest(this._node, '.modal').shift();
+            this._modal = $.closest(this.node, '.modal').shift();
 
-            this._triggers = this._options.trigger.split(' ');
+            this._triggers = this.options.trigger.split(' ');
 
             this._render();
             this._events();
 
-            if (this._options.enable) {
+            if (this.options.enable) {
                 this.enable();
             }
 
@@ -3449,31 +3471,31 @@
          */
         _events() {
             if (this._triggers.includes('hover')) {
-                $.addEvent(this._node, 'mouseover.ui.tooltip', (_) => {
+                $.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
                     this._stop();
                     this.show();
                 });
 
-                $.addEvent(this._node, 'mouseout.ui.tooltip', (_) => {
+                $.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
                     this._stop();
                     this.hide({ force: false });
                 });
             }
 
             if (this._triggers.includes('focus')) {
-                $.addEvent(this._node, 'focus.ui.tooltip', (_) => {
+                $.addEvent(this.node, 'focus.ui.tooltip', (_) => {
                     this._stop();
                     this.show();
                 });
 
-                $.addEvent(this._node, 'blur.ui.tooltip', (_) => {
+                $.addEvent(this.node, 'blur.ui.tooltip', (_) => {
                     this._stop();
                     this.hide({ force: false });
                 });
             }
 
             if (this._triggers.includes('click')) {
-                $.addEvent(this._node, 'click.ui.tooltip', (e) => {
+                $.addEvent(this.node, 'click.ui.tooltip', (e) => {
                     e.preventDefault();
 
                     this._stop();
@@ -3494,9 +3516,9 @@
          * Render the Tooltip element.
          */
         _render() {
-            this._tooltip = $.parseHTML(this._options.template).shift();
-            if (this._options.customClass) {
-                $.addClass(this._tooltip, this._options.customClass);
+            this._tooltip = $.parseHTML(this.options.template).shift();
+            if (this.options.customClass) {
+                $.addClass(this._tooltip, this.options.customClass);
             }
             this._arrow = $.findOne('.tooltip-arrow', this._tooltip);
             this._tooltipInner = $.findOne('.tooltip-inner', this._tooltip);
@@ -3506,29 +3528,29 @@
          * Update the Tooltip and append to the DOM.
          */
         _show() {
-            if (this._options.appendTo) {
-                $.append(this._options.appendTo, this._tooltip);
+            if (this.options.appendTo) {
+                $.append(this.options.appendTo, this._tooltip);
             } else {
-                $.after(this._node, this._tooltip);
+                $.after(this.node, this._tooltip);
             }
 
-            if (!this._options.noAttributes) {
+            if (!this.options.noAttributes) {
                 const id = generateId(this.constructor.DATA_KEY);
                 $.setAttribute(this._tooltip, { id });
-                $.setAttribute(this._node, { 'aria-described-by': id });
+                $.setAttribute(this.node, { 'aria-described-by': id });
             }
 
             this._popper = new Popper(
                 this._tooltip,
                 {
-                    reference: this._node,
+                    reference: this.node,
                     arrow: this._arrow,
-                    placement: this._options.placement,
-                    position: this._options.position,
-                    fixed: this._options.fixed,
-                    spacing: this._options.spacing,
-                    minContact: this._options.minContact,
-                    noAttributes: this._options.noAttributes,
+                    placement: this.options.placement,
+                    position: this.options.position,
+                    fixed: this.options.fixed,
+                    spacing: this.options.spacing,
+                    minContact: this.options.minContact,
+                    noAttributes: this.options.noAttributes,
                 },
             );
 
@@ -3574,10 +3596,10 @@
          * Dispose the Tooltip.
          */
         dispose() {
-            if ($.hasDataset(this._node, 'uiOriginalTitle')) {
-                const title = $.getDataset(this._node, 'uiOriginalTitle');
-                $.setAttribute(this._node, { title });
-                $.removeDataset(this._node, 'uiOriginalTitle');
+            if ($.hasDataset(this.node, 'uiOriginalTitle')) {
+                const title = $.getDataset(this.node, 'uiOriginalTitle');
+                $.setAttribute(this.node, { title });
+                $.removeDataset(this.node, 'uiOriginalTitle');
             }
 
             if (this._popper) {
@@ -3588,17 +3610,17 @@
             $.remove(this._tooltip);
 
             if (this._triggers.includes('hover')) {
-                $.removeEvent(this._node, 'mouseover.ui.tooltip');
-                $.removeEvent(this._node, 'mouseout.ui.tooltip');
+                $.removeEvent(this.node, 'mouseover.ui.tooltip');
+                $.removeEvent(this.node, 'mouseout.ui.tooltip');
             }
 
             if (this._triggers.includes('focus')) {
-                $.removeEvent(this._node, 'focus.ui.tooltip');
-                $.removeEvent(this._node, 'blur.ui.tooltip');
+                $.removeEvent(this.node, 'focus.ui.tooltip');
+                $.removeEvent(this.node, 'blur.ui.tooltip');
             }
 
             if (this._triggers.includes('click')) {
-                $.removeEvent(this._node, 'click.ui.tooltip');
+                $.removeEvent(this.node, 'click.ui.tooltip');
             }
 
             if (this._modal) {
@@ -3632,7 +3654,7 @@
                 (!force && !this._enabled) ||
                 $.getDataset(this._tooltip, 'uiAnimating') ||
                 !$.isConnected(this._tooltip) ||
-                !$.triggerOne(this._node, 'hide.ui.tooltip')
+                !$.triggerOne(this.node, 'hide.ui.tooltip')
             ) {
                 return;
             }
@@ -3640,7 +3662,7 @@
             $.setDataset(this._tooltip, { uiAnimating: 'out' });
 
             $.fadeOut(this._tooltip, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }).then((_) => {
                 this._popper.dispose();
                 this._popper = null;
@@ -3648,8 +3670,8 @@
                 $.removeClass(this._tooltip, 'show');
                 $.detach(this._tooltip);
                 $.removeDataset(this._tooltip, 'uiAnimating');
-                $.removeAttribute(this._node, 'aria-described-by');
-                $.triggerEvent(this._node, 'hidden.ui.tooltip');
+                $.removeAttribute(this.node, 'aria-described-by');
+                $.triggerEvent(this.node, 'hidden.ui.tooltip');
             }).catch((_) => {
                 if ($.getDataset(this._tooltip, 'uiAnimating') === 'out') {
                     $.removeDataset(this._tooltip, 'uiAnimating');
@@ -3661,27 +3683,27 @@
          * Refresh the Tooltip.
          */
         refresh() {
-            if ($.hasAttribute(this._node, 'title')) {
-                const originalTitle = $.getAttribute(this._node, 'title');
-                $.setDataset(this._node, { uiOriginalTitle: originalTitle });
-                $.removeAttribute(this._node, 'title');
+            if ($.hasAttribute(this.node, 'title')) {
+                const originalTitle = $.getAttribute(this.node, 'title');
+                $.setDataset(this.node, { uiOriginalTitle: originalTitle });
+                $.removeAttribute(this.node, 'title');
             }
 
             let title = '';
-            if ($.hasDataset(this._node, 'uiTitle')) {
-                title = $.getDataset(this._node, 'uiTitle');
-            } else if (this._options.title) {
-                title = this._options.title;
-            } else if ($.hasDataset(this._node, 'uiOriginalTitle')) {
-                title = $.getDataset(this._node, 'uiOriginalTitle', title);
+            if ($.hasDataset(this.node, 'uiTitle')) {
+                title = $.getDataset(this.node, 'uiTitle');
+            } else if (this.options.title) {
+                title = this.options.title;
+            } else if ($.hasDataset(this.node, 'uiOriginalTitle')) {
+                title = $.getDataset(this.node, 'uiOriginalTitle', title);
             }
 
-            const method = this._options.html ? 'setHTML' : 'setText';
+            const method = this.options.html ? 'setHTML' : 'setText';
 
             $[method](
                 this._tooltipInner,
-                this._options.html && this._options.sanitize ?
-                    this._options.sanitize(title) :
+                this.options.html && this.options.sanitize ?
+                    this.options.sanitize(title) :
                     title,
             );
 
@@ -3696,7 +3718,7 @@
                 !this._enabled ||
                 $.getDataset(this._tooltip, 'uiAnimating') ||
                 $.isConnected(this._tooltip) ||
-                !$.triggerOne(this._node, 'show.ui.tooltip')
+                !$.triggerOne(this.node, 'show.ui.tooltip')
             ) {
                 return;
             }
@@ -3707,10 +3729,10 @@
             this._show();
 
             $.fadeIn(this._tooltip, {
-                duration: this._options.duration,
+                duration: this.options.duration,
             }).then((_) => {
                 $.removeDataset(this._tooltip, 'uiAnimating');
-                $.triggerEvent(this._node, 'shown.ui.tooltip');
+                $.triggerEvent(this.node, 'shown.ui.tooltip');
             }).catch((_) => {
                 if ($.getDataset(this._tooltip, 'uiAnimating') === 'in') {
                     $.removeDataset(this._tooltip, 'uiAnimating');
