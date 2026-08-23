@@ -47,7 +47,7 @@ $gutters: (
     2: 1rem,
     3: 1.5rem,
     4: 2rem,
-    5: 5rem
+    5: 3rem
 ) !default;
 
 $gutter-y: 0 !default;
@@ -193,7 +193,7 @@ $line-heights: (
 $animation-time: 1s !default;
 $transition-time-fast: .15s !default;
 $transition-time: .25s !default;
-$transition-type: ease-in-out !default;
+$transition-type: cubic-bezier(.2, 0, 0, 1) !default;
 
 // z-index
 $dropdown-z-index: 1000 !default;

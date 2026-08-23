@@ -21,6 +21,11 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+::selection {
+    color: var(--ui-primary-contrast);
+    background-color: var(--ui-primary);
+}
+
 hr {
     margin: vars.$hr-margin-y 0;
     background-color: currentcolor;
@@ -287,6 +292,11 @@ tr {
 }
 
 // forms
+
+input,
+progress {
+    accent-color: var(--ui-primary);
+}
 
 label {
     display: inline-block;
