@@ -67,7 +67,7 @@ export default class Tooltip extends BaseComponent {
         }
 
         if (this._modal) {
-            $.removeEvent(this._modal, 'hide.ui.modal');
+            $.removeEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
         }
 
         this._modal = null;
@@ -75,6 +75,7 @@ export default class Tooltip extends BaseComponent {
         this._tooltip = null;
         this._tooltipInner = null;
         this._arrow = null;
+        this._hideModalEvent = null;
 
         super.dispose();
     }

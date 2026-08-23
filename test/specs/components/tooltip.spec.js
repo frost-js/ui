@@ -71,6 +71,37 @@ test.describe('Tooltip', () => {
             })).toBe(false);
         });
 
+        test('removes only its modal hide event', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.body.innerHTML =
+                    '<div class="modal" id="modal">' +
+                    '<button id="tooltipToggle1" type="button"></button>' +
+                    '<button id="tooltipToggle2" type="button"></button>' +
+                    '</div>';
+
+                const modal = $.findOne('#modal');
+                const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                const tooltipToggle2 = $.findOne('#tooltipToggle2');
+                window.modalHideEventTriggered = false;
+
+                $.addEvent(modal, 'hide.ui.modal', (_) => {
+                    window.modalHideEventTriggered = true;
+                });
+                UI.Tooltip.init(tooltipToggle1);
+                UI.Tooltip.init(tooltipToggle2).show();
+            });
+            await advanceClock(page, 150);
+
+            await page.evaluate((_) => {
+                UI.Tooltip.init($.findOne('#tooltipToggle1')).dispose();
+                $.triggerEvent('#modal', 'hide.ui.modal');
+            });
+
+            expect(await page.evaluate((_) => window.modalHideEventTriggered)).toBe(true);
+            await advanceClock(page, 150);
+            await expect(page.locator('.tooltip')).toHaveCount(0);
+        });
+
         test('clears tooltip memory', async ({ page }) => {
             expect(await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');

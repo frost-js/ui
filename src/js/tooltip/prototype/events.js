@@ -38,9 +38,10 @@ export function _events() {
     }
 
     if (this._modal) {
-        $.addEvent(this._modal, 'hide.ui.modal', (_) => {
+        this._hideModalEvent = (_) => {
             this._stop();
             this.hide();
-        });
+        };
+        $.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
     }
 };

@@ -71,6 +71,37 @@ test.describe('Popover', () => {
             })).toBe(false);
         });
 
+        test('removes only its modal hide event', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.body.innerHTML =
+                    '<div class="modal" id="modal">' +
+                    '<button id="popoverToggle1" type="button"></button>' +
+                    '<button id="popoverToggle2" type="button"></button>' +
+                    '</div>';
+
+                const modal = $.findOne('#modal');
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                const popoverToggle2 = $.findOne('#popoverToggle2');
+                window.modalHideEventTriggered = false;
+
+                $.addEvent(modal, 'hide.ui.modal', (_) => {
+                    window.modalHideEventTriggered = true;
+                });
+                UI.Popover.init(popoverToggle1);
+                UI.Popover.init(popoverToggle2).show();
+            });
+            await advanceClock(page, 150);
+
+            await page.evaluate((_) => {
+                UI.Popover.init($.findOne('#popoverToggle1')).dispose();
+                $.triggerEvent('#modal', 'hide.ui.modal');
+            });
+
+            expect(await page.evaluate((_) => window.modalHideEventTriggered)).toBe(true);
+            await advanceClock(page, 150);
+            await expect(page.locator('.popover')).toHaveCount(0);
+        });
+
         test('clears popover memory', async ({ page }) => {
             expect(await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');

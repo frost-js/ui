@@ -346,6 +346,11 @@ test.describe('Tab', () => {
             await page.evaluate((_) => {
                 const tabToggle2 = $.findOne('#tabToggle2');
                 const tab = UI.Tab.init(tabToggle2);
+                window.tabShownEvents = 0;
+
+                $.addEvent(tabToggle2, 'shown.ui.tab', (_) => {
+                    window.tabShownEvents++;
+                });
                 tab.show();
                 tab.show();
                 tab.show();
@@ -358,6 +363,24 @@ test.describe('Tab', () => {
                     progress: 0.5,
                 },
             ]);
+            await advanceClock(page, 100);
+            await expectAnimationState(page, [
+                {
+                    selectors: ['#tab2'],
+                    progress: 0.5,
+                },
+            ]);
+            await advanceClock(page, 100);
+
+            expect(await page.evaluate((_) => window.tabShownEvents)).toBe(1);
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane active');
+            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab2')).toHaveAttribute('style', '');
         });
 
         test('can be called on shown tab', async ({ page }) => {

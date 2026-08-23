@@ -76,6 +76,7 @@ export default class Popover extends BaseComponent {
         this._popoverHeader = null;
         this._popoverBody = null;
         this._arrow = null;
+        this._hideModalEvent = null;
 
         super.dispose();
     }

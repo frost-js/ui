@@ -109,7 +109,7 @@ export default class Tab extends BaseComponent {
         } else {
             const activeTab = this.constructor.init(active);
 
-            if (activeTab.animating) {
+            if ($.getDataset(activeTab._target, 'uiAnimating')) {
                 return;
             }
 

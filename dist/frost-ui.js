@@ -2674,6 +2674,7 @@
             this._popoverHeader = null;
             this._popoverBody = null;
             this._arrow = null;
+            this._hideModalEvent = null;
 
             super.dispose();
         }
@@ -2854,10 +2855,11 @@
         }
 
         if (this._modal) {
-            $.addEvent(this._modal, 'hide.ui.modal', (_) => {
+            this._hideModalEvent = (_) => {
                 this._stop();
                 this.hide();
-            });
+            };
+            $.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
         }
     }
 
@@ -3173,7 +3175,7 @@
             } else {
                 const activeTab = this.constructor.init(active);
 
-                if (activeTab.animating) {
+                if ($.getDataset(activeTab._target, 'uiAnimating')) {
                     return;
                 }
 
@@ -3367,10 +3369,11 @@
         }
 
         if (this._modal) {
-            $.addEvent(this._modal, 'hide.ui.modal', (_) => {
+            this._hideModalEvent = (_) => {
                 this._stop();
                 this.hide();
-            });
+            };
+            $.addEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
         }
     }
 
@@ -3512,7 +3515,7 @@
             }
 
             if (this._modal) {
-                $.removeEvent(this._modal, 'hide.ui.modal');
+                $.removeEvent(this._modal, 'hide.ui.modal', this._hideModalEvent);
             }
 
             this._modal = null;
@@ -3520,6 +3523,7 @@
             this._tooltip = null;
             this._tooltipInner = null;
             this._arrow = null;
+            this._hideModalEvent = null;
 
             super.dispose();
         }
