@@ -35,6 +35,7 @@ $alert-padding-x: vars.$spacing !default;
 $alert-padding-y: vars.$spacing !default;
 $alert-margin-bottom: vars.$spacing !default;
 $alert-border-width: var(--ui-border-width) !default;
+$alert-accent-border-width: vars.$spacing * .375 !default;
 $alert-border-radius: var(--ui-border-radius) !default;
 $alert-link-font-weight: map.get(vars.$font-weights, bold) !default;
 

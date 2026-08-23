@@ -2098,6 +2098,7 @@ progress {
   --ui-alert-color: inherit;
   --ui-alert-link-color: inherit;
   --ui-alert-border-width: var(--ui-border-width);
+  --ui-alert-accent-border-width: 0.375rem;
   --ui-alert-border-color: transparent;
   --ui-alert-border-radius: var(--ui-border-radius);
   position: relative;
@@ -2106,6 +2107,7 @@ progress {
   color: var(--ui-alert-color);
   background-color: var(--ui-alert-bg);
   border: var(--ui-alert-border-width) var(--ui-border-style) var(--ui-alert-border-color);
+  border-inline-start-width: var(--ui-alert-accent-border-width);
   border-radius: var(--ui-alert-border-radius);
 }
 
