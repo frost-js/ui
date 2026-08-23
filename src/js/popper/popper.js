@@ -133,6 +133,17 @@ export default class Popper extends BaseComponent {
     }
 
     /**
+     * Check whether a scroll target affects the Popper.
+     * @param {HTMLElement|Document} target The scroll target.
+     * @return {boolean} Whether the Popper should update.
+     */
+    shouldUpdateForScroll(target) {
+        return $._isDocument(target) ||
+            $.hasDescendent(target, this._node) ||
+            $.hasDescendent(target, this._options.reference);
+    }
+
+    /**
      * Update the Popper position.
      */
     update() {

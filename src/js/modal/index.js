@@ -22,8 +22,7 @@ $.addEventDelegate(document, 'click.ui.modal', '[data-ui-toggle="modal"]', (e) =
 
     const target = getTarget(e.currentTarget, '.modal');
     const modal = Modal.init(target);
-    modal._activeTarget = e.currentTarget;
-    modal.show();
+    modal.show(e.currentTarget);
 });
 
 $.addEventDelegate(document, 'click.ui.modal', '[data-ui-dismiss="modal"]', (e) => {
@@ -44,20 +43,11 @@ $.addEvent(window, 'click.ui.modal', (e) => {
 
     const modal = getTopModal();
 
-    if (
-        !modal ||
-        !modal._options.backdrop ||
-        (modal._node !== target && $.hasDescendent(modal._node, target))
-    ) {
+    if (!modal) {
         return;
     }
 
-    if (modal._options.backdrop === 'static') {
-        modal._zoom();
-        return;
-    }
-
-    modal.hide();
+    modal.handleBackdrop(target);
 });
 
 $.addEvent(window, 'keydown.ui.modal', (e) => {
@@ -67,16 +57,11 @@ $.addEvent(window, 'keydown.ui.modal', (e) => {
 
     const modal = getTopModal();
 
-    if (!modal || !modal._options.keyboard) {
+    if (!modal) {
         return;
     }
 
-    if (modal._options.backdrop === 'static') {
-        modal._zoom();
-        return;
-    }
-
-    modal.hide();
+    modal.handleEscape();
 });
 
 export default Modal;

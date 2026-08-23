@@ -34,6 +34,15 @@ export default class Dropdown extends BaseComponent {
     }
 
     /**
+     * Check whether the Dropdown menu contains a target.
+     * @param {HTMLElement} target The target node.
+     * @return {boolean} Whether the menu contains the target.
+     */
+    containsMenuTarget(target) {
+        return $.hasDescendent(this._menuNode, target);
+    }
+
+    /**
      * Dispose the Dropdown.
      */
     dispose() {
@@ -46,6 +55,14 @@ export default class Dropdown extends BaseComponent {
         this._referenceNode = null;
 
         super.dispose();
+    }
+
+    /**
+     * Focus the first Dropdown menu item.
+     */
+    focusFirstItem() {
+        const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', this._menuNode);
+        $.focus(focusNode);
     }
 
     /**
@@ -79,6 +96,36 @@ export default class Dropdown extends BaseComponent {
                 $.removeDataset(this._menuNode, 'uiAnimating');
             }
         });
+    }
+
+    /**
+     * Check whether the Dropdown should close for a target.
+     * @param {HTMLElement} target The target node.
+     * @return {boolean} Whether the Dropdown should close.
+     */
+    shouldClose(target) {
+        const hasDescendent = this.containsMenuTarget(target);
+        const autoClose = this._options.autoClose;
+
+        return !(
+            $.isSame(this._node, target) ||
+            (
+                hasDescendent &&
+                (
+                    $.is(target, 'form, input, textarea, select, option') ||
+                    autoClose === 'outside' ||
+                    autoClose === false
+                )
+            ) ||
+            (
+                !hasDescendent &&
+                !$.isSame(this._menuNode, target) &&
+                (
+                    autoClose === 'inside' ||
+                    autoClose === false
+                )
+            )
+        );
     }
 
     /**

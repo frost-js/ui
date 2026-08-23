@@ -11355,11 +11355,7 @@
             'scroll.ui.popper',
             $$1.debounce((e) => {
                 for (const popper of poppers) {
-                    if (
-                        !$$1._isDocument(e.target) &&
-                        !$$1.hasDescendent(e.target, popper._node) &&
-                        !$$1.hasDescendent(e.target, popper._options.reference)
-                    ) {
+                    if (!popper.shouldUpdateForScroll(e.target)) {
                         continue;
                     }
 
@@ -11606,6 +11602,17 @@
             removePopper(this);
 
             super.dispose();
+        }
+
+        /**
+         * Check whether a scroll target affects the Popper.
+         * @param {HTMLElement|Document} target The scroll target.
+         * @return {boolean} Whether the Popper should update.
+         */
+        shouldUpdateForScroll(target) {
+            return $$1._isDocument(target) ||
+                $$1.hasDescendent(target, this._node) ||
+                $$1.hasDescendent(target, this._options.reference);
         }
 
         /**
@@ -11884,6 +11891,15 @@
         }
 
         /**
+         * Check whether the Dropdown menu contains a target.
+         * @param {HTMLElement} target The target node.
+         * @return {boolean} Whether the menu contains the target.
+         */
+        containsMenuTarget(target) {
+            return $$1.hasDescendent(this._menuNode, target);
+        }
+
+        /**
          * Dispose the Dropdown.
          */
         dispose() {
@@ -11896,6 +11912,14 @@
             this._referenceNode = null;
 
             super.dispose();
+        }
+
+        /**
+         * Focus the first Dropdown menu item.
+         */
+        focusFirstItem() {
+            const focusNode = $$1.findOne('.dropdown-item:not([tabindex="-1"])', this._menuNode);
+            $$1.focus(focusNode);
         }
 
         /**
@@ -11929,6 +11953,36 @@
                     $$1.removeDataset(this._menuNode, 'uiAnimating');
                 }
             });
+        }
+
+        /**
+         * Check whether the Dropdown should close for a target.
+         * @param {HTMLElement} target The target node.
+         * @return {boolean} Whether the Dropdown should close.
+         */
+        shouldClose(target) {
+            const hasDescendent = this.containsMenuTarget(target);
+            const autoClose = this._options.autoClose;
+
+            return !(
+                $$1.isSame(this._node, target) ||
+                (
+                    hasDescendent &&
+                    (
+                        $$1.is(target, 'form, input, textarea, select, option') ||
+                        autoClose === 'outside' ||
+                        autoClose === false
+                    )
+                ) ||
+                (
+                    !hasDescendent &&
+                    !$$1.isSame(this._menuNode, target) &&
+                    (
+                        autoClose === 'inside' ||
+                        autoClose === false
+                    )
+                )
+            );
         }
 
         /**
@@ -12030,12 +12084,8 @@
                 const node = e.currentTarget;
                 const dropdown = Dropdown.init(node);
 
-                if (!$$1.hasClass(dropdown._menuNode, 'show')) {
-                    dropdown.show();
-                }
-
-                const focusNode = $$1.findOne('.dropdown-item:not([tabindex="-1"])', dropdown._menuNode);
-                $$1.focus(focusNode);
+                dropdown.show();
+                dropdown.focusFirstItem();
                 break;
             }
         }
@@ -12067,28 +12117,8 @@
         for (const node of nodes) {
             const toggle = $$1.siblings(node, '[data-ui-toggle="dropdown"]').shift();
             const dropdown = Dropdown.init(toggle);
-            const hasDescendent = $$1.hasDescendent(dropdown._menuNode, target);
-            const autoClose = dropdown._options.autoClose;
 
-            if (
-                $$1.isSame(dropdown._node, target) ||
-                (
-                    hasDescendent &&
-                    (
-                        $$1.is(target, 'form, input, textarea, select, option') ||
-                        autoClose === 'outside' ||
-                        autoClose === false
-                    )
-                ) ||
-                (
-                    !hasDescendent &&
-                    !$$1.isSame(dropdown._menuNode, target) &&
-                    (
-                        autoClose === 'inside' ||
-                        autoClose === false
-                    )
-                )
-            ) {
+            if (!dropdown.shouldClose(target)) {
                 continue;
             }
 
@@ -12129,7 +12159,7 @@
             const toggle = $$1.siblings(node, '[data-ui-toggle="dropdown"]').shift();
             const dropdown = Dropdown.init(toggle);
 
-            if ($$1.hasDescendent(dropdown._menuNode, e.target)) {
+            if (dropdown.containsMenuTarget(e.target)) {
                 continue;
             }
 
@@ -12338,6 +12368,42 @@
         }
 
         /**
+         * Handle a backdrop interaction.
+         * @param {HTMLElement} target The interaction target.
+         */
+        handleBackdrop(target) {
+            if (
+                !this._options.backdrop ||
+                (this._node !== target && $$1.hasDescendent(this._node, target))
+            ) {
+                return;
+            }
+
+            if (this._options.backdrop === 'static') {
+                this._zoom();
+                return;
+            }
+
+            this.hide();
+        }
+
+        /**
+         * Handle an escape key interaction.
+         */
+        handleEscape() {
+            if (!this._options.keyboard) {
+                return;
+            }
+
+            if (this._options.backdrop === 'static') {
+                this._zoom();
+                return;
+            }
+
+            this.hide();
+        }
+
+        /**
          * Hide the Modal.
          */
         hide() {
@@ -12407,8 +12473,13 @@
 
         /**
          * Show the Modal.
+         * @param {HTMLElement} [relatedTarget] The element that triggered the Modal.
          */
-        show() {
+        show(relatedTarget) {
+            if (relatedTarget) {
+                this._activeTarget = relatedTarget;
+            }
+
             if (
                 $$1.getDataset(this._dialog, 'uiAnimating') ||
                 $$1.hasClass(this._node, 'show') ||
@@ -12551,8 +12622,7 @@
 
         const target = getTarget(e.currentTarget, '.modal');
         const modal = Modal.init(target);
-        modal._activeTarget = e.currentTarget;
-        modal.show();
+        modal.show(e.currentTarget);
     });
 
     $$1.addEventDelegate(document, 'click.ui.modal', '[data-ui-dismiss="modal"]', (e) => {
@@ -12573,20 +12643,11 @@
 
         const modal = getTopModal();
 
-        if (
-            !modal ||
-            !modal._options.backdrop ||
-            (modal._node !== target && $$1.hasDescendent(modal._node, target))
-        ) {
+        if (!modal) {
             return;
         }
 
-        if (modal._options.backdrop === 'static') {
-            modal._zoom();
-            return;
-        }
-
-        modal.hide();
+        modal.handleBackdrop(target);
     });
 
     $$1.addEvent(window$1, 'keydown.ui.modal', (e) => {
@@ -12596,16 +12657,11 @@
 
         const modal = getTopModal();
 
-        if (!modal || !modal._options.keyboard) {
+        if (!modal) {
             return;
         }
 
-        if (modal._options.backdrop === 'static') {
-            modal._zoom();
-            return;
-        }
-
-        modal.hide();
+        modal.handleEscape();
     });
 
     /**
@@ -12664,6 +12720,32 @@
             this._scrollNodes = null;
 
             super.dispose();
+        }
+
+        /**
+         * Handle a backdrop interaction.
+         * @param {HTMLElement} target The interaction target.
+         */
+        handleBackdrop(target) {
+            if (
+                !this._options.backdrop ||
+                this._options.backdrop === 'static' ||
+                $$1.isSame(this._node, target) ||
+                $$1.hasDescendent(this._node, target)
+            ) {
+                return;
+            }
+
+            this.hide();
+        }
+
+        /**
+         * Handle an escape key interaction.
+         */
+        handleEscape() {
+            if (this._options.keyboard) {
+                this.hide();
+            }
         }
 
         /**
@@ -12727,8 +12809,13 @@
 
         /**
          * Show the Offcanvas.
+         * @param {HTMLElement} [relatedTarget] The element that triggered the Offcanvas.
          */
-        show() {
+        show(relatedTarget) {
+            if (relatedTarget) {
+                this._activeTarget = relatedTarget;
+            }
+
             if (
                 $$1.getDataset(this._node, 'uiAnimating') ||
                 $$1.hasClass(this._node, 'show') ||
@@ -12812,8 +12899,7 @@
 
         const target = getTarget(e.currentTarget, '.offcanvas');
         const offcanvas = Offcanvas.init(target);
-        offcanvas._activeTarget = e.currentTarget;
-        offcanvas.show();
+        offcanvas.show(e.currentTarget);
     });
 
     $$1.addEventDelegate(document, 'click.ui.offcanvas', '[data-ui-dismiss="offcanvas"]', (e) => {
@@ -12839,17 +12925,7 @@
 
         for (const node of nodes) {
             const offcanvas = Offcanvas.init(node);
-
-            if (
-                !offcanvas._options.backdrop ||
-                offcanvas._options.backdrop === 'static' ||
-                $$1.isSame(offcanvas._node, target) ||
-                $$1.hasDescendent(offcanvas._node, target)
-            ) {
-                continue;
-            }
-
-            offcanvas.hide();
+            offcanvas.handleBackdrop(target);
         }
     });
 
@@ -12866,12 +12942,7 @@
 
         for (const node of nodes) {
             const offcanvas = Offcanvas.init(node);
-
-            if (!offcanvas._options.keyboard) {
-                return;
-            }
-
-            offcanvas.hide();
+            offcanvas.handleEscape();
         }
     });
 

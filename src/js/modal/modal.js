@@ -74,6 +74,42 @@ export default class Modal extends BaseComponent {
     }
 
     /**
+     * Handle a backdrop interaction.
+     * @param {HTMLElement} target The interaction target.
+     */
+    handleBackdrop(target) {
+        if (
+            !this._options.backdrop ||
+            (this._node !== target && $.hasDescendent(this._node, target))
+        ) {
+            return;
+        }
+
+        if (this._options.backdrop === 'static') {
+            this._zoom();
+            return;
+        }
+
+        this.hide();
+    }
+
+    /**
+     * Handle an escape key interaction.
+     */
+    handleEscape() {
+        if (!this._options.keyboard) {
+            return;
+        }
+
+        if (this._options.backdrop === 'static') {
+            this._zoom();
+            return;
+        }
+
+        this.hide();
+    }
+
+    /**
      * Hide the Modal.
      */
     hide() {
@@ -143,8 +179,13 @@ export default class Modal extends BaseComponent {
 
     /**
      * Show the Modal.
+     * @param {HTMLElement} [relatedTarget] The element that triggered the Modal.
      */
-    show() {
+    show(relatedTarget) {
+        if (relatedTarget) {
+            this._activeTarget = relatedTarget;
+        }
+
         if (
             $.getDataset(this._dialog, 'uiAnimating') ||
             $.hasClass(this._node, 'show') ||

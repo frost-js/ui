@@ -20,8 +20,7 @@ $.addEventDelegate(document, 'click.ui.offcanvas', '[data-ui-toggle="offcanvas"]
 
     const target = getTarget(e.currentTarget, '.offcanvas');
     const offcanvas = Offcanvas.init(target);
-    offcanvas._activeTarget = e.currentTarget;
-    offcanvas.show();
+    offcanvas.show(e.currentTarget);
 });
 
 $.addEventDelegate(document, 'click.ui.offcanvas', '[data-ui-dismiss="offcanvas"]', (e) => {
@@ -47,17 +46,7 @@ $.addEvent(document, 'click.ui.offcanvas', (e) => {
 
     for (const node of nodes) {
         const offcanvas = Offcanvas.init(node);
-
-        if (
-            !offcanvas._options.backdrop ||
-            offcanvas._options.backdrop === 'static' ||
-            $.isSame(offcanvas._node, target) ||
-            $.hasDescendent(offcanvas._node, target)
-        ) {
-            continue;
-        }
-
-        offcanvas.hide();
+        offcanvas.handleBackdrop(target);
     }
 });
 
@@ -74,12 +63,7 @@ $.addEvent(document, 'keydown.ui.offcanvas', (e) => {
 
     for (const node of nodes) {
         const offcanvas = Offcanvas.init(node);
-
-        if (!offcanvas._options.keyboard) {
-            return;
-        }
-
-        offcanvas.hide();
+        offcanvas.handleEscape();
     }
 });
 

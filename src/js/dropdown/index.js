@@ -38,12 +38,8 @@ $.addEventDelegate(document, 'keydown.ui.dropdown', '[data-ui-toggle="dropdown"]
             const node = e.currentTarget;
             const dropdown = Dropdown.init(node);
 
-            if (!$.hasClass(dropdown._menuNode, 'show')) {
-                dropdown.show();
-            }
-
-            const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', dropdown._menuNode);
-            $.focus(focusNode);
+            dropdown.show();
+            dropdown.focusFirstItem();
             break;
         }
     }
@@ -75,28 +71,8 @@ $.addEvent(document, 'click.ui.dropdown', (e) => {
     for (const node of nodes) {
         const toggle = $.siblings(node, '[data-ui-toggle="dropdown"]').shift();
         const dropdown = Dropdown.init(toggle);
-        const hasDescendent = $.hasDescendent(dropdown._menuNode, target);
-        const autoClose = dropdown._options.autoClose;
 
-        if (
-            $.isSame(dropdown._node, target) ||
-            (
-                hasDescendent &&
-                (
-                    $.is(target, 'form, input, textarea, select, option') ||
-                    autoClose === 'outside' ||
-                    autoClose === false
-                )
-            ) ||
-            (
-                !hasDescendent &&
-                !$.isSame(dropdown._menuNode, target) &&
-                (
-                    autoClose === 'inside' ||
-                    autoClose === false
-                )
-            )
-        ) {
+        if (!dropdown.shouldClose(target)) {
             continue;
         }
 
@@ -137,7 +113,7 @@ $.addEvent(document, 'keyup.ui.dropdown', (e) => {
         const toggle = $.siblings(node, '[data-ui-toggle="dropdown"]').shift();
         const dropdown = Dropdown.init(toggle);
 
-        if ($.hasDescendent(dropdown._menuNode, e.target)) {
+        if (dropdown.containsMenuTarget(e.target)) {
             continue;
         }
 

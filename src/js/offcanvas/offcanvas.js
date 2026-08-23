@@ -38,6 +38,32 @@ export default class Offcanvas extends BaseComponent {
     }
 
     /**
+     * Handle a backdrop interaction.
+     * @param {HTMLElement} target The interaction target.
+     */
+    handleBackdrop(target) {
+        if (
+            !this._options.backdrop ||
+            this._options.backdrop === 'static' ||
+            $.isSame(this._node, target) ||
+            $.hasDescendent(this._node, target)
+        ) {
+            return;
+        }
+
+        this.hide();
+    }
+
+    /**
+     * Handle an escape key interaction.
+     */
+    handleEscape() {
+        if (this._options.keyboard) {
+            this.hide();
+        }
+    }
+
+    /**
      * Hide the Offcanvas.
      */
     hide() {
@@ -98,8 +124,13 @@ export default class Offcanvas extends BaseComponent {
 
     /**
      * Show the Offcanvas.
+     * @param {HTMLElement} [relatedTarget] The element that triggered the Offcanvas.
      */
-    show() {
+    show(relatedTarget) {
+        if (relatedTarget) {
+            this._activeTarget = relatedTarget;
+        }
+
         if (
             $.getDataset(this._node, 'uiAnimating') ||
             $.hasClass(this._node, 'show') ||

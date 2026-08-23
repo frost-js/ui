@@ -34,11 +34,7 @@ export function addPopper(popper) {
         'scroll.ui.popper',
         $.debounce((e) => {
             for (const popper of poppers) {
-                if (
-                    !$._isDocument(e.target) &&
-                    !$.hasDescendent(e.target, popper._node) &&
-                    !$.hasDescendent(e.target, popper._options.reference)
-                ) {
+                if (!popper.shouldUpdateForScroll(e.target)) {
                     continue;
                 }
 
