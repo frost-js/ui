@@ -1,4 +1,11 @@
 @charset "UTF-8";
+:root {
+  --ui-safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --ui-safe-area-inset-right: env(safe-area-inset-right, 0px);
+  --ui-safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --ui-safe-area-inset-left: env(safe-area-inset-left, 0px);
+}
+
 :root,
 [data-ui-theme=light] {
   --ui-white: #fff;
@@ -3492,7 +3499,9 @@ fieldset:disabled .btn {
   position: fixed;
   inset: 0;
   z-index: var(--ui-modal-z-index);
+  padding: var(--ui-safe-area-inset-top) var(--ui-safe-area-inset-right) var(--ui-safe-area-inset-bottom) var(--ui-safe-area-inset-left);
   overflow: hidden;
+  overscroll-behavior: contain;
   outline: 0;
 }
 .modal:not(.show) {
@@ -3507,7 +3516,7 @@ fieldset:disabled .btn {
 }
 
 .modal-dialog-scrollable {
-  max-height: calc(100vh - 1rem);
+  max-height: calc(100dvh - 1rem);
 }
 .modal-dialog-scrollable .modal-content {
   max-height: 100%;
@@ -3520,7 +3529,7 @@ fieldset:disabled .btn {
 .modal-dialog-centered {
   display: flex;
   align-items: center;
-  min-height: calc(100vh - 1rem);
+  min-height: calc(100dvh - 1rem);
 }
 
 .modal-content {
@@ -3571,6 +3580,7 @@ fieldset:disabled .btn {
   position: relative;
   flex: 1 1 auto;
   padding: var(--ui-modal-padding-y) var(--ui-modal-padding-x);
+  overscroll-behavior: contain;
 }
 
 .modal-footer {
@@ -3615,7 +3625,7 @@ fieldset:disabled .btn {
   }
 }
 .modal-fullscreen {
-  width: 100vw;
+  width: 100%;
   max-width: none;
   height: 100%;
   margin: 0;
@@ -3635,7 +3645,7 @@ fieldset:disabled .btn {
 
 @media (max-width: 575.98px) {
   .modal-fullscreen-sm-down {
-    width: 100vw;
+    width: 100%;
     max-width: none;
     height: 100%;
     margin: 0;
@@ -3655,7 +3665,7 @@ fieldset:disabled .btn {
 }
 @media (max-width: 767.98px) {
   .modal-fullscreen-md-down {
-    width: 100vw;
+    width: 100%;
     max-width: none;
     height: 100%;
     margin: 0;
@@ -3675,7 +3685,7 @@ fieldset:disabled .btn {
 }
 @media (max-width: 991.98px) {
   .modal-fullscreen-lg-down {
-    width: 100vw;
+    width: 100%;
     max-width: none;
     height: 100%;
     margin: 0;
@@ -3695,7 +3705,7 @@ fieldset:disabled .btn {
 }
 @media (max-width: 1199.98px) {
   .modal-fullscreen-xl-down {
-    width: 100vw;
+    width: 100%;
     max-width: none;
     height: 100%;
     margin: 0;
@@ -3715,7 +3725,7 @@ fieldset:disabled .btn {
 }
 @media (max-width: 1399.98px) {
   .modal-fullscreen-xxl-down {
-    width: 100vw;
+    width: 100%;
     max-width: none;
     height: 100%;
     margin: 0;
@@ -3962,8 +3972,9 @@ fieldset:disabled .btn {
 }
 
 .navbar-nav-scroll {
-  max-height: 75vh;
+  max-height: 75dvh;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .navbar-collapse {
@@ -4327,7 +4338,7 @@ fieldset:disabled .btn {
 .offcanvas {
   --ui-offcanvas-z-index: 1040;
   --ui-offcanvas-width: 400px;
-  --ui-offcanvas-height: 30vh;
+  --ui-offcanvas-height: 30dvh;
   --ui-offcanvas-padding-x: 1rem;
   --ui-offcanvas-padding-y: 1rem;
   --ui-offcanvas-color: var(--ui-body-color);
@@ -4341,6 +4352,7 @@ fieldset:disabled .btn {
   display: flex;
   flex-direction: column;
   max-width: 100%;
+  padding: var(--ui-safe-area-inset-top) var(--ui-safe-area-inset-right) var(--ui-safe-area-inset-bottom) var(--ui-safe-area-inset-left);
   color: var(--ui-offcanvas-color);
   outline: 0;
   background-color: var(--ui-offcanvas-bg);
@@ -4371,6 +4383,7 @@ fieldset:disabled .btn {
   flex-grow: 1;
   padding: var(--ui-offcanvas-padding-y) var(--ui-offcanvas-padding-x);
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .offcanvas-start {
@@ -5793,38 +5806,32 @@ select.input-lg[multiple] option {
   position: relative;
   display: block;
   width: 100%;
+  aspect-ratio: var(--ui-aspect-ratio);
   padding: 0;
   overflow: hidden;
 }
 .ratio > * {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   border: 0;
 }
-.ratio::before {
-  display: block;
-  padding-top: var(--ui-aspect-ratio);
-  content: "";
-}
 
 .ratio-1x1 {
-  --ui-aspect-ratio: 100%;
+  --ui-aspect-ratio: 1 / 1;
 }
 
 .ratio-4x3 {
-  --ui-aspect-ratio: 75%;
+  --ui-aspect-ratio: 4 / 3;
 }
 
 .ratio-16x9 {
-  --ui-aspect-ratio: 56.25%;
+  --ui-aspect-ratio: 16 / 9;
 }
 
 .ratio-21x9 {
-  --ui-aspect-ratio: 42.857143%;
+  --ui-aspect-ratio: 21 / 9;
 }
 
 .ripple {
@@ -8467,6 +8474,22 @@ select.input-lg[multiple] option {
 
 .min-vh-100 {
   min-height: 100vh !important;
+}
+
+.dvw-100 {
+  width: 100dvw !important;
+}
+
+.dvh-100 {
+  height: 100dvh !important;
+}
+
+.min-dvw-100 {
+  min-width: 100dvw !important;
+}
+
+.min-dvh-100 {
+  min-height: 100dvh !important;
 }
 
 .p-0 {

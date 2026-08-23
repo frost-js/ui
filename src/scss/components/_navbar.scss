@@ -104,6 +104,7 @@
 .navbar-nav-scroll {
     max-height: vars.$navbar-nav-scroll-height;
     overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .navbar-collapse {

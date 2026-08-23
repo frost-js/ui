@@ -3,6 +3,13 @@
 
 @use "sass:map";
 
+:root {
+    --ui-safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --ui-safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --ui-safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --ui-safe-area-inset-left: env(safe-area-inset-left, 0px);
+}
+
 :root,
 [data-ui-theme="light"] {
     --ui-white: #{vars.$white};

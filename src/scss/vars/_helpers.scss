@@ -1,6 +1,8 @@
 @use "maps";
 @use "vars";
 
+@use "sass:list";
+
 // caret
 $caret-spacing: vars.$spacing * .5 !default;
 $caret-vertical-align: .2em !default;
@@ -11,10 +13,10 @@ $color-link-variants: maps.$utilities-colors !default;
 
 // ratio
 $ratios: (
-    1x1: 100%,
-    4x3: 75%,
-    16x9: 56.25%,
-    21x9: 42.857143%
+    1x1: list.slash(1, 1),
+    4x3: list.slash(4, 3),
+    16x9: list.slash(16, 9),
+    21x9: list.slash(21, 9)
 ) !default;
 
 // ripple

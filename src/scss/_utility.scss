@@ -512,6 +512,26 @@
     class: min-vh,
     values: (100: 100vh)
 ));
+@include mixins.utility((
+    property: width,
+    class: dvw,
+    values: (100: 100dvw)
+));
+@include mixins.utility((
+    property: height,
+    class: dvh,
+    values: (100: 100dvh)
+));
+@include mixins.utility((
+    property: min-width,
+    class: min-dvw,
+    values: (100: 100dvw)
+));
+@include mixins.utility((
+    property: min-height,
+    class: min-dvh,
+    values: (100: 100dvh)
+));
 
 // spacing
 @include mixins.utility((
