@@ -1,10 +1,13 @@
+@use "maps";
+@use "vars";
+
 // caret
-$caret-spacing: $spacing * .5 !default;
+$caret-spacing: vars.$spacing * .5 !default;
 $caret-vertical-align: .2em !default;
 $caret-size: .25em !default;
 
 // color links
-$color-link-variants: $utilities-colors !default;
+$color-link-variants: maps.$utilities-colors !default;
 
 // ratio
 $ratios: (

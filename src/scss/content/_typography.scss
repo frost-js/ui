@@ -1,16 +1,20 @@
+@use "../functions";
+@use "../vars";
+@use "base";
+
 .blockquote {
-    margin-bottom: $blockquote-margin-bottom;
-    font-size: $blockquote-font-size;
+    margin-bottom: vars.$blockquote-margin-bottom;
+    font-size: vars.$blockquote-font-size;
 }
 
 .blockquote-footer {
     display: block;
-    margin-top: $blockquote-footer-margin-top;
-    font-size: $blockquote-footer-font-size;
-    color: $blockquote-footer-color;
+    margin-top: vars.$blockquote-footer-margin-top;
+    font-size: vars.$blockquote-footer-font-size;
+    color: vars.$blockquote-footer-color;
 
     &::before {
-        content: $blockquote-footer-prefix;
+        content: vars.$blockquote-footer-prefix;
     }
 }
 
@@ -40,52 +44,52 @@
 
 %display-heading {
     margin-top: 0;
-    margin-bottom: $headings-margin-bottom;
-    font-family: $headings-font-family;
-    font-style: $headings-font-style;
-    font-weight: $display-font-weight;
-    line-height: $display-line-height;
-    color: $headings-color;
+    margin-bottom: vars.$headings-margin-bottom;
+    font-family: vars.$headings-font-family;
+    font-style: vars.$headings-font-style;
+    font-weight: vars.$display-font-weight;
+    line-height: vars.$display-line-height;
+    color: vars.$headings-color;
 }
 
 .display-1 {
     @extend %display-heading;
-    font-size: text-size($display-1-font-size);
+    font-size: functions.text-size(vars.$display-1-font-size);
 }
 
 .display-2 {
     @extend %display-heading;
-    font-size: text-size($display-2-font-size);
+    font-size: functions.text-size(vars.$display-2-font-size);
 }
 
 .display-3 {
     @extend %display-heading;
-    font-size: text-size($display-3-font-size);
+    font-size: functions.text-size(vars.$display-3-font-size);
 }
 
 .display-4 {
     @extend %display-heading;
-    font-size: text-size($display-4-font-size);
+    font-size: functions.text-size(vars.$display-4-font-size);
 }
 
 .display-5 {
     @extend %display-heading;
-    font-size: text-size($display-5-font-size);
+    font-size: functions.text-size(vars.$display-5-font-size);
 }
 
 .display-6 {
     @extend %display-heading;
-    font-size: text-size($display-6-font-size);
+    font-size: functions.text-size(vars.$display-6-font-size);
 }
 
 .initialism {
-    font-size: $small-font-size;
+    font-size: vars.$small-font-size;
     text-transform: uppercase;
 }
 
 .lead {
-    font-size: text-size($lead-font-size);
-    font-weight: $lead-font-weight;
+    font-size: functions.text-size(vars.$lead-font-size);
+    font-weight: vars.$lead-font-weight;
 }
 
 .list-inline {
@@ -98,7 +102,7 @@
 }
 
 .list-inline-item:not(:last-child) {
-    margin-right: $list-inline-item-margin-right;
+    margin-right: vars.$list-inline-item-margin-right;
 }
 
 .list-unstyled {

@@ -1,21 +1,23 @@
+@use "../vars";
+
 .col-label {
-    padding-top: calc(#{$input-padding-y} + #{$input-border-width});
-    padding-bottom: calc(#{$input-padding-y} + #{$input-border-width});
+    padding-top: calc(#{vars.$input-padding-y} + #{vars.$input-border-width});
+    padding-bottom: calc(#{vars.$input-padding-y} + #{vars.$input-border-width});
     margin-bottom: 0;
     font-size: inherit;
-    line-height: $input-line-height;
+    line-height: vars.$input-line-height;
 }
 
 .col-label-sm {
-    padding-top: calc(#{$input-sm-padding-y} + #{$input-border-width});
-    padding-bottom: calc(#{$input-sm-padding-y} + #{$input-border-width});
-    font-size: $input-sm-font-size;
+    padding-top: calc(#{vars.$input-sm-padding-y} + #{vars.$input-border-width});
+    padding-bottom: calc(#{vars.$input-sm-padding-y} + #{vars.$input-border-width});
+    font-size: vars.$input-sm-font-size;
 }
 
 .col-label-lg {
-    padding-top: calc(#{$input-padding-y} + #{$input-border-width});
-    padding-bottom: calc(#{$input-padding-y} + #{$input-border-width});
-    font-size: $input-lg-font-size;
+    padding-top: calc(#{vars.$input-padding-y} + #{vars.$input-border-width});
+    padding-bottom: calc(#{vars.$input-padding-y} + #{vars.$input-border-width});
+    font-size: vars.$input-lg-font-size;
 }
 
 .label-floating {
@@ -24,14 +26,14 @@
     left: 0;
     display: block;
     width: 100%;
-    padding: $label-floating-padding-y $input-padding-x;
+    padding: vars.$label-floating-padding-y vars.$input-padding-x;
     margin-bottom: 0;
-    font-size: $input-font-size;
-    line-height: $input-line-height;
-    color: $input-placeholder-color;
+    font-size: vars.$input-font-size;
+    line-height: vars.$input-line-height;
+    color: vars.$input-placeholder-color;
     pointer-events: none;
     cursor: text;
-    transition: all $transition-time $transition-type;
+    transition: all vars.$transition-time vars.$transition-type;
     transition-property: padding, font-size, color;
 }
 
@@ -39,8 +41,8 @@
 
     &,
     .input-group & {
-        padding-top: $label-floating-padding-y;
-        padding-bottom: $label-floating-padding-y;
+        padding-top: vars.$label-floating-padding-y;
+        padding-bottom: vars.$label-floating-padding-y;
     }
 
     &::placeholder {
@@ -51,7 +53,7 @@
     .input-group-sm & {
 
         ~.label-floating {
-            font-size: $input-sm-font-size;
+            font-size: vars.$input-sm-font-size;
         }
 
     }
@@ -60,28 +62,28 @@
     .input-group-lg & {
 
         ~.label-floating {
-            font-size: $input-lg-font-size;
+            font-size: vars.$input-lg-font-size;
         }
     }
 
     &.input-filled ~ .label-floating {
-        border-bottom: $input-border-width var(--ui-border-style) transparent;
+        border-bottom: vars.$input-border-width var(--ui-border-style) transparent;
     }
 
     &.input-outline ~ .label-floating {
-        border: $input-border-width var(--ui-border-style) transparent;
+        border: vars.$input-border-width var(--ui-border-style) transparent;
     }
 
     &:focus,
     &.focus,
     &:not(:placeholder-shown) {
-        padding-top: $input-padding-y + $label-floating-padding-y;
-        padding-bottom: $input-padding-y * .5;
+        padding-top: vars.$input-padding-y + vars.$label-floating-padding-y;
+        padding-bottom: vars.$input-padding-y * .5;
 
         ~.label-floating {
-            padding-top: $input-padding-y * .5;
-            font-size: $label-floating-font-size;
-            color: $label-floating-color;
+            padding-top: vars.$input-padding-y * .5;
+            font-size: vars.$label-floating-font-size;
+            color: vars.$label-floating-color;
         }
     }
 }

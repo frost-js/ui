@@ -1,26 +1,30 @@
+@use "../functions";
+@use "../mixins";
+@use "../vars";
+
 .container,
 .container-fluid {
     width: 100%;
-    padding-right: $gutter-x * .5;
-    padding-left: $gutter-x * .5;
+    padding-right: vars.$gutter-x * .5;
+    padding-left: vars.$gutter-x * .5;
     margin-right: auto;
     margin-left: auto;
 }
 
-@each $breakpoint, $max-width in $containers {
+@each $breakpoint, $max-width in vars.$containers {
     .container-#{$breakpoint} {
         @extend .container-fluid;
     }
 
     $extend-breakpoint: true;
-    @include media-breakpoint-up($breakpoint) {
+    @include mixins.media-breakpoint-up($breakpoint) {
         %responsive-container-#{$breakpoint} {
             max-width: $max-width;
         }
 
-        @each $name, $width in $breakpoints {
+        @each $name, $width in vars.$breakpoints {
             @if ($extend-breakpoint) {
-                $infix: breakpoint-infix($name);
+                $infix: functions.breakpoint-infix($name);
 
                 .container#{$infix} {
                     @extend %responsive-container-#{$breakpoint};

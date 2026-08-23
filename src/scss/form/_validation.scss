@@ -1,33 +1,35 @@
+@use "../vars";
+
 .form-success {
-    --ui-input-border-color: #{$valid-feedback-color};
-    --ui-input-filled-bg: #{$input-filled-success-bg};
-    --ui-input-filled-border-color: #{$valid-feedback-color};
-    --ui-input-filled-hover-bg: #{$input-filled-success-hover-bg};
-    --ui-input-filled-focus-bg: #{$input-filled-success-focus-bg};
-    --ui-input-check-checked-bg: #{$valid-feedback-color};
-    --ui-input-check-focus-color: #{$valid-feedback-color};
-    --ui-input-check-label-color: #{$valid-feedback-color};
-    --ui-input-feedback-color: #{$valid-feedback-color};
+    --ui-input-border-color: #{vars.$valid-feedback-color};
+    --ui-input-filled-bg: #{vars.$input-filled-success-bg};
+    --ui-input-filled-border-color: #{vars.$valid-feedback-color};
+    --ui-input-filled-hover-bg: #{vars.$input-filled-success-hover-bg};
+    --ui-input-filled-focus-bg: #{vars.$input-filled-success-focus-bg};
+    --ui-input-check-checked-bg: #{vars.$valid-feedback-color};
+    --ui-input-check-focus-color: #{vars.$valid-feedback-color};
+    --ui-input-check-label-color: #{vars.$valid-feedback-color};
+    --ui-input-feedback-color: #{vars.$valid-feedback-color};
 }
 
 .form-error {
-    --ui-input-border-color: #{$invalid-feedback-color};
-    --ui-input-filled-bg: #{$input-filled-error-bg};
-    --ui-input-filled-border-color: #{$invalid-feedback-color};
-    --ui-input-filled-hover-bg: #{$input-filled-error-hover-bg};
-    --ui-input-filled-focus-bg: #{$input-filled-error-focus-bg};
-    --ui-input-check-checked-bg: #{$invalid-feedback-color};
-    --ui-input-check-focus-color: #{$invalid-feedback-color};
-    --ui-input-check-label-color: #{$invalid-feedback-color};
-    --ui-input-feedback-color: #{$invalid-feedback-color};
+    --ui-input-border-color: #{vars.$invalid-feedback-color};
+    --ui-input-filled-bg: #{vars.$input-filled-error-bg};
+    --ui-input-filled-border-color: #{vars.$invalid-feedback-color};
+    --ui-input-filled-hover-bg: #{vars.$input-filled-error-hover-bg};
+    --ui-input-filled-focus-bg: #{vars.$input-filled-error-focus-bg};
+    --ui-input-check-checked-bg: #{vars.$invalid-feedback-color};
+    --ui-input-check-focus-color: #{vars.$invalid-feedback-color};
+    --ui-input-check-label-color: #{vars.$invalid-feedback-color};
+    --ui-input-feedback-color: #{vars.$invalid-feedback-color};
 }
 
 .valid-feedback,
 .invalid-feedback {
     display: none;
     width: 100%;
-    margin-top: $form-feedback-margin-top;
-    font-size: $form-feedback-font-size;
+    margin-top: vars.$form-feedback-margin-top;
+    font-size: vars.$form-feedback-font-size;
     color: var(--ui-input-feedback-color);
 }
 

@@ -1,9 +1,13 @@
+@use "../functions";
+@use "../mixins";
+@use "../vars";
+
 @use "sass:map";
 @use "sass:math";
 
 .row {
-    --ui-gutter-y: #{$gutter-y};
-    --ui-gutter-x: #{$gutter-x};
+    --ui-gutter-y: #{vars.$gutter-y};
+    --ui-gutter-x: #{vars.$gutter-x};
 
     display: flex;
     flex-wrap: wrap;
@@ -21,10 +25,10 @@
     }
 }
 
-@each $breakpoint in map.keys($breakpoints) {
-    $infix: breakpoint-infix($breakpoint);
+@each $breakpoint in map.keys(vars.$breakpoints) {
+    $infix: functions.breakpoint-infix($breakpoint);
 
-    @include media-breakpoint-up($breakpoint) {
+    @include mixins.media-breakpoint-up($breakpoint) {
         .col#{$infix} {
             flex: 1 0 0%;
         }
@@ -35,8 +39,8 @@
             width: auto;
         }
 
-        @if $row-grid-size > 0 {
-            @for $i from 1 through $row-grid-size {
+        @if vars.$row-grid-size > 0 {
+            @for $i from 1 through vars.$row-grid-size {
                 .row-cols#{$infix}-#{$i} > * {
                     flex: 0 0 auto;
                     width: math.div(100%, $i);
@@ -44,17 +48,17 @@
             }
         }
 
-        @if $grid-size > 0 {
-            @for $i from 1 through $grid-size {
+        @if vars.$grid-size > 0 {
+            @for $i from 1 through vars.$grid-size {
                 .col#{$infix}-#{$i} {
                     flex: 0 0 auto;
-                    width: math.percentage(math.div($i, $grid-size));
+                    width: math.percentage(math.div($i, vars.$grid-size));
                 }
             }
 
-            @for $i from 0 through ($grid-size - 1) {
+            @for $i from 0 through (vars.$grid-size - 1) {
                 .offset#{$infix}-#{$i} {
-                    $num: math.div($i, $grid-size);
+                    $num: math.div($i, vars.$grid-size);
 
                     @if $num == 0 {
                         margin-left: 0;
@@ -65,7 +69,7 @@
             }
         }
 
-        @each $key, $value in $gutters {
+        @each $key, $value in vars.$gutters {
             .g#{$infix}-#{$key},
             .gx#{$infix}-#{$key} {
                 --ui-gutter-x: #{$value};

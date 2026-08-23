@@ -1,6 +1,9 @@
+@use "../mixins";
+@use "../vars";
+
 .input-range {
     width: 100%;
-    height: calc($input-range-thumb-height + ($input-range-thumb-focus-box-shadow-width * 2));
+    height: calc(vars.$input-range-thumb-height + (vars.$input-range-thumb-focus-box-shadow-width * 2));
     padding: 0;
     appearance: none;
     background-color: transparent;
@@ -9,11 +12,11 @@
         outline: 0;
 
         &::-webkit-slider-thumb {
-            box-shadow: $input-range-thumb-focus-box-shadow;
+            box-shadow: vars.$input-range-thumb-focus-box-shadow;
         }
 
         &::-moz-range-thumb {
-            box-shadow: $input-range-thumb-focus-box-shadow;
+            box-shadow: vars.$input-range-thumb-focus-box-shadow;
         }
     }
 
@@ -22,65 +25,65 @@
     }
 
     &::-webkit-slider-thumb {
-        width: $input-range-thumb-width;
-        height: $input-range-thumb-height;
-        margin-top: ($input-range-track-height - $input-range-thumb-height) * .5;
+        width: vars.$input-range-thumb-width;
+        height: vars.$input-range-thumb-height;
+        margin-top: (vars.$input-range-track-height - vars.$input-range-thumb-height) * .5;
         appearance: none;
-        background-color: $input-range-thumb-bg;
+        background-color: vars.$input-range-thumb-bg;
         border: 0;
-        @include border-radius($input-range-thumb-border-radius);
-        box-shadow: $input-range-thumb-box-shadow;
-        transition: $input-range-thumb-transition;
+        @include mixins.border-radius(vars.$input-range-thumb-border-radius);
+        box-shadow: vars.$input-range-thumb-box-shadow;
+        transition: vars.$input-range-thumb-transition;
 
         &:active {
-            background-color: $input-range-thumb-active-bg;
+            background-color: vars.$input-range-thumb-active-bg;
         }
     }
 
     &::-webkit-slider-runnable-track {
-        width: $input-range-track-width;
-        height: $input-range-track-height;
+        width: vars.$input-range-track-width;
+        height: vars.$input-range-track-height;
         cursor: pointer;
-        background-color: $input-range-track-bg;
+        background-color: vars.$input-range-track-bg;
         border-color: transparent;
-        @include border-radius($input-range-track-border-radius);
-        box-shadow: $input-range-thumb-box-shadow;
+        @include mixins.border-radius(vars.$input-range-track-border-radius);
+        box-shadow: vars.$input-range-thumb-box-shadow;
     }
 
     &::-moz-range-thumb {
-        width: $input-range-thumb-width;
-        height: $input-range-thumb-height;
+        width: vars.$input-range-thumb-width;
+        height: vars.$input-range-thumb-height;
         appearance: none;
-        background-color: $input-range-thumb-bg;
+        background-color: vars.$input-range-thumb-bg;
         border: 0;
-        @include border-radius($input-range-thumb-border-radius);
-        box-shadow: $input-range-thumb-box-shadow;
-        transition: $input-range-thumb-transition;
+        @include mixins.border-radius(vars.$input-range-thumb-border-radius);
+        box-shadow: vars.$input-range-thumb-box-shadow;
+        transition: vars.$input-range-thumb-transition;
 
         &:active {
-            background-color: $input-range-thumb-active-bg;
+            background-color: vars.$input-range-thumb-active-bg;
         }
     }
 
     &::-moz-range-track {
-        width: $input-range-track-width;
-        height: $input-range-track-height;
+        width: vars.$input-range-track-width;
+        height: vars.$input-range-track-height;
         color: transparent;
         cursor: pointer;
-        background-color: $input-range-track-bg;
+        background-color: vars.$input-range-track-bg;
         border-color: transparent;
-        @include border-radius($input-range-track-border-radius);
+        @include mixins.border-radius(vars.$input-range-track-border-radius);
     }
 
     &:disabled {
         pointer-events: none;
 
         &::-webkit-slider-thumb {
-            background-color: $input-range-thumb-disabled-bg;
+            background-color: vars.$input-range-thumb-disabled-bg;
         }
 
         &::-moz-range-thumb {
-            background-color: $input-range-thumb-disabled-bg;
+            background-color: vars.$input-range-thumb-disabled-bg;
         }
     }
 }

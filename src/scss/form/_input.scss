@@ -1,3 +1,6 @@
+@use "../mixins";
+@use "../vars";
+
 @use "sass:selector";
 
 .form-input {
@@ -9,13 +12,13 @@
 .input-outline {
     display: block;
     width: 100%;
-    padding: $input-padding-y $input-padding-x;
-    font-size: $input-font-size;
-    line-height: $input-line-height;
-    color: $input-color;
+    padding: vars.$input-padding-y vars.$input-padding-x;
+    font-size: vars.$input-font-size;
+    line-height: vars.$input-line-height;
+    color: vars.$input-color;
 
     &::placeholder {
-        color: $input-placeholder-color;
+        color: vars.$input-placeholder-color;
     }
 
     &:hover {
@@ -38,13 +41,13 @@
 
         &,
         &:hover {
-            background-color: $input-disabled-bg;
+            background-color: vars.$input-disabled-bg;
         }
     }
 
     &[readonly],
     &.readonly {
-        color: $input-placeholder-color;
+        color: vars.$input-placeholder-color;
     }
 
     @at-root #{selector.append("select", &)} {
@@ -54,26 +57,26 @@
             @at-root {
                 #{&},
                 #{selector.nest("[data-ui-theme=\"light\"]", &)} {
-                    --ui-select-arrow-background-image: #{$input-select-arrow-background-image};
+                    --ui-select-arrow-background-image: #{vars.$input-select-arrow-background-image};
                 }
 
                 #{selector.nest("[data-ui-theme=\"dark\"]", &)} {
-                    --ui-select-arrow-background-image: #{$input-select-arrow-background-image-dark};
+                    --ui-select-arrow-background-image: #{vars.$input-select-arrow-background-image-dark};
                 }
             }
 
-            padding-right: calc(#{$input-padding-x * 2} + #{$input-select-arrow-size});
+            padding-right: calc(#{vars.$input-padding-x * 2} + #{vars.$input-select-arrow-size});
             background-image: var(--ui-select-arrow-background-image);
             background-repeat: no-repeat;
-            background-position: right $input-padding-x center;
-            background-size: $input-select-arrow-size #{$input-select-arrow-size * .75};
+            background-position: right vars.$input-padding-x center;
+            background-size: vars.$input-select-arrow-size #{vars.$input-select-arrow-size * .75};
         }
 
         &[multiple] {
             padding: 0;
 
             option {
-                padding: $input-padding-y $input-padding-x;
+                padding: vars.$input-padding-y vars.$input-padding-x;
             }
         }
     }
@@ -87,16 +90,16 @@
     }
 
     &::file-selector-button {
-        padding: $input-padding-y $input-padding-x;
-        margin: (-$input-padding-y) (-$input-padding-x);
-        margin-inline-end: $input-padding-x;
-        color: $input-file-button-color;
+        padding: vars.$input-padding-y vars.$input-padding-x;
+        margin: (-(vars.$input-padding-y)) (-(vars.$input-padding-x));
+        margin-inline-end: vars.$input-padding-x;
+        color: vars.$input-file-button-color;
         pointer-events: none;
-        background-color: $input-file-button-bg;
+        background-color: vars.$input-file-button-bg;
         border-color: inherit;
         border-style: solid;
         border-width: 0;
-        border-inline-end-width: $input-border-width;
+        border-inline-end-width: vars.$input-border-width;
         border-radius: 0;
     }
 
@@ -116,76 +119,76 @@
 }
 
 .input-filled {
-    background-color: var(--ui-input-filled-bg, #{$input-filled-bg});
+    background-color: var(--ui-input-filled-bg, #{vars.$input-filled-bg});
     border: 0;
-    border-bottom: $input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{$input-filled-border-color});
+    border-bottom: vars.$input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{vars.$input-filled-border-color});
 
     &:hover {
-        background-color: var(--ui-input-filled-hover-bg, #{$input-filled-hover-bg});
+        background-color: var(--ui-input-filled-hover-bg, #{vars.$input-filled-hover-bg});
     }
 
     &:focus,
     &.focus {
-        background-color: var(--ui-input-filled-focus-bg, #{$input-filled-focus-bg});
+        background-color: var(--ui-input-filled-focus-bg, #{vars.$input-filled-focus-bg});
     }
 }
 
 .input-outline {
-    background-color: $input-outline-bg;
-    border: $input-border-width var(--ui-border-style) var(--ui-input-border-color, #{$input-border-color});
-    @include border-radius($input-outline-border-radius);
+    background-color: vars.$input-outline-bg;
+    border: vars.$input-border-width var(--ui-border-style) var(--ui-input-border-color, #{vars.$input-border-color});
+    @include mixins.border-radius(vars.$input-outline-border-radius);
 
     &:hover {
-        border-color: $input-outline-hover-border-color;
+        border-color: vars.$input-outline-hover-border-color;
     }
 
     &:focus,
     &.focus {
-        border-color: $input-outline-focus-border-color;
-        box-shadow: 0 0 0 $input-outline-focus-shadow-width $input-outline-focus-shadow-color;
+        border-color: vars.$input-outline-focus-border-color;
+        box-shadow: 0 0 0 vars.$input-outline-focus-shadow-width vars.$input-outline-focus-shadow-color;
     }
 }
 
 .input-sm {
-    min-height: calc(#{$input-line-height * 1em} + #{$input-sm-padding-y * 2} + (#{$input-border-width} * 2));
-    padding: $input-sm-padding-y $input-sm-padding-x;
-    font-size: $input-sm-font-size;
+    min-height: calc(#{vars.$input-line-height * 1em} + #{vars.$input-sm-padding-y * 2} + (#{vars.$input-border-width} * 2));
+    padding: vars.$input-sm-padding-y vars.$input-sm-padding-x;
+    font-size: vars.$input-sm-font-size;
 
     &::file-selector-button {
-        padding: $input-sm-padding-y $input-sm-padding-x;
-        margin: (-$input-sm-padding-y) (-$input-sm-padding-x);
-        margin-inline-end: $input-sm-padding-x;
+        padding: vars.$input-sm-padding-y vars.$input-sm-padding-x;
+        margin: (-(vars.$input-sm-padding-y)) (-(vars.$input-sm-padding-x));
+        margin-inline-end: vars.$input-sm-padding-x;
     }
 
     @at-root select#{&}[multiple] option {
-        padding: $input-sm-padding-y $input-sm-padding-x;
+        padding: vars.$input-sm-padding-y vars.$input-sm-padding-x;
     }
 }
 
 .input-lg {
-    min-height: calc(#{$input-line-height * 1em} + #{$input-lg-padding-y * 2} + (#{$input-border-width} * 2));
-    padding: $input-lg-padding-y $input-lg-padding-x;
-    font-size: $input-lg-font-size;
+    min-height: calc(#{vars.$input-line-height * 1em} + #{vars.$input-lg-padding-y * 2} + (#{vars.$input-border-width} * 2));
+    padding: vars.$input-lg-padding-y vars.$input-lg-padding-x;
+    font-size: vars.$input-lg-font-size;
 
     &::file-selector-button {
-        padding: $input-lg-padding-y $input-lg-padding-x;
-        margin: (-$input-lg-padding-y) (-$input-lg-padding-x);
-        margin-inline-end: $input-lg-padding-x;
+        padding: vars.$input-lg-padding-y vars.$input-lg-padding-x;
+        margin: (-(vars.$input-lg-padding-y)) (-(vars.$input-lg-padding-x));
+        margin-inline-end: vars.$input-lg-padding-x;
     }
 
     @at-root select#{&}[multiple] option {
-        padding: $input-lg-padding-y $input-lg-padding-x;
+        padding: vars.$input-lg-padding-y vars.$input-lg-padding-x;
     }
 }
 
 .form-input-color {
-    width: $input-color-width;
+    width: vars.$input-color-width;
 }
 
 .input-color {
-    width: $input-color-width;
-    height: calc(#{$input-line-height * 1em} + #{$input-padding-y * 2} + (#{$input-border-width} * 2));
-    padding: $input-padding-y;
+    width: vars.$input-color-width;
+    height: calc(#{vars.$input-line-height * 1em} + #{vars.$input-padding-y * 2} + (#{vars.$input-border-width} * 2));
+    padding: vars.$input-padding-y;
 
     &:not(:disabled):not([readonly]) {
         cursor: pointer;
@@ -200,20 +203,20 @@
     }
 
     &.input-sm {
-        height: calc(#{$input-line-height * 1em} + #{$input-sm-padding-y * 2} + (#{$input-border-width} * 2));
+        height: calc(#{vars.$input-line-height * 1em} + #{vars.$input-sm-padding-y * 2} + (#{vars.$input-border-width} * 2));
     }
 
     &.input-lg {
-        height: calc(#{$input-line-height * 1em} + #{$input-lg-padding-y * 2} + (#{$input-border-width} * 2));
+        height: calc(#{vars.$input-line-height * 1em} + #{vars.$input-lg-padding-y * 2} + (#{vars.$input-border-width} * 2));
     }
 
     &.input-outline {
         &::-moz-color-swatch {
-            @include border-radius($input-outline-border-radius);
+            @include mixins.border-radius(vars.$input-outline-border-radius);
         }
 
         &::-webkit-color-swatch {
-            @include border-radius($input-outline-border-radius);
+            @include mixins.border-radius(vars.$input-outline-border-radius);
         }
     }
 }
@@ -224,11 +227,11 @@
     left: 0;
     z-index: 4;
     width: 100%;
-    height: calc($input-border-width * 2);
-    background-color: $ripple-line-bg;
+    height: calc(vars.$input-border-width * 2);
+    background-color: vars.$ripple-line-bg;
     opacity: 0;
     transform: scaleX(0);
-    transition: all $transition-time $transition-type;
+    transition: all vars.$transition-time vars.$transition-type;
     transition-property: transform, opacity;
 
     @at-root {

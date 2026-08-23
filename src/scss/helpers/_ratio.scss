@@ -1,3 +1,5 @@
+@use "../vars";
+
 .ratio {
     position: relative;
     display: block;
@@ -22,7 +24,7 @@
     }
 }
 
-@each $key, $ratio in $ratios {
+@each $key, $ratio in vars.$ratios {
     .ratio-#{$key} {
         --ui-aspect-ratio: #{$ratio};
     }

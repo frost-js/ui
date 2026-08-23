@@ -1,28 +1,32 @@
+@use "../functions";
+@use "../mixins";
+@use "../vars";
+
 @use "sass:map";
 
 .list-group {
-    --ui-list-group-color: #{$list-group-color};
-    --ui-list-group-bg: #{$list-group-bg};
-    --ui-list-group-border-color: #{$list-group-border-color};
-    --ui-list-group-border-width: #{$list-group-border-width};
-    --ui-list-group-border-radius: #{$list-group-border-radius};
-    --ui-list-group-item-padding-x: #{$list-group-item-padding-x};
-    --ui-list-group-item-padding-y: #{$list-group-item-padding-y};
-    --ui-list-group-item-disabled-color: #{$list-group-item-disabled-color};
-    --ui-list-group-item-disabled-bg: #{$list-group-item-disabled-bg};
-    --ui-list-group-action-color: #{$list-group-action-color};
-    --ui-list-group-action-hover-color: #{$list-group-action-hover-color};
-    --ui-list-group-action-hover-bg: #{$list-group-action-hover-bg};
-    --ui-list-group-active-color: #{$list-group-active-color};
-    --ui-list-group-active-bg: #{$list-group-active-bg};
-    --ui-list-group-active-border-color: #{$list-group-active-border-color};
+    --ui-list-group-color: #{vars.$list-group-color};
+    --ui-list-group-bg: #{vars.$list-group-bg};
+    --ui-list-group-border-color: #{vars.$list-group-border-color};
+    --ui-list-group-border-width: #{vars.$list-group-border-width};
+    --ui-list-group-border-radius: #{vars.$list-group-border-radius};
+    --ui-list-group-item-padding-x: #{vars.$list-group-item-padding-x};
+    --ui-list-group-item-padding-y: #{vars.$list-group-item-padding-y};
+    --ui-list-group-item-disabled-color: #{vars.$list-group-item-disabled-color};
+    --ui-list-group-item-disabled-bg: #{vars.$list-group-item-disabled-bg};
+    --ui-list-group-action-color: #{vars.$list-group-action-color};
+    --ui-list-group-action-hover-color: #{vars.$list-group-action-hover-color};
+    --ui-list-group-action-hover-bg: #{vars.$list-group-action-hover-bg};
+    --ui-list-group-active-color: #{vars.$list-group-active-color};
+    --ui-list-group-active-bg: #{vars.$list-group-active-bg};
+    --ui-list-group-active-border-color: #{vars.$list-group-active-border-color};
 
     display: flex;
     flex-direction: column;
     padding: 0;
     margin-bottom: 0;
     margin-left: 0;
-    @include border-radius(var(--ui-list-group-border-radius));
+    @include mixins.border-radius(var(--ui-list-group-border-radius));
 }
 
 .list-group-item-action {
@@ -40,7 +44,7 @@
 
     &:focus {
         outline: 0;
-        box-shadow: #{$list-group-action-focus-box-shadow};
+        box-shadow: #{vars.$list-group-action-focus-box-shadow};
     }
 }
 
@@ -54,11 +58,11 @@
     border: var(--ui-list-group-border-width) var(--ui-border-style) var(--ui-list-group-border-color);
 
     &:first-child {
-        @include border-top-radius(inherit);
+        @include mixins.border-top-radius(inherit);
     }
 
     &:last-child {
-        @include border-bottom-radius(inherit);
+        @include mixins.border-bottom-radius(inherit);
     }
 
     &:disabled,
@@ -86,7 +90,7 @@
 }
 
 .list-group-flush {
-    @include border-radius(0);
+    @include mixins.border-radius(0);
 
     >.list-group-item {
         border-width: 0 0 var(--ui-list-group-border-width);
@@ -107,7 +111,7 @@
     }
 }
 
-@each $name, $color in $color-variants {
+@each $name, $color in vars.$color-variants {
     .list-group-item-#{$name} {
         --ui-list-group-color: var(--ui-#{$name}-subtle-text);
         --ui-list-group-bg: var(--ui-#{$name}-subtle);
@@ -121,10 +125,10 @@
     }
 }
 
-@each $breakpoint in map.keys($breakpoints) {
-    $infix: breakpoint-infix($breakpoint);
+@each $breakpoint in map.keys(vars.$breakpoints) {
+    $infix: functions.breakpoint-infix($breakpoint);
 
-    @include media-breakpoint-up($breakpoint) {
+    @include mixins.media-breakpoint-up($breakpoint) {
         .list-group-horizontal#{$infix} {
             flex-direction: row;
 
@@ -135,11 +139,11 @@
             .list-group-item {
 
                 &:first-child {
-                    @include border-radius(var(--ui-list-group-border-radius) 0 0 var(--ui-list-group-border-radius));
+                    @include mixins.border-radius(var(--ui-list-group-border-radius) 0 0 var(--ui-list-group-border-radius));
                 }
 
                 &:last-child {
-                    @include border-radius(0 var(--ui-list-group-border-radius) $list-group-border-radius 0);
+                    @include mixins.border-radius(0 var(--ui-list-group-border-radius) vars.$list-group-border-radius 0);
                 }
 
 

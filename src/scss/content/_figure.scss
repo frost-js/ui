@@ -1,17 +1,19 @@
+@use "../vars";
+
 @use "sass:map";
 
 .figure {
-    --ui-figure-caption-color: #{$figure-caption-color};
+    --ui-figure-caption-color: #{vars.$figure-caption-color};
 
     display: inline-block;
 }
 
 .figure-img {
-    margin-bottom: $figure-img-margin-bottom;
-    line-height: map.get($line-heights, 1);
+    margin-bottom: vars.$figure-img-margin-bottom;
+    line-height: map.get(vars.$line-heights, 1);
 }
 
 .figure-caption {
-    font-size: $figure-caption-font-size;
+    font-size: vars.$figure-caption-font-size;
     color: var(--ui-figure-caption-color);
 }

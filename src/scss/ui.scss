@@ -1,10 +1,10 @@
-@import "functions";
-@import "mixins";
-@import "vars";
+@forward "vars";
+@forward "functions";
+@forward "mixins";
 
-@import "content";
-@import "layout";
-@import "components";
-@import "form";
-@import "helpers";
-@import "utility";
+@use "content";
+@use "layout";
+@use "components";
+@use "form";
+@use "helpers";
+@use "utility";

@@ -1,38 +1,41 @@
+@use "colors";
+@use "vars";
+
 @use "sass:map";
 @use "sass:math";
 
 // address
-$address-margin-bottom: $spacing !default;
+$address-margin-bottom: vars.$spacing !default;
 
 // blockquote
-$blockquote-margin-bottom: $spacing !default;
+$blockquote-margin-bottom: vars.$spacing !default;
 $blockquote-font-size: var(--ui-font-size-lg) !default;
-$blockquote-footer-margin-top: ($spacing * -1) !default;
+$blockquote-footer-margin-top: (vars.$spacing * -1) !default;
 $blockquote-footer-font-size: 80% !default;
 $blockquote-footer-color: var(--ui-secondary-color) !default;
 $blockquote-footer-prefix: "\2014 \00A0" !default;
 
 // body
-$body-font-weight: map.get($font-weights, normal) !default;
-$body-line-height: map.get($line-heights, base) !default;
+$body-font-weight: map.get(vars.$font-weights, normal) !default;
+$body-line-height: map.get(vars.$line-heights, base) !default;
 
 // dd
-$dd-margin-bottom: $spacing * .5 !default;
+$dd-margin-bottom: vars.$spacing * .5 !default;
 
 // dt
-$dt-font-weight: map.get($font-weights, bolder) !default;
+$dt-font-weight: map.get(vars.$font-weights, bolder) !default;
 
 // figure
-$figure-margin-bottom: $spacing !default;
-$figure-img-margin-bottom: $spacing * .5 !default;
+$figure-margin-bottom: vars.$spacing !default;
+$figure-img-margin-bottom: vars.$spacing * .5 !default;
 $figure-caption-font-size: 90% !default;
 $figure-caption-color: var(--ui-secondary-color) !default;
 
 // heading
-$headings-margin-bottom: $spacing * .5 !default;
+$headings-margin-bottom: vars.$spacing * .5 !default;
 $headings-font-family: null !default;
 $headings-font-style: null !default;
-$headings-font-weight: map.get($font-weights, bold) !default;
+$headings-font-weight: map.get(vars.$font-weights, bold) !default;
 $headings-line-height: 1.2 !default;
 $headings-color: null !default;
 
@@ -43,7 +46,7 @@ $h4-font-size: 1.5 !default;
 $h5-font-size: 1.25 !default;
 $h6-font-size: 1 !default;
 
-$display-font-weight: map.get($font-weights, light) !default;
+$display-font-weight: map.get(vars.$font-weights, light) !default;
 $display-line-height: 1.2 !default;
 $display-1-font-size: 5 !default;
 $display-2-font-size: 4.5 !default;
@@ -53,12 +56,12 @@ $display-5-font-size: 3 !default;
 $display-6-font-size: 2.5 !default;
 
 // horizontal rule
-$hr-height: $border-width !default;
-$hr-margin-y: $spacing * .5 !default;
+$hr-height: vars.$border-width !default;
+$hr-margin-y: vars.$spacing * .5 !default;
 $hr-opacity: .25 !default;
 
 // image
-$img-thumbnail-padding: $spacing * .25 !default;
+$img-thumbnail-padding: vars.$spacing * .25 !default;
 $img-thumbnail-bg: var(--ui-body-bg) !default;
 $img-thumbnail-border-color: var(--ui-border-color) !default;
 $img-thumbnail-border-width: var(--ui-border-width) !default;
@@ -67,32 +70,32 @@ $img-thumbnail-border-radius: var(--ui-border-radius) !default;
 // kbd
 $kbd-padding-x: .4rem !default;
 $kbd-padding-y: .2rem !default;
-$kbd-kbd-font-weight: map.get($font-weights, bolder) !default;
+$kbd-kbd-font-weight: map.get(vars.$font-weights, bolder) !default;
 $kbd-bg: var(--ui-body-color) !default;
 $kbd-color: var(--ui-body-bg) !default;
 $kbd-border-radius: var(--ui-border-radius) !default;
 
 // lead
 $lead-font-size: 1.25 !default;
-$lead-font-weight: map.get($font-weights, light) !default;
+$lead-font-weight: map.get(vars.$font-weights, light) !default;
 
 // legend
-$legend-margin-bottom: $spacing * .5 !default;
+$legend-margin-bottom: vars.$spacing * .5 !default;
 $legend-font-size: var(--ui-font-size-lg) !default;
-$legend-font-weight: map.get($font-weights, bold) !default;
+$legend-font-weight: map.get(vars.$font-weights, bold) !default;
 
 // list
-$list-padding-left: $spacing * 2 !default;
-$list-inline-item-margin-right: $spacing * .5 !default;
+$list-padding-left: vars.$spacing * 2 !default;
+$list-inline-item-margin-right: vars.$spacing * .5 !default;
 
 // mark
 $mark-padding: .2rem !default;
 
 // paragraph
-$p-margin-bottom: $spacing !default;
+$p-margin-bottom: vars.$spacing !default;
 
 // strong
-$strong-font-weight: map.get($font-weights, bolder) !default;
+$strong-font-weight: map.get(vars.$font-weights, bolder) !default;
 
 // sub/sup
 $sub-sup-font-size: .75em !default;
@@ -101,18 +104,18 @@ $sup-top: -.25em !default;
 
 // table
 $table-variants: (
-    primary: $primary,
-    secondary: $secondary,
-    success: $success,
-    info: $info,
-    warning: $warning,
-    danger: $danger
+    primary: colors.$primary,
+    secondary: colors.$secondary,
+    success: colors.$success,
+    info: colors.$info,
+    warning: colors.$warning,
+    danger: colors.$danger
 ) !default;
 
-$table-margin-bottom: $spacing !default;
-$table-cell-padding-x: $spacing !default;
-$table-cell-padding-y: $spacing * .5 !default;
-$table-th-font-weight: map.get($font-weights, bold) !default;
+$table-margin-bottom: vars.$spacing !default;
+$table-cell-padding-x: vars.$spacing !default;
+$table-cell-padding-y: vars.$spacing * .5 !default;
+$table-th-font-weight: map.get(vars.$font-weights, bold) !default;
 
 $table-bg: var(--ui-body-bg) !default;
 $table-color: var(--ui-body-color) !default;
@@ -121,5 +124,5 @@ $table-border-width: var(--ui-border-width) !default;
 $table-hover-bg: rgba(var(--ui-body-color-rgb), .1) !default;
 $table-striped-bg: rgba(var(--ui-body-color-rgb), .05) !default;
 
-$table-sm-cell-padding-x: math.div($spacing, 3) !default;
-$table-sm-cell-padding-y: $spacing * .25 !default;
+$table-sm-cell-padding-x: math.div(vars.$spacing, 3) !default;
+$table-sm-cell-padding-y: vars.$spacing * .25 !default;

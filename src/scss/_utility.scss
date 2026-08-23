@@ -1,10 +1,13 @@
+@use "mixins";
+@use "vars";
+
 @use "sass:map";
 
 // background
-@include utility((
+@include mixins.utility((
     property: background-color,
     class: bg,
-    values: map.merge($utilities-bg-colors, (
+    values: map.merge(vars.$utilities-bg-colors, (
         body-secondary: var(--ui-secondary-bg),
         body-tertiary: var(--ui-tertiary-bg),
         transparent: transparent
@@ -13,33 +16,33 @@
         bg-opacity: 1
     )
 ));
-@include utility((
+@include mixins.utility((
     property: bg-opacity,
-    values: $opacities,
+    values: vars.$opacities,
     css-var: true
 ));
-@include utility((
+@include mixins.utility((
     property: background-image,
     class: bg,
-    values: (gradient: $gradient)
+    values: (gradient: vars.$gradient)
 ));
 
 // border
-@include utility((
+@include mixins.utility((
     property: border,
     values: (
         null: var(--ui-border-width) var(--ui-border-style) var(--ui-border-color),
         0: 0
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-top,
     values: (
         null: var(--ui-border-width) var(--ui-border-style) var(--ui-border-color),
         0: 0
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-right,
     class: border-end,
     values: (
@@ -47,14 +50,14 @@
         0: 0
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-bottom,
     values: (
         null: var(--ui-border-width) var(--ui-border-style) var(--ui-border-color),
         0: 0
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-left,
     class: border-start,
     values: (
@@ -62,20 +65,20 @@
         0: 0
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-color,
     class: border,
-    values: $utilities-border-colors,
+    values: vars.$utilities-border-colors,
     local-vars: (
         border-opacity: 1
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-opacity,
-    values: $opacities,
+    values: vars.$opacities,
     css-var: true
 ));
-@include utility((
+@include mixins.utility((
     property: border-width,
     class: border,
     values: (
@@ -86,7 +89,7 @@
         5: 5px
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-radius,
     class: rounded,
     values: (
@@ -101,7 +104,7 @@
         pill: var(--ui-border-radius-pill)
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-top-left-radius border-top-right-radius,
     class: rounded-top,
     values: (
@@ -116,7 +119,7 @@
         pill: var(--ui-border-radius-pill)
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-top-right-radius border-bottom-right-radius,
     class: rounded-end,
     values: (
@@ -131,7 +134,7 @@
         pill: var(--ui-border-radius-pill)
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-bottom-left-radius border-bottom-right-radius,
     class: rounded-bottom,
     values: (
@@ -146,7 +149,7 @@
         pill: var(--ui-border-radius-pill)
     )
 ));
-@include utility((
+@include mixins.utility((
     property: border-top-left-radius border-bottom-left-radius,
     class: rounded-start,
     values: (
@@ -163,10 +166,10 @@
 ));
 
 // colors
-@include utility((
+@include mixins.utility((
     property: color,
     class: text,
-    values: map.merge($utilities-text-colors, (
+    values: map.merge(vars.$utilities-text-colors, (
         body: var(--ui-body-color),
         body-secondary: var(--ui-secondary-color),
         body-tertiary: var(--ui-tertiary-color),
@@ -177,14 +180,14 @@
         text-opacity: 1
     )
 ));
-@include utility((
+@include mixins.utility((
     property: text-opacity,
-    values: $opacities,
+    values: vars.$opacities,
     css-var: true
 ));
 
 // display
-@include utility((
+@include mixins.utility((
     property: display,
     class: d,
     values: inline inline-block block table table-cell table-row flex inline-flex grid inline-grid none,
@@ -193,13 +196,13 @@
 ));
 
 // flex
-@include utility((
+@include mixins.utility((
     property: flex-direction,
     class: flex,
     values: row column row-reverse column-reverse,
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: justify-content,
     values: (
         start: flex-start,
@@ -211,7 +214,7 @@
     ),
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: align-items,
     values: (
         start: flex-start,
@@ -222,7 +225,7 @@
     ),
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: align-self,
     values: (
         start: flex-start,
@@ -233,14 +236,14 @@
     ),
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: flex,
     values: (
         fill: 1 1 auto
     ),
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: flex-grow,
     class: flex,
     values: (
@@ -249,7 +252,7 @@
     ),
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: flex-shrink,
     class: flex,
     values: (
@@ -258,13 +261,13 @@
     ),
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: flex-wrap,
     class: flex,
     values: wrap no-wrap wrap-reverse,
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: order,
     values: (
         first: -1,
@@ -278,7 +281,7 @@
     ),
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: align-content,
     values: (
         start: flex-start,
@@ -292,7 +295,7 @@
 ));
 
 // float
-@include utility((
+@include mixins.utility((
     property: float,
     values: (
         start: left,
@@ -303,31 +306,31 @@
 ));
 
 // interaction
-@include utility((
+@include mixins.utility((
     property: user-select,
     values: auto all none
 ));
-@include utility((
+@include mixins.utility((
     property: pointer-events,
     class: pe,
     values: auto none,
 ));
 
 // link
-@include utility((
+@include mixins.utility((
     property: link-opacity,
-    values: $opacities,
+    values: vars.$opacities,
     state: hover,
     css-var: true
 ));
-@include utility((
+@include mixins.utility((
     property: link-opacity,
     class: link-hover-opacity,
-    values: $opacities,
+    values: vars.$opacities,
     state: hover,
     css-var: true
 ));
-@include utility((
+@include mixins.utility((
     property: text-underline-offset,
     class: link-offset,
     values: (
@@ -337,11 +340,11 @@
     ),
     state: hover
 ));
-@include utility((
+@include mixins.utility((
     property: text-decoration-color,
     class: link-underline,
     values: map.merge(
-        $utilities-link-underline-colors,
+        vars.$utilities-link-underline-colors,
         (
             null: rgba(var(--ui-link-color-rgb), var(--ui-link-underline-opacity))
         )
@@ -350,15 +353,15 @@
         link-underline-opacity: 1
     )
 ));
-@include utility((
+@include mixins.utility((
     property: link-underline-opacity,
-    values: $opacities,
+    values: vars.$opacities,
     state: hover,
     css-var: true
 ));
 
 // object fit
-@include utility((
+@include mixins.utility((
     property: object-fit,
     values: (
         contain: contain,
@@ -371,55 +374,55 @@
 ));
 
 // opacity
-@include utility((
+@include mixins.utility((
     property: opacity,
-    values: $opacities
+    values: vars.$opacities
 ));
 
 // outline
-@include utility((
+@include mixins.utility((
     property: outline,
     values: 0
 ));
 
 // overflow
-@include utility((
+@include mixins.utility((
     property: overflow,
     values: auto hidden visible scroll
 ));
-@include utility((
+@include mixins.utility((
     property: overflow-x,
     values: auto hidden visible scroll
 ));
-@include utility((
+@include mixins.utility((
     property: overflow-y,
     values: auto hidden visible scroll
 ));
 
 // position
-@include utility((
+@include mixins.utility((
     property: position,
     values: static relative absolute fixed sticky
 ));
-@include utility((
+@include mixins.utility((
     property: top,
-    values: $positions
+    values: vars.$positions
 ));
-@include utility((
+@include mixins.utility((
     property: right,
     class: end,
-    values: $positions
+    values: vars.$positions
 ));
-@include utility((
+@include mixins.utility((
     property: bottom,
-    values: $positions
+    values: vars.$positions
 ));
-@include utility((
+@include mixins.utility((
     property: left,
     class: start,
-    values: $positions
+    values: vars.$positions
 ));
-@include utility((
+@include mixins.utility((
     property: transform,
     class: translate-middle,
     values: (
@@ -430,7 +433,7 @@
 ));
 
 // resize
-@include utility((
+@include mixins.utility((
     property: resize,
     values: (
         none: none,
@@ -441,7 +444,7 @@
 ));
 
 // shadow
-@include utility((
+@include mixins.utility((
     property: box-shadow,
     class: shadow,
     values: (
@@ -451,175 +454,175 @@
         none: none
     )
 ));
-@include utility((
+@include mixins.utility((
     property: focus-ring-color,
     class: focus-ring,
-    values: $utilities-focus-ring-colors,
+    values: vars.$utilities-focus-ring-colors,
     css-var: true
 ));
 
 // sizing
-@include utility((
+@include mixins.utility((
     property: width,
     class: w,
-    values: $sizes
+    values: vars.$sizes
 ));
-@include utility((
+@include mixins.utility((
     property: height,
     class: h,
-    values: $sizes
+    values: vars.$sizes
 ));
-@include utility((
+@include mixins.utility((
     property: max-width,
     class: max-w,
     values: (100: 100%)
 ));
-@include utility((
+@include mixins.utility((
     property: max-height,
     class: max-h,
     values: (100: 100%)
 ));
-@include utility((
+@include mixins.utility((
     property: min-width,
     class: min-w,
     values: (0: 0)
 ));
-@include utility((
+@include mixins.utility((
     property: min-height,
     class: min-h,
     values: (0: 0)
 ));
-@include utility((
+@include mixins.utility((
     property: width,
     class: vw,
     values: (100: 100vw)
 ));
-@include utility((
+@include mixins.utility((
     property: height,
     class: vh,
     values: (100: 100vh)
 ));
-@include utility((
+@include mixins.utility((
     property: min-width,
     class: min-vw,
     values: (100: 100vw)
 ));
-@include utility((
+@include mixins.utility((
     property: min-height,
     class: min-vh,
     values: (100: 100vh)
 ));
 
 // spacing
-@include utility((
+@include mixins.utility((
     property: padding,
     class: p,
-    values: $paddings,
+    values: vars.$paddings,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: padding-top padding-bottom,
     class: py,
-    values: $paddings,
+    values: vars.$paddings,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: padding-left padding-right,
     class: px,
-    values: $paddings,
+    values: vars.$paddings,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: padding-top,
     class: pt,
-    values: $paddings,
+    values: vars.$paddings,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: padding-right,
     class: pe,
-    values: $paddings,
+    values: vars.$paddings,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: padding-bottom,
     class: pb,
-    values: $paddings,
+    values: vars.$paddings,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: padding-left,
     class: ps,
-    values: $paddings,
+    values: vars.$paddings,
     responsive: true,
     print: true
 ));
 
-@include utility((
+@include mixins.utility((
     property: margin,
     class: m,
-    values: $margins,
+    values: vars.$margins,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: margin-top margin-bottom,
     class: my,
-    values: $margins,
+    values: vars.$margins,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: margin-left margin-right,
     class: mx,
-    values: $margins,
+    values: vars.$margins,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: margin-top,
     class: mt,
-    values: $margins,
+    values: vars.$margins,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: margin-right,
     class: me,
-    values: $margins,
+    values: vars.$margins,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: margin-bottom,
     class: mb,
-    values: $margins,
+    values: vars.$margins,
     responsive: true,
     print: true
 ));
-@include utility((
+@include mixins.utility((
     property: margin-left,
     class: ms,
-    values: $margins,
+    values: vars.$margins,
     responsive: true,
     print: true
 ));
 
-@include utility((
+@include mixins.utility((
     property: gap,
-    values: $gaps,
+    values: vars.$gaps,
     responsive: true,
     print: true
 ));
 
 // text
-@include utility((
+@include mixins.utility((
     property: text-align,
     class: text,
     values: (
@@ -630,7 +633,7 @@
     ),
     responsive: true
 ));
-@include utility((
+@include mixins.utility((
     property: white-space,
     class: text,
     values: (
@@ -638,55 +641,55 @@
         nowrap: nowrap
     )
 ));
-@include utility((
+@include mixins.utility((
     property: word-break overflow-wrap,
     class: text,
     values: (break: break-word)
 ));
-@include utility((
+@include mixins.utility((
     property: text-transform,
     class: text,
     values: lowercase uppercase capitalize
 ));
-@include utility((
+@include mixins.utility((
     property: font-size,
     class: fs,
-    values: $font-sizes
+    values: vars.$font-sizes
 ));
-@include utility((
+@include mixins.utility((
     property: font-weight,
     class: fw,
-    values: $font-weights
+    values: vars.$font-weights
 ));
-@include utility((
+@include mixins.utility((
     property: font-style,
     class: fst,
     values: italic normal
 ));
-@include utility((
+@include mixins.utility((
     property: line-height,
     class: lh,
-    values: $line-heights
+    values: vars.$line-heights
 ));
-@include utility((
+@include mixins.utility((
     property: font-family,
     class: font,
-    values: (monospace: $font-monospace)
+    values: (monospace: vars.$font-monospace)
 ));
-@include utility((
+@include mixins.utility((
     property: text-decoration,
     values: underline line-through none
 ));
 
 // vertical alignment
-@include utility((
+@include mixins.utility((
     property: vertical-align,
     class: align,
     values: baseline top middle bottom text-top text-bottom
 ));
 
 // visibility
-@include utility((
+@include mixins.utility((
     property: visibility,
     class: null,
     values: (
@@ -696,7 +699,7 @@
 ));
 
 // z-index
-@include utility((
+@include mixins.utility((
     property: z-index,
     class: z,
     values: (

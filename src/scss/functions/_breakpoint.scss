@@ -1,3 +1,5 @@
+@use "../vars/vars";
+
 @use "sass:map";
 
 // Get the breakpoint infix.
@@ -13,7 +15,7 @@
 // Get the maximum breakpoint width (-.02px).
 // @param $name
 @function breakpoint-max($name) {
-    $max: map.get($breakpoints, $name);
+    $max: map.get(vars.$breakpoints, $name);
 
     @if $max and $max > 0 {
         @return $max - .02;
@@ -25,7 +27,7 @@
 // Get the minimum breakpoint width.
 // @param $name
 @function breakpoint-min($name) {
-    $min: map.get($breakpoints, $name);
+    $min: map.get(vars.$breakpoints, $name);
 
     @if $min != 0 {
         @return $min;

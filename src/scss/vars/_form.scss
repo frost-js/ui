@@ -1,12 +1,14 @@
+@use "vars";
+
 @use "sass:map";
 
 // check
 $form-check-min-height: 1.5rem !default;
-$form-check-padding-left: $spacing * 2 !default;
-$form-check-inline-margin-right: $spacing !default;
+$form-check-padding-left: vars.$spacing * 2 !default;
+$form-check-inline-margin-right: vars.$spacing !default;
 
 $input-check-size: 1em !default;
-$input-check-margin-top: $spacing * .25 !default;
+$input-check-margin-top: vars.$spacing * .25 !default;
 $input-check-bg: var(--ui-tertiary-bg) !default;
 $input-check-color: var(--ui-primary-contrast) !default;
 $input-check-border-width: var(--ui-border-width) !default;
@@ -22,7 +24,7 @@ $input-check-checkbox-checked-background-image: url("data:image/svg+xml,%3csvg x
 
 $input-check-radio-border-radius: 50% !default;
 
-$form-switch-padding-left: $spacing * 2.5 !default;
+$form-switch-padding-left: vars.$spacing * 2.5 !default;
 $form-switch-input-check-width: 2rem !default;
 $form-switch-input-check-color: var(--ui-secondary-color) !default;
 $form-switch-input-check-border-radius: 2rem !default;
@@ -30,21 +32,21 @@ $form-switch-input-check-focus-color: var(--ui-primary) !default;
 $form-switch-input-check-checked-color: var(--ui-primary-contrast) !default;
 
 // form text
-$form-text-margin-top: $spacing * .25 !default;
+$form-text-margin-top: vars.$spacing * .25 !default;
 $form-text-font-size: var(--ui-font-size-sm) !default;
 $form-text-color: var(--ui-body-color) !default;
 
 $input-plain-text-color: var(--ui-body-color) !default;
 
-$input-group-text-font-weight: map.get($font-weights, normal) !default;
+$input-group-text-font-weight: map.get(vars.$font-weights, normal) !default;
 $input-group-text-color: var(--ui-secondary-color) !default;
 $input-group-text-bg: var(--ui-tertiary-bg) !default;
 
 // input
-$input-padding-x: $spacing * .5 !default;
-$input-padding-y: $spacing * .5 !default;
+$input-padding-x: vars.$spacing * .5 !default;
+$input-padding-y: vars.$spacing * .5 !default;
 $input-font-size: var(--ui-font-size) !default;
-$input-line-height: map.get($line-heights, base) !default;
+$input-line-height: map.get(vars.$line-heights, base) !default;
 $input-color: var(--ui-body-color) !default;
 $input-border-width: var(--ui-border-width) !default;
 $input-border-color: var(--ui-border-color) !default;
@@ -66,8 +68,8 @@ $input-outline-focus-border-color: var(--ui-primary) !default;
 $input-outline-focus-shadow-width: var(--ui-focus-ring-width) !default;
 $input-outline-focus-shadow-color: var(--ui-focus-ring-color) !default;
 
-$input-sm-padding-x: $spacing * .5 !default;
-$input-sm-padding-y: $spacing * .25 !default;
+$input-sm-padding-x: vars.$spacing * .5 !default;
+$input-sm-padding-y: vars.$spacing * .25 !default;
 $input-sm-font-size: var(--ui-font-size-sm) !default;
 $input-lg-padding-x: $input-padding-x !default;
 $input-lg-padding-y: $input-padding-y !default;
@@ -97,12 +99,12 @@ $input-range-thumb-transition: background-color .15s ease-in-out, border-color .
 $ripple-line-bg: var(--ui-primary) !default;
 
 // label
-$label-floating-padding-y: $spacing * .75 !default;
+$label-floating-padding-y: vars.$spacing * .75 !default;
 $label-floating-font-size: 11px !default;
 $label-floating-color: $input-placeholder-color !default;
 
 // validation
-$form-feedback-margin-top: $spacing * .25 !default;
+$form-feedback-margin-top: vars.$spacing * .25 !default;
 $form-feedback-font-size: 80% !default;
 $valid-feedback-color: var(--ui-success) !default;
 $invalid-feedback-color: var(--ui-danger) !default;

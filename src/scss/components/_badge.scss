@@ -1,10 +1,13 @@
+@use "../mixins";
+@use "../vars";
+
 .badge {
-    --ui-badge-padding-x: #{$badge-padding-x};
-    --ui-badge-padding-y: #{$badge-padding-y};
-    --ui-badge-font-size: #{$badge-font-size};
-    --ui-badge-font-weight: #{$badge-font-weight};
-    --ui-badge-color: #{$badge-color};
-    --ui-badge-border-radius: #{$badge-border-radius};
+    --ui-badge-padding-x: #{vars.$badge-padding-x};
+    --ui-badge-padding-y: #{vars.$badge-padding-y};
+    --ui-badge-font-size: #{vars.$badge-font-size};
+    --ui-badge-font-weight: #{vars.$badge-font-weight};
+    --ui-badge-color: #{vars.$badge-color};
+    --ui-badge-border-radius: #{vars.$badge-border-radius};
 
     display: inline-block;
     padding: var(--ui-badge-padding-y) var(--ui-badge-padding-x);
@@ -15,7 +18,7 @@
     color: var(--ui-badge-color);
     text-align: center;
     white-space: nowrap;
-    @include border-radius(var(--ui-badge-border-radius));
+    @include mixins.border-radius(var(--ui-badge-border-radius));
 }
 
 .badge:empty {

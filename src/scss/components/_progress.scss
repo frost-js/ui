@@ -1,6 +1,9 @@
+@use "../mixins";
+@use "../vars";
+
 @keyframes progress-bar-stripes {
     from {
-        background-position: $progress-bar-striped-background-size-x 0;
+        background-position: vars.$progress-bar-striped-background-size-x 0;
     }
 
     to {
@@ -9,20 +12,20 @@
 }
 
 .progress {
-    --ui-progress-height: #{$progress-height};
-    --ui-progress-bg: #{$progress-bg};
-    --ui-progress-border-radius: #{$progress-border-radius};
-    --ui-progress-vertical-height: #{$progress-vertical-height};
-    --ui-progress-vertical-width: #{$progress-vertical-width};
-    --ui-progress-bar-color: #{$progress-bar-color};
-    --ui-progress-bar-bg: #{$progress-bar-bg};
+    --ui-progress-height: #{vars.$progress-height};
+    --ui-progress-bg: #{vars.$progress-bg};
+    --ui-progress-border-radius: #{vars.$progress-border-radius};
+    --ui-progress-vertical-height: #{vars.$progress-vertical-height};
+    --ui-progress-vertical-width: #{vars.$progress-vertical-width};
+    --ui-progress-bar-color: #{vars.$progress-bar-color};
+    --ui-progress-bar-bg: #{vars.$progress-bar-bg};
 
     display: flex;
     height: var(--ui-progress-height);
     overflow: hidden;
-    font-size: $progress-font-size;
+    font-size: vars.$progress-font-size;
     background-color: var(--ui-progress-bg);
-    @include border-radius(var(--ui-progress-border-radius));
+    @include mixins.border-radius(var(--ui-progress-border-radius));
 }
 
 .progress-bar {
@@ -34,16 +37,16 @@
     text-align: center;
     white-space: nowrap;
     background-color: var(--ui-progress-bar-bg);
-    transition: width $transition-time $transition-type;
+    transition: width vars.$transition-time vars.$transition-type;
 }
 
 .progress-bar-striped {
-    background-image: $progress-bar-striped-background-image;
-    background-size: $progress-bar-striped-background-size-x $progress-bar-striped-background-size-y;
+    background-image: vars.$progress-bar-striped-background-image;
+    background-size: vars.$progress-bar-striped-background-size-x vars.$progress-bar-striped-background-size-y;
 }
 
 .progress-bar-animated {
-    animation: progress-bar-stripes $animation-time linear infinite;
+    animation: progress-bar-stripes vars.$animation-time linear infinite;
 }
 
 .progress-vertical {
@@ -54,7 +57,7 @@
 
     .progress-bar {
         width: 100%;
-        transition: height $animation-time $transition-type;
+        transition: height vars.$animation-time vars.$transition-type;
 
         &:first-child {
             margin-top: auto;
@@ -64,6 +67,6 @@
 
 @media (prefers-reduced-motion) {
     .progress-bar-animated {
-        animation-duration: $animation-time-reduced-motion;
+        animation-duration: vars.$animation-time-reduced-motion;
     }
 }

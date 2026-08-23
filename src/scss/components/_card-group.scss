@@ -1,9 +1,11 @@
+@use "../mixins";
+
 .card-group {
     >.card {
         margin-bottom: var(--ui-card-group-margin);
     }
 
-    @include media-breakpoint-up(sm) {
+    @include mixins.media-breakpoint-up(sm) {
         display: flex;
         flex-flow: row wrap;
 
@@ -17,7 +19,7 @@
             }
 
             &:not(:first-child) {
-                @include border-left-radius(0);
+                @include mixins.border-left-radius(0);
 
                 > .card-img-top,
                 > .card-header {
@@ -31,7 +33,7 @@
             }
 
             &:not(:last-child) {
-                @include border-right-radius(0);
+                @include mixins.border-right-radius(0);
 
                 > .card-img-top,
                 > .card-header {

@@ -1,17 +1,20 @@
+@use "../mixins";
+@use "../vars";
+
 .card {
-    --ui-card-spacer-x: #{$card-spacer-x};
-    --ui-card-spacer-y: #{$card-spacer-y};
-    --ui-card-title-spacer-y: #{$card-title-spacer-y};
-    --ui-card-border-width: #{$card-border-width};
-    --ui-card-border-color: #{$card-border-color};
-    --ui-card-border-radius: #{$card-border-radius};
+    --ui-card-spacer-x: #{vars.$card-spacer-x};
+    --ui-card-spacer-y: #{vars.$card-spacer-y};
+    --ui-card-title-spacer-y: #{vars.$card-title-spacer-y};
+    --ui-card-border-width: #{vars.$card-border-width};
+    --ui-card-border-color: #{vars.$card-border-color};
+    --ui-card-border-radius: #{vars.$card-border-radius};
     --ui-card-inner-border-radius: calc(var(--ui-card-border-radius) - var(--ui-card-border-width));
-    --ui-card-bg: #{$card-bg};
-    --ui-card-cap-padding-x: #{$card-cap-padding-x};
-    --ui-card-cap-padding-y: #{$card-cap-padding-y};
-    --ui-card-cap-bg: #{$card-cap-bg};
-    --ui-card-img-overlay-padding: #{$card-img-overlay-padding};
-    --ui-card-group-margin: #{$card-group-margin};
+    --ui-card-bg: #{vars.$card-bg};
+    --ui-card-cap-padding-x: #{vars.$card-cap-padding-x};
+    --ui-card-cap-padding-y: #{vars.$card-cap-padding-y};
+    --ui-card-cap-bg: #{vars.$card-cap-bg};
+    --ui-card-img-overlay-padding: #{vars.$card-img-overlay-padding};
+    --ui-card-group-margin: #{vars.$card-group-margin};
 
     position: relative;
     display: flex;
@@ -22,7 +25,7 @@
     background-color: var(--ui-card-bg);
     background-clip: border-box;
     border: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
-    @include border-radius(var(--ui-card-border-radius));
+    @include mixins.border-radius(var(--ui-card-border-radius));
 
     >hr {
         margin-right: 0;
@@ -35,12 +38,12 @@
 
         &:first-child {
             border-top-width: 0;
-            @include border-top-radius(var(--ui-card-inner-border-radius));
+            @include mixins.border-top-radius(var(--ui-card-inner-border-radius));
         }
 
         &:last-child {
             border-bottom-width: 0;
-            @include border-bottom-radius(var(--ui-card-inner-border-radius));
+            @include mixins.border-bottom-radius(var(--ui-card-inner-border-radius));
         }
     }
 
@@ -58,7 +61,7 @@
 
     &:first-child {
         $card-header-border-radius: var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius) 0 0;
-        @include border-radius($card-header-border-radius);
+        @include mixins.border-radius($card-header-border-radius);
     }
 }
 
@@ -69,7 +72,7 @@
 
     &:last-child {
         $card-footer-border-radius: 0 0 var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius);
-        @include border-radius($card-footer-border-radius);
+        @include mixins.border-radius($card-footer-border-radius);
     }
 }
 
@@ -102,7 +105,7 @@
     bottom: 0;
     left: 0;
     padding: var(--ui-card-img-overlay-padding);
-    @include border-radius(var(--ui-card-inner-border-radius));
+    @include mixins.border-radius(var(--ui-card-inner-border-radius));
 }
 
 .card-img {
@@ -111,10 +114,10 @@
 
 .card-img-top {
     @extend .card-img;
-    @include border-top-radius(var(--ui-card-inner-border-radius));
+    @include mixins.border-top-radius(var(--ui-card-inner-border-radius));
 }
 
 .card-img-bottom {
     @extend .card-img;
-    @include border-bottom-radius(var(--ui-card-inner-border-radius));
+    @include mixins.border-bottom-radius(var(--ui-card-inner-border-radius));
 }

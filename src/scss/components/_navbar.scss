@@ -1,28 +1,33 @@
+@use "../functions";
+@use "../mixins";
+@use "../vars";
+
 @use "sass:map";
+@use "sass:list";
 
 .navbar {
-    --ui-navbar-padding-x: #{$navbar-padding-x};
-    --ui-navbar-padding-y: #{$navbar-padding-y};
-    --ui-navbar-color: #{$navbar-color};
-    --ui-navbar-hover-color: #{$navbar-hover-color};
-    --ui-navbar-active-color: #{$navbar-active-color};
-    --ui-navbar-disabled-color: #{$navbar-disabled-color};
-    --ui-navbar-brand-padding-y: #{$navbar-brand-padding-y};
-    --ui-navbar-brand-margin-end: #{$navbar-brand-margin-end};
-    --ui-navbar-brand-font-size: #{$navbar-brand-font-size};
-    --ui-navbar-brand-color: #{$navbar-brand-color};
-    --ui-navbar-brand-hover-color: #{$navbar-brand-hover-color};
-    --ui-navbar-text-color: #{$navbar-text-color};
-    --ui-navbar-nav-link-padding-x: #{$navbar-nav-link-padding-x};
-    --ui-navbar-toggler-padding-x: #{$navbar-toggler-padding-x};
-    --ui-navbar-toggler-padding-y: #{$navbar-toggler-padding-y};
-    --ui-navbar-toggler-font-size: #{$navbar-toggler-font-size};
-    --ui-navbar-toggler-icon-width: #{$navbar-toggler-icon-width};
-    --ui-navbar-toggler-icon: #{$navbar-toggler-icon};
-    --ui-navbar-toggler-border-color: #{$navbar-toggler-border-color};
-    --ui-navbar-toggler-border-width: #{$navbar-toggler-border-width};
-    --ui-navbar-toggler-border-radius: #{$navbar-toggler-border-radius};
-    --ui-navbar-toggler-focus-box-shadow: #{$navbar-toggler-focus-box-shadow};
+    --ui-navbar-padding-x: #{vars.$navbar-padding-x};
+    --ui-navbar-padding-y: #{vars.$navbar-padding-y};
+    --ui-navbar-color: #{vars.$navbar-color};
+    --ui-navbar-hover-color: #{vars.$navbar-hover-color};
+    --ui-navbar-active-color: #{vars.$navbar-active-color};
+    --ui-navbar-disabled-color: #{vars.$navbar-disabled-color};
+    --ui-navbar-brand-padding-y: #{vars.$navbar-brand-padding-y};
+    --ui-navbar-brand-margin-end: #{vars.$navbar-brand-margin-end};
+    --ui-navbar-brand-font-size: #{vars.$navbar-brand-font-size};
+    --ui-navbar-brand-color: #{vars.$navbar-brand-color};
+    --ui-navbar-brand-hover-color: #{vars.$navbar-brand-hover-color};
+    --ui-navbar-text-color: #{vars.$navbar-text-color};
+    --ui-navbar-nav-link-padding-x: #{vars.$navbar-nav-link-padding-x};
+    --ui-navbar-toggler-padding-x: #{vars.$navbar-toggler-padding-x};
+    --ui-navbar-toggler-padding-y: #{vars.$navbar-toggler-padding-y};
+    --ui-navbar-toggler-font-size: #{vars.$navbar-toggler-font-size};
+    --ui-navbar-toggler-icon-width: #{vars.$navbar-toggler-icon-width};
+    --ui-navbar-toggler-icon: #{vars.$navbar-toggler-icon};
+    --ui-navbar-toggler-border-color: #{vars.$navbar-toggler-border-color};
+    --ui-navbar-toggler-border-width: #{vars.$navbar-toggler-border-width};
+    --ui-navbar-toggler-border-radius: #{vars.$navbar-toggler-border-radius};
+    --ui-navbar-toggler-focus-box-shadow: #{vars.$navbar-toggler-focus-box-shadow};
 
     position: relative;
     display: flex;
@@ -40,7 +45,12 @@
         justify-content: space-between;
     }
 
-    @each $breakpoint, $max-width in $containers {
+    $container-breakpoints: map.keys(vars.$containers);
+
+    // Sass prepends extended selectors, so iterate in reverse to preserve the map order.
+    @for $i from list.length($container-breakpoints) through 1 {
+        $breakpoint: list.nth($container-breakpoints, $i);
+
         >.container-#{$breakpoint} {
             @extend %responsive-navbar-container;
         }
@@ -63,8 +73,8 @@
 }
 
 .navbar-nav {
-    --ui-nav-link-padding-x: #{$nav-link-padding-x};
-    --ui-nav-link-padding-y: #{$nav-link-padding-y};
+    --ui-nav-link-padding-x: #{vars.$nav-link-padding-x};
+    --ui-nav-link-padding-y: #{vars.$nav-link-padding-y};
     --ui-nav-link-font-size: var(--ui-nav-link-font-size);
     --ui-nav-link-font-weight: var(--ui-nav-link-font-weight);
     --ui-nav-link-color: var(--ui-navbar-color);
@@ -88,13 +98,13 @@
 }
 
 .navbar-text {
-    padding-top: $nav-link-padding-y;
-    padding-bottom: $nav-link-padding-y;
+    padding-top: vars.$nav-link-padding-y;
+    padding-bottom: vars.$nav-link-padding-y;
     color: var(--ui-navbar-text-color);
 }
 
 .navbar-nav-scroll {
-    max-height: $navbar-nav-scroll-height;
+    max-height: vars.$navbar-nav-scroll-height;
     overflow-y: auto;
 }
 
@@ -107,11 +117,11 @@
 .navbar-toggler {
     padding: var(--ui-navbar-toggler-padding-y) var(--ui-navbar-toggler-padding-x);
     font-size: var(--ui-navbar-toggler-font-size);
-    line-height: map.get($line-heights, 1);
+    line-height: map.get(vars.$line-heights, 1);
     color: var(--ui-navbar-color);
     background-color: transparent;
     border: var(--ui-navbar-toggler-border-width) var(--ui-border-style) var(--ui-navbar-toggler-border-color);
-    @include border-radius(var(--ui-navbar-toggler-border-radius));
+    @include mixins.border-radius(var(--ui-navbar-toggler-border-radius));
 
     &:hover {
         text-decoration: none;
@@ -135,10 +145,10 @@
     mask-size: var(--ui-navbar-toggler-icon-width);
 }
 
-@each $breakpoint in map.keys($breakpoints) {
-    $infix: breakpoint-infix($breakpoint);
+@each $breakpoint in map.keys(vars.$breakpoints) {
+    $infix: functions.breakpoint-infix($breakpoint);
 
-    @include media-breakpoint-up($breakpoint) {
+    @include mixins.media-breakpoint-up($breakpoint) {
         .navbar-expand#{$infix} {
             flex-wrap: nowrap;
             justify-content: flex-start;

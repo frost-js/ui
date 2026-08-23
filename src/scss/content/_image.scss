@@ -1,19 +1,22 @@
+@use "../mixins";
+@use "../vars";
+
 .img-fluid {
     max-width: 100%;
     height: auto;
 }
 
 .img-thumbnail {
-    --ui-img-thumbnail-padding: #{$img-thumbnail-padding};
-    --ui-img-thumbnail-bg: #{$img-thumbnail-bg};
-    --ui-img-thumbnail-border-color: #{$img-thumbnail-border-color};
-    --ui-img-thumbnail-border-width: #{$img-thumbnail-border-width};
-    --ui-img-thumbnail-border-radius: #{$img-thumbnail-border-radius};
+    --ui-img-thumbnail-padding: #{vars.$img-thumbnail-padding};
+    --ui-img-thumbnail-bg: #{vars.$img-thumbnail-bg};
+    --ui-img-thumbnail-border-color: #{vars.$img-thumbnail-border-color};
+    --ui-img-thumbnail-border-width: #{vars.$img-thumbnail-border-width};
+    --ui-img-thumbnail-border-radius: #{vars.$img-thumbnail-border-radius};
 
     max-width: 100%;
     height: auto;
     padding: var(--ui-img-thumbnail-padding);
     background-color: var(--ui-img-thumbnail-bg);
     border: var(--ui-img-thumbnail-border-width) var(--ui-border-style) var(--ui-img-thumbnail-border-color);
-    @include border-radius(var(--ui-img-thumbnail-border-radius));
+    @include mixins.border-radius(var(--ui-img-thumbnail-border-radius));
 }

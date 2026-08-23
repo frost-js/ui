@@ -1,16 +1,19 @@
+@use "../mixins";
+@use "../vars";
+
 .toast {
-    --ui-toast-max-width: #{$toast-max-width};
-    --ui-toast-padding-x: #{$toast-padding-x};
-    --ui-toast-padding-y: #{$toast-padding-y};
-    --ui-toast-margin-bottom: #{$toast-margin-bottom};
-    --ui-toast-font-size: #{$toast-font-size};
-    --ui-toast-bg: #{$toast-bg};
-    --ui-toast-border-width: #{$toast-border-width};
-    --ui-toast-border-color: #{$toast-border-color};
-    --ui-toast-border-radius: #{$toast-border-radius};
-    --ui-toast-header-color: #{$toast-header-color};
-    --ui-toast-header-bg: #{$toast-header-bg};
-    --ui-toast-header-border-color: #{$toast-header-border-color};
+    --ui-toast-max-width: #{vars.$toast-max-width};
+    --ui-toast-padding-x: #{vars.$toast-padding-x};
+    --ui-toast-padding-y: #{vars.$toast-padding-y};
+    --ui-toast-margin-bottom: #{vars.$toast-margin-bottom};
+    --ui-toast-font-size: #{vars.$toast-font-size};
+    --ui-toast-bg: #{vars.$toast-bg};
+    --ui-toast-border-width: #{vars.$toast-border-width};
+    --ui-toast-border-color: #{vars.$toast-border-color};
+    --ui-toast-border-radius: #{vars.$toast-border-radius};
+    --ui-toast-header-color: #{vars.$toast-header-color};
+    --ui-toast-header-bg: #{vars.$toast-header-bg};
+    --ui-toast-header-border-color: #{vars.$toast-header-border-color};
 
     width: var(--ui-toast-max-width);
     max-width: 100%;
@@ -20,8 +23,8 @@
     background-clip: padding-box;
     border: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-border-color);
     opacity: 0;
-    backdrop-filter: $toast-backdrop-filter;
-    @include border-radius(var(--ui-toast-border-radius));
+    backdrop-filter: vars.$toast-backdrop-filter;
+    @include mixins.border-radius(var(--ui-toast-border-radius));
 
     &.show {
         display: block;
@@ -51,7 +54,7 @@
     background-color: var(--ui-toast-header-bg);
     background-clip: padding-box;
     border-bottom: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-border-color);
-    @include border-top-radius(calc(var(--ui-toast-border-radius) - var(--ui-toast-border-width)));
+    @include mixins.border-top-radius(calc(var(--ui-toast-border-radius) - var(--ui-toast-border-width)));
 
     .btn-close {
         margin-right: calc(var(--ui-toast-padding-x) * -.5);

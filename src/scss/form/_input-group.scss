@@ -1,10 +1,13 @@
+@use "../mixins";
+@use "../vars";
+
 .input-group {
     position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
     width: 100%;
-    @include border-radius($input-outline-border-radius);
+    @include mixins.border-radius(vars.$input-outline-border-radius);
 
     >.form-input,
     >.input-filled,
@@ -33,26 +36,26 @@
     >.input-group-text,
     >.form-input > .input-filled,
     >.form-input > .input-outline {
-        @include border-radius(inherit);
+        @include mixins.border-radius(inherit);
 
         &:not(:last-child) {
-            @include border-right-radius(0);
+            @include mixins.border-right-radius(0);
         }
 
         &:not(:first-child) {
-            margin-left: calc($input-border-width * -1);
-            @include border-left-radius(0);
+            margin-left: calc(vars.$input-border-width * -1);
+            @include mixins.border-left-radius(0);
         }
     }
 }
 
 .input-group-filled {
-    @include border-radius(0);
+    @include mixins.border-radius(0);
 
     >.input-group-text {
-        background-color: var(--ui-input-filled-bg, #{$input-filled-bg});
+        background-color: var(--ui-input-filled-bg, #{vars.$input-filled-bg});
         border: 0;
-        border-bottom: $input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{$input-filled-border-color});
+        border-bottom: vars.$input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{vars.$input-filled-border-color});
     }
 }
 
@@ -62,8 +65,8 @@
     .input-filled,
     .input-outline,
     .input-group-text {
-        padding: $input-sm-padding-y $input-sm-padding-x;
-        font-size: $input-sm-font-size;
+        padding: vars.$input-sm-padding-y vars.$input-sm-padding-x;
+        font-size: vars.$input-sm-font-size;
     }
 }
 
@@ -73,7 +76,7 @@
     .input-filled,
     .input-outline,
     .input-group-text {
-        padding: $input-lg-padding-y $input-lg-padding-x;
-        font-size: $input-lg-font-size;
+        padding: vars.$input-lg-padding-y vars.$input-lg-padding-x;
+        font-size: vars.$input-lg-font-size;
     }
 }

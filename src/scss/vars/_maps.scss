@@ -1,48 +1,51 @@
+@use "colors";
+@use "../functions/helpers";
+
 @use "sass:map";
 
 $color-variants: (
-    primary: $primary,
-    secondary: $secondary,
-    success: $success,
-    info: $info,
-    warning: $warning,
-    danger: $danger,
-    light: $light,
-    dark: $dark
+    primary: colors.$primary,
+    secondary: colors.$secondary,
+    success: colors.$success,
+    info: colors.$info,
+    warning: colors.$warning,
+    danger: colors.$danger,
+    light: colors.$light,
+    dark: colors.$dark
 ) !default;
 
 $subtle-colors: (
-    primary-subtle: $primary-subtle,
-    secondary-subtle: $secondary-subtle,
-    success-subtle: $success-subtle,
-    info-subtle: $info-subtle,
-    warning-subtle: $warning-subtle,
-    danger-subtle: $danger-subtle,
-    light-subtle: $light-subtle,
-    dark-subtle: $dark-subtle
+    primary-subtle: colors.$primary-subtle,
+    secondary-subtle: colors.$secondary-subtle,
+    success-subtle: colors.$success-subtle,
+    info-subtle: colors.$info-subtle,
+    warning-subtle: colors.$warning-subtle,
+    danger-subtle: colors.$danger-subtle,
+    light-subtle: colors.$light-subtle,
+    dark-subtle: colors.$dark-subtle
 ) !default;
 
 $emphasis-colors: (
-    primary-emphasis: $primary-emphasis,
-    secondary-emphasis: $secondary-emphasis,
-    success-emphasis: $success-emphasis,
-    info-emphasis: $info-emphasis,
-    warning-emphasis: $warning-emphasis,
-    danger-emphasis: $danger-emphasis,
-    light-emphasis: $light-emphasis,
-    dark-emphasis: $dark-emphasis
+    primary-emphasis: colors.$primary-emphasis,
+    secondary-emphasis: colors.$secondary-emphasis,
+    success-emphasis: colors.$success-emphasis,
+    info-emphasis: colors.$info-emphasis,
+    warning-emphasis: colors.$warning-emphasis,
+    danger-emphasis: colors.$danger-emphasis,
+    light-emphasis: colors.$light-emphasis,
+    dark-emphasis: colors.$dark-emphasis
 ) !default;
 
 $utilities-colors: map.merge(
     $color-variants,
     (
-        black: $black,
-        white: $white
+        black: colors.$black,
+        white: colors.$white
     )
 ) !default;
 
-$utilities-text-colors: map-loop(map.merge($utilities-colors, $emphasis-colors), rgba-css-var, "$key", "text") !default;
-$utilities-border-colors: map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "border") !default;
-$utilities-bg-colors: map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "bg") !default;
-$utilities-link-underline-colors: map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "link-underline") !default;
-$utilities-focus-ring-colors: map-loop($utilities-colors, rgba-css-var, "$key", "focus-ring") !default;
+$utilities-text-colors: helpers.map-loop(map.merge($utilities-colors, $emphasis-colors), rgba-css-var, "$key", "text") !default;
+$utilities-border-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "border") !default;
+$utilities-bg-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "bg") !default;
+$utilities-link-underline-colors: helpers.map-loop(map.merge($utilities-colors, $subtle-colors), rgba-css-var, "$key", "link-underline") !default;
+$utilities-focus-ring-colors: helpers.map-loop($utilities-colors, rgba-css-var, "$key", "focus-ring") !default;

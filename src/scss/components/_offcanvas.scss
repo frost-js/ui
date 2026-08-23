@@ -1,14 +1,16 @@
+@use "../vars";
+
 .offcanvas {
-    --ui-offcanvas-z-index: #{$offcanvas-z-index};
-    --ui-offcanvas-width: #{$offcanvas-horizontal-width};
-    --ui-offcanvas-height: #{$offcanvas-vertical-height};
-    --ui-offcanvas-padding-x: #{$offcanvas-padding-x};
-    --ui-offcanvas-padding-y: #{$offcanvas-padding-y};
-    --ui-offcanvas-color: #{$offcanvas-color};
-    --ui-offcanvas-bg: #{$offcanvas-bg};
-    --ui-offcanvas-border-width: #{$offcanvas-border-width};
-    --ui-offcanvas-border-color: #{$offcanvas-border-color};
-    --ui-offcanvas-title-line-height: #{$offcanvas-title-line-height};
+    --ui-offcanvas-z-index: #{vars.$offcanvas-z-index};
+    --ui-offcanvas-width: #{vars.$offcanvas-horizontal-width};
+    --ui-offcanvas-height: #{vars.$offcanvas-vertical-height};
+    --ui-offcanvas-padding-x: #{vars.$offcanvas-padding-x};
+    --ui-offcanvas-padding-y: #{vars.$offcanvas-padding-y};
+    --ui-offcanvas-color: #{vars.$offcanvas-color};
+    --ui-offcanvas-bg: #{vars.$offcanvas-bg};
+    --ui-offcanvas-border-width: #{vars.$offcanvas-border-width};
+    --ui-offcanvas-border-color: #{vars.$offcanvas-border-color};
+    --ui-offcanvas-title-line-height: #{vars.$offcanvas-title-line-height};
 
     position: fixed;
     bottom: 0;
@@ -86,9 +88,9 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: $offcanvas-z-index - 1;
+    z-index: vars.$offcanvas-z-index - 1;
     width: 100vw;
     height: 100vh;
     content: "";
-    background-color: $offcanvas-backdrop-bg;
+    background-color: vars.$offcanvas-backdrop-bg;
 }

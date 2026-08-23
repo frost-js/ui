@@ -1,14 +1,17 @@
+@use "../mixins";
+@use "../vars";
+
 .btn-close {
-    --ui-btn-close-width: #{$btn-close-width};
-    --ui-btn-close-height: #{$btn-close-height};
-    --ui-btn-close-padding-x: #{$btn-close-padding-x};
-    --ui-btn-close-padding-y: #{$btn-close-padding-y};
-    --ui-btn-close-icon: #{$btn-close-icon};
-    --ui-btn-close-opacity: #{$btn-close-opacity};
-    --ui-btn-close-hover-opacity: #{$btn-close-hover-opacity};
-    --ui-btn-close-focus-opacity: #{$btn-close-focus-opacity};
-    --ui-btn-close-disabled-opacity: #{$btn-close-disabled-opacity};
-    --ui-btn-close-border-radius: #{$btn-close-border-radius};
+    --ui-btn-close-width: #{vars.$btn-close-width};
+    --ui-btn-close-height: #{vars.$btn-close-height};
+    --ui-btn-close-padding-x: #{vars.$btn-close-padding-x};
+    --ui-btn-close-padding-y: #{vars.$btn-close-padding-y};
+    --ui-btn-close-icon: #{vars.$btn-close-icon};
+    --ui-btn-close-opacity: #{vars.$btn-close-opacity};
+    --ui-btn-close-hover-opacity: #{vars.$btn-close-hover-opacity};
+    --ui-btn-close-focus-opacity: #{vars.$btn-close-focus-opacity};
+    --ui-btn-close-disabled-opacity: #{vars.$btn-close-disabled-opacity};
+    --ui-btn-close-border-radius: #{vars.$btn-close-border-radius};
 
     box-sizing: content-box;
     width: var(--ui-btn-close-width);
@@ -22,7 +25,7 @@
     mask-repeat: no-repeat;
     mask-position: center center;
     mask-size: var(--ui-btn-close-width);
-    @include border-radius(var(--ui-btn-close-border-radius));
+    @include mixins.border-radius(var(--ui-btn-close-border-radius));
 
     &:hover {
         text-decoration: none;

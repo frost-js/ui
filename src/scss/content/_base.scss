@@ -1,3 +1,7 @@
+@use "../functions";
+@use "../mixins";
+@use "../vars";
+
 *,
 *::before,
 *::after {
@@ -18,62 +22,62 @@ body {
 }
 
 hr {
-    margin: $hr-margin-y 0;
+    margin: vars.$hr-margin-y 0;
     background-color: currentcolor;
     border: 0;
-    opacity: $hr-opacity;
+    opacity: vars.$hr-opacity;
 }
 
 hr:not([size]) {
-    height: $hr-height;
+    height: vars.$hr-height;
 }
 
 // headings
 
 %heading {
     margin-top: 0;
-    margin-bottom: $headings-margin-bottom;
-    font-family: $headings-font-family;
-    font-style: $headings-font-style;
-    font-weight: $headings-font-weight;
-    line-height: $headings-line-height;
-    color: $headings-color;
+    margin-bottom: vars.$headings-margin-bottom;
+    font-family: vars.$headings-font-family;
+    font-style: vars.$headings-font-style;
+    font-weight: vars.$headings-font-weight;
+    line-height: vars.$headings-line-height;
+    color: vars.$headings-color;
 }
 
 h1 {
     @extend %heading;
-    font-size: text-size($h1-font-size);
+    font-size: functions.text-size(vars.$h1-font-size);
 }
 
 h2 {
     @extend %heading;
-    font-size: text-size($h2-font-size);
+    font-size: functions.text-size(vars.$h2-font-size);
 }
 
 h3 {
     @extend %heading;
-    font-size: text-size($h3-font-size);
+    font-size: functions.text-size(vars.$h3-font-size);
 }
 
 h4 {
     @extend %heading;
-    font-size: text-size($h4-font-size);
+    font-size: functions.text-size(vars.$h4-font-size);
 }
 
 h5 {
     @extend %heading;
-    font-size: text-size($h5-font-size);
+    font-size: functions.text-size(vars.$h5-font-size);
 }
 
 h6 {
     @extend %heading;
-    font-size: text-size($h6-font-size);
+    font-size: functions.text-size(vars.$h6-font-size);
 }
 
 // paragraphs
 p {
     margin-top: 0;
-    margin-bottom: $p-margin-bottom;
+    margin-bottom: vars.$p-margin-bottom;
 }
 
 // abbreviations
@@ -88,7 +92,7 @@ abbr[data-ui-original-title] {
 // address
 
 address {
-    margin-bottom: $address-margin-bottom;
+    margin-bottom: vars.$address-margin-bottom;
     font-style: normal;
     line-height: inherit;
 }
@@ -97,14 +101,14 @@ address {
 
 ol,
 ul {
-    padding-left: $list-padding-left;
+    padding-left: vars.$list-padding-left;
 }
 
 ol,
 ul,
 dl {
     margin-top: 0;
-    margin-bottom: $spacing;
+    margin-bottom: vars.$spacing;
 }
 
 ol ul,
@@ -115,37 +119,37 @@ ul ol {
 }
 
 dt {
-    font-weight: $dt-font-weight;
+    font-weight: vars.$dt-font-weight;
 }
 
 dd {
-    margin-bottom: $dd-margin-bottom;
+    margin-bottom: vars.$dd-margin-bottom;
     margin-left: 0;
 }
 
 // blockquote
 
 blockquote {
-    margin: 0 0 $spacing;
+    margin: 0 0 vars.$spacing;
 }
 
 // strong
 
 b,
 strong {
-    font-weight: $strong-font-weight;
+    font-weight: vars.$strong-font-weight;
 }
 
 // small
 
 small {
-    font-size: $small-font-size;
+    font-size: vars.$small-font-size;
 }
 
 // mark
 
 mark {
-    padding: $mark-padding;
+    padding: vars.$mark-padding;
     background-color: var(--ui-mark-bg);
 }
 
@@ -154,17 +158,17 @@ mark {
 sub,
 sup {
     position: relative;
-    font-size: $sub-sup-font-size;
+    font-size: vars.$sub-sup-font-size;
     line-height: 0;
     vertical-align: baseline;
 }
 
 sub {
-    bottom: $sub-bottom;
+    bottom: vars.$sub-bottom;
 }
 
 sup {
-    top: $sup-top;
+    top: vars.$sup-top;
 }
 
 // links
@@ -202,9 +206,9 @@ xmp {
 pre {
     display: block;
     margin-top: 0;
-    margin-bottom: $blockquote-margin-bottom;
+    margin-bottom: vars.$blockquote-margin-bottom;
     overflow: auto;
-    font-size: $small-font-size;
+    font-size: vars.$small-font-size;
 
     code {
         font-size: inherit;
@@ -214,7 +218,7 @@ pre {
 }
 
 code {
-    font-size: $small-font-size;
+    font-size: vars.$small-font-size;
     color: var(--ui-code-color);
     overflow-wrap: break-word;
 
@@ -224,23 +228,23 @@ code {
 }
 
 kbd {
-    padding: $kbd-padding-y $kbd-padding-x;
-    font-size: $small-font-size;
-    color: $kbd-color;
-    background-color: $kbd-bg;
-    border-radius: $kbd-border-radius;
+    padding: vars.$kbd-padding-y vars.$kbd-padding-x;
+    font-size: vars.$small-font-size;
+    color: vars.$kbd-color;
+    background-color: vars.$kbd-bg;
+    border-radius: vars.$kbd-border-radius;
 
     kbd {
         padding: 0;
         font-size: 1em;
-        font-weight: $kbd-kbd-font-weight;
+        font-weight: vars.$kbd-kbd-font-weight;
     }
 }
 
 // figure
 
 figure {
-    margin: 0 0 $figure-margin-bottom;
+    margin: 0 0 vars.$figure-margin-bottom;
 }
 
 // images
@@ -258,14 +262,14 @@ table {
 }
 
 caption {
-    padding-top: $table-cell-padding-y;
-    padding-bottom: $table-cell-padding-y;
+    padding-top: vars.$table-cell-padding-y;
+    padding-bottom: vars.$table-cell-padding-y;
     color: var(--ui-secondary-color);
     text-align: left;
 }
 
 th {
-    font-weight: $table-th-font-weight;
+    font-weight: vars.$table-th-font-weight;
     text-align: inherit;
 }
 
@@ -287,7 +291,7 @@ label {
 }
 
 button {
-    @include border-radius(0);
+    @include mixins.border-radius(0);
 
     &:focus:not(:focus-visible) {
         outline: 0;
@@ -358,9 +362,9 @@ legend {
     float: left;
     width: 100%;
     padding: 0;
-    margin-bottom: $legend-margin-bottom;
-    font-size: $legend-font-size;
-    font-weight: $legend-font-weight;
+    margin-bottom: vars.$legend-margin-bottom;
+    font-size: vars.$legend-font-size;
+    font-weight: vars.$legend-font-weight;
     line-height: inherit;
 
     +* {

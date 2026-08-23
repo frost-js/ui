@@ -1,32 +1,34 @@
+@use "../vars";
+
 .form-text {
-    margin-top: $form-text-margin-top;
-    font-size: $form-text-font-size;
-    color: $form-text-color;
+    margin-top: vars.$form-text-margin-top;
+    font-size: vars.$form-text-font-size;
+    color: vars.$form-text-color;
 }
 
 .input-plain-text {
     display: block;
     width: 100%;
-    padding: $input-padding-y 0;
+    padding: vars.$input-padding-y 0;
     margin-bottom: 0;
-    line-height: $input-line-height;
-    color: $input-plain-text-color;
+    line-height: vars.$input-line-height;
+    color: vars.$input-plain-text-color;
     outline: 0;
     background-color: transparent;
     border: solid transparent;
-    border-width: $input-border-width 0;
+    border-width: vars.$input-border-width 0;
 }
 
 .input-group-text {
     display: flex;
     align-items: center;
-    padding: $input-padding-y $input-padding-x;
-    font-size: $input-font-size;
-    font-weight: $input-group-text-font-weight;
-    line-height: $input-line-height;
-    color: $input-group-text-color;
+    padding: vars.$input-padding-y vars.$input-padding-x;
+    font-size: vars.$input-font-size;
+    font-weight: vars.$input-group-text-font-weight;
+    line-height: vars.$input-line-height;
+    color: vars.$input-group-text-color;
     text-align: center;
     white-space: nowrap;
-    background-color: $input-group-text-bg;
-    border: $input-border-width var(--ui-border-style) $input-border-color;
+    background-color: vars.$input-group-text-bg;
+    border: vars.$input-border-width var(--ui-border-style) vars.$input-border-color;
 }

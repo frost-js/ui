@@ -1,3 +1,5 @@
+@use "../functions/helpers";
+
 @use "sass:map";
 
 $spacing: 1rem !default;
@@ -155,7 +157,7 @@ $font-sizes: (
 ) !default;
 
 @each $key, $size in $font-sizes {
-    $size: text-size($size);
+    $size: helpers.text-size($size);
     $font-sizes: map.merge($font-sizes, ($key: $size));
 }
 

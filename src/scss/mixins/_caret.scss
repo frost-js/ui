@@ -1,15 +1,17 @@
+@use "../vars/helpers";
+
 // Attach a caret to a component
 // @param $direction: down
 @mixin caret($direction: down) {
     @if $direction == start {
         &::before {
             display: inline-block;
-            margin-right: $caret-spacing;
-            vertical-align: $caret-vertical-align - ($caret-size * .5);
+            margin-right: helpers.$caret-spacing;
+            vertical-align: helpers.$caret-vertical-align - (helpers.$caret-size * .5);
             content: "";
-            border-top: $caret-size solid transparent;
-            border-right: $caret-size solid;
-            border-bottom: $caret-size solid transparent;
+            border-top: helpers.$caret-size solid transparent;
+            border-right: helpers.$caret-size solid;
+            border-bottom: helpers.$caret-size solid transparent;
         }
 
         &:empty::before {
@@ -22,28 +24,28 @@
     } @else {
         &::after {
             display: inline-block;
-            margin-left: $caret-spacing;
+            margin-left: helpers.$caret-spacing;
             @if $direction == end {
-                vertical-align: $caret-vertical-align - ($caret-size * .5);
+                vertical-align: helpers.$caret-vertical-align - (helpers.$caret-size * .5);
             } @else {
-                vertical-align: $caret-vertical-align;
+                vertical-align: helpers.$caret-vertical-align;
             }
             content: "";
             @if $direction == down {
-                border-top: $caret-size solid;
-                border-right: $caret-size solid transparent;
+                border-top: helpers.$caret-size solid;
+                border-right: helpers.$caret-size solid transparent;
                 border-bottom: 0;
-                border-left: $caret-size solid transparent;
+                border-left: helpers.$caret-size solid transparent;
             } @else if $direction == up {
                 border-top: 0;
-                border-right: $caret-size solid transparent;
-                border-bottom: $caret-size solid;
-                border-left: $caret-size solid transparent;
+                border-right: helpers.$caret-size solid transparent;
+                border-bottom: helpers.$caret-size solid;
+                border-left: helpers.$caret-size solid transparent;
             } @else if $direction == end {
-                border-top: $caret-size solid transparent;
+                border-top: helpers.$caret-size solid transparent;
                 border-right: 0;
-                border-bottom: $caret-size solid transparent;
-                border-left: $caret-size solid;
+                border-bottom: helpers.$caret-size solid transparent;
+                border-left: helpers.$caret-size solid;
             }
         }
 

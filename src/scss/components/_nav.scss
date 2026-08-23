@@ -1,12 +1,15 @@
+@use "../mixins";
+@use "../vars";
+
 @use "sass:map";
 
 .nav {
-    --ui-nav-link-padding-x: #{$nav-link-padding-x};
-    --ui-nav-link-padding-y: #{$nav-link-padding-y};
-    --ui-nav-link-color: #{$nav-link-color};
-    --ui-nav-link-hover-color: #{$nav-link-hover-color};
-    --ui-nav-link-focus-box-shadow: #{$nav-link-focus-box-shadow};
-    --ui-nav-link-disabled-color: #{$nav-link-disabled-color};
+    --ui-nav-link-padding-x: #{vars.$nav-link-padding-x};
+    --ui-nav-link-padding-y: #{vars.$nav-link-padding-y};
+    --ui-nav-link-color: #{vars.$nav-link-color};
+    --ui-nav-link-hover-color: #{vars.$nav-link-hover-color};
+    --ui-nav-link-focus-box-shadow: #{vars.$nav-link-focus-box-shadow};
+    --ui-nav-link-disabled-color: #{vars.$nav-link-disabled-color};
 
     display: flex;
     flex-wrap: wrap;
@@ -23,7 +26,7 @@
     text-decoration: none;
     background: none;
     border: 0;
-    transition: all $transition-time $transition-type;
+    transition: all vars.$transition-time vars.$transition-type;
     transition-property: color, background-color, border-color;
 
     &:hover,
@@ -34,7 +37,7 @@
 
     &:focus-visible {
         outline: 0;
-        box-shadow: $nav-link-focus-box-shadow;
+        box-shadow: vars.$nav-link-focus-box-shadow;
     }
 
     &.disabled {
@@ -45,13 +48,13 @@
 }
 
 .nav-tabs {
-    --ui-nav-tabs-border-width: #{$nav-tabs-border-width};
-    --ui-nav-tabs-border-color: #{$nav-tabs-border-color};
-    --ui-nav-tabs-border-radius: #{$nav-tabs-border-radius};
-    --ui-nav-tabs-link-hover-border-color: #{$nav-tabs-link-hover-border-color};
-    --ui-nav-tabs-link-active-color: #{$nav-tabs-link-active-color};
-    --ui-nav-tabs-link-active-bg: #{$nav-tabs-link-active-bg};
-    --ui-nav-tabs-link-active-border-color: #{$nav-tabs-link-active-border-color};
+    --ui-nav-tabs-border-width: #{vars.$nav-tabs-border-width};
+    --ui-nav-tabs-border-color: #{vars.$nav-tabs-border-color};
+    --ui-nav-tabs-border-radius: #{vars.$nav-tabs-border-radius};
+    --ui-nav-tabs-link-hover-border-color: #{vars.$nav-tabs-link-hover-border-color};
+    --ui-nav-tabs-link-active-color: #{vars.$nav-tabs-link-active-color};
+    --ui-nav-tabs-link-active-bg: #{vars.$nav-tabs-link-active-bg};
+    --ui-nav-tabs-link-active-border-color: #{vars.$nav-tabs-link-active-border-color};
 
     border-bottom: var(--ui-nav-tabs-border-width) var(--ui-border-style) var(--ui-nav-tabs-border-color);
 
@@ -59,7 +62,7 @@
         margin-bottom: calc(var(--ui-nav-tabs-border-width) * -1);
         background-color: transparent;
         border: var(--ui-nav-tabs-border-width) var(--ui-border-style) transparent;
-        @include border-top-radius(var(--ui-nav-tabs-border-radius));
+        @include mixins.border-top-radius(var(--ui-nav-tabs-border-radius));
 
         &:hover,
         &:focus {
@@ -82,19 +85,19 @@
     }
 
     [data-ui-placement="bottom"] + .dropdown-menu {
-        @include border-top-radius(0);
+        @include mixins.border-top-radius(0);
     }
 }
 
 .nav-pills {
-    --ui-nav-pills-border-radius: #{$nav-pills-border-radius};
-    --ui-nav-pills-link-active-color: #{$nav-pills-link-active-color};
-    --ui-nav-pills-link-active-bg: #{$nav-pills-link-active-bg};
+    --ui-nav-pills-border-radius: #{vars.$nav-pills-border-radius};
+    --ui-nav-pills-link-active-color: #{vars.$nav-pills-link-active-color};
+    --ui-nav-pills-link-active-bg: #{vars.$nav-pills-link-active-bg};
 
     .nav-link {
         background: none;
         border: 0;
-        @include border-radius(var(--ui-nav-pills-border-radius));
+        @include mixins.border-radius(var(--ui-nav-pills-border-radius));
 
         &:disabled {
             color: var(--ui-nav-link-disabled-color);
@@ -111,9 +114,9 @@
 }
 
 .nav-underline {
-    --ui-nav-underline-gap: #{$nav-underline-gap};
-    --ui-nav-underline-border-width: #{$nav-underline-border-width};
-    --ui-nav-underline-link-active-color: #{$nav-underline-link-active-color};
+    --ui-nav-underline-gap: #{vars.$nav-underline-gap};
+    --ui-nav-underline-border-width: #{vars.$nav-underline-border-width};
+    --ui-nav-underline-link-active-color: #{vars.$nav-underline-link-active-color};
 
     gap: var(--ui-nav-underline-gap);
 
@@ -130,7 +133,7 @@
 
     .nav-link.active,
     .show > .nav-link {
-        font-weight: map.get($font-weights, bold);
+        font-weight: map.get(vars.$font-weights, bold);
         color: var(--ui-nav-underline-link-active-color);
         border-bottom-color: currentcolor;
     }

@@ -1,3 +1,7 @@
+@use "../functions";
+@use "../mixins";
+@use "../vars";
+
 @use "sass:map";
 
 .modal-open {
@@ -10,24 +14,24 @@
 }
 
 .modal {
-    --ui-modal-z-index: #{$modal-z-index};
-    --ui-modal-width: #{$modal-md-max-width};
-    --ui-modal-padding-x: #{$modal-padding-x};
-    --ui-modal-padding-y: #{$modal-padding-y};
-    --ui-modal-margin: #{$modal-margin};
-    --ui-modal-bg: #{$modal-bg};
-    --ui-modal-border-width: #{$modal-border-width};
-    --ui-modal-border-color: #{$modal-border-color};
-    --ui-modal-border-radius: #{$modal-border-radius};
+    --ui-modal-z-index: #{vars.$modal-z-index};
+    --ui-modal-width: #{vars.$modal-md-max-width};
+    --ui-modal-padding-x: #{vars.$modal-padding-x};
+    --ui-modal-padding-y: #{vars.$modal-padding-y};
+    --ui-modal-margin: #{vars.$modal-margin};
+    --ui-modal-bg: #{vars.$modal-bg};
+    --ui-modal-border-width: #{vars.$modal-border-width};
+    --ui-modal-border-color: #{vars.$modal-border-color};
+    --ui-modal-border-radius: #{vars.$modal-border-radius};
     --ui-modal-inner-border-radius: calc(var(--ui-modal-border-radius) - var(--ui-modal-border-width));
-    --ui-modal-header-padding-x: #{$modal-header-padding-x};
-    --ui-modal-header-padding-y: #{$modal-header-padding-y};
-    --ui-modal-header-border-width: #{$modal-header-border-width};
-    --ui-modal-header-border-color: #{$modal-header-border-color};
-    --ui-modal-title-line-height: #{$modal-title-line-height};
-    --ui-modal-footer-gap: #{$model-footer-gap};
-    --ui-modal-footer-border-width: #{$modal-footer-border-width};
-    --ui-modal-footer-border-color: #{$modal-footer-border-color};
+    --ui-modal-header-padding-x: #{vars.$modal-header-padding-x};
+    --ui-modal-header-padding-y: #{vars.$modal-header-padding-y};
+    --ui-modal-header-border-width: #{vars.$modal-header-border-width};
+    --ui-modal-header-border-color: #{vars.$modal-header-border-color};
+    --ui-modal-title-line-height: #{vars.$modal-title-line-height};
+    --ui-modal-footer-gap: #{vars.$model-footer-gap};
+    --ui-modal-footer-border-width: #{vars.$modal-footer-border-width};
+    --ui-modal-footer-border-color: #{vars.$modal-footer-border-color};
 
     position: fixed;
     top: 0;
@@ -51,7 +55,7 @@
 }
 
 .modal-dialog-scrollable {
-    max-height: calc(100vh - #{$modal-dialog-scrollable-gap});
+    max-height: calc(100vh - #{vars.$modal-dialog-scrollable-gap});
 
     .modal-content {
         max-height: 100%;
@@ -66,7 +70,7 @@
 .modal-dialog-centered {
     display: flex;
     align-items: center;
-    min-height: calc(100vh - #{$modal-dialog-centered-gap});
+    min-height: calc(100vh - #{vars.$modal-dialog-centered-gap});
 }
 
 .modal-content {
@@ -74,18 +78,18 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    color: $modal-content-color;
+    color: vars.$modal-content-color;
     pointer-events: auto;
     background-color: var(--ui-modal-bg);
     background-clip: padding-box;
     border: var(--ui-modal-border-width) var(--ui-border-style) var(--ui-modal-border-color);
-    @include border-radius(var(--ui-modal-border-radius));
-    box-shadow: $modal-content-box-shadow;
+    @include mixins.border-radius(var(--ui-modal-border-radius));
+    box-shadow: vars.$modal-content-box-shadow;
 }
 
 .modal-backdrop {
-    --ui-backdrop-z-index: #{$modal-backdrop-z-index};
-    --ui-backdrop-bg: #{$modal-backdrop-bg};
+    --ui-backdrop-z-index: #{vars.$modal-backdrop-z-index};
+    --ui-backdrop-bg: #{vars.$modal-backdrop-bg};
 
     position: fixed;
     top: 0;
@@ -102,7 +106,7 @@
     align-items: center;
     padding: var(--ui-modal-header-padding-y) var(--ui-modal-header-padding-x);
     border-bottom: var(--ui-modal-header-border-width) var(--ui-border-style) var(--ui-modal-header-border-color);
-    @include border-top-radius(var(--ui-modal-inner-border-radius));
+    @include mixins.border-top-radius(var(--ui-modal-inner-border-radius));
 
     .btn-close {
         padding: calc(var(--ui-modal-header-padding-y) * .5) calc(var(--ui-modal-header-padding-x) * .5);
@@ -132,54 +136,54 @@
     justify-content: flex-end;
     padding: var(--ui-modal-padding-y) var(--ui-modal-padding-x);
     border-top: var(--ui-modal-footer-border-width) var(--ui-border-style) var(--ui-modal-footer-border-color);
-    @include border-bottom-radius(var(--ui-modal-inner-border-radius));
+    @include mixins.border-bottom-radius(var(--ui-modal-inner-border-radius));
 
     >* {
         margin: calc(var(--ui-modal-footer-gap) * .5);
     }
 }
 
-@include media-breakpoint-up(sm) {
+@include mixins.media-breakpoint-up(sm) {
     .modal-dialog {
-        max-width: $modal-md-max-width;
-        margin: $modal-md-dialog-margin-y auto;
+        max-width: vars.$modal-md-max-width;
+        margin: vars.$modal-md-dialog-margin-y auto;
     }
 
     .modal-dialog-scrollable {
-        height: calc(100% - #{$modal-md-dialog-margin-y * 2});
+        height: calc(100% - #{vars.$modal-md-dialog-margin-y * 2});
     }
 
     .modal-dialog-centered {
-        min-height: calc(100% - #{$modal-md-dialog-margin-y * 2});
+        min-height: calc(100% - #{vars.$modal-md-dialog-margin-y * 2});
     }
 
     .modal-sm {
-        max-width: $modal-sm-max-width;
+        max-width: vars.$modal-sm-max-width;
     }
 }
 
-@include media-breakpoint-up(lg) {
+@include mixins.media-breakpoint-up(lg) {
 
     .modal-lg,
     .modal-xl {
-        max-width: $modal-lg-max-width;
+        max-width: vars.$modal-lg-max-width;
     }
 }
 
-@include media-breakpoint-up(xl) {
+@include mixins.media-breakpoint-up(xl) {
     .modal-xl {
-        max-width: $modal-xl-max-width;
+        max-width: vars.$modal-xl-max-width;
     }
 }
 
-@each $breakpoint in map.keys($breakpoints) {
-    $infix: breakpoint-infix($breakpoint);
+@each $breakpoint in map.keys(vars.$breakpoints) {
+    $infix: functions.breakpoint-infix($breakpoint);
 
     @if $infix != "" {
         $infix: $infix + "-down";
     }
 
-    @include media-breakpoint-down($breakpoint) {
+    @include mixins.media-breakpoint-down($breakpoint) {
         .modal-fullscreen#{$infix} {
             width: 100vw;
             max-width: none;
@@ -194,7 +198,7 @@
             .modal-content,
             .modal-header,
             .modal-footer {
-                @include border-radius(0);
+                @include mixins.border-radius(0);
             }
 
             .modal-body {

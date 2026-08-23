@@ -1,23 +1,26 @@
+@use "../mixins";
+@use "../vars";
+
 .accordion {
-    --ui-accordion-bg: #{$accordion-bg};
-    --ui-accordion-color: #{$accordion-color};
-    --ui-accordion-border-color: #{$accordion-border-color};
-    --ui-accordion-border-width: #{$accordion-border-width};
-    --ui-accordion-border-radius: #{$accordion-border-radius};
+    --ui-accordion-bg: #{vars.$accordion-bg};
+    --ui-accordion-color: #{vars.$accordion-color};
+    --ui-accordion-border-color: #{vars.$accordion-border-color};
+    --ui-accordion-border-width: #{vars.$accordion-border-width};
+    --ui-accordion-border-radius: #{vars.$accordion-border-radius};
     --ui-accordion-inner-border-radius: calc(var(--ui-accordion-border-radius) - var(--ui-accordion-border-width));
-    --ui-accordion-btn-padding-x: #{$accordion-button-padding-x};
-    --ui-accordion-btn-padding-y: #{$accordion-button-padding-y};
-    --ui-accordion-btn-bg: #{$accordion-button-bg};
-    --ui-accordion-btn-color: #{$accordion-button-color};
-    --ui-accordion-active-bg: #{$accordion-active-bg};
-    --ui-accordion-active-color: #{$accordion-active-color};
-    --ui-accordion-focus-box-shadow: #{$accordion-focus-box-shadow};
-    --ui-accordion-icon-width: #{$accordion-icon-width};
-    --ui-accordion-icon-transform: #{$accordion-icon-transform};
-    --ui-accordion-icon-transition: #{$accordion-icon-transition};
-    --ui-accordion-icon: #{$accordion-icon};
-    --ui-accordion-body-padding-x: #{$accordion-body-padding-x};
-    --ui-accordion-body-padding-y: #{$accordion-body-padding-y};
+    --ui-accordion-btn-padding-x: #{vars.$accordion-button-padding-x};
+    --ui-accordion-btn-padding-y: #{vars.$accordion-button-padding-y};
+    --ui-accordion-btn-bg: #{vars.$accordion-button-bg};
+    --ui-accordion-btn-color: #{vars.$accordion-button-color};
+    --ui-accordion-active-bg: #{vars.$accordion-active-bg};
+    --ui-accordion-active-color: #{vars.$accordion-active-color};
+    --ui-accordion-focus-box-shadow: #{vars.$accordion-focus-box-shadow};
+    --ui-accordion-icon-width: #{vars.$accordion-icon-width};
+    --ui-accordion-icon-transform: #{vars.$accordion-icon-transform};
+    --ui-accordion-icon-transition: #{vars.$accordion-icon-transition};
+    --ui-accordion-icon: #{vars.$accordion-icon};
+    --ui-accordion-body-padding-x: #{vars.$accordion-body-padding-x};
+    --ui-accordion-body-padding-y: #{vars.$accordion-body-padding-y};
 }
 
 .accordion-button {
@@ -30,10 +33,10 @@
     color: var(--ui-accordion-btn-color);
     background-color: var(--ui-accordion-btn-bg);
     border: 0;
-    transition: all $transition-time $transition-type;
+    transition: all vars.$transition-time vars.$transition-type;
     transition-property: color, background-color, border-color, border-radius;
     overflow-anchor: none;
-    @include border-radius(0);
+    @include mixins.border-radius(0);
 
     &:hover {
         z-index: 1;
@@ -90,24 +93,24 @@
     border-bottom-width: 0;
 
     &:first-of-type {
-        @include border-top-radius(var(--ui-accordion-border-radius));
+        @include mixins.border-top-radius(var(--ui-accordion-border-radius));
 
         > .accordion-header .accordion-button {
-            @include border-top-radius(var(--ui-accordion-inner-border-radius));
+            @include mixins.border-top-radius(var(--ui-accordion-inner-border-radius));
         }
     }
 
     &:last-of-type {
         margin-bottom: 0;
         border-bottom-width: var(--ui-accordion-border-width);
-        @include border-bottom-radius(var(--ui-accordion-border-radius));
+        @include mixins.border-bottom-radius(var(--ui-accordion-border-radius));
 
         > .accordion-header .accordion-button.collapsed {
-            @include border-bottom-radius(var(--ui-accordion-inner-border-radius));
+            @include mixins.border-bottom-radius(var(--ui-accordion-inner-border-radius));
         }
 
         > .accordion-collapse {
-            @include border-bottom-radius(var(--ui-accordion-border-radius));
+            @include mixins.border-bottom-radius(var(--ui-accordion-border-radius));
         }
     }
 }
@@ -135,7 +138,7 @@
 
         .accordion-button,
         .accordion-button.collapsed {
-            @include border-radius(0);
+            @include mixins.border-radius(0);
         }
     }
 }

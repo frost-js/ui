@@ -1,7 +1,7 @@
-@import "root";
+@use "root";
 
-@import "base";
-@import "figure";
-@import "image";
-@import "table";
-@import "typography";
+@use "base";
+@use "figure";
+@use "image";
+@use "table";
+@use "typography";

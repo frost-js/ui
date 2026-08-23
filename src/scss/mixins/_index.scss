@@ -1,5 +1,5 @@
-@import "border";
-@import "breakpoint";
-@import "caret";
-@import "text";
-@import "utility";
+@forward "border";
+@forward "breakpoint";
+@forward "caret";
+@forward "text";
+@forward "utility";

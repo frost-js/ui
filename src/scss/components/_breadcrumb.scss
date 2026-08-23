@@ -1,9 +1,11 @@
+@use "../vars";
+
 .breadcrumb {
-    --ui-breadcrumb-item-padding-x: #{$breadcrumb-item-padding-x};
-    --ui-breadcrumb-margin-bottom: #{$breadcrumb-margin-bottom};
-    --ui-breadcrumb-active-color: #{$breadcrumb-active-color};
-    --ui-breadcrumb-divider-color: #{$breadcrumb-divider-color};
-    --ui-breadcrumb-divider: "#{$breadcrumb-divider}";
+    --ui-breadcrumb-item-padding-x: #{vars.$breadcrumb-item-padding-x};
+    --ui-breadcrumb-margin-bottom: #{vars.$breadcrumb-margin-bottom};
+    --ui-breadcrumb-active-color: #{vars.$breadcrumb-active-color};
+    --ui-breadcrumb-divider-color: #{vars.$breadcrumb-divider-color};
+    --ui-breadcrumb-divider: "#{vars.$breadcrumb-divider}";
 
     display: flex;
     flex-wrap: wrap;

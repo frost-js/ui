@@ -1,197 +1,200 @@
+@use "../functions";
+@use "../vars";
+
 @use "sass:map";
 
 :root,
 [data-ui-theme="light"] {
-    --ui-white: #{$white};
-    --ui-white-rgb: #{to-rgb($white)};
+    --ui-white: #{vars.$white};
+    --ui-white-rgb: #{functions.to-rgb(vars.$white)};
 
-    --ui-black: #{$black};
-    --ui-black-rgb: #{to-rgb($black)};
+    --ui-black: #{vars.$black};
+    --ui-black-rgb: #{functions.to-rgb(vars.$black)};
 
-    --ui-gray: #{$gray};
-    --ui-gray-rgb: #{to-rgb($gray)};
+    --ui-gray: #{vars.$gray};
+    --ui-gray-rgb: #{functions.to-rgb(vars.$gray)};
 
-    --ui-primary: #{$primary};
-    --ui-primary-emphasis: #{$primary-emphasis};
-    --ui-primary-highlight: #{$primary-highlight};
-    --ui-primary-active: #{$primary-active};
-    --ui-primary-subtle: #{$primary-subtle};
-    --ui-primary-subtle-emphasis: #{$primary-subtle-emphasis};
-    --ui-primary-subtle-text: #{$primary-subtle-text};
-    --ui-primary-contrast: #{$primary-contrast};
-    --ui-primary-rgb: #{to-rgb($primary)};
-    --ui-primary-emphasis-rgb: #{to-rgb($primary-emphasis)};
-    --ui-primary-subtle-rgb: #{to-rgb($primary-subtle)};
-    --ui-primary-contrast-rgb: #{to-rgb($primary-contrast)};
+    --ui-primary: #{vars.$primary};
+    --ui-primary-emphasis: #{vars.$primary-emphasis};
+    --ui-primary-highlight: #{vars.$primary-highlight};
+    --ui-primary-active: #{vars.$primary-active};
+    --ui-primary-subtle: #{vars.$primary-subtle};
+    --ui-primary-subtle-emphasis: #{vars.$primary-subtle-emphasis};
+    --ui-primary-subtle-text: #{vars.$primary-subtle-text};
+    --ui-primary-contrast: #{vars.$primary-contrast};
+    --ui-primary-rgb: #{functions.to-rgb(vars.$primary)};
+    --ui-primary-emphasis-rgb: #{functions.to-rgb(vars.$primary-emphasis)};
+    --ui-primary-subtle-rgb: #{functions.to-rgb(vars.$primary-subtle)};
+    --ui-primary-contrast-rgb: #{functions.to-rgb(vars.$primary-contrast)};
 
-    --ui-secondary: #{$secondary};
-    --ui-secondary-emphasis: #{$secondary-emphasis};
-    --ui-secondary-highlight: #{$secondary-highlight};
-    --ui-secondary-active: #{$secondary-active};
-    --ui-secondary-subtle: #{$secondary-subtle};
-    --ui-secondary-subtle-emphasis: #{$secondary-subtle-emphasis};
-    --ui-secondary-subtle-text: #{$secondary-subtle-text};
-    --ui-secondary-contrast: #{$secondary-contrast};
-    --ui-secondary-rgb: #{to-rgb($secondary)};
-    --ui-secondary-emphasis-rgb: #{to-rgb($secondary-emphasis)};
-    --ui-secondary-subtle-rgb: #{to-rgb($secondary-subtle)};
-    --ui-secondary-contrast-rgb: #{to-rgb($secondary-contrast)};
+    --ui-secondary: #{vars.$secondary};
+    --ui-secondary-emphasis: #{vars.$secondary-emphasis};
+    --ui-secondary-highlight: #{vars.$secondary-highlight};
+    --ui-secondary-active: #{vars.$secondary-active};
+    --ui-secondary-subtle: #{vars.$secondary-subtle};
+    --ui-secondary-subtle-emphasis: #{vars.$secondary-subtle-emphasis};
+    --ui-secondary-subtle-text: #{vars.$secondary-subtle-text};
+    --ui-secondary-contrast: #{vars.$secondary-contrast};
+    --ui-secondary-rgb: #{functions.to-rgb(vars.$secondary)};
+    --ui-secondary-emphasis-rgb: #{functions.to-rgb(vars.$secondary-emphasis)};
+    --ui-secondary-subtle-rgb: #{functions.to-rgb(vars.$secondary-subtle)};
+    --ui-secondary-contrast-rgb: #{functions.to-rgb(vars.$secondary-contrast)};
 
-    --ui-success: #{$success};
-    --ui-success-emphasis: #{$success-emphasis};
-    --ui-success-highlight: #{$success-highlight};
-    --ui-success-active: #{$success-active};
-    --ui-success-subtle: #{$success-subtle};
-    --ui-success-subtle-emphasis: #{$success-subtle-emphasis};
-    --ui-success-subtle-text: #{$success-subtle-text};
-    --ui-success-contrast: #{$success-contrast};
-    --ui-success-rgb: #{to-rgb($success)};
-    --ui-success-emphasis-rgb: #{to-rgb($success-emphasis)};
-    --ui-success-subtle-rgb: #{to-rgb($success-subtle)};
-    --ui-success-contrast-rgb: #{to-rgb($success-contrast)};
+    --ui-success: #{vars.$success};
+    --ui-success-emphasis: #{vars.$success-emphasis};
+    --ui-success-highlight: #{vars.$success-highlight};
+    --ui-success-active: #{vars.$success-active};
+    --ui-success-subtle: #{vars.$success-subtle};
+    --ui-success-subtle-emphasis: #{vars.$success-subtle-emphasis};
+    --ui-success-subtle-text: #{vars.$success-subtle-text};
+    --ui-success-contrast: #{vars.$success-contrast};
+    --ui-success-rgb: #{functions.to-rgb(vars.$success)};
+    --ui-success-emphasis-rgb: #{functions.to-rgb(vars.$success-emphasis)};
+    --ui-success-subtle-rgb: #{functions.to-rgb(vars.$success-subtle)};
+    --ui-success-contrast-rgb: #{functions.to-rgb(vars.$success-contrast)};
 
-    --ui-info: #{$info};
-    --ui-info-emphasis: #{$info-emphasis};
-    --ui-info-highlight: #{$info-highlight};
-    --ui-info-active: #{$info-active};
-    --ui-info-subtle: #{$info-subtle};
-    --ui-info-subtle-emphasis: #{$info-subtle-emphasis};
-    --ui-info-subtle-text: #{$info-subtle-text};
-    --ui-info-contrast: #{$info-contrast};
-    --ui-info-rgb: #{to-rgb($info)};
-    --ui-info-emphasis-rgb: #{to-rgb($info-emphasis)};
-    --ui-info-subtle-rgb: #{to-rgb($info-subtle)};
-    --ui-info-contrast-rgb: #{to-rgb($info-contrast)};
+    --ui-info: #{vars.$info};
+    --ui-info-emphasis: #{vars.$info-emphasis};
+    --ui-info-highlight: #{vars.$info-highlight};
+    --ui-info-active: #{vars.$info-active};
+    --ui-info-subtle: #{vars.$info-subtle};
+    --ui-info-subtle-emphasis: #{vars.$info-subtle-emphasis};
+    --ui-info-subtle-text: #{vars.$info-subtle-text};
+    --ui-info-contrast: #{vars.$info-contrast};
+    --ui-info-rgb: #{functions.to-rgb(vars.$info)};
+    --ui-info-emphasis-rgb: #{functions.to-rgb(vars.$info-emphasis)};
+    --ui-info-subtle-rgb: #{functions.to-rgb(vars.$info-subtle)};
+    --ui-info-contrast-rgb: #{functions.to-rgb(vars.$info-contrast)};
 
-    --ui-warning: #{$warning};
-    --ui-warning-emphasis: #{$warning-emphasis};
-    --ui-warning-highlight: #{$warning-highlight};
-    --ui-warning-active: #{$warning-active};
-    --ui-warning-subtle: #{$warning-subtle};
-    --ui-warning-subtle-emphasis: #{$warning-subtle-emphasis};
-    --ui-warning-subtle-text: #{$warning-subtle-text};
-    --ui-warning-contrast: #{$warning-contrast};
-    --ui-warning-rgb: #{to-rgb($warning)};
-    --ui-warning-emphasis-rgb: #{to-rgb($warning-emphasis)};
-    --ui-warning-subtle-rgb: #{to-rgb($warning-subtle)};
-    --ui-warning-contrast-rgb: #{to-rgb($warning-contrast)};
+    --ui-warning: #{vars.$warning};
+    --ui-warning-emphasis: #{vars.$warning-emphasis};
+    --ui-warning-highlight: #{vars.$warning-highlight};
+    --ui-warning-active: #{vars.$warning-active};
+    --ui-warning-subtle: #{vars.$warning-subtle};
+    --ui-warning-subtle-emphasis: #{vars.$warning-subtle-emphasis};
+    --ui-warning-subtle-text: #{vars.$warning-subtle-text};
+    --ui-warning-contrast: #{vars.$warning-contrast};
+    --ui-warning-rgb: #{functions.to-rgb(vars.$warning)};
+    --ui-warning-emphasis-rgb: #{functions.to-rgb(vars.$warning-emphasis)};
+    --ui-warning-subtle-rgb: #{functions.to-rgb(vars.$warning-subtle)};
+    --ui-warning-contrast-rgb: #{functions.to-rgb(vars.$warning-contrast)};
 
-    --ui-danger: #{$danger};
-    --ui-danger-emphasis: #{$danger-emphasis};
-    --ui-danger-highlight: #{$danger-highlight};
-    --ui-danger-active: #{$danger-active};
-    --ui-danger-subtle: #{$danger-subtle};
-    --ui-danger-subtle-emphasis: #{$danger-subtle-emphasis};
-    --ui-danger-subtle-text: #{$danger-subtle-text};
-    --ui-danger-contrast: #{$danger-contrast};
-    --ui-danger-rgb: #{to-rgb($danger)};
-    --ui-danger-emphasis-rgb: #{to-rgb($danger-emphasis)};
-    --ui-danger-subtle-rgb: #{to-rgb($danger-subtle)};
-    --ui-danger-contrast-rgb: #{to-rgb($danger-contrast)};
+    --ui-danger: #{vars.$danger};
+    --ui-danger-emphasis: #{vars.$danger-emphasis};
+    --ui-danger-highlight: #{vars.$danger-highlight};
+    --ui-danger-active: #{vars.$danger-active};
+    --ui-danger-subtle: #{vars.$danger-subtle};
+    --ui-danger-subtle-emphasis: #{vars.$danger-subtle-emphasis};
+    --ui-danger-subtle-text: #{vars.$danger-subtle-text};
+    --ui-danger-contrast: #{vars.$danger-contrast};
+    --ui-danger-rgb: #{functions.to-rgb(vars.$danger)};
+    --ui-danger-emphasis-rgb: #{functions.to-rgb(vars.$danger-emphasis)};
+    --ui-danger-subtle-rgb: #{functions.to-rgb(vars.$danger-subtle)};
+    --ui-danger-contrast-rgb: #{functions.to-rgb(vars.$danger-contrast)};
 
-    --ui-light: #{$light};
-    --ui-light-emphasis: #{$light-emphasis};
-    --ui-light-highlight: #{$light-highlight};
-    --ui-light-active: #{$light-active};
-    --ui-light-subtle: #{$light-subtle};
-    --ui-light-subtle-emphasis: #{$light-subtle-emphasis};
-    --ui-light-subtle-text: #{$light-subtle-text};
-    --ui-light-contrast: #{$light-contrast};
-    --ui-light-rgb: #{to-rgb($light)};
-    --ui-light-emphasis-rgb: #{to-rgb($light-emphasis)};
-    --ui-light-subtle-rgb: #{to-rgb($light-subtle)};
-    --ui-light-contrast-rgb: #{to-rgb($light-contrast)};
+    --ui-light: #{vars.$light};
+    --ui-light-emphasis: #{vars.$light-emphasis};
+    --ui-light-highlight: #{vars.$light-highlight};
+    --ui-light-active: #{vars.$light-active};
+    --ui-light-subtle: #{vars.$light-subtle};
+    --ui-light-subtle-emphasis: #{vars.$light-subtle-emphasis};
+    --ui-light-subtle-text: #{vars.$light-subtle-text};
+    --ui-light-contrast: #{vars.$light-contrast};
+    --ui-light-rgb: #{functions.to-rgb(vars.$light)};
+    --ui-light-emphasis-rgb: #{functions.to-rgb(vars.$light-emphasis)};
+    --ui-light-subtle-rgb: #{functions.to-rgb(vars.$light-subtle)};
+    --ui-light-contrast-rgb: #{functions.to-rgb(vars.$light-contrast)};
 
-    --ui-dark: #{$dark};
-    --ui-dark-emphasis: #{$dark-emphasis};
-    --ui-dark-highlight: #{$dark-highlight};
-    --ui-dark-active: #{$dark-active};
-    --ui-dark-subtle: #{$dark-subtle};
-    --ui-dark-subtle-emphasis: #{$dark-subtle-emphasis};
-    --ui-dark-subtle-text: #{$dark-subtle-text};
-    --ui-dark-contrast: #{$dark-contrast};
-    --ui-dark-rgb: #{to-rgb($dark)};
-    --ui-dark-emphasis-rgb: #{to-rgb($dark-emphasis)};
-    --ui-dark-subtle-rgb: #{to-rgb($dark-subtle)};
-    --ui-dark-contrast-rgb: #{to-rgb($dark-contrast)};
+    --ui-dark: #{vars.$dark};
+    --ui-dark-emphasis: #{vars.$dark-emphasis};
+    --ui-dark-highlight: #{vars.$dark-highlight};
+    --ui-dark-active: #{vars.$dark-active};
+    --ui-dark-subtle: #{vars.$dark-subtle};
+    --ui-dark-subtle-emphasis: #{vars.$dark-subtle-emphasis};
+    --ui-dark-subtle-text: #{vars.$dark-subtle-text};
+    --ui-dark-contrast: #{vars.$dark-contrast};
+    --ui-dark-rgb: #{functions.to-rgb(vars.$dark)};
+    --ui-dark-emphasis-rgb: #{functions.to-rgb(vars.$dark-emphasis)};
+    --ui-dark-subtle-rgb: #{functions.to-rgb(vars.$dark-subtle)};
+    --ui-dark-contrast-rgb: #{functions.to-rgb(vars.$dark-contrast)};
 
-    --ui-gradient: #{$gradient};
+    --ui-gradient: #{vars.$gradient};
 
-    --ui-font-sans-serif: #{$font-sans-serif};
-    --ui-font-monospace: #{$font-monospace};
-    --ui-font-size: #{$font-size};
-    --ui-font-size-sm: #{$font-size-sm};
-    --ui-font-size-lg: #{$font-size-lg};
+    --ui-font-sans-serif: #{vars.$font-sans-serif};
+    --ui-font-monospace: #{vars.$font-monospace};
+    --ui-font-size: #{vars.$font-size};
+    --ui-font-size-sm: #{vars.$font-size-sm};
+    --ui-font-size-lg: #{vars.$font-size-lg};
 
     --ui-body-font-family: var(--ui-font-sans-serif);
-    --ui-body-font-size: #{$body-font-size};
-    --ui-body-font-weight: #{$body-font-weight};
-    --ui-body-line-height: #{$body-line-height};
+    --ui-body-font-size: #{vars.$body-font-size};
+    --ui-body-font-weight: #{vars.$body-font-weight};
+    --ui-body-line-height: #{vars.$body-line-height};
 
-    --ui-body-bg: #{$body-bg};
-    --ui-body-bg-rgb: #{to-rgb($body-bg)};
+    --ui-body-bg: #{vars.$body-bg};
+    --ui-body-bg-rgb: #{functions.to-rgb(vars.$body-bg)};
 
-    --ui-body-color: #{$body-color};
-    --ui-body-color-rgb: #{to-rgb($body-color)};
+    --ui-body-color: #{vars.$body-color};
+    --ui-body-color-rgb: #{functions.to-rgb(vars.$body-color)};
 
-    --ui-secondary-bg: #{$body-secondary-bg};
-    --ui-secondary-bg-rgb: #{to-rgb($body-secondary-bg)};
-    --ui-secondary-color: #{$body-secondary-color};
-    --ui-secondary-color-rgb: #{to-rgb($body-secondary-color)};
+    --ui-secondary-bg: #{vars.$body-secondary-bg};
+    --ui-secondary-bg-rgb: #{functions.to-rgb(vars.$body-secondary-bg)};
+    --ui-secondary-color: #{vars.$body-secondary-color};
+    --ui-secondary-color-rgb: #{functions.to-rgb(vars.$body-secondary-color)};
 
-    --ui-tertiary-bg: #{$body-tertiary-bg};
-    --ui-tertiary-bg-rgb: #{to-rgb($body-tertiary-bg)};
-    --ui-tertiary-color: #{$body-tertiary-color};
-    --ui-tertiary-color-rgb: #{to-rgb($body-tertiary-color)};
+    --ui-tertiary-bg: #{vars.$body-tertiary-bg};
+    --ui-tertiary-bg-rgb: #{functions.to-rgb(vars.$body-tertiary-bg)};
+    --ui-tertiary-color: #{vars.$body-tertiary-color};
+    --ui-tertiary-color-rgb: #{functions.to-rgb(vars.$body-tertiary-color)};
 
-    --ui-emphasis-color: #{$emphasis-color};
-    --ui-emphasis-color-rgb: #{to-rgb($emphasis-color)};
+    --ui-emphasis-color: #{vars.$emphasis-color};
+    --ui-emphasis-color-rgb: #{functions.to-rgb(vars.$emphasis-color)};
 
-    --ui-link-color: #{$link-color};
-    --ui-link-color-rgb: #{to-rgb($link-color)};
+    --ui-link-color: #{vars.$link-color};
+    --ui-link-color-rgb: #{functions.to-rgb(vars.$link-color)};
     --ui-link-decoration: underline;
-    --ui-link-hover-color: #{$link-color-hover};
-    --ui-link-hover-color-rgb: #{to-rgb($link-color-hover)};
+    --ui-link-hover-color: #{vars.$link-color-hover};
+    --ui-link-hover-color-rgb: #{functions.to-rgb(vars.$link-color-hover)};
     --ui-link-hover-decoration: underline;
 
-    --ui-code-color: #{$code-color};
-    --ui-mark-bg: #{$mark-bg};
+    --ui-code-color: #{vars.$code-color};
+    --ui-mark-bg: #{vars.$mark-bg};
 
-    --ui-border-color: #{$border-color};
-    --ui-border-color-translucent: #{$border-color-translucent};
-    --ui-border-width: #{$border-width};
-    --ui-border-style: #{$border-style};
+    --ui-border-color: #{vars.$border-color};
+    --ui-border-color-translucent: #{vars.$border-color-translucent};
+    --ui-border-width: #{vars.$border-width};
+    --ui-border-style: #{vars.$border-style};
 
-    --ui-border-radius: #{$border-radius};
+    --ui-border-radius: #{vars.$border-radius};
 
-    --ui-border-radius-sm: #{$border-radius-sm};
-    --ui-border-radius-lg: #{$border-radius-lg};
-    --ui-border-radius-xl: #{$border-radius-xl};
-    --ui-border-radius-xxl: #{$border-radius-xxl};
-    --ui-border-radius-pill: #{$border-radius-pill};
+    --ui-border-radius-sm: #{vars.$border-radius-sm};
+    --ui-border-radius-lg: #{vars.$border-radius-lg};
+    --ui-border-radius-xl: #{vars.$border-radius-xl};
+    --ui-border-radius-xxl: #{vars.$border-radius-xxl};
+    --ui-border-radius-pill: #{vars.$border-radius-pill};
 
-    --ui-shadow: #{$shadow};
-    --ui-shadow-sm: #{$shadow-sm};
-    --ui-shadow-lg: #{$shadow-lg};
+    --ui-shadow: #{vars.$shadow};
+    --ui-shadow-sm: #{vars.$shadow-sm};
+    --ui-shadow-lg: #{vars.$shadow-lg};
 
-    --ui-focus-ring-width: #{$focus-ring-width};
-    --ui-focus-ring-opacity: #{$focus-ring-opacity};
-    --ui-focus-ring-color: #{$focus-ring-color};
+    --ui-focus-ring-width: #{vars.$focus-ring-width};
+    --ui-focus-ring-opacity: #{vars.$focus-ring-opacity};
+    --ui-focus-ring-color: #{vars.$focus-ring-color};
 
-    --ui-ripple-opacity: #{$ripple-opacity};
-    --ui-ripple-bg: #{$ripple-bg};
+    --ui-ripple-opacity: #{vars.$ripple-opacity};
+    --ui-ripple-bg: #{vars.$ripple-bg};
 
-    --ui-breakpoint-xs: #{map.get($breakpoints, xs)};
-    --ui-breakpoint-sm: #{map.get($breakpoints, sm)};
-    --ui-breakpoint-md: #{map.get($breakpoints, md)};
-    --ui-breakpoint-lg: #{map.get($breakpoints, lg)};
-    --ui-breakpoint-xl: #{map.get($breakpoints, xl)};
-    --ui-breakpoint-xxl: #{map.get($breakpoints, xxl)};
+    --ui-breakpoint-xs: #{map.get(vars.$breakpoints, xs)};
+    --ui-breakpoint-sm: #{map.get(vars.$breakpoints, sm)};
+    --ui-breakpoint-md: #{map.get(vars.$breakpoints, md)};
+    --ui-breakpoint-lg: #{map.get(vars.$breakpoints, lg)};
+    --ui-breakpoint-xl: #{map.get(vars.$breakpoints, xl)};
+    --ui-breakpoint-xxl: #{map.get(vars.$breakpoints, xxl)};
 
     --ui-text-opacity: 1;
     --ui-bg-opacity: 1;
     --ui-border-opacity: 1;
-    --ui-disabled-opacity: #{$disabled-opacity};
+    --ui-disabled-opacity: #{vars.$disabled-opacity};
 }
 
 [data-ui-theme="light"] {
@@ -201,88 +204,88 @@
 [data-ui-theme="dark"] {
     color-scheme: dark;
 
-    --ui-primary-emphasis: #{$primary-emphasis-dark};
-    --ui-primary-subtle: #{$primary-subtle-dark};
-    --ui-primary-subtle-emphasis: #{$primary-subtle-emphasis-dark};
-    --ui-primary-subtle-text: #{$primary-subtle-text-dark};
-    --ui-primary-emphasis-rgb: #{to-rgb($primary-emphasis-dark)};
-    --ui-primary-subtle-rgb: #{to-rgb($primary-subtle-dark)};
+    --ui-primary-emphasis: #{vars.$primary-emphasis-dark};
+    --ui-primary-subtle: #{vars.$primary-subtle-dark};
+    --ui-primary-subtle-emphasis: #{vars.$primary-subtle-emphasis-dark};
+    --ui-primary-subtle-text: #{vars.$primary-subtle-text-dark};
+    --ui-primary-emphasis-rgb: #{functions.to-rgb(vars.$primary-emphasis-dark)};
+    --ui-primary-subtle-rgb: #{functions.to-rgb(vars.$primary-subtle-dark)};
 
-    --ui-secondary-emphasis: #{$secondary-emphasis-dark};
-    --ui-secondary-subtle: #{$secondary-subtle-dark};
-    --ui-secondary-subtle-emphasis: #{$secondary-subtle-emphasis-dark};
-    --ui-secondary-subtle-text: #{$secondary-subtle-text-dark};
-    --ui-secondary-emphasis-rgb: #{to-rgb($secondary-emphasis-dark)};
-    --ui-secondary-subtle-rgb: #{to-rgb($secondary-subtle-dark)};
+    --ui-secondary-emphasis: #{vars.$secondary-emphasis-dark};
+    --ui-secondary-subtle: #{vars.$secondary-subtle-dark};
+    --ui-secondary-subtle-emphasis: #{vars.$secondary-subtle-emphasis-dark};
+    --ui-secondary-subtle-text: #{vars.$secondary-subtle-text-dark};
+    --ui-secondary-emphasis-rgb: #{functions.to-rgb(vars.$secondary-emphasis-dark)};
+    --ui-secondary-subtle-rgb: #{functions.to-rgb(vars.$secondary-subtle-dark)};
 
-    --ui-success-emphasis: #{$success-emphasis-dark};
-    --ui-success-subtle: #{$success-subtle-dark};
-    --ui-success-subtle-emphasis: #{$success-subtle-emphasis-dark};
-    --ui-success-subtle-text: #{$success-subtle-text-dark};
-    --ui-success-emphasis-rgb: #{to-rgb($success-emphasis-dark)};
-    --ui-success-subtle-rgb: #{to-rgb($success-subtle-dark)};
+    --ui-success-emphasis: #{vars.$success-emphasis-dark};
+    --ui-success-subtle: #{vars.$success-subtle-dark};
+    --ui-success-subtle-emphasis: #{vars.$success-subtle-emphasis-dark};
+    --ui-success-subtle-text: #{vars.$success-subtle-text-dark};
+    --ui-success-emphasis-rgb: #{functions.to-rgb(vars.$success-emphasis-dark)};
+    --ui-success-subtle-rgb: #{functions.to-rgb(vars.$success-subtle-dark)};
 
-    --ui-info-emphasis: #{$info-emphasis-dark};
-    --ui-info-subtle: #{$info-subtle-dark};
-    --ui-info-subtle-emphasis: #{$info-subtle-emphasis-dark};
-    --ui-info-subtle-text: #{$info-subtle-text-dark};
-    --ui-info-emphasis-rgb: #{to-rgb($info-emphasis-dark)};
-    --ui-info-subtle-rgb: #{to-rgb($info-subtle-dark)};
+    --ui-info-emphasis: #{vars.$info-emphasis-dark};
+    --ui-info-subtle: #{vars.$info-subtle-dark};
+    --ui-info-subtle-emphasis: #{vars.$info-subtle-emphasis-dark};
+    --ui-info-subtle-text: #{vars.$info-subtle-text-dark};
+    --ui-info-emphasis-rgb: #{functions.to-rgb(vars.$info-emphasis-dark)};
+    --ui-info-subtle-rgb: #{functions.to-rgb(vars.$info-subtle-dark)};
 
-    --ui-warning-emphasis: #{$warning-emphasis-dark};
-    --ui-warning-subtle: #{$warning-subtle-dark};
-    --ui-warning-subtle-emphasis: #{$warning-subtle-emphasis-dark};
-    --ui-warning-subtle-text: #{$warning-subtle-text-dark};
-    --ui-warning-emphasis-rgb: #{to-rgb($warning-emphasis-dark)};
-    --ui-warning-subtle-rgb: #{to-rgb($warning-subtle-dark)};
+    --ui-warning-emphasis: #{vars.$warning-emphasis-dark};
+    --ui-warning-subtle: #{vars.$warning-subtle-dark};
+    --ui-warning-subtle-emphasis: #{vars.$warning-subtle-emphasis-dark};
+    --ui-warning-subtle-text: #{vars.$warning-subtle-text-dark};
+    --ui-warning-emphasis-rgb: #{functions.to-rgb(vars.$warning-emphasis-dark)};
+    --ui-warning-subtle-rgb: #{functions.to-rgb(vars.$warning-subtle-dark)};
 
-    --ui-danger-emphasis: #{$danger-emphasis-dark};
-    --ui-danger-subtle: #{$danger-subtle-dark};
-    --ui-danger-subtle-emphasis: #{$danger-subtle-emphasis-dark};
-    --ui-danger-subtle-text: #{$danger-subtle-text-dark};
-    --ui-danger-emphasis-rgb: #{to-rgb($danger-emphasis-dark)};
-    --ui-danger-subtle-rgb: #{to-rgb($danger-subtle-dark)};
+    --ui-danger-emphasis: #{vars.$danger-emphasis-dark};
+    --ui-danger-subtle: #{vars.$danger-subtle-dark};
+    --ui-danger-subtle-emphasis: #{vars.$danger-subtle-emphasis-dark};
+    --ui-danger-subtle-text: #{vars.$danger-subtle-text-dark};
+    --ui-danger-emphasis-rgb: #{functions.to-rgb(vars.$danger-emphasis-dark)};
+    --ui-danger-subtle-rgb: #{functions.to-rgb(vars.$danger-subtle-dark)};
 
-    --ui-light-emphasis: #{$light-emphasis-dark};
-    --ui-light-subtle: #{$light-subtle-dark};
-    --ui-light-subtle-emphasis: #{$light-subtle-emphasis-dark};
-    --ui-light-subtle-text: #{$light-subtle-text-dark};
-    --ui-light-emphasis-rgb: #{to-rgb($light-emphasis-dark)};
-    --ui-light-subtle-rgb: #{to-rgb($light-subtle-dark)};
+    --ui-light-emphasis: #{vars.$light-emphasis-dark};
+    --ui-light-subtle: #{vars.$light-subtle-dark};
+    --ui-light-subtle-emphasis: #{vars.$light-subtle-emphasis-dark};
+    --ui-light-subtle-text: #{vars.$light-subtle-text-dark};
+    --ui-light-emphasis-rgb: #{functions.to-rgb(vars.$light-emphasis-dark)};
+    --ui-light-subtle-rgb: #{functions.to-rgb(vars.$light-subtle-dark)};
 
-    --ui-dark-emphasis: #{$dark-emphasis-dark};
-    --ui-dark-subtle: #{$dark-subtle-dark};
-    --ui-dark-subtle-emphasis: #{$dark-subtle-emphasis-dark};
-    --ui-dark-subtle-text: #{$dark-subtle-text-dark};
-    --ui-dark-emphasis-rgb: #{to-rgb($dark-emphasis-dark)};
-    --ui-dark-subtle-rgb: #{to-rgb($dark-subtle-dark)};
+    --ui-dark-emphasis: #{vars.$dark-emphasis-dark};
+    --ui-dark-subtle: #{vars.$dark-subtle-dark};
+    --ui-dark-subtle-emphasis: #{vars.$dark-subtle-emphasis-dark};
+    --ui-dark-subtle-text: #{vars.$dark-subtle-text-dark};
+    --ui-dark-emphasis-rgb: #{functions.to-rgb(vars.$dark-emphasis-dark)};
+    --ui-dark-subtle-rgb: #{functions.to-rgb(vars.$dark-subtle-dark)};
 
-    --ui-body-bg: #{$body-bg-dark};
-    --ui-body-bg-rgb: #{to-rgb($body-bg-dark)};
+    --ui-body-bg: #{vars.$body-bg-dark};
+    --ui-body-bg-rgb: #{functions.to-rgb(vars.$body-bg-dark)};
 
-    --ui-body-color: #{$body-color-dark};
-    --ui-body-color-rgb: #{to-rgb($body-color-dark)};
+    --ui-body-color: #{vars.$body-color-dark};
+    --ui-body-color-rgb: #{functions.to-rgb(vars.$body-color-dark)};
 
-    --ui-secondary-bg: #{$body-secondary-bg-dark};
-    --ui-secondary-bg-rgb: #{to-rgb($body-secondary-bg-dark)};
-    --ui-secondary-color: #{$body-secondary-color-dark};
-    --ui-secondary-color-rgb: #{to-rgb($body-secondary-color-dark)};
+    --ui-secondary-bg: #{vars.$body-secondary-bg-dark};
+    --ui-secondary-bg-rgb: #{functions.to-rgb(vars.$body-secondary-bg-dark)};
+    --ui-secondary-color: #{vars.$body-secondary-color-dark};
+    --ui-secondary-color-rgb: #{functions.to-rgb(vars.$body-secondary-color-dark)};
 
-    --ui-tertiary-bg: #{$body-tertiary-bg-dark};
-    --ui-tertiary-bg-rgb: #{to-rgb($body-tertiary-bg-dark)};
-    --ui-tertiary-color: #{$body-tertiary-color-dark};
-    --ui-tertiary-color-rgb: #{to-rgb($body-tertiary-color-dark)};
+    --ui-tertiary-bg: #{vars.$body-tertiary-bg-dark};
+    --ui-tertiary-bg-rgb: #{functions.to-rgb(vars.$body-tertiary-bg-dark)};
+    --ui-tertiary-color: #{vars.$body-tertiary-color-dark};
+    --ui-tertiary-color-rgb: #{functions.to-rgb(vars.$body-tertiary-color-dark)};
 
-    --ui-emphasis-color: #{$emphasis-color-dark};
-    --ui-emphasis-color-rgb: #{to-rgb($emphasis-color-dark)};
+    --ui-emphasis-color: #{vars.$emphasis-color-dark};
+    --ui-emphasis-color-rgb: #{functions.to-rgb(vars.$emphasis-color-dark)};
 
-    --ui-link-color: #{$link-color-dark};
-    --ui-link-color-rgb: #{to-rgb($link-color-dark)};
-    --ui-link-hover-color: #{$link-color-hover-dark};
-    --ui-link-hover-color-rgb: #{to-rgb($link-color-hover-dark)};
+    --ui-link-color: #{vars.$link-color-dark};
+    --ui-link-color-rgb: #{functions.to-rgb(vars.$link-color-dark)};
+    --ui-link-hover-color: #{vars.$link-color-hover-dark};
+    --ui-link-hover-color-rgb: #{functions.to-rgb(vars.$link-color-hover-dark)};
 
-    --ui-border-color: #{$border-color-dark};
-    --ui-border-color-translucent: #{$border-color-translucent-dark};
+    --ui-border-color: #{vars.$border-color-dark};
+    --ui-border-color-translucent: #{vars.$border-color-translucent-dark};
 }
 
 @media (prefers-reduced-motion: no-preference) {

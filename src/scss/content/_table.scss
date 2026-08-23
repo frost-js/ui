@@ -1,15 +1,19 @@
+@use "../functions";
+@use "../mixins";
+@use "../vars";
+
 @use "sass:map";
 
 .table {
-    --ui-table-margin-bottom: #{$table-margin-bottom};
-    --ui-table-bg: #{$table-bg};
-    --ui-table-color: #{$table-color};
-    --ui-table-border-color: #{$table-border-color};
-    --ui-table-border-width: #{$table-border-width};
-    --ui-table-striped-bg: #{$table-striped-bg};
-    --ui-table-hover-bg: #{$table-hover-bg};
-    --ui-table-cell-padding-y: #{$table-cell-padding-y};
-    --ui-table-cell-padding-x: #{$table-cell-padding-x};
+    --ui-table-margin-bottom: #{vars.$table-margin-bottom};
+    --ui-table-bg: #{vars.$table-bg};
+    --ui-table-color: #{vars.$table-color};
+    --ui-table-border-color: #{vars.$table-border-color};
+    --ui-table-border-width: #{vars.$table-border-width};
+    --ui-table-striped-bg: #{vars.$table-striped-bg};
+    --ui-table-hover-bg: #{vars.$table-hover-bg};
+    --ui-table-cell-padding-y: #{vars.$table-cell-padding-y};
+    --ui-table-cell-padding-x: #{vars.$table-cell-padding-x};
 
     width: 100%;
     margin-bottom: var(--ui-table-margin-bottom);
@@ -53,8 +57,8 @@
 }
 
 .table-sm > :not(caption) > * > * {
-    --ui-table-cell-padding-y: #{$table-sm-cell-padding-y};
-    --ui-table-cell-padding-x: #{$table-sm-cell-padding-x};
+    --ui-table-cell-padding-y: #{vars.$table-sm-cell-padding-y};
+    --ui-table-cell-padding-x: #{vars.$table-sm-cell-padding-x};
 }
 
 .caption-top {
@@ -62,7 +66,7 @@
 }
 
 @each $name,
-    $color in $table-variants {
+    $color in vars.$table-variants {
     .table-#{$name} {
         --ui-table-color: var(--ui-#{$name}-subtle-text);
         --ui-table-bg: var(--ui-#{$name}-subtle);
@@ -90,10 +94,10 @@
     --ui-table-hover-bg: rgba(var(--ui-body-bg-rgb), .05);
 }
 
-@each $breakpoint in map.keys($breakpoints) {
-    $infix: breakpoint-infix($breakpoint);
+@each $breakpoint in map.keys(vars.$breakpoints) {
+    $infix: functions.breakpoint-infix($breakpoint);
 
-    @include media-breakpoint-down($breakpoint) {
+    @include mixins.media-breakpoint-down($breakpoint) {
         .table-responsive#{$infix} {
             overflow-x: auto;
         }

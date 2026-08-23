@@ -1,3 +1,6 @@
+@use "../mixins";
+@use "button";
+
 .btn-group,
 .btn-group-vertical {
     position: relative;
@@ -38,13 +41,13 @@
 
     >.btn:not(:last-child):not(.dropdown-toggle),
     >.btn-group:not(:last-child) > .btn {
-        @include border-right-radius(0);
+        @include mixins.border-right-radius(0);
     }
 
     >.btn:nth-child(n + 3),
     > :not(.btn-check) + .btn,
     >.btn-group:not(:first-child) > .btn {
-        @include border-left-radius(0);
+        @include mixins.border-left-radius(0);
     }
 }
 
@@ -65,12 +68,12 @@
 
     >.btn:not(:last-child):not(.dropdown-toggle),
     >.btn-group:not(:last-child) > .btn {
-        @include border-bottom-radius(0);
+        @include mixins.border-bottom-radius(0);
     }
 
     > .btn ~ .btn,
     >.btn-group:not(:first-child) > .btn {
-        @include border-top-radius(0);
+        @include mixins.border-top-radius(0);
     }
 }
 

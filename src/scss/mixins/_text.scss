@@ -1,7 +1,9 @@
+@use "../vars/vars";
+
 // Reset the text styles.
 @mixin reset-text() {
-    font-family: $font-sans-serif;
-    font-size: $small-font-size;
+    font-family: vars.$font-sans-serif;
+    font-size: vars.$small-font-size;
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;

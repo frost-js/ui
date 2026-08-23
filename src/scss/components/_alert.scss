@@ -1,13 +1,16 @@
+@use "../mixins";
+@use "../vars";
+
 .alert {
-    --ui-alert-padding-x: #{$alert-padding-x};
-    --ui-alert-padding-y: #{$alert-padding-y};
-    --ui-alert-margin-bottom: #{$alert-margin-bottom};
+    --ui-alert-padding-x: #{vars.$alert-padding-x};
+    --ui-alert-padding-y: #{vars.$alert-padding-y};
+    --ui-alert-margin-bottom: #{vars.$alert-margin-bottom};
     --ui-alert-bg: transparent;
     --ui-alert-color: inherit;
     --ui-alert-link-color: inherit;
-    --ui-alert-border-width: #{$alert-border-width};
+    --ui-alert-border-width: #{vars.$alert-border-width};
     --ui-alert-border-color: transparent;
-    --ui-alert-border-radius: #{$alert-border-radius};
+    --ui-alert-border-radius: #{vars.$alert-border-radius};
 
     position: relative;
     padding: var(--ui-alert-padding-y) var(--ui-alert-padding-x);
@@ -15,7 +18,7 @@
     color: var(--ui-alert-color);
     background-color: var(--ui-alert-bg);
     border: var(--ui-alert-border-width) var(--ui-border-style) var(--ui-alert-border-color);
-    @include border-radius(var(--ui-alert-border-radius));
+    @include mixins.border-radius(var(--ui-alert-border-radius));
 }
 
 .alert-heading {
@@ -23,12 +26,12 @@
 }
 
 .alert-link {
-    font-weight: $alert-link-font-weight;
+    font-weight: vars.$alert-link-font-weight;
     color: var(--ui-alert-link-color);
 }
 
 .alert-dismissable {
-    padding-right: calc((var(--ui-alert-padding-x) * 2) + #{$btn-close-width});
+    padding-right: calc((var(--ui-alert-padding-x) * 2) + #{vars.$btn-close-width});
 
     .btn-close {
         position: absolute;
@@ -39,7 +42,7 @@
     }
 }
 
-@each $name, $color in $color-variants {
+@each $name, $color in vars.$color-variants {
     .alert-#{$name} {
         --ui-alert-bg: var(--ui-#{$name}-subtle);
         --ui-alert-border-color: var(--ui-#{$name}-subtle-emphasis);

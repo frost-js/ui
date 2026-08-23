@@ -1,54 +1,57 @@
+@use "../functions/color";
+@use "colors";
+
 // base colors
-$body-bg-dark: color-shade($gray, 900) !default;
-$body-color-dark: color-shade($gray, 200) !default;
+$body-bg-dark: color.color-shade(colors.$gray, 900) !default;
+$body-color-dark: color.color-shade(colors.$gray, 200) !default;
 
-$body-secondary-bg-dark: color-shade($gray, 800) !default;
-$body-secondary-color-dark: fade($body-color-dark, .7) !default;
+$body-secondary-bg-dark: color.color-shade(colors.$gray, 800) !default;
+$body-secondary-color-dark: color.fade($body-color-dark, .7) !default;
 
-$body-tertiary-bg-dark: color-shade($gray, 850) !default;
-$body-tertiary-color-dark: fade($body-color-dark, .5) !default;
+$body-tertiary-bg-dark: color.color-shade(colors.$gray, 850) !default;
+$body-tertiary-color-dark: color.fade($body-color-dark, .5) !default;
 
-$emphasis-color-dark: $white !default;
+$emphasis-color-dark: colors.$white !default;
 
-$link-color-dark: color-shade($blue, 350) !default;
-$link-color-hover-dark: color-shade($blue, 150) !default;
+$link-color-dark: color.color-shade(colors.$blue, 350) !default;
+$link-color-hover-dark: color.color-shade(colors.$blue, 150) !default;
 
-$border-color-dark: color-shade($gray, 700) !default;
-$border-color-translucent-dark: fade($white, .15) !default;
+$border-color-dark: color.color-shade(colors.$gray, 700) !default;
+$border-color-translucent-dark: color.fade(colors.$white, .15) !default;
 
 // theme colors
-$primary-emphasis-dark: color-shade($primary, 450) !default;
-$secondary-emphasis-dark: color-shade($secondary, 450) !default;
-$success-emphasis-dark: color-shade($success, 450) !default;
-$info-emphasis-dark: color-shade($info, 450) !default;
-$warning-emphasis-dark: color-shade($warning, 450) !default;
-$danger-emphasis-dark: color-shade($danger, 450) !default;
-$light-emphasis-dark: color-shade($light, 250) !default;
-$dark-emphasis-dark: color-shade($dark, 450) !default;
+$primary-emphasis-dark: color.color-shade(colors.$primary, 450) !default;
+$secondary-emphasis-dark: color.color-shade(colors.$secondary, 450) !default;
+$success-emphasis-dark: color.color-shade(colors.$success, 450) !default;
+$info-emphasis-dark: color.color-shade(colors.$info, 450) !default;
+$warning-emphasis-dark: color.color-shade(colors.$warning, 450) !default;
+$danger-emphasis-dark: color.color-shade(colors.$danger, 450) !default;
+$light-emphasis-dark: color.color-shade(colors.$light, 250) !default;
+$dark-emphasis-dark: color.color-shade(colors.$dark, 450) !default;
 
-$primary-subtle-dark: color-shade($primary, 800) !default;
-$secondary-subtle-dark: color-shade($secondary, 800) !default;
-$success-subtle-dark: color-shade($success, 800) !default;
-$info-subtle-dark: color-shade($info, 800) !default;
-$warning-subtle-dark: color-shade($warning, 800) !default;
-$danger-subtle-dark: color-shade($danger, 800) !default;
-$light-subtle-dark: color-shade($light, 800) !default;
-$dark-subtle-dark: color-shade($dark, 700) !default;
+$primary-subtle-dark: color.color-shade(colors.$primary, 800) !default;
+$secondary-subtle-dark: color.color-shade(colors.$secondary, 800) !default;
+$success-subtle-dark: color.color-shade(colors.$success, 800) !default;
+$info-subtle-dark: color.color-shade(colors.$info, 800) !default;
+$warning-subtle-dark: color.color-shade(colors.$warning, 800) !default;
+$danger-subtle-dark: color.color-shade(colors.$danger, 800) !default;
+$light-subtle-dark: color.color-shade(colors.$light, 800) !default;
+$dark-subtle-dark: color.color-shade(colors.$dark, 700) !default;
 
-$primary-subtle-emphasis-dark: color-shade($primary, 750) !default;
-$secondary-subtle-emphasis-dark: color-shade($secondary, 750) !default;
-$success-subtle-emphasis-dark: color-shade($success, 750) !default;
-$info-subtle-emphasis-dark: color-shade($info, 750) !default;
-$warning-subtle-emphasis-dark: color-shade($warning, 750) !default;
-$danger-subtle-emphasis-dark: color-shade($danger, 750) !default;
-$light-subtle-emphasis-dark: color-shade($light, 650) !default;
-$dark-subtle-emphasis-dark: color-shade($dark, 600) !default;
+$primary-subtle-emphasis-dark: color.color-shade(colors.$primary, 750) !default;
+$secondary-subtle-emphasis-dark: color.color-shade(colors.$secondary, 750) !default;
+$success-subtle-emphasis-dark: color.color-shade(colors.$success, 750) !default;
+$info-subtle-emphasis-dark: color.color-shade(colors.$info, 750) !default;
+$warning-subtle-emphasis-dark: color.color-shade(colors.$warning, 750) !default;
+$danger-subtle-emphasis-dark: color.color-shade(colors.$danger, 750) !default;
+$light-subtle-emphasis-dark: color.color-shade(colors.$light, 650) !default;
+$dark-subtle-emphasis-dark: color.color-shade(colors.$dark, 600) !default;
 
-$primary-subtle-text-dark: text-color-contrast($primary-subtle-dark, $foreground: $primary) !default;
-$secondary-subtle-text-dark: text-color-contrast($secondary-subtle-dark, $foreground: $secondary) !default;
-$success-subtle-text-dark: text-color-contrast($success-subtle-dark, $foreground: $success) !default;
-$info-subtle-text-dark: text-color-contrast($info-subtle-dark, $foreground: $info) !default;
-$warning-subtle-text-dark: text-color-contrast($warning-subtle-dark, $foreground: $warning) !default;
-$danger-subtle-text-dark: text-color-contrast($danger-subtle-dark, $foreground: $danger) !default;
-$light-subtle-text-dark: text-color-contrast($light-subtle-dark, $foreground: $light) !default;
-$dark-subtle-text-dark: text-color-contrast($dark-subtle-dark, $foreground: $dark) !default;
+$primary-subtle-text-dark: color.text-color-contrast($primary-subtle-dark, $foreground: colors.$primary) !default;
+$secondary-subtle-text-dark: color.text-color-contrast($secondary-subtle-dark, $foreground: colors.$secondary) !default;
+$success-subtle-text-dark: color.text-color-contrast($success-subtle-dark, $foreground: colors.$success) !default;
+$info-subtle-text-dark: color.text-color-contrast($info-subtle-dark, $foreground: colors.$info) !default;
+$warning-subtle-text-dark: color.text-color-contrast($warning-subtle-dark, $foreground: colors.$warning) !default;
+$danger-subtle-text-dark: color.text-color-contrast($danger-subtle-dark, $foreground: colors.$danger) !default;
+$light-subtle-text-dark: color.text-color-contrast($light-subtle-dark, $foreground: colors.$light) !default;
+$dark-subtle-text-dark: color.text-color-contrast($dark-subtle-dark, $foreground: colors.$dark) !default;

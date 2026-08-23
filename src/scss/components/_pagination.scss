@@ -1,23 +1,26 @@
+@use "../mixins";
+@use "../vars";
+
 .pagination {
-    --ui-pagination-padding-x: #{$pagination-padding-x};
-    --ui-pagination-padding-y: #{$pagination-padding-y};
-    --ui-pagination-font-size: #{$pagination-font-size};
-    --ui-pagination-color: #{$pagination-color};
-    --ui-pagination-bg: #{$pagination-bg};
-    --ui-pagination-border-width: #{$pagination-border-width};
-    --ui-pagination-border-color: #{$pagination-border-color};
-    --ui-pagination-border-radius: #{$pagination-border-radius};
-    --ui-pagination-hover-color: #{$pagination-hover-color};
-    --ui-pagination-hover-bg: #{$pagination-hover-bg};
-    --ui-pagination-focus-color: #{$pagination-focus-color};
-    --ui-pagination-focus-bg: #{$pagination-focus-bg};
-    --ui-pagination-focus-box-shadow: #{$pagination-focus-box-shadow};
-    --ui-pagination-active-color: #{$pagination-active-color};
-    --ui-pagination-active-bg: #{$pagination-active-bg};
-    --ui-pagination-active-border-color: #{$pagination-active-border-color};
-    --ui-pagination-disabled-color: #{$pagination-disabled-color};
-    --ui-pagination-disabled-bg: #{$pagination-disabled-bg};
-    --ui-pagination-disabled-border-color: #{$pagination-disabled-border-color};
+    --ui-pagination-padding-x: #{vars.$pagination-padding-x};
+    --ui-pagination-padding-y: #{vars.$pagination-padding-y};
+    --ui-pagination-font-size: #{vars.$pagination-font-size};
+    --ui-pagination-color: #{vars.$pagination-color};
+    --ui-pagination-bg: #{vars.$pagination-bg};
+    --ui-pagination-border-width: #{vars.$pagination-border-width};
+    --ui-pagination-border-color: #{vars.$pagination-border-color};
+    --ui-pagination-border-radius: #{vars.$pagination-border-radius};
+    --ui-pagination-hover-color: #{vars.$pagination-hover-color};
+    --ui-pagination-hover-bg: #{vars.$pagination-hover-bg};
+    --ui-pagination-focus-color: #{vars.$pagination-focus-color};
+    --ui-pagination-focus-bg: #{vars.$pagination-focus-bg};
+    --ui-pagination-focus-box-shadow: #{vars.$pagination-focus-box-shadow};
+    --ui-pagination-active-color: #{vars.$pagination-active-color};
+    --ui-pagination-active-bg: #{vars.$pagination-active-bg};
+    --ui-pagination-active-border-color: #{vars.$pagination-active-border-color};
+    --ui-pagination-disabled-color: #{vars.$pagination-disabled-color};
+    --ui-pagination-disabled-bg: #{vars.$pagination-disabled-bg};
+    --ui-pagination-disabled-border-color: #{vars.$pagination-disabled-border-color};
 
     display: flex;
     padding-left: 0;
@@ -33,7 +36,7 @@
     text-decoration: none;
     background-color: var(--ui-pagination-bg);
     border: var(--ui-pagination-border-width) var(--ui-border-style) var(--ui-pagination-border-color);
-    transition: all $transition-time $transition-type;
+    transition: all vars.$transition-time vars.$transition-type;
     transition-property: color, background-color, box-shadow;
 
     &:hover {
@@ -73,11 +76,11 @@
 
 .page-item {
     &:first-child .page-link {
-        @include border-left-radius(var(--ui-pagination-border-radius));
+        @include mixins.border-left-radius(var(--ui-pagination-border-radius));
     }
 
     &:last-child .page-link {
-        @include border-right-radius(var(--ui-pagination-border-radius));
+        @include mixins.border-right-radius(var(--ui-pagination-border-radius));
     }
 
     &:not(:first-child) .page-link {
@@ -86,13 +89,13 @@
 }
 
 .pagination-sm .page-link {
-    --ui-pagination-padding-x: #{$pagination-sm-padding-x};
-    --ui-pagination-padding-y: #{$pagination-sm-padding-y};
-    --ui-pagination-font-size: #{$pagination-sm-font-size};
+    --ui-pagination-padding-x: #{vars.$pagination-sm-padding-x};
+    --ui-pagination-padding-y: #{vars.$pagination-sm-padding-y};
+    --ui-pagination-font-size: #{vars.$pagination-sm-font-size};
 }
 
 .pagination-lg .page-link {
-    --ui-pagination-padding-x: #{$pagination-lg-padding-x};
-    --ui-pagination-padding-y: #{$pagination-lg-padding-y};
-    --ui-pagination-font-size: #{$pagination-lg-font-size};
+    --ui-pagination-padding-x: #{vars.$pagination-lg-padding-x};
+    --ui-pagination-padding-y: #{vars.$pagination-lg-padding-y};
+    --ui-pagination-font-size: #{vars.$pagination-lg-font-size};
 }

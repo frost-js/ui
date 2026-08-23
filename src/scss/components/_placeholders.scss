@@ -1,6 +1,8 @@
+@use "../vars";
+
 @keyframes placeholder-glow {
     50% {
-        opacity: $placeholder-opacity-min;
+        opacity: vars.$placeholder-opacity-min;
     }
 }
 
@@ -15,7 +17,7 @@
     min-height: 1em;
     vertical-align: middle;
     cursor: wait;
-    opacity: $placeholder-opacity-max;
+    opacity: vars.$placeholder-opacity-max;
 
     &:not(.btn) {
         background-color: currentcolor;
@@ -44,7 +46,7 @@
 }
 
 .placeholder-wave {
-    mask-image: linear-gradient(130deg, $black 55%, rgba(0, 0, 0, (1 - $placeholder-opacity-min)) 75%, $black 95%);
+    mask-image: linear-gradient(130deg, vars.$black 55%, rgba(0, 0, 0, (1 - vars.$placeholder-opacity-min)) 75%, vars.$black 95%);
     mask-size: 200% 100%;
     animation: placeholder-wave 2s linear infinite;
 }

@@ -1,15 +1,18 @@
+@use "../mixins";
+@use "../vars";
+
 .tooltip {
-    --ui-tooltip-z-index: #{$tooltip-z-index};
-    --ui-tooltip-max-width: #{$tooltip-max-width};
-    --ui-tooltip-padding-x: #{$tooltip-padding-x};
-    --ui-tooltip-padding-y: #{$tooltip-padding-y};
-    --ui-tooltip-font-size: #{$tooltip-font-size};
-    --ui-tooltip-color: #{$tooltip-color};
-    --ui-tooltip-bg: #{$tooltip-bg};
-    --ui-tooltip-border-radius: #{$tooltip-border-radius};
-    --ui-tooltip-opacity: #{$tooltip-opacity};
-    --ui-tooltip-arrow-width: #{$tooltip-arrow-width};
-    --ui-tooltip-arrow-height: #{$tooltip-arrow-height};
+    --ui-tooltip-z-index: #{vars.$tooltip-z-index};
+    --ui-tooltip-max-width: #{vars.$tooltip-max-width};
+    --ui-tooltip-padding-x: #{vars.$tooltip-padding-x};
+    --ui-tooltip-padding-y: #{vars.$tooltip-padding-y};
+    --ui-tooltip-font-size: #{vars.$tooltip-font-size};
+    --ui-tooltip-color: #{vars.$tooltip-color};
+    --ui-tooltip-bg: #{vars.$tooltip-bg};
+    --ui-tooltip-border-radius: #{vars.$tooltip-border-radius};
+    --ui-tooltip-opacity: #{vars.$tooltip-opacity};
+    --ui-tooltip-arrow-width: #{vars.$tooltip-arrow-width};
+    --ui-tooltip-arrow-height: #{vars.$tooltip-arrow-height};
 
     position: absolute;
     z-index: var(--ui-tooltip-z-index);
@@ -18,7 +21,7 @@
     font-size: var(--ui-tooltip-font-size);
     overflow-wrap: break-word;
     opacity: 0;
-    @include reset-text();
+    @include mixins.reset-text();
 
     &.show {
         opacity: var(--ui-tooltip-opacity);
@@ -86,5 +89,5 @@
     color: var(--ui-tooltip-color);
     text-align: center;
     background-color: var(--ui-tooltip-bg);
-    @include border-radius(var(--ui-tooltip-border-radius));
+    @include mixins.border-radius(var(--ui-tooltip-border-radius));
 }
