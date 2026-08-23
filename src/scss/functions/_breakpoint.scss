@@ -2,8 +2,10 @@
 
 @use "sass:map";
 
-// Get the breakpoint infix.
-// @param $name
+/// Returns the class infix for a breakpoint.
+///
+/// @param {String} $name - The breakpoint name.
+/// @return {String} An empty string for the base breakpoint, otherwise the prefixed name.
 @function breakpoint-infix($name) {
     @if breakpoint-min($name) == null {
         @return "";
@@ -12,8 +14,13 @@
     @return "-#{$name}";
 }
 
-// Get the maximum breakpoint width (-.02px).
-// @param $name
+/// Returns the exclusive maximum width for a breakpoint.
+///
+/// The result is reduced by `.02` in the configured unit to avoid overlapping
+/// adjacent breakpoint ranges.
+///
+/// @param {String} $name - The breakpoint name.
+/// @return {Number | Null} The maximum width, or `null` when no maximum applies.
 @function breakpoint-max($name) {
     $max: map.get(vars.$breakpoints, $name);
 
@@ -24,8 +31,10 @@
     @return null;
 }
 
-// Get the minimum breakpoint width.
-// @param $name
+/// Returns the minimum width for a breakpoint.
+///
+/// @param {String} $name - The breakpoint name.
+/// @return {Number | Null} The minimum width, or `null` for the base breakpoint.
 @function breakpoint-min($name) {
     $min: map.get(vars.$breakpoints, $name);
 

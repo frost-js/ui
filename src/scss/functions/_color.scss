@@ -2,10 +2,15 @@
 @use "sass:map";
 @use "sass:math";
 
-// Generate a color shade
-// @param $color
-// @param $amount: 500
-// @param $invert: false
+/// Returns a palette color for a shade value.
+///
+/// Values below `500` tint the color, values above `500` shade it, and `500`
+/// returns the original color.
+///
+/// @param {Color} $color - The base color.
+/// @param {Number} $amount [500] - The shade value from `0` through `1000`.
+/// @param {Bool} $invert [false] - Whether to invert the shade scale.
+/// @return {Color} The resulting color.
 @function color-shade($color, $amount: 500, $invert: false) {
     @if ($invert) {
         $amount: 1000 - $amount;
@@ -22,14 +27,18 @@
     }
 }
 
-// Find a text color that meets a minimum contrast ratio.
-// @param $background
-// @param $foreground: null
-// @param $threshold: 4.5
-// @param $base: 500
-// @param $min: 100
-// @param $max: 900
-// @param $step-size: 100
+/// Finds the foreground shade nearest the base value that meets a contrast ratio.
+///
+/// Falls back to `text-color()` when no candidate meets the threshold.
+///
+/// @param {Color} $background - The background color.
+/// @param {Color | Null} $foreground [null] - The foreground palette color.
+/// @param {Number} $threshold [4.5] - The minimum contrast ratio.
+/// @param {Number} $base [500] - The preferred shade value.
+/// @param {Number} $min [100] - The first shade value to test.
+/// @param {Number} $max [900] - The final shade value to test.
+/// @param {Number} $step-size [100] - The amount between tested shade values.
+/// @return {Color} A foreground color that meets the threshold, or a fallback color.
 @function text-color-contrast($background, $foreground: null, $threshold: 4.5, $base: 500, $min: 100, $max: 900, $step-size: 100) {
     $min-diff: $max - $min;
     $i: $min;
@@ -54,9 +63,11 @@
     @return $result;
 }
 
-// Calculate the contrast ratio between two colors.
-// @param $background
-// @param $foreground
+/// Calculates the contrast ratio between two colors.
+///
+/// @param {Color} $background - The background color.
+/// @param {Color} $foreground - The foreground color.
+/// @return {Number} The contrast ratio.
 @function contrast-ratio($background, $foreground) {
     $luma1: luma($background);
     $luma2: luma($foreground);
@@ -68,15 +79,19 @@
     @return math.div($luma2 + .05, $luma1 + .05);
 }
 
-// Fade a color to a specified opacity (0-1).
-// @param $color
-// @param $amount
+/// Sets the opacity of a color.
+///
+/// @param {Color} $color - The input color.
+/// @param {Number} $amount - The opacity from `0` through `1`.
+/// @return {Color} The color with the requested opacity.
 @function fade($color, $amount) {
     @return color.change($color, $alpha: $amount);
 }
 
-// Calculate the relative luminance of a color.
-// @param color
+/// Calculates the relative luminance of a color.
+///
+/// @param {Color} $color - The input color.
+/// @return {Number} The relative luminance.
 @function luma($color) {
     $rgb: (
         r: math.round(color.channel($color, "red", $space: rgb)),
@@ -100,18 +115,22 @@
     @return (map.get($rgb, "r") * .2126) + (map.get($rgb, "g") * .7152) + (map.get($rgb, "b") * .0722);
 }
 
-// Shade a color by a specified amount (1-100).
-// @param $color
-// @param $amount
+/// Mixes a color with black by a specified percentage.
+///
+/// @param {Color} $color - The input color.
+/// @param {Number} $amount - The percentage of black from `0%` through `100%`.
+/// @return {Color} The shaded color.
 @function shade($color, $amount) {
     @return color.mix($color, #000, 100 - $amount);
 }
 
-// Choose the best text color for a background.
-// @param $background
-// @param $foreground1: #fff
-// @param $foreground2: #fff
-// @param $threshold: 4.5
+/// Chooses a text color for a background.
+///
+/// @param {Color} $background - The background color.
+/// @param {Color} $foreground1 [#fff] - The preferred foreground color.
+/// @param {Color} $foreground2 [#000] - The fallback foreground color.
+/// @param {Number} $threshold [4.5] - The minimum contrast ratio.
+/// @return {Color} The preferred color when it exceeds the threshold, otherwise the fallback.
 @function text-color($background, $foreground1: #fff, $foreground2: #000, $threshold: 4.5) {
     @if contrast-ratio($background, $foreground1) > $threshold {
         @return $foreground1;
@@ -120,15 +139,19 @@
     @return $foreground2;
 }
 
-// Tint a color by a specified amount (1-100).
-// @param $color
-// @param $amount
+/// Mixes a color with white by a specified percentage.
+///
+/// @param {Color} $color - The input color.
+/// @param {Number} $amount - The percentage of white from `0%` through `100%`.
+/// @return {Color} The tinted color.
 @function tint($color, $amount) {
     @return color.mix($color, #fff, 100 - $amount);
 }
 
-// Convert a color to RGB values
-// @param $color
+/// Returns the RGB channels of a color.
+///
+/// @param {Color} $color - The input color.
+/// @return {List} The red, green, and blue channels.
 @function to-rgb($color) {
     @return math.round(color.channel($color, "red", $space: rgb)),
         math.round(color.channel($color, "green", $space: rgb)),

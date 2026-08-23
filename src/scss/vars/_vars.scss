@@ -70,7 +70,7 @@ $positions: (
     100: 100%
 ) !default;
 
-// box-shadow
+// focus ring and shadows
 $focus-ring-width: .25rem !default;
 $focus-ring-opacity: .5 !default;
 $focus-ring-color: rgba(var(--ui-primary-rgb), var(--ui-focus-ring-opacity)) !default;
@@ -182,13 +182,13 @@ $line-heights: (
     lg: 2
 ) !default;
 
-// transition
+// animation and transition
 $animation-time: 1s !default;
 $animation-time-reduced-motion: 5s !default;
 $transition-time: .25s !default;
 $transition-type: ease-in-out !default;
 
-// z index
+// z-index
 $dropdown-z-index: 1000 !default;
 $sticky-z-index: 1020 !default;
 $fixed-z-index: 1030 !default;

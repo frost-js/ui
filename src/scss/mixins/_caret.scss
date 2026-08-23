@@ -1,7 +1,9 @@
 @use "../vars/helpers";
 
-// Attach a caret to a component
-// @param $direction: down
+/// Attaches a directional caret to a component.
+///
+/// @param {String} $direction [down] - The caret direction: `down`, `up`, `start`, or `end`.
+/// @output A directional caret using a `::before` or `::after` pseudo-element.
 @mixin caret($direction: down) {
     @if $direction == start {
         &::before {

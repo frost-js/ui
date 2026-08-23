@@ -1,6 +1,8 @@
 @use "../vars/vars";
 
-// Reset the text styles.
+/// Resets inherited text styles to the library defaults.
+///
+/// @output Font, alignment, spacing, wrapping, and decoration declarations.
 @mixin reset-text() {
     font-family: vars.$font-sans-serif;
     font-size: vars.$small-font-size;

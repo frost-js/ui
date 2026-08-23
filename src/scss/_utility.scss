@@ -360,7 +360,7 @@
     css-var: true
 ));
 
-// object fit
+// object-fit
 @include mixins.utility((
     property: object-fit,
     values: (
@@ -681,7 +681,7 @@
     values: underline line-through none
 ));
 
-// vertical alignment
+// vertical-align
 @include mixins.utility((
     property: vertical-align,
     class: align,

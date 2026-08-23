@@ -7,8 +7,10 @@
 @use "sass:meta";
 @use "sass:string";
 
-// Generate utility classes
-// @param $utility
+/// Generates utility classes from a utility definition.
+///
+/// @param {Map} $utility - The utility properties, values, states, and generation options.
+/// @output Base, responsive, state, and print utility rules requested by the definition.
 @mixin utility($utility) {
     $properties: map.get($utility, property);
     $values: map.get($utility, values);
@@ -69,15 +71,18 @@
     }
 }
 
-// Generate a utility class.
-// @param $properties
-// @param $values
-// @param $infix
-// @param $class
-// @param $state
-// @param $local-vars
-// @param $css-var
-// @param $important
+/// Generates utility rules for one breakpoint or media context.
+///
+/// @access private
+/// @param {List} $properties - The CSS properties to set.
+/// @param {Map} $values - The class modifiers and declaration values.
+/// @param {String} $infix - The breakpoint or media infix.
+/// @param {String} $class - The utility class prefix.
+/// @param {List} $state - The pseudo-class states to generate.
+/// @param {Map} $local-vars - The local custom properties to emit.
+/// @param {Bool} $css-var - Whether the properties are custom properties.
+/// @param {Bool} $important - Whether declarations use `!important`.
+/// @output Utility rules for the supplied values and states.
 @mixin utility-class($properties, $values, $infix, $class, $state, $local-vars, $css-var, $important) {
     @if $class == "" and string.slice($infix, 1, 1) == "-" {
         $infix: string.slice($infix, 2);

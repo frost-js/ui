@@ -1,7 +1,11 @@
 @use "../functions/breakpoint";
 
-// Media selector for breakpoint max width.
-// @param $name
+/// Emits content below a breakpoint.
+///
+/// Content is emitted without a media query when the breakpoint has no maximum.
+///
+/// @param {String} $name - The breakpoint name.
+/// @content The styles to emit below the breakpoint.
 @mixin media-breakpoint-down($name) {
     $max: breakpoint.breakpoint-max($name);
     @if $max {
@@ -13,8 +17,12 @@
     }
 }
 
-// Media selector for breakpoint min width.
-// @param $name
+/// Emits content at or above a breakpoint.
+///
+/// Content is emitted without a media query for the base breakpoint.
+///
+/// @param {String} $name - The breakpoint name.
+/// @content The styles to emit at or above the breakpoint.
 @mixin media-breakpoint-up($name) {
     $min: breakpoint.breakpoint-min($name);
 

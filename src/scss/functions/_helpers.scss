@@ -2,15 +2,20 @@
 @use "sass:map";
 @use "sass:meta";
 
-// Loop a map and call a function on each value.
-// @param $map
-// @param $func
-// @param ...$args
+/// Applies a function to each entry in a map.
+///
+/// Arguments equal to `"$key"` or `"$value"` are replaced with the current
+/// entry's key or value before the function is called.
+///
+/// @param {Map} $map - The input map.
+/// @param {String} $func - The function name.
+/// @param {ArgList} $args - The arguments passed to the function.
+/// @return {Map} A map containing each function result under its original key.
 @function map-loop($map, $func, $args...) {
     $result: ();
 
     @each $key, $value in $map {
-        // allow to pass the $key and $value of the map as an function argument
+        // Replace placeholder arguments with values from the current map entry.
         $temp: ();
         @each $arg in $args {
             $item: $arg;
@@ -30,15 +35,22 @@
     @return $result;
 }
 
-// Create an RGBA css value.
-// @param $rgbVar
-// @param opacityVar
+/// Creates an `rgba()` value from component color and opacity properties.
+///
+/// @param {String} $rgbVar - The color custom-property name without its prefix or suffix.
+/// @param {String} $opacityVar - The opacity custom-property name without its prefix or suffix.
+/// @return {String} The CSS `rgba()` value.
 @function rgba-css-var($rgbVar, $opacityVar) {
     @return rgba(var(--ui-#{$rgbVar}-rgb), var(--ui-#{$opacityVar}-opacity));
 }
 
-// Generate a responsive font size.
-// @param $size
+/// Returns a responsive font size.
+///
+/// Values below `1.5` produce a fixed `rem` size. Larger values produce a
+/// viewport-responsive `clamp()` value.
+///
+/// @param {Number} $size - The unitless maximum size in `rem`.
+/// @return {Number | Calculation} The fixed or responsive font size.
 @function text-size($size) {
     $max-size: $size * 1rem;
 
