@@ -1,4 +1,3 @@
-@use "../functions/color";
 @use "../functions/helpers";
 
 // colors
@@ -23,33 +22,33 @@ $cyan: #06b6d4 !default;
 
 // theme colors
 $primary: $blue !default;
-$secondary: color.color-shade($gray, 600) !default;
+$secondary: color-mix(in srgb, var(--ui-gray) 80%, var(--ui-black)) !default;
 $success: $green !default;
 $info: $teal !default;
 $warning: $orange !default;
 $danger: $red !default;
-$light: color.color-shade($gray, 100) !default;
-$dark: color.color-shade($gray, 800) !default;
+$light: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-white)) !default;
+$dark: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-black)) !default;
 
 $gradient: linear-gradient(135deg, var(--ui-primary), $purple) !default;
 
 // base colors
 $body-bg: $white !default;
-$body-color: color.color-shade($gray, 900) !default;
+$body-color: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-black)) !default;
 
-$body-secondary-bg: color.color-shade($gray, 100) !default;
+$body-secondary-bg: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-white)) !default;
 $body-secondary-color: helpers.color-alpha(body-color, .7) !default;
 
-$body-tertiary-bg: color.color-shade($gray, 50) !default;
+$body-tertiary-bg: color-mix(in srgb, var(--ui-gray) 10%, var(--ui-white)) !default;
 $body-tertiary-color: helpers.color-alpha(body-color, .5) !default;
 
 $emphasis-color: $black !default;
 
-$link-color: $primary !default;
-$link-color-hover: color.color-shade($primary, 700) !default;
+$link-color: var(--ui-primary) !default;
+$link-color-hover: color-mix(in oklch, var(--ui-primary) 60%, var(--ui-black)) !default;
 
-$border-color: color.color-shade($gray, 200) !default;
+$border-color: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-white)) !default;
 $border-color-translucent: helpers.color-alpha("black", .15) !default;
 
-$code-color: color.color-shade($red, 400) !default;
-$mark-bg: color.color-shade($yellow, 100) !default;
+$code-color: color-mix(in oklch, var(--ui-danger) 80%, var(--ui-white)) !default;
+$mark-bg: color-mix(in srgb, $yellow 20%, var(--ui-white)) !default;

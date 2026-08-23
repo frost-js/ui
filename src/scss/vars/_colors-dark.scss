@@ -1,21 +1,19 @@
-@use "../functions/color";
 @use "../functions/helpers";
-@use "colors";
 
 // base colors
-$body-bg-dark: color.color-shade(colors.$gray, 900) !default;
-$body-color-dark: color.color-shade(colors.$gray, 200) !default;
+$body-bg-dark: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-black)) !default;
+$body-color-dark: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-white)) !default;
 
-$body-secondary-bg-dark: color.color-shade(colors.$gray, 800) !default;
+$body-secondary-bg-dark: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-black)) !default;
 $body-secondary-color-dark: helpers.color-alpha(body-color, .7) !default;
 
-$body-tertiary-bg-dark: color.color-shade(colors.$gray, 850) !default;
+$body-tertiary-bg-dark: color-mix(in srgb, var(--ui-gray) 30%, var(--ui-black)) !default;
 $body-tertiary-color-dark: helpers.color-alpha(body-color, .5) !default;
 
-$emphasis-color-dark: colors.$white !default;
+$emphasis-color-dark: var(--ui-white) !default;
 
-$link-color-dark: color.color-shade(colors.$primary, 350) !default;
-$link-color-hover-dark: color.color-shade(colors.$primary, 150) !default;
+$link-color-dark: color-mix(in oklch, var(--ui-primary) 70%, var(--ui-white)) !default;
+$link-color-hover-dark: color-mix(in oklch, var(--ui-primary) 30%, var(--ui-white)) !default;
 
-$border-color-dark: color.color-shade(colors.$gray, 700) !default;
+$border-color-dark: color-mix(in srgb, var(--ui-gray) 60%, var(--ui-black)) !default;
 $border-color-translucent-dark: helpers.color-alpha("white", .15) !default;
