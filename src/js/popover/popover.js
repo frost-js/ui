@@ -90,10 +90,12 @@ export default class Popover extends BaseComponent {
 
     /**
      * Hide the Popover.
+     * @param {object} [options] The hide options.
+     * @param {boolean} [options.force=true] Whether to force hiding when disabled.
      */
-    hide() {
+    hide({ force = true } = {}) {
         if (
-            !this._enabled ||
+            (!force && !this._enabled) ||
             $.getDataset(this._popover, 'uiAnimating') ||
             !$.isConnected(this._popover) ||
             !$.triggerOne(this._node, 'hide.ui.popover')
@@ -200,10 +202,12 @@ export default class Popover extends BaseComponent {
 
     /**
      * Toggle the Popover.
+     * @param {object} [options] The toggle options.
+     * @param {boolean} [options.force=true] Whether to force hiding when disabled.
      */
-    toggle() {
+    toggle({ force = true } = {}) {
         if ($.isConnected(this._popover)) {
-            this.hide();
+            this.hide({ force });
         } else {
             this.show();
         }

@@ -580,6 +580,53 @@ test.describe('Tooltip', () => {
 
             await expect(page.locator('.tooltip')).toHaveCount(0);
         });
+
+        test('allows a visible tooltip to be hidden programmatically', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                UI.Tooltip.init(tooltipToggle1).show();
+            });
+            await advanceClock(page, 150);
+            await page.evaluate((_) => {
+                const tooltip = UI.Tooltip.init($.findOne('#tooltipToggle1'));
+                tooltip.disable();
+                tooltip.hide();
+            });
+            await advanceClock(page, 50);
+            await expectAnimationState(page, [
+                {
+                    selectors: ['.tooltip'],
+                    active: true,
+                },
+            ]);
+            await advanceClock(page, 100);
+
+            await expect(page.locator('.tooltip')).toHaveCount(0);
+        });
+
+        test('ignores hide trigger events when disabled', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                UI.Tooltip.init(tooltipToggle1, { trigger: 'hover focus click' }).show();
+            });
+            await advanceClock(page, 150);
+            await page.evaluate((_) => {
+                UI.Tooltip.init($.findOne('#tooltipToggle1')).disable();
+            });
+            await page.locator('#tooltipToggle1').dispatchEvent('mouseout');
+            await page.locator('#tooltipToggle1').dispatchEvent('blur');
+            await page.locator('#tooltipToggle1').dispatchEvent('click');
+            await advanceClock(page, 150);
+
+            await expect(page.locator('.tooltip')).toHaveCount(1);
+            await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('.tooltip')).toBeVisible();
+            await expectAnimationState(page, [
+                {
+                    selectors: ['.tooltip'],
+                },
+            ]);
+        });
     });
 
     test.describe('#enable', () => {

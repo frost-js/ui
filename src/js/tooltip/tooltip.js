@@ -89,10 +89,12 @@ export default class Tooltip extends BaseComponent {
 
     /**
      * Hide the Tooltip.
+     * @param {object} [options] The hide options.
+     * @param {boolean} [options.force=true] Whether to force hiding when disabled.
      */
-    hide() {
+    hide({ force = true } = {}) {
         if (
-            !this._enabled ||
+            (!force && !this._enabled) ||
             $.getDataset(this._tooltip, 'uiAnimating') ||
             !$.isConnected(this._tooltip) ||
             !$.triggerOne(this._node, 'hide.ui.tooltip')
@@ -183,10 +185,12 @@ export default class Tooltip extends BaseComponent {
 
     /**
      * Toggle the Tooltip.
+     * @param {object} [options] The toggle options.
+     * @param {boolean} [options.force=true] Whether to force hiding when disabled.
      */
-    toggle() {
+    toggle({ force = true } = {}) {
         if ($.isConnected(this._tooltip)) {
-            this.hide();
+            this.hide({ force });
         } else {
             this.show();
         }

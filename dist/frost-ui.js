@@ -2690,10 +2690,12 @@
 
         /**
          * Hide the Popover.
+         * @param {object} [options] The hide options.
+         * @param {boolean} [options.force=true] Whether to force hiding when disabled.
          */
-        hide() {
+        hide({ force = true } = {}) {
             if (
-                !this._enabled ||
+                (!force && !this._enabled) ||
                 $.getDataset(this._popover, 'uiAnimating') ||
                 !$.isConnected(this._popover) ||
                 !$.triggerOne(this._node, 'hide.ui.popover')
@@ -2800,10 +2802,12 @@
 
         /**
          * Toggle the Popover.
+         * @param {object} [options] The toggle options.
+         * @param {boolean} [options.force=true] Whether to force hiding when disabled.
          */
-        toggle() {
+        toggle({ force = true } = {}) {
             if ($.isConnected(this._popover)) {
-                this.hide();
+                this.hide({ force });
             } else {
                 this.show();
             }
@@ -2831,7 +2835,7 @@
 
             $.addEvent(this._node, 'mouseout.ui.popover', (_) => {
                 this._stop();
-                this.hide();
+                this.hide({ force: false });
             });
         }
 
@@ -2843,7 +2847,7 @@
 
             $.addEvent(this._node, 'blur.ui.popover', (_) => {
                 this._stop();
-                this.hide();
+                this.hide({ force: false });
             });
         }
 
@@ -2852,7 +2856,7 @@
                 e.preventDefault();
 
                 this._stop();
-                this.toggle();
+                this.toggle({ force: false });
             });
         }
 
@@ -3364,7 +3368,7 @@
 
             $.addEvent(this._node, 'mouseout.ui.tooltip', (_) => {
                 this._stop();
-                this.hide();
+                this.hide({ force: false });
             });
         }
 
@@ -3376,7 +3380,7 @@
 
             $.addEvent(this._node, 'blur.ui.tooltip', (_) => {
                 this._stop();
-                this.hide();
+                this.hide({ force: false });
             });
         }
 
@@ -3385,7 +3389,7 @@
                 e.preventDefault();
 
                 this._stop();
-                this.toggle();
+                this.toggle({ force: false });
             });
         }
 
@@ -3558,10 +3562,12 @@
 
         /**
          * Hide the Tooltip.
+         * @param {object} [options] The hide options.
+         * @param {boolean} [options.force=true] Whether to force hiding when disabled.
          */
-        hide() {
+        hide({ force = true } = {}) {
             if (
-                !this._enabled ||
+                (!force && !this._enabled) ||
                 $.getDataset(this._tooltip, 'uiAnimating') ||
                 !$.isConnected(this._tooltip) ||
                 !$.triggerOne(this._node, 'hide.ui.tooltip')
@@ -3652,10 +3658,12 @@
 
         /**
          * Toggle the Tooltip.
+         * @param {object} [options] The toggle options.
+         * @param {boolean} [options.force=true] Whether to force hiding when disabled.
          */
-        toggle() {
+        toggle({ force = true } = {}) {
             if ($.isConnected(this._tooltip)) {
-                this.hide();
+                this.hide({ force });
             } else {
                 this.show();
             }

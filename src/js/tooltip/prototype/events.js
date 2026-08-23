@@ -12,7 +12,7 @@ export function _events() {
 
         $.addEvent(this._node, 'mouseout.ui.tooltip', (_) => {
             this._stop();
-            this.hide();
+            this.hide({ force: false });
         });
     }
 
@@ -24,7 +24,7 @@ export function _events() {
 
         $.addEvent(this._node, 'blur.ui.tooltip', (_) => {
             this._stop();
-            this.hide();
+            this.hide({ force: false });
         });
     }
 
@@ -33,7 +33,7 @@ export function _events() {
             e.preventDefault();
 
             this._stop();
-            this.toggle();
+            this.toggle({ force: false });
         });
     }
 

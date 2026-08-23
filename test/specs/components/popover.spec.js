@@ -571,6 +571,52 @@ test.describe('Popover', () => {
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
+
+        test('allows a visible popover to be hidden programmatically', async ({ page }) => {
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                UI.Popover.init(popoverToggle1).show();
+            });
+            await advanceClock(page, 150);
+            await page.evaluate((_) => {
+                const popover = UI.Popover.init($.findOne('#popoverToggle1'));
+                popover.disable();
+                popover.hide();
+            });
+            await advanceClock(page, 50);
+            await expectAnimationState(page, [
+                {
+                    selectors: ['.popover'],
+                    active: true,
+                },
+            ]);
+            await advanceClock(page, 100);
+
+            await expect(page.locator('.popover')).toHaveCount(0);
+        });
+
+        test('ignores hide trigger events when disabled', async ({ page }) => {
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                UI.Popover.init(popoverToggle1, { trigger: 'hover focus click' }).show();
+            });
+            await advanceClock(page, 150);
+            await page.evaluate((_) => {
+                UI.Popover.init($.findOne('#popoverToggle1')).disable();
+            });
+            await page.locator('#popoverToggle1').dispatchEvent('mouseout');
+            await page.locator('#popoverToggle1').dispatchEvent('blur');
+            await page.locator('#popoverToggle1').dispatchEvent('click');
+            await advanceClock(page, 150);
+
+            await expect(page.locator('.popover')).toHaveCount(1);
+            await expect(page.locator('.popover')).toBeVisible();
+            await expectAnimationState(page, [
+                {
+                    selectors: ['.popover'],
+                },
+            ]);
+        });
     });
 
     test.describe('#enable', () => {
