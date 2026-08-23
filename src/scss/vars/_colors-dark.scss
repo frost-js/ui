@@ -14,8 +14,8 @@ $body-tertiary-color-dark: helpers.color-alpha(body-color, .5) !default;
 
 $emphasis-color-dark: colors.$white !default;
 
-$link-color-dark: color.color-shade(colors.$blue, 350) !default;
-$link-color-hover-dark: color.color-shade(colors.$blue, 150) !default;
+$link-color-dark: color.color-shade(colors.$primary, 350) !default;
+$link-color-hover-dark: color.color-shade(colors.$primary, 150) !default;
 
 $border-color-dark: color.color-shade(colors.$gray, 700) !default;
 $border-color-translucent-dark: helpers.color-alpha("white", .15) !default;

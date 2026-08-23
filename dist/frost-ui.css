@@ -55,7 +55,7 @@
   --ui-danger: #c71010;
   --ui-light: rgb(87.8431372549%, 89.0980392157%, 90.9019607843%);
   --ui-dark: rgb(15.6862745098%, 18.1960784314%, 21.8039215686%);
-  --ui-gradient: linear-gradient(180deg, rgb(from var(--ui-white) r g b/0.25), rgb(from var(--ui-white) r g b/0));
+  --ui-gradient: linear-gradient(135deg, var(--ui-primary), #7c3aed);
   --ui-code-color: rgb(82.431372549%, 25.0196078431%, 25.0196078431%);
   --ui-mark-bg: rgb(100%, 97.3333333333%, 83.7647058824%);
   --ui-focus-ring-color: rgb(from var(--ui-primary) r g b/var(--ui-focus-ring-opacity));
@@ -6098,7 +6098,7 @@ select.input-lg[multiple] option {
 }
 
 .bg-gradient {
-  background-image: linear-gradient(180deg, rgb(from var(--ui-white) r g b/0.25), rgb(from var(--ui-white) r g b/0)) !important;
+  background-image: var(--ui-gradient) !important;
 }
 
 .border {
