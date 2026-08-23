@@ -34,14 +34,21 @@ export function addPopper(popper) {
         'scroll.ui.popper',
         $.debounce((e) => {
             for (const popper of poppers) {
-                if (!$._isDocument(e.target) && !$.hasDescendent(e.target, popper.node)) {
+                if (
+                    !$._isDocument(e.target) &&
+                    !$.hasDescendent(e.target, popper._node) &&
+                    !$.hasDescendent(e.target, popper._options.reference)
+                ) {
                     continue;
                 }
 
                 popper.update();
             }
         }),
-        { passive: true },
+        {
+            capture: true,
+            passive: true,
+        },
     );
 
     running = true;

@@ -140,6 +140,85 @@ test.describe('Popper', () => {
         });
     });
 
+    test.describe('scroll updates', () => {
+        test('updates when an ancestor of the popper scrolls', async ({ page }) => {
+            expect(await page.evaluate(async (_) => {
+                const badge = $.findOne('#badge');
+                const scroll = document.createElement('div');
+                badge.before(scroll);
+                scroll.append(badge);
+
+                let initialized = false;
+                let updated = false;
+                UI.Popper.init(badge, {
+                    reference: $.findOne('#button'),
+                    afterUpdate: (_) => {
+                        if (initialized) {
+                            updated = true;
+                        }
+                    },
+                });
+                initialized = true;
+
+                scroll.dispatchEvent(new Event('scroll'));
+                await Promise.resolve();
+
+                return updated;
+            })).toBe(true);
+        });
+
+        test('updates when an ancestor of the reference scrolls', async ({ page }) => {
+            expect(await page.evaluate(async (_) => {
+                const badge = $.findOne('#badge');
+                const button = $.findOne('#button');
+                const scroll = document.createElement('div');
+                button.before(scroll);
+                scroll.append(button);
+
+                let initialized = false;
+                let updated = false;
+                UI.Popper.init(badge, {
+                    reference: button,
+                    afterUpdate: (_) => {
+                        if (initialized) {
+                            updated = true;
+                        }
+                    },
+                });
+                initialized = true;
+
+                scroll.dispatchEvent(new Event('scroll'));
+                await Promise.resolve();
+
+                return updated;
+            })).toBe(true);
+        });
+
+        test('does not update when an unrelated element scrolls', async ({ page }) => {
+            expect(await page.evaluate(async (_) => {
+                const badge = $.findOne('#badge');
+                let initialized = false;
+                let updated = false;
+                UI.Popper.init(badge, {
+                    reference: $.findOne('#button'),
+                    afterUpdate: (_) => {
+                        if (initialized) {
+                            updated = true;
+                        }
+                    },
+                });
+                initialized = true;
+
+                const scroll = document.createElement('div');
+                document.body.append(scroll);
+                scroll.dispatchEvent(new Event('scroll'));
+                await Promise.resolve();
+
+                return updated;
+            })).toBe(false);
+        });
+    });
+
     test.describe('beforeUpdate option', () => {
         test('executes a callback before updating the popper', async ({ page }) => {
             const callbackTransform = await page.evaluate((_) => {

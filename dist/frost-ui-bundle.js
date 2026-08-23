@@ -11356,14 +11356,21 @@
             'scroll.ui.popper',
             $$1.debounce((e) => {
                 for (const popper of poppers) {
-                    if (!$$1._isDocument(e.target) && !$$1.hasDescendent(e.target, popper.node)) {
+                    if (
+                        !$$1._isDocument(e.target) &&
+                        !$$1.hasDescendent(e.target, popper._node) &&
+                        !$$1.hasDescendent(e.target, popper._options.reference)
+                    ) {
                         continue;
                     }
 
                     popper.update();
                 }
             }),
-            { passive: true },
+            {
+                capture: true,
+                passive: true,
+            },
         );
 
         running$1 = true;
