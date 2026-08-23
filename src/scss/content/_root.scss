@@ -88,12 +88,12 @@
         }
 
         @if $name == light or $name == dark {
-            --ui-#{$name}-highlight: color-mix(in srgb, var(--ui-#{$name}) 80%, var(--ui-#{$name}-interaction-mix));
-            --ui-#{$name}-active: color-mix(in srgb, var(--ui-#{$name}) 60%, var(--ui-#{$name}-interaction-mix));
+            --ui-#{$name}-highlight: color-mix(in srgb, var(--ui-#{$name}) 85%, var(--ui-#{$name}-interaction-mix));
+            --ui-#{$name}-active: color-mix(in srgb, var(--ui-#{$name}) 70%, var(--ui-#{$name}-interaction-mix));
             --ui-#{$name}-subtle-text: color-mix(in srgb, var(--ui-#{$name}) 50%, contrast-color(var(--ui-#{$name}-subtle)));
         } @else {
-            --ui-#{$name}-highlight: color-mix(in oklch, var(--ui-#{$name}) 80%, var(--ui-#{$name}-interaction-mix));
-            --ui-#{$name}-active: color-mix(in oklch, var(--ui-#{$name}) 60%, var(--ui-#{$name}-interaction-mix));
+            --ui-#{$name}-highlight: color-mix(in oklch, var(--ui-#{$name}) 85%, var(--ui-#{$name}-interaction-mix));
+            --ui-#{$name}-active: color-mix(in oklch, var(--ui-#{$name}) 70%, var(--ui-#{$name}-interaction-mix));
             --ui-#{$name}-subtle-text: color-mix(in oklch, var(--ui-#{$name}) 50%, contrast-color(var(--ui-#{$name}-subtle)));
         }
     }
@@ -126,9 +126,9 @@
 
     @each $name in map.keys(vars.$color-variants) {
         @if $name == light or $name == dark {
-            --ui-#{$name}-emphasis: color-mix(in srgb, var(--ui-#{$name}) 90%, var(--ui-black));
+            --ui-#{$name}-emphasis: color-mix(in srgb, var(--ui-#{$name}) 95%, var(--ui-black));
         } @else {
-            --ui-#{$name}-emphasis: color-mix(in oklch, var(--ui-#{$name}) 90%, var(--ui-black));
+            --ui-#{$name}-emphasis: color-mix(in oklch, var(--ui-#{$name}) 95%, var(--ui-black));
         }
 
         --ui-#{$name}-subtle: color-mix(in srgb, var(--ui-#{$name}) 20%, var(--ui-body-bg));
@@ -162,9 +162,9 @@
 
     @each $name in map.keys(vars.$color-variants) {
         @if $name == light or $name == dark {
-            --ui-#{$name}-emphasis: color-mix(in srgb, var(--ui-#{$name}) 90%, var(--ui-white));
+            --ui-#{$name}-emphasis: color-mix(in srgb, var(--ui-#{$name}) 95%, var(--ui-white));
         } @else {
-            --ui-#{$name}-emphasis: color-mix(in oklch, var(--ui-#{$name}) 90%, var(--ui-white));
+            --ui-#{$name}-emphasis: color-mix(in oklch, var(--ui-#{$name}) 95%, var(--ui-white));
         }
 
         --ui-#{$name}-subtle: color-mix(in srgb, var(--ui-#{$name}) 40%, var(--ui-body-bg));
