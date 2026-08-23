@@ -8,6 +8,7 @@
     --ui-dropdown-padding-y: #{vars.$dropdown-padding-y};
     --ui-dropdown-color: #{vars.$dropdown-color};
     --ui-dropdown-bg: #{vars.$dropdown-bg};
+    --ui-dropdown-backdrop-filter: #{vars.$dropdown-backdrop-filter};
     --ui-dropdown-border-width: #{vars.$dropdown-border-width};
     --ui-dropdown-border-color: #{vars.$dropdown-border-color};
     --ui-dropdown-border-radius: #{vars.$dropdown-border-radius};
@@ -41,6 +42,7 @@
     background-color: var(--ui-dropdown-bg);
     border: var(--ui-dropdown-border-width) var(--ui-border-style) var(--ui-dropdown-border-color);
     box-shadow: var(--ui-dropdown-box-shadow);
+    backdrop-filter: var(--ui-dropdown-backdrop-filter);
     @include mixins.border-radius(var(--ui-dropdown-border-radius));
 
     &.show {

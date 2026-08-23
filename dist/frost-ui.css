@@ -2941,7 +2941,8 @@ fieldset:disabled .btn {
   --ui-dropdown-padding-x: 0.5rem;
   --ui-dropdown-padding-y: 0.5rem;
   --ui-dropdown-color: var(--ui-body-color);
-  --ui-dropdown-bg: var(--ui-body-bg);
+  --ui-dropdown-bg: rgb(from var(--ui-body-bg) r g b/0.88);
+  --ui-dropdown-backdrop-filter: blur(0.75rem) saturate(140%);
   --ui-dropdown-border-width: var(--ui-border-width);
   --ui-dropdown-border-color: var(--ui-border-color-translucent);
   --ui-dropdown-border-radius: var(--ui-border-radius-xl);
@@ -2974,6 +2975,8 @@ fieldset:disabled .btn {
   background-color: var(--ui-dropdown-bg);
   border: var(--ui-dropdown-border-width) var(--ui-border-style) var(--ui-dropdown-border-color);
   box-shadow: var(--ui-dropdown-box-shadow);
+  -webkit-backdrop-filter: var(--ui-dropdown-backdrop-filter);
+  backdrop-filter: var(--ui-dropdown-backdrop-filter);
   border-radius: var(--ui-dropdown-border-radius);
 }
 .dropdown-menu.show {
