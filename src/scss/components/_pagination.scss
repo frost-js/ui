@@ -10,6 +10,7 @@
     --ui-pagination-border-width: #{vars.$pagination-border-width};
     --ui-pagination-border-color: #{vars.$pagination-border-color};
     --ui-pagination-border-radius: #{vars.$pagination-border-radius};
+    --ui-pagination-gap: #{vars.$pagination-gap};
     --ui-pagination-hover-color: #{vars.$pagination-hover-color};
     --ui-pagination-hover-bg: #{vars.$pagination-hover-bg};
     --ui-pagination-focus-color: #{vars.$pagination-focus-color};
@@ -23,6 +24,7 @@
     --ui-pagination-disabled-border-color: #{vars.$pagination-disabled-border-color};
 
     display: flex;
+    gap: var(--ui-pagination-gap);
     padding-inline-start: 0;
     list-style: none;
 }
@@ -36,6 +38,7 @@
     text-decoration: none;
     background-color: var(--ui-pagination-bg);
     border: var(--ui-pagination-border-width) var(--ui-border-style) var(--ui-pagination-border-color);
+    @include mixins.border-radius(var(--ui-pagination-border-radius));
     transition-timing-function: var(--ui-transition-timing-function);
     transition-duration: var(--ui-transition-duration);
     transition-property: color, background-color, box-shadow;
@@ -72,20 +75,6 @@
         --ui-pagination-border-color: var(--ui-pagination-disabled-border-color);
 
         pointer-events: none;
-    }
-}
-
-.page-item {
-    &:first-child .page-link {
-        @include mixins.border-start-radius(var(--ui-pagination-border-radius));
-    }
-
-    &:last-child .page-link {
-        @include mixins.border-end-radius(var(--ui-pagination-border-radius));
-    }
-
-    &:not(:first-child) .page-link {
-        margin-inline-start: calc(var(--ui-pagination-border-width) * -1);
     }
 }
 

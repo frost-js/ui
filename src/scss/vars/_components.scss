@@ -84,8 +84,8 @@ $btn-ripple-opacity: var(--ui-ripple-opacity) !default;
 $btn-outline-hover-opacity: .2 !default;
 
 // card
-$card-spacer-x: vars.$spacing !default;
-$card-spacer-y: vars.$spacing !default;
+$card-spacer-x: vars.$spacing * 1.25 !default;
+$card-spacer-y: vars.$spacing * 1.25 !default;
 $card-title-spacer-y: vars.$spacing * .5 !default;
 $card-title-font-weight: map.get(vars.$font-weights, bolder) !default;
 $card-border-width: var(--ui-border-width) !default;
@@ -95,7 +95,7 @@ $card-bg: var(--ui-body-bg) !default;
 $card-box-shadow: var(--ui-shadow-sm) !default;
 $card-cap-padding-x: $card-spacer-x !default;
 $card-cap-padding-y: $card-spacer-y * .5 !default;
-$card-cap-bg: helpers.color-alpha(body-color, .1) !default;
+$card-cap-bg: helpers.color-alpha(body-color, .05) !default;
 $card-header-font-weight: map.get(vars.$font-weights, bolder) !default;
 $card-img-overlay-padding: vars.$spacing !default;
 $card-group-margin: vars.$spacing !default;
@@ -254,8 +254,12 @@ $nav-tabs-link-active-bg: var(--ui-body-bg) !default;
 $nav-tabs-link-active-border-color: var(--ui-border-color) var(--ui-border-color) !default;
 
 $nav-pills-border-radius: var(--ui-border-radius) !default;
+$nav-pills-padding: vars.$spacing * .25 !default;
+$nav-pills-gap: vars.$spacing * .125 !default;
+$nav-pills-bg: var(--ui-tertiary-bg) !default;
 $nav-pills-link-active-color: var(--ui-primary-contrast) !default;
 $nav-pills-link-active-bg: var(--ui-primary) !default;
+$nav-pills-link-active-box-shadow: var(--ui-shadow-sm) !default;
 
 $nav-underline-gap: vars.$spacing !default;
 $nav-underline-border-width: .125rem !default;
@@ -317,6 +321,7 @@ $pagination-color: var(--ui-link-color) !default;
 $pagination-border-width: var(--ui-border-width) !default;
 $pagination-border-color: var(--ui-border-color) !default;
 $pagination-border-radius: var(--ui-border-radius) !default;
+$pagination-gap: vars.$spacing * .25 !default;
 
 $pagination-hover-color: var(--ui-link-hover-color) !default;
 $pagination-hover-bg: var(--ui-tertiary-bg) !default;

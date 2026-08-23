@@ -2632,8 +2632,8 @@ fieldset:disabled .btn {
 }
 
 .card {
-  --ui-card-spacer-x: 1rem;
-  --ui-card-spacer-y: 1rem;
+  --ui-card-spacer-x: 1.25rem;
+  --ui-card-spacer-y: 1.25rem;
   --ui-card-title-spacer-y: 0.5rem;
   --ui-card-title-font-weight: 700;
   --ui-card-border-width: var(--ui-border-width);
@@ -2642,9 +2642,9 @@ fieldset:disabled .btn {
   --ui-card-inner-border-radius: calc(var(--ui-card-border-radius) - var(--ui-card-border-width));
   --ui-card-bg: var(--ui-body-bg);
   --ui-card-box-shadow: var(--ui-shadow-sm);
-  --ui-card-cap-padding-x: 1rem;
-  --ui-card-cap-padding-y: 0.5rem;
-  --ui-card-cap-bg: rgb(from var(--ui-body-color) r g b/0.1);
+  --ui-card-cap-padding-x: 1.25rem;
+  --ui-card-cap-padding-y: 0.625rem;
+  --ui-card-cap-bg: rgb(from var(--ui-body-color) r g b/0.05);
   --ui-card-header-font-weight: 700;
   --ui-card-img-overlay-padding: 1rem;
   --ui-card-group-margin: 1rem;
@@ -3825,7 +3825,7 @@ fieldset:disabled .btn {
   border: 0;
   transition-timing-function: var(--ui-transition-timing-function);
   transition-duration: var(--ui-transition-duration);
-  transition-property: color, background-color, border-color;
+  transition-property: color, background-color, border-color, box-shadow;
 }
 .nav-link:hover, .nav-link:focus-visible {
   color: var(--ui-nav-link-hover-color);
@@ -3880,8 +3880,21 @@ fieldset:disabled .btn {
 
 .nav-pills {
   --ui-nav-pills-border-radius: var(--ui-border-radius);
+  --ui-nav-pills-padding: 0.25rem;
+  --ui-nav-pills-gap: 0.125rem;
+  --ui-nav-pills-bg: var(--ui-tertiary-bg);
   --ui-nav-pills-link-active-color: var(--ui-primary-contrast);
   --ui-nav-pills-link-active-bg: var(--ui-primary);
+  --ui-nav-pills-link-active-box-shadow: var(--ui-shadow-sm);
+  gap: var(--ui-nav-pills-gap);
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--ui-nav-pills-padding);
+  background-color: var(--ui-nav-pills-bg);
+  border-radius: calc(var(--ui-nav-pills-border-radius) + var(--ui-nav-pills-padding));
+}
+.nav-pills.nav-fill, .nav-pills.nav-justified {
+  width: 100%;
 }
 .nav-pills .nav-link {
   background: none;
@@ -3897,6 +3910,7 @@ fieldset:disabled .btn {
 .nav-pills .nav-item.show .nav-link {
   color: var(--ui-nav-pills-link-active-color);
   background-color: var(--ui-nav-pills-link-active-bg);
+  box-shadow: var(--ui-nav-pills-link-active-box-shadow);
 }
 
 .nav-underline {
@@ -3946,6 +3960,9 @@ fieldset:disabled .btn {
 }
 
 .card-header-pills {
+  --ui-nav-pills-padding: 0;
+  --ui-nav-pills-bg: transparent;
+  width: auto;
   margin-inline: calc(var(--ui-card-cap-padding-x) * -0.5);
 }
 
@@ -4520,6 +4537,7 @@ fieldset:disabled .btn {
   --ui-pagination-border-width: var(--ui-border-width);
   --ui-pagination-border-color: var(--ui-border-color);
   --ui-pagination-border-radius: var(--ui-border-radius);
+  --ui-pagination-gap: 0.25rem;
   --ui-pagination-hover-color: var(--ui-link-hover-color);
   --ui-pagination-hover-bg: var(--ui-tertiary-bg);
   --ui-pagination-focus-color: var(--ui-link-hover-color);
@@ -4532,6 +4550,7 @@ fieldset:disabled .btn {
   --ui-pagination-disabled-bg: var(--ui-secondary-bg);
   --ui-pagination-disabled-border-color: var(--ui-border-color);
   display: flex;
+  gap: var(--ui-pagination-gap);
   padding-inline-start: 0;
   list-style: none;
 }
@@ -4545,6 +4564,7 @@ fieldset:disabled .btn {
   text-decoration: none;
   background-color: var(--ui-pagination-bg);
   border: var(--ui-pagination-border-width) var(--ui-border-style) var(--ui-pagination-border-color);
+  border-radius: var(--ui-pagination-border-radius);
   transition-timing-function: var(--ui-transition-timing-function);
   transition-duration: var(--ui-transition-duration);
   transition-property: color, background-color, box-shadow;
@@ -4572,18 +4592,6 @@ fieldset:disabled .btn {
   --ui-pagination-bg: var(--ui-pagination-disabled-bg);
   --ui-pagination-border-color: var(--ui-pagination-disabled-border-color);
   pointer-events: none;
-}
-
-.page-item:first-child .page-link {
-  border-start-start-radius: var(--ui-pagination-border-radius);
-  border-end-start-radius: var(--ui-pagination-border-radius);
-}
-.page-item:last-child .page-link {
-  border-start-end-radius: var(--ui-pagination-border-radius);
-  border-end-end-radius: var(--ui-pagination-border-radius);
-}
-.page-item:not(:first-child) .page-link {
-  margin-inline-start: calc(var(--ui-pagination-border-width) * -1);
 }
 
 .pagination-sm .page-link {

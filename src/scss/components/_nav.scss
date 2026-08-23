@@ -28,7 +28,7 @@
     border: 0;
     transition-timing-function: var(--ui-transition-timing-function);
     transition-duration: var(--ui-transition-duration);
-    transition-property: color, background-color, border-color;
+    transition-property: color, background-color, border-color, box-shadow;
 
     &:hover,
     &:focus-visible {
@@ -92,8 +92,24 @@
 
 .nav-pills {
     --ui-nav-pills-border-radius: #{vars.$nav-pills-border-radius};
+    --ui-nav-pills-padding: #{vars.$nav-pills-padding};
+    --ui-nav-pills-gap: #{vars.$nav-pills-gap};
+    --ui-nav-pills-bg: #{vars.$nav-pills-bg};
     --ui-nav-pills-link-active-color: #{vars.$nav-pills-link-active-color};
     --ui-nav-pills-link-active-bg: #{vars.$nav-pills-link-active-bg};
+    --ui-nav-pills-link-active-box-shadow: #{vars.$nav-pills-link-active-box-shadow};
+
+    gap: var(--ui-nav-pills-gap);
+    width: fit-content;
+    max-width: 100%;
+    padding: var(--ui-nav-pills-padding);
+    background-color: var(--ui-nav-pills-bg);
+    @include mixins.border-radius(calc(var(--ui-nav-pills-border-radius) + var(--ui-nav-pills-padding)));
+
+    &.nav-fill,
+    &.nav-justified {
+        width: 100%;
+    }
 
     .nav-link {
         background: none;
@@ -111,6 +127,7 @@
     .nav-item.show .nav-link {
         color: var(--ui-nav-pills-link-active-color);
         background-color: var(--ui-nav-pills-link-active-bg);
+        box-shadow: var(--ui-nav-pills-link-active-box-shadow);
     }
 }
 
@@ -175,5 +192,9 @@
 }
 
 .card-header-pills {
+    --ui-nav-pills-padding: 0;
+    --ui-nav-pills-bg: transparent;
+
+    width: auto;
     margin-inline: calc(var(--ui-card-cap-padding-x) * -.5);
 }
