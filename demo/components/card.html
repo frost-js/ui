@@ -16,24 +16,28 @@
     <div class="container">
         <h1>Cards</h1>
 
-        <h4>Body</h4>
-        <p class="text-body-secondary">A card body provides a padded surface for related content.</p>
-        <div class="mb-4">
-            <div class="card">
-                <div class="card-body">A simple card body.</div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Content structure</h2>
+                <p class="text-body-secondary mb-2">Build a card from a padded body, then add titles, supporting text, links, and actions as needed.</p>
+                <code>.card .card-body</code>
+            </header>
+            <h3 class="h6">Body</h3>
+            <div class="mb-4">
+                <div class="card">
+                    <div class="card-body">A simple card body.</div>
+                </div>
             </div>
-        </div>
 
-        <h4>Content</h4>
-        <p class="text-body-secondary">Titles, subtitles, text, and links establish a clear content hierarchy.</p>
-        <div class="mb-4">
+            <h3 class="h6">Titles, text, and actions</h3>
+            <p class="text-body-secondary">Titles, subtitles, text, and links establish a clear content hierarchy.</p>
             <div class="row g-4">
                 <div class="col-md-6">
                     <article class="card h-100">
                         <div class="card-body">
                             <span class="badge bg-primary-subtle text-primary-subtle mb-3">Field guide</span>
-                            <h5 class="card-title">Pack for changing weather</h5>
-                            <h6 class="card-subtitle mb-3 text-body-secondary">A practical equipment list</h6>
+                            <h3 class="card-title h5">Pack for changing weather</h3>
+                            <p class="card-subtitle mb-3 text-body-secondary">A practical equipment list</p>
                             <p class="card-text">Build a compact kit that works across warm afternoons, cold ridgelines, and sudden rain.</p>
                             <a class="card-link" href="#">Open guide</a>
                             <a class="card-link" href="#">Save for later</a>
@@ -44,62 +48,67 @@
                     <article class="card h-100 text-center">
                         <div class="card-body">
                             <span class="badge bg-accent-subtle text-accent-subtle mb-3">Members</span>
-                            <h5 class="card-title">Your next route is ready</h5>
+                            <h3 class="card-title h5">Your next route is ready</h3>
                             <p class="card-text text-body-secondary">Review the itinerary, download offline notes, and meet your guide.</p>
                             <a class="btn btn-primary ripple" href="#">View trip</a>
                         </div>
                     </article>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Media</h4>
-        <p class="text-body-secondary">Images can sit above or below the card body while retaining the card radius.</p>
-        <div class="mb-4">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <article class="card h-100">
-                        <div class="ratio ratio-16x9">
-                            <img class="card-img-top object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at blue hour">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">The southern edge</h5>
-                            <p class="card-text text-body-secondary">A two-day route along tidal shelves and sandstone headlands.</p>
-                        </div>
-                    </article>
-                </div>
-                <div class="col-md-6">
-                    <article class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Cabins built for weather</h5>
-                            <p class="card-text text-body-secondary">Small shelters where material, warmth, and landscape do the work.</p>
-                        </div>
-                        <div class="ratio ratio-16x9">
-                            <img class="card-img-bottom object-fit-cover" src="../assets/cabin.webp" alt="Cabin beside a mountain lake">
-                        </div>
-                    </article>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Media</h2>
+                <p class="text-body-secondary mb-2">Place images around the body, under an overlay, or beside content in a responsive grid.</p>
+                <code>.card-img-top</code> <code>.card-img-bottom</code> <code>.card-img-overlay</code>
+            </header>
+            <h3 class="h6">Top and bottom images</h3>
+            <p class="text-body-secondary">Image helpers retain the card radius at either edge.</p>
+            <div class="mb-5">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <article class="card h-100">
+                            <div class="ratio ratio-16x9">
+                                <img class="card-img-top object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at blue hour">
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title h5">The southern edge</h3>
+                                <p class="card-text text-body-secondary">A two-day route along tidal shelves and sandstone headlands.</p>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-md-6">
+                        <article class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title h5">Cabins built for weather</h3>
+                                <p class="card-text text-body-secondary">Small shelters where material, warmth, and landscape do the work.</p>
+                            </div>
+                            <div class="ratio ratio-16x9">
+                                <img class="card-img-bottom object-fit-cover" src="../assets/cabin.webp" alt="Cabin beside a mountain lake">
+                            </div>
+                        </article>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <h4>Image overlay</h4>
-        <p class="text-body-secondary">Overlay content combines with text and background utilities for readable media cards.</p>
-        <div class="mb-4">
-            <article class="card text-bg-dark">
-                <div class="ratio ratio-21x9">
-                    <img class="card-img object-fit-cover opacity-75" src="../assets/canyon.webp" alt="Expedition vehicle above a desert canyon road">
-                </div>
-                <div class="card-img-overlay d-flex flex-column justify-content-end">
-                    <span class="badge bg-warning text-black align-self-start mb-2">Route notes</span>
-                    <h5 class="card-title text-white">One road through the red country</h5>
-                    <p class="card-text text-light d-none d-sm-block">Water stops, weather windows, and what to know before leaving the marked route.</p>
-                </div>
-            </article>
-        </div>
+            <h3 class="h6">Image overlay</h3>
+            <p class="text-body-secondary">Overlay content combines with text and background utilities for readable media cards.</p>
+            <div class="mb-5">
+                <article class="card text-bg-dark">
+                    <div class="ratio ratio-21x9">
+                        <img class="card-img object-fit-cover opacity-75" src="../assets/canyon.webp" alt="Expedition vehicle above a desert canyon road">
+                    </div>
+                    <div class="card-img-overlay d-flex flex-column justify-content-end">
+                        <span class="badge bg-warning text-black align-self-start mb-2">Route notes</span>
+                        <h3 class="card-title h5 text-white">One road through the red country</h3>
+                        <p class="card-text text-light d-none d-sm-block">Water stops, weather windows, and what to know before leaving the marked route.</p>
+                    </div>
+                </article>
+            </div>
 
-        <h4>Horizontal</h4>
-        <p class="text-body-secondary">Use the grid to place media beside content and stack it on narrower screens.</p>
-        <div class="mb-4">
+            <h3 class="h6">Responsive horizontal layout</h3>
+            <p class="text-body-secondary">Use the grid to place media beside content and stack it on narrower screens.</p>
             <article class="card overflow-hidden">
                 <div class="row g-0 align-items-stretch">
                     <div class="col-md-5">
@@ -110,7 +119,7 @@
                     <div class="col-md-7 d-flex align-items-center">
                         <div class="card-body">
                             <span class="text-accent fw-bold">Four-night retreat</span>
-                            <h5 class="card-title mt-2">Make room for quiet</h5>
+                            <h3 class="card-title h5 mt-2">Make room for quiet</h3>
                             <p class="card-text">Trail access from the door, a private cabin, and enough flexibility to follow the weather.</p>
                             <p class="card-text"><small class="text-body-secondary">Next departure: November 3</small></p>
                             <a class="btn btn-outline-primary ripple" href="#">See itinerary</a>
@@ -118,28 +127,32 @@
                     </div>
                 </div>
             </article>
-        </div>
+        </section>
 
-        <h4>Header and footer</h4>
-        <p class="text-body-secondary">Headers label a card and footers hold supporting metadata or secondary actions.</p>
-        <div class="mb-4">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <strong>Departure status</strong>
-                    <span class="badge bg-success-subtle text-success-subtle">Confirmed</span>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Headers, footers, and navigation</h2>
+                <p class="text-body-secondary mb-2">Add stronger hierarchy, supporting metadata, or navigation around the card body.</p>
+                <code>.card-header</code> <code>.card-footer</code> <code>.card-header-tabs</code>
+            </header>
+            <h3 class="h6">Header and footer</h3>
+            <div class="mb-5">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <strong>Departure status</strong>
+                        <span class="badge bg-success-subtle text-success-subtle">Confirmed</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title h5">Southern edge traverse</h3>
+                        <p class="card-text">Your guide has confirmed the route and the equipment briefing is available.</p>
+                        <a class="btn btn-primary ripple" href="#">Open briefing</a>
+                    </div>
+                    <div class="card-footer text-body-secondary">Updated 14 minutes ago</div>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Southern edge traverse</h5>
-                    <p class="card-text">Your guide has confirmed the route and the equipment briefing is available.</p>
-                    <a class="btn btn-primary ripple" href="#">Open briefing</a>
-                </div>
-                <div class="card-footer text-body-secondary">Updated 14 minutes ago</div>
             </div>
-        </div>
 
-        <h4>Navigation</h4>
-        <p class="text-body-secondary">Tabs or pills can sit in the header to switch between related card views.</p>
-        <div class="mb-4">
+            <h3 class="h6">Navigation</h3>
+            <p class="text-body-secondary">Tabs or pills can sit in the header to switch between related card views.</p>
             <div class="card">
                 <div class="card-header">
                     <nav class="nav nav-tabs card-header-tabs">
@@ -149,15 +162,18 @@
                     </nav>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Trip overview</h5>
+                    <h3 class="card-title h5">Trip overview</h3>
                     <p class="card-text text-body-secondary">Seven days of supported walking with five nights under canvas and one lodge night.</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Lists</h4>
-        <p class="text-body-secondary">Flush list groups remove doubled borders when placed inside a card.</p>
-        <div class="mb-4">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">List groups</h2>
+                <p class="text-body-secondary mb-2">Place flush list groups against a card edge without introducing doubled borders.</p>
+                <code>.card .list-group-flush</code>
+            </header>
             <div class="row g-4">
                 <div class="col-md-6">
                     <div class="card h-100">
@@ -180,17 +196,20 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Contextual variants</h4>
-        <p class="text-body-secondary">Background, text, and border utilities adapt cards to semantic contexts.</p>
-        <div class="mb-4">
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Contextual treatments</h2>
+                <p class="text-body-secondary mb-2">Combine background, text, and border utilities to adapt cards to semantic contexts.</p>
+                <code>.text-bg-{variant}</code> <code>.border-{variant}</code>
+            </header>
             <div class="row row-cols-1 row-cols-md-2 g-4">
                 <div class="col">
                     <div class="card text-bg-primary h-100">
                         <div class="card-header">Primary</div>
                         <div class="card-body">
-                            <h5 class="card-title">Registration open</h5>
+                            <h3 class="card-title h5">Registration open</h3>
                             <p class="card-text">Four places remain on the October departure.</p>
                         </div>
                     </div>
@@ -199,7 +218,7 @@
                     <div class="card border-success h-100">
                         <div class="card-header">Success</div>
                         <div class="card-body text-success">
-                            <h5 class="card-title">Payment received</h5>
+                            <h3 class="card-title h5">Payment received</h3>
                             <p class="card-text">Your place is confirmed and a receipt has been emailed.</p>
                         </div>
                     </div>
@@ -208,7 +227,7 @@
                     <div class="card border-warning h-100">
                         <div class="card-header">Warning</div>
                         <div class="card-body">
-                            <h5 class="card-title">Equipment check needed</h5>
+                            <h3 class="card-title h5">Equipment check needed</h3>
                             <p class="card-text">Review the updated cold-weather requirements before departure.</p>
                         </div>
                     </div>
@@ -217,13 +236,13 @@
                     <div class="card text-bg-dark h-100">
                         <div class="card-header">Dark</div>
                         <div class="card-body">
-                            <h5 class="card-title">Offline route ready</h5>
+                            <h3 class="card-title h5">Offline route ready</h3>
                             <p class="card-text">Maps and emergency notes are stored on this device.</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 

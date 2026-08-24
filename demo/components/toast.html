@@ -15,129 +15,144 @@
 <body>
     <div class="container">
         <h1>Toasts</h1>
-        <div class="mb-4">
-            <div class="toast show" data-ui-toggle="toast" role="alert" aria-live="assertive" aria-atomic="true">
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Anatomy</h2>
+                <p class="text-body-secondary mb-2">Combine an optional header with a concise message and a dismissal control.</p>
+                <code>.toast .toast-header .toast-body</code>
+            </header>
+            <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
                 <div class="toast-header">
-                    <svg class="rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="100%" height="100%" fill="#2b55d4"></rect>
-                    </svg>
-                    <strong class="me-auto">Toast</strong>
+                    <span class="badge text-bg-primary rounded-pill me-2" aria-hidden="true">F</span>
+                    <strong class="me-auto">Route planner</strong>
                     <small>Just now</small>
-                    <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Close"></button>
+                    <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Dismiss notification"></button>
                 </div>
                 <div class="toast-body">
-                    This is the toast content.
+                    Your coastal itinerary is ready to review.
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Live</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" id="show-toast" type="button">Show Toast</button>
-        </div>
-        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
-            <div class="toast" id="toast" data-ui-toggle="toast" role="alert" style="display: none !important;" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <svg class="rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="100%" height="100%" fill="#2b55d4"></rect>
-                    </svg>
-                    <strong class="me-auto">Toast</strong>
-                    <small>Just now</small>
-                    <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    This is the toast content.
-                </div>
-            </div>
-        </div>
-
-        <h4>Translucent</h4>
-        <div class="mb-4">
-            <div class="bg-dark p-3">
-                <div class="toast show" data-ui-toggle="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Live notification</h2>
+                <p class="text-body-secondary mb-2">Initialize a hidden toast and call its show method in response to an application event.</p>
+                <code>UI.Toast.init(node).show()</code>
+            </header>
+            <button class="btn btn-primary ripple" id="show-toast" type="button">Save route</button>
+            <div class="position-fixed top-0 end-0 z-3 p-3 mt-5">
+                <div class="toast" id="live-toast" role="status" style="display: none !important;" aria-live="polite" aria-atomic="true">
                     <div class="toast-header">
-                        <svg class="rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <rect width="100%" height="100%" fill="#2b55d4"></rect>
-                        </svg>
-                        <strong class="me-auto">Toast</strong>
+                        <span class="badge text-bg-success rounded-pill me-2" aria-hidden="true">✓</span>
+                        <strong class="me-auto">Route saved</strong>
                         <small>Just now</small>
-                        <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Close"></button>
+                        <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Dismiss notification"></button>
                     </div>
                     <div class="toast-body">
-                        This is the toast content.
+                        Southern edge traverse was added to your saved routes.
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Stacking</h4>
-        <div class="mb-4">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Frosted surface</h2>
+                <p class="text-body-secondary mb-2">The translucent toast surface preserves context when it appears over rich content.</p>
+                <code>.toast</code>
+            </header>
+            <div class="bg-ambient rounded-3 p-4">
+                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
+                    <div class="toast-header">
+                        <span class="badge text-bg-accent rounded-pill me-2" aria-hidden="true">F</span>
+                        <strong class="me-auto">Field notes</strong>
+                        <small>2 min ago</small>
+                        <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Dismiss notification"></button>
+                    </div>
+                    <div class="toast-body">
+                        Offline notes are available for this section of the route.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Stacking</h2>
+                <p class="text-body-secondary mb-2">Keep related notifications aligned and evenly separated in a toast container.</p>
+                <code>.toast-container</code>
+            </header>
             <div class="toast-container">
-                <div class="toast show" data-ui-toggle="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
                     <div class="toast-header">
-                        <svg class="rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <rect width="100%" height="100%" fill="#2b55d4"></rect>
-                        </svg>
-                        <strong class="me-auto">Toast</strong>
-                        <small>Just now</small>
-                        <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Close"></button>
+                        <span class="badge text-bg-success rounded-pill me-2" aria-hidden="true">✓</span>
+                        <strong class="me-auto">Offline maps ready</strong>
+                        <small>Now</small>
+                        <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Dismiss notification"></button>
                     </div>
                     <div class="toast-body">
-                        This is the toast content.
+                        Three map regions were downloaded to this device.
                     </div>
                 </div>
-                <div class="toast show" data-ui-toggle="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
                     <div class="toast-header">
-                        <svg class="rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <rect width="100%" height="100%" fill="#2b55d4"></rect>
-                        </svg>
-                        <strong class="me-auto">Toast</strong>
-                        <small>Just now</small>
-                        <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Close"></button>
+                        <span class="badge text-bg-warning rounded-pill me-2" aria-hidden="true">!</span>
+                        <strong class="me-auto">Weather update</strong>
+                        <small>4 min ago</small>
+                        <button class="btn-close" data-ui-dismiss="toast" type="button" aria-label="Dismiss notification"></button>
                     </div>
                     <div class="toast-body">
-                        This is the toast content.
+                        Rain is now expected on the exposed ridge after 3 pm.
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Content</h4>
-        <div class="mb-4">
-            <div class="toast show" data-ui-toggle="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body">
-                    This is the toast content.
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Body content and actions</h2>
+                <p class="text-body-secondary mb-2">Use a body on its own for short messages, or add compact actions when a response is useful.</p>
+                <code>.toast-body</code>
+            </header>
+            <div class="d-flex flex-column gap-3">
+                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
+                    <div class="toast-body">
+                        Your equipment checklist is up to date.
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="toast show" data-ui-toggle="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body">
-                    This is the toast content.
-                    <div class="mt-2 pt-2 border-top">
-                        <button class="btn btn-primary btn-sm" type="button">Action</button>
-                        <button class="btn btn-secondary btn-sm" type="button" data-ui-dismiss="toast">Close</button>
+                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
+                    <div class="toast-body">
+                        A newer route briefing is available.
+                        <div class="d-flex gap-2 mt-2 pt-2 border-top">
+                            <button class="btn btn-primary btn-sm ripple" type="button">Review update</button>
+                            <button class="btn btn-secondary btn-sm" data-ui-dismiss="toast" type="button">Not now</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Styles</h4>
-        <div class="mb-4">
-            <div class="toast d-flex align-items-center text-bg-primary border-0 show" data-ui-toggle="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Contextual treatment</h2>
+                <p class="text-body-secondary mb-2">Combine color and border utilities when a notification needs stronger semantic emphasis.</p>
+                <code>.text-bg-{variant} .border-0</code>
+            </header>
+            <div class="toast d-flex align-items-center text-bg-primary border-0 show" role="status" aria-live="polite" aria-atomic="true">
                 <div class="toast-body">
-                    This is the toast content.
+                    A guide has joined your trip workspace.
                 </div>
-                <button type="button" class="btn-close ms-auto me-2" data-ui-dismiss="toast" aria-label="Close"></button>
+                <button class="btn-close ms-auto me-2" data-ui-dismiss="toast" type="button" aria-label="Dismiss notification"></button>
             </div>
-        </div>
+        </section>
     </div>
 
     <script>
-        $.addEvent('#show-toast', 'click', e => {
-            const toast = $.findOne('#toast');
-            UI.Toast.init(toast).show();
-        });
+        const liveToast = UI.Toast.init($.findOne('#live-toast'), { autohide: false });
+
+        $.addEvent('#show-toast', 'click', () => liveToast.show());
     </script>
 </body>
 
