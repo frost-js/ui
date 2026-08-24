@@ -248,7 +248,10 @@ const renderNavigationGroup = ({ title, paths }, index) => {
 const renderNavigation = () => `
     <header class="navbar bg-glass sticky-top border-bottom d-lg-none" data-demo-header>
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="${root}index.html">FrostUI</a>
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="${root}index.html">
+                <span class="badge bg-primary bg-gradient shadow-glow fs-5" aria-hidden="true">F</span>
+                <span>FrostUI</span>
+            </a>
             <button class="navbar-toggler" type="button" data-ui-toggle="offcanvas" data-ui-target="#demo-navigation" aria-controls="demo-navigation" aria-label="Open demo navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -292,13 +295,7 @@ const renderPageHeader = () => {
     }
 
     const pageHeader = $.parseHTML(`
-        <header class="mb-5">
-            <nav aria-label="Breadcrumb">
-                <ol class="breadcrumb mt-4 mb-0">
-                    <li class="breadcrumb-item"><a href="${root}index.html">Demos</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">${section}</li>
-                </ol>
-            </nav>
+        <header class="pt-4 mb-5">
             <h1>${title}</h1>
             <p class="lead text-body-secondary mb-0">${descriptions[path] || sectionDescriptions[section]}</p>
         </header>`).shift();
@@ -317,23 +314,6 @@ $.ready(() => {
     $('[data-demo-theme]').addEvent('click', toggleTheme);
     $('[data-demo-indeterminate]').each((node) => {
         node.indeterminate = true;
-    });
-    $('[data-demo-clipboard-tooltip]').each((node) => {
-        const tooltip = UI.Tooltip.init(node, {
-            placement: 'top',
-            trigger: '',
-        });
-        let hideTimer;
-
-        $.addEvent(node, 'copied.ui.clipboard', (_) => {
-            const action = $.getDataset(node, 'uiAction') || 'copy';
-
-            clearTimeout(hideTimer);
-            $.setDataset(node, { uiTitle: action === 'cut' ? 'Cut to clipboard.' : 'Copied to clipboard.' });
-            tooltip.refresh();
-            tooltip.show();
-            hideTimer = setTimeout(() => tooltip.hide(), 2000);
-        });
     });
     $('[data-ui-toggle="tooltip"]').each((node) => UI.Tooltip.init(node));
     $('[data-ui-toggle="popover"]').each((node) => UI.Popover.init(node));

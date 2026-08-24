@@ -22,7 +22,7 @@
                 <p class="text-body-secondary mb-2">Use the text property when the clipboard value does not come from a visible element.</p>
                 <code>data-ui-text="support@example.com"</code>
             </header>
-            <button class="btn btn-primary ripple" data-ui-toggle="clipboard" data-ui-text="support@example.com" data-demo-clipboard-tooltip type="button">
+            <button class="btn btn-primary ripple" data-ui-toggle="clipboard" data-ui-text="support@example.com" type="button">
                 Copy support address
             </button>
         </section>
@@ -36,7 +36,7 @@
             <label for="share-link">Share link</label>
             <div class="input-group">
                 <input class="input-outline" id="share-link" type="text" value="https://example.com/trips/north-coast" readonly />
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="clipboard" data-ui-target="#share-link" data-demo-clipboard-tooltip type="button">
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="clipboard" data-ui-target="#share-link" type="button">
                     Copy
                 </button>
             </div>
@@ -51,12 +51,32 @@
             <label for="draft-note">Draft note</label>
             <div class="input-group">
                 <input class="input-outline" id="draft-note" type="text" value="Move this note to the clipboard" />
-                <button class="btn btn-outline-danger ripple" data-ui-toggle="clipboard" data-ui-target="#draft-note" data-ui-action="cut" data-demo-clipboard-tooltip type="button">
+                <button class="btn btn-outline-danger ripple" data-ui-toggle="clipboard" data-ui-target="#draft-note" data-ui-action="cut" type="button">
                     Cut
                 </button>
             </div>
         </section>
     </div>
+
+    <script>
+        $('[data-ui-toggle="clipboard"]').each((node) => {
+            const tooltip = UI.Tooltip.init(node, {
+                placement: 'top',
+                trigger: '',
+            });
+            let hideTimer;
+
+            $.addEvent(node, 'copied.ui.clipboard', () => {
+                const action = $.getDataset(node, 'uiAction') || 'copy';
+
+                clearTimeout(hideTimer);
+                $.setDataset(node, { uiTitle: action === 'cut' ? 'Cut to clipboard.' : 'Copied to clipboard.' });
+                tooltip.refresh();
+                tooltip.show();
+                hideTimer = setTimeout(() => tooltip.hide(), 2000);
+            });
+        });
+    </script>
 </body>
 
 </html>
