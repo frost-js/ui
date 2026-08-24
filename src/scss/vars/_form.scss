@@ -24,6 +24,7 @@ $input-check-disabled-opacity: var(--ui-disabled-opacity) !default;
 
 $input-check-checkbox-border-radius: var(--ui-border-radius-sm) !default;
 $input-check-checkbox-checked-background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e") !default;
+$input-check-checkbox-indeterminate-background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e") !default;
 
 $input-check-radio-border-radius: 50% !default;
 

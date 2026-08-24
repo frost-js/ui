@@ -103,6 +103,7 @@
             box-shadow: var(--ui-btn-focus-box-shadow), var(--ui-btn-box-shadow);
         }
 
+        .btn-check:disabled+#{&},
         #{&}:disabled,
         #{&}.disabled,
         fieldset:disabled #{&} {

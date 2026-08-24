@@ -54,10 +54,17 @@
         @include mixins.border-radius(vars.$input-check-checkbox-border-radius);
 
         &::before {
+            inset: calc(vars.$input-check-border-width * -1);
             width: vars.$input-check-size;
             height: vars.$input-check-size;
             mask-image: vars.$input-check-checkbox-checked-background-image;
+            mask-repeat: no-repeat;
+            mask-position: center;
             mask-size: vars.$input-check-size;
+        }
+
+        &:indeterminate::before {
+            mask-image: vars.$input-check-checkbox-indeterminate-background-image;
         }
     }
 
@@ -71,7 +78,8 @@
         }
     }
 
-    &:checked {
+    &:checked,
+    &[type="checkbox"]:indeterminate {
         background-color: var(--ui-input-check-checked-bg, #{vars.$input-check-checked-bg});
         border-color: var(--ui-input-border-color, #{vars.$input-check-checked-border-color});
         box-shadow: vars.$input-check-checked-box-shadow;
@@ -165,7 +173,8 @@
         background-color: Canvas;
         border-color: ButtonText;
 
-        &:checked {
+        &:checked,
+        &[type="checkbox"]:indeterminate {
             color: HighlightText;
             background-color: Highlight;
             border-color: Highlight;

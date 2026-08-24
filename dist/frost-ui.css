@@ -2281,6 +2281,7 @@ progress {
   box-shadow: var(--ui-btn-focus-box-shadow), var(--ui-btn-box-shadow);
 }
 
+.btn-check:disabled + .btn,
 .btn:disabled,
 .btn.disabled,
 fieldset:disabled .btn {
@@ -5263,10 +5264,16 @@ fieldset:disabled .btn {
   border-radius: var(--ui-border-radius-sm);
 }
 .input-check[type=checkbox]::before {
+  inset: calc(var(--ui-border-width) * -1);
   width: 1.125em;
   height: 1.125em;
   mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+  mask-repeat: no-repeat;
+  mask-position: center;
   mask-size: 1.125em;
+}
+.input-check[type=checkbox]:indeterminate::before {
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
 }
 .input-check[type=radio] {
   border-radius: 50%;
@@ -5276,12 +5283,12 @@ fieldset:disabled .btn {
   height: 0.5625em;
   border-radius: 50%;
 }
-.input-check:checked {
+.input-check:checked, .input-check[type=checkbox]:indeterminate {
   background-color: var(--ui-input-check-checked-bg, var(--ui-primary));
   border-color: var(--ui-input-border-color, var(--ui-primary));
   box-shadow: var(--ui-shadow-sm);
 }
-.input-check:checked::before {
+.input-check:checked::before, .input-check[type=checkbox]:indeterminate::before {
   opacity: 1;
   scale: 1;
 }
@@ -5357,7 +5364,7 @@ fieldset:disabled .btn {
     background-color: Canvas;
     border-color: ButtonText;
   }
-  .input-check:checked {
+  .input-check:checked, .input-check[type=checkbox]:indeterminate {
     color: HighlightText;
     background-color: Highlight;
     border-color: Highlight;

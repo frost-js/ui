@@ -28,7 +28,6 @@ const navigation = [
             ['Floating labels', 'form/floating-label.html'],
             ['Form layout', 'form/layout.html'],
             ['Validation', 'form/validation.html'],
-            ['Check validation', 'form/check-validation.html'],
             ['Range controls', 'form/range.html'],
         ],
     },
@@ -123,10 +122,13 @@ const descriptions = {
     'content/figure.html': 'Keep media and its caption together, then adjust alignment with text utilities.',
     'content/image.html': 'Make images responsive and apply thumbnail, float, and alignment treatments.',
     'content/table.html': 'Present structured data with responsive wrappers, row states, and semantic variants.',
+    'form/check.html': 'Compare checkboxes, radios, switches, inline controls, and button toggles across their native states.',
     'form/floating-label.html': 'Compare floating labels across filled and outline controls, sizes, and input groups.',
     'form/input-group.html': 'Compose filled and outline controls with text, selections, buttons, and responsive sizes.',
     'form/input.html': 'Compare filled and outline controls across input types, sizes, and interaction states.',
-    'form/validation.html': 'Apply clear success and error states to filled and outline form controls.',
+    'form/layout.html': 'Compose practical stacked, responsive, horizontal, and inline forms with the grid and spacing utilities.',
+    'form/range.html': 'Review range controls with native limits, steps, disabled states, and responsive compositions.',
+    'form/validation.html': 'Apply clear success and error states to filled, outline, and selection controls.',
     'layout/grid.html': 'Combine responsive rows and columns to build layouts that adapt across breakpoints.',
 };
 
@@ -263,6 +265,9 @@ $.ready(() => {
 
     $(document.body).prepend(navigationElements);
     $('[data-demo-theme]').addEvent('click', toggleTheme);
+    $('[data-demo-indeterminate]').each((node) => {
+        node.indeterminate = true;
+    });
     setTheme(document.documentElement.dataset.uiTheme);
 
     if (!example && path !== 'index.html') {

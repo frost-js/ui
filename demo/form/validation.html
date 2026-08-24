@@ -21,136 +21,184 @@
             <button class="nav-link" id="outlineValidationTab" data-ui-toggle="tab" data-ui-target="#outlineValidation" type="button" role="tab" aria-controls="outlineValidation" aria-selected="false">Outline</button>
         </nav>
 
-        <form class="tab-content">
-            <div class="tab-pane active" id="filledValidation" role="tabpanel" aria-labelledby="filledValidationTab">
-                <section class="mb-5">
-                    <header class="border-bottom pb-3 mb-4">
-                        <h2 class="h4 mb-1">Valid filled controls</h2>
-                        <p class="text-body-secondary mb-2">Apply the validation state to a parent containing the control and its feedback.</p>
-                        <code>.form-success .input-filled .valid-feedback</code>
-                    </header>
-                    <div class="form-success row g-3">
-                        <div class="col-md-6">
-                            <label for="filledValidEmail">Email</label>
-                            <div class="form-input"><input class="input-filled" id="filledValidEmail" type="email" value="hello@example.com" /></div>
-                            <div class="valid-feedback">This address is available.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-input">
-                                <input class="input-filled input-floating" id="filledValidName" type="text" value="Ada Lovelace" placeholder="Name" />
-                                <label class="label-floating" for="filledValidName">Name</label>
+        <form>
+            <div class="tab-content">
+                <div class="tab-pane active" id="filledValidation" role="tabpanel" aria-labelledby="filledValidationTab">
+                    <section class="mb-5">
+                        <header class="border-bottom pb-3 mb-4">
+                            <h2 class="h4 mb-1">Valid filled controls</h2>
+                            <p class="text-body-secondary mb-2">Apply the validation state to a parent containing the control and its feedback.</p>
+                            <code>.form-success .input-filled .valid-feedback</code>
+                        </header>
+                        <div class="form-success row g-3">
+                            <div class="col-md-6">
+                                <label for="filledValidEmail">Email</label>
+                                <div class="form-input"><input class="input-filled" id="filledValidEmail" type="email" value="hello@example.com" /></div>
+                                <div class="valid-feedback">This address is available.</div>
                             </div>
-                            <div class="valid-feedback">Name looks good.</div>
-                        </div>
-                        <div class="col-12">
-                            <label for="filledValidCode">Invite code</label>
-                            <div class="input-group">
-                                <div class="input-group-text">TEAM-</div>
-                                <input class="input-filled" id="filledValidCode" type="text" value="2048" />
+                            <div class="col-md-6">
+                                <div class="form-input">
+                                    <input class="input-filled input-floating" id="filledValidName" type="text" value="Ada Lovelace" placeholder="Name" />
+                                    <label class="label-floating" for="filledValidName">Name</label>
+                                </div>
+                                <div class="valid-feedback">Name looks good.</div>
                             </div>
-                            <div class="valid-feedback">Invite code accepted.</div>
+                            <div class="col-12">
+                                <label for="filledValidCode">Invite code</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">TEAM-</div>
+                                    <input class="input-filled" id="filledValidCode" type="text" value="2048" />
+                                </div>
+                                <div class="valid-feedback">Invite code accepted.</div>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                <section class="mb-5">
-                    <header class="border-bottom pb-3 mb-4">
-                        <h2 class="h4 mb-1">Invalid filled controls</h2>
-                        <p class="text-body-secondary mb-2">Error feedback should identify the problem and explain how to resolve it.</p>
-                        <code>.form-error .input-filled .invalid-feedback</code>
-                    </header>
-                    <div class="form-error row g-3">
-                        <div class="col-md-6">
-                            <label for="filledInvalidEmail">Email</label>
-                            <div class="form-input"><input class="input-filled" id="filledInvalidEmail" type="email" value="hello@" /></div>
-                            <div class="invalid-feedback">Enter a complete email address.</div>
+                    <section class="mb-5">
+                        <header class="border-bottom pb-3 mb-4">
+                            <h2 class="h4 mb-1">Invalid filled controls</h2>
+                            <p class="text-body-secondary mb-2">Error feedback should identify the problem and explain how to resolve it.</p>
+                            <code>.form-error .input-filled .invalid-feedback</code>
+                        </header>
+                        <div class="form-error row g-3">
+                            <div class="col-md-6">
+                                <label for="filledInvalidEmail">Email</label>
+                                <div class="form-input"><input class="input-filled" id="filledInvalidEmail" type="email" value="hello@" /></div>
+                                <div class="invalid-feedback">Enter a complete email address.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="filledInvalidTeam">Team</label>
+                                <div class="form-input">
+                                    <select class="input-filled" id="filledInvalidTeam">
+                                        <option selected disabled>Select a team</option>
+                                        <option>Design</option>
+                                        <option>Engineering</option>
+                                    </select>
+                                </div>
+                                <div class="invalid-feedback">Choose a team.</div>
+                            </div>
+                            <div class="col-12">
+                                <label for="filledInvalidCode">Invite code</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">TEAM-</div>
+                                    <input class="input-filled" id="filledInvalidCode" type="text" value="20" />
+                                </div>
+                                <div class="invalid-feedback">Enter a four-digit invite code.</div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="filledInvalidTeam">Team</label>
-                            <div class="form-input">
-                                <select class="input-filled" id="filledInvalidTeam">
+                    </section>
+                </div>
+
+                <div class="tab-pane" id="outlineValidation" role="tabpanel" aria-labelledby="outlineValidationTab">
+                    <section class="mb-5">
+                        <header class="border-bottom pb-3 mb-4">
+                            <h2 class="h4 mb-1">Valid outline controls</h2>
+                            <p class="text-body-secondary mb-2">Validation state updates the outline, label, and feedback together.</p>
+                            <code>.form-success .input-outline .valid-feedback</code>
+                        </header>
+                        <div class="form-success row g-3">
+                            <div class="col-md-6">
+                                <label for="outlineValidEmail">Email</label>
+                                <input class="input-outline" id="outlineValidEmail" type="email" value="hello@example.com" />
+                                <div class="valid-feedback">This address is available.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-input">
+                                    <input class="input-outline input-floating" id="outlineValidName" type="text" value="Ada Lovelace" placeholder="Name" />
+                                    <label class="label-floating" for="outlineValidName">Name</label>
+                                </div>
+                                <div class="valid-feedback">Name looks good.</div>
+                            </div>
+                            <div class="col-12">
+                                <label for="outlineValidCode">Invite code</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">TEAM-</div>
+                                    <input class="input-outline" id="outlineValidCode" type="text" value="2048" />
+                                </div>
+                                <div class="valid-feedback">Invite code accepted.</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <header class="border-bottom pb-3 mb-4">
+                            <h2 class="h4 mb-1">Invalid outline controls</h2>
+                            <p class="text-body-secondary mb-2">Use the same parent state and feedback structure with outlined inputs.</p>
+                            <code>.form-error .input-outline .invalid-feedback</code>
+                        </header>
+                        <div class="form-error row g-3">
+                            <div class="col-md-6">
+                                <label for="outlineInvalidEmail">Email</label>
+                                <input class="input-outline" id="outlineInvalidEmail" type="email" value="hello@" />
+                                <div class="invalid-feedback">Enter a complete email address.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="outlineInvalidTeam">Team</label>
+                                <select class="input-outline" id="outlineInvalidTeam">
                                     <option selected disabled>Select a team</option>
                                     <option>Design</option>
                                     <option>Engineering</option>
                                 </select>
+                                <div class="invalid-feedback">Choose a team.</div>
                             </div>
-                            <div class="invalid-feedback">Choose a team.</div>
-                        </div>
-                        <div class="col-12">
-                            <label for="filledInvalidCode">Invite code</label>
-                            <div class="input-group">
-                                <div class="input-group-text">TEAM-</div>
-                                <input class="input-filled" id="filledInvalidCode" type="text" value="20" />
+                            <div class="col-12">
+                                <label for="outlineInvalidCode">Invite code</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">TEAM-</div>
+                                    <input class="input-outline" id="outlineInvalidCode" type="text" value="20" />
+                                </div>
+                                <div class="invalid-feedback">Enter a four-digit invite code.</div>
                             </div>
-                            <div class="invalid-feedback">Enter a four-digit invite code.</div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
 
-            <div class="tab-pane" id="outlineValidation" role="tabpanel" aria-labelledby="outlineValidationTab">
-                <section class="mb-5">
-                    <header class="border-bottom pb-3 mb-4">
-                        <h2 class="h4 mb-1">Valid outline controls</h2>
-                        <p class="text-body-secondary mb-2">Validation state updates the outline, label, and feedback together.</p>
-                        <code>.form-success .input-outline .valid-feedback</code>
-                    </header>
-                    <div class="form-success row g-3">
-                        <div class="col-md-6">
-                            <label for="outlineValidEmail">Email</label>
-                            <input class="input-outline" id="outlineValidEmail" type="email" value="hello@example.com" />
-                            <div class="valid-feedback">This address is available.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-input">
-                                <input class="input-outline input-floating" id="outlineValidName" type="text" value="Ada Lovelace" placeholder="Name" />
-                                <label class="label-floating" for="outlineValidName">Name</label>
+            <section class="mb-5">
+                <header class="border-bottom pb-3 mb-4">
+                    <h2 class="h4 mb-1">Checks, radios, and switches</h2>
+                    <p class="text-body-secondary mb-2">Validation state also updates selection controls, their labels, and associated feedback.</p>
+                    <code>.form-success</code> <code>.form-error</code>
+                </header>
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="form-success border rounded-3 p-4 h-100">
+                            <h3 class="h5">Valid selection</h3>
+                            <div class="form-check">
+                                <input class="input-check" id="validTerms" type="checkbox" checked aria-describedby="validSelectionFeedback" />
+                                <label class="form-check-label" for="validTerms">Terms accepted</label>
                             </div>
-                            <div class="valid-feedback">Name looks good.</div>
-                        </div>
-                        <div class="col-12">
-                            <label for="outlineValidCode">Invite code</label>
-                            <div class="input-group">
-                                <div class="input-group-text">TEAM-</div>
-                                <input class="input-outline" id="outlineValidCode" type="text" value="2048" />
+                            <div class="form-check">
+                                <input class="input-check" id="validEmailUpdates" name="validUpdates" type="radio" checked />
+                                <label class="form-check-label" for="validEmailUpdates">Email updates</label>
                             </div>
-                            <div class="valid-feedback">Invite code accepted.</div>
+                            <div class="form-check form-switch">
+                                <input class="input-check" id="validSecurityAlerts" type="checkbox" role="switch" checked />
+                                <label class="form-check-label" for="validSecurityAlerts">Security alerts enabled</label>
+                            </div>
+                            <div class="valid-feedback" id="validSelectionFeedback">Preferences are ready to save.</div>
                         </div>
                     </div>
-                </section>
-
-                <section class="mb-5">
-                    <header class="border-bottom pb-3 mb-4">
-                        <h2 class="h4 mb-1">Invalid outline controls</h2>
-                        <p class="text-body-secondary mb-2">Use the same parent state and feedback structure with outlined inputs.</p>
-                        <code>.form-error .input-outline .invalid-feedback</code>
-                    </header>
-                    <div class="form-error row g-3">
-                        <div class="col-md-6">
-                            <label for="outlineInvalidEmail">Email</label>
-                            <input class="input-outline" id="outlineInvalidEmail" type="email" value="hello@" />
-                            <div class="invalid-feedback">Enter a complete email address.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="outlineInvalidTeam">Team</label>
-                            <select class="input-outline" id="outlineInvalidTeam">
-                                <option selected disabled>Select a team</option>
-                                <option>Design</option>
-                                <option>Engineering</option>
-                            </select>
-                            <div class="invalid-feedback">Choose a team.</div>
-                        </div>
-                        <div class="col-12">
-                            <label for="outlineInvalidCode">Invite code</label>
-                            <div class="input-group">
-                                <div class="input-group-text">TEAM-</div>
-                                <input class="input-outline" id="outlineInvalidCode" type="text" value="20" />
+                    <div class="col-lg-6">
+                        <div class="form-error border rounded-3 p-4 h-100">
+                            <h3 class="h5">Invalid selection</h3>
+                            <div class="form-check">
+                                <input class="input-check" id="invalidTerms" type="checkbox" aria-describedby="invalidSelectionFeedback" />
+                                <label class="form-check-label" for="invalidTerms">Accept the terms</label>
                             </div>
-                            <div class="invalid-feedback">Enter a four-digit invite code.</div>
+                            <div class="form-check">
+                                <input class="input-check" id="invalidEmailUpdates" name="invalidUpdates" type="radio" />
+                                <label class="form-check-label" for="invalidEmailUpdates">Email updates</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="input-check" id="invalidSecurityAlerts" type="checkbox" role="switch" />
+                                <label class="form-check-label" for="invalidSecurityAlerts">Security alerts disabled</label>
+                            </div>
+                            <div class="invalid-feedback" id="invalidSelectionFeedback">Accept the terms before continuing.</div>
                         </div>
                     </div>
-                </section>
-            </div>
+                </div>
+            </section>
         </form>
     </div>
 </body>

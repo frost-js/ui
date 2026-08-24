@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Form Layouts</title>
+    <title>Form Layout</title>
     <link rel="stylesheet" href="../../dist/frost-ui.css" />
     <link rel="stylesheet" href="../assets/demo.css" />
     <script src="../../dist/frost-ui-bundle.js"></script>
@@ -14,199 +14,160 @@
 
 <body>
     <div class="container">
-        <h1>Form Layouts</h1>
-        <div class="mb-4">
-            <form>
-                <div class="mb-4">
-                    <label for="input1">Label</label>
-                    <div class="form-input">
-                        <input class="input-filled" id="input1" type="text" placeholder="Placeholder" />
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <label for="input2">Label</label>
-                    <div class="form-input">
-                        <input class="input-filled" id="input2" type="text" placeholder="Placeholder" />
-                    </div>
-                </div>
-            </form>
-        </div>
+        <h1>Form Layout</h1>
 
-        <h4>Grid</h4>
-        <div class="mb-4">
-            <form>
-                <div class="row mb-4">
-                    <div class="col">
-                        <div class="form-input">
-                            <input class="input-filled" placeholder="Placeholder" type="text" aria-label="Label" />
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-input">
-                            <input class="input-filled" placeholder="Placeholder" type="text" aria-label="Label" />
-                        </div>
-                    </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Stacked form</h2>
+                <p class="text-body-secondary mb-2">Block controls and spacing utilities create a clear single-column form.</p>
+                <code>.mb-3</code> <code>.form-text</code>
+            </header>
+            <form class="col-lg-7">
+                <div class="mb-3">
+                    <label for="stackedEmail">Email address</label>
+                    <input class="input-outline" id="stackedEmail" type="email" placeholder="you@example.com" aria-describedby="stackedEmailHelp" />
+                    <div class="form-text" id="stackedEmailHelp">We will only use this address for account notifications.</div>
                 </div>
+                <div class="mb-3">
+                    <label for="stackedMessage">Message</label>
+                    <textarea class="input-outline text-expand" id="stackedMessage" placeholder="How can we help?"></textarea>
+                </div>
+                <div class="form-check mb-4">
+                    <input class="input-check" id="stackedCopy" type="checkbox" checked />
+                    <label class="form-check-label" for="stackedCopy">Send me a copy</label>
+                </div>
+                <button class="btn btn-primary ripple" type="submit">Send message</button>
             </form>
-        </div>
+        </section>
 
-        <h4>Columns</h4>
-        <div class="mb-4">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Responsive grid</h2>
+                <p class="text-body-secondary mb-2">Grid columns stack on narrow screens and align related fields at larger breakpoints.</p>
+                <code>.row .g-3 .col-md-*</code>
+            </header>
             <form>
-                <div class="row mb-4">
+                <div class="row g-3">
                     <div class="col-md-6">
-                        <label for="columnInput1">Label</label>
+                        <label for="gridFirstName">First name</label>
                         <div class="form-input">
-                            <input class="input-filled" id="columnInput1" type="text" placeholder="Placeholder" />
+                            <input class="input-filled" id="gridFirstName" type="text" autocomplete="given-name" />
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label for="columnInput2">Label</label>
+                        <label for="gridLastName">Last name</label>
                         <div class="form-input">
-                            <input class="input-filled" id="columnInput2" type="text" placeholder="Placeholder" />
+                            <input class="input-filled" id="gridLastName" type="text" autocomplete="family-name" />
                         </div>
                     </div>
-                </div>
-                <div class="mb-4">
-                    <label for="columnInput3">Label</label>
-                    <div class="form-input">
-                        <textarea class="input-filled" id="columnInput3" placeholder="Placeholder"></textarea>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <label for="columnInput4">Label</label>
+                    <div class="col-12">
+                        <label for="gridAddress">Address</label>
                         <div class="form-input">
-                            <input class="input-filled" id="columnInput4" type="text" placeholder="Placeholder" />
+                            <input class="input-filled" id="gridAddress" type="text" autocomplete="street-address" />
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="gridCity">City</label>
+                        <div class="form-input">
+                            <input class="input-filled" id="gridCity" type="text" autocomplete="address-level2" />
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <label for="columnInput5">Label</label>
+                        <label for="gridState">State</label>
                         <div class="form-input">
-                            <select class="input-filled" id="columnInput5">
-                                <option>Option 1</option>
-                                <option>Option 2</option>
-                                <option>Option 3</option>
-                                <option>Option 4</option>
-                                <option>Option 5</option>
-                                <option>Option 6</option>
+                            <select class="input-filled" id="gridState" autocomplete="address-level1">
+                                <option>Queensland</option>
+                                <option>New South Wales</option>
+                                <option>Victoria</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <label for="columnInput6">Label</label>
+                    <div class="col-md-3">
+                        <label for="gridPostcode">Postcode</label>
                         <div class="form-input">
-                            <input class="input-filled" id="columnInput6" type="text" placeholder="Placeholder" />
+                            <input class="input-filled" id="gridPostcode" type="text" autocomplete="postal-code" inputmode="numeric" />
                         </div>
                     </div>
-                </div>
-                <div class="mb-4">
-                    <div class="form-check">
-                        <input class="input-check" id="columnInput7" type="checkbox" />
-                        <label class="form-check-label" for="columnInput7">Option</label>
+                    <div class="col-12">
+                        <button class="btn btn-primary ripple" type="submit">Save address</button>
                     </div>
                 </div>
             </form>
-        </div>
+        </section>
 
-        <h4>Horizontal</h4>
-        <div class="mb-4">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Horizontal form</h2>
+                <p class="text-body-secondary mb-2">Column labels align with their controls while returning to a natural stack on small screens.</p>
+                <code>.row .col-sm-* .col-label</code>
+            </header>
             <form>
-                <div class="row mb-4">
-                    <label class="col-sm-2 col-label" for="horizontalInput1">Label</label>
-                    <div class="col-sm-10">
-                        <input class="input-plain-text" id="horizontalInput1" type="text" placeholder="Placeholder" readonly />
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-label" for="horizontalAccount">Account</label>
+                    <div class="col-sm-9">
+                        <input class="input-plain-text" id="horizontalAccount" type="text" value="ada@example.com" readonly />
                     </div>
                 </div>
-                <div class="row mb-4">
-                    <label class="col-sm-2 col-label" for="horizontalInput1">Label</label>
-                    <div class="col-sm-10">
-                        <div class="form-input">
-                            <input class="input-filled" id="horizontalInput1" type="text" placeholder="Placeholder" />
+                <div class="row mb-3">
+                    <label class="col-sm-3 col-label" for="horizontalRole">Role</label>
+                    <div class="col-sm-9">
+                        <select class="input-outline" id="horizontalRole">
+                            <option>Designer</option>
+                            <option>Engineer</option>
+                            <option>Manager</option>
+                        </select>
+                    </div>
+                </div>
+                <fieldset class="row mb-3">
+                    <legend class="col-sm-3 col-label pt-0">Access</legend>
+                    <div class="col-sm-9">
+                        <div class="form-check">
+                            <input class="input-check" id="horizontalStandard" name="horizontalAccess" type="radio" checked />
+                            <label class="form-check-label" for="horizontalStandard">Standard access</label>
                         </div>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <label class="col-sm-2 col-label" for="horizontalInput2">Label</label>
-                    <div class="col-sm-10">
-                        <div class="form-input">
-                            <textarea class="input-filled" id="horizontalInput2" placeholder="Placeholder"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <fieldset class="mb-4">
-                    <div class="row">
-                        <legend class="col-sm-2 col-label pt-0">Label</legend>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input class="input-check" id="horizontalRadioChecked" name="horizontalRadio" type="radio" checked />
-                                <label class="form-check-label" for="horizontalRadioChecked">Selected</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="input-check" id="horizontalRadioDefault" name="horizontalRadio" type="radio" />
-                                <label class="form-check-label" for="horizontalRadioDefault">Option</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="input-check" id="horizontalRadioDisabled" name="horizontalRadio" type="radio" disabled />
-                                <label class="form-check-label" for="horizontalRadioDisabled">Disabled</label>
-                            </div>
+                        <div class="form-check">
+                            <input class="input-check" id="horizontalAdmin" name="horizontalAccess" type="radio" />
+                            <label class="form-check-label" for="horizontalAdmin">Administrator access</label>
                         </div>
                     </div>
                 </fieldset>
-                <div class="row mb-4">
-                    <div class="col-sm-2 col-label">Label</div>
-                    <div class="col-sm-10">
-                        <div class="form-check">
-                            <input class="input-check" id="horizontalCheck" type="checkbox" />
-                            <label class="form-check-label" for="horizontalCheck">Option</label>
-                        </div>
+                <div class="row">
+                    <div class="col-sm-9 offset-sm-3">
+                        <button class="btn btn-primary ripple" type="submit">Update member</button>
                     </div>
                 </div>
             </form>
-        </div>
+        </section>
 
-        <h4>Inline</h4>
-        <div class="mb-4">
-            <form class="row row-cols-lg-auto g-3 align-items-center">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Inline form</h2>
+                <p class="text-body-secondary mb-2">Responsive row columns keep a compact filter form inline when space allows.</p>
+                <code>.row .row-cols-lg-auto .g-3 .align-items-end</code>
+            </header>
+            <form class="row row-cols-lg-auto g-3 align-items-end">
                 <div class="col-12">
-                    <label class="visually-hidden" for="inlineInput1">Label</label>
-                    <div class="form-input">
-                        <input class="input-filled me-sm-2" id="inlineInput1" type="text" placeholder="Placeholder" />
-                    </div>
+                    <label for="inlineKeyword">Keyword</label>
+                    <input class="input-outline" id="inlineKeyword" type="search" placeholder="Search projects" />
                 </div>
                 <div class="col-12">
-                    <label class="visually-hidden" for="inlineInput2">Label</label>
-                    <div class="input-group me-sm-2">
+                    <label for="inlineOwner">Owner</label>
+                    <div class="input-group">
                         <div class="input-group-text">@</div>
-                        <div class="form-input">
-                            <input class="input-filled" id="inlineInput2" type="text" placeholder="Placeholder" />
-                        </div>
+                        <input class="input-outline" id="inlineOwner" type="text" placeholder="username" />
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-check">
-                        <input class="input-check" id="inlineCheck" type="checkbox" />
-                        <label class="form-check-label" for="inlineCheck">Option</label>
+                        <input class="input-check" id="inlineArchived" type="checkbox" />
+                        <label class="form-check-label" for="inlineArchived">Include archived</label>
                     </div>
                 </div>
                 <div class="col-12">
-                    <button class="btn btn-primary ripple" type="submit">Submit</button>
+                    <button class="btn btn-primary ripple" type="submit">Apply filters</button>
                 </div>
             </form>
-        </div>
-
-        <h4>Help Text</h4>
-        <div class="mb-4">
-            <form>
-                <div class="mb-4">
-                    <label for="helpInput">Label</label>
-                    <div class="form-input">
-                        <input class="input-filled" id="helpInput" type="text" placeholder="Placeholder" />
-                    </div>
-                    <small class="form-text text-body-secondary">This is help text for the form.</small>
-                </div>
-            </form>
-        </div>
+        </section>
     </div>
 </body>
 

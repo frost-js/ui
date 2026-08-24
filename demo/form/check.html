@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Checkboxes</title>
+    <title>Checks and Radios</title>
     <link rel="stylesheet" href="../../dist/frost-ui.css" />
     <link rel="stylesheet" href="../assets/demo.css" />
     <script src="../../dist/frost-ui-bundle.js"></script>
@@ -14,110 +14,155 @@
 
 <body>
     <div class="container">
+        <h1>Checks and Radios</h1>
+
         <form>
-            <h1>Checkboxes</h1>
-            <div class="mb-4">
-                <div class="form-check">
-                    <input class="input-check" id="flexCheckChecked" type="checkbox" checked />
-                    <label class="form-check-label" for="flexCheckChecked">Checked</label>
+            <section class="mb-5">
+                <header class="border-bottom pb-3 mb-4">
+                    <h2 class="h4 mb-1">Checkboxes</h2>
+                    <p class="text-body-secondary mb-2">Checkboxes support unchecked, checked, indeterminate, and disabled states.</p>
+                    <code>.form-check .input-check</code>
+                </header>
+                <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="form-check">
+                            <input class="input-check" id="checkDefault" type="checkbox" />
+                            <label class="form-check-label" for="checkDefault">Unchecked</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="form-check">
+                            <input class="input-check" id="checkSelected" type="checkbox" checked />
+                            <label class="form-check-label" for="checkSelected">Checked</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="form-check">
+                            <input class="input-check" id="checkMixed" data-demo-indeterminate type="checkbox" />
+                            <label class="form-check-label" for="checkMixed">Indeterminate</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="form-check">
+                            <input class="input-check" id="checkDisabled" type="checkbox" checked disabled />
+                            <label class="form-check-label" for="checkDisabled">Disabled</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="input-check" id="flexCheckDefault" type="checkbox" />
-                    <label class="form-check-label" for="flexCheckDefault">Option</label>
-                </div>
-                <div class="form-check">
-                    <input class="input-check" id="flexCheckDisabled" type="checkbox" disabled />
-                    <label class="form-check-label" for="flexCheckDisabled">Disabled</label>
-                </div>
-            </div>
+            </section>
 
-            <h4>Radio</h4>
-            <div class="mb-4">
-                <div class="form-check">
-                    <input class="input-check" id="flexRadioChecked" name="flexRadioDefault" type="radio" checked />
-                    <label class="form-check-label" for="flexRadioChecked">Checked</label>
-                </div>
-                <div class="form-check">
-                    <input class="input-check" id="flexRadioDefault" name="flexRadioDefault" type="radio" />
-                    <label class="form-check-label" for="flexRadioDefault">Option</label>
-                </div>
-                <div class="form-check">
-                    <input class="input-check" id="flexRadioDisabled" name="flexRadioDefault" type="radio" disabled />
-                    <label class="form-check-label" for="flexRadioDisabled">Disabled</label>
-                </div>
-            </div>
+            <section class="mb-5">
+                <header class="border-bottom pb-3 mb-4">
+                    <h2 class="h4 mb-1">Radio groups</h2>
+                    <p class="text-body-secondary mb-2">Radio controls share a name when exactly one option can be selected.</p>
+                    <code>.form-check input[type="radio"].input-check</code>
+                </header>
+                <fieldset>
+                    <legend class="h6">Notification frequency</legend>
+                    <div class="form-check">
+                        <input class="input-check" id="radioDaily" name="notificationFrequency" type="radio" checked />
+                        <label class="form-check-label" for="radioDaily">Daily summary</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="input-check" id="radioWeekly" name="notificationFrequency" type="radio" />
+                        <label class="form-check-label" for="radioWeekly">Weekly summary</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="input-check" id="radioNever" name="notificationFrequency" type="radio" disabled />
+                        <label class="form-check-label" for="radioNever">Never available</label>
+                    </div>
+                </fieldset>
+            </section>
 
-            <h4>Switch</h4>
-            <div class="mb-4">
-                <div class="form-check form-switch">
-                    <input class="input-check" id="flexSwitchChecked" type="checkbox" role="switch" checked />
-                    <label class="form-check-label" for="flexSwitchChecked">Checked</label>
+            <section class="mb-5">
+                <header class="border-bottom pb-3 mb-4">
+                    <h2 class="h4 mb-1">Switches</h2>
+                    <p class="text-body-secondary mb-2">Switches present checkbox behavior as an immediate on-or-off setting.</p>
+                    <code>.form-check.form-switch</code>
+                </header>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="form-check form-switch">
+                            <input class="input-check" id="switchMessages" type="checkbox" role="switch" checked />
+                            <label class="form-check-label" for="switchMessages">Messages</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check form-switch">
+                            <input class="input-check" id="switchUpdates" type="checkbox" role="switch" />
+                            <label class="form-check-label" for="switchUpdates">Product updates</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check form-switch">
+                            <input class="input-check" id="switchDisabled" type="checkbox" role="switch" disabled />
+                            <label class="form-check-label" for="switchDisabled">Disabled</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-check form-switch">
-                    <input class="input-check" id="flexSwitchDefault" type="checkbox" role="switch" />
-                    <label class="form-check-label" for="flexSwitchDefault">Option</label>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="input-check" id="flexSwitchDisabled" type="checkbox" role="switch" disabled />
-                    <label class="form-check-label" for="flexSwitchDisabled">Disabled</label>
-                </div>
-            </div>
+            </section>
 
-            <h4>Inline</h4>
-            <div class="mb-4">
-                <div class="form-check form-check-inline">
-                    <input class="input-check" id="inlineCheckChecked" type="checkbox" checked />
-                    <label class="form-check-label" for="inlineCheckChecked">Checked</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="input-check" id="inlineCheckDefault" type="checkbox" />
-                    <label class="form-check-label" for="inlineCheckDefault">Option</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="input-check" id="inlineCheckDisabled" type="checkbox" disabled />
-                    <label class="form-check-label" for="inlineCheckDisabled">Disabled</label>
-                </div>
-            </div>
-            <div class="mb-4">
-                <div class="form-check form-check-inline">
-                    <input class="input-check" id="inlineRadioChecked" name="inlineRadioDefault" type="radio" checked />
-                    <label class="form-check-label" for="inlineRadioChecked">Checked</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="input-check" id="inlineRadioDefault" name="inlineRadioDefault" type="radio" />
-                    <label class="form-check-label" for="inlineRadioDefault">Option</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="input-check" id="inlineRadioDisabled" name="inlineRadioDefault" type="radio" disabled />
-                    <label class="form-check-label" for="inlineRadioDisabled">Disabled</label>
-                </div>
-            </div>
+            <section class="mb-5">
+                <header class="border-bottom pb-3 mb-4">
+                    <h2 class="h4 mb-1">Inline controls</h2>
+                    <p class="text-body-secondary mb-2">Use the inline modifier for short option sets that fit comfortably on one line.</p>
+                    <code>.form-check-inline</code>
+                </header>
+                <fieldset class="mb-4">
+                    <legend class="h6">Topics</legend>
+                    <div class="form-check form-check-inline">
+                        <input class="input-check" id="inlineDesign" type="checkbox" checked />
+                        <label class="form-check-label" for="inlineDesign">Design</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="input-check" id="inlineEngineering" type="checkbox" />
+                        <label class="form-check-label" for="inlineEngineering">Engineering</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="input-check" id="inlineResearch" type="checkbox" />
+                        <label class="form-check-label" for="inlineResearch">Research</label>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend class="h6">Visibility</legend>
+                    <div class="form-check form-check-inline">
+                        <input class="input-check" id="inlinePublic" name="visibility" type="radio" checked />
+                        <label class="form-check-label" for="inlinePublic">Public</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="input-check" id="inlinePrivate" name="visibility" type="radio" />
+                        <label class="form-check-label" for="inlinePrivate">Private</label>
+                    </div>
+                </fieldset>
+            </section>
 
-            <h4>Buttons</h4>
-            <div class="mb-4">
-                <input class="btn-check" id="buttonCheck" type="checkbox" checked />
-                <label class="btn btn-secondary" for="buttonCheck" role="button">Checked</label>
-            </div>
-            <div class="mb-4">
-                <input class="btn-check" id="buttonCheckDefault" type="checkbox" checked />
-                <label class="btn" for="buttonCheckDefault" role="button">Checked</label>
-            </div>
-            <div class="mb-4">
-                <input class="btn-check" id="buttonCheckOutline" type="checkbox" />
-                <label class="btn btn-outline-secondary" for="buttonCheckOutline" role="button">Checked</label>
-            </div>
-            <div class="mb-4">
-                <div class="btn-group">
-                    <input class="btn-check" id="buttonRadioChecked" name="buttonRadioDefault" type="radio" checked />
-                    <label class="btn btn-secondary" for="buttonRadioChecked" role="button">Checked</label>
+            <section class="mb-5">
+                <header class="border-bottom pb-3 mb-4">
+                    <h2 class="h4 mb-1">Toggle buttons</h2>
+                    <p class="text-body-secondary mb-2">Visually hidden check and radio inputs can control adjacent button labels.</p>
+                    <code>.btn-check + .btn</code>
+                </header>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    <input class="btn-check" id="toggleBold" type="checkbox" checked />
+                    <label class="btn btn-secondary" for="toggleBold">Bold</label>
 
-                    <input class="btn-check" id="buttonRadioDefault" name="buttonRadioDefault" type="radio" />
-                    <label class="btn btn-secondary" for="buttonRadioDefault" role="button">Option</label>
+                    <input class="btn-check" id="toggleItalic" type="checkbox" />
+                    <label class="btn btn-outline-secondary" for="toggleItalic">Italic</label>
 
-                    <input class="btn-check" id="buttonRadioDisabled" name="buttonRadioDefault" type="radio" disabled />
-                    <label class="btn btn-secondary disabled" for="buttonRadioDisabled" role="button">Disabled</label>
+                    <input class="btn-check" id="toggleDisabled" type="checkbox" disabled />
+                    <label class="btn btn-secondary" for="toggleDisabled">Disabled</label>
                 </div>
-            </div>
+                <div class="btn-group" role="group" aria-label="View density">
+                    <input class="btn-check" id="densityComfortable" name="density" type="radio" checked />
+                    <label class="btn btn-secondary" for="densityComfortable">Comfortable</label>
+
+                    <input class="btn-check" id="densityCompact" name="density" type="radio" />
+                    <label class="btn btn-secondary" for="densityCompact">Compact</label>
+
+                    <input class="btn-check" id="densityDense" name="density" type="radio" />
+                    <label class="btn btn-secondary" for="densityDense">Dense</label>
+                </div>
+            </section>
         </form>
     </div>
 </body>
