@@ -86,8 +86,7 @@
     transition-property: color, background-color, border-color, box-shadow;
     @include mixins.border-radius(var(--ui-carousel-control-border-radius));
 
-    &:hover,
-    &:focus-visible {
+    &:is(:hover, :focus-visible) {
         --ui-carousel-control-opacity: #{vars.$carousel-control-hover-opacity};
 
         box-shadow: var(--ui-carousel-control-hover-box-shadow);

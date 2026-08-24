@@ -38,13 +38,11 @@
         outline: 0;
     }
 
-    &:active,
-    &.active {
+    &:is(:active, .active) {
         z-index: 3;
     }
 
-    &:disabled,
-    &.disabled {
+    &:is(:disabled, .disabled) {
         pointer-events: none;
 
         &,
@@ -53,8 +51,7 @@
         }
     }
 
-    &[readonly],
-    &.readonly {
+    &:is([readonly], .readonly) {
         color: vars.$input-placeholder-color;
     }
 
@@ -142,8 +139,7 @@
         background-color: var(--ui-input-filled-hover-bg, #{vars.$input-filled-hover-bg});
     }
 
-    &:focus,
-    &.focus {
+    &:is(:focus, .focus) {
         --ui-input-filled-focus-line-size: 100% calc(#{vars.$input-border-width} * 2);
 
         background-color: var(--ui-input-filled-focus-bg, #{vars.$input-filled-focus-bg});
@@ -166,8 +162,7 @@
         border-color: vars.$input-outline-hover-border-color;
     }
 
-    &:focus,
-    &.focus {
+    &:is(:focus, .focus) {
         border-color: vars.$input-outline-focus-border-color;
         box-shadow: 0 0 0 vars.$input-outline-focus-shadow-width vars.$input-outline-focus-shadow-color;
     }

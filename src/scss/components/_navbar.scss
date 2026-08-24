@@ -66,8 +66,7 @@
     white-space: nowrap;
     text-decoration: none;
 
-    &:hover,
-    &:focus-visible {
+    &:is(:hover, :focus-visible) {
         color: var(--ui-navbar-brand-hover-color);
     }
 }

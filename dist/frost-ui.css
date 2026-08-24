@@ -1964,7 +1964,7 @@ progress {
 .accordion-button:not(.collapsed)::after {
   transform: var(--ui-accordion-icon-transform);
 }
-.accordion-button:not(.collapsed)::before, .accordion-button.collapsing::before {
+.accordion-button:is(:not(.collapsed), .collapsing)::before {
   position: absolute;
   inset-inline: 0;
   bottom: calc(var(--ui-accordion-border-width) * -1);
@@ -2557,16 +2557,10 @@ fieldset:disabled .btn {
 }
 .btn-group > .btn-check:checked + .btn,
 .btn-group > .btn-check:focus-visible + .btn,
-.btn-group > .btn:hover,
-.btn-group > .btn:focus-visible,
-.btn-group > .btn:active,
-.btn-group > .btn.active,
+.btn-group > .btn:is(:hover, :focus-visible, :active, .active),
 .btn-group-vertical > .btn-check:checked + .btn,
 .btn-group-vertical > .btn-check:focus-visible + .btn,
-.btn-group-vertical > .btn:hover,
-.btn-group-vertical > .btn:focus-visible,
-.btn-group-vertical > .btn:active,
-.btn-group-vertical > .btn.active {
+.btn-group-vertical > .btn:is(:hover, :focus-visible, :active, .active) {
   z-index: 1;
 }
 
@@ -2874,9 +2868,8 @@ fieldset:disabled .btn {
   transition-property: color, background-color, border-color, box-shadow;
   border-radius: var(--ui-carousel-control-border-radius);
 }
-.carousel-control-prev:hover, .carousel-control-prev:focus-visible,
-.carousel-control-next:hover,
-.carousel-control-next:focus-visible {
+.carousel-control-prev:is(:hover, :focus-visible),
+.carousel-control-next:is(:hover, :focus-visible) {
   --ui-carousel-control-opacity: 1;
   box-shadow: var(--ui-carousel-control-hover-box-shadow);
 }
@@ -3003,7 +2996,7 @@ fieldset:disabled .btn {
   box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
   opacity: var(--ui-btn-close-focus-opacity);
 }
-.btn-close.disabled, .btn-close:disabled {
+.btn-close:is(:disabled, .disabled) {
   pointer-events: none;
   -webkit-user-select: none;
   user-select: none;
@@ -3082,7 +3075,7 @@ fieldset:disabled .btn {
   transition-property: color, background-color, box-shadow;
   border-radius: var(--ui-border-radius);
 }
-.dropdown-item:hover, .dropdown-item:focus-visible {
+.dropdown-item:is(:hover, :focus-visible) {
   color: var(--ui-dropdown-link-hover-color);
   background-color: var(--ui-dropdown-link-hover-bg);
 }
@@ -3095,7 +3088,7 @@ fieldset:disabled .btn {
   color: var(--ui-dropdown-link-active-color);
   background-color: var(--ui-dropdown-link-active-bg);
 }
-.dropdown-item:disabled, .dropdown-item.disabled {
+.dropdown-item:is(:disabled, .disabled) {
   color: var(--ui-dropdown-link-disabled-color);
   pointer-events: none;
   background-color: transparent;
@@ -3230,7 +3223,7 @@ fieldset:disabled .btn {
   color: var(--ui-list-group-action-color);
   text-align: inherit;
 }
-.list-group-item-action:hover, .list-group-item-action:focus-visible {
+.list-group-item-action:is(:hover, :focus-visible) {
   z-index: 1;
   color: var(--ui-list-group-action-hover-color);
   text-decoration: none;
@@ -3258,7 +3251,7 @@ fieldset:disabled .btn {
   border-bottom-right-radius: inherit;
   border-bottom-left-radius: inherit;
 }
-.list-group-item:disabled, .list-group-item.disabled {
+.list-group-item:is(:disabled, .disabled) {
   color: var(--ui-list-group-item-disabled-color);
   pointer-events: none;
   background-color: var(--ui-list-group-item-disabled-bg);
@@ -3852,7 +3845,7 @@ fieldset:disabled .btn {
   transition-duration: var(--ui-transition-duration);
   transition-property: color, background-color, border-color, box-shadow;
 }
-.nav-link:hover, .nav-link:focus-visible {
+.nav-link:is(:hover, :focus-visible) {
   color: var(--ui-nav-link-hover-color);
   text-decoration: none;
 }
@@ -3900,7 +3893,7 @@ fieldset:disabled .btn {
   transition-duration: var(--ui-transition-duration-fast);
   transition-property: color, background-color, background-size, box-shadow;
 }
-.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus-visible {
+.nav-tabs .nav-link:is(:hover, :focus-visible) {
   color: var(--ui-nav-tabs-link-hover-color);
   background-color: var(--ui-nav-tabs-link-hover-bg);
   isolation: isolate;
@@ -3930,7 +3923,7 @@ fieldset:disabled .btn {
   background-color: var(--ui-nav-pills-bg);
   border-radius: calc(var(--ui-nav-pills-border-radius) + var(--ui-nav-pills-padding));
 }
-.nav-pills.nav-fill, .nav-pills.nav-justified {
+.nav-pills:is(.nav-fill, .nav-justified) {
   width: 100%;
 }
 .nav-pills .nav-link {
@@ -3960,7 +3953,7 @@ fieldset:disabled .btn {
   padding-inline: 0;
   border-bottom: var(--ui-nav-underline-border-width) solid transparent;
 }
-.nav-underline .nav-link:focus-visible, .nav-underline .nav-link:hover {
+.nav-underline .nav-link:is(:hover, :focus-visible) {
   border-bottom-color: currentcolor;
 }
 .nav-underline .nav-link.active,
@@ -4056,7 +4049,7 @@ fieldset:disabled .btn {
   white-space: nowrap;
   text-decoration: none;
 }
-.navbar-brand:hover, .navbar-brand:focus-visible {
+.navbar-brand:is(:hover, :focus-visible) {
   color: var(--ui-navbar-brand-hover-color);
 }
 
@@ -5213,7 +5206,7 @@ fieldset:disabled .btn {
   opacity: 1;
   scale: 1;
 }
-.input-check:focus-visible, .input-check.focus {
+.input-check:is(:focus-visible, .focus) {
   outline: 0;
   box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
 }
@@ -5244,7 +5237,7 @@ fieldset:disabled .btn {
   color: var(--ui-secondary-color);
   border-radius: 2rem;
 }
-.form-switch .input-check:focus-visible, .form-switch .input-check.focus {
+.form-switch .input-check:is(:focus-visible, .focus) {
   color: var(--ui-input-check-focus-color, var(--ui-primary));
 }
 .form-switch .input-check::before {
@@ -5372,26 +5365,21 @@ fieldset:disabled .btn {
   z-index: 2;
   outline: 0;
 }
-.input-filled:active, .input-filled.active,
-.input-outline:active,
-.input-outline.active {
+.input-filled:is(:active, .active),
+.input-outline:is(:active, .active) {
   z-index: 3;
 }
-.input-filled:disabled, .input-filled.disabled,
-.input-outline:disabled,
-.input-outline.disabled {
+.input-filled:is(:disabled, .disabled),
+.input-outline:is(:disabled, .disabled) {
   pointer-events: none;
 }
-.input-filled:disabled, .input-filled:disabled:hover, .input-filled.disabled, .input-filled.disabled:hover,
-.input-outline:disabled,
-.input-outline:disabled:hover,
-.input-outline.disabled,
-.input-outline.disabled:hover {
+.input-filled:is(:disabled, .disabled), .input-filled:is(:disabled, .disabled):hover,
+.input-outline:is(:disabled, .disabled),
+.input-outline:is(:disabled, .disabled):hover {
   background-color: var(--ui-secondary-bg);
 }
-.input-filled[readonly], .input-filled.readonly,
-.input-outline[readonly],
-.input-outline.readonly {
+.input-filled:is([readonly], .readonly),
+.input-outline:is([readonly], .readonly) {
   color: var(--ui-tertiary-color);
 }
 select.input-filled, select.input-outline {
@@ -5471,7 +5459,7 @@ select.input-filled[multiple] option, select.input-outline[multiple] option {
 .input-filled:hover {
   background-color: var(--ui-input-filled-hover-bg, rgb(from var(--ui-body-color) r g b/0.075));
 }
-.input-filled:focus, .input-filled.focus {
+.input-filled:is(:focus, .focus) {
   --ui-input-filled-focus-line-size: 100% calc(var(--ui-border-width) * 2);
   background-color: var(--ui-input-filled-focus-bg, rgb(from var(--ui-body-color) r g b/0.12));
 }
@@ -5490,7 +5478,7 @@ select.input-filled:not([multiple]) {
 .input-outline:hover {
   border-color: var(--ui-tertiary-color);
 }
-.input-outline:focus, .input-outline.focus {
+.input-outline:is(:focus, .focus) {
   border-color: var(--ui-primary);
   box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
 }
@@ -5852,11 +5840,11 @@ select.input-lg[multiple] option {
 .input-floating.input-outline ~ .label-floating {
   border: var(--ui-border-width) var(--ui-border-style) transparent;
 }
-.input-floating:focus, .input-floating.focus, .input-floating:not(:placeholder-shown) {
+.input-floating:is(:focus, .focus, :not(:placeholder-shown)) {
   padding-top: 1.25rem;
   padding-bottom: 0.25rem;
 }
-.input-floating:focus ~ .label-floating, .input-floating.focus ~ .label-floating, .input-floating:not(:placeholder-shown) ~ .label-floating {
+.input-floating:is(:focus, .focus, :not(:placeholder-shown)) ~ .label-floating {
   padding-top: 0.25rem;
   font-size: 0.75rem;
   color: var(--ui-tertiary-color);
@@ -5950,7 +5938,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-primary) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-primary) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-primary:hover, .link-primary:focus-visible {
+.link-primary:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-primary-emphasis) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-primary-emphasis) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -5959,7 +5947,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-secondary) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-secondary) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-secondary:hover, .link-secondary:focus-visible {
+.link-secondary:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-secondary-emphasis) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-secondary-emphasis) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -5968,7 +5956,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-success) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-success) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-success:hover, .link-success:focus-visible {
+.link-success:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-success-emphasis) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-success-emphasis) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -5977,7 +5965,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-info) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-info) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-info:hover, .link-info:focus-visible {
+.link-info:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-info-emphasis) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-info-emphasis) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -5986,7 +5974,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-warning) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-warning) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-warning:hover, .link-warning:focus-visible {
+.link-warning:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-warning-emphasis) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-warning-emphasis) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -5995,7 +5983,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-danger) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-danger) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-danger:hover, .link-danger:focus-visible {
+.link-danger:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-danger-emphasis) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-danger-emphasis) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -6004,7 +5992,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-light) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-light) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-light:hover, .link-light:focus-visible {
+.link-light:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-light-emphasis) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-light-emphasis) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -6013,7 +6001,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-dark) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-dark) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-dark:hover, .link-dark:focus-visible {
+.link-dark:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-dark-emphasis) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-dark-emphasis) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -6022,7 +6010,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-black) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-black) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-black:hover, .link-black:focus-visible {
+.link-black:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-black) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-black) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -6031,7 +6019,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-white) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-white) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-white:hover, .link-white:focus-visible {
+.link-white:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-white) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-white) r g b/var(--ui-link-underline-opacity, 1));
 }
@@ -6040,7 +6028,7 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-emphasis-color) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-emphasis-color) r g b/var(--ui-link-underline-opacity, 1));
 }
-.link-body-emphasis:hover, .link-body-emphasis:focus-visible {
+.link-body-emphasis:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-emphasis-color) r g b/var(--ui-link-opacity, 0.75));
   text-decoration-color: rgb(from var(--ui-emphasis-color) r g b/var(--ui-link-underline-opacity, 0.75));
 }

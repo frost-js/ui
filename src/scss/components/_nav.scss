@@ -30,8 +30,7 @@
     transition-duration: var(--ui-transition-duration);
     transition-property: color, background-color, border-color, box-shadow;
 
-    &:hover,
-    &:focus-visible {
+    &:is(:hover, :focus-visible) {
         color: var(--ui-nav-link-hover-color);
         text-decoration: none;
     }
@@ -83,8 +82,7 @@
         transition-duration: var(--ui-transition-duration-fast);
         transition-property: color, background-color, background-size, box-shadow;
 
-        &:hover,
-        &:focus-visible {
+        &:is(:hover, :focus-visible) {
             color: var(--ui-nav-tabs-link-hover-color);
             background-color: var(--ui-nav-tabs-link-hover-bg);
             isolation: isolate;
@@ -119,8 +117,7 @@
     background-color: var(--ui-nav-pills-bg);
     @include mixins.border-radius(calc(var(--ui-nav-pills-border-radius) + var(--ui-nav-pills-padding)));
 
-    &.nav-fill,
-    &.nav-justified {
+    &:is(.nav-fill, .nav-justified) {
         width: 100%;
     }
 
@@ -155,8 +152,7 @@
         padding-inline: 0;
         border-bottom: var(--ui-nav-underline-border-width) solid transparent;
 
-        &:focus-visible,
-        &:hover {
+        &:is(:hover, :focus-visible) {
             border-bottom-color: currentcolor;
         }
     }

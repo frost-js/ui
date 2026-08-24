@@ -14,8 +14,7 @@
         color: functions.color-alpha($name, var(--ui-link-opacity, 1));
         text-decoration-color: functions.color-alpha($name, var(--ui-link-underline-opacity, 1));
 
-        &:hover,
-        &:focus-visible {
+        &:is(:hover, :focus-visible) {
             color: functions.color-alpha($emphasis-name, var(--ui-link-opacity, 1));
             text-decoration-color: functions.color-alpha($emphasis-name, var(--ui-link-underline-opacity, 1));
         }
@@ -26,8 +25,7 @@
     color: functions.color-alpha(emphasis-color, var(--ui-link-opacity, 1));
     text-decoration-color: functions.color-alpha(emphasis-color, var(--ui-link-underline-opacity, 1));
 
-    &:hover,
-    &:focus-visible {
+    &:is(:hover, :focus-visible) {
         color: functions.color-alpha(emphasis-color, var(--ui-link-opacity, .75));
         text-decoration-color: functions.color-alpha(emphasis-color, var(--ui-link-underline-opacity, .75));
     }

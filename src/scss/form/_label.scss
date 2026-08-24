@@ -75,9 +75,7 @@
         border: vars.$input-border-width var(--ui-border-style) transparent;
     }
 
-    &:focus,
-    &.focus,
-    &:not(:placeholder-shown) {
+    &:is(:focus, .focus, :not(:placeholder-shown)) {
         padding-top: vars.$input-padding-y + vars.$label-floating-padding-y;
         padding-bottom: vars.$input-padding-y * .5;
 

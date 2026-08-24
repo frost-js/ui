@@ -46,8 +46,7 @@
         opacity: var(--ui-btn-close-focus-opacity);
     }
 
-    &.disabled,
-    &:disabled {
+    &:is(:disabled, .disabled) {
         pointer-events: none;
         user-select: none;
         opacity: var(--ui-btn-close-disabled-opacity);

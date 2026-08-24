@@ -70,8 +70,7 @@
     transition-property: color, background-color, box-shadow;
     @include mixins.border-radius(var(--ui-border-radius));
 
-    &:hover,
-    &:focus-visible {
+    &:is(:hover, :focus-visible) {
         color: var(--ui-dropdown-link-hover-color);
         background-color: var(--ui-dropdown-link-hover-bg);
     }
@@ -87,8 +86,7 @@
         background-color: var(--ui-dropdown-link-active-bg);
     }
 
-    &:disabled,
-    &.disabled {
+    &:is(:disabled, .disabled) {
         color: var(--ui-dropdown-link-disabled-color);
         pointer-events: none;
         background-color: transparent;

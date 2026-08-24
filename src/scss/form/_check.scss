@@ -84,8 +84,7 @@
         }
     }
 
-    &:focus-visible,
-    &.focus {
+    &:is(:focus-visible, .focus) {
         outline: 0;
         box-shadow: 0 0 0 vars.$input-check-focus-shadow-width vars.$input-check-focus-shadow-color;
     }
@@ -121,8 +120,7 @@
         color: vars.$form-switch-input-check-color;
         @include mixins.border-radius(vars.$form-switch-input-check-border-radius);
 
-        &:focus-visible,
-        &.focus {
+        &:is(:focus-visible, .focus) {
             color: var(--ui-input-check-focus-color, #{vars.$form-switch-input-check-focus-color});
         }
 

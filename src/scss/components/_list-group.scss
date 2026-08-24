@@ -35,8 +35,7 @@
     color: var(--ui-list-group-action-color);
     text-align: inherit;
 
-    &:hover,
-    &:focus-visible {
+    &:is(:hover, :focus-visible) {
         z-index: 1;
         color: var(--ui-list-group-action-hover-color);
         text-decoration: none;
@@ -66,8 +65,7 @@
         @include mixins.border-bottom-radius(inherit);
     }
 
-    &:disabled,
-    &.disabled {
+    &:is(:disabled, .disabled) {
         color: var(--ui-list-group-item-disabled-color);
         pointer-events: none;
         background-color: var(--ui-list-group-item-disabled-bg);

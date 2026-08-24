@@ -62,8 +62,7 @@
         }
     }
 
-    &:not(.collapsed),
-    &.collapsing {
+    &:is(:not(.collapsed), .collapsing) {
         &::before {
             position: absolute;
             inset-inline: 0;
