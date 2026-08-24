@@ -15,442 +15,259 @@
 <body>
     <div class="container">
         <h1>Modals</h1>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modal" type="button">Open Modal</button>
-        </div>
-        <div class="modal" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <h4>Static Backdrop</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modalStatic" type="button">Open Modal</button>
-        </div>
-        <div class="modal" id="modalStatic" data-ui-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalStaticTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalStaticTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Action dialog</h2>
+                <p class="text-body-secondary mb-2">Use a modal for a focused decision that needs context, a clear primary action, and an obvious way out.</p>
+                <code>data-ui-toggle="modal"</code> <code>data-ui-dismiss="modal"</code>
+            </header>
+            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#archiveModal" type="button">Archive route</button>
 
-        <h4>Long Content</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modalLong" type="button">Open Modal</button>
-        </div>
-        <div class="modal" id="modalLong" tabindex="-1" role="dialog" aria-labelledby="modalLongTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLongTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti voluptas tenetur impedit
-                            sit dolor, quasi voluptatem enim earum numquam perferendis nobis dolorem modi non, odio
-                            deleniti quia, voluptates laborum commodi.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi distinctio quaerat, hic quis
-                            suscipit eligendi ratione ullam! Enim minima quia accusantium nihil itaque, hic eveniet
-                            culpa quo inventore voluptas autem?</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio, ad rerum nulla libero
-                            cupiditate aut, recusandae sequi voluptates fugiat sapiente ipsum, dignissimos laboriosam!
-                            Dignissimos tempora aperiam autem id consequatur ratione.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem sapiente harum deleniti
-                            hic, quibusdam cum, officiis ratione omnis totam accusantium corrupti mollitia in id unde
-                            rem aliquam, corporis quia est.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, ipsum! Non tempora quo
-                            ullam eligendi hic, nostrum quisquam sed est totam minus beatae dolorem, error et rem esse
-                            perferendis voluptatibus!</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. In fuga adipisci excepturi quo,
-                            similique saepe corporis porro inventore nihil, perferendis blanditiis, nesciunt ipsum
-                            facilis natus. Enim cumque culpa quibusdam? A!</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas exercitationem delectus
-                            dolorem ratione doloribus molestias ipsum corrupti neque? Minus nemo nam rerum. Veniam
-                            aliquid impedit similique delectus voluptas ipsum. Fuga!</p>
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque dolor voluptate maxime vero,
-                            debitis tenetur hic ea vel veniam cupiditate numquam neque molestias nobis voluptatem
-                            doloremque repellat. Quia, sint delectus?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h4>Scrollable</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modalScrollable" type="button">Open Modal</button>
-        </div>
-        <div class="modal" id="modalScrollable" tabindex="-1" role="dialog" aria-labelledby="modalScrollableTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalScrollableTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti voluptas tenetur impedit
-                            sit dolor, quasi voluptatem enim earum numquam perferendis nobis dolorem modi non, odio
-                            deleniti quia, voluptates laborum commodi.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi distinctio quaerat, hic quis
-                            suscipit eligendi ratione ullam! Enim minima quia accusantium nihil itaque, hic eveniet
-                            culpa quo inventore voluptas autem?</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio, ad rerum nulla libero
-                            cupiditate aut, recusandae sequi voluptates fugiat sapiente ipsum, dignissimos laboriosam!
-                            Dignissimos tempora aperiam autem id consequatur ratione.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem sapiente harum deleniti
-                            hic, quibusdam cum, officiis ratione omnis totam accusantium corrupti mollitia in id unde
-                            rem aliquam, corporis quia est.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, ipsum! Non tempora quo
-                            ullam eligendi hic, nostrum quisquam sed est totam minus beatae dolorem, error et rem esse
-                            perferendis voluptatibus!</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. In fuga adipisci excepturi quo,
-                            similique saepe corporis porro inventore nihil, perferendis blanditiis, nesciunt ipsum
-                            facilis natus. Enim cumque culpa quibusdam? A!</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas exercitationem delectus
-                            dolorem ratione doloribus molestias ipsum corrupti neque? Minus nemo nam rerum. Veniam
-                            aliquid impedit similique delectus voluptas ipsum. Fuga!</p>
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque dolor voluptate maxime vero,
-                            debitis tenetur hic ea vel veniam cupiditate numquam neque molestias nobis voluptatem
-                            doloremque repellat. Quia, sint delectus?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h4>Vertically Centered</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modalCentered" type="button">Open Modal</button>
-        </div>
-        <div class="modal" id="modalCentered" tabindex="-1" role="dialog" aria-labelledby="modalCenteredTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalCenteredTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h4>Tooltips/Popovers</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modalTooltips" type="button">Open Modal</button>
-        </div>
-        <div class="modal" id="modalTooltips" tabindex="-1" role="dialog" aria-labelledby="modalTooltipsTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTooltipsTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h4>Tooltip</h4>
-                        <button class="btn btn-secondary ripple" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" type="button">Tooltip</button>
-                        <h4>Popover</h4>
-                        <button class="btn btn-secondary ripple" data-ui-toggle="popover" data-ui-content="Popover content would go here.. how cool!" type="button">Popover</button>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h4>Dropdowns</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modalDropdown" type="button">Open Modal</button>
-        </div>
-        <div class="modal" id="modalDropdown" tabindex="-1" role="dialog" aria-labelledby="modalDropdownTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalDropdownTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="dropdown">
-                            <button class="btn btn-primary ripple dropdown-toggle" id="dropdown" data-ui-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">Dropdown</button>
-                            <div class="dropdown-menu shadow-sm" aria-labelledby="dropdown">
-                                <button class="dropdown-item" type="button">Action</button>
-                                <button class="dropdown-item" type="button">Action</button>
-                                <button class="dropdown-item" type="button">Action</button>
-                            </div>
+            <div class="modal" id="archiveModal" tabindex="-1" role="dialog" aria-labelledby="archiveModalTitle" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="archiveModalTitle">Archive Alpine Circuit?</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">The route will leave the public catalog. Existing bookings and reports will remain available to your team.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary ripple" data-ui-dismiss="modal" type="button">Cancel</button>
+                            <button class="btn btn-danger ripple" type="button">Archive route</button>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Stackable</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modalStack1" type="button">Open Modal</button>
-        </div>
-        <div class="modal" id="modalStack1" tabindex="-1" role="dialog" aria-labelledby="modalStack1Title" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalStack1Title">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Modals can be stacked on top of each other.</p>
-                        <p>This modal is larger and contains extra content, to demonstrate how backdrops overlay over other modals.</p>
-                        <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modalStack2" type="button">Open Modal</button>
-                    </div>
-                </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Backdrop and alignment</h2>
+                <p class="text-body-secondary mb-2">A static backdrop keeps an important decision open, while centered dialogs suit short, self-contained tasks.</p>
+                <code>data-ui-backdrop="static"</code> <code>.modal-dialog-centered</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#staticModal" type="button">Static backdrop</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#centeredModal" type="button">Centered dialog</button>
             </div>
-        </div>
-        <div class="modal" id="modalStack2" tabindex="-1" role="dialog" aria-labelledby="modalStack2Title" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalStack2Title">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Modals stacking can go as deep as you want.</p>
-                        <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modalStack3" type="button">Open Modal</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal" id="modalStack3" tabindex="-1" role="dialog" aria-labelledby="modalStack3Title" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalStack3Title">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <h4>Sizes</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="modal" data-ui-target="#modalSmall" type="button">Small</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="modal" data-ui-target="#modalLarge" type="button">Large</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="modal" data-ui-target="#modalXL" type="button">Extra Large</button>
-        </div>
-        <div class="modal" id="modalSmall" tabindex="-1" role="dialog" aria-labelledby="modalSmallTitle" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalSmallTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
+            <div class="modal" id="staticModal" data-ui-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticModalTitle" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="staticModalTitle">Unsaved route changes</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">Choose whether to save your elevation notes before leaving the editor.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary ripple" data-ui-dismiss="modal" type="button">Discard</button>
+                            <button class="btn btn-primary ripple" type="button">Save changes</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal" id="modalLarge" tabindex="-1" role="dialog" aria-labelledby="modalLargeTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLargeTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal" id="modalXL" tabindex="-1" role="dialog" aria-labelledby="modalXLTitle" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalXLTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <h4>Fullscreen</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="modal" data-ui-target="#modalFullscreen" type="button">Fullscreen</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="modal" data-ui-target="#modalFullscreenSm" type="button">Fullscreen SM</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="modal" data-ui-target="#modalFullscreenMd" type="button">Fullscreen MD</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="modal" data-ui-target="#modalFullscreenLg" type="button">Fullscreen LG</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="modal" data-ui-target="#modalFullscreenXl" type="button">Fullscreen XL</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="modal" data-ui-target="#modalFullscreenXxl" type="button">Fullscreen XXL</button>
-        </div>
-        <div class="modal" id="modalFullscreen" tabindex="-1" role="dialog" aria-labelledby="modalFullscreenTitle" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalFullscreenTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
+            <div class="modal" id="centeredModal" tabindex="-1" role="dialog" aria-labelledby="centeredModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="centeredModalTitle">Route published</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">Alpine Circuit is now visible in the public route catalog.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary ripple" data-ui-dismiss="modal" type="button">Done</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal" id="modalFullscreenSm" tabindex="-1" role="dialog" aria-labelledby="modalFullscreenSmTitle" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen-sm-down">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalFullscreenSmTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal" id="modalFullscreenMd" tabindex="-1" role="dialog" aria-labelledby="modalFullscreenMdTitle" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen-md-down">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalFullscreenMdTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal" id="modalFullscreenLg" tabindex="-1" role="dialog" aria-labelledby="modalFullscreenLgTitle" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen-lg-down">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalFullscreenLgTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Scrollable content</h2>
+                <p class="text-body-secondary mb-2">Keep the header and actions visible while a long modal body scrolls independently.</p>
+                <code>.modal-dialog-scrollable</code>
+            </header>
+            <button class="btn btn-secondary ripple" data-ui-toggle="modal" data-ui-target="#scrollableModal" type="button">Review trip briefing</button>
+
+            <div class="modal" id="scrollableModal" tabindex="-1" role="dialog" aria-labelledby="scrollableModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="scrollableModalTitle">Alpine Circuit briefing</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h3 class="h5">Before departure</h3>
+                            <p>Check the park alert board on the morning of travel. Snow or high wind can close the upper ridge with little notice.</p>
+                            <h3 class="h5">Route conditions</h3>
+                            <p>The first six kilometres follow a formed trail. Beyond the saddle, the route crosses exposed rock and requires confident navigation in low cloud.</p>
+                            <h3 class="h5">Water and equipment</h3>
+                            <p>Carry all drinking water. Each walker should bring warm layers, rain protection, a head torch, and an offline map of the complete circuit.</p>
+                            <h3 class="h5">Turnaround plan</h3>
+                            <p>If the group has not reached North Saddle by 1:30 pm, return by the ascent route. Do not continue across the ridge after that time.</p>
+                            <h3 class="h5">Emergency contacts</h3>
+                            <p class="mb-0">Leave the route plan and expected return time with a trusted contact. Mobile coverage is unreliable beyond the trailhead.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary ripple" data-ui-dismiss="modal" type="button">Close</button>
+                            <button class="btn btn-primary ripple" type="button">Acknowledge briefing</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal" id="modalFullscreenXl" tabindex="-1" role="dialog" aria-labelledby="modalFullscreenXlTitle" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen-xl-down">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalFullscreenXlTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Dialog sizes</h2>
+                <p class="text-body-secondary mb-2">Choose a size around the task: compact confirmation, standard content, or a wider workspace.</p>
+                <code>.modal-sm</code> <code>.modal-lg</code> <code>.modal-xl</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#smallModal" type="button">Small</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#largeModal" type="button">Large</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#extraLargeModal" type="button">Extra large</button>
+            </div>
+
+            <div class="modal" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="smallModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="smallModalTitle">Remove waypoint?</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">This cannot be undone.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary ripple" data-ui-dismiss="modal" type="button">Cancel</button>
+                            <button class="btn btn-danger ripple" type="button">Remove</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal" id="modalFullscreenXxl" tabindex="-1" role="dialog" aria-labelledby="modalFullscreenXxlTitle" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen-xxl-down">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalFullscreenXxlTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
+
+            <div class="modal" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="largeModalTitle">Route summary</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="card card-body h-100">
+                                        <span class="text-body-secondary">Distance</span>
+                                        <strong class="fs-4">18.4 km</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card card-body h-100">
+                                        <span class="text-body-secondary">Ascent</span>
+                                        <strong class="fs-4">920 m</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card card-body h-100">
+                                        <span class="text-body-secondary">Duration</span>
+                                        <strong class="fs-4">7–8 hr</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary ripple" data-ui-dismiss="modal" type="button">Done</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="modal" id="extraLargeModal" tabindex="-1" role="dialog" aria-labelledby="extraLargeModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="extraLargeModalTitle">Team availability</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr><th scope="col">Guide</th><th scope="col">Saturday</th><th scope="col">Sunday</th><th scope="col">Next weekend</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><th scope="row">Maya Chen</th><td>Available</td><td>Available</td><td>Unavailable</td></tr>
+                                        <tr><th scope="row">Noah Williams</th><td>Unavailable</td><td>Available</td><td>Available</td></tr>
+                                        <tr><th scope="row">Ari Singh</th><td>Available</td><td>Unavailable</td><td>Available</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary ripple" data-ui-dismiss="modal" type="button">Close</button>
+                            <button class="btn btn-primary ripple" type="button">Assign guide</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Responsive fullscreen</h2>
+                <p class="text-body-secondary mb-2">Let a detailed workflow fill smaller screens while returning to a contained dialog when more space is available.</p>
+                <code>.modal-fullscreen-md-down</code>
+            </header>
+            <button class="btn btn-secondary ripple" data-ui-toggle="modal" data-ui-target="#responsiveModal" type="button">Plan a departure</button>
+
+            <div class="modal" id="responsiveModal" tabindex="-1" role="dialog" aria-labelledby="responsiveModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen-md-down">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="responsiveModalTitle">Plan a departure</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="departureDate">Departure date</label>
+                                <div class="form-input">
+                                    <input class="input-filled" id="departureDate" type="date">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="groupSize">Group size</label>
+                                <div class="form-input">
+                                    <select class="input-filled" id="groupSize">
+                                        <option>2 walkers</option>
+                                        <option>3 walkers</option>
+                                        <option>4 walkers</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-check">
+                                <input class="input-check" id="guideRequired" type="checkbox">
+                                <label class="form-check-label" for="guideRequired">Request a local guide</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary ripple" data-ui-dismiss="modal" type="button">Cancel</button>
+                            <button class="btn btn-primary ripple" type="button">Check availability</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-    <script>
-        const tooltips = $.find('[data-ui-toggle="tooltip"]');
-        for (const tooltip of tooltips) {
-            UI.Tooltip.init(tooltip);
-        }
-        const popovers = $.find('[data-ui-toggle="popover"]');
-        for (const popover of popovers) {
-            UI.Popover.init(popovers);
-        }
-    </script>
 </body>
 
 </html>

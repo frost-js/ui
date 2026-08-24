@@ -15,158 +15,161 @@
 <body>
     <div class="container">
         <h1>Offcanvas</h1>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button">Open Offcanvas</button>
-        </div>
-        <div class="offcanvas offcanvas-start" id="offcanvas" tabindex="-1" aria-labelledby="offcanvasTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-            </div>
-        </div>
 
-        <h4>Body Scrolling</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#offcanvasScrolling" type="button">Open Offcanvas</button>
-        </div>
-        <div class="offcanvas offcanvas-start" id="offcanvasScrolling" data-ui-backdrop="false" data-ui-scroll="true" tabindex="-1" aria-labelledby="offcanvasScrollingTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-            </div>
-        </div>
+        <section class="mb-5" id="taskPanel">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Task panel</h2>
+                <p class="text-body-secondary mb-2">Use an offcanvas surface for supporting controls or navigation that should not permanently reduce the content area.</p>
+                <code>.offcanvas-end</code> <code>data-ui-toggle="offcanvas"</code>
+            </header>
+            <button class="btn btn-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#routeFilters" type="button" aria-controls="routeFilters">Filter routes</button>
 
-        <h4>Body Scrolling with Backdrop</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#offCanvasScrollingBackdrop" type="button">Open Offcanvas</button>
-        </div>
-        <div class="offcanvas offcanvas-start" id="offCanvasScrollingBackdrop" data-ui-scroll="true" tabindex="-1" aria-labelledby="offCanvasScrollingBackdropTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offCanvasScrollingBackdropTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+            <div class="offcanvas offcanvas-end" id="routeFilters" tabindex="-1" role="dialog" aria-labelledby="routeFiltersTitle" aria-hidden="true">
+                <div class="offcanvas-header">
+                    <h2 class="offcanvas-title h5" id="routeFiltersTitle">Filter routes</h2>
+                    <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form>
+                        <fieldset class="mb-4">
+                            <legend class="h6">Difficulty</legend>
+                            <div class="form-check mb-2">
+                                <input class="input-check" id="easyRoutes" type="checkbox" checked>
+                                <label class="form-check-label" for="easyRoutes">Easy</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="input-check" id="moderateRoutes" type="checkbox" checked>
+                                <label class="form-check-label" for="moderateRoutes">Moderate</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="input-check" id="challengingRoutes" type="checkbox">
+                                <label class="form-check-label" for="challengingRoutes">Challenging</label>
+                            </div>
+                        </fieldset>
+                        <div class="mb-4">
+                            <label class="form-label" for="routeLength">Maximum distance</label>
+                            <div class="form-input">
+                                <select class="input-filled" id="routeLength">
+                                    <option>Any distance</option>
+                                    <option>Up to 5 km</option>
+                                    <option>Up to 10 km</option>
+                                    <option>Up to 20 km</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary ripple" type="submit">Show 18 routes</button>
+                            <button class="btn btn-link" type="reset">Clear filters</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-            </div>
-        </div>
+        </section>
 
-        <h4>Static Backdrop</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#offCanvasStatic" type="button">Open Offcanvas</button>
-        </div>
-        <div class="offcanvas offcanvas-start" id="offCanvasStatic" data-ui-backdrop="static" tabindex="-1" aria-labelledby="offCanvasStaticTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offCanvasStaticTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+        <section class="mb-5" id="placementOptions">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Placement</h2>
+                <p class="text-body-secondary mb-2">Choose top or bottom for broad notices and start or end for task and navigation panels.</p>
+                <code>.offcanvas-top|end|bottom|start</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#topPanel" type="button" aria-controls="topPanel">Top</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#endPanel" type="button" aria-controls="endPanel">End</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#bottomPanel" type="button" aria-controls="bottomPanel">Bottom</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#startPanel" type="button" aria-controls="startPanel">Start</button>
             </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-            </div>
-        </div>
 
-        <h4>Position</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvasTop" type="button">Open Top Offcanvas</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvasRight" type="button">Open Right Offcanvas</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvasBottom" type="button">Open Bottom Offcanvas</button>
-            <button class="btn btn-primary ripple mb-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvasLeft" type="button">Open Left Offcanvas</button>
-        </div>
-        <div class="offcanvas offcanvas-top" id="offcanvasTop" tabindex="-1" aria-labelledby="offcanvasTopTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasTopTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+            <div class="offcanvas offcanvas-top" id="topPanel" tabindex="-1" role="dialog" aria-labelledby="topPanelTitle" aria-hidden="true">
+                <div class="offcanvas-header">
+                    <h2 class="offcanvas-title h5" id="topPanelTitle">Conditions update</h2>
+                    <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p class="mb-0">Strong wind is forecast above 1,200 metres from midday.</p>
+                </div>
             </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-            </div>
-        </div>
-        <div class="offcanvas offcanvas-end" id="offcanvasRight" tabindex="-1" aria-labelledby="offcanvasRightTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasRightTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-            </div>
-        </div>
-        <div class="offcanvas offcanvas-bottom" id="offcanvasBottom" tabindex="-1" aria-labelledby="offcanvasBottomTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasBottomTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-            </div>
-        </div>
-        <div class="offcanvas offcanvas-start" id="offcanvasLeft" tabindex="-1" aria-labelledby="offcanvasLeftTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasLeftTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-            </div>
-        </div>
 
-        <h4>With Modal</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#offcanvasModal" type="button">Open Offcanvas</button>
-        </div>
-        <div class="offcanvas offcanvas-start" id="offcanvasModal" tabindex="-1" aria-labelledby="offcanvasModalTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasModalTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+            <div class="offcanvas offcanvas-end" id="endPanel" tabindex="-1" role="dialog" aria-labelledby="endPanelTitle" aria-hidden="true">
+                <div class="offcanvas-header">
+                    <h2 class="offcanvas-title h5" id="endPanelTitle">Route details</h2>
+                    <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p>Alpine Circuit climbs steadily from the valley floor to an exposed ridge traverse.</p>
+                    <dl class="row mb-0">
+                        <dt class="col-5">Distance</dt><dd class="col-7">18.4 km</dd>
+                        <dt class="col-5">Ascent</dt><dd class="col-7">920 m</dd>
+                        <dt class="col-5">Duration</dt><dd class="col-7">7–8 hours</dd>
+                    </dl>
+                </div>
             </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-                <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#modal" type="button">Open Modal</button>
+
+            <div class="offcanvas offcanvas-bottom" id="bottomPanel" tabindex="-1" role="dialog" aria-labelledby="bottomPanelTitle" aria-hidden="true">
+                <div class="offcanvas-header">
+                    <h2 class="offcanvas-title h5" id="bottomPanelTitle">Download ready</h2>
+                    <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p class="mb-0">The offline route pack is ready to save to your device.</p>
+                </div>
             </div>
-        </div>
-        <div class="modal" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content shadow">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">Modal title</h5>
-                        <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>This is the body of the modal.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success ripple mb-0" type="button">Save</button>
-                        <button class="btn btn-secondary ripple mb-0" data-ui-dismiss="modal" type="button">Cancel</button>
+
+            <div class="offcanvas offcanvas-start" id="startPanel" tabindex="-1" role="dialog" aria-labelledby="startPanelTitle" aria-hidden="true">
+                <div class="offcanvas-header">
+                    <h2 class="offcanvas-title h5" id="startPanelTitle">Trip sections</h2>
+                    <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <nav class="list-group list-group-flush" aria-label="Trip sections">
+                        <button class="list-group-item list-group-item-action active" data-ui-dismiss="offcanvas" type="button">Overview</button>
+                        <button class="list-group-item list-group-item-action" data-ui-dismiss="offcanvas" type="button">Route notes</button>
+                        <button class="list-group-item list-group-item-action" data-ui-dismiss="offcanvas" type="button">Equipment</button>
+                    </nav>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5 pb-5" id="backdropOptions">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Scrolling and backdrop behavior</h2>
+                <p class="text-body-secondary mb-2">Keep the page available for reference, or require an explicit close when the panel contains an important decision.</p>
+                <code>data-ui-scroll="true"</code> <code>data-ui-backdrop="false|static"</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-secondary ripple" data-ui-toggle="offcanvas" data-ui-target="#referencePanel" type="button" aria-controls="referencePanel">Scrollable page</button>
+                <button class="btn btn-secondary ripple" data-ui-toggle="offcanvas" data-ui-target="#staticPanel" type="button" aria-controls="staticPanel">Static backdrop</button>
+            </div>
+
+            <div class="offcanvas offcanvas-start" id="referencePanel" data-ui-backdrop="false" data-ui-scroll="true" tabindex="-1" role="dialog" aria-labelledby="referencePanelTitle" aria-hidden="true">
+                <div class="offcanvas-header">
+                    <h2 class="offcanvas-title h5" id="referencePanelTitle">Map legend</h2>
+                    <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <p class="text-body-secondary">The page remains scrollable and there is no backdrop.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item px-0">Solid line — formed track</li>
+                        <li class="list-group-item px-0">Dashed line — unmarked route</li>
+                        <li class="list-group-item px-0">Triangle — exposed viewpoint</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="offcanvas offcanvas-end" id="staticPanel" data-ui-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticPanelTitle" aria-hidden="true">
+                <div class="offcanvas-header">
+                    <h2 class="offcanvas-title h5" id="staticPanelTitle">Confirm publication</h2>
+                    <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body d-flex flex-column">
+                    <p>A static backdrop prevents an outside interaction from dismissing this review.</p>
+                    <div class="alert alert-warning">Publishing will notify 42 subscribed walkers.</div>
+                    <div class="d-grid gap-2 mt-auto">
+                        <button class="btn btn-primary ripple" type="button">Publish update</button>
+                        <button class="btn btn-secondary ripple" data-ui-dismiss="offcanvas" type="button">Cancel</button>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <h4>With Dropdown</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#offcanvasDropdown" type="button">Open Offcanvas</button>
-        </div>
-        <div class="offcanvas offcanvas-start" id="offcanvasDropdown" tabindex="-1" aria-labelledby="offcanvasDropdownTitle">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasDropdownTitle">Offcanvas</h5>
-                <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <p>This is the body of the offcanvas.</p>
-                <div class="dropdown">
-                    <button class="btn btn-primary ripple dropdown-toggle" id="dropdown" data-ui-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">Dropdown</button>
-                    <div class="dropdown-menu" aria-labelledby="dropdown">
-                        <button class="dropdown-item" type="button">Action</button>
-                        <button class="dropdown-item" type="button">Action</button>
-                        <button class="dropdown-item" type="button">Action</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
 </body>
 
