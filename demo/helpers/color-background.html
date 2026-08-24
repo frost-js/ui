@@ -15,45 +15,54 @@
 <body>
     <div class="container">
         <h1>Color &amp; Background</h1>
-        <div class="mb-4">
-            <div class="text-bg-primary p-3">Primary with text</div>
-            <div class="text-bg-accent p-3">Accent with text</div>
-            <div class="text-bg-secondary p-3">Secondary with text</div>
-            <div class="text-bg-success p-3">Success with text</div>
-            <div class="text-bg-info p-3">Info with text</div>
-            <div class="text-bg-warning p-3">Warning with text</div>
-            <div class="text-bg-danger p-3">Danger with text</div>
-            <div class="text-bg-light p-3">Light with text</div>
-            <div class="text-bg-dark p-3">Dark with text</div>
-        </div>
 
-        <h4>Components</h4>
-        <div class="mb-4">
-            <span class="badge text-bg-primary">Primary</span>
-            <span class="badge text-bg-info">Info</span>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Semantic pairings</h2>
+                <p class="text-body-secondary mb-2">Each helper applies a background together with its intended contrast color, so the pairing remains readable across themes.</p>
+                <code>.text-bg-{color}</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+                <div class="col"><div class="text-bg-primary rounded-3 p-3 h-100"><strong>Primary</strong><code class="d-block text-reset">.text-bg-primary</code></div></div>
+                <div class="col"><div class="text-bg-accent rounded-3 p-3 h-100"><strong>Accent</strong><code class="d-block text-reset">.text-bg-accent</code></div></div>
+                <div class="col"><div class="text-bg-secondary rounded-3 p-3 h-100"><strong>Secondary</strong><code class="d-block text-reset">.text-bg-secondary</code></div></div>
+                <div class="col"><div class="text-bg-success rounded-3 p-3 h-100"><strong>Success</strong><code class="d-block text-reset">.text-bg-success</code></div></div>
+                <div class="col"><div class="text-bg-info rounded-3 p-3 h-100"><strong>Info</strong><code class="d-block text-reset">.text-bg-info</code></div></div>
+                <div class="col"><div class="text-bg-warning rounded-3 p-3 h-100"><strong>Warning</strong><code class="d-block text-reset">.text-bg-warning</code></div></div>
+                <div class="col"><div class="text-bg-danger rounded-3 p-3 h-100"><strong>Danger</strong><code class="d-block text-reset">.text-bg-danger</code></div></div>
+                <div class="col"><div class="text-bg-light rounded-3 p-3 h-100"><strong>Light</strong><code class="d-block text-reset">.text-bg-light</code></div></div>
+                <div class="col"><div class="text-bg-dark rounded-3 p-3 h-100"><strong>Dark</strong><code class="d-block text-reset">.text-bg-dark</code></div></div>
+            </div>
+        </section>
 
-        <h4>Cards</h4>
-        <div class="mb-4">
-            <div class="card text-bg-primary">
-                <div class="card-header">
-                    Primary
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Component composition</h2>
+                <p class="text-body-secondary mb-2">The same helper can establish a complete component context without coordinating separate text and background utilities.</p>
+                <code>.card.text-bg-primary</code> <code>.badge.text-bg-warning</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-7">
+                    <article class="card text-bg-primary h-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            Expedition status
+                            <span class="badge text-bg-light">On schedule</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Coastal stage confirmed</h3>
+                            <p class="card-text mb-0">The route, support vehicle, and overnight camp are ready for departure.</p>
+                        </div>
+                    </article>
                 </div>
-                <div class="card-body">
-                    <p class="card-text">This is the body of the card.</p>
+                <div class="col-md-5">
+                    <div class="text-bg-warning rounded-3 p-4 h-100">
+                        <span class="badge text-bg-dark mb-2">Weather watch</span>
+                        <h3 class="h5">Strong wind after 16:00</h3>
+                        <p class="mb-0">Plan to clear the exposed ridge before the afternoon change arrives.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="card text-bg-info">
-                <div class="card-header">
-                    Info
-                </div>
-                <div class="card-body">
-                    <p class="card-text">This is the body of the card.</p>
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
 </body>
 

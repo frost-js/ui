@@ -15,60 +15,45 @@
 <body>
     <div class="container">
         <h1>Focus Rings</h1>
-        <div class="mb-4">
-            <a class="d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2" href="#">
-                Focus
-            </a>
-        </div>
 
-        <h4>Styles</h4>
-        <div class="mb-4">
-            <p>
-                <a class="d-inline-flex focus-ring focus-ring-primary py-1 px-2 text-decoration-none border rounded-2" href="#">
-                    Primary Focus
-                </a>
-            </p>
-            <p>
-                <a class="d-inline-flex focus-ring focus-ring-accent py-1 px-2 text-decoration-none border rounded-2" href="#">
-                    Accent Focus
-                </a>
-            </p>
-            <p>
-                <a class="d-inline-flex focus-ring focus-ring-secondary py-1 px-2 text-decoration-none border rounded-2" href="#">
-                    Secondary Focus
-                </a>
-            </p>
-            <p>
-                <a class="d-inline-flex focus-ring focus-ring-success py-1 px-2 text-decoration-none border rounded-2" href="#">
-                    Success Focus
-                </a>
-            </p>
-            <p>
-                <a class="d-inline-flex focus-ring focus-ring-info py-1 px-2 text-decoration-none border rounded-2" href="#">
-                    Info Focus
-                </a>
-            </p>
-            <p>
-                <a class="d-inline-flex focus-ring focus-ring-warning py-1 px-2 text-decoration-none border rounded-2" href="#">
-                    Warning Focus
-                </a>
-            </p>
-            <p>
-                <a class="d-inline-flex focus-ring focus-ring-danger py-1 px-2 text-decoration-none border rounded-2" href="#">
-                    Danger Focus
-                </a>
-            </p>
-            <p>
-                <a class="d-inline-flex focus-ring focus-ring-light py-1 px-2 text-decoration-none border rounded-2" href="#">
-                    Light Focus
-                </a>
-            </p>
-            <p>
-                <a class="d-inline-flex focus-ring focus-ring-dark py-1 px-2 text-decoration-none border rounded-2" href="#">
-                    Dark Focus
-                </a>
-            </p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1" id="keyboard-visible-focus">Keyboard-visible focus</h2>
+                <p class="text-body-secondary mb-2">Use the focus-ring helper on a custom interactive surface. Press Tab to see the ring without showing it after a pointer click.</p>
+                <code>.focus-ring</code>
+            </header>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <a class="d-block focus-ring text-body text-decoration-none border rounded-3 p-4 h-100" href="#keyboard-visible-focus">
+                        <strong class="d-block mb-1">Open route briefing</strong>
+                        <span class="text-body-secondary">A linked surface with a visible keyboard focus state.</span>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a class="d-block focus-ring text-body text-decoration-none bg-body-tertiary rounded-3 p-4 h-100" href="#keyboard-visible-focus">
+                        <strong class="d-block mb-1">Review equipment list</strong>
+                        <span class="text-body-secondary">The helper works without a standard button or link treatment.</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1" id="contextual-ring-colors">Contextual ring colors</h2>
+                <p class="text-body-secondary mb-2">Color utilities change the ring token while leaving the focused element’s remaining presentation untouched.</p>
+                <code>.focus-ring-{color}</code>
+            </header>
+            <div class="d-flex flex-wrap gap-3">
+                <a class="focus-ring focus-ring-primary border rounded-3 px-3 py-2 text-decoration-none" href="#contextual-ring-colors">Primary</a>
+                <a class="focus-ring focus-ring-accent border rounded-3 px-3 py-2 text-decoration-none" href="#contextual-ring-colors">Accent</a>
+                <a class="focus-ring focus-ring-success border rounded-3 px-3 py-2 text-decoration-none" href="#contextual-ring-colors">Success</a>
+                <a class="focus-ring focus-ring-info border rounded-3 px-3 py-2 text-decoration-none" href="#contextual-ring-colors">Info</a>
+                <a class="focus-ring focus-ring-warning border rounded-3 px-3 py-2 text-decoration-none" href="#contextual-ring-colors">Warning</a>
+                <a class="focus-ring focus-ring-danger border rounded-3 px-3 py-2 text-decoration-none" href="#contextual-ring-colors">Danger</a>
+                <a class="focus-ring focus-ring-secondary border rounded-3 px-3 py-2 text-decoration-none" href="#contextual-ring-colors">Secondary</a>
+            </div>
+        </section>
     </div>
 </body>
 

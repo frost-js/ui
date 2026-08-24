@@ -15,96 +15,74 @@
 <body>
     <div class="container">
         <h1>Gutters</h1>
-        <div class="mb-4">
-            <div class="row gx-5">
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">1/2</div>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Combined gutters</h2>
+                <p class="text-body-secondary mb-2">A single gutter class applies matching horizontal and vertical spacing between every column in the row.</p>
+                <code>.g-4</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-2 g-4">
+                <div class="col"><div class="card card-body h-100"><strong>Coastal route</strong><span class="text-body-secondary">8.5 km · Moderate</span></div></div>
+                <div class="col"><div class="card card-body h-100"><strong>Alpine circuit</strong><span class="text-body-secondary">18.4 km · Challenging</span></div></div>
+                <div class="col"><div class="card card-body h-100"><strong>Forest loop</strong><span class="text-body-secondary">5.2 km · Easy</span></div></div>
+                <div class="col"><div class="card card-body h-100"><strong>Canyon traverse</strong><span class="text-body-secondary">12.1 km · Moderate</span></div></div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Independent axes</h2>
+                <p class="text-body-secondary mb-2">Horizontal and vertical gutter utilities can be tuned independently around the needs of each composition.</p>
+                <code>.gx-5</code> <code>.gy-4</code>
+            </header>
+            <div class="row g-5">
+                <div class="col-lg-6">
+                    <h3 class="h6">Horizontal space</h3>
+                    <div class="bg-body-secondary rounded-3 p-3">
+                        <div class="row gx-5">
+                            <div class="col-6"><div class="bg-body-tertiary border rounded-3 p-3 text-center">A</div></div>
+                            <div class="col-6"><div class="bg-body-tertiary border rounded-3 p-3 text-center">B</div></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">2/2</div>
+                <div class="col-lg-6">
+                    <h3 class="h6">Vertical space</h3>
+                    <div class="bg-body-secondary rounded-3 p-3">
+                        <div class="row gy-4">
+                            <div class="col-12"><div class="bg-body-tertiary border rounded-3 p-3 text-center">A</div></div>
+                            <div class="col-12"><div class="bg-body-tertiary border rounded-3 p-3 text-center">B</div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Vertical</h4>
-        <div class="mb-4">
-            <div class="row gy-5">
-                <div class="col-6">
-                    <div class="bg-body-tertiary border p-3">1/4</div>
-                </div>
-                <div class="col-6">
-                    <div class="bg-body-tertiary border p-3">2/4</div>
-                </div>
-                <div class="col-6">
-                    <div class="bg-body-tertiary border p-3">3/4</div>
-                </div>
-                <div class="col-6">
-                    <div class="bg-body-tertiary border p-3">4/4</div>
-                </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Responsive spacing</h2>
+                <p class="text-body-secondary mb-2">Start with compact spacing for narrow screens, then increase separation when the layout has room to breathe.</p>
+                <code>.g-2 .g-lg-5</code>
+            </header>
+            <div class="row row-cols-2 row-cols-lg-4 g-2 g-lg-5">
+                <div class="col"><div class="bg-body-tertiary border rounded-3 p-3 h-100">Trailhead</div></div>
+                <div class="col"><div class="bg-body-tertiary border rounded-3 p-3 h-100">Saddle</div></div>
+                <div class="col"><div class="bg-body-tertiary border rounded-3 p-3 h-100">Summit</div></div>
+                <div class="col"><div class="bg-body-tertiary border rounded-3 p-3 h-100">Camp</div></div>
             </div>
-        </div>
+        </section>
 
-        <h4>Horizontal &amp; Vertical Gutters</h4>
-        <div class="mb-4">
-            <div class="row g-2">
-                <div class="col-6">
-                    <div class="bg-body-tertiary border p-3">1/4</div>
-                </div>
-                <div class="col-6">
-                    <div class="bg-body-tertiary border p-3">2/4</div>
-                </div>
-                <div class="col-6">
-                    <div class="bg-body-tertiary border p-3">3/4</div>
-                </div>
-                <div class="col-6">
-                    <div class="bg-body-tertiary border p-3">4/4</div>
-                </div>
-            </div>
-        </div>
-
-        <h4>Row Columns</h4>
-        <div class="mb-4">
-            <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">1/10</div>
-                </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">2/10</div>
-                </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">3/10</div>
-                </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">4/10</div>
-                </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">5/10</div>
-                </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">6/10</div>
-                </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">7/10</div>
-                </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">8/10</div>
-                </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">9/10</div>
-                </div>
-                <div class="col">
-                    <div class="bg-body-tertiary border p-3">10/10</div>
-                </div>
-            </div>
-        </div>
-
-        <h4>No Gutters</h4>
-        <div class="mb-4">
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">No gutters</h2>
+                <p class="text-body-secondary mb-2">Remove gutters when adjacent columns should form one continuous edge-to-edge composition.</p>
+                <code>.g-0</code>
+            </header>
             <div class="row g-0">
-                <div class="col-sm-6 col-md-8 bg-body-tertiary border">.col-sm-6 .col-md-8</div>
-                <div class="col-6 col-md-4 bg-body-tertiary border">.col-6 .col-md-4</div>
+                <div class="col-md-7"><img class="img-fluid w-100 h-100 object-fit-cover" src="../assets/coast.webp" alt="Hiker overlooking a coastal headland" loading="lazy"></div>
+                <div class="col-md-5"><div class="bg-body-tertiary border h-100 p-4"><h3 class="h5">Coastal Headland</h3><p>A compact editorial layout with media and supporting content touching at the column boundary.</p><button class="btn btn-primary ripple" type="button">View route</button></div></div>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 

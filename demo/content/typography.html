@@ -15,171 +15,106 @@
 <body>
     <div class="container">
         <h1>Typography</h1>
-        <h4>Headings</h4>
-        <div class="mb-4">
-            <h1>Heading 1</h1>
-            <h2>Heading 2</h2>
-            <h3>Heading 3</h3>
-            <h4>Heading 4</h4>
-            <h5>Heading 5</h5>
-            <h6>Heading 6</h6>
-        </div>
-        <div class="mb-4">
-            <p class="h1">Heading 1</p>
-            <p class="h2">Heading 2</p>
-            <p class="h3">Heading 3</p>
-            <p class="h4">Heading 4</p>
-            <p class="h5">Heading 5</p>
-            <p class="h6">Heading 6</p>
-        </div>
 
-        <h4>Display Headings</h4>
-        <div class="mb-4">
-            <h1 class="display-1">Display 1</h1>
-            <h1 class="display-2">Display 2</h1>
-            <h1 class="display-3">Display 3</h1>
-            <h1 class="display-4">Display 4</h1>
-            <h1 class="display-5">Display 5</h1>
-            <h1 class="display-6">Display 6</h1>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Heading scale</h2>
+                <p class="text-body-secondary mb-2">Heading utilities reproduce the native heading scale when document semantics require a different element.</p>
+                <code>.h1–.h6</code>
+            </header>
+            <div class="col-lg-8">
+                <p class="h1">Plan the remarkable</p>
+                <p class="h2">Plan the remarkable</p>
+                <p class="h3">Plan the remarkable</p>
+                <p class="h4">Plan the remarkable</p>
+                <p class="h5">Plan the remarkable</p>
+                <p class="h6 mb-0">Plan the remarkable</p>
+            </div>
+        </section>
 
-        <h4>Lead</h4>
-        <div class="mb-4">
-            <p class="lead">This is a leading text.</p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Display titles</h2>
+                <p class="text-body-secondary mb-2">The six-step display scale provides high-impact, tightly spaced titles for landing pages and editorial moments.</p>
+                <code>.display-1–.display-6</code>
+            </header>
+            <div>
+                <p class="display-1">Beyond ordinary</p>
+                <p class="display-3">Beyond ordinary</p>
+                <p class="display-6 mb-0">Beyond ordinary</p>
+            </div>
+        </section>
 
-        <h4>Inline text elements</h4>
-        <div class="mb-4">
-            <p>
-                This is some example text with a <mark>highlight</mark>.
-            </p>
-            <p>
-                <del>This is some example deleted text.</del>
-            </p>
-            <p>
-                <s>This is some example redacted text.</s>
-            </p>
-            <p>
-                <ins>This is some example inserted text.</ins>
-            </p>
-            <p>
-                <u>This is some example underlined text.</u>
-            </p>
-            <p>
-                <small>This is some example small text.</small>
-            </p>
-            <p>
-                <strong>This is some example strong text.</strong>
-            </p>
-            <p>
-                <em>This is some example italicized text.</em>
-            </p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Body hierarchy and inline emphasis</h2>
+                <p class="text-body-secondary mb-2">Lead copy establishes an introduction, while native inline elements express meaning within ordinary prose.</p>
+                <code>.lead</code> <code>&lt;strong&gt;</code> <code>&lt;mark&gt;</code>
+            </header>
+            <div class="col-lg-9">
+                <p class="lead">Follow the ridge from cool rainforest to open alpine country in a single day.</p>
+                <p><strong>Start early</strong> and carry enough water for the exposed upper section. The latest report marks the western descent as <mark>temporarily closed</mark>.</p>
+                <p class="text-body-secondary"><small>Conditions last updated on 25 August 2026.</small></p>
+                <p class="mb-0"><del>Western descent available</del> <ins>Return via North Saddle</ins></p>
+            </div>
+        </section>
 
-        <h4>Abbreviations</h4>
-        <div class="mb-4">
-            <p>
-                <abbr title="attribute">attr</abbr>
-            </p>
-            <p>
-                <abbr title="HyperText Markup Language" class="initialism">HTML</abbr>
-            </p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Quotations</h2>
+                <p class="text-body-secondary mb-2">Blockquote and footer classes create a strong quotation with a clearly separated source.</p>
+                <code>.blockquote</code> <code>.blockquote-footer</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <figure class="mb-0">
+                        <blockquote class="blockquote">
+                            <p>A clear horizon makes the climb feel lighter.</p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer">North Ridge field journal</figcaption>
+                    </figure>
+                </div>
+                <div class="col-lg-6 text-end">
+                    <figure class="mb-0">
+                        <blockquote class="blockquote">
+                            <p>The best route leaves enough time to notice where you are.</p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer">Expedition notes</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
 
-        <h4>Blockquote</h4>
-        <div class="mb-4">
-            <blockquote class="blockquote">
-                <p>This is an example quote.</p>
-            </blockquote>
-        </div>
-        <div class="mb-4">
-            <figure>
-                <blockquote class="blockquote">
-                    <p>This is an example quote.</p>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    Author Name in <cite title="Source Title">Source Title</cite>
-                </figcaption>
-            </figure>
-        </div>
-        <div class="mb-4">
-            <figure class="text-center">
-                <blockquote class="blockquote">
-                    <p>This is an example quote.</p>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    Author Name in <cite title="Source Title">Source Title</cite>
-                </figcaption>
-            </figure>
-        </div>
-        <div class="mb-4">
-            <figure class="text-end">
-                <blockquote class="blockquote">
-                    <p>This is an example quote.</p>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    Author Name in <cite title="Source Title">Source Title</cite>
-                </figcaption>
-            </figure>
-        </div>
-
-        <h4>List Unstyled</h4>
-        <div class="mb-4">
-            <ul class="list-unstyled">
-                <li>Item</li>
-                <li>Item</li>
-                <ul>
-                    <li>Inline Item</li>
-                    <li>Inline Item</li>
-                </ul>
-            </ul>
-        </div>
-
-        <h4>List Inline</h4>
-        <div class="mb-4">
-            <ul class="list-inline">
-                <li class="list-inline-item">Item</li>
-                <li class="list-inline-item">Item</li>
-            </ul>
-        </div>
-
-        <h4>Description List</h4>
-        <div class="mb-4">
-            <dl class="row" style="max-width: 750px;">
-                <dt class="col-sm-3">
-                    Heading
-                </dt>
-                <dd class="col-sm-9">
-                    This is some example content.
-                </dd>
-                <dt class="col-sm-3">
-                    Heading
-                </dt>
-                <dd class="col-sm-9">
-                    <p>This is some example content.</p>
-                    <p>With additional content.</p>
-                </dd>
-                <dt class="col-sm-3 text-truncate">
-                    Heading with truncation
-                </dt>
-                <dd class="col-sm-9">
-                    This is some example content.
-                </dd>
-                <dt class="col-sm-3">
-                    Heading
-                </dt>
-                <dd class="col-sm-9">
-                    <dl class="row">
-                        <dt class="col-sm-3">
-                            Nesting
-                        </dt>
-                        <dd class="col-sm-9">
-                            This is some example content.
-                        </dd>
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">List treatments</h2>
+                <p class="text-body-secondary mb-2">Remove markers for navigation-like content, place short items inline, or pair terms and definitions with the grid.</p>
+                <code>.list-unstyled</code> <code>.list-inline</code> <code>.row</code>
+            </header>
+            <div class="row g-5">
+                <div class="col-md-5">
+                    <h3 class="h6">Unstyled itinerary</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><strong>07:30</strong> Trailhead departure</li>
+                        <li class="mb-2"><strong>10:00</strong> North Saddle</li>
+                        <li><strong>13:00</strong> Summit lookout</li>
+                    </ul>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="#">Map</a></li>
+                        <li class="list-inline-item"><a href="#">Weather</a></li>
+                        <li class="list-inline-item"><a href="#">Alerts</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-7">
+                    <h3 class="h6">Route definition</h3>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Track grade</dt><dd class="col-sm-8">Moderate, with exposed sections</dd>
+                        <dt class="col-sm-4">Best season</dt><dd class="col-sm-8">Late spring through early autumn</dd>
+                        <dt class="col-sm-4">Navigation</dt><dd class="col-sm-8">Marked track to the saddle, then cairned route</dd>
                     </dl>
-                </dd>
-            </dl>
-        </div>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 

@@ -12,282 +12,137 @@
     <script src="../assets/demo.js"></script>
 </head>
 
-<body class="p-1">
+<body>
     <div class="container">
         <h1>Base Styles</h1>
 
-        <h4>Headings</h4>
-        <div class="mb-4">
-            <h1>Heading 1</h1>
-            <h2>Heading 2</h2>
-            <h3>Heading 3</h3>
-            <h4>Heading 4</h4>
-            <h5>Heading 5</h5>
-            <h6>Heading 6</h6>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Document flow</h2>
+                <p class="text-body-secondary mb-2">FrostUI gives ordinary semantic HTML a readable rhythm before any component classes are applied.</p>
+                <code>Unclassed headings, paragraphs, links, and rules</code>
+            </header>
+            <article class="col-lg-9">
+                <h3>Field notes from North Ridge</h3>
+                <p>The track rises through open forest before reaching a broad saddle with views across the western range.</p>
+                <h4>Current conditions</h4>
+                <p>Recent rain has softened the lower approach. Check the <a href="#nativeDisclosure">route advisory</a> before departure.</p>
+                <hr>
+                <p class="mb-0">Updated <time datetime="2026-08-25">25 August 2026</time>.</p>
+            </article>
+        </section>
 
-        <h4>Paragraphs</h4>
-        <div class="mb-4">
-            <p>This is a paragraph.</p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Native lists</h2>
+                <p class="text-body-secondary mb-2">Ordered, unordered, and description lists retain useful markers, spacing, and hierarchy without utility classes.</p>
+                <code>&lt;ul&gt;</code> <code>&lt;ol&gt;</code> <code>&lt;dl&gt;</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h3 class="h6">Equipment</h3>
+                    <ul class="mb-0">
+                        <li>Offline map</li>
+                        <li>Rain shell</li>
+                        <li>Head torch</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="h6">Departure checklist</h3>
+                    <ol class="mb-0">
+                        <li>Check alerts</li>
+                        <li>Share the route plan</li>
+                        <li>Record the start time</li>
+                    </ol>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="h6">Route summary</h3>
+                    <dl class="mb-0">
+                        <dt>Distance</dt><dd>12.6 km</dd>
+                        <dt>Ascent</dt><dd>680 m</dd>
+                        <dt>Grade</dt><dd>Moderate</dd>
+                    </dl>
+                </div>
+            </div>
+        </section>
 
-        <h4>Links</h4>
-        <div class="mb-4">
-            <p>
-                <a href="#">This is a link</a>
-            </p>
-            <p>
-                <a>This is a placeholder link</a>
-            </p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Inline semantics</h2>
+                <p class="text-body-secondary mb-2">Text-level elements preserve their meaning while receiving consistent typography and theme-aware color.</p>
+                <code>&lt;mark&gt;</code> <code>&lt;code&gt;</code> <code>&lt;kbd&gt;</code> <code>&lt;abbr&gt;</code>
+            </header>
+            <div class="card card-body col-lg-9">
+                <p>Use <mark>extra caution</mark> above the saddle when the wind warning is active.</p>
+                <p>Set the route token with <code>data-ui-target="#northRidge"</code>.</p>
+                <p>Press <kbd><kbd>Ctrl</kbd> + <kbd>K</kbd></kbd> to open search.</p>
+                <p><abbr title="Global Positioning System">GPS</abbr> accuracy can fall below <var>r</var> = 10 m in the gorge.</p>
+                <samp class="mb-0">Route pack downloaded successfully.</samp>
+            </div>
+        </section>
 
-        <h4>Horizontal Rules</h4>
-        <div class="mb-4">
-            <hr>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Unclassed data and controls</h2>
+                <p class="text-body-secondary mb-2">Native tables and form controls are normalized but intentionally remain visually distinct from the full component treatments.</p>
+                <code>No .table, .input-filled, or .input-outline classes</code>
+            </header>
+            <div class="row g-5">
+                <div class="col-lg-6">
+                    <table>
+                        <caption>Morning trailhead readings</caption>
+                        <thead>
+                            <tr><th scope="col">Time</th><th scope="col">Temperature</th><th scope="col">Wind</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><th scope="row">7:00</th><td>8°C</td><td>12 km/h</td></tr>
+                            <tr><th scope="row">9:00</th><td>11°C</td><td>18 km/h</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-6">
+                    <form>
+                        <fieldset>
+                            <legend>Send a route update</legend>
+                            <p><label for="baseEmail">Email address</label><br><input id="baseEmail" type="email" placeholder="walker@example.com"></p>
+                            <p><label for="baseRegion">Region</label><br><select id="baseRegion"><option>North Ridge</option><option>Coastal Track</option></select></p>
+                            <p><label><input type="checkbox" checked> Include weather alerts</label></p>
+                            <button type="button">Subscribe</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </section>
 
-        <h4>Lists</h4>
-        <div class="mb-4">
-            <ul>
-                <li>List Item</li>
-                <li>List Item</li>
-                <li>List Item</li>
-                <li>List Item</li>
-            </ul>
-        </div>
-        <div class="mb-4">
-            <ol>
-                <li>List Item</li>
-                <li>List Item</li>
-                <li>List Item</li>
-                <li>List Item</li>
-            </ol>
-        </div>
-        <div class="mb-4">
-            <dl>
-                <dt>Heading</dt>
-                <dd>List Item</dd>
-                <dt>Heading</dt>
-                <dd>List Item</dd>
-                <dt>Heading</dt>
-                <dd>List Item</dd>
-            </dl>
-        </div>
-
-        <h4>Inline Code</h4>
-        <div class="mb-4">
-            <p>An example <code>&lt;html&gt;</code> HTML tag.</p>
-        </div>
-
-        <h4>Code Block</h4>
-        <div class="mb-4">
-            <pre><code>const x = 1;
-const y = 2;</code></pre>
-        </div>
-
-        <h4>Variables</h4>
-        <div class="mb-4">
-            <var>x</var> = <var>a</var><var>b</var> + <var>c</var>
-        </div>
-
-        <h4>User Input</h4>
-        <div class="mb-4">
-            <kbd>cd ..</kbd>
-            <kbd><kbd>ctrl</kbd> + <kbd>x</kbd></kbd>
-        </div>
-
-        <h4>Sample output</h4>
-        <div class="mb-4">
-            <samp>This text is meant to be treated as sample output from a computer program.</samp>
-        </div>
-
-        <h4>Table</h4>
-        <div class="mb-4">
-            <table>
-                <caption>
-                    This is a table caption.
-                </caption>
-                <thead>
-                    <tr>
-                        <th>Table header</th>
-                        <th>Table header</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Content</td>
-                        <td>Content</td>
-                    </tr>
-                    <tr>
-                        <td>Content</td>
-                        <td>Content</td>
-                    </tr>
-                </tbody>
-                <tr>
-            </table>
-        </div>
-
-        <h4>Form</h4>
-        <div class="mb-4">
-            <fieldset>
-                <legend>Example legend</legend>
-                <p>
-                    <label for="input">Text input</label>
-                    <input id="input" type="text" placeholder="Placeholder">
-                </p>
-                <p>
-                    <label for="email">Email input</label>
-                    <input id="email" type="email" placeholder="test@test.com">
-                </p>
-                <p>
-                    <label for="tel">Telephone input</label>
-                    <input id="tel" type="tel">
-                </p>
-                <p>
-                    <label for="url">Url input</label>
-                    <input id="url" type="url">
-                </p>
-                <p>
-                    <label for="number">Number input</label>
-                    <input id="number" type="number">
-                </p>
-                <p>
-                    <label for="search">Search input</label>
-                    <input id="search" type="search">
-                </p>
-                <p>
-                    <label for="range">Range input</label>
-                    <input id="range" type="range" min="0" max="10">
-                </p>
-                <p>
-                    <label for="file">File input</label>
-                    <input id="file" type="file">
-                </p>
-                <p>
-                    <label for="select">Select input</label>
-                    <select id="select">
-                        <option value="">Choose...</option>
-                        <optgroup label="Group 1">
-                            <option value="">Option 1</option>
-                            <option value="">Option 2</option>
-                            <option value="">Option 3</option>
-                        </optgroup>
-                        <optgroup label="Group 2">
-                            <option value="">Option 4</option>
-                            <option value="">Option 5</option>
-                            <option value="">Option 6</option>
-                        </optgroup>
-                    </select>
-                </p>
-                <p>
-                    <label>
-                        <input type="checkbox" value="">
-                        Checkbox
-                    </label>
-                </p>
-                <p>
-                    <label>
-                        <input id="optionsRadios1" type="radio" name="optionsRadios" value="option1" checked>
-                        Option 1
-                    </label>
-                    <label>
-                        <input id="optionsRadios2" type="radio" name="optionsRadios" value="option2">
-                        Option 2
-                    </label>
-                    <label>
-                        <input id="optionsRadios3" type="radio" name="optionsRadios" value="option3" disabled>
-                        Option 3 (Disabled)
-                    </label>
-                </p>
-                <p>
-                    <label for="textarea">Textarea</label>
-                    <textarea id="textarea" rows="3"></textarea>
-                </p>
-                <p>
-                    <label for="date">Date input</label>
-                    <input id="date" type="date">
-                </p>
-                <p>
-                    <label for="time">Time input</label>
-                    <input id="time" type="time">
-                </p>
-                <p>
-                    <label for="password">Password input</label>
-                    <input id="password" type="password">
-                </p>
-                <p>
-                    <label for="datetime-local">Date/Time input</label>
-                    <input id="datetime-local" type="datetime-local">
-                </p>
-                <p>
-                    <label for="week">Week input</label>
-                    <input id="week" type="week">
-                </p>
-                <p>
-                    <label for="month">Month input</label>
-                    <input id="month" type="month">
-                </p>
-                <p>
-                    <label for="color">Color input</label>
-                    <input id="color" type="color">
-                </p>
-                <p>
-                    <label for="output">Output</label>
-                    <output id="output" name="result">Value</output>
-                </p>
-                <p>
-                    <button type="submit">Button submit</button>
-                    <input type="submit" value="Input submit">
-                    <input type="reset" value="Input reset">
-                    <input type="button" value="Input button">
-                </p>
-                <p>
-                    <button type="submit" disabled="">Button submit</button>
-                    <input type="submit" value="Input submit" disabled>
-                    <input type="reset" value="Input reset" disabled>
-                    <input type="button" value="Input button" disabled>
-                </p>
-            </fieldset>
-        </div>
-
-        <h4>Pointers On Buttons</h4>
-        <div class="mb-4">
-            <span role="button" tabindex="0">Span element</span>
-        </div>
-
-        <h4>Address</h4>
-        <div class="mb-4">
-            <address>
-                <strong>Company Name</strong><br>
-                123 Main Street<br>
-                City, State 1234<br>
-                <abbr title="Phone">P:</abbr> +12 3456 7890
-            </address>
-            <address>
-                <strong>Full Name</strong><br>
-                <a href="mailto:test@test.com">test@test.com</a>
-            </address>
-        </div>
-
-        <h4>Blockquote</h4>
-        <div class="mb-4">
-            <blockquote class="blockquote">
-                <p>This is an example quote.</p>
-            </blockquote>
-            <p>Author Name in <cite title="Source Title">Source Title</cite></p>
-        </div>
-
-        <h4>Summary</h4>
-        <div class="mb-4">
-            <details>
-                <summary>Heading</summary>
-                <p>Some example content.</p>
-            </details>
-            <details>
-                <summary>Heading</summary>
-                <p>Some example content.</p>
-            </details>
-        </div>
+        <section class="mb-5 pb-5" id="nativeDisclosure">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Quotes, contact details, and disclosure</h2>
+                <p class="text-body-secondary mb-2">Less common native elements share the same baseline spacing and inherit the active theme.</p>
+                <code>&lt;blockquote&gt;</code> <code>&lt;address&gt;</code> <code>&lt;details&gt;</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <blockquote>
+                        <p>Take only memories, leave only footprints.</p>
+                    </blockquote>
+                    <address>
+                        <strong>North Ridge Visitor Centre</strong><br>
+                        24 Summit Road<br>
+                        <a href="mailto:trails@example.com">trails@example.com</a>
+                    </address>
+                </div>
+                <div class="col-lg-7">
+                    <details open>
+                        <summary>Route advisory</summary>
+                        <p>The upper lookout remains open, but the western descent is closed after recent storm damage.</p>
+                    </details>
+                    <details>
+                        <summary>Emergency information</summary>
+                        <p class="mb-0">Carry a personal locator beacon when travelling beyond the marked day-walk network.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 

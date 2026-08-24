@@ -16,38 +16,49 @@
     <div class="container">
         <h1>Images</h1>
 
-        <h4>Responsive</h4>
-        <p class="text-body-secondary">Use <code>.img-fluid</code> to keep an image within its parent while preserving its aspect ratio.</p>
-        <div class="mb-4">
-            <img class="img-fluid rounded" src="../assets/coast.webp" width="1440" height="960" alt="Hiker overlooking a coastal headland at blue hour">
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Responsive media</h2>
+                <p class="text-body-secondary mb-2">Fluid images never exceed their container and retain their intrinsic aspect ratio as the layout changes.</p>
+                <code>.img-fluid</code>
+            </header>
+            <img class="img-fluid rounded-3 shadow-sm" src="../assets/coast.webp" width="1440" height="960" alt="Hiker overlooking a coastal headland at blue hour">
+        </section>
 
-        <h4>Thumbnail</h4>
-        <p class="text-body-secondary">The thumbnail treatment adds a compact border and background around media.</p>
-        <div class="mb-4">
-            <img class="img-thumbnail" src="../assets/cabin.webp" width="280" alt="Cabin beside a misty alpine lake">
-        </div>
-
-        <h4>Alignment</h4>
-        <p class="text-body-secondary">Float utilities align media to either edge and <code>.clearfix</code> contains the floated content.</p>
-        <div class="mb-4">
-            <div class="clearfix">
-                <img class="rounded float-start" src="../assets/coast.webp" width="280" alt="Coastal cliffs at dusk">
-                <img class="rounded float-end" src="../assets/canyon.webp" width="280" alt="Desert canyon and winding road">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Thumbnails</h2>
+                <p class="text-body-secondary mb-2">Thumbnail framing provides a consistent border, background, and radius around images with different subjects.</p>
+                <code>.img-thumbnail</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-3 g-4">
+                <div class="col"><img class="img-thumbnail" src="../assets/coast.webp" width="480" height="320" alt="Coastal cliffs at blue hour" loading="lazy"></div>
+                <div class="col"><img class="img-thumbnail" src="../assets/cabin.webp" width="480" height="320" alt="Cabin beside a misty alpine lake" loading="lazy"></div>
+                <div class="col"><img class="img-thumbnail" src="../assets/canyon.webp" width="480" height="320" alt="Expedition vehicle above a desert canyon" loading="lazy"></div>
             </div>
-        </div>
+        </section>
 
-        <h4>Centered block</h4>
-        <p class="text-body-secondary">A block image can be centered with automatic inline margins.</p>
-        <div class="mb-4">
-            <img class="d-block rounded mx-auto" src="../assets/cabin.webp" width="320" alt="Mountain cabin at dawn">
-        </div>
-
-        <h4>Centered inline content</h4>
-        <p class="text-body-secondary">Text alignment on the parent centers an inline image.</p>
-        <div class="mb-4 text-center">
-            <img class="rounded" src="../assets/canyon.webp" width="320" alt="Expedition vehicle at a canyon overlook">
-        </div>
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Alignment</h2>
+                <p class="text-body-secondary mb-2">Images combine with display, margin, and float utilities when the surrounding content determines their alignment.</p>
+                <code>.d-block .mx-auto</code> <code>.float-start|end</code>
+            </header>
+            <div class="row g-5">
+                <div class="col-lg-5 text-center">
+                    <img class="d-block img-fluid rounded-3 mx-auto" src="../assets/cabin.webp" width="360" height="240" alt="Mountain cabin at dawn" loading="lazy">
+                    <p class="text-body-secondary mt-2 mb-0">Centered block image</p>
+                </div>
+                <div class="col-lg-7">
+                    <div class="clearfix">
+                        <img class="img-fluid rounded-3 float-sm-end ms-sm-4 mb-3" src="../assets/canyon.webp" width="280" height="187" alt="Vehicle at a canyon overlook" loading="lazy">
+                        <h3 class="h5">Flowing editorial content</h3>
+                        <p>Float utilities let nearby copy wrap around supporting media at the selected breakpoint.</p>
+                        <p class="mb-0">Below that breakpoint, the image returns to ordinary document flow and retains a usable responsive width.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 

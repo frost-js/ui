@@ -16,23 +16,39 @@
     <div class="container">
         <h1>Figures</h1>
 
-        <h4>Caption</h4>
-        <p class="text-body-secondary">Figures keep related media and explanatory text together.</p>
-        <div class="mb-4">
-            <figure class="figure">
-                <img class="figure-img img-fluid rounded" src="../assets/cabin.webp" width="560" height="373" alt="Cabin beside a misty alpine lake">
-                <figcaption class="figure-caption">A remote timber shelter beside an alpine lake at dawn.</figcaption>
-            </figure>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Image and caption</h2>
+                <p class="text-body-secondary mb-2">A figure keeps media and its explanatory caption together as one semantic unit.</p>
+                <code>.figure</code> <code>.figure-img</code> <code>.figure-caption</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <figure class="figure mb-0">
+                        <img class="figure-img img-fluid rounded-3" src="../assets/cabin.webp" width="720" height="480" alt="Cabin beside a misty alpine lake">
+                        <figcaption class="figure-caption">A remote timber shelter beside an alpine lake at dawn.</figcaption>
+                    </figure>
+                </div>
+                <div class="col-md-6">
+                    <figure class="figure mb-0">
+                        <img class="figure-img img-fluid rounded-3" src="../assets/coast.webp" width="720" height="480" alt="Hiker overlooking a coastal headland">
+                        <figcaption class="figure-caption">The final lookout above a sheltered coastal route.</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
 
-        <h4>Aligned caption</h4>
-        <p class="text-body-secondary">Text utilities can change caption alignment without altering the figure component.</p>
-        <div class="mb-4">
-            <figure class="figure">
-                <img class="figure-img img-fluid rounded" src="../assets/canyon.webp" width="560" height="373" alt="Blue vehicle overlooking a desert canyon">
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Caption alignment</h2>
+                <p class="text-body-secondary mb-2">Text utilities adjust caption alignment without changing the figure component or its semantic structure.</p>
+                <code>.text-end</code>
+            </header>
+            <figure class="figure mb-0">
+                <img class="figure-img img-fluid rounded-3" src="../assets/canyon.webp" width="720" height="480" alt="Expedition vehicle overlooking a desert canyon" loading="lazy">
                 <figcaption class="figure-caption text-end">A supported route through remote desert country.</figcaption>
             </figure>
-        </div>
+        </section>
     </div>
 </body>
 

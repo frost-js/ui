@@ -15,27 +15,58 @@
 <body>
     <div class="container">
         <h1>Containers</h1>
+
+        <section class="mb-4">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Responsive container</h2>
+                <p class="text-body-secondary mb-2">The default container stays fluid at smaller widths, then adopts a maximum width at each breakpoint.</p>
+                <code>.container</code>
+            </header>
+        </section>
     </div>
-    <div class="mb-4">
-        <div class="container bg-body-tertiary border">.container</div>
+    <div class="bg-body-secondary py-4 mb-5">
+        <div class="container">
+            <div class="card card-body">
+                <strong>Responsive content boundary</strong>
+                <div class="text-body-secondary">Resize the viewport to see the outer gutters and maximum width change.</div>
+            </div>
+        </div>
     </div>
-    <div class="mb-4">
-        <div class="container-sm bg-body-tertiary border">.container-sm</div>
+
+    <div class="container">
+        <section class="mb-4">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Breakpoint container</h2>
+                <p class="text-body-secondary mb-2">A breakpoint container remains full width until its named breakpoint, then follows the responsive maximum-width scale.</p>
+                <code>.container-md</code> <code>.container-sm|lg|xl|xxl</code>
+            </header>
+        </section>
     </div>
-    <div class="mb-4">
-        <div class="container-md bg-body-tertiary border">.container-md</div>
+    <div class="bg-body-secondary py-4 mb-5">
+        <div class="container-md">
+            <div class="card card-body">
+                <strong>Medium breakpoint boundary</strong>
+                <div class="text-body-secondary">Full width below medium; constrained from medium upward.</div>
+            </div>
+        </div>
     </div>
-    <div class="mb-4">
-        <div class="container-lg bg-body-tertiary border">.container-lg</div>
+
+    <div class="container">
+        <section class="mb-4">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Fluid container</h2>
+                <p class="text-body-secondary mb-2">A fluid container always uses the available width while retaining the framework’s horizontal container padding.</p>
+                <code>.container-fluid</code>
+            </header>
+        </section>
     </div>
-    <div class="mb-4">
-        <div class="container-xl bg-body-tertiary border">.container-xl</div>
-    </div>
-    <div class="mb-4">
-        <div class="container-xxl bg-body-tertiary border">.container-xxl</div>
-    </div>
-    <div class="mb-4">
-        <div class="container-fluid bg-body-tertiary border">.container-fluid</div>
+    <div class="bg-body-secondary py-4 mb-5 pb-5">
+        <div class="container-fluid">
+            <div class="card card-body">
+                <strong>Fluid content boundary</strong>
+                <div class="text-body-secondary">The content continues to expand with its allocated width.</div>
+            </div>
+        </div>
     </div>
 </body>
 

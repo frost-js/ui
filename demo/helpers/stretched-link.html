@@ -10,57 +10,64 @@
     <link rel="stylesheet" href="../assets/demo.css" />
     <script src="../../dist/frost-ui-bundle.js"></script>
     <script src="../assets/demo.js"></script>
-    <style>
-        svg {
-            text-anchor: middle;
-            user-select: none;
-        }
-    </style>
 </head>
 
 <body>
     <div class="container">
         <h1>Stretched Links</h1>
-        <div class="mb-4">
-            <div class="card" style="width: 18rem;">
-                <svg class="card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#868e96"></rect>
-                    <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
-                </svg>
-                <div class="card-body">
-                    <h5 class="card-title">Card Title</h5>
-                    <p class="card-text">This is the body of the card.</p>
-                    <a class="btn btn-primary stretched-link" href="#" role="button">Primary</a>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1" id="linked-cards">Linked cards</h2>
+                <p class="text-body-secondary mb-2">A stretched link expands its clickable pseudo-element to the nearest positioned ancestor, making the complete card interactive.</p>
+                <code>.stretched-link</code>
+            </header>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <article class="card h-100">
+                        <img class="card-img-top" src="../assets/coast.webp" width="720" height="480" alt="Hiker overlooking a coastal headland">
+                        <div class="card-body">
+                            <span class="badge text-bg-primary mb-2">Moderate</span>
+                            <h3 class="card-title">Coastal Headland</h3>
+                            <p class="card-text">An exposed half-day route linking sheltered beaches with a high ocean lookout.</p>
+                            <a class="stretched-link" href="#linked-cards">View route</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col">
+                    <article class="card h-100">
+                        <img class="card-img-top" src="../assets/cabin.webp" width="720" height="480" alt="Cabin beside a misty alpine lake">
+                        <div class="card-body">
+                            <span class="badge text-bg-accent mb-2">Overnight</span>
+                            <h3 class="card-title">Alpine Lake Cabin</h3>
+                            <p class="card-text">A quiet forest approach to a timber shelter beside a high-country lake.</p>
+                            <a class="stretched-link" href="#linked-cards">View route</a>
+                        </div>
+                    </article>
                 </div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="border rounded shadow-sm d-flex position-relative" style="max-width: 36em;">
-                <svg class="flex-shrink-0 me-3" width="144" height="144" xmlns="http://www.w3.org/2000/svg" role="img" preserveAspectRatio="xMidYMid slice" focusable="false">
-                    <rect width="100%" height="100%" fill="#868e96"></rect>
-                </svg>
-                <div class="p-2">
-                    <h5 class="mt-0">Component Title</h5>
-                    <p>This is the body of the component.</p>
-                    <a class="stretched-link" href="#">Link</a>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1" id="custom-positioned-parent">Custom positioned parent</h2>
+                <p class="text-body-secondary mb-2">Use position-relative when the containing pattern does not already establish positioning.</p>
+                <code>.position-relative</code> <code>.stretched-link</code>
+            </header>
+            <div class="row">
+                <div class="col-lg-8">
+                    <article class="position-relative bg-body-tertiary border rounded-3 p-4">
+                        <div class="hstack gap-3">
+                            <span class="badge text-bg-info">Field note</span>
+                            <small class="text-body-secondary">Updated 24 August</small>
+                        </div>
+                        <h3 class="h5 mt-3">Water availability beyond the saddle</h3>
+                        <p>Seasonal streams are dry. Carry enough water for the exposed return leg.</p>
+                        <a class="stretched-link" href="#custom-positioned-parent">Read field note</a>
+                    </article>
                 </div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="row g-0 bg-body-tertiary border rounded shadow-sm  position-relative" style="max-width: 36em;">
-                <div class="col-md-6 mb-md-0 p-md-4">
-                    <svg class="w-100" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="100%" height="100%" fill="#868e96"></rect>
-                    </svg>
-                </div>
-                <div class="col-md-6 p-4 ps-md-0">
-                    <h5 class="mt-0">Component Title</h5>
-                    <p>This is the body of the component.</p>
-                    <a class="stretched-link" href="#">Link</a>
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
 </body>
 

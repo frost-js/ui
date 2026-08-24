@@ -15,18 +15,46 @@
 <body>
     <div class="container">
         <h1>Text Truncation</h1>
-        <div class="mb-4">
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Block content</h2>
+                <p class="text-body-secondary mb-2">Text truncation adds an ellipsis when a single line exceeds the width imposed by its layout.</p>
+                <code>.text-truncate</code>
+            </header>
             <div class="row">
-                <div class="col-2 text-truncate">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                <div class="col-8 col-md-5">
+                    <div class="card card-body">
+                        <strong class="text-truncate" title="Coastal Headland expedition briefing and equipment checklist">Coastal Headland expedition briefing and equipment checklist</strong>
+                        <small class="text-body-secondary">PDF · 4.8 MB</small>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="mb-4">
-            <span class="d-inline-block text-truncate" style="max-width: 10em;">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </span>
-        </div>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Flexible rows</h2>
+                <p class="text-body-secondary mb-2">Within a flex composition, the helper allows a long label to yield space to fixed metadata and actions.</p>
+                <code>.hstack</code> <code>.text-truncate</code>
+            </header>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="hstack gap-3">
+                        <span class="badge text-bg-primary">GPX</span>
+                        <span class="text-truncate" title="Coastal Headland via North Ridge, Lighthouse Track, and the Southern Lookout">Coastal Headland via North Ridge, Lighthouse Track, and the Southern Lookout</span>
+                        <small class="text-body-secondary ms-auto flex-shrink-0">12.4 km</small>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="hstack gap-3">
+                        <span class="badge text-bg-accent">PDF</span>
+                        <span class="text-truncate" title="Emergency contacts, access gates, and alternate meeting points">Emergency contacts, access gates, and alternate meeting points</span>
+                        <small class="text-body-secondary ms-auto flex-shrink-0">2.1 MB</small>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 

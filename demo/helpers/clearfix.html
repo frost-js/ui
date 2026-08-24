@@ -15,12 +15,33 @@
 <body>
     <div class="container">
         <h1>Clearfix</h1>
-        <div class="mb-4">
-            <div class="bg-body-tertiary border clearfix">
-                <button class="btn btn-secondary ripple float-start">Left Button</button>
-                <button class="btn btn-secondary ripple float-end">Right Button</button>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Containing floated content</h2>
+                <p class="text-body-secondary mb-2">Add clearfix to a parent when floated content should continue to define the parent’s height.</p>
+                <code>.clearfix</code> <code>.float-start</code>
+            </header>
+            <article class="card">
+                <div class="card-body clearfix">
+                    <img class="img-thumbnail float-start me-3 mb-2" src="../assets/coast.webp" width="180" height="120" alt="Hiker overlooking a coastal headland">
+                    <h3 class="h5">Coastal headland</h3>
+                    <p class="mb-0">The image is floated for a compact editorial treatment. Clearfix keeps the card body wrapped around both the image and this longer description.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Opposing actions</h2>
+                <p class="text-body-secondary mb-2">Floats can also separate simple controls while the clearfix preserves the surrounding action bar.</p>
+                <code>.float-start</code> <code>.float-end</code>
+            </header>
+            <div class="bg-body-tertiary border rounded-3 p-3 clearfix">
+                <button class="btn btn-secondary ripple float-start" type="button">Previous</button>
+                <button class="btn btn-primary ripple float-end" type="button">Continue</button>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 

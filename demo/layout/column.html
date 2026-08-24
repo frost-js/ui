@@ -15,221 +15,92 @@
 <body>
     <div class="container">
         <h1>Columns</h1>
-        <h4>Vertical Alignment</h4>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row align-items-start bg-body-secondary" style="min-height: 5rem;">
-                    <div class="col bg-body-tertiary border">1/3</div>
-                    <div class="col bg-body-tertiary border">2/3</div>
-                    <div class="col bg-body-tertiary border">3/3</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row align-items-center bg-body-secondary" style="min-height: 5rem;">
-                    <div class="col bg-body-tertiary border">1/3</div>
-                    <div class="col bg-body-tertiary border">2/3</div>
-                    <div class="col bg-body-tertiary border">3/3</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row align-items-end bg-body-secondary" style="min-height: 5rem;">
-                    <div class="col bg-body-tertiary border">1/3</div>
-                    <div class="col bg-body-tertiary border">2/3</div>
-                    <div class="col bg-body-tertiary border">3/3</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary" style="min-height: 5rem;">
-                    <div class="col align-self-start bg-body-tertiary border">1/3</div>
-                    <div class="col align-self-center bg-body-tertiary border">2/3</div>
-                    <div class="col align-self-end bg-body-tertiary border">3/3</div>
-                </div>
-            </div>
-        </div>
 
-        <h4>Horizontal Alignment</h4>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row justify-content-start bg-body-secondary">
-                    <div class="col-4 bg-body-tertiary border">1/2</div>
-                    <div class="col-4 bg-body-tertiary border">2/2</div>
-                </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Vertical alignment</h2>
+                <p class="text-body-secondary mb-2">Align every column from the row or give individual columns their own position along the block axis.</p>
+                <code>.align-items-center</code> <code>.align-self-start|center|end</code>
+            </header>
+            <div class="row g-3 bg-body-secondary rounded-3 p-3" style="min-height: 10rem;">
+                <div class="col align-self-start"><div class="bg-body-tertiary border rounded-3 p-3">Start</div></div>
+                <div class="col align-self-center"><div class="bg-body-tertiary border rounded-3 p-3">Center</div></div>
+                <div class="col align-self-end"><div class="bg-body-tertiary border rounded-3 p-3">End</div></div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row justify-content-center bg-body-secondary">
-                    <div class="col-4 bg-body-tertiary border">1/2</div>
-                    <div class="col-4 bg-body-tertiary border">2/2</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row justify-content-end bg-body-secondary">
-                    <div class="col-4 bg-body-tertiary border">1/2</div>
-                    <div class="col-4 bg-body-tertiary border">2/2</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row justify-content-around bg-body-secondary">
-                    <div class="col-4 bg-body-tertiary border">1/2</div>
-                    <div class="col-4 bg-body-tertiary border">2/2</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row justify-content-between bg-body-secondary">
-                    <div class="col-4 bg-body-tertiary border">1/2</div>
-                    <div class="col-4 bg-body-tertiary border">2/2</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row justify-content-evenly bg-body-secondary">
-                    <div class="col-4 bg-body-tertiary border">1/2</div>
-                    <div class="col-4 bg-body-tertiary border">2/2</div>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <h4>Column Wrapping</h4>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-9 bg-body-tertiary border">.col-9</div>
-                    <div class="col-4 bg-body-tertiary border">.col-4</div>
-                    <div class="col-6 bg-body-tertiary border">.col-6</div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Horizontal distribution</h2>
+                <p class="text-body-secondary mb-2">Justification utilities distribute fixed-width columns through otherwise unused inline space.</p>
+                <code>.justify-content-between</code> <code>.justify-content-evenly</code>
+            </header>
+            <div class="d-grid gap-3">
+                <div class="row justify-content-between bg-body-secondary rounded-3 p-3">
+                    <div class="col-4"><div class="bg-body-tertiary border rounded-3 p-3">Start</div></div>
+                    <div class="col-4"><div class="bg-body-tertiary border rounded-3 p-3">End</div></div>
+                </div>
+                <div class="row justify-content-evenly bg-body-secondary rounded-3 p-3">
+                    <div class="col-3"><div class="bg-body-tertiary border rounded-3 p-3 text-center">A</div></div>
+                    <div class="col-3"><div class="bg-body-tertiary border rounded-3 p-3 text-center">B</div></div>
+                    <div class="col-3"><div class="bg-body-tertiary border rounded-3 p-3 text-center">C</div></div>
                 </div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-6 col-sm-3 bg-body-tertiary border">.col-6 .col-sm-3</div>
-                    <div class="col-6 col-sm-3 bg-body-tertiary border">.col-6 .col-sm-3</div>
-                    <div class="w-100"></div>
-                    <div class="col-6 col-sm-3 bg-body-tertiary border">.col-6 .col-sm-3</div>
-                    <div class="col-6 col-sm-3 bg-body-tertiary border">.col-6 .col-sm-3</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-6 col-sm-4 bg-body-tertiary border">.col-6 .col-sm-4</div>
-                    <div class="col-6 col-sm-4 bg-body-tertiary border">.col-6 .col-sm-4</div>
-                    <div class="w-100 d-none d-md-block"></div>
-                    <div class="col-6 col-sm-4 bg-body-tertiary border">.col-6 .col-sm-4</div>
-                    <div class="col-6 col-sm-4 bg-body-tertiary border">.col-6 .col-sm-4</div>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <h4>Column Ordering</h4>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col bg-body-tertiary border">1/3</div>
-                    <div class="col order-5 bg-body-tertiary border">2/3</div>
-                    <div class="col order-1 bg-body-tertiary border">3/3</div>
-                </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Wrapping</h2>
+                <p class="text-body-secondary mb-2">When explicit spans exceed twelve units, subsequent columns continue on a new row without extra markup.</p>
+                <code>.col-8 + .col-6 + .col-6</code>
+            </header>
+            <div class="row g-2 bg-body-secondary rounded-3 p-3">
+                <div class="col-8"><div class="bg-body-tertiary border rounded-3 p-3">Eight columns</div></div>
+                <div class="col-6"><div class="bg-body-tertiary border rounded-3 p-3">Six columns</div></div>
+                <div class="col-6"><div class="bg-body-tertiary border rounded-3 p-3">Six columns</div></div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col order-last bg-body-tertiary border">1/3</div>
-                    <div class="col bg-body-tertiary border">2/3</div>
-                    <div class="col order-first bg-body-tertiary border">3/3</div>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <h4>Column Offsets</h4>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-md-4 bg-body-tertiary border">.col-md-4</div>
-                    <div class="col-md-4 offset-md-4 bg-body-tertiary border">.col-md-4 .offset-md-4</div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Responsive order</h2>
+                <p class="text-body-secondary mb-2">Order utilities can change visual priority at a breakpoint while the document keeps its logical source order.</p>
+                <code>.order-lg-first</code> <code>.order-lg-last</code>
+            </header>
+            <div class="row g-3">
+                <div class="col-lg-4 order-lg-last">
+                    <div class="card card-body h-100">
+                        <span class="badge text-bg-secondary align-self-start mb-2">First in source</span>
+                        <h3 class="card-title">Supporting summary</h3>
+                        <p class="mb-0">Moves after the main content on large screens.</p>
+                    </div>
+                </div>
+                <div class="col-lg-8 order-lg-first">
+                    <div class="card card-body h-100">
+                        <span class="badge text-bg-primary align-self-start mb-2">Second in source</span>
+                        <h3 class="card-title">Primary route details</h3>
+                        <p class="mb-0">Moves first visually when the wider composition has enough room.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-md-3 offset-md-3 bg-body-tertiary border">.col-md-3. offset-md-3</div>
-                    <div class="col-md-3 offset-md-3 bg-body-tertiary border">.col-md-3. offset-md-3</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container mb-4">
-                <div class="row bg-body-secondary">
-                    <div class="col-md-6 offset-md-3 bg-body-tertiary border">.col-md-6 .offset-md-3</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-sm-5 col-md-6 bg-body-tertiary border">.col-sm-5 .col-md-6</div>
-                    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0 bg-body-tertiary border">.col-sm-5 .offset-sm-2 .col-md-6 .offset-md-0</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-sm-6 col-md-5 col-lg-6 bg-body-tertiary border">.col-sm-6 .col-md-5 .col-lg-6</div>
-                    <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0 bg-body-tertiary border">.col-sm-6 .col-md-5 .col-md-2 .col-lg-6 .offset-lg-0</div>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <h4>Column Margins</h4>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-md-4 bg-body-tertiary border">.col-md-4</div>
-                    <div class="col-md-4 ms-auto bg-body-tertiary border">.col-md-4 .ms-auto</div>
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Offsets and auto margins</h2>
+                <p class="text-body-secondary mb-2">Offsets reserve grid tracks, while logical auto margins push a column through the flexible space around it.</p>
+                <code>.offset-md-3</code> <code>.ms-auto</code>
+            </header>
+            <div class="d-grid gap-3">
+                <div class="row g-2 bg-body-secondary rounded-3 p-3">
+                    <div class="col-md-6 offset-md-3"><div class="bg-body-tertiary border rounded-3 p-3 text-center">Centered with an offset</div></div>
+                </div>
+                <div class="row g-2 bg-body-secondary rounded-3 p-3">
+                    <div class="col-auto"><div class="bg-body-tertiary border rounded-3 p-3">Previous</div></div>
+                    <div class="col-auto ms-auto"><div class="bg-body-tertiary border rounded-3 p-3">Next</div></div>
                 </div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-md-3 ms-md-auto bg-body-tertiary border">.col-md-3 .ms-md-auto</div>
-                    <div class="col-md-3 ms-md-auto bg-body-tertiary border">.col-md-3 .ms-md-auto</div>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="container">
-                <div class="row bg-body-secondary">
-                    <div class="col-auto me-auto bg-body-tertiary border">.col-auto .me-auto</div>
-                    <div class="col-auto bg-body-tertiary border">.col-auto</div>
-                </div>
-            </div>
-        </div>
-
-        <h4>Standalone Columns</h4>
-        <div class="mb-4">
-            <div class="col-3 bg-body-tertiary border p-3">.col-3</div>
-        </div>
-        <div class="mb-4">
-            <div class="col-sm-9 bg-body-tertiary border p-3">.col-sm-9</div>
-        </div>
+        </section>
     </div>
 </body>
 

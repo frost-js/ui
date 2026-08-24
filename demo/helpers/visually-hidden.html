@@ -15,12 +15,48 @@
 <body>
     <div class="container">
         <h1>Visually Hidden</h1>
-        <div class="mb-4">
-            <h2 class="visually-hidden">Hidden</h2>
-        </div>
-        <div class="mb-4">
-            <a class="visually-hidden-focusable" href="#">Focusable</a>
-        </div>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Accessible labels</h2>
+                <p class="text-body-secondary mb-2">Hide supporting text visually while keeping it available to assistive technology.</p>
+                <code>.visually-hidden</code>
+            </header>
+            <div class="hstack flex-wrap gap-3">
+                <button class="btn btn-primary rounded-circle ripple" type="button">
+                    <span aria-hidden="true">?</span>
+                    <span class="visually-hidden">Open route help</span>
+                </button>
+                <button class="btn btn-secondary ripple" type="button">
+                    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                    Preparing route
+                    <span class="visually-hidden">Please wait</span>
+                </button>
+                <span class="badge text-bg-success">24<span class="visually-hidden"> unread field notes</span></span>
+            </div>
+        </section>
+
+        <section class="mb-5 pb-5" id="focusable-skip-link">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Focusable skip link</h2>
+                <p class="text-body-secondary mb-2">A focusable hidden helper stays out of sight until it receives keyboard focus. Press Tab to reveal the skip link below.</p>
+                <code>.visually-hidden-focusable</code>
+            </header>
+            <div class="card">
+                <div class="card-body">
+                    <a class="visually-hidden-focusable btn btn-primary" href="#route-content">Skip to route content</a>
+                    <nav class="hstack flex-wrap gap-3 mb-4" aria-label="Example navigation">
+                        <a href="#focusable-skip-link">Overview</a>
+                        <a href="#focusable-skip-link">Conditions</a>
+                        <a href="#focusable-skip-link">Equipment</a>
+                    </nav>
+                    <div id="route-content" tabindex="-1">
+                        <h3 class="h5">Route content</h3>
+                        <p class="mb-0">The skip link moves keyboard users directly past repeated navigation to this content.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 

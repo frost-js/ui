@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>FrostUI</title>
+    <title>Colors</title>
     <link rel="stylesheet" href="../dist/frost-ui.css" />
     <link rel="stylesheet" href="assets/demo.css" />
     <script src="../dist/frost-ui-bundle.js"></script>
@@ -16,105 +16,139 @@
     <div class="container">
         <h1>Colors</h1>
 
-        <h4>Primary</h4>
-        <div class="mb-4">
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item" style="background-color: var(--ui-primary-active); color: var(--ui-primary-contrast);">primary-active</li>
-                <li class="list-group-item" style="background-color: var(--ui-primary-highlight); color: var(--ui-primary-contrast);">primary-highlight</li>
-                <li class="list-group-item" style="background-color: var(--ui-primary); color: var(--ui-primary-contrast);">primary</li>
-                <li class="list-group-item" style="background-color: var(--ui-primary-emphasis); color: var(--ui-primary-contrast);">primary-emphasis</li>
-                <li class="list-group-item" style="background-color: var(--ui-primary-subtle); color:var(--ui-primary-subtle-text);">primary-subtle</li>
-            </ul>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Semantic palette</h2>
+                <p class="text-body-secondary mb-2">Semantic tokens communicate hierarchy and intent while their paired contrast colors keep foreground content readable.</p>
+                <code>--ui-*</code> <code>--ui-*-contrast</code>
+            </header>
+            <div class="row row-cols-2 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="rounded-3 p-3 h-100" style="color: var(--ui-primary-contrast); background-color: var(--ui-primary);">
+                        <strong>Primary</strong>
+                        <div class="small opacity-75">--ui-primary</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="rounded-3 p-3 h-100" style="color: var(--ui-accent-contrast); background-color: var(--ui-accent);">
+                        <strong>Accent</strong>
+                        <div class="small opacity-75">--ui-accent</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="rounded-3 p-3 h-100" style="color: var(--ui-secondary-contrast); background-color: var(--ui-secondary);">
+                        <strong>Secondary</strong>
+                        <div class="small opacity-75">--ui-secondary</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="rounded-3 p-3 h-100" style="color: var(--ui-success-contrast); background-color: var(--ui-success);">
+                        <strong>Success</strong>
+                        <div class="small opacity-75">--ui-success</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="rounded-3 p-3 h-100" style="color: var(--ui-info-contrast); background-color: var(--ui-info);">
+                        <strong>Info</strong>
+                        <div class="small opacity-75">--ui-info</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="rounded-3 p-3 h-100" style="color: var(--ui-warning-contrast); background-color: var(--ui-warning);">
+                        <strong>Warning</strong>
+                        <div class="small opacity-75">--ui-warning</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="rounded-3 p-3 h-100" style="color: var(--ui-danger-contrast); background-color: var(--ui-danger);">
+                        <strong>Danger</strong>
+                        <div class="small opacity-75">--ui-danger</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="rounded-3 p-3 h-100" style="color: var(--ui-light-contrast); background-color: var(--ui-light);">
+                        <strong>Light</strong>
+                        <div class="small opacity-75">--ui-light</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="rounded-3 p-3 h-100" style="color: var(--ui-dark-contrast); background-color: var(--ui-dark);">
+                        <strong>Dark</strong>
+                        <div class="small opacity-75">--ui-dark</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <h4>Accent</h4>
-        <div class="mb-4">
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item" style="background-color: var(--ui-accent-active); color: var(--ui-accent-contrast);">accent-active</li>
-                <li class="list-group-item" style="background-color: var(--ui-accent-highlight); color: var(--ui-accent-contrast);">accent-highlight</li>
-                <li class="list-group-item" style="background-color: var(--ui-accent); color: var(--ui-accent-contrast);">accent</li>
-                <li class="list-group-item" style="background-color: var(--ui-accent-emphasis); color: var(--ui-accent-contrast);">accent-emphasis</li>
-                <li class="list-group-item" style="background-color: var(--ui-accent-subtle); color:var(--ui-accent-subtle-text);">accent-subtle</li>
-            </ul>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Interaction scale</h2>
+                <p class="text-body-secondary mb-2">Each semantic color derives the same active, highlight, emphasis, and subtle states from its current base value.</p>
+                <code>--ui-primary-*</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <ul class="list-group shadow-sm">
+                        <li class="list-group-item d-flex justify-content-between" style="color: var(--ui-primary-contrast); background-color: var(--ui-primary-active);"><span>Active</span><code class="text-reset">--ui-primary-active</code></li>
+                        <li class="list-group-item d-flex justify-content-between" style="color: var(--ui-primary-contrast); background-color: var(--ui-primary-highlight);"><span>Highlight</span><code class="text-reset">--ui-primary-highlight</code></li>
+                        <li class="list-group-item d-flex justify-content-between" style="color: var(--ui-primary-contrast); background-color: var(--ui-primary);"><span>Base</span><code class="text-reset">--ui-primary</code></li>
+                        <li class="list-group-item d-flex justify-content-between" style="color: var(--ui-primary-contrast); background-color: var(--ui-primary-emphasis);"><span>Emphasis</span><code class="text-reset">--ui-primary-emphasis</code></li>
+                        <li class="list-group-item d-flex justify-content-between" style="color: var(--ui-primary-subtle-text); background-color: var(--ui-primary-subtle);"><span>Subtle</span><code class="text-reset">--ui-primary-subtle</code></li>
+                    </ul>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card card-body h-100">
+                        <h3 class="card-title">One coherent family</h3>
+                        <p>Components consume these states for hover, active, border, and low-emphasis surfaces.</p>
+                        <p class="text-body-secondary mb-0">Override the base token on a theme boundary and the complete interaction family follows automatically.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <h4>Secondary</h4>
-        <div class="mb-4">
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item" style="background-color: var(--ui-secondary-active); color: var(--ui-secondary-contrast);">secondary-active</li>
-                <li class="list-group-item" style="background-color: var(--ui-secondary-highlight); color: var(--ui-secondary-contrast);">secondary-highlight</li>
-                <li class="list-group-item" style="background-color: var(--ui-secondary); color: var(--ui-secondary-contrast);">secondary</li>
-                <li class="list-group-item" style="background-color: var(--ui-secondary-emphasis); color: var(--ui-secondary-contrast);">secondary-emphasis</li>
-                <li class="list-group-item" style="background-color: var(--ui-secondary-subtle); color:var(--ui-secondary-subtle-text);">secondary-subtle</li>
-            </ul>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Theme surfaces</h2>
+                <p class="text-body-secondary mb-2">Body, secondary, and tertiary surfaces establish depth without coupling content to a semantic status color.</p>
+                <code>--ui-body-bg</code> <code>--ui-secondary-bg</code> <code>--ui-tertiary-bg</code>
+            </header>
+            <div class="row row-cols-1 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="card card-body h-100">
+                        <strong>Body surface</strong>
+                        <span class="text-body-secondary">Primary reading surface</span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="bg-body-secondary border rounded-3 p-4 h-100">
+                        <strong>Secondary surface</strong>
+                        <div class="text-body-secondary">Stronger visual separation</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="bg-body-tertiary border rounded-3 p-4 h-100">
+                        <strong>Tertiary surface</strong>
+                        <div class="text-body-secondary">Quiet grouping and controls</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <h4>Success</h4>
-        <div class="mb-4">
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item" style="background-color: var(--ui-success-active); color: var(--ui-success-contrast);">success-active</li>
-                <li class="list-group-item" style="background-color: var(--ui-success-highlight); color: var(--ui-success-contrast);">success-highlight</li>
-                <li class="list-group-item" style="background-color: var(--ui-success); color: var(--ui-success-contrast);">success</li>
-                <li class="list-group-item" style="background-color: var(--ui-success-emphasis); color: var(--ui-success-contrast);">success-emphasis</li>
-                <li class="list-group-item" style="background-color: var(--ui-success-subtle); color:var(--ui-success-subtle-text);">success-subtle</li>
-            </ul>
-        </div>
-
-        <h4>Info</h4>
-        <div class="mb-4">
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item" style="background-color: var(--ui-info-active); color: var(--ui-info-contrast);">info-active</li>
-                <li class="list-group-item" style="background-color: var(--ui-info-highlight); color: var(--ui-info-contrast);">info-highlight</li>
-                <li class="list-group-item" style="background-color: var(--ui-info); color: var(--ui-info-contrast);">info</li>
-                <li class="list-group-item" style="background-color: var(--ui-info-emphasis); color: var(--ui-info-contrast);">info-emphasis</li>
-                <li class="list-group-item" style="background-color: var(--ui-info-subtle); color:var(--ui-info-subtle-text);">info-subtle</li>
-            </ul>
-        </div>
-
-        <h4>Warning</h4>
-        <div class="mb-4">
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item" style="background-color: var(--ui-warning-active); color: var(--ui-warning-contrast);">warning-active</li>
-                <li class="list-group-item" style="background-color: var(--ui-warning-highlight); color: var(--ui-warning-contrast);">warning-highlight</li>
-                <li class="list-group-item" style="background-color: var(--ui-warning); color: var(--ui-warning-contrast);">warning</li>
-                <li class="list-group-item" style="background-color: var(--ui-warning-emphasis); color: var(--ui-warning-contrast);">warning-emphasis</li>
-                <li class="list-group-item" style="background-color: var(--ui-warning-subtle); color:var(--ui-warning-subtle-text);">warning-subtle</li>
-            </ul>
-        </div>
-
-        <h4>Danger</h4>
-        <div class="mb-4">
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item" style="background-color: var(--ui-danger-active); color: var(--ui-danger-contrast);">danger-active</li>
-                <li class="list-group-item" style="background-color: var(--ui-danger-highlight); color: var(--ui-danger-contrast);">danger-highlight</li>
-                <li class="list-group-item" style="background-color: var(--ui-danger); color: var(--ui-danger-contrast);">danger</li>
-                <li class="list-group-item" style="background-color: var(--ui-danger-emphasis); color: var(--ui-danger-contrast);">danger-emphasis</li>
-                <li class="list-group-item" style="background-color: var(--ui-danger-subtle); color:var(--ui-danger-subtle-text);">danger-subtle</li>
-            </ul>
-        </div>
-
-        <h4>Light</h4>
-        <div class="mb-4">
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item" style="background-color: var(--ui-light-active); color: var(--ui-light-contrast);">light-active</li>
-                <li class="list-group-item" style="background-color: var(--ui-light-highlight); color: var(--ui-light-contrast);">light-highlight</li>
-                <li class="list-group-item" style="background-color: var(--ui-light); color: var(--ui-light-contrast);">light</li>
-                <li class="list-group-item" style="background-color: var(--ui-light-emphasis); color: var(--ui-light-contrast);">light-emphasis</li>
-                <li class="list-group-item" style="background-color: var(--ui-light-subtle); color:var(--ui-light-subtle-text);">light-subtle</li>
-            </ul>
-        </div>
-
-        <h4>Dark</h4>
-        <div class="mb-4">
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item" style="background-color: var(--ui-dark-active); color: var(--ui-dark-contrast);">dark-active</li>
-                <li class="list-group-item" style="background-color: var(--ui-dark-highlight); color: var(--ui-dark-contrast);">dark-highlight</li>
-                <li class="list-group-item" style="background-color: var(--ui-dark); color: var(--ui-dark-contrast);">dark</li>
-                <li class="list-group-item" style="background-color: var(--ui-dark-emphasis); color: var(--ui-dark-contrast);">dark-emphasis</li>
-                <li class="list-group-item" style="background-color: var(--ui-dark-subtle); color:var(--ui-dark-subtle-text);">dark-subtle</li>
-            </ul>
-        </div>
-
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Scoped customization</h2>
+                <p class="text-body-secondary mb-2">Create a theme boundary and override its base semantic tokens to regenerate the complete local color family.</p>
+                <code>data-ui-theme="dark"</code> <code>--ui-primary</code> <code>--ui-accent</code>
+            </header>
+            <div class="card card-body" data-ui-theme="dark" style="--ui-primary: #e11d48; --ui-accent: #f97316;">
+                <h3 class="text-gradient">Sunset expedition</h3>
+                <p class="text-body-secondary">The theme boundary redeclares the derived tokens, so the button states and branded gradient follow the two local overrides.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary ripple" type="button">Plan route</button>
+                    <span class="badge text-bg-primary align-self-center">New itinerary</span>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 
