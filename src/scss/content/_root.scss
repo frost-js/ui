@@ -123,7 +123,6 @@
         }
 
         --ui-#{$name}-subtle: color-mix(in srgb, var(--ui-#{$name}) 20%, var(--ui-body-bg));
-        --ui-#{$name}-subtle-emphasis: color-mix(in srgb, var(--ui-#{$name}) 30%, var(--ui-body-bg));
     }
 }
 
@@ -159,7 +158,6 @@
         }
 
         --ui-#{$name}-subtle: color-mix(in srgb, var(--ui-#{$name}) 40%, var(--ui-body-bg));
-        --ui-#{$name}-subtle-emphasis: color-mix(in srgb, var(--ui-#{$name}) 50%, var(--ui-body-bg));
     }
 }
 

@@ -116,8 +116,8 @@
         --ui-list-group-color: var(--ui-#{$name}-subtle-text);
         --ui-list-group-bg: var(--ui-#{$name}-subtle);
         --ui-list-group-border-color: var(--ui-#{$name}-emphasis);
-        --ui-list-group-action-hover-color: var(--ui-#{$name}-subtle-text);
-        --ui-list-group-action-hover-bg: var(--ui-#{$name}-subtle-emphasis);
+        --ui-list-group-action-hover-color: var(--ui-#{$name}-contrast);
+        --ui-list-group-action-hover-bg: var(--ui-#{$name}-highlight);
         --ui-list-group-focus-shadow-color: var(--ui-#{$name});
         --ui-list-group-active-color: var(--ui-#{$name}-contrast);
         --ui-list-group-active-bg: var(--ui-#{$name});
