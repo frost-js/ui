@@ -30,5 +30,5 @@
     text-align: center;
     white-space: nowrap;
     background-color: vars.$input-group-text-bg;
-    border: vars.$input-border-width var(--ui-border-style) vars.$input-border-color;
+    border: vars.$input-border-width var(--ui-border-style) var(--ui-input-border-color, #{vars.$input-border-color});
 }

@@ -2788,16 +2788,15 @@ fieldset:disabled .btn {
 
 .card-img, .card-img-bottom, .card-img-top {
   width: 100%;
+  border-radius: var(--ui-card-inner-border-radius);
 }
 
 .card-img-top {
-  border-top-left-radius: var(--ui-card-inner-border-radius);
-  border-top-right-radius: var(--ui-card-inner-border-radius);
+  border-radius: var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius) 0 0;
 }
 
 .card-img-bottom {
-  border-bottom-right-radius: var(--ui-card-inner-border-radius);
-  border-bottom-left-radius: var(--ui-card-inner-border-radius);
+  border-radius: 0 0 var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius);
 }
 
 .card-group > .card {
@@ -5398,7 +5397,7 @@ fieldset:disabled .btn {
   text-align: center;
   white-space: nowrap;
   background-color: var(--ui-tertiary-bg);
-  border: var(--ui-border-width) var(--ui-border-style) var(--ui-border-color);
+  border: var(--ui-border-width) var(--ui-border-style) var(--ui-input-border-color, var(--ui-border-color));
 }
 
 .form-input {
