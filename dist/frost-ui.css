@@ -648,10 +648,14 @@ progress {
   margin-bottom: var(--ui-table-margin-bottom);
   border-color: var(--ui-table-border-color);
 }
+.table > :not(caption) > * {
+  border-color: var(--ui-table-border-color);
+}
 .table > :not(caption) > * > * {
   padding: var(--ui-table-cell-padding-y) var(--ui-table-cell-padding-x);
   color: var(--ui-table-color);
   background-color: var(--ui-table-bg);
+  border-color: var(--ui-table-border-color);
   border-bottom-width: var(--ui-table-border-width);
   box-shadow: inset 0 0 0 9999px var(--ui-table-accent-bg, transparent);
 }
@@ -696,43 +700,43 @@ progress {
 .table-primary {
   --ui-table-color: var(--ui-primary-subtle-text);
   --ui-table-bg: var(--ui-primary-subtle);
-  --ui-table-border-color: var(--ui-primary-subtle-emphasis);
+  --ui-table-border-color: var(--ui-primary-emphasis);
 }
 
 .table-accent {
   --ui-table-color: var(--ui-accent-subtle-text);
   --ui-table-bg: var(--ui-accent-subtle);
-  --ui-table-border-color: var(--ui-accent-subtle-emphasis);
+  --ui-table-border-color: var(--ui-accent-emphasis);
 }
 
 .table-secondary {
   --ui-table-color: var(--ui-secondary-subtle-text);
   --ui-table-bg: var(--ui-secondary-subtle);
-  --ui-table-border-color: var(--ui-secondary-subtle-emphasis);
+  --ui-table-border-color: var(--ui-secondary-emphasis);
 }
 
 .table-success {
   --ui-table-color: var(--ui-success-subtle-text);
   --ui-table-bg: var(--ui-success-subtle);
-  --ui-table-border-color: var(--ui-success-subtle-emphasis);
+  --ui-table-border-color: var(--ui-success-emphasis);
 }
 
 .table-info {
   --ui-table-color: var(--ui-info-subtle-text);
   --ui-table-bg: var(--ui-info-subtle);
-  --ui-table-border-color: var(--ui-info-subtle-emphasis);
+  --ui-table-border-color: var(--ui-info-emphasis);
 }
 
 .table-warning {
   --ui-table-color: var(--ui-warning-subtle-text);
   --ui-table-bg: var(--ui-warning-subtle);
-  --ui-table-border-color: var(--ui-warning-subtle-emphasis);
+  --ui-table-border-color: var(--ui-warning-emphasis);
 }
 
 .table-danger {
   --ui-table-color: var(--ui-danger-subtle-text);
   --ui-table-bg: var(--ui-danger-subtle);
-  --ui-table-border-color: var(--ui-danger-subtle-emphasis);
+  --ui-table-border-color: var(--ui-danger-emphasis);
 }
 
 .table-active {
@@ -2083,63 +2087,63 @@ progress {
 
 .alert-primary {
   --ui-alert-bg: var(--ui-primary-subtle);
-  --ui-alert-border-color: var(--ui-primary-subtle-emphasis);
+  --ui-alert-border-color: var(--ui-primary-emphasis);
   --ui-alert-color: var(--ui-primary-subtle-text);
   --ui-alert-link-color: var(--ui-primary-subtle-text);
 }
 
 .alert-accent {
   --ui-alert-bg: var(--ui-accent-subtle);
-  --ui-alert-border-color: var(--ui-accent-subtle-emphasis);
+  --ui-alert-border-color: var(--ui-accent-emphasis);
   --ui-alert-color: var(--ui-accent-subtle-text);
   --ui-alert-link-color: var(--ui-accent-subtle-text);
 }
 
 .alert-secondary {
   --ui-alert-bg: var(--ui-secondary-subtle);
-  --ui-alert-border-color: var(--ui-secondary-subtle-emphasis);
+  --ui-alert-border-color: var(--ui-secondary-emphasis);
   --ui-alert-color: var(--ui-secondary-subtle-text);
   --ui-alert-link-color: var(--ui-secondary-subtle-text);
 }
 
 .alert-success {
   --ui-alert-bg: var(--ui-success-subtle);
-  --ui-alert-border-color: var(--ui-success-subtle-emphasis);
+  --ui-alert-border-color: var(--ui-success-emphasis);
   --ui-alert-color: var(--ui-success-subtle-text);
   --ui-alert-link-color: var(--ui-success-subtle-text);
 }
 
 .alert-info {
   --ui-alert-bg: var(--ui-info-subtle);
-  --ui-alert-border-color: var(--ui-info-subtle-emphasis);
+  --ui-alert-border-color: var(--ui-info-emphasis);
   --ui-alert-color: var(--ui-info-subtle-text);
   --ui-alert-link-color: var(--ui-info-subtle-text);
 }
 
 .alert-warning {
   --ui-alert-bg: var(--ui-warning-subtle);
-  --ui-alert-border-color: var(--ui-warning-subtle-emphasis);
+  --ui-alert-border-color: var(--ui-warning-emphasis);
   --ui-alert-color: var(--ui-warning-subtle-text);
   --ui-alert-link-color: var(--ui-warning-subtle-text);
 }
 
 .alert-danger {
   --ui-alert-bg: var(--ui-danger-subtle);
-  --ui-alert-border-color: var(--ui-danger-subtle-emphasis);
+  --ui-alert-border-color: var(--ui-danger-emphasis);
   --ui-alert-color: var(--ui-danger-subtle-text);
   --ui-alert-link-color: var(--ui-danger-subtle-text);
 }
 
 .alert-light {
   --ui-alert-bg: var(--ui-light-subtle);
-  --ui-alert-border-color: var(--ui-light-subtle-emphasis);
+  --ui-alert-border-color: var(--ui-light-emphasis);
   --ui-alert-color: var(--ui-light-subtle-text);
   --ui-alert-link-color: var(--ui-light-subtle-text);
 }
 
 .alert-dark {
   --ui-alert-bg: var(--ui-dark-subtle);
-  --ui-alert-border-color: var(--ui-dark-subtle-emphasis);
+  --ui-alert-border-color: var(--ui-dark-emphasis);
   --ui-alert-color: var(--ui-dark-subtle-text);
   --ui-alert-link-color: var(--ui-dark-subtle-text);
 }
@@ -3361,7 +3365,7 @@ fieldset:disabled .btn {
 .list-group-item-primary {
   --ui-list-group-color: var(--ui-primary-subtle-text);
   --ui-list-group-bg: var(--ui-primary-subtle);
-  --ui-list-group-border-color: var(--ui-primary-subtle-emphasis);
+  --ui-list-group-border-color: var(--ui-primary-emphasis);
   --ui-list-group-action-hover-color: var(--ui-primary-subtle-text);
   --ui-list-group-action-hover-bg: var(--ui-primary-subtle-emphasis);
   --ui-list-group-focus-shadow-color: var(--ui-primary);
@@ -3373,7 +3377,7 @@ fieldset:disabled .btn {
 .list-group-item-accent {
   --ui-list-group-color: var(--ui-accent-subtle-text);
   --ui-list-group-bg: var(--ui-accent-subtle);
-  --ui-list-group-border-color: var(--ui-accent-subtle-emphasis);
+  --ui-list-group-border-color: var(--ui-accent-emphasis);
   --ui-list-group-action-hover-color: var(--ui-accent-subtle-text);
   --ui-list-group-action-hover-bg: var(--ui-accent-subtle-emphasis);
   --ui-list-group-focus-shadow-color: var(--ui-accent);
@@ -3385,7 +3389,7 @@ fieldset:disabled .btn {
 .list-group-item-secondary {
   --ui-list-group-color: var(--ui-secondary-subtle-text);
   --ui-list-group-bg: var(--ui-secondary-subtle);
-  --ui-list-group-border-color: var(--ui-secondary-subtle-emphasis);
+  --ui-list-group-border-color: var(--ui-secondary-emphasis);
   --ui-list-group-action-hover-color: var(--ui-secondary-subtle-text);
   --ui-list-group-action-hover-bg: var(--ui-secondary-subtle-emphasis);
   --ui-list-group-focus-shadow-color: var(--ui-secondary);
@@ -3397,7 +3401,7 @@ fieldset:disabled .btn {
 .list-group-item-success {
   --ui-list-group-color: var(--ui-success-subtle-text);
   --ui-list-group-bg: var(--ui-success-subtle);
-  --ui-list-group-border-color: var(--ui-success-subtle-emphasis);
+  --ui-list-group-border-color: var(--ui-success-emphasis);
   --ui-list-group-action-hover-color: var(--ui-success-subtle-text);
   --ui-list-group-action-hover-bg: var(--ui-success-subtle-emphasis);
   --ui-list-group-focus-shadow-color: var(--ui-success);
@@ -3409,7 +3413,7 @@ fieldset:disabled .btn {
 .list-group-item-info {
   --ui-list-group-color: var(--ui-info-subtle-text);
   --ui-list-group-bg: var(--ui-info-subtle);
-  --ui-list-group-border-color: var(--ui-info-subtle-emphasis);
+  --ui-list-group-border-color: var(--ui-info-emphasis);
   --ui-list-group-action-hover-color: var(--ui-info-subtle-text);
   --ui-list-group-action-hover-bg: var(--ui-info-subtle-emphasis);
   --ui-list-group-focus-shadow-color: var(--ui-info);
@@ -3421,7 +3425,7 @@ fieldset:disabled .btn {
 .list-group-item-warning {
   --ui-list-group-color: var(--ui-warning-subtle-text);
   --ui-list-group-bg: var(--ui-warning-subtle);
-  --ui-list-group-border-color: var(--ui-warning-subtle-emphasis);
+  --ui-list-group-border-color: var(--ui-warning-emphasis);
   --ui-list-group-action-hover-color: var(--ui-warning-subtle-text);
   --ui-list-group-action-hover-bg: var(--ui-warning-subtle-emphasis);
   --ui-list-group-focus-shadow-color: var(--ui-warning);
@@ -3433,7 +3437,7 @@ fieldset:disabled .btn {
 .list-group-item-danger {
   --ui-list-group-color: var(--ui-danger-subtle-text);
   --ui-list-group-bg: var(--ui-danger-subtle);
-  --ui-list-group-border-color: var(--ui-danger-subtle-emphasis);
+  --ui-list-group-border-color: var(--ui-danger-emphasis);
   --ui-list-group-action-hover-color: var(--ui-danger-subtle-text);
   --ui-list-group-action-hover-bg: var(--ui-danger-subtle-emphasis);
   --ui-list-group-focus-shadow-color: var(--ui-danger);
@@ -3445,7 +3449,7 @@ fieldset:disabled .btn {
 .list-group-item-light {
   --ui-list-group-color: var(--ui-light-subtle-text);
   --ui-list-group-bg: var(--ui-light-subtle);
-  --ui-list-group-border-color: var(--ui-light-subtle-emphasis);
+  --ui-list-group-border-color: var(--ui-light-emphasis);
   --ui-list-group-action-hover-color: var(--ui-light-subtle-text);
   --ui-list-group-action-hover-bg: var(--ui-light-subtle-emphasis);
   --ui-list-group-focus-shadow-color: var(--ui-light);
@@ -3457,7 +3461,7 @@ fieldset:disabled .btn {
 .list-group-item-dark {
   --ui-list-group-color: var(--ui-dark-subtle-text);
   --ui-list-group-bg: var(--ui-dark-subtle);
-  --ui-list-group-border-color: var(--ui-dark-subtle-emphasis);
+  --ui-list-group-border-color: var(--ui-dark-emphasis);
   --ui-list-group-action-hover-color: var(--ui-dark-subtle-text);
   --ui-list-group-action-hover-bg: var(--ui-dark-subtle-emphasis);
   --ui-list-group-focus-shadow-color: var(--ui-dark);
@@ -3472,13 +3476,16 @@ fieldset:disabled .btn {
 .list-group-horizontal .list-group-item-action {
   width: auto;
 }
+.list-group-horizontal .list-group-item {
+  border-radius: 0;
+}
 .list-group-horizontal .list-group-item:first-child {
-  border-start-start-radius: var(--ui-list-group-border-radius);
-  border-end-start-radius: var(--ui-list-group-border-radius);
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
 }
 .list-group-horizontal .list-group-item:last-child {
-  border-start-end-radius: var(--ui-list-group-border-radius);
-  border-end-end-radius: var(--ui-list-group-border-radius);
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
 }
 .list-group-horizontal .list-group-item + .list-group-item {
   border-inline-start-width: 0;
@@ -3497,13 +3504,16 @@ fieldset:disabled .btn {
   .list-group-horizontal-sm .list-group-item-action {
     width: auto;
   }
+  .list-group-horizontal-sm .list-group-item {
+    border-radius: 0;
+  }
   .list-group-horizontal-sm .list-group-item:first-child {
-    border-start-start-radius: var(--ui-list-group-border-radius);
-    border-end-start-radius: var(--ui-list-group-border-radius);
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
   }
   .list-group-horizontal-sm .list-group-item:last-child {
-    border-start-end-radius: var(--ui-list-group-border-radius);
-    border-end-end-radius: var(--ui-list-group-border-radius);
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
   }
   .list-group-horizontal-sm .list-group-item + .list-group-item {
     border-inline-start-width: 0;
@@ -3522,13 +3532,16 @@ fieldset:disabled .btn {
   .list-group-horizontal-md .list-group-item-action {
     width: auto;
   }
+  .list-group-horizontal-md .list-group-item {
+    border-radius: 0;
+  }
   .list-group-horizontal-md .list-group-item:first-child {
-    border-start-start-radius: var(--ui-list-group-border-radius);
-    border-end-start-radius: var(--ui-list-group-border-radius);
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
   }
   .list-group-horizontal-md .list-group-item:last-child {
-    border-start-end-radius: var(--ui-list-group-border-radius);
-    border-end-end-radius: var(--ui-list-group-border-radius);
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
   }
   .list-group-horizontal-md .list-group-item + .list-group-item {
     border-inline-start-width: 0;
@@ -3547,13 +3560,16 @@ fieldset:disabled .btn {
   .list-group-horizontal-lg .list-group-item-action {
     width: auto;
   }
+  .list-group-horizontal-lg .list-group-item {
+    border-radius: 0;
+  }
   .list-group-horizontal-lg .list-group-item:first-child {
-    border-start-start-radius: var(--ui-list-group-border-radius);
-    border-end-start-radius: var(--ui-list-group-border-radius);
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
   }
   .list-group-horizontal-lg .list-group-item:last-child {
-    border-start-end-radius: var(--ui-list-group-border-radius);
-    border-end-end-radius: var(--ui-list-group-border-radius);
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
   }
   .list-group-horizontal-lg .list-group-item + .list-group-item {
     border-inline-start-width: 0;
@@ -3572,13 +3588,16 @@ fieldset:disabled .btn {
   .list-group-horizontal-xl .list-group-item-action {
     width: auto;
   }
+  .list-group-horizontal-xl .list-group-item {
+    border-radius: 0;
+  }
   .list-group-horizontal-xl .list-group-item:first-child {
-    border-start-start-radius: var(--ui-list-group-border-radius);
-    border-end-start-radius: var(--ui-list-group-border-radius);
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
   }
   .list-group-horizontal-xl .list-group-item:last-child {
-    border-start-end-radius: var(--ui-list-group-border-radius);
-    border-end-end-radius: var(--ui-list-group-border-radius);
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
   }
   .list-group-horizontal-xl .list-group-item + .list-group-item {
     border-inline-start-width: 0;
@@ -3597,13 +3616,16 @@ fieldset:disabled .btn {
   .list-group-horizontal-xxl .list-group-item-action {
     width: auto;
   }
+  .list-group-horizontal-xxl .list-group-item {
+    border-radius: 0;
+  }
   .list-group-horizontal-xxl .list-group-item:first-child {
-    border-start-start-radius: var(--ui-list-group-border-radius);
-    border-end-start-radius: var(--ui-list-group-border-radius);
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
   }
   .list-group-horizontal-xxl .list-group-item:last-child {
-    border-start-end-radius: var(--ui-list-group-border-radius);
-    border-end-end-radius: var(--ui-list-group-border-radius);
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
   }
   .list-group-horizontal-xxl .list-group-item + .list-group-item {
     border-inline-start-width: 0;

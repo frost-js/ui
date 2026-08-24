@@ -115,7 +115,7 @@
     .list-group-item-#{$name} {
         --ui-list-group-color: var(--ui-#{$name}-subtle-text);
         --ui-list-group-bg: var(--ui-#{$name}-subtle);
-        --ui-list-group-border-color: var(--ui-#{$name}-subtle-emphasis);
+        --ui-list-group-border-color: var(--ui-#{$name}-emphasis);
         --ui-list-group-action-hover-color: var(--ui-#{$name}-subtle-text);
         --ui-list-group-action-hover-bg: var(--ui-#{$name}-subtle-emphasis);
         --ui-list-group-focus-shadow-color: var(--ui-#{$name});
@@ -137,13 +137,14 @@
             }
 
             .list-group-item {
+                @include mixins.border-radius(0);
 
                 &:first-child {
-                    @include mixins.border-start-radius(var(--ui-list-group-border-radius));
+                    @include mixins.border-start-radius(inherit);
                 }
 
                 &:last-child {
-                    @include mixins.border-end-radius(var(--ui-list-group-border-radius));
+                    @include mixins.border-end-radius(inherit);
                 }
 
 

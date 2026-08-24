@@ -19,12 +19,17 @@
     margin-bottom: var(--ui-table-margin-bottom);
     border-color: var(--ui-table-border-color);
 
-    > :not(caption) > * > * {
-        padding: var(--ui-table-cell-padding-y) var(--ui-table-cell-padding-x);
-        color: var(--ui-table-color);
-        background-color: var(--ui-table-bg);
-        border-bottom-width: var(--ui-table-border-width);
-        box-shadow: inset 0 0 0 9999px var(--ui-table-accent-bg, transparent);
+    > :not(caption) > * {
+        border-color: var(--ui-table-border-color);
+
+        > * {
+            padding: var(--ui-table-cell-padding-y) var(--ui-table-cell-padding-x);
+            color: var(--ui-table-color);
+            background-color: var(--ui-table-bg);
+            border-color: var(--ui-table-border-color);
+            border-bottom-width: var(--ui-table-border-width);
+            box-shadow: inset 0 0 0 9999px var(--ui-table-accent-bg, transparent);
+        }
     }
 }
 
@@ -70,7 +75,7 @@
     .table-#{$name} {
         --ui-table-color: var(--ui-#{$name}-subtle-text);
         --ui-table-bg: var(--ui-#{$name}-subtle);
-        --ui-table-border-color: var(--ui-#{$name}-subtle-emphasis);
+        --ui-table-border-color: var(--ui-#{$name}-emphasis);
     }
 }
 

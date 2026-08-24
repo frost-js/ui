@@ -49,7 +49,7 @@
 @each $name in map.keys(vars.$color-variants) {
     .alert-#{$name} {
         --ui-alert-bg: var(--ui-#{$name}-subtle);
-        --ui-alert-border-color: var(--ui-#{$name}-subtle-emphasis);
+        --ui-alert-border-color: var(--ui-#{$name}-emphasis);
         --ui-alert-color: var(--ui-#{$name}-subtle-text);
         --ui-alert-link-color: var(--ui-#{$name}-subtle-text);
     }
