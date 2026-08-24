@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wayfinder · FrostUI Example</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <main class="min-vh-100 d-flex align-items-center position-relative overflow-hidden text-bg-dark">
+        <img class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover opacity-50" src="../assets/coast.webp" alt="">
+        <div class="container position-relative z-1 py-5">
+            <div class="col-lg-7 col-xl-6">
+                <span class="badge bg-glass text-white mb-4">Wayfinder Journal · Issue 08</span>
+                <h1 class="display-1 text-white">Go far enough to hear yourself think.</h1>
+                <p class="lead text-light my-4">Field reports, practical routes, and quiet places for people who prefer the long way around.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-primary btn-lg ripple" href="#">Read the new issue</a>
+                    <button class="btn btn-outline-light btn-lg ripple" type="button" data-ui-toggle="modal" data-ui-target="#subscribeModal">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="subscribeTitle">Join Wayfinder</h2>
+                    <button class="btn-close" type="button" data-ui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-body-secondary">One useful field note every second Sunday. No feeds, no noise.</p>
+                    <div class="form-input">
+                        <label for="coverEmail">Email address</label>
+                        <input class="input-outline" id="coverEmail" type="email" placeholder="you@example.com">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary ripple" type="button">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

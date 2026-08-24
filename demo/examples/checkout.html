@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frost Supply Checkout · FrostUI Example</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body class="bg-body-tertiary">
+    <header class="navbar border-bottom bg-body">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Frost Supply</a>
+            <span class="text-body-secondary">Secure checkout</span>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <div class="row g-5">
+            <section class="col-lg-7">
+                <div class="mb-4">
+                    <span class="badge bg-primary-subtle text-primary mb-3">Step 2 of 3</span>
+                    <h1>Delivery and payment</h1>
+                    <p class="lead text-body-secondary">Confirm where your order is going and how you would like to pay.</p>
+                </div>
+
+                <form>
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header">
+                            <h2 class="h4 mb-0">Contact</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="form-input">
+                                        <input class="input-outline input-floating" id="firstName" type="text" placeholder="First name" autocomplete="given-name" required>
+                                        <label class="label-floating" for="firstName">First name</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-input">
+                                        <input class="input-outline input-floating" id="lastName" type="text" placeholder="Last name" autocomplete="family-name" required>
+                                        <label class="label-floating" for="lastName">Last name</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-input">
+                                        <input class="input-outline input-floating" id="email" type="email" placeholder="Email address" autocomplete="email" required>
+                                        <label class="label-floating" for="email">Email address</label>
+                                    </div>
+                                    <div class="form-text">We will send tracking updates to this address.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header">
+                            <h2 class="h4 mb-0">Delivery address</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="form-input">
+                                        <input class="input-outline input-floating" id="address" type="text" placeholder="Street address" autocomplete="street-address" required>
+                                        <label class="label-floating" for="address">Street address</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-input">
+                                        <select class="input-outline input-floating" id="country" autocomplete="country-name">
+                                            <option>Australia</option>
+                                            <option>New Zealand</option>
+                                        </select>
+                                        <label class="label-floating" for="country">Country</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-input">
+                                        <select class="input-outline input-floating" id="state" autocomplete="address-level1">
+                                            <option>Queensland</option>
+                                            <option>New South Wales</option>
+                                            <option>Victoria</option>
+                                        </select>
+                                        <label class="label-floating" for="state">State</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-input">
+                                        <input class="input-outline input-floating" id="postcode" type="text" placeholder="Postcode" autocomplete="postal-code" required>
+                                        <label class="label-floating" for="postcode">Postcode</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                            <div class="form-check">
+                                <input class="input-check" id="saveAddress" type="checkbox" checked>
+                                <label class="form-check-label" for="saveAddress">Save this address to my account</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header">
+                            <h2 class="h4 mb-0">Payment</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="hstack gap-4 mb-4">
+                                <div class="form-check">
+                                    <input class="input-check" id="credit" name="paymentMethod" type="radio" checked>
+                                    <label class="form-check-label" for="credit">Credit card</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="input-check" id="paypal" name="paymentMethod" type="radio">
+                                    <label class="form-check-label" for="paypal">PayPal</label>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="form-input">
+                                        <input class="input-outline input-floating" id="cardNumber" type="text" inputmode="numeric" placeholder="Card number" autocomplete="cc-number">
+                                        <label class="label-floating" for="cardNumber">Card number</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="form-input">
+                                        <input class="input-outline input-floating" id="cardName" type="text" placeholder="Name on card" autocomplete="cc-name">
+                                        <label class="label-floating" for="cardName">Name on card</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-input">
+                                        <input class="input-outline input-floating" id="expiry" type="text" inputmode="numeric" placeholder="MM/YY" autocomplete="cc-exp">
+                                        <label class="label-floating" for="expiry">Expiry</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-input">
+                                        <input class="input-outline input-floating" id="securityCode" type="text" inputmode="numeric" placeholder="CVC" autocomplete="cc-csc">
+                                        <label class="label-floating" for="securityCode">CVC</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg ripple w-100" type="submit">Pay $246.00</button>
+                    <p class="text-center text-body-secondary mt-3">Your payment details are encrypted and processed securely.</p>
+                </form>
+            </section>
+
+            <aside class="col-lg-5 order-lg-last">
+                <div class="card shadow-sm sticky-top">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h2 class="h4 mb-0">Order summary</h2>
+                        <span class="badge bg-primary rounded-pill">3</span>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between gap-3 py-3">
+                            <div>
+                                <h3 class="h6 mb-1">Ridgeline day pack</h3>
+                                <small class="text-body-secondary">Cobalt · 18 L · Qty 1</small>
+                            </div>
+                            <strong>$128.00</strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between gap-3 py-3">
+                            <div>
+                                <h3 class="h6 mb-1">Merino trail socks</h3>
+                                <small class="text-body-secondary">Slate · M · Qty 2</small>
+                            </div>
+                            <strong>$56.00</strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between gap-3 py-3">
+                            <div>
+                                <h3 class="h6 mb-1">Insulated camp mug</h3>
+                                <small class="text-body-secondary">Violet · 350 ml · Qty 1</small>
+                            </div>
+                            <strong>$42.00</strong>
+                        </li>
+                    </ul>
+                    <div class="card-body">
+                        <div class="input-group mb-4">
+                            <div class="form-input">
+                                <label class="visually-hidden" for="promoCode">Promo code</label>
+                                <input class="input-filled" id="promoCode" type="text" placeholder="Promo code">
+                            </div>
+                            <button class="btn btn-secondary ripple" type="button">Apply</button>
+                        </div>
+                        <dl class="vstack gap-2 mb-0">
+                            <div class="d-flex justify-content-between"><dt class="fw-normal text-body-secondary">Subtotal</dt><dd class="mb-0">$226.00</dd></div>
+                            <div class="d-flex justify-content-between"><dt class="fw-normal text-body-secondary">Express delivery</dt><dd class="mb-0">$20.00</dd></div>
+                            <div class="d-flex justify-content-between border-top pt-3"><dt>Total (AUD)</dt><dd class="h4 mb-0">$246.00</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+</body>
+
+</html>

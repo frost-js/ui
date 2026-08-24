@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FrostUI Demos</title>
+    <link rel="stylesheet" href="../dist/frost-ui.css" />
+    <link rel="stylesheet" href="assets/demo.css" />
+    <script src="../dist/frost-ui-bundle.js"></script>
+    <script src="assets/demo.js"></script>
+</head>
+
+<body>
+    <main class="container py-4 py-lg-5">
+        <section class="card border-0 overflow-hidden shadow-lg mb-5">
+            <div class="row g-0 align-items-stretch">
+                <div class="col-lg-7 d-flex align-items-center bg-ambient">
+                    <div class="p-4 p-md-5">
+                        <span class="badge bg-primary-subtle text-primary-subtle mb-3">FrostUI interface system</span>
+                        <h1 class="display-1 mb-4">Build interfaces with a little more <span class="text-gradient">atmosphere.</span></h1>
+                        <p class="lead text-body-secondary mb-4">A responsive component library with expressive color, tactile controls, frosted overlays, and a practical utility layer.</p>
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            <a class="btn btn-primary btn-lg ripple" href="components/button.html">Explore components</a>
+                            <a class="btn btn-secondary btn-lg" href="#examples">View complete pages</a>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-secondary-subtle text-secondary-subtle">Light and dark themes</span>
+                            <span class="badge bg-secondary-subtle text-secondary-subtle">Responsive by default</span>
+                            <span class="badge bg-secondary-subtle text-secondary-subtle">Composable Sass and JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 position-relative">
+                    <div class="ratio ratio-4x3 h-100">
+                        <img class="object-fit-cover" src="assets/coast.webp" alt="Hiker overlooking an Australian coastal headland at blue hour">
+                    </div>
+                    <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-glass border-top">
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <div>
+                                <small class="text-body-secondary d-block">Featured composition</small>
+                                <strong>Field Notes travel journal</strong>
+                            </div>
+                            <a class="btn btn-primary btn-sm ripple" href="examples/album.html">Open</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5" id="components">
+            <div class="row align-items-end mb-4">
+                <div class="col-lg-8">
+                    <span class="text-primary fw-bold">Designed as a system</span>
+                    <h2 class="display-5 mb-2">Distinctive defaults. Familiar composition.</h2>
+                    <p class="lead text-body-secondary mb-0">These are live FrostUI components, not illustrations of them.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-xl-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <span class="badge bg-accent-subtle text-accent-subtle mb-3">Interaction</span>
+                            <h3 class="card-title">Controls with physical feedback</h3>
+                            <p class="card-text text-body-secondary">Color, elevation, focus, and motion work together without obscuring the control itself.</p>
+                            <div class="d-flex flex-wrap gap-2 mt-4">
+                                <button class="btn btn-primary ripple" type="button">Primary action</button>
+                                <button class="btn btn-outline-accent" type="button">Secondary</button>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="components/button.html">Explore buttons</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <span class="badge bg-success-subtle text-success-subtle mb-3">Forms</span>
+                            <h3 class="card-title">Clear states and quieter structure</h3>
+                            <p class="card-text text-body-secondary">Filled and outlined controls share consistent sizing, validation, and focus behavior.</p>
+                            <div class="form-input mt-4">
+                                <label for="demoEmail">Email address</label>
+                                <input class="input-filled" id="demoEmail" type="email" placeholder="you@example.com">
+                                <div class="form-text">We will only use this for trip updates.</div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="form/filled-input.html">Explore form controls</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4">
+                    <div class="card h-100 overflow-hidden">
+                        <img class="card-img-top" src="assets/cabin.webp" alt="Timber cabin beside a misty alpine lake">
+                        <div class="card-body">
+                            <span class="badge bg-primary-subtle text-primary-subtle mb-3">Surfaces</span>
+                            <h3 class="card-title">Content with stronger hierarchy</h3>
+                            <p class="card-text text-body-secondary">Cards stay grounded while overlays use FrostUI’s translucent, theme-aware visual language.</p>
+                            <a class="stretched-link" href="components/card.html">Explore cards</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5" id="examples">
+            <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+                <div>
+                    <span class="text-accent fw-bold">Complete examples</span>
+                    <h2 class="display-5 mb-2">See the pieces working together.</h2>
+                    <p class="lead text-body-secondary mb-0">Real page compositions built from the same components and utilities.</p>
+                </div>
+                <a class="btn btn-secondary" href="examples/pricing.html">Open pricing example</a>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-xl-4">
+                    <div class="card h-100 overflow-hidden">
+                        <img class="card-img-top" src="assets/coast.webp" alt="Coastal trail above the ocean">
+                        <div class="card-body">
+                            <span class="badge bg-primary-subtle text-primary-subtle mb-3">Editorial gallery</span>
+                            <h3 class="card-title">Field Notes</h3>
+                            <p class="card-text text-body-secondary">A visual travel journal using cards, responsive images, badges, and grid utilities.</p>
+                            <a class="stretched-link" href="examples/album.html">View travel journal</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-4">
+                    <div class="card h-100 overflow-hidden">
+                        <img class="card-img-top" src="assets/canyon.webp" alt="Road winding through a red desert canyon">
+                        <div class="card-body">
+                            <span class="badge bg-accent-subtle text-accent-subtle mb-3">Campaign landing</span>
+                            <h3 class="card-title">Northstar</h3>
+                            <p class="card-text text-body-secondary">An immersive destination page built around carousel, navigation, and overlay components.</p>
+                            <a class="stretched-link" href="examples/carousel.html">View travel landing</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-4">
+                    <div class="card h-100 overflow-hidden">
+                        <img class="card-img-top" src="assets/cabin.webp" alt="Cabin reflected in a calm mountain lake">
+                        <div class="card-body">
+                            <span class="badge bg-success-subtle text-success-subtle mb-3">Account flow</span>
+                            <h3 class="card-title">Member access</h3>
+                            <p class="card-text text-body-secondary">A focused sign-in flow combining a responsive split layout with polished form controls.</p>
+                            <a class="stretched-link" href="examples/sign-in.html">View sign-in page</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5" id="catalog">
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-5">
+                    <div class="card text-bg-primary bg-gradient h-100 shadow-glow">
+                        <div class="card-body p-4 p-xl-5 d-flex flex-column">
+                            <span class="badge bg-light text-dark align-self-start mb-3">75+ focused demos</span>
+                            <h2 class="card-title display-6">Browse by layer.</h2>
+                            <p class="card-text">The sidebar contains the complete catalog. Start with a foundation, compose a layout, then add components and utilities as needed.</p>
+                            <a class="btn btn-light ripple mt-auto align-self-start" href="colors.html">Start with color</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="card h-100">
+                        <div class="card-body p-4">
+                            <h2 class="card-title">Popular destinations</h2>
+                            <p class="card-text text-body-secondary mb-4">A short route into the catalog without repeating the full navigation.</p>
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <nav class="list-group" aria-label="Popular foundations and components">
+                                        <a class="list-group-item list-group-item-action" href="content/typography.html">Typography</a>
+                                        <a class="list-group-item list-group-item-action" href="layout/grid.html">Responsive grid</a>
+                                        <a class="list-group-item list-group-item-action" href="components/card.html">Cards</a>
+                                        <a class="list-group-item list-group-item-action" href="components/modal.html">Modal</a>
+                                    </nav>
+                                </div>
+                                <div class="col-sm-6">
+                                    <nav class="list-group" aria-label="Popular forms, helpers, and utilities">
+                                        <a class="list-group-item list-group-item-action" href="form/outline-input.html">Outline inputs</a>
+                                        <a class="list-group-item list-group-item-action" href="helpers/focus-ring.html">Focus rings</a>
+                                        <a class="list-group-item list-group-item-action" href="utility/background.html">Background utilities</a>
+                                        <a class="list-group-item list-group-item-action" href="utility/shadow.html">Shadow utilities</a>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

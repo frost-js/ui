@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Images</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Images</h1>
+
+        <h4>Responsive</h4>
+        <p class="text-body-secondary">Use <code>.img-fluid</code> to keep an image within its parent while preserving its aspect ratio.</p>
+        <div class="mb-4">
+            <img class="img-fluid rounded" src="../assets/coast.webp" width="1440" height="960" alt="Hiker overlooking a coastal headland at blue hour">
+        </div>
+
+        <h4>Thumbnail</h4>
+        <p class="text-body-secondary">The thumbnail treatment adds a compact border and background around media.</p>
+        <div class="mb-4">
+            <img class="img-thumbnail" src="../assets/cabin.webp" width="280" alt="Cabin beside a misty alpine lake">
+        </div>
+
+        <h4>Alignment</h4>
+        <p class="text-body-secondary">Float utilities align media to either edge and <code>.clearfix</code> contains the floated content.</p>
+        <div class="mb-4">
+            <div class="clearfix">
+                <img class="rounded float-start" src="../assets/coast.webp" width="280" alt="Coastal cliffs at dusk">
+                <img class="rounded float-end" src="../assets/canyon.webp" width="280" alt="Desert canyon and winding road">
+            </div>
+        </div>
+
+        <h4>Centered block</h4>
+        <p class="text-body-secondary">A block image can be centered with automatic inline margins.</p>
+        <div class="mb-4">
+            <img class="d-block rounded mx-auto" src="../assets/cabin.webp" width="320" alt="Mountain cabin at dawn">
+        </div>
+
+        <h4>Centered inline content</h4>
+        <p class="text-body-secondary">Text alignment on the parent centers an inline image.</p>
+        <div class="mb-4 text-center">
+            <img class="rounded" src="../assets/canyon.webp" width="320" alt="Expedition vehicle at a canyon overlook">
+        </div>
+    </div>
+</body>
+
+</html>

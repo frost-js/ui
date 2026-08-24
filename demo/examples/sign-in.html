@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northstar Sign In · FrostUI Example</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <main class="container-fluid">
+        <div class="row min-vh-100">
+            <div class="col-lg-6 d-none d-lg-block position-relative p-0">
+                <img class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" src="../assets/cabin.webp" alt="Remote timber cabin beside a mountain lake">
+                <div class="position-absolute bottom-0 start-0 end-0 p-5 text-white bg-glass">
+                    <span class="badge bg-accent mb-3">Member story</span>
+                    <blockquote class="blockquote">
+                        <p>“The route notes gave us confidence to slow down and stay an extra night.”</p>
+                        <footer class="blockquote-footer text-light">Mara Chen, Alpine Reset 2026</footer>
+                    </blockquote>
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center">
+                <div class="col-sm-9 col-md-7 col-lg-8 col-xl-6 mx-auto py-5">
+                    <a class="h3 text-body text-decoration-none" href="#">Northstar</a>
+                    <div class="my-5">
+                        <span class="badge bg-primary-subtle text-primary mb-3">Member access</span>
+                        <h1>Welcome back.</h1>
+                        <p class="text-body-secondary">Sign in to view departures, saved routes, and trip details.</p>
+                    </div>
+                    <form>
+                        <div class="form-input mb-3">
+                            <label for="signInEmail">Email address</label>
+                            <input class="input-outline input-lg" id="signInEmail" type="email" autocomplete="email" placeholder="you@example.com">
+                        </div>
+                        <div class="form-input mb-3">
+                            <div class="d-flex justify-content-between">
+                                <label for="signInPassword">Password</label>
+                                <a class="link-secondary" href="#">Forgot password?</a>
+                            </div>
+                            <input class="input-outline input-lg" id="signInPassword" type="password" autocomplete="current-password" placeholder="Enter your password">
+                        </div>
+                        <div class="form-check mb-4">
+                            <input class="input-check" id="rememberMe" type="checkbox">
+                            <label class="form-check-label" for="rememberMe">Keep me signed in</label>
+                        </div>
+                        <button class="btn btn-primary btn-lg ripple w-100" type="submit">Sign in</button>
+                    </form>
+                    <p class="text-center text-body-secondary mt-4">New to Northstar? <a href="#">Create an account</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

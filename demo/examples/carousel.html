@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northstar · FrostUI Example</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md bg-glass">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="#">Northstar</a>
+                <button class="navbar-toggler" type="button" data-ui-toggle="collapse" data-ui-target="#northstarNavigation" aria-controls="northstarNavigation" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="northstarNavigation">
+                    <ul class="navbar-nav ms-auto align-items-md-center">
+                        <li class="nav-item"><a class="nav-link active" href="#" aria-current="page">Expeditions</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#approach">Our approach</a></li>
+                        <li class="nav-item ms-md-2"><a class="btn btn-primary ripple" href="#departures">Find a departure</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="carousel slide" id="northstarCarousel" data-ui-ride="carousel">
+            <ol class="carousel-indicators">
+                <li class="active" data-ui-target="#northstarCarousel" data-ui-slide-to="0" aria-current="true" aria-label="Coastal expedition"></li>
+                <li data-ui-target="#northstarCarousel" data-ui-slide-to="1" aria-label="Alpine retreat"></li>
+                <li data-ui-target="#northstarCarousel" data-ui-slide-to="2" aria-label="Desert crossing"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="ratio ratio-21x9">
+                        <img class="d-block w-100 object-fit-cover" src="../assets/coast.webp" alt="Hiker looking over a coastal headland at twilight">
+                    </div>
+                    <div class="carousel-caption d-none d-md-block text-start">
+                        <span class="badge bg-glass text-white mb-3">Seven days · Small group</span>
+                        <h1 class="display-3 text-white">Walk to the edge of the map.</h1>
+                        <p class="lead">A guided coastal traverse shaped by weather, tide, and the best light of the day.</p>
+                        <a class="btn btn-primary btn-lg ripple" href="#">Explore the coast</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="ratio ratio-21x9">
+                        <img class="d-block w-100 object-fit-cover" src="../assets/cabin.webp" alt="Remote cabin beside a mountain lake">
+                    </div>
+                    <div class="carousel-caption d-none d-md-block">
+                        <span class="badge bg-glass text-white mb-3">Four nights · Private cabin</span>
+                        <h2 class="display-3 text-white">Make room for quiet.</h2>
+                        <p class="lead">Unhurried days, trail access from the door, and a lake that changes every hour.</p>
+                        <a class="btn btn-light btn-lg ripple" href="#">See the retreat</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="ratio ratio-21x9">
+                        <img class="d-block w-100 object-fit-cover" src="../assets/canyon.webp" alt="Expedition vehicle above a desert canyon road">
+                    </div>
+                    <div class="carousel-caption d-none d-md-block text-end">
+                        <span class="badge bg-glass text-white mb-3">Nine days · Self-drive</span>
+                        <h2 class="display-3 text-white">Take the road that keeps going.</h2>
+                        <p class="lead">A supported desert crossing with remote camps and a route worth remembering.</p>
+                        <a class="btn btn-primary btn-lg ripple" href="#">Plan the crossing</a>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-ui-target="#northstarCarousel" data-ui-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous expedition</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-ui-target="#northstarCarousel" data-ui-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next expedition</span>
+            </button>
+        </div>
+
+        <section class="container py-5" id="approach">
+            <div class="row align-items-center g-5 py-lg-5">
+                <div class="col-lg-5">
+                    <p class="text-primary fw-bold text-uppercase">Travel, considered</p>
+                    <h2 class="display-4">Fewer departures. Better journeys.</h2>
+                </div>
+                <div class="col-lg-7">
+                    <p class="lead text-body-secondary">Every route is built around the landscape rather than a checklist. Groups stay small, local guides lead the way, and flexible days leave room for weather and discovery.</p>
+                    <div class="row row-cols-1 row-cols-sm-3 g-3 mt-3">
+                        <div class="col">
+                            <div class="border-top pt-3">
+                                <strong class="display-6 d-block">8</strong>
+                                <span class="text-body-secondary">travellers maximum</span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border-top pt-3">
+                                <strong class="display-6 d-block">72%</strong>
+                                <span class="text-body-secondary">local supplier spend</span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border-top pt-3">
+                                <strong class="display-6 d-block">1:4</strong>
+                                <span class="text-body-secondary">guide ratio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-body-tertiary py-5" id="departures">
+            <div class="container py-lg-5">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+                    <div>
+                        <p class="text-accent fw-bold text-uppercase mb-2">Upcoming</p>
+                        <h2 class="display-5 mb-0">Choose your horizon</h2>
+                    </div>
+                    <a class="btn btn-outline-primary ripple" href="#">All departures</a>
+                </div>
+                <div class="row row-cols-1 row-cols-lg-3 g-4">
+                    <div class="col">
+                        <article class="card h-100">
+                            <div class="ratio ratio-4x3">
+                                <img class="card-img-top object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at dusk">
+                            </div>
+                            <div class="card-body">
+                                <span class="text-primary fw-bold">October 12–18</span>
+                                <h3 class="card-title mt-2">Southern edge traverse</h3>
+                                <p class="text-body-secondary">7 days · Moderate · From $2,840</p>
+                                <a class="stretched-link fw-bold" href="#">View departure</a>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col">
+                        <article class="card h-100">
+                            <div class="ratio ratio-4x3">
+                                <img class="card-img-top object-fit-cover" src="../assets/cabin.webp" alt="Lakeside cabin in the mountains">
+                            </div>
+                            <div class="card-body">
+                                <span class="text-primary fw-bold">November 3–7</span>
+                                <h3 class="card-title mt-2">Alpine reset</h3>
+                                <p class="text-body-secondary">5 days · Easy · From $2,190</p>
+                                <a class="stretched-link fw-bold" href="#">View departure</a>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col">
+                        <article class="card h-100">
+                            <div class="ratio ratio-4x3">
+                                <img class="card-img-top object-fit-cover" src="../assets/canyon.webp" alt="Vehicle at a desert canyon overlook">
+                            </div>
+                            <div class="card-body">
+                                <span class="text-primary fw-bold">March 8–16</span>
+                                <h3 class="card-title mt-2">Red country crossing</h3>
+                                <p class="text-body-secondary">9 days · Active · From $3,620</p>
+                                <a class="stretched-link fw-bold" href="#">View departure</a>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-top py-5">
+        <div class="container d-flex flex-column flex-md-row justify-content-between gap-3">
+            <strong>Northstar Expeditions</strong>
+            <span class="text-body-secondary">Small groups · Local guides · Leave no trace</span>
+        </div>
+    </footer>
+</body>
+
+</html>

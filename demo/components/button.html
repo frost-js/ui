@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Buttons</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Buttons</h1>
+        <div class="mb-4">
+            <button class="btn mb-1" type="button">Default</button>
+            <button class="btn btn-primary ripple mb-1" type="button">Primary</button>
+            <button class="btn btn-accent ripple mb-1" type="button">Accent</button>
+            <button class="btn btn-secondary ripple mb-1" type="button">Secondary</button>
+            <button class="btn btn-success ripple mb-1" type="button">Success</button>
+            <button class="btn btn-info ripple mb-1" type="button">Info</button>
+            <button class="btn btn-warning ripple mb-1" type="button">Warning</button>
+            <button class="btn btn-danger ripple mb-1" type="button">Danger</button>
+            <button class="btn btn-light ripple mb-1" type="button">Light</button>
+            <button class="btn btn-dark ripple mb-1" type="button">Dark</button>
+            <button class="btn btn-link mb-1" type="button">Link</button>
+        </div>
+
+        <h4>Gradient</h4>
+        <div class="mb-4">
+            <button class="btn btn-primary btn-gradient ripple mb-1" type="button">Primary</button>
+            <button class="btn btn-accent btn-gradient ripple mb-1" type="button">Accent</button>
+            <button class="btn btn-secondary btn-gradient ripple mb-1" type="button">Secondary</button>
+            <button class="btn btn-success btn-gradient ripple mb-1" type="button">Success</button>
+            <button class="btn btn-info btn-gradient ripple mb-1" type="button">Info</button>
+            <button class="btn btn-warning btn-gradient ripple mb-1" type="button">Warning</button>
+            <button class="btn btn-danger btn-gradient ripple mb-1" type="button">Danger</button>
+            <button class="btn btn-light btn-gradient ripple mb-1" type="button">Light</button>
+            <button class="btn btn-dark btn-gradient ripple mb-1" type="button">Dark</button>
+        </div>
+
+        <h4>Tags</h4>
+        <div class="mb-4">
+            <a class="btn btn-primary ripple mb-1" href="#" role="button">Link</a>
+            <button class="btn btn-primary ripple mb-1" type="button">Button</button>
+            <input class="btn btn-primary mb-1" type="button" value="Input">
+            <input class="btn btn-primary mb-1" type="submit" value="Submit">
+            <input class="btn btn-primary mb-1" type="reset" value="Reset">
+        </div>
+
+        <h4>Outline</h4>
+        <div class="mb-4">
+            <button class="btn btn-outline-primary ripple mb-1" type="button">Primary</button>
+            <button class="btn btn-outline-accent ripple mb-1" type="button">Accent</button>
+            <button class="btn btn-outline-secondary ripple mb-1" type="button">Secondary</button>
+            <button class="btn btn-outline-success ripple mb-1" type="button">Success</button>
+            <button class="btn btn-outline-info ripple mb-1" type="button">Info</button>
+            <button class="btn btn-outline-warning ripple mb-1" type="button">Warning</button>
+            <button class="btn btn-outline-danger ripple mb-1" type="button">Danger</button>
+            <button class="btn btn-outline-light ripple mb-1" type="button">Light</button>
+            <button class="btn btn-outline-dark ripple mb-1" type="button">Dark</button>
+        </div>
+
+        <h4>Sizes</h4>
+        <div class="mb-4">
+            <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
+            <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
+        </div>
+        <div class="mb-4">
+            <button class="btn btn-primary ripple btn-sm" type="button">Primary</button>
+            <button class="btn btn-secondary ripple btn-sm" type="button">Secondary</button>
+        </div>
+        <div class="mb-4">
+            <button class="btn btn-primary ripple" style="--ui-btn-padding-y: .25rem; --ui-btn-padding-x: .25rem; --ui-btn-font-size: .75rem;" type="button">Primary</button>
+            <button class="btn btn-secondary ripple" style="--ui-btn-padding-y: .25rem; --ui-btn-padding-x: .25rem; --ui-btn-font-size: .75rem;" type="button">Secondary</button>
+        </div>
+
+        <h4>Disabled</h4>
+        <div class="mb-4">
+            <button class="btn btn-primary ripple btn-lg disabled" tabindex="-1" type="button" aria-disabled="true">Primary</button>
+            <button class="btn btn-secondary ripple btn-lg disabled" tabindex="-1" type="button" aria-disabled="true">Secondary</button>
+            <button class="btn btn-outline-primary ripple btn-lg disabled" tabindex="-1" type="button" aria-disabled="true">Primary</button>
+            <button class="btn btn-outline-secondary ripple btn-lg disabled" tabindex="-1" type="button" aria-disabled="true">Secondary</button>
+        </div>
+
+        <h4>Block</h4>
+        <div class="mb-4">
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
+                <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
+            </div>
+        </div>
+        <div class="mb-4">
+            <div class="d-grid gap-2 d-md-block">
+                <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
+                <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
+            </div>
+        </div>
+        <div class="mb-4">
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
+                <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
+            </div>
+        </div>
+        <div class="mb-4">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
+                <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
+            </div>
+        </div>
+
+        <h4>Toggle</h4>
+        <div class="mb-4">
+            <button class="btn btn-primary active" data-ui-toggle="button" type="button">Toggle</button>
+            <button class="btn btn-primary" data-ui-toggle="button" type="button">Toggle</button>
+            <button class="btn btn-primary disabled" data-ui-toggle="button" type="button">Toggle</button>
+        </div>
+        <div class="mb-4">
+            <a class="btn btn-primary active" data-ui-toggle="button" href="#" role="button">Toggle</a>
+            <a class="btn btn-primary" data-ui-toggle="button" href="#" href="#" role="button">Toggle</a>
+            <a class="btn btn-primary disabled" data-ui-toggle="button" role="button">Toggle</a>
+        </div>
+    </div>
+</body>
+
+</html>

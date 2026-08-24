@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tooltips</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Tooltips</h1>
+        <div class="mb-4">
+            <button class="btn btn-secondary ripple" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" type="button">Tooltip</button>
+        </div>
+
+        <h4>HTML</h4>
+        <div class="mb-4">
+            <button class="btn btn-secondary ripple" data-ui-toggle="tooltip" data-ui-html="true" data-ui-title="This is a <strong>tooltip</strong>" type="button">Tooltip</button>
+        </div>
+
+        <h4>Placement</h4>
+        <div class="mb-4">
+            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="top" data-ui-position="center" data-ui-fixed="true" type="button">Top</button>
+            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="right" data-ui-position="center" data-ui-fixed="true" type="button">Right</button>
+            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="bottom" data-ui-position="center" data-ui-fixed="true" type="button">Bottom</button>
+            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="left" data-ui-position="center" data-ui-fixed="true" type="button">Left</button>
+        </div>
+
+        <h4>Position</h4>
+        <div class="mb-4">
+            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="bottom" data-ui-position="start" data-ui-fixed="true" type="button">Start</button>
+            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="bottom" data-ui-position="center" data-ui-fixed="true" type="button">Center</button>
+            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="bottom" data-ui-position="end" data-ui-fixed="true" type="button">End</button>
+        </div>
+
+        <h4>Disabled</h4>
+        <div class="mb-4">
+            <span class="d-inline-block outline-0" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" tabindex="0">
+                <button class="btn btn-secondary ripple" type="button" disabled>Tooltip</button>
+            </span>
+        </div>
+    </div>
+    <script>
+        const nodes = $.find('[data-ui-toggle="tooltip"]');
+        for (const node of nodes) {
+            UI.Tooltip.init(node);
+        }
+    </script>
+</body>
+
+</html>

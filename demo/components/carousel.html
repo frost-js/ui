@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Carousel</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Carousel</h1>
+
+        <h4>Slides</h4>
+        <p class="text-body-secondary">A basic carousel cycles through one active item at a time.</p>
+        <div class="mb-4">
+            <div class="carousel slide" data-ui-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at blue hour">
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/cabin.webp" alt="Cabin beside an alpine lake">
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/canyon.webp" alt="Road winding through a desert canyon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>Controls</h4>
+        <p class="text-body-secondary">Previous and next controls move directly between adjacent slides.</p>
+        <div class="mb-4">
+            <div class="carousel slide" id="carouselControls" data-ui-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at blue hour">
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/cabin.webp" alt="Cabin beside an alpine lake">
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/canyon.webp" alt="Road winding through a desert canyon">
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" data-ui-target="#carouselControls" data-ui-slide="prev" type="button">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" data-ui-target="#carouselControls" data-ui-slide="next" type="button">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <h4>Indicators</h4>
+        <p class="text-body-secondary">Indicators show the current position and allow direct slide selection.</p>
+        <div class="mb-4">
+            <div class="carousel slide" id="carouselIndicators" data-ui-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li class="active" data-ui-target="#carouselIndicators" data-ui-slide-to="0" aria-current="true" aria-label="Coast"></li>
+                    <li data-ui-target="#carouselIndicators" data-ui-slide-to="1" aria-label="Cabin"></li>
+                    <li data-ui-target="#carouselIndicators" data-ui-slide-to="2" aria-label="Canyon"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at blue hour">
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/cabin.webp" alt="Cabin beside an alpine lake">
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/canyon.webp" alt="Road winding through a desert canyon">
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" data-ui-target="#carouselIndicators" data-ui-slide="prev" type="button">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" data-ui-target="#carouselIndicators" data-ui-slide="next" type="button">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <h4>Captions</h4>
+        <p class="text-body-secondary">Captions add contextual content and can be aligned with text utilities.</p>
+        <div class="mb-4">
+            <div class="carousel slide" id="carouselCaptions" data-ui-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li class="active" data-ui-target="#carouselCaptions" data-ui-slide-to="0" aria-current="true" aria-label="Coast"></li>
+                    <li data-ui-target="#carouselCaptions" data-ui-slide-to="1" aria-label="Cabin"></li>
+                    <li data-ui-target="#carouselCaptions" data-ui-slide-to="2" aria-label="Canyon"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at blue hour">
+                        </div>
+                        <div class="carousel-caption d-none d-md-block text-start">
+                            <h5>Southern coast</h5>
+                            <p>A trail shaped by sandstone, tide, and the final light of day.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/cabin.webp" alt="Cabin beside an alpine lake">
+                        </div>
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Alpine shelter</h5>
+                            <p>A small cabin designed around weather, warmth, and the view.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="ratio ratio-21x9">
+                            <img class="d-block w-100 object-fit-cover" src="../assets/canyon.webp" alt="Road winding through a desert canyon">
+                        </div>
+                        <div class="carousel-caption d-none d-md-block text-end">
+                            <h5>Red country</h5>
+                            <p>A remote road where preparation creates room for discovery.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" data-ui-target="#carouselCaptions" data-ui-slide="prev" type="button">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" data-ui-target="#carouselCaptions" data-ui-slide="next" type="button">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

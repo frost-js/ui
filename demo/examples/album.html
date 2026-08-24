@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Notes · FrostUI Example</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <header class="border-bottom">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="#">Field Notes</a>
+                <button class="navbar-toggler" type="button" data-ui-toggle="collapse" data-ui-target="#fieldNotesNavigation" aria-controls="fieldNotesNavigation" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="fieldNotesNavigation">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item"><a class="nav-link active" href="#" aria-current="page">Journal</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Places</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Field guides</a></li>
+                        <li class="nav-item ms-lg-2"><a class="btn btn-primary ripple" href="#">Plan a trip</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container py-5">
+            <div class="card overflow-hidden shadow-lg">
+                <div class="row g-0 align-items-stretch">
+                    <div class="col-lg-7">
+                        <div class="ratio ratio-4x3 h-100">
+                            <img class="object-fit-cover" src="../assets/cabin.webp" alt="Timber cabin beside a misty alpine lake">
+                        </div>
+                    </div>
+                    <div class="col-lg-5 d-flex align-items-center">
+                        <div class="card-body p-4 p-xl-5">
+                            <span class="badge bg-accent-subtle text-accent mb-3">Issue 08 · Winter</span>
+                            <h1 class="display-3">Quiet places, carefully found.</h1>
+                            <p class="lead text-body-secondary">Independent field reports for people who would rather take the long way.</p>
+                            <a class="btn btn-primary btn-lg ripple" href="#stories">Read the latest issue</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container py-5" id="stories">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+                <div>
+                    <p class="text-primary fw-bold text-uppercase mb-2">Latest dispatches</p>
+                    <h2 class="display-5 mb-0">Stories from the edge</h2>
+                </div>
+                <a class="link-primary fw-bold" href="#">View every dispatch &rarr;</a>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                <article class="col">
+                    <div class="card h-100">
+                        <div class="ratio ratio-4x3">
+                            <img class="card-img-top object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs and ocean at blue hour">
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-primary-subtle text-primary">Coast</span>
+                                <small class="text-body-secondary">7 min read</small>
+                            </div>
+                            <h3 class="card-title">The last light at Cape Solace</h3>
+                            <p class="card-text text-body-secondary">A two-day walk along sandstone cliffs, tidal shelves, and the quietest stretch of coast we could find.</p>
+                            <a class="stretched-link fw-bold" href="#">Read field report</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="col">
+                    <div class="card h-100">
+                        <div class="ratio ratio-4x3">
+                            <img class="card-img-top object-fit-cover" src="../assets/canyon.webp" alt="Expedition vehicle above a winding desert road">
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-warning-subtle text-warning">Desert</span>
+                                <small class="text-body-secondary">11 min read</small>
+                            </div>
+                            <h3 class="card-title">One road through the red country</h3>
+                            <p class="card-text text-body-secondary">Water stops, weather windows, and what to know before driving beyond the marked route.</p>
+                            <a class="stretched-link fw-bold" href="#">Read field report</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="col">
+                    <div class="card h-100">
+                        <div class="ratio ratio-4x3">
+                            <img class="card-img-top object-fit-cover" src="../assets/cabin.webp" alt="Remote lakeside cabin at dawn">
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-accent-subtle text-accent">Shelter</span>
+                                <small class="text-body-secondary">5 min read</small>
+                            </div>
+                            <h3 class="card-title">Cabins built for weather</h3>
+                            <p class="card-text text-body-secondary">Three small shelters where simple materials, warm light, and dramatic landscapes do the work.</p>
+                            <a class="stretched-link fw-bold" href="#">Read field report</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="col">
+                    <div class="card h-100">
+                        <div class="ratio ratio-16x9">
+                            <img class="card-img-top object-fit-cover" src="../assets/canyon.webp" alt="Layered desert canyon in morning light">
+                        </div>
+                        <div class="card-body">
+                            <span class="text-primary fw-bold">Field guide</span>
+                            <h3 class="card-title mt-2">Packing for heat, cold, and everything between</h3>
+                            <p class="card-text text-body-secondary">A compact equipment list refined over six seasons in remote country.</p>
+                            <a class="stretched-link fw-bold" href="#">Open the guide</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="col">
+                    <div class="card h-100">
+                        <div class="ratio ratio-16x9">
+                            <img class="card-img-top object-fit-cover" src="../assets/coast.webp" alt="Ocean and coastal headland at dusk">
+                        </div>
+                        <div class="card-body">
+                            <span class="text-primary fw-bold">Route notes</span>
+                            <h3 class="card-title mt-2">A slower weekend on the southern coast</h3>
+                            <p class="card-text text-body-secondary">Trailheads, camps, and a sunrise detour worth waking early for.</p>
+                            <a class="stretched-link fw-bold" href="#">Open route notes</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="col">
+                    <div class="card h-100 text-bg-primary">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <span class="badge bg-white text-primary align-self-start">Newsletter</span>
+                            <div class="my-5">
+                                <h3 class="card-title display-6">One useful note, every second Sunday.</h3>
+                                <p class="card-text">New routes, practical guides, and places worth protecting.</p>
+                            </div>
+                            <form class="input-group" action="#">
+                                <div class="form-input">
+                                    <label class="visually-hidden" for="fieldEmail">Email address</label>
+                                    <input class="input-filled" id="fieldEmail" type="email" placeholder="you@example.com">
+                                </div>
+                                <button class="btn btn-light ripple" type="submit">Join</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-top py-5 mt-5">
+        <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+            <strong>Field Notes</strong>
+            <span class="text-body-secondary">Independent travel stories · Made with FrostUI</span>
+        </div>
+    </footer>
+</body>
+
+</html>

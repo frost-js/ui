@@ -59,6 +59,7 @@
         #{&}:hover,
         .btn-check:focus-visible+#{&},
         #{&}:focus-visible {
+            color: var(--ui-btn-hover-color, var(--ui-btn-color));
             background-color: var(--ui-btn-hover-bg);
             border-color: var(--ui-btn-hover-border-color);
         }

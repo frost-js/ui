@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cards</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Cards</h1>
+
+        <h4>Body</h4>
+        <p class="text-body-secondary">A card body provides a padded surface for related content.</p>
+        <div class="mb-4">
+            <div class="card">
+                <div class="card-body">A simple card body.</div>
+            </div>
+        </div>
+
+        <h4>Content</h4>
+        <p class="text-body-secondary">Titles, subtitles, text, and links establish a clear content hierarchy.</p>
+        <div class="mb-4">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <article class="card h-100">
+                        <div class="card-body">
+                            <span class="badge bg-primary-subtle text-primary mb-3">Field guide</span>
+                            <h5 class="card-title">Pack for changing weather</h5>
+                            <h6 class="card-subtitle mb-3 text-body-secondary">A practical equipment list</h6>
+                            <p class="card-text">Build a compact kit that works across warm afternoons, cold ridgelines, and sudden rain.</p>
+                            <a class="card-link" href="#">Open guide</a>
+                            <a class="card-link" href="#">Save for later</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-md-6">
+                    <article class="card h-100 text-center">
+                        <div class="card-body">
+                            <span class="badge bg-accent-subtle text-accent mb-3">Members</span>
+                            <h5 class="card-title">Your next route is ready</h5>
+                            <p class="card-text text-body-secondary">Review the itinerary, download offline notes, and meet your guide.</p>
+                            <a class="btn btn-primary ripple" href="#">View trip</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <h4>Media</h4>
+        <p class="text-body-secondary">Images can sit above or below the card body while retaining the card radius.</p>
+        <div class="mb-4">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <article class="card h-100">
+                        <div class="ratio ratio-16x9">
+                            <img class="card-img-top object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at blue hour">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">The southern edge</h5>
+                            <p class="card-text text-body-secondary">A two-day route along tidal shelves and sandstone headlands.</p>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-md-6">
+                    <article class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Cabins built for weather</h5>
+                            <p class="card-text text-body-secondary">Small shelters where material, warmth, and landscape do the work.</p>
+                        </div>
+                        <div class="ratio ratio-16x9">
+                            <img class="card-img-bottom object-fit-cover" src="../assets/cabin.webp" alt="Cabin beside a mountain lake">
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <h4>Image overlay</h4>
+        <p class="text-body-secondary">Overlay content combines with text and background utilities for readable media cards.</p>
+        <div class="mb-4">
+            <article class="card text-bg-dark overflow-hidden">
+                <div class="ratio ratio-21x9">
+                    <img class="card-img object-fit-cover opacity-75" src="../assets/canyon.webp" alt="Expedition vehicle above a desert canyon road">
+                </div>
+                <div class="card-img-overlay d-flex flex-column justify-content-end">
+                    <span class="badge bg-warning text-black align-self-start mb-2">Route notes</span>
+                    <h5 class="card-title text-white">One road through the red country</h5>
+                    <p class="card-text text-light d-none d-sm-block">Water stops, weather windows, and what to know before leaving the marked route.</p>
+                </div>
+            </article>
+        </div>
+
+        <h4>Horizontal</h4>
+        <p class="text-body-secondary">Use the grid to place media beside content and stack it on narrower screens.</p>
+        <div class="mb-4">
+            <article class="card overflow-hidden">
+                <div class="row g-0 align-items-stretch">
+                    <div class="col-md-5">
+                        <div class="ratio ratio-4x3 h-100">
+                            <img class="object-fit-cover" src="../assets/cabin.webp" alt="Remote lakeside cabin at dawn">
+                        </div>
+                    </div>
+                    <div class="col-md-7 d-flex align-items-center">
+                        <div class="card-body">
+                            <span class="text-accent fw-bold">Four-night retreat</span>
+                            <h5 class="card-title mt-2">Make room for quiet</h5>
+                            <p class="card-text">Trail access from the door, a private cabin, and enough flexibility to follow the weather.</p>
+                            <p class="card-text"><small class="text-body-secondary">Next departure: November 3</small></p>
+                            <a class="btn btn-outline-primary ripple" href="#">See itinerary</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <h4>Header and footer</h4>
+        <p class="text-body-secondary">Headers label a card and footers hold supporting metadata or secondary actions.</p>
+        <div class="mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>Departure status</strong>
+                    <span class="badge bg-success-subtle text-success">Confirmed</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Southern edge traverse</h5>
+                    <p class="card-text">Your guide has confirmed the route and the equipment briefing is available.</p>
+                    <a class="btn btn-primary ripple" href="#">Open briefing</a>
+                </div>
+                <div class="card-footer text-body-secondary">Updated 14 minutes ago</div>
+            </div>
+        </div>
+
+        <h4>Navigation</h4>
+        <p class="text-body-secondary">Tabs or pills can sit in the header to switch between related card views.</p>
+        <div class="mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <nav class="nav nav-tabs card-header-tabs">
+                        <a class="nav-link active" href="#" aria-current="page">Overview</a>
+                        <a class="nav-link" href="#">Itinerary</a>
+                        <a class="nav-link" href="#">Equipment</a>
+                    </nav>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Trip overview</h5>
+                    <p class="card-text text-body-secondary">Seven days of supported walking with five nights under canvas and one lodge night.</p>
+                </div>
+            </div>
+        </div>
+
+        <h4>Lists</h4>
+        <p class="text-body-secondary">Flush list groups remove doubled borders when placed inside a card.</p>
+        <div class="mb-4">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header">Included</div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Local expedition leader</li>
+                            <li class="list-group-item">All camp meals</li>
+                            <li class="list-group-item">Equipment transfer</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between"><span>Base price</span><strong>$2,640</strong></li>
+                            <li class="list-group-item d-flex justify-content-between"><span>Single supplement</span><strong>$320</strong></li>
+                            <li class="list-group-item d-flex justify-content-between"><span>Equipment hire</span><strong>$85</strong></li>
+                        </ul>
+                        <div class="card-footer">Prices shown in AUD</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>Contextual variants</h4>
+        <p class="text-body-secondary">Background, text, and border utilities adapt cards to semantic contexts.</p>
+        <div class="mb-4">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="card text-bg-primary h-100">
+                        <div class="card-header">Primary</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Registration open</h5>
+                            <p class="card-text">Four places remain on the October departure.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-success h-100">
+                        <div class="card-header">Success</div>
+                        <div class="card-body text-success">
+                            <h5 class="card-title">Payment received</h5>
+                            <p class="card-text">Your place is confirmed and a receipt has been emailed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-warning h-100">
+                        <div class="card-header">Warning</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Equipment check needed</h5>
+                            <p class="card-text">Review the updated cold-weather requirements before departure.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card text-bg-dark h-100">
+                        <div class="card-header">Dark</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Offline route ready</h5>
+                            <p class="card-text">Maps and emergency notes are stored on this device.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

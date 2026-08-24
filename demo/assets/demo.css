@@ -1,0 +1,28 @@
+:root {
+    --demo-sidebar-width: 18rem;
+}
+
+[data-demo-sidebar] {
+    --ui-offcanvas-width: min(var(--demo-sidebar-width), 88vw);
+}
+
+[data-demo-sidebar] .offcanvas-body {
+    scrollbar-width: thin;
+}
+
+@media (min-width: 992px) {
+    :root[data-demo-catalog] body {
+        padding-inline-start: var(--demo-sidebar-width);
+    }
+
+    [data-demo-sidebar].offcanvas {
+        --ui-offcanvas-width: var(--demo-sidebar-width);
+
+        display: flex;
+        box-shadow: none;
+    }
+
+    [data-demo-sidebar] .btn-close {
+        display: none;
+    }
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frost Cloud Pricing · FrostUI Example</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <header class="navbar navbar-expand-md border-bottom">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Frost Cloud</a>
+            <button class="navbar-toggler" type="button" data-ui-toggle="collapse" data-ui-target="#pricingNavigation" aria-controls="pricingNavigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="pricingNavigation">
+                <ul class="navbar-nav ms-auto align-items-md-center">
+                    <li class="nav-item"><a class="nav-link" href="#plans">Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#compare">Compare</a></li>
+                    <li class="nav-item ms-md-2"><a class="btn btn-primary ripple" href="#">Start free</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container text-center py-5">
+            <div class="col-lg-8 mx-auto py-lg-5">
+                <span class="badge bg-primary-subtle text-primary mb-3">Simple, predictable pricing</span>
+                <h1 class="display-2">Ship the product, not the platform.</h1>
+                <p class="lead text-body-secondary">Every plan includes global delivery, preview environments, and usage alerts. Upgrade when your team—not your invoice—needs to grow.</p>
+            </div>
+        </section>
+
+        <section class="container pb-5" id="plans">
+            <div class="row row-cols-1 row-cols-lg-3 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h2 class="card-title">Launch</h2>
+                            <p class="text-body-secondary">For prototypes and small production apps.</p>
+                            <p><span class="display-4 fw-bold">$0</span> <span class="text-body-secondary">/ month</span></p>
+                            <a class="btn btn-outline-primary ripple w-100" href="#">Start building</a>
+                            <hr>
+                            <ul class="list-unstyled vstack gap-2 mb-0">
+                                <li>3 active projects</li>
+                                <li>100 GB bandwidth</li>
+                                <li>Community support</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 border-primary shadow-lg">
+                        <div class="card-header text-bg-primary d-flex justify-content-between align-items-center">
+                            <strong>Scale</strong>
+                            <span class="badge bg-white text-primary">Most popular</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-body-secondary">For teams shipping every week.</p>
+                            <p><span class="display-4 fw-bold">$39</span> <span class="text-body-secondary">/ member</span></p>
+                            <a class="btn btn-primary ripple w-100" href="#">Start 14-day trial</a>
+                            <hr>
+                            <ul class="list-unstyled vstack gap-2 mb-0">
+                                <li>Unlimited projects</li>
+                                <li>1 TB bandwidth</li>
+                                <li>Preview collaboration</li>
+                                <li>Priority support</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h2 class="card-title">Enterprise</h2>
+                            <p class="text-body-secondary">For regulated and global organizations.</p>
+                            <p><span class="display-4 fw-bold">Custom</span></p>
+                            <a class="btn btn-outline-primary ripple w-100" href="#">Talk to an architect</a>
+                            <hr>
+                            <ul class="list-unstyled vstack gap-2 mb-0">
+                                <li>Dedicated regions</li>
+                                <li>Advanced access controls</li>
+                                <li>Custom retention</li>
+                                <li>24/7 response</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container py-5" id="compare">
+            <h2 class="display-5 text-center mb-4">Compare plans</h2>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Capability</th>
+                            <th scope="col">Launch</th>
+                            <th scope="col">Scale</th>
+                            <th scope="col">Enterprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><th scope="row">Projects</th><td>3</td><td>Unlimited</td><td>Unlimited</td></tr>
+                        <tr><th scope="row">Team roles</th><td>—</td><td>Included</td><td>Custom</td></tr>
+                        <tr><th scope="row">Analytics retention</th><td>7 days</td><td>90 days</td><td>Custom</td></tr>
+                        <tr><th scope="row">Support</th><td>Community</td><td>Priority</td><td>24/7</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-top py-5">
+        <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+            <strong>Frost Cloud</strong>
+            <span class="text-body-secondary">All prices in AUD · Cancel any time</span>
+        </div>
+    </footer>
+</body>
+
+</html>

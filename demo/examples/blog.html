@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waypoint · FrostUI Example</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <header class="container py-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 border-bottom pb-4">
+            <a class="display-6 text-body text-decoration-none fw-bold" href="#">Waypoint</a>
+            <nav class="nav">
+                <a class="nav-link active" href="#" aria-current="page">Stories</a>
+                <a class="nav-link" href="#">Design</a>
+                <a class="nav-link" href="#">Culture</a>
+                <a class="nav-link" href="#">Places</a>
+            </nav>
+            <a class="btn btn-outline-primary ripple" href="#">Subscribe</a>
+        </div>
+    </header>
+
+    <main class="container pb-5">
+        <article class="card text-bg-dark overflow-hidden border-0 shadow-lg mb-5">
+            <div class="ratio ratio-21x9">
+                <img class="object-fit-cover opacity-75" src="../assets/coast.webp" alt="Coastal headland at blue hour">
+            </div>
+            <div class="card-img-overlay d-flex align-items-end">
+                <div class="col-lg-8 p-md-4">
+                    <span class="badge bg-primary mb-3">Cover story</span>
+                    <h1 class="display-3 text-white">Why the best public spaces leave room for weather.</h1>
+                    <p class="lead text-light d-none d-md-block">Architect Lina Ortiz on designing coastal places that become richer in wind, salt, rain, and time.</p>
+                    <a class="stretched-link text-white fw-bold" href="#">Read the cover story &rarr;</a>
+                </div>
+            </div>
+        </article>
+
+        <section class="row g-4 mb-5">
+            <article class="col-lg-6">
+                <div class="card h-100">
+                    <div class="row g-0">
+                        <div class="col-sm-5">
+                            <div class="ratio ratio-4x3 h-100">
+                                <img class="object-fit-cover rounded-start" src="../assets/cabin.webp" alt="Modern cabin beside an alpine lake">
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="card-body">
+                                <span class="text-accent fw-bold">Architecture</span>
+                                <h2 class="card-title mt-2">Small buildings, larger landscapes</h2>
+                                <p class="card-text text-body-secondary">Three architects explain how restraint creates a stronger sense of place.</p>
+                                <a class="stretched-link fw-bold" href="#">Read story</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="col-lg-6">
+                <div class="card h-100">
+                    <div class="row g-0">
+                        <div class="col-sm-5">
+                            <div class="ratio ratio-4x3 h-100">
+                                <img class="object-fit-cover rounded-start" src="../assets/canyon.webp" alt="Desert canyon crossed by a winding road">
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="card-body">
+                                <span class="text-warning fw-bold">Mobility</span>
+                                <h2 class="card-title mt-2">The road as public architecture</h2>
+                                <p class="card-text text-body-secondary">What remote routes teach us about access, maintenance, and belonging.</p>
+                                <a class="stretched-link fw-bold" href="#">Read story</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <div class="row g-5">
+            <section class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-end border-bottom pb-3 mb-4">
+                    <h2 class="mb-0">Latest stories</h2>
+                    <a href="#">View archive</a>
+                </div>
+                <div class="vstack gap-4">
+                    <article class="border-bottom pb-4">
+                        <span class="text-primary fw-bold">Cities</span>
+                        <h3 class="mt-2"><a class="text-body text-decoration-none" href="#">A night market designed to move every morning</a></h3>
+                        <p class="text-body-secondary mb-2">How temporary infrastructure became a permanent part of one neighborhood’s identity.</p>
+                        <small class="text-body-secondary">August 21 · 6 min read</small>
+                    </article>
+                    <article class="border-bottom pb-4">
+                        <span class="text-accent fw-bold">Objects</span>
+                        <h3 class="mt-2"><a class="text-body text-decoration-none" href="#">The repair manual is part of the product</a></h3>
+                        <p class="text-body-secondary mb-2">A new generation of manufacturers is making maintenance visible, legible, and satisfying.</p>
+                        <small class="text-body-secondary">August 16 · 8 min read</small>
+                    </article>
+                    <article class="border-bottom pb-4">
+                        <span class="text-success fw-bold">Landscape</span>
+                        <h3 class="mt-2"><a class="text-body text-decoration-none" href="#">Listening for water in a dry city</a></h3>
+                        <p class="text-body-secondary mb-2">The planners rebuilding an urban watershed one overlooked block at a time.</p>
+                        <small class="text-body-secondary">August 9 · 10 min read</small>
+                    </article>
+                </div>
+                <nav class="mt-4" aria-label="Story pages">
+                    <ul class="pagination">
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
+                        <li class="page-item active"><a class="page-link" href="#" aria-current="page">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </section>
+
+            <aside class="col-lg-4">
+                <div class="card bg-body-tertiary mb-4">
+                    <div class="card-body">
+                        <span class="badge bg-primary-subtle text-primary mb-3">About Waypoint</span>
+                        <h2 class="card-title">Ideas for places in motion.</h2>
+                        <p class="card-text text-body-secondary">Independent reporting on design, culture, and the systems that shape everyday life.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Most read</h2>
+                        <ol class="list-group list-group-numbered list-group-flush">
+                            <li class="list-group-item"><a href="#">The train station that became a town square</a></li>
+                            <li class="list-group-item"><a href="#">Seven materials aging beautifully</a></li>
+                            <li class="list-group-item"><a href="#">Making shade a public utility</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="bg-body-tertiary border-top py-5 mt-5">
+        <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+            <strong>Waypoint</strong>
+            <span class="text-body-secondary">Design · Culture · Places</span>
+        </div>
+    </footer>
+</body>
+
+</html>

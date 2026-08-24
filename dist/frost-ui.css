@@ -2240,6 +2240,7 @@ progress {
 .btn:hover,
 .btn-check:focus-visible + .btn,
 .btn:focus-visible {
+  color: var(--ui-btn-hover-color, var(--ui-btn-color));
   background-color: var(--ui-btn-hover-bg);
   border-color: var(--ui-btn-hover-border-color);
 }
@@ -7860,8 +7861,8 @@ select.input-lg[multiple] option {
   flex-wrap: wrap !important;
 }
 
-.flex-no-wrap {
-  flex-wrap: no-wrap !important;
+.flex-nowrap {
+  flex-wrap: nowrap !important;
 }
 
 .flex-wrap-reverse {
@@ -7872,8 +7873,8 @@ select.input-lg[multiple] option {
   .flex-sm-wrap {
     flex-wrap: wrap !important;
   }
-  .flex-sm-no-wrap {
-    flex-wrap: no-wrap !important;
+  .flex-sm-nowrap {
+    flex-wrap: nowrap !important;
   }
   .flex-sm-wrap-reverse {
     flex-wrap: wrap-reverse !important;
@@ -7883,8 +7884,8 @@ select.input-lg[multiple] option {
   .flex-md-wrap {
     flex-wrap: wrap !important;
   }
-  .flex-md-no-wrap {
-    flex-wrap: no-wrap !important;
+  .flex-md-nowrap {
+    flex-wrap: nowrap !important;
   }
   .flex-md-wrap-reverse {
     flex-wrap: wrap-reverse !important;
@@ -7894,8 +7895,8 @@ select.input-lg[multiple] option {
   .flex-lg-wrap {
     flex-wrap: wrap !important;
   }
-  .flex-lg-no-wrap {
-    flex-wrap: no-wrap !important;
+  .flex-lg-nowrap {
+    flex-wrap: nowrap !important;
   }
   .flex-lg-wrap-reverse {
     flex-wrap: wrap-reverse !important;
@@ -7905,8 +7906,8 @@ select.input-lg[multiple] option {
   .flex-xl-wrap {
     flex-wrap: wrap !important;
   }
-  .flex-xl-no-wrap {
-    flex-wrap: no-wrap !important;
+  .flex-xl-nowrap {
+    flex-wrap: nowrap !important;
   }
   .flex-xl-wrap-reverse {
     flex-wrap: wrap-reverse !important;
@@ -7916,8 +7917,8 @@ select.input-lg[multiple] option {
   .flex-xxl-wrap {
     flex-wrap: wrap !important;
   }
-  .flex-xxl-no-wrap {
-    flex-wrap: no-wrap !important;
+  .flex-xxl-nowrap {
+    flex-wrap: nowrap !important;
   }
   .flex-xxl-wrap-reverse {
     flex-wrap: wrap-reverse !important;
