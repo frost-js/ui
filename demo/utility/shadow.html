@@ -15,13 +15,37 @@
 <body>
     <div class="container">
         <h1>Shadows</h1>
-        <div class="mb-4">
-            <div class="shadow-none p-3 mb-4 bg-body-tertiary rounded">No shadow</div>
-            <div class="shadow-sm p-3 mb-4 bg-body-tertiary rounded">Small shadow</div>
-            <div class="shadow p-3 mb-4 bg-body-tertiary rounded">Regular shadow</div>
-            <div class="shadow-lg p-3 mb-4 bg-body-tertiary rounded">Larger shadow</div>
-            <div class="shadow-glow p-3 mb-4 bg-body-tertiary rounded">Glow shadow</div>
-        </div>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Elevation scale</h2>
+                <p class="text-body-secondary mb-2">The shadow scale moves from flat surfaces to strong floating elevation and remains theme-aware.</p>
+                <code>.shadow-none</code> <code>.shadow-sm</code> <code>.shadow</code> <code>.shadow-lg</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 bg-body-secondary rounded-4 p-4">
+                <div class="col"><div class="shadow-none bg-body-tertiary rounded-3 p-4 h-100"><strong>No shadow</strong><code class="d-block">.shadow-none</code></div></div>
+                <div class="col"><div class="shadow-sm bg-body-tertiary rounded-3 p-4 h-100"><strong>Small</strong><code class="d-block">.shadow-sm</code></div></div>
+                <div class="col"><div class="shadow bg-body-tertiary rounded-3 p-4 h-100"><strong>Default</strong><code class="d-block">.shadow</code></div></div>
+                <div class="col"><div class="shadow-lg bg-body-tertiary rounded-3 p-4 h-100"><strong>Large</strong><code class="d-block">.shadow-lg</code></div></div>
+            </div>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Branded glow</h2>
+                <p class="text-body-secondary mb-2">Use the glow effect sparingly to draw attention to a featured surface or primary moment.</p>
+                <code>.shadow-glow</code>
+            </header>
+            <div class="row">
+                <div class="col-md-7 col-lg-5">
+                    <div class="shadow-glow bg-gradient text-white rounded-4 p-4">
+                        <span class="badge text-bg-light mb-3">Featured</span>
+                        <h3 class="h5">Coastal expedition</h3>
+                        <p class="mb-0">A branded glow distinguishes the featured route without changing its layout.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 

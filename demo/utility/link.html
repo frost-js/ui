@@ -16,56 +16,87 @@
     <div class="container">
         <h1>Link</h1>
 
-        <h4>Opacity</h4>
-        <div class="mb-4">
-            <p><a class="link-opacity-100" href="#">.link-opacity-100</a></p>
-            <p><a class="link-opacity-75" href="#">.link-opacity-75</a></p>
-            <p><a class="link-opacity-50" href="#">.link-opacity-50</a></p>
-            <p><a class="link-opacity-25" href="#">.link-opacity-25</a></p>
-            <p><a class="link-opacity-10" href="#">.link-opacity-10</a></p>
-        </div>
-        <div class="mb-4">
-            <p><a class="link-opacity-100-hover" href="#">.link-opacity-100-hover</a></p>
-            <p><a class="link-opacity-75-hover" href="#">.link-opacity-75-hover</a></p>
-            <p><a class="link-opacity-50-hover" href="#">.link-opacity-50-hover</a></p>
-            <p><a class="link-opacity-25-hover" href="#">.link-opacity-25-hover</a></p>
-            <p><a class="link-opacity-10-hover" href="#">.link-opacity-10-hover</a></p>
-        </div>
+        <section class="mb-5" id="link-opacity">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Link opacity</h2>
+                <p class="text-body-secondary mb-2">Apply opacity to the resting link color or only while the link is hovered or keyboard-focused.</p>
+                <code>.link-opacity-{100|75|50|25|10|0}</code> <code>.link-opacity-*-hover</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h3 class="h6">Resting state</h3>
+                    <div class="vstack gap-2">
+                        <a class="link-opacity-100" href="#link-opacity">100% opacity</a>
+                        <a class="link-opacity-75" href="#link-opacity">75% opacity</a>
+                        <a class="link-opacity-50" href="#link-opacity">50% opacity</a>
+                        <a class="link-opacity-25" href="#link-opacity">25% opacity</a>
+                        <a class="link-opacity-10" href="#link-opacity">10% opacity</a>
+                        <span><a class="link-opacity-0" href="#link-opacity" aria-label="0% opacity link">0% opacity</a><code>.link-opacity-0</code></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="h6">Hover and focus state</h3>
+                    <div class="vstack gap-2">
+                        <a class="link-opacity-100-hover" href="#link-opacity">100% on interaction</a>
+                        <a class="link-opacity-75-hover" href="#link-opacity">75% on interaction</a>
+                        <a class="link-opacity-50-hover" href="#link-opacity">50% on interaction</a>
+                        <a class="link-opacity-25-hover" href="#link-opacity">25% on interaction</a>
+                        <a class="link-opacity-10-hover" href="#link-opacity">10% on interaction</a>
+                        <span><a class="link-opacity-0-hover" href="#link-opacity">0% on interaction</a><code class="ms-2">.link-opacity-0-hover</code></span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <h4>Underline Styles</h4>
-        <div class="mb-4">
-            <p><a class="link-underline-primary" href="#">.link-underline-primary</a></p>
-            <p><a class="link-underline-accent" href="#">.link-underline-accent</a></p>
-            <p><a class="link-underline-secondary" href="#">.link-underline-secondary</a></p>
-            <p><a class="link-underline-success" href="#">.link-underline-success</a></p>
-            <p><a class="link-underline-info" href="#">.link-underline-info</a></p>
-            <p><a class="link-underline-warning" href="#">.link-underline-warning</a></p>
-            <p><a class="link-underline-danger" href="#">.link-underline-danger</a></p>
-            <p><a class="link-underline-light" href="#">.link-underline-light</a></p>
-            <p><a class="link-underline-dark" href="#">.link-underline-dark</a></p>
-        </div>
+        <section class="mb-5" id="underline-color">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Underline color</h2>
+                <p class="text-body-secondary mb-2">Change the decoration color independently from the link’s text color.</p>
+                <code>.link-underline-{color}</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+                <div class="col"><div class="card card-body"><a class="link-underline-primary" href="#underline-color">Primary underline</a></div></div>
+                <div class="col"><div class="card card-body"><a class="link-underline-accent" href="#underline-color">Accent underline</a></div></div>
+                <div class="col"><div class="card card-body"><a class="link-underline-secondary" href="#underline-color">Secondary underline</a></div></div>
+                <div class="col"><div class="card card-body"><a class="link-underline-success" href="#underline-color">Success underline</a></div></div>
+                <div class="col"><div class="card card-body"><a class="link-underline-info" href="#underline-color">Info underline</a></div></div>
+                <div class="col"><div class="card card-body"><a class="link-underline-warning" href="#underline-color">Warning underline</a></div></div>
+                <div class="col"><div class="card card-body"><a class="link-underline-danger" href="#underline-color">Danger underline</a></div></div>
+                <div class="col"><div class="bg-dark rounded-3 p-3"><a class="link-light link-underline-light" href="#underline-color">Light underline</a></div></div>
+                <div class="col"><div class="bg-light rounded-3 p-3"><a class="link-dark link-underline-dark" href="#underline-color">Dark underline</a></div></div>
+            </div>
+        </section>
 
-        <h4>Underline Offset</h4>
-        <div class="mb-4">
-            <p><a class="link-offset-1" href="#">.link-offset-1</a></p>
-            <p><a class="link-offset-2" href="#">.link-offset-2</a></p>
-            <p><a class="link-offset-3" href="#">.link-offset-3</a></p>
-        </div>
+        <section class="mb-5" id="underline-offset">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Underline offset</h2>
+                <p class="text-body-secondary mb-2">Move the decoration progressively farther from the text without changing its thickness.</p>
+                <code>.link-offset-{1|2|3}</code> <code>.link-offset-*-hover</code>
+            </header>
+            <div class="hstack flex-wrap gap-4 fs-5">
+                <a class="link-offset-1" href="#underline-offset">Offset 1</a>
+                <a class="link-offset-2" href="#underline-offset">Offset 2</a>
+                <a class="link-offset-3" href="#underline-offset">Offset 3</a>
+                <a class="link-offset-1 link-offset-3-hover" href="#underline-offset">Offset 1 to 3</a>
+            </div>
+        </section>
 
-        <h4>Underline Opacity</h4>
-        <div class="mb-4">
-            <p><a class="link-offset-2 link-underline link-underline-opacity-100" href="#">.link-underline-opacity-100</a></p>
-            <p><a class="link-offset-2 link-underline link-underline-opacity-75" href="#">.link-underline-opacity-75</a></p>
-            <p><a class="link-offset-2 link-underline link-underline-opacity-50" href="#">.link-underline-opacity-50</a></p>
-            <p><a class="link-offset-2 link-underline link-underline-opacity-25" href="#">.link-underline-opacity-25</a></p>
-            <p><a class="link-offset-2 link-underline link-underline-opacity-10" href="#">.link-underline-opacity-10</a></p>
-            <p><a class="link-offset-2 link-underline link-underline-opacity-0" href="#">.link-underline-opacity-0</a></p>
-        </div>
-
-        <h4>Hover</h4>
-        <div class="mb-4">
-            <p><a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="#">.link-underline-opacity-0 .link-underline-opacity-75-hover</a></p>
-        </div>
+        <section class="mb-5 pb-5" id="underline-opacity">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Underline opacity</h2>
+                <p class="text-body-secondary mb-2">Fade only the decoration, including an interaction-only treatment that begins transparent.</p>
+                <code>.link-underline-opacity-{100|75|50|25|10|0}</code> <code>.link-underline-opacity-*-hover</code>
+            </header>
+            <div class="vstack gap-3 mb-4">
+                <a class="link-offset-2 link-underline link-underline-opacity-100" href="#underline-opacity">100% underline</a>
+                <a class="link-offset-2 link-underline link-underline-opacity-75" href="#underline-opacity">75% underline</a>
+                <a class="link-offset-2 link-underline link-underline-opacity-50" href="#underline-opacity">50% underline</a>
+                <a class="link-offset-2 link-underline link-underline-opacity-25" href="#underline-opacity">25% underline</a>
+                <a class="link-offset-2 link-underline link-underline-opacity-10" href="#underline-opacity">10% underline</a>
+                <a class="link-offset-2 link-underline link-underline-opacity-0" href="#underline-opacity">0% underline</a>
+            </div>
+            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="#underline-opacity">Hover or focus to reveal and offset the underline</a>
+        </section>
     </div>
 </body>
 

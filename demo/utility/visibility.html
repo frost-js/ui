@@ -15,12 +15,20 @@
 <body>
     <div class="container">
         <h1>Visibility</h1>
-        <div class="mb-4">
-            <div class="visible">Visible</div>
-        </div>
-        <div class="mb-4">
-            <div class="invisible">Invisible</div>
-        </div>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Preserving layout space</h2>
+                <p class="text-body-secondary mb-2">Visibility utilities hide or reveal content without removing its allocated space from the layout.</p>
+                <code>.visible</code> <code>.invisible</code>
+            </header>
+            <div class="row row-cols-3 g-3 text-center">
+                <div class="col"><div class="visible text-bg-primary rounded-3 p-4">Visible</div></div>
+                <div class="col"><div class="invisible text-bg-accent rounded-3 p-4">Invisible</div></div>
+                <div class="col"><div class="visible text-bg-primary rounded-3 p-4">Visible</div></div>
+            </div>
+            <p class="text-body-secondary mt-3 mb-0">The middle column still occupies one third of the row. Use display utilities instead when the layout should collapse.</p>
+        </section>
     </div>
 </body>
 

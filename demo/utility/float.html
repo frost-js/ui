@@ -15,19 +15,33 @@
 <body>
     <div class="container">
         <h1>Float</h1>
-        <div class="mb-4">
-            <div class="float-start">Float start</div><br>
-            <div class="float-end">Float end</div><br>
-            <div class="float-none">Float none</div>
-        </div>
 
-        <h4>Responsive</h4>
-        <div class="mb-4">
-            <div class="float-sm-start">Float start SM</div><br>
-            <div class="float-md-start">Float start MD</div><br>
-            <div class="float-lg-start">Float start LG</div><br>
-            <div class="float-xl-start">Flaot start XL</div><br>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Logical directions</h2>
+                <p class="text-body-secondary mb-2">Start and end follow the document’s writing direction. Float-none returns an element to normal flow.</p>
+                <code>.float-start</code> <code>.float-end</code> <code>.float-none</code>
+            </header>
+            <div class="clearfix bg-body-secondary rounded-3 p-3 mb-3">
+                <div class="float-start text-bg-primary rounded-2 p-3">Float start</div>
+                <div class="float-end text-bg-accent rounded-2 p-3">Float end</div>
+            </div>
+            <div class="float-none bg-body-tertiary border rounded-2 p-3">Float none</div>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Responsive floats</h2>
+                <p class="text-body-secondary mb-2">Add a breakpoint infix to enable start, end, or no float from that viewport width upward. Resize the page to see each item enter the float context.</p>
+                <code>.float-{sm|md|lg|xl}-{start|end|none}</code>
+            </header>
+            <div class="vstack gap-3">
+                <div class="clearfix bg-body-secondary rounded-3 p-3"><span class="float-sm-start text-bg-primary rounded-2 p-2">.float-sm-start</span></div>
+                <div class="clearfix bg-body-secondary rounded-3 p-3"><span class="float-md-end text-bg-accent rounded-2 p-2">.float-md-end</span></div>
+                <div class="clearfix bg-body-secondary rounded-3 p-3"><span class="float-lg-start text-bg-success rounded-2 p-2">.float-lg-start</span></div>
+                <div class="clearfix bg-body-secondary rounded-3 p-3"><span class="float-xl-end text-bg-info rounded-2 p-2">.float-xl-end</span></div>
+            </div>
+        </section>
     </div>
 </body>
 

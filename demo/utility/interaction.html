@@ -15,21 +15,35 @@
 <body>
     <div class="container">
         <h1>Interactions</h1>
-        <h4>Text Selection</h4>
-        <div class="mb-4">
-            <p class="user-select-all">Select all</p>
-            <p class="user-select-auto">Select auto</p>
-            <p class="user-select-none">Select none</p>
-        </div>
 
-        <h4>Pointer Events</h4>
-        <div class="mb-4">
-            <p><a class="pe-none" href="#" tabindex="-1" aria-disabled="true">Not clickable</a></p>
-            <p><a class="pe-auto" href="#">Clickable</a></p>
-            <p class="pe-none">
-                <a href="#" tabindex="-1" aria-disabled="true">Not clickable</a> - <a href="#" class="pe-auto">Clickable</a>
-            </p>
-        </div>
+        <section class="mb-5" id="text-selection">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Text selection</h2>
+                <p class="text-body-secondary mb-2">Control whether dragging selects content normally, as a complete unit, or not at all.</p>
+                <code>.user-select-auto</code> <code>.user-select-all</code> <code>.user-select-none</code>
+            </header>
+            <div class="row row-cols-1 row-cols-md-3 g-3">
+                <div class="col"><div class="user-select-auto card card-body h-100"><strong>Auto</strong><span>Drag across part of this sentence.</span></div></div>
+                <div class="col"><div class="user-select-all card card-body h-100"><strong>All</strong><span>Selecting this sentence captures the complete block.</span></div></div>
+                <div class="col"><div class="user-select-none card card-body h-100"><strong>None</strong><span>This supporting label cannot be selected.</span></div></div>
+            </div>
+        </section>
+
+        <section class="mb-5 pb-5" id="pointer-events">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Pointer events</h2>
+                <p class="text-body-secondary mb-2">Disable pointer targeting on an element, or restore it on a descendant. Supply the matching semantic and keyboard state separately.</p>
+                <code>.pe-none</code> <code>.pe-auto</code>
+            </header>
+            <div class="hstack flex-wrap gap-3 mb-4">
+                <a class="btn btn-secondary pe-none" href="#pointer-events" tabindex="-1" aria-disabled="true">Pointer disabled</a>
+                <a class="btn btn-primary pe-auto" href="#pointer-events">Pointer enabled</a>
+            </div>
+            <div class="pe-none bg-body-tertiary border rounded-3 p-4">
+                The parent ignores pointer input.
+                <a class="pe-auto ms-2" href="#pointer-events">This descendant restores it</a>
+            </div>
+        </section>
     </div>
 </body>
 

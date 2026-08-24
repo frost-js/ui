@@ -15,53 +15,71 @@
 <body>
     <div class="container">
         <h1>Backgrounds</h1>
-        <div class="mb-4">
-            <div class="p-3 mb-2 bg-primary text-white">.bg-primary</div>
-            <div class="p-3 mb-2 bg-primary-subtle text-black">.bg-primary-subtle</div>
-            <div class="p-3 mb-2 bg-accent text-white">.bg-accent</div>
-            <div class="p-3 mb-2 bg-accent-subtle text-black">.bg-accent-subtle</div>
-            <div class="p-3 mb-2 bg-secondary text-white">.bg-secondary</div>
-            <div class="p-3 mb-2 bg-secondary-subtle text-black">.bg-secondary-subtle</div>
-            <div class="p-3 mb-2 bg-success text-white">.bg-success</div>
-            <div class="p-3 mb-2 bg-success-subtle text-black">.bg-success-subtle</div>
-            <div class="p-3 mb-2 bg-info text-black">.bg-info</div>
-            <div class="p-3 mb-2 bg-info-subtle text-black">.bg-info-subtle</div>
-            <div class="p-3 mb-2 bg-warning text-black">.bg-warning</div>
-            <div class="p-3 mb-2 bg-warning-subtle text-black">.bg-warning-subtle</div>
-            <div class="p-3 mb-2 bg-danger text-white">.bg-danger</div>
-            <div class="p-3 mb-2 bg-danger-subtle text-black">.bg-danger-subtle</div>
-            <div class="p-3 mb-2 bg-light text-black">.bg-light</div>
-            <div class="p-3 mb-2 bg-light-subtle text-black">.bg-light-subtle</div>
-            <div class="p-3 mb-2 bg-dark text-white">.bg-dark</div>
-            <div class="p-3 mb-2 bg-dark-subtle text-black">.bg-dark-subtle</div>
-            <div class="p-3 mb-2 bg-body-secondary text-black">.bg-body-secondary</div>
-            <div class="p-3 mb-2 bg-body-tertiary text-black">.bg-body-tertiary</div>
-            <div class="p-3 mb-2 bg-white text-black">.bg-white</div>
-            <div class="p-3 mb-2 bg-black text-white">.bg-black</div>
-            <div class="p-3 mb-2 bg-transparent">.bg-transparent</div>
-        </div>
 
-        <h4>Gradients</h4>
-        <div class="mb-4">
-            <div class="px-3 py-5 mb-2 bg-gradient text-white">.bg-gradient</div>
-        </div>
-
-        <h4>Effects</h4>
-        <div class="p-5 mb-4 bg-ambient bg-body-tertiary rounded-4">
-            <div class="p-4 bg-glass border rounded-4">
-                <h5>Ambient glass</h5>
-                <p class="mb-0">Combine <code>.bg-ambient</code> and <code>.bg-glass</code> to create layered translucent surfaces.</p>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Theme colors</h2>
+                <p class="text-body-secondary mb-2">Every semantic color includes a solid utility and a quieter theme-aware surface.</p>
+                <code>.bg-{color}</code> <code>.bg-{color}-subtle</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+                <div class="col"><div class="bg-primary text-white rounded-top-3 p-3">Primary</div><div class="bg-primary-subtle text-primary-emphasis rounded-bottom-3 p-3"><code class="text-body">.bg-primary-subtle</code></div></div>
+                <div class="col"><div class="bg-accent text-white rounded-top-3 p-3">Accent</div><div class="bg-accent-subtle text-accent-emphasis rounded-bottom-3 p-3"><code class="text-body">.bg-accent-subtle</code></div></div>
+                <div class="col"><div class="bg-secondary text-white rounded-top-3 p-3">Secondary</div><div class="bg-secondary-subtle text-secondary-emphasis rounded-bottom-3 p-3"><code class="text-body">.bg-secondary-subtle</code></div></div>
+                <div class="col"><div class="bg-success text-white rounded-top-3 p-3">Success</div><div class="bg-success-subtle text-success-emphasis rounded-bottom-3 p-3"><code class="text-body">.bg-success-subtle</code></div></div>
+                <div class="col"><div class="bg-info text-black rounded-top-3 p-3">Info</div><div class="bg-info-subtle text-info-emphasis rounded-bottom-3 p-3"><code class="text-body">.bg-info-subtle</code></div></div>
+                <div class="col"><div class="bg-warning text-black rounded-top-3 p-3">Warning</div><div class="bg-warning-subtle text-warning-emphasis rounded-bottom-3 p-3"><code class="text-body">.bg-warning-subtle</code></div></div>
+                <div class="col"><div class="bg-danger text-white rounded-top-3 p-3">Danger</div><div class="bg-danger-subtle text-danger-emphasis rounded-bottom-3 p-3"><code class="text-body">.bg-danger-subtle</code></div></div>
+                <div class="col"><div class="bg-light text-black rounded-top-3 p-3">Light</div><div class="bg-light-subtle text-light-emphasis rounded-bottom-3 p-3"><code class="text-body">.bg-light-subtle</code></div></div>
+                <div class="col"><div class="bg-dark text-white rounded-top-3 p-3">Dark</div><div class="bg-dark-subtle text-dark-emphasis rounded-bottom-3 p-3"><code class="text-body">.bg-dark-subtle</code></div></div>
             </div>
-        </div>
+        </section>
 
-        <h4>Opacity</h4>
-        <div class="mb-4">
-            <div class="p-3 mb-2 bg-success text-white bg-opacity-100">.bg-opacity-100</div>
-            <div class="p-3 mb-2 bg-success text-white bg-opacity-75">.bg-opacity-75</div>
-            <div class="p-3 mb-2 bg-success bg-opacity-50">.bg-opacity-50</div>
-            <div class="p-3 mb-2 bg-success bg-opacity-25">.bg-opacity-25</div>
-            <div class="p-3 mb-2 bg-success bg-opacity-10">.bg-opacity-10</div>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Neutral and transparent backgrounds</h2>
+                <p class="text-body-secondary mb-2">Body surfaces follow the active theme; absolute black and white remain fixed.</p>
+                <code>.bg-body-secondary</code> <code>.bg-body-tertiary</code> <code>.bg-white</code> <code>.bg-black</code> <code>.bg-transparent</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-3 bg-body-secondary rounded-3 p-3">
+                <div class="col"><div class="bg-body-secondary border rounded-3 p-3 h-100">Body secondary</div></div>
+                <div class="col"><div class="bg-body-tertiary border rounded-3 p-3 h-100">Body tertiary</div></div>
+                <div class="col"><div class="bg-white text-black rounded-3 p-3 h-100">White</div></div>
+                <div class="col"><div class="bg-black text-white rounded-3 p-3 h-100">Black</div></div>
+                <div class="col"><div class="bg-transparent border rounded-3 p-3 h-100">Transparent</div></div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Gradient and glass effects</h2>
+                <p class="text-body-secondary mb-2">Use the branded gradient directly, or layer ambient color behind a translucent glass surface.</p>
+                <code>.bg-gradient</code> <code>.bg-ambient</code> <code>.bg-glass</code>
+            </header>
+            <div class="bg-gradient text-white rounded-4 p-5 mb-4"><h3 class="h5">Branded gradient</h3><p class="mb-0">The gradient follows the project’s primary and accent colors.</p></div>
+            <div class="bg-ambient bg-body-tertiary rounded-4 p-5">
+                <div class="bg-glass border rounded-4 p-4 shadow-lg">
+                    <h3 class="h5">Ambient glass</h3>
+                    <p class="mb-0">Translucency reveals the ambient treatment without losing surface separation.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Background opacity</h2>
+                <p class="text-body-secondary mb-2">Opacity utilities modify the background channel without reducing the opacity of child content.</p>
+                <code>.bg-opacity-{100|75|50|25|10|0}</code>
+            </header>
+            <div class="row row-cols-2 row-cols-md-3 g-3 bg-body-secondary rounded-3 p-3">
+                <div class="col"><div class="bg-success bg-opacity-100 text-white rounded-3 p-3 h-100">100%</div></div>
+                <div class="col"><div class="bg-success bg-opacity-75 text-white rounded-3 p-3 h-100">75%</div></div>
+                <div class="col"><div class="bg-success bg-opacity-50 rounded-3 p-3 h-100">50%</div></div>
+                <div class="col"><div class="bg-success bg-opacity-25 rounded-3 p-3 h-100">25%</div></div>
+                <div class="col"><div class="bg-success bg-opacity-10 rounded-3 p-3 h-100">10%</div></div>
+                <div class="col"><div class="bg-success bg-opacity-0 border rounded-3 p-3 h-100">0%</div></div>
+            </div>
+        </section>
     </div>
 </body>
 

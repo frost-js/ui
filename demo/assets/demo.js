@@ -162,6 +162,23 @@ const descriptions = {
     'layout/container.html': 'Establish responsive, breakpoint-bound, or fluid content boundaries around a page.',
     'layout/grid.html': 'Combine responsive rows and columns to build practical layouts that adapt across breakpoints.',
     'layout/gutter.html': 'Tune horizontal, vertical, responsive, or edge-to-edge spacing between grid columns.',
+    'utility/background.html': 'Apply semantic, neutral, translucent, gradient, and opacity-aware background treatments.',
+    'utility/border.html': 'Control border sides, colors, opacity, width, radius, and logical corner geometry.',
+    'utility/color.html': 'Apply semantic text colors, body hierarchy, fixed contrast colors, gradients, and opacity.',
+    'utility/flex.html': 'Reference the complete flexbox utility families across axes, distribution, sizing, wrapping, and responsive behavior.',
+    'utility/float.html': 'Float content along logical edges or change its flow behavior at responsive breakpoints.',
+    'utility/interaction.html': 'Control text selection and pointer targeting while preserving the matching semantic state.',
+    'utility/link.html': 'Tune link color opacity, underline color, offset, opacity, and interactive states independently.',
+    'utility/object-fit.html': 'Fit responsive media into constrained frames with every object-fit mode and breakpoint behavior.',
+    'utility/opacity.html': 'Fade complete elements using the shared opacity scale.',
+    'utility/overflow.html': 'Control clipping, visibility, and scrolling across both axes or either axis independently.',
+    'utility/position.html': 'Establish positioning contexts, apply logical offsets, and center elements with translation helpers.',
+    'utility/shadow.html': 'Apply theme-aware elevation or a focused branded glow to interface surfaces.',
+    'utility/sizing.html': 'Set relative, constrained, classic viewport, and dynamic viewport dimensions.',
+    'utility/text.html': 'Control alignment, wrapping, casing, scale, weight, line height, family, and decoration.',
+    'utility/vertical-align.html': 'Align inline, inline-block, and table-cell content against text and container baselines.',
+    'utility/visibility.html': 'Hide or reveal content while preserving its allocated layout space.',
+    'utility/z-index.html': 'Order positioned elements within a local stacking context using the compact z-index scale.',
 };
 
 const sectionDescriptions = {

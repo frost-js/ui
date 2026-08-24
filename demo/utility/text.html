@@ -15,99 +15,104 @@
 <body>
     <div class="container">
         <h1>Text</h1>
-        <h4>Alignment</h4>
-        <div class="mb-4">
-            <p class="text-start">Align start</p>
-            <p class="text-center">Align center</p>
-            <p class="text-end">Align end</p>
 
-            <p class="text-sm-start">Align start SM</p>
-            <p class="text-md-start">Align start MD</p>
-            <p class="text-lg-start">Align start LG</p>
-            <p class="text-xl-start">Align start XL</p>
-        </div>
-
-        <h4>Wrapping</h4>
-        <div class="mb-4">
-            <div class="badge text-bg-primary text-wrap" style="width: 6rem;">
-                This text should wrap.
+        <section class="mb-5" id="text-alignment">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Alignment</h2>
+                <p class="text-body-secondary mb-2">Align text to logical edges, center it, justify it, or change alignment at a responsive breakpoint.</p>
+                <code>.text-{start|center|end|justify}</code> <code>.text-{sm|md|lg|xl}-*</code>
+            </header>
+            <div class="vstack gap-2 mb-4">
+                <div class="text-start bg-body-tertiary border rounded-2 p-2">Start aligned</div>
+                <div class="text-center bg-body-tertiary border rounded-2 p-2">Center aligned</div>
+                <div class="text-end bg-body-tertiary border rounded-2 p-2">End aligned</div>
+                <div class="text-justify bg-body-tertiary border rounded-2 p-2">Justified text distributes a longer sentence across the available line width so both logical edges align.</div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="text-nowrap bg-body-tertiary border" style="width: 8rem;">
-                This text should overflow the parent.
+            <p class="text-center text-sm-start text-md-center text-lg-end text-xl-start bg-body-secondary rounded-3 p-3 mb-0">Center by default, start at sm, center at md, end at lg, and start at xl.</p>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Wrapping and word breaks</h2>
+                <p class="text-body-secondary mb-2">Allow normal wrapping, preserve a single line, or break an otherwise unbroken identifier.</p>
+                <code>.text-wrap</code> <code>.text-nowrap</code> <code>.text-break</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-4"><div class="badge text-bg-primary text-wrap w-50">A route label that wraps inside a narrow badge</div></div>
+                <div class="col-md-4"><div class="overflow-auto"><div class="text-nowrap bg-body-tertiary border rounded-2 p-2">This route label remains on one continuous line.</div></div></div>
+                <div class="col-md-4"><div class="text-break bg-body-tertiary border rounded-2 p-2">coastal-headland-north-ridge-lighthouse-lookout-expedition</div></div>
             </div>
-        </div>
+        </section>
 
-        <h4>Word Break</h4>
-        <div class="mb-4">
-            <p class="text-break">
-                mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-            </p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Text transformation</h2>
+                <p class="text-body-secondary mb-2">Transform displayed casing without altering the source text.</p>
+                <code>.text-lowercase</code> <code>.text-uppercase</code> <code>.text-capitalize</code>
+            </header>
+            <div class="hstack flex-wrap gap-4">
+                <span class="text-lowercase">LOWERCASE ROUTE</span>
+                <span class="text-uppercase">uppercase route</span>
+                <span class="text-capitalize">coastal headland route</span>
+            </div>
+        </section>
 
-        <h4>Transform</h4>
-        <div class="mb-4">
-            <p class="text-lowercase">Lowercased text.</p>
-            <p class="text-uppercase">Uppercased text.</p>
-            <p class="text-capitalize">CapiTaliZed text.</p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Font size</h2>
+                <p class="text-body-secondary mb-2">The six-step responsive type scale mirrors the heading scale without adding heading semantics.</p>
+                <code>.fs-{1|2|3|4|5|6}</code>
+            </header>
+            <div class="vstack gap-2">
+                <span class="fs-1">Font size 1</span>
+                <span class="fs-2">Font size 2</span>
+                <span class="fs-3">Font size 3</span>
+                <span class="fs-4">Font size 4</span>
+                <span class="fs-5">Font size 5</span>
+                <span class="fs-6">Font size 6</span>
+            </div>
+        </section>
 
-        <h4>Sizes</h4>
-        <div class="mb-4">
-            <p class="fs-1">.fs-1 text</p>
-            <p class="fs-2">.fs-2 text</p>
-            <p class="fs-3">.fs-3 text</p>
-            <p class="fs-4">.fs-4 text</p>
-            <p class="fs-5">.fs-5 text</p>
-            <p class="fs-6">.fs-6 text</p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Font weight and style</h2>
+                <p class="text-body-secondary mb-2">Apply the complete weight scale or switch between normal and italic styles.</p>
+                <code>.fw-{lighter|light|normal|bold|bolder}</code> <code>.fst-{normal|italic}</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-7"><div class="vstack gap-2"><span class="fw-lighter">Lighter 200</span><span class="fw-light">Light 300</span><span class="fw-normal">Normal 400</span><span class="fw-bold">Bold 500</span><span class="fw-bolder">Bolder 700</span></div></div>
+                <div class="col-md-5"><p class="fst-normal">Normal style</p><p class="fst-italic mb-0">Italic style</p></div>
+            </div>
+        </section>
 
-        <h4>Styles</h4>
-        <div class="mb-4">
-            <p class="fw-bold">Bold text.</p>
-            <p class="fw-bolder">Bolder text.</p>
-            <p class="fw-normal">Normal weight text.</p>
-            <p class="fw-light">Light weight text.</p>
-            <p class="fw-lighter">Lighter weight text.</p>
-            <p class="fst-italic">Italic text.</p>
-            <p class="fst-normal">Normal style text.</p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Line height</h2>
+                <p class="text-body-secondary mb-2">Compare compact, small, base, and spacious line-height values using the same copy.</p>
+                <code>.lh-1</code> <code>.lh-sm</code> <code>.lh-base</code> <code>.lh-lg</code>
+            </header>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col"><div class="card card-body h-100"><strong class="mb-2">1</strong><p class="lh-1 mb-0">A narrow trail climbs through coastal forest before opening onto the exposed ridge and lighthouse lookout.</p></div></div>
+                <div class="col"><div class="card card-body h-100"><strong class="mb-2">Small</strong><p class="lh-sm mb-0">A narrow trail climbs through coastal forest before opening onto the exposed ridge and lighthouse lookout.</p></div></div>
+                <div class="col"><div class="card card-body h-100"><strong class="mb-2">Base</strong><p class="lh-base mb-0">A narrow trail climbs through coastal forest before opening onto the exposed ridge and lighthouse lookout.</p></div></div>
+                <div class="col"><div class="card card-body h-100"><strong class="mb-2">Large</strong><p class="lh-lg mb-0">A narrow trail climbs through coastal forest before opening onto the exposed ridge and lighthouse lookout.</p></div></div>
+            </div>
+        </section>
 
-        <h4>Line Height</h4>
-        <div class="mb-4">
-            <p class="lh-1">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus iure explicabo fugit rerum quam libero eum recusandae officiis amet? Ex assumenda commodi suscipit dolorem libero veritatis non enim fugit architecto.
-            </p>
-            <p class="lh-sm">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit voluptate officia sunt hic consectetur repudiandae deleniti laboriosam? Fuga laborum necessitatibus, quam assumenda, ratione ipsa debitis totam, recusandae nobis voluptatum nesciunt.
-            </p>
-            <p class="lh-base">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, obcaecati facere. Sequi atque quasi eligendi quibusdam tempore laudantium illo. Necessitatibus sint facere inventore quidem earum eaque tenetur numquam nemo incidunt.
-            </p>
-            <p class="lh-lg">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis ipsa molestias, temporibus maiores minus tempora quam aspernatur quis ullam, possimus consequatur, expedita ipsam omnis hic dolorum harum. Facere, laboriosam? Omnis?
-            </p>
-        </div>
-
-        <h4>Monospace</h4>
-        <div class="mb-4">
-            <p class="font-monospace">Monospace text</p>
-        </div>
-
-        <h4>Reset</h4>
-        <div class="mb-4">
-            <p class="text-body-secondary">
-                Muted text with a <a class="text-reset" href="#">reset link</a>.
-            </p>
-        </div>
-
-        <h4>Decorations</h4>
-        <div class="mb-4">
-            <p class="text-decoration-underline">This text has a line underneath it.</p>
-            <p class="text-decoration-line-through">This text has a line going through it.</p>
-            <a class="text-decoration-none" href="#">This link has no text decoration.</a>
-        </div>
+        <section class="mb-5 pb-5" id="text-finishing">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Family, reset, and decoration</h2>
+                <p class="text-body-secondary mb-2">Use monospace for technical values, inherit a parent color, or control text decoration directly.</p>
+                <code>.font-monospace</code> <code>.text-reset</code> <code>.text-decoration-{underline|line-through|none}</code>
+            </header>
+            <p class="font-monospace">S27°56.331′ E153°25.814′</p>
+            <p class="text-body-secondary">Secondary text with a <a class="text-reset" href="#text-finishing">link that inherits its color</a>.</p>
+            <div class="hstack flex-wrap gap-4">
+                <span class="text-decoration-underline">Underlined text</span>
+                <span class="text-decoration-line-through">Completed item</span>
+                <a class="text-decoration-none" href="#text-finishing">Link without decoration</a>
+            </div>
+        </section>
     </div>
 </body>
 

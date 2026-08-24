@@ -15,28 +15,45 @@
 <body>
     <div class="container">
         <h1>Vertical Alignment</h1>
-        <div class="mb-4">
-            <span class="align-baseline">baseline</span>
-            <span class="align-top">top</span>
-            <span class="align-middle">middle</span>
-            <span class="align-bottom">bottom</span>
-            <span class="align-text-top">text-top</span>
-            <span class="align-text-bottom">text-bottom</span>
-        </div>
-        <div class="mb-4">
-            <table style="height: 5em;">
-                <tbody>
-                    <tr>
-                        <td class="align-baseline p-1">baseline</td>
-                        <td class="align-top p-1">top</td>
-                        <td class="align-middle p-1">middle</td>
-                        <td class="align-bottom p-1">bottom</td>
-                        <td class="align-text-top p-1">text-top</td>
-                        <td class="align-text-bottom p-1">text-bottom</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Inline alignment</h2>
+                <p class="text-body-secondary mb-2">Vertical-align utilities affect inline, inline-block, and table-cell elements; they do not align flex or grid items.</p>
+                <code>.align-{baseline|top|middle|bottom|text-top|text-bottom}</code>
+            </header>
+            <p class="fs-4 lh-lg bg-body-tertiary border rounded-3 p-4">
+                Baseline
+                <span class="align-baseline badge text-bg-primary">baseline</span>
+                <span class="align-top badge text-bg-accent">top</span>
+                <span class="align-middle badge text-bg-success">middle</span>
+                <span class="align-bottom badge text-bg-info">bottom</span>
+                <span class="align-text-top badge text-bg-warning">text-top</span>
+                <span class="align-text-bottom badge text-bg-danger">text-bottom</span>
+            </p>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Table cells</h2>
+                <p class="text-body-secondary mb-2">The same scale positions cell content within a taller table row.</p>
+                <code>.align-*</code>
+            </header>
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0" style="height: 10rem;">
+                    <tbody>
+                        <tr>
+                            <td class="align-baseline">baseline</td>
+                            <td class="align-top">top</td>
+                            <td class="align-middle">middle</td>
+                            <td class="align-bottom">bottom</td>
+                            <td class="align-text-top">text-top</td>
+                            <td class="align-text-bottom">text-bottom</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
 </body>
 

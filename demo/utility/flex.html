@@ -10,462 +10,179 @@
     <link rel="stylesheet" href="../assets/demo.css" />
     <script src="../../dist/frost-ui-bundle.js"></script>
     <script src="../assets/demo.js"></script>
-    <style>
-        svg {
-            text-anchor: middle;
-            user-select: none;
-        }
-    </style>
 </head>
 
 <body>
     <div class="container">
         <h1>Flex</h1>
-        <div class="mb-4">
-            <div class="d-flex p-2 bg-body-tertiary border">Flex item</div>
-        </div>
-        <div class="mb-4">
-            <div class="d-inline-flex p-2 bg-body-tertiary border">Inline flex item</div>
-        </div>
 
-        <h4>Direction</h4>
-        <div class="mb-4">
-            <div class="d-flex flex-row bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item 1</div>
-                <div class="p-2 bg-body-tertiary border">Flex item 2</div>
-                <div class="p-2 bg-body-tertiary border">Flex item 3</div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Display and direction</h2>
+                <p class="text-body-secondary mb-2">Create block or inline flex containers, then choose the main-axis direction and its visual order.</p>
+                <code>.d-flex</code> <code>.d-inline-flex</code> <code>.flex-{row|row-reverse|column|column-reverse}</code>
+            </header>
+            <div class="mb-4">
+                <div class="d-flex bg-body-secondary border rounded-3 p-2 mb-2">Block flex container</div>
+                <div class="d-inline-flex bg-body-secondary border rounded-3 p-2">Inline flex container</div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex flex-row-reverse bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item 1</div>
-                <div class="p-2 bg-body-tertiary border">Flex item 2</div>
-                <div class="p-2 bg-body-tertiary border">Flex item 3</div>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col"><h3 class="h6">Row</h3><div class="d-flex flex-row bg-body-secondary rounded-3 p-2"><span class="text-bg-primary p-2">1</span><span class="text-bg-accent p-2">2</span><span class="text-bg-success p-2">3</span></div><code>.flex-row</code></div>
+                <div class="col"><h3 class="h6">Row reverse</h3><div class="d-flex flex-row-reverse bg-body-secondary rounded-3 p-2"><span class="text-bg-primary p-2">1</span><span class="text-bg-accent p-2">2</span><span class="text-bg-success p-2">3</span></div><code>.flex-row-reverse</code></div>
+                <div class="col"><h3 class="h6">Column</h3><div class="d-flex flex-column bg-body-secondary rounded-3 p-2"><span class="text-bg-primary p-2">1</span><span class="text-bg-accent p-2">2</span><span class="text-bg-success p-2">3</span></div><code>.flex-column</code></div>
+                <div class="col"><h3 class="h6">Column reverse</h3><div class="d-flex flex-column-reverse bg-body-secondary rounded-3 p-2"><span class="text-bg-primary p-2">1</span><span class="text-bg-accent p-2">2</span><span class="text-bg-success p-2">3</span></div><code>.flex-column-reverse</code></div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex flex-column bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item 1</div>
-                <div class="p-2 bg-body-tertiary border">Flex item 2</div>
-                <div class="p-2 bg-body-tertiary border">Flex item 3</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex flex-column-reverse bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item 1</div>
-                <div class="p-2 bg-body-tertiary border">Flex item 2</div>
-                <div class="p-2 bg-body-tertiary border">Flex item 3</div>
-            </div>
-        </div>
+        </section>
 
-        <h4>Justify Content</h4>
-        <div class="mb-4">
-            <div class="d-flex justify-content-start bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Main-axis distribution</h2>
+                <p class="text-body-secondary mb-2">Justify content along the current main axis using edge, center, or distributed spacing.</p>
+                <code>.justify-content-{start|end|center|between|around|evenly}</code>
+            </header>
+            <div class="vstack gap-3">
+                <div><code>.justify-content-start</code><div class="d-flex justify-content-start bg-body-secondary rounded-2 p-2"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-2">B</span><span class="text-bg-success p-2">C</span></div></div>
+                <div><code>.justify-content-end</code><div class="d-flex justify-content-end bg-body-secondary rounded-2 p-2"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-2">B</span><span class="text-bg-success p-2">C</span></div></div>
+                <div><code>.justify-content-center</code><div class="d-flex justify-content-center bg-body-secondary rounded-2 p-2"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-2">B</span><span class="text-bg-success p-2">C</span></div></div>
+                <div><code>.justify-content-between</code><div class="d-flex justify-content-between bg-body-secondary rounded-2 p-2"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-2">B</span><span class="text-bg-success p-2">C</span></div></div>
+                <div><code>.justify-content-around</code><div class="d-flex justify-content-around bg-body-secondary rounded-2 p-2"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-2">B</span><span class="text-bg-success p-2">C</span></div></div>
+                <div><code>.justify-content-evenly</code><div class="d-flex justify-content-evenly bg-body-secondary rounded-2 p-2"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-2">B</span><span class="text-bg-success p-2">C</span></div></div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex justify-content-end bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex justify-content-center bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex justify-content-between bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex justify-content-around bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex justify-content-evenly bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
+        </section>
 
-        <h4>Align Items</h4>
-        <div class="mb-4">
-            <div class="d-flex align-items-start bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Cross-axis item alignment</h2>
+                <p class="text-body-secondary mb-2">Align every child as a group, or override a single item with the matching align-self value.</p>
+                <code>.align-items-{start|end|center|baseline|stretch}</code> <code>.align-self-*</code>
+            </header>
+            <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+                <div class="col"><code>.align-items-start</code><div class="d-flex align-items-start gap-2 bg-body-secondary rounded-3 p-2" style="height: 8rem;"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-3">B</span><span class="text-bg-success p-2">C</span></div></div>
+                <div class="col"><code>.align-items-end</code><div class="d-flex align-items-end gap-2 bg-body-secondary rounded-3 p-2" style="height: 8rem;"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-3">B</span><span class="text-bg-success p-2">C</span></div></div>
+                <div class="col"><code>.align-items-center</code><div class="d-flex align-items-center gap-2 bg-body-secondary rounded-3 p-2" style="height: 8rem;"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-3">B</span><span class="text-bg-success p-2">C</span></div></div>
+                <div class="col"><code>.align-items-baseline</code><div class="d-flex align-items-baseline gap-2 bg-body-secondary rounded-3 p-2" style="height: 8rem;"><span class="text-bg-primary p-2 fs-5">A</span><span class="text-bg-accent p-2 fs-2">B</span><span class="text-bg-success p-2 fs-6">C</span></div></div>
+                <div class="col"><code>.align-items-stretch</code><div class="d-flex align-items-stretch gap-2 bg-body-secondary rounded-3 p-2" style="height: 8rem;"><span class="text-bg-primary p-2">A</span><span class="text-bg-accent p-2">B</span><span class="text-bg-success p-2">C</span></div></div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-items-end bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
+            <h3 class="h6">Individual alignment</h3>
+            <div class="d-flex gap-2 overflow-auto bg-body-secondary rounded-3 p-2" style="height: 10rem;">
+                <span class="align-self-start text-bg-primary p-2">Start</span>
+                <span class="align-self-end text-bg-accent p-2">End</span>
+                <span class="align-self-center text-bg-success p-2">Center</span>
+                <span class="align-self-baseline text-bg-info p-2">Baseline</span>
+                <span class="align-self-stretch text-bg-warning p-2">Stretch</span>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-items-center bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-items-baseline bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-items-stretch bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
+        </section>
 
-        <h4>Align Self</h4>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="align-self-start p-2 bg-body-tertiary border">Aligned flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Fill, grow, and shrink</h2>
+                <p class="text-body-secondary mb-2">Distribute available space evenly, allow one child to grow, or control whether an item can contract.</p>
+                <code>.flex-fill</code> <code>.flex-grow-{0|1}</code> <code>.flex-shrink-{0|1}</code>
+            </header>
+            <h3 class="h6">Fill</h3>
+            <div class="d-flex bg-body-secondary rounded-3 p-2 mb-4">
+                <span class="flex-fill border bg-body-tertiary p-2">Longer item</span><span class="flex-fill border bg-body-tertiary p-2">Item</span><span class="flex-fill border bg-body-tertiary p-2">Item</span>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="align-self-end p-2 bg-body-tertiary border">Aligned flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="align-self-center p-2 bg-body-tertiary border">Aligned flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="align-self-baseline p-2 bg-body-tertiary border">Aligned flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary" style="height: 5em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="align-self-stretch p-2 bg-body-tertiary border">Aligned flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-
-        <h4>Fill</h4>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary">
-                <div class="flex-fill p-2 bg-body-tertiary border">Flex item with a lot of content</div>
-                <div class="flex-fill p-2 bg-body-tertiary border">Flex item</div>
-                <div class="flex-fill p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-
-        <h4>Grow &amp; Shrink</h4>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary">
-                <div class="flex-grow-1 p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary">
-                <div class="w-100 p-2 bg-body-tertiary border">Flex item</div>
-                <div class="flex-shrink-1 p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-
-        <h4>Auto Margins</h4>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary">
-                <div class="me-auto p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="ms-auto p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-items-start flex-column bg-body-secondary" style="height: 12em;">
-                <div class="mb-auto p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-items-end flex-column bg-body-secondary" style="height: 12em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="mt-auto p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-
-        <h4>Wrap</h4>
-        <div class="mb-4">
-            <div class="d-flex flex-nowrap bg-body-secondary" style="width: 8em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex flex-wrap bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex flex-wrap-reverse bg-body-secondary">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-
-        <h4>Order</h4>
-        <div class="mb-4">
-            <div class="d-flex flex-nowrap bg-body-secondary">
-                <div class="order-3 p-2 bg-body-tertiary border">Flex item 1</div>
-                <div class="order-2 p-2 bg-body-tertiary border">Flex item 2</div>
-                <div class="order-1 p-2 bg-body-tertiary border">Flex item 3</div>
-            </div>
-        </div>
-
-        <h4>Align Content</h4>
-        <div class="mb-4">
-            <div class="d-flex align-content-start flex-wrap bg-body-secondary" style="height: 10em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-content-end flex-wrap bg-body-secondary" style="height: 10em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-content-center flex-wrap bg-body-secondary" style="height: 10em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-content-between flex-wrap bg-body-secondary" style="height: 10em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-content-around flex-wrap bg-body-secondary" style="height: 10em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-content-stretch flex-wrap bg-body-secondary" style="height: 10em;">
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-                <div class="p-2 bg-body-tertiary border">Flex item</div>
-            </div>
-        </div>
-
-        <h4>Media Object</h4>
-        <div class="mb-4">
-            <div class="d-flex border p-5">
-                <div class="flex-shrink-0">
-                    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#e5e5e5"></rect>
-                        <text x="50%" y="50%" fill="#999" dy=".3em">Image</text>
-                    </svg>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h3 class="h6">Grow</h3>
+                    <div class="d-flex bg-body-secondary rounded-3 p-2"><span class="flex-grow-1 text-bg-primary p-2">Grow 1</span><span class="flex-grow-0 bg-body-tertiary border p-2">Grow 0</span></div>
                 </div>
-                <div class="flex-grow-1 ms-3">
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel repellendus enim minus veritatis unde iste non nostrum, illum numquam ipsum nobis quasi dolores quia? Tempore molestias totam blanditiis illum illo.
+                <div class="col-md-6">
+                    <h3 class="h6">Shrink</h3>
+                    <div class="d-flex bg-body-secondary rounded-3 p-2"><span class="flex-shrink-1 w-100 text-bg-accent p-2">Shrink 1</span><span class="flex-shrink-0 bg-body-tertiary border p-2">Shrink 0 remains intrinsic</span></div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Auto margins</h2>
+                <p class="text-body-secondary mb-2">An auto margin consumes remaining space on its axis, making it useful for separating controls without changing justification.</p>
+                <code>.ms-auto</code> <code>.me-auto</code> <code>.mt-auto</code> <code>.mb-auto</code>
+            </header>
+            <div class="d-flex bg-body-secondary rounded-3 p-2 mb-4"><span class="me-auto text-bg-primary p-2">me-auto</span><span class="bg-body-tertiary border p-2">B</span><span class="bg-body-tertiary border p-2">C</span></div>
+            <div class="d-flex bg-body-secondary rounded-3 p-2 mb-4"><span class="bg-body-tertiary border p-2">A</span><span class="bg-body-tertiary border p-2">B</span><span class="ms-auto text-bg-primary p-2">ms-auto</span></div>
+            <div class="row g-4">
+                <div class="col-md-6"><div class="d-flex flex-column align-items-start bg-body-secondary rounded-3 p-2" style="height: 12rem;"><span class="mb-auto text-bg-accent p-2">mb-auto</span><span class="bg-body-tertiary border p-2">B</span><span class="bg-body-tertiary border p-2">C</span></div></div>
+                <div class="col-md-6"><div class="d-flex flex-column align-items-end bg-body-secondary rounded-3 p-2" style="height: 12rem;"><span class="bg-body-tertiary border p-2">A</span><span class="bg-body-tertiary border p-2">B</span><span class="mt-auto text-bg-accent p-2">mt-auto</span></div></div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Wrapping</h2>
+                <p class="text-body-secondary mb-2">Keep items on one line, wrap them onto new lines, or reverse the cross-axis order of wrapped lines.</p>
+                <code>.flex-nowrap</code> <code>.flex-wrap</code> <code>.flex-wrap-reverse</code>
+            </header>
+            <div class="vstack gap-4">
+                <div><code>.flex-nowrap</code><div class="overflow-auto"><div class="d-flex flex-nowrap bg-body-secondary rounded-3 p-2"><span class="flex-shrink-0 text-bg-primary p-2">One</span><span class="flex-shrink-0 text-bg-accent p-2">Two</span><span class="flex-shrink-0 text-bg-success p-2">Three</span><span class="flex-shrink-0 text-bg-info p-2">Four</span><span class="flex-shrink-0 text-bg-warning p-2">Five</span></div></div></div>
+                <div><code>.flex-wrap</code><div class="d-flex flex-wrap bg-body-secondary rounded-3 p-2"><span class="w-50 text-bg-primary p-2">One</span><span class="w-50 text-bg-accent p-2">Two</span><span class="w-50 text-bg-success p-2">Three</span><span class="w-50 text-bg-info p-2">Four</span></div></div>
+                <div><code>.flex-wrap-reverse</code><div class="d-flex flex-wrap-reverse bg-body-secondary rounded-3 p-2"><span class="w-50 text-bg-primary p-2">One</span><span class="w-50 text-bg-accent p-2">Two</span><span class="w-50 text-bg-success p-2">Three</span><span class="w-50 text-bg-info p-2">Four</span></div></div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Visual order</h2>
+                <p class="text-body-secondary mb-2">The order scale runs from first through zero-to-five and last. Visual reordering does not change reading or keyboard order.</p>
+                <code>.order-first</code> <code>.order-{0|1|2|3|4|5}</code> <code>.order-last</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2 bg-body-secondary rounded-3 p-3">
+                <span class="order-last text-bg-danger p-2">last</span>
+                <span class="order-5 text-bg-warning p-2">5</span>
+                <span class="order-4 text-bg-info p-2">4</span>
+                <span class="order-3 text-bg-success p-2">3</span>
+                <span class="order-2 text-bg-secondary p-2">2</span>
+                <span class="order-1 text-bg-accent p-2">1</span>
+                <span class="order-0 bg-body-tertiary border p-2">0</span>
+                <span class="order-first text-bg-primary p-2">first</span>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Wrapped-line alignment</h2>
+                <p class="text-body-secondary mb-2">Align-content distributes multiple wrapped lines along the cross axis when the container has extra height.</p>
+                <code>.align-content-{start|end|center|between|around|stretch}</code>
+            </header>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col"><code>.align-content-start</code><div class="d-flex flex-wrap align-content-start bg-body-secondary rounded-3" style="height: 10rem;"><span class="w-50 text-bg-primary p-2">A</span><span class="w-50 text-bg-accent p-2">B</span><span class="w-50 text-bg-success p-2">C</span><span class="w-50 text-bg-info p-2">D</span></div></div>
+                <div class="col"><code>.align-content-end</code><div class="d-flex flex-wrap align-content-end bg-body-secondary rounded-3" style="height: 10rem;"><span class="w-50 text-bg-primary p-2">A</span><span class="w-50 text-bg-accent p-2">B</span><span class="w-50 text-bg-success p-2">C</span><span class="w-50 text-bg-info p-2">D</span></div></div>
+                <div class="col"><code>.align-content-center</code><div class="d-flex flex-wrap align-content-center bg-body-secondary rounded-3" style="height: 10rem;"><span class="w-50 text-bg-primary p-2">A</span><span class="w-50 text-bg-accent p-2">B</span><span class="w-50 text-bg-success p-2">C</span><span class="w-50 text-bg-info p-2">D</span></div></div>
+                <div class="col"><code>.align-content-between</code><div class="d-flex flex-wrap align-content-between bg-body-secondary rounded-3" style="height: 10rem;"><span class="w-50 text-bg-primary p-2">A</span><span class="w-50 text-bg-accent p-2">B</span><span class="w-50 text-bg-success p-2">C</span><span class="w-50 text-bg-info p-2">D</span></div></div>
+                <div class="col"><code>.align-content-around</code><div class="d-flex flex-wrap align-content-around bg-body-secondary rounded-3" style="height: 10rem;"><span class="w-50 text-bg-primary p-2">A</span><span class="w-50 text-bg-accent p-2">B</span><span class="w-50 text-bg-success p-2">C</span><span class="w-50 text-bg-info p-2">D</span></div></div>
+                <div class="col"><code>.align-content-stretch</code><div class="d-flex flex-wrap align-content-stretch bg-body-secondary rounded-3" style="height: 10rem;"><span class="w-50 text-bg-primary p-2">A</span><span class="w-50 text-bg-accent p-2">B</span><span class="w-50 text-bg-success p-2">C</span><span class="w-50 text-bg-info p-2">D</span></div></div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Responsive flex</h2>
+                <p class="text-body-secondary mb-2">Direction, justification, alignment, fill, growth, shrinkage, wrapping, order, and align-content utilities all accept responsive breakpoint infixes.</p>
+                <code>.flex-column .flex-md-row</code> <code>.justify-content-md-between</code> <code>.align-items-md-center</code>
+            </header>
+            <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center gap-3 bg-body-tertiary border rounded-3 p-4">
+                <div><strong class="d-block">Coastal Headland</strong><span class="text-body-secondary">12.4 km · Moderate</span></div>
+                <div class="hstack gap-2"><button class="btn btn-secondary btn-sm" type="button">Preview</button><button class="btn btn-primary btn-sm" type="button">Open route</button></div>
+            </div>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Media object</h2>
+                <p class="text-body-secondary mb-2">Combine shrinking and growing children for a classic media composition with fixed imagery and flexible content.</p>
+                <code>.d-flex</code> <code>.flex-shrink-0</code> <code>.flex-grow-1</code>
+            </header>
+            <article class="d-flex flex-column flex-sm-row gap-4 border rounded-4 p-4">
+                <div class="flex-shrink-0"><img class="img-thumbnail" src="../assets/coast.webp" width="180" height="120" alt="Hiker overlooking a coastal headland" loading="lazy"></div>
+                <div class="flex-grow-1 min-w-0">
+                    <span class="badge text-bg-primary mb-2">Route note</span>
+                    <h3 class="h5">Conditions on the northern ridge</h3>
+                    <p class="mb-0">The exposed section is dry and clear, but strong afternoon winds remain likely beyond the lighthouse lookout.</p>
+                </div>
+            </article>
+        </section>
     </div>
 </body>
 

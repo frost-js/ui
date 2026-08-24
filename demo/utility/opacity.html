@@ -15,13 +15,22 @@
 <body>
     <div class="container">
         <h1>Opacity</h1>
-        <div class="d-sm-flex mb-4">
-            <div class="opacity-100 p-3 m-2 bg-primary text-light fw-bold rounded">100%</div>
-            <div class="opacity-75 p-3 m-2 bg-primary text-light fw-bold rounded">75%</div>
-            <div class="opacity-50 p-3 m-2 bg-primary text-light fw-bold rounded">50%</div>
-            <div class="opacity-25 p-3 m-2 bg-primary text-light fw-bold rounded">25%</div>
-            <div class="opacity-10 p-3 m-2 bg-primary text-light fw-bold rounded">10%</div>
-        </div>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Element opacity</h2>
+                <p class="text-body-secondary mb-2">These utilities fade the complete element, including its background, content, border, and descendants.</p>
+                <code>.opacity-{100|75|50|25|10|0}</code>
+            </header>
+            <div class="row row-cols-2 row-cols-md-3 g-3 bg-body-secondary rounded-3 p-3">
+                <div class="col"><div class="opacity-100 text-bg-primary rounded-3 p-4 h-100"><strong>100%</strong><small class="d-block">Fully opaque</small></div></div>
+                <div class="col"><div class="opacity-75 text-bg-primary rounded-3 p-4 h-100"><strong>75%</strong><small class="d-block">High</small></div></div>
+                <div class="col"><div class="opacity-50 text-bg-primary rounded-3 p-4 h-100"><strong>50%</strong><small class="d-block">Medium</small></div></div>
+                <div class="col"><div class="opacity-25 text-bg-primary rounded-3 p-4 h-100"><strong>25%</strong><small class="d-block">Low</small></div></div>
+                <div class="col"><div class="opacity-10 text-bg-primary rounded-3 p-4 h-100"><strong>10%</strong><small class="d-block">Very low</small></div></div>
+                <div class="col position-relative"><div class="opacity-0 text-bg-primary rounded-3 p-4 h-100">Invisible</div><strong class="position-absolute top-50 start-50 translate-middle">0%</strong></div>
+            </div>
+        </section>
     </div>
 </body>
 

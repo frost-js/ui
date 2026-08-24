@@ -15,25 +15,22 @@
 <body>
     <div class="container">
         <h1>Z-Index</h1>
-        <div class="mb-4">
-            <div class="position-relative">
-                <div class="z-3 position-absolute rounded-3 text-bg-primary border" style="height: 6rem; width: 6rem;">
-                    <span class="position-absolute bottom-0 end-0 p-1">z-3</span>
-                </div>
-                <div class="z-2 position-absolute rounded-3 text-bg-success border" style="height: 6rem; width: 6rem; top: 2rem; left: 2rem;">
-                    <span class="position-absolute bottom-0 end-0 p-1">z-2</span>
-                </div>
-                <div class="z-1 position-absolute rounded-3 text-bg-info border" style="height: 6rem; width: 6rem; top: 4rem; left: 4rem;">
-                    <span class="position-absolute bottom-0 end-0 p-1">z-1</span>
-                </div>
-                <div class="z-0 position-absolute rounded-3 text-bg-warning border" style="height: 6rem; width: 6rem; top: 6rem; left: 6rem;">
-                    <span class="position-absolute bottom-0 end-0 p-1">z-0</span>
-                </div>
-                <div class="z-n1 position-absolute rounded-3 text-bg-danger border" style="height: 6rem; width: 6rem; top: 8rem; left: 8rem;">
-                    <span class="position-absolute bottom-0 end-0 p-1">z-n1</span>
-                </div>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Local stacking order</h2>
+                <p class="text-body-secondary mb-2">Apply the compact z-index scale to positioned elements that share a stacking context.</p>
+                <code>.z-n1</code> <code>.z-0</code> <code>.z-1</code> <code>.z-2</code> <code>.z-3</code>
+            </header>
+            <div class="position-relative" style="height: 19rem;">
+                <div class="z-n1 position-absolute rounded-3 text-bg-danger border p-3" style="width: 9rem; height: 9rem; inset-inline-start: 8rem; top: 8rem;">z-n1</div>
+                <div class="z-0 position-absolute rounded-3 text-bg-warning border p-3" style="width: 9rem; height: 9rem; inset-inline-start: 6rem; top: 6rem;">z-0</div>
+                <div class="z-1 position-absolute rounded-3 text-bg-info border p-3" style="width: 9rem; height: 9rem; inset-inline-start: 4rem; top: 4rem;">z-1</div>
+                <div class="z-2 position-absolute rounded-3 text-bg-success border p-3" style="width: 9rem; height: 9rem; inset-inline-start: 2rem; top: 2rem;">z-2</div>
+                <div class="z-3 position-absolute rounded-3 text-bg-primary border p-3" style="width: 9rem; height: 9rem; inset-inline-start: 0; top: 0;">z-3</div>
             </div>
-        </div>
+            <p class="text-body-secondary mb-0">These values are intentionally small. Components such as modals and tooltips use their own higher-level stacking tokens.</p>
+        </section>
     </div>
 </body>
 

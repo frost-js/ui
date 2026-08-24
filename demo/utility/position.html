@@ -15,45 +15,59 @@
 <body>
     <div class="container">
         <h1>Position</h1>
-        <h4>Arrange Elements</h4>
-        <div class="mb-4">
-            <div class="position-relative bg-body-secondary" style="height: 10em;">
-                <div class="position-absolute top-0 start-0 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-0 end-0 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-50 start-50 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute bottom-50 end-50 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute bottom-0 start-0 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute bottom-0 end-0 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-            </div>
-        </div>
 
-        <h4>Center Elements</h4>
-        <div class="mb-4">
-            <div class="position-relative bg-body-secondary" style="height: 10em;">
-                <div class="position-absolute top-0 start-0 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-0 start-50 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-0 start-100 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-50 start-0 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-50 start-50 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-50 start-100 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-100 start-0 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-100 start-50 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-100 start-100 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Position modes</h2>
+                <p class="text-body-secondary mb-2">Choose the positioning context before applying offsets. Fixed positioning targets the viewport; sticky positioning follows its scrolling container.</p>
+                <code>.position-{static|relative|absolute|fixed|sticky}</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="position-relative bg-body-secondary border rounded-3 p-4" style="height: 10rem;">
+                        <span class="position-static badge text-bg-secondary">Static</span>
+                        <span class="position-absolute top-50 start-50 translate-middle badge text-bg-primary">Absolute</span>
+                        <code class="position-absolute bottom-0 start-0 p-3">.position-relative parent</code>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="overflow-auto bg-body-secondary border rounded-3" style="height: 10rem;">
+                        <div class="position-sticky top-0 text-bg-accent p-2">Sticky heading</div>
+                        <div class="p-3">Trailhead<br>Creek crossing<br>North ridge<br>Lighthouse lookout<br>Southern camp<br>Return track<br>Car park</div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="position-relative bg-body-secondary" style="height: 10em;">
-                <div class="position-absolute top-0 start-0 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-0 start-50 translate-middle-x bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-0 end-0 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-50 start-0 translate-middle-y bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-50 start-50 translate-middle bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute top-50 end-0 translate-middle-y bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute bottom-0 start-0 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute bottom-0 start-50 translate-middle-x bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
-                <div class="position-absolute bottom-0 end-0 bg-body-tertiary border" style="width: 1em; height: 1em;"></div>
+            <p class="text-body-secondary mt-3 mb-0">Use <code>.fixed-top</code>, <code>.fixed-bottom</code>, or <code>.sticky-{breakpoint}-top</code> for common full-width page chrome.</p>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Edge offsets</h2>
+                <p class="text-body-secondary mb-2">Top, end, bottom, and start utilities accept 0%, 50%, and 100%. Logical start and end adapt to writing direction.</p>
+                <code>.top-{0|50|100}</code> <code>.end-{0|50|100}</code> <code>.bottom-{0|50|100}</code> <code>.start-{0|50|100}</code>
+            </header>
+            <div class="position-relative bg-body-secondary border rounded-3" style="height: 14rem;">
+                <span class="position-absolute top-0 start-0 badge text-bg-primary">top-0 start-0</span>
+                <span class="position-absolute top-0 end-0 badge text-bg-primary">top-0 end-0</span>
+                <span class="position-absolute top-50 start-50 badge text-bg-accent">top-50 start-50</span>
+                <span class="position-absolute bottom-50 end-50 badge text-bg-success">bottom-50 end-50</span>
+                <span class="position-absolute bottom-0 start-0 badge text-bg-primary">bottom-0 start-0</span>
+                <span class="position-absolute bottom-0 end-0 badge text-bg-primary">bottom-0 end-0</span>
             </div>
-        </div>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Translation helpers</h2>
+                <p class="text-body-secondary mb-2">Move an absolutely positioned element back by half its own width, height, or both to align its center with an offset point.</p>
+                <code>.translate-middle</code> <code>.translate-middle-x</code> <code>.translate-middle-y</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-4"><div class="position-relative bg-body-secondary border rounded-3" style="height: 10rem;"><span class="position-absolute top-50 start-50 translate-middle badge text-bg-primary">Both axes</span></div><code>.translate-middle</code></div>
+                <div class="col-md-4"><div class="position-relative bg-body-secondary border rounded-3" style="height: 10rem;"><span class="position-absolute top-0 start-50 translate-middle-x badge text-bg-accent">Inline axis</span></div><code>.translate-middle-x</code></div>
+                <div class="col-md-4"><div class="position-relative bg-body-secondary border rounded-3" style="height: 10rem;"><span class="position-absolute top-50 start-0 translate-middle-y badge text-bg-success">Block axis</span></div><code>.translate-middle-y</code></div>
+            </div>
+        </section>
     </div>
 </body>
 

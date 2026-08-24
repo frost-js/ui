@@ -15,56 +15,48 @@
 <body>
     <div class="container">
         <h1>Overflow</h1>
-        <div class="mb-4 d-flex">
-            <div class="overflow-auto p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary" style="max-width: 15em; max-height: 8em;">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio. Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.
-            </div>
-            <div class="overflow-hidden p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary" style="max-width: 15em; max-height: 8em;">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio. Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.
-            </div>
-            <div class="overflow-visible p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary" style="max-width: 15em; max-height: 8em;">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio. Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.
-            </div>
-            <div class="overflow-scroll p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary" style="max-width: 15em; max-height: 8em;">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio. Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.
-            </div>
-        </div>
 
-        <h4>Overflow X</h4>
-        <div class="mb-4 d-flex">
-            <div class="overflow-x-auto p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary text-nowrap" style="max-width: 15em; max-height: 8em;">
-                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio.</div>
-                <div>Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.</div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Both axes</h2>
+                <p class="text-body-secondary mb-2">Set overflow behavior on both axes at once. Auto adds scrollbars only when needed; scroll reserves them regardless.</p>
+                <code>.overflow-{auto|hidden|visible|scroll}</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+                <div class="col"><div class="overflow-auto bg-body-tertiary border rounded-3 p-3" style="height: 9rem;"><strong class="d-block">Auto</strong>Trailhead<br>Shelter<br>Creek crossing<br>North ridge<br>Lookout<br>Camp<br>Return track</div></div>
+                <div class="col"><div class="overflow-hidden bg-body-tertiary border rounded-3 p-3" style="height: 9rem;"><strong class="d-block">Hidden</strong>Trailhead<br>Shelter<br>Creek crossing<br>North ridge<br>Lookout<br>Camp<br>Return track</div></div>
+                <div class="col pb-5"><div class="overflow-visible bg-body-tertiary border rounded-3 p-3" style="height: 9rem;"><strong class="d-block">Visible</strong>Trailhead<br>Shelter<br>Creek crossing<br>North ridge<br>Lookout<br>Camp<br>Return track</div></div>
+                <div class="col"><div class="overflow-scroll bg-body-tertiary border rounded-3 p-3" style="height: 9rem;"><strong class="d-block">Scroll</strong>Trailhead<br>Shelter<br>Creek crossing<br>North ridge<br>Lookout<br>Camp<br>Return track</div></div>
             </div>
-            <div class="overflow-x-hidden p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary text-nowrap" style="max-width: 15em; max-height: 8em;">
-                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio.</div>
-                <div>Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.</div>
-            </div>
-            <div class="overflow-x-visible p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary text-nowrap" style="max-width: 15em; max-height: 8em;">
-                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio.</div>
-                <div>Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.</div>
-            </div>
-            <div class="overflow-x-scroll p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary text-nowrap" style="max-width: 15em; max-height: 8em;">
-                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio.</div>
-                <div>Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.</div>
-            </div>
-        </div>
+        </section>
 
-        <h4>Overflow Y</h4>
-        <div class="mb-4 d-flex">
-            <div class="overflow-y-auto p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary" style="max-width: 15em; max-height: 8em;">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio. Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Inline-axis overflow</h2>
+                <p class="text-body-secondary mb-2">Control horizontal overflow independently when content such as logs, tables, or timelines must remain on one line.</p>
+                <code>.overflow-x-{auto|hidden|visible|scroll}</code>
+            </header>
+            <div class="vstack gap-3">
+                <div class="overflow-hidden rounded-3"><div class="overflow-x-auto text-nowrap bg-body-tertiary border rounded-3 p-3">Auto — Trailhead → Creek crossing → North ridge → Lighthouse lookout → Southern camp → Return track</div></div>
+                <div class="overflow-hidden rounded-3"><div class="overflow-x-hidden text-nowrap bg-body-tertiary border rounded-3 p-3">Hidden — Trailhead → Creek crossing → North ridge → Lighthouse lookout → Southern camp → Return track</div></div>
+                <div class="overflow-hidden rounded-3"><div class="overflow-x-visible text-nowrap bg-body-tertiary border rounded-3 p-3 w-50">Visible — Trailhead → Creek crossing → North ridge → Lighthouse lookout → Southern camp → Return track</div></div>
+                <div class="overflow-hidden rounded-3"><div class="overflow-x-scroll text-nowrap bg-body-tertiary border rounded-3 p-3">Scroll — Trailhead → Creek crossing → North ridge → Lighthouse lookout → Southern camp → Return track</div></div>
             </div>
-            <div class="overflow-y-hidden p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary" style="max-width: 15em; max-height: 8em;">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio. Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Block-axis overflow</h2>
+                <p class="text-body-secondary mb-2">Control vertical overflow while leaving inline-axis behavior untouched.</p>
+                <code>.overflow-y-{auto|hidden|visible|scroll}</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+                <div class="col"><div class="overflow-y-auto bg-body-tertiary border rounded-3 p-3" style="height: 9rem;"><strong>Auto</strong><p>Carry two litres of water, sun protection, a wind layer, first aid, navigation, food, and an emergency beacon.</p></div></div>
+                <div class="col"><div class="overflow-y-hidden bg-body-tertiary border rounded-3 p-3" style="height: 9rem;"><strong>Hidden</strong><p>Carry two litres of water, sun protection, a wind layer, first aid, navigation, food, and an emergency beacon.</p></div></div>
+                <div class="col pb-4"><div class="overflow-y-visible bg-body-tertiary border rounded-3 p-3" style="height: 9rem;"><strong>Visible</strong><p>Carry two litres of water, sun protection, a wind layer, first aid, navigation, food, and an emergency beacon.</p></div></div>
+                <div class="col"><div class="overflow-y-scroll bg-body-tertiary border rounded-3 p-3" style="height: 9rem;"><strong>Scroll</strong><p>Carry two litres of water, sun protection, a wind layer, first aid, navigation, food, and an emergency beacon.</p></div></div>
             </div>
-            <div class="overflow-y-visible p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary" style="max-width: 15em; max-height: 8em;">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio. Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.
-            </div>
-            <div class="overflow-y-scroll p-3 mb-4 mb-md-0 me-md-3 bg-body-tertiary" style="max-width: 15em; max-height: 8em;">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat veritatis aspernatur ad reiciendis illum consequatur fugiat praesentium distinctio. Laudantium nihil itaque quaerat iste vel id nostrum magni culpa exercitationem nemo.
-            </div>
-        </div>
+        </section>
     </div>
 </body>
 

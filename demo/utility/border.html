@@ -15,85 +15,124 @@
 <body>
     <div class="container">
         <h1>Borders</h1>
-        <div class="mb-4">
-            <div class="border d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border-top d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border-end d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border-bottom d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border-start d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-        </div>
 
-        <h4>Subtractive</h4>
-        <div class="mb-4">
-            <div class="border border-0 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-top-0 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-end-0 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-bottom-0 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-start-0 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Additive and subtractive sides</h2>
+                <p class="text-body-secondary mb-2">Apply one edge directly, or start with a complete border and remove individual logical sides.</p>
+                <code>.border{-top|-end|-bottom|-start}</code> <code>.border-*-0</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <h3 class="h6">Additive</h3>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="border bg-body-tertiary p-4"><code>.border</code></div>
+                        <div class="border-top bg-body-tertiary p-4"><code>.border-top</code></div>
+                        <div class="border-end bg-body-tertiary p-4"><code>.border-end</code></div>
+                        <div class="border-bottom bg-body-tertiary p-4"><code>.border-bottom</code></div>
+                        <div class="border-start bg-body-tertiary p-4"><code>.border-start</code></div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="h6">Subtractive</h3>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="border border-0 bg-body-tertiary p-4"><code>.border-0</code></div>
+                        <div class="border border-top-0 bg-body-tertiary p-4"><code>.border-top-0</code></div>
+                        <div class="border border-end-0 bg-body-tertiary p-4"><code>.border-end-0</code></div>
+                        <div class="border border-bottom-0 bg-body-tertiary p-4"><code>.border-bottom-0</code></div>
+                        <div class="border border-start-0 bg-body-tertiary p-4"><code>.border-start-0</code></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <h4>Styles</h4>
-        <div class="mb-4">
-            <div class="border border-primary d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-primary-subtle d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-accent d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-accent-subtle d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-secondary d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-secondary-subtle d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-success d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-success-subtle d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-info d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-info-subtle d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-warning d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-warning-subtle d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-danger d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-danger-subtle d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-light d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-light-subtle d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-dark d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-dark-subtle d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-black d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-white d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Border colors</h2>
+                <p class="text-body-secondary mb-2">Semantic borders include solid and subtle values, alongside fixed black and white.</p>
+                <code>.border-{color}</code> <code>.border-{color}-subtle</code>
+            </header>
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
+                <div class="col"><div class="border border-3 border-primary rounded-3 p-3 h-100">Primary</div></div>
+                <div class="col"><div class="border border-3 border-primary-subtle rounded-3 p-3 h-100">Primary subtle</div></div>
+                <div class="col"><div class="border border-3 border-accent rounded-3 p-3 h-100">Accent</div></div>
+                <div class="col"><div class="border border-3 border-accent-subtle rounded-3 p-3 h-100">Accent subtle</div></div>
+                <div class="col"><div class="border border-3 border-secondary rounded-3 p-3 h-100">Secondary</div></div>
+                <div class="col"><div class="border border-3 border-secondary-subtle rounded-3 p-3 h-100">Secondary subtle</div></div>
+                <div class="col"><div class="border border-3 border-success rounded-3 p-3 h-100">Success</div></div>
+                <div class="col"><div class="border border-3 border-success-subtle rounded-3 p-3 h-100">Success subtle</div></div>
+                <div class="col"><div class="border border-3 border-info rounded-3 p-3 h-100">Info</div></div>
+                <div class="col"><div class="border border-3 border-info-subtle rounded-3 p-3 h-100">Info subtle</div></div>
+                <div class="col"><div class="border border-3 border-warning rounded-3 p-3 h-100">Warning</div></div>
+                <div class="col"><div class="border border-3 border-warning-subtle rounded-3 p-3 h-100">Warning subtle</div></div>
+                <div class="col"><div class="border border-3 border-danger rounded-3 p-3 h-100">Danger</div></div>
+                <div class="col"><div class="border border-3 border-danger-subtle rounded-3 p-3 h-100">Danger subtle</div></div>
+                <div class="col"><div class="border border-3 border-light rounded-3 p-3 h-100">Light</div></div>
+                <div class="col"><div class="border border-3 border-light-subtle rounded-3 p-3 h-100">Light subtle</div></div>
+                <div class="col"><div class="border border-3 border-dark rounded-3 p-3 h-100">Dark</div></div>
+                <div class="col"><div class="border border-3 border-dark-subtle rounded-3 p-3 h-100">Dark subtle</div></div>
+                <div class="col"><div class="border border-3 border-black rounded-3 p-3 h-100">Black</div></div>
+                <div class="col"><div class="border border-3 border-white bg-body-secondary rounded-3 p-3 h-100">White</div></div>
+            </div>
+        </section>
 
-        <h4>Opacity</h4>
-        <div class="mb-4">
-            <div class="p-3 mb-2 border border-success border-opacity-100">.border-opacity-100</div>
-            <div class="p-3 mb-2 border border-success border-opacity-75">.border-opacity-75</div>
-            <div class="p-3 mb-2 border border-success border-opacity-50">.border-opacity-50</div>
-            <div class="p-3 mb-2 border border-success border-opacity-25">.border-opacity-25</div>
-            <div class="p-3 mb-2 border border-success border-opacity-10">.bg-opacity-10</div>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Opacity and width</h2>
+                <p class="text-body-secondary mb-2">Tune border color opacity independently, then select a width from the one-to-five pixel scale.</p>
+                <code>.border-opacity-{100|75|50|25|10|0}</code> <code>.border-{1|2|3|4|5}</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <h3 class="h6">Opacity</h3>
+                    <div class="vstack gap-2">
+                        <div class="border border-success border-opacity-100 rounded-2 p-2">100%</div>
+                        <div class="border border-success border-opacity-75 rounded-2 p-2">75%</div>
+                        <div class="border border-success border-opacity-50 rounded-2 p-2">50%</div>
+                        <div class="border border-success border-opacity-25 rounded-2 p-2">25%</div>
+                        <div class="border border-success border-opacity-10 rounded-2 p-2">10%</div>
+                        <div class="border border-success border-opacity-0 rounded-2 p-2">0%</div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <h3 class="h6">Width</h3>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="border border-1 border-primary rounded-2 p-4">1</div>
+                        <div class="border border-2 border-primary rounded-2 p-4">2</div>
+                        <div class="border border-3 border-primary rounded-2 p-4">3</div>
+                        <div class="border border-4 border-primary rounded-2 p-4">4</div>
+                        <div class="border border-5 border-primary rounded-2 p-4">5</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <h4>Widths</h4>
-        <div class="mb-4">
-            <div class="border border-1 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-2 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-3 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-4 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-            <div class="border border-5 d-inline-block bg-body-tertiary" style="width: 5em; height: 5em;"></div>
-        </div>
-
-        <h4>Radius</h4>
-        <div class="mb-4">
-            <div class="rounded d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-top d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-end d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-bottom d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-start d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-circle d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-pill d-inline-block bg-dark" style="width: 10em; height: 5em;"></div>
-        </div>
-
-        <h4>Sizes</h4>
-        <div class="mb-4">
-            <div class="rounded-0 d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-1 d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-2 d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-3 d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-4 d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-            <div class="rounded-5 d-inline-block bg-dark" style="width: 5em; height: 5em;"></div>
-        </div>
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Radius directions and sizes</h2>
+                <p class="text-body-secondary mb-2">Round every corner, selected logical sides, or choose circle and pill geometry. Numeric suffixes apply the complete radius scale.</p>
+                <code>.rounded{-top|-end|-bottom|-start|-circle|-pill}</code> <code>.rounded-{0|1|2|3|4|5}</code>
+            </header>
+            <h3 class="h6">Directions and shapes</h3>
+            <div class="d-flex flex-wrap gap-3 mb-4">
+                <div class="rounded text-bg-primary p-4">All</div>
+                <div class="rounded-top text-bg-primary p-4">Top</div>
+                <div class="rounded-end text-bg-primary p-4">End</div>
+                <div class="rounded-bottom text-bg-primary p-4">Bottom</div>
+                <div class="rounded-start text-bg-primary p-4">Start</div>
+                <div class="rounded-circle text-bg-primary p-4">Circle</div>
+                <div class="rounded-pill text-bg-primary px-5 py-4">Pill</div>
+            </div>
+            <h3 class="h6">Size scale</h3>
+            <div class="d-flex flex-wrap gap-3">
+                <div class="rounded-0 text-bg-accent p-4">0</div>
+                <div class="rounded-1 text-bg-accent p-4">1</div>
+                <div class="rounded-2 text-bg-accent p-4">2</div>
+                <div class="rounded-3 text-bg-accent p-4">3</div>
+                <div class="rounded-4 text-bg-accent p-4">4</div>
+                <div class="rounded-5 text-bg-accent p-4">5</div>
+            </div>
+        </section>
     </div>
 </body>
 

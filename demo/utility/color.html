@@ -15,46 +15,72 @@
 <body>
     <div class="container">
         <h1>Colors</h1>
-        <div class="mb-4">
-            <p class="text-primary">.text-primary</p>
-            <p class="text-primary-emphasis">.text-primary-emphasis</p>
-            <p class="text-accent">.text-accent</p>
-            <p class="text-accent-emphasis">.text-accent-emphasis</p>
-            <p class="text-secondary">.text-secondary</p>
-            <p class="text-secondary-emphasis">.text-secondary-emphasis</p>
-            <p class="text-success">.text-success</p>
-            <p class="text-success-emphasis">.text-success-emphasis</p>
-            <p class="text-info">.text-info</p>
-            <p class="text-info-emphasis">.text-info-emphasis</p>
-            <p class="text-warning">.text-warning</p>
-            <p class="text-warning-emphasis">.text-warning-emphasis</p>
-            <p class="text-danger">.text-danger</p>
-            <p class="text-danger-emphasis">.text-danger-emphasis</p>
-            <p class="text-light bg-dark">.text-light</p>
-            <p class="text-light-emphasis bg-dark">.text-light-emphasis</p>
-            <p class="text-dark bg-light">.text-dark</p>
-            <p class="text-dark-emphasis bg-light">.text-dark-emphasis</p>
-            <p class="text-body">.text-body</p>
-            <p class="text-body-emphasis">.text-body-emphasis</p>
-            <p class="text-body-secondary">.text-body-secondary</p>
-            <p class="text-body-tertiary">.text-body-tertiary</p>
-            <p class="text-black bg-light">.text-black</p>
-            <p class="text-white bg-dark">.text-white</p>
-        </div>
 
-        <h4>Gradient</h4>
-        <div class="mb-4">
-            <h2 class="text-gradient">Electric gradient text</h2>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Semantic text colors</h2>
+                <p class="text-body-secondary mb-2">Each semantic color includes a stronger emphasis value for headings, links, and content placed on subtle surfaces.</p>
+                <code>.text-{color}</code> <code>.text-{color}-emphasis</code>
+            </header>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+                <div class="col"><div class="card card-body h-100"><span class="text-primary">Primary</span><strong class="text-primary-emphasis">Primary emphasis</strong></div></div>
+                <div class="col"><div class="card card-body h-100"><span class="text-accent">Accent</span><strong class="text-accent-emphasis">Accent emphasis</strong></div></div>
+                <div class="col"><div class="card card-body h-100"><span class="text-secondary">Secondary</span><strong class="text-secondary-emphasis">Secondary emphasis</strong></div></div>
+                <div class="col"><div class="card card-body h-100"><span class="text-success">Success</span><strong class="text-success-emphasis">Success emphasis</strong></div></div>
+                <div class="col"><div class="card card-body h-100"><span class="text-info">Info</span><strong class="text-info-emphasis">Info emphasis</strong></div></div>
+                <div class="col"><div class="card card-body h-100"><span class="text-warning">Warning</span><strong class="text-warning-emphasis">Warning emphasis</strong></div></div>
+                <div class="col"><div class="card card-body h-100"><span class="text-danger">Danger</span><strong class="text-danger-emphasis">Danger emphasis</strong></div></div>
+                <div class="col"><div class="bg-dark rounded-3 p-3 h-100"><span class="text-light d-block">Light</span><strong class="text-light-emphasis">Light emphasis</strong></div></div>
+                <div class="col"><div class="bg-light rounded-3 p-3 h-100"><span class="text-dark d-block">Dark</span><strong class="text-dark-emphasis">Dark emphasis</strong></div></div>
+            </div>
+        </section>
 
-        <h4>Opacity</h4>
-        <div class="mb-4">
-            <p class="text-primary text-opacity-100">.text-opacity-100</p>
-            <p class="text-primary text-opacity-75">.text-opacity-75</p>
-            <p class="text-primary text-opacity-50">.text-opacity-50</p>
-            <p class="text-primary text-opacity-25">.text-opacity-25</p>
-            <p class="text-primary text-opacity-10">.text-opacity-10</p>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Body and absolute colors</h2>
+                <p class="text-body-secondary mb-2">Body values adapt with the active theme, while black and white remain absolute colors for known surfaces.</p>
+                <code>.text-body</code> <code>.text-body-emphasis</code> <code>.text-body-secondary</code> <code>.text-body-tertiary</code> <code>.text-black</code> <code>.text-white</code>
+            </header>
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <div class="card card-body h-100">
+                        <span class="text-body">Body text</span>
+                        <strong class="text-body-emphasis">Body emphasis</strong>
+                        <span class="text-body-secondary">Secondary body text</span>
+                        <span class="text-body-tertiary">Tertiary body text</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-light text-black rounded-top-3 p-3">Absolute black</div>
+                    <div class="bg-dark text-white rounded-bottom-3 p-3">Absolute white</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Gradient text</h2>
+                <p class="text-body-secondary mb-2">The gradient helper clips the branded gradient to the text while retaining a forced-colors fallback.</p>
+                <code>.text-gradient</code>
+            </header>
+            <p class="display-4 text-gradient mb-0">Explore beyond the familiar.</p>
+        </section>
+
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Text opacity</h2>
+                <p class="text-body-secondary mb-2">Text opacity utilities modify the color channel without fading descendants or the element itself.</p>
+                <code>.text-opacity-{100|75|50|25|10|0}</code>
+            </header>
+            <div class="hstack flex-wrap gap-4 fs-5 fw-bold">
+                <span class="text-primary text-opacity-100">100%</span>
+                <span class="text-primary text-opacity-75">75%</span>
+                <span class="text-primary text-opacity-50">50%</span>
+                <span class="text-primary text-opacity-25">25%</span>
+                <span class="text-primary text-opacity-10">10%</span>
+                <span><span class="text-primary text-opacity-0" aria-hidden="true">0%</span><code>.text-opacity-0</code></span>
+            </div>
+        </section>
     </div>
 </body>
 
