@@ -2917,7 +2917,7 @@ fieldset:disabled .btn {
 .carousel-control-prev,
 .carousel-control-next {
   position: absolute;
-  top: 50%;
+  inset-block: 0;
   z-index: 1;
   display: flex;
   align-items: center;
@@ -2925,6 +2925,7 @@ fieldset:disabled .btn {
   width: var(--ui-carousel-control-size);
   height: var(--ui-carousel-control-size);
   padding: 0;
+  margin-block: auto;
   color: rgb(from var(--ui-carousel-control-color) r g b/var(--ui-carousel-control-opacity));
   text-align: center;
   background-color: var(--ui-carousel-control-bg);
@@ -2932,7 +2933,6 @@ fieldset:disabled .btn {
   box-shadow: var(--ui-carousel-control-box-shadow);
   -webkit-backdrop-filter: var(--ui-carousel-control-backdrop-filter);
   backdrop-filter: var(--ui-carousel-control-backdrop-filter);
-  transform: translateY(-50%);
   transition-timing-function: var(--ui-transition-timing-function);
   transition-duration: var(--ui-transition-duration-fast);
   transition-property: color, background-color, border-color, box-shadow;
@@ -3643,7 +3643,6 @@ fieldset:disabled .btn {
   --ui-modal-title-font-size: var(--ui-font-size-lg);
   --ui-modal-title-font-weight: 700;
   --ui-modal-title-line-height: 1.25;
-  --ui-modal-footer-gap: 0.5rem;
   --ui-modal-footer-border-width: var(--ui-modal-border-width);
   --ui-modal-footer-border-color: var(--ui-modal-border-color);
   position: fixed;
@@ -3744,15 +3743,13 @@ fieldset:disabled .btn {
   display: flex;
   flex-shrink: 0;
   flex-wrap: wrap;
+  gap: 0.5rem;
   align-items: center;
   justify-content: flex-end;
   padding: var(--ui-modal-padding-y) var(--ui-modal-padding-x);
   border-top: var(--ui-modal-footer-border-width) var(--ui-border-style) var(--ui-modal-footer-border-color);
   border-bottom-right-radius: var(--ui-modal-inner-border-radius);
   border-bottom-left-radius: var(--ui-modal-inner-border-radius);
-}
-.modal-footer > * {
-  margin: calc(var(--ui-modal-footer-gap) * 0.5);
 }
 
 @media (min-width: 576px) {
@@ -5249,7 +5246,6 @@ fieldset:disabled .btn {
 .input-check::before {
   position: absolute;
   inset: 0;
-  display: inline-block;
   margin: auto;
   content: "";
   background-color: currentcolor;
@@ -5324,15 +5320,14 @@ fieldset:disabled .btn {
 }
 .form-switch .input-check::after {
   position: absolute;
+  inset-block: 0;
   inset-inline-start: 0.125rem;
-  top: 50%;
-  display: inline-block;
   width: 0.875rem;
   height: 0.875rem;
+  margin-block: auto;
   content: "";
   background-color: currentcolor;
   box-shadow: var(--ui-shadow-sm);
-  translate: 0 -50%;
   transition-timing-function: var(--ui-transition-timing-function);
   transition-duration: var(--ui-transition-duration);
   transition-property: inset-inline-start, box-shadow;
@@ -5366,15 +5361,6 @@ fieldset:disabled .btn {
   .input-check:disabled {
     color: GrayText;
     border-color: GrayText;
-  }
-  .form-switch .input-check {
-    color: ButtonText;
-  }
-  .form-switch .input-check:checked {
-    color: HighlightText;
-  }
-  .form-switch .input-check:disabled {
-    color: GrayText;
   }
 }
 .form-text {

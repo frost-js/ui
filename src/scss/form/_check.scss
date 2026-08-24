@@ -40,7 +40,6 @@
     &::before {
         position: absolute;
         inset: 0;
-        display: inline-block;
         margin: auto;
         content: "";
         background-color: currentcolor;
@@ -129,15 +128,14 @@
 
         &::after {
             position: absolute;
+            inset-block: 0;
             inset-inline-start: vars.$form-switch-input-check-padding;
-            top: 50%;
-            display: inline-block;
             width: vars.$form-switch-input-check-thumb-size;
             height: vars.$form-switch-input-check-thumb-size;
+            margin-block: auto;
             content: "";
             background-color: currentcolor;
             box-shadow: vars.$form-switch-input-check-thumb-box-shadow;
-            translate: 0 -50%;
             transition-timing-function: var(--ui-transition-timing-function);
             transition-duration: var(--ui-transition-duration);
             transition-property: inset-inline-start, box-shadow;
@@ -176,18 +174,6 @@
         &:disabled {
             color: GrayText;
             border-color: GrayText;
-        }
-    }
-
-    .form-switch .input-check {
-        color: ButtonText;
-
-        &:checked {
-            color: HighlightText;
-        }
-
-        &:disabled {
-            color: GrayText;
         }
     }
 }

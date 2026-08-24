@@ -33,7 +33,6 @@
     --ui-modal-title-font-size: #{vars.$modal-title-font-size};
     --ui-modal-title-font-weight: #{vars.$modal-title-font-weight};
     --ui-modal-title-line-height: #{vars.$modal-title-line-height};
-    --ui-modal-footer-gap: #{vars.$modal-footer-gap};
     --ui-modal-footer-border-width: #{vars.$modal-footer-border-width};
     --ui-modal-footer-border-color: #{vars.$modal-footer-border-color};
 
@@ -137,15 +136,12 @@
     display: flex;
     flex-shrink: 0;
     flex-wrap: wrap;
+    gap: vars.$spacing * .5;
     align-items: center;
     justify-content: flex-end;
     padding: var(--ui-modal-padding-y) var(--ui-modal-padding-x);
     border-top: var(--ui-modal-footer-border-width) var(--ui-border-style) var(--ui-modal-footer-border-color);
     @include mixins.border-bottom-radius(var(--ui-modal-inner-border-radius));
-
-    >* {
-        margin: calc(var(--ui-modal-footer-gap) * .5);
-    }
 }
 
 @include mixins.media-breakpoint-up(sm) {

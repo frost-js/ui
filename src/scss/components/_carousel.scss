@@ -66,7 +66,7 @@
 .carousel-control-prev,
 .carousel-control-next {
     position: absolute;
-    top: 50%;
+    inset-block: 0;
     z-index: 1;
     display: flex;
     align-items: center;
@@ -74,13 +74,13 @@
     width: var(--ui-carousel-control-size);
     height: var(--ui-carousel-control-size);
     padding: 0;
+    margin-block: auto;
     color: functions.color-alpha(carousel-control-color, var(--ui-carousel-control-opacity));
     text-align: center;
     background-color: var(--ui-carousel-control-bg);
     border: var(--ui-carousel-control-border-width) var(--ui-border-style) var(--ui-carousel-control-border-color);
     box-shadow: var(--ui-carousel-control-box-shadow);
     backdrop-filter: var(--ui-carousel-control-backdrop-filter);
-    transform: translateY(-50%);
     transition-timing-function: var(--ui-transition-timing-function);
     transition-duration: var(--ui-transition-duration-fast);
     transition-property: color, background-color, border-color, box-shadow;

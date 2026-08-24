@@ -246,7 +246,6 @@ $modal-title-font-size: var(--ui-font-size-lg) !default;
 $modal-title-font-weight: map.get(vars.$font-weights, bolder) !default;
 $modal-title-line-height: map.get(vars.$line-heights, sm) !default;
 
-$modal-footer-gap: vars.$spacing * .5 !default;
 $modal-footer-border-width: var(--ui-modal-border-width) !default;
 $modal-footer-border-color: var(--ui-modal-border-color) !default;
 
