@@ -1,7 +1,9 @@
 @use "../functions";
 @use "../vars";
 
-@each $name, $color in vars.$color-variants {
+@use "sass:map";
+
+@each $name in map.keys(vars.$color-variants) {
     .text-bg-#{$name} {
         color: var(--ui-#{$name}-contrast) !important;
         background-color: functions.color-alpha($name, var(--ui-bg-opacity)) !important;

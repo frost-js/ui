@@ -1,6 +1,8 @@
 @use "../mixins";
 @use "../vars";
 
+@use "sass:map";
+
 .alert {
     --ui-alert-padding-x: #{vars.$alert-padding-x};
     --ui-alert-padding-y: #{vars.$alert-padding-y};
@@ -44,7 +46,7 @@
     color: var(--ui-alert-link-color);
 }
 
-@each $name, $color in vars.$color-variants {
+@each $name in map.keys(vars.$color-variants) {
     .alert-#{$name} {
         --ui-alert-bg: var(--ui-#{$name}-subtle);
         --ui-alert-border-color: var(--ui-#{$name}-subtle-emphasis);

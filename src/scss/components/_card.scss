@@ -82,8 +82,7 @@
     border-bottom: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
 
     &:first-child {
-        $card-header-border-radius: var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius) 0 0;
-        @include mixins.border-radius($card-header-border-radius);
+        @include mixins.border-radius(var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius) 0 0);
     }
 }
 
@@ -93,8 +92,7 @@
     border-top: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
 
     &:last-child {
-        $card-footer-border-radius: 0 0 var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius);
-        @include mixins.border-radius($card-footer-border-radius);
+        @include mixins.border-radius(0 0 var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius));
     }
 }
 

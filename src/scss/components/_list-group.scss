@@ -111,7 +111,7 @@
     }
 }
 
-@each $name, $color in vars.$color-variants {
+@each $name in map.keys(vars.$color-variants) {
     .list-group-item-#{$name} {
         --ui-list-group-color: var(--ui-#{$name}-subtle-text);
         --ui-list-group-bg: var(--ui-#{$name}-subtle);

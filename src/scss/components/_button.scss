@@ -2,6 +2,8 @@
 @use "../mixins";
 @use "../vars";
 
+@use "sass:map";
+
 .btn {
     --ui-btn-padding-x: #{vars.$btn-padding-x};
     --ui-btn-padding-y: #{vars.$btn-padding-y};
@@ -157,7 +159,7 @@
     }
 }
 
-@each $name, $color in vars.$color-variants {
+@each $name in map.keys(vars.$color-variants) {
     .btn-#{$name} {
         --ui-btn-bg: var(--ui-#{$name});
         --ui-btn-border-color: var(--ui-#{$name});

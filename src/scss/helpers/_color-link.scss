@@ -3,7 +3,7 @@
 
 @use "sass:map";
 
-@each $name, $color in vars.$color-link-variants {
+@each $name in map.keys(vars.$color-link-variants) {
     $emphasis-name: $name;
 
     @if map.has-key(vars.$color-variants, $name) {
