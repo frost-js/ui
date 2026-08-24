@@ -20,17 +20,17 @@
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Button and link triggers</h2>
                 <p class="text-body-secondary mb-2">A button can target a selector explicitly, while a link can use its destination as the target.</p>
-                <code>data-ui-toggle="collapse"</code> <code>data-ui-target="#routeDetails"</code>
+                <code>data-ui-toggle="collapse"</code> <code>data-ui-target="#route-details"</code>
             </header>
             <div class="d-flex flex-wrap gap-2 mb-3">
-                <button class="btn btn-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#routeDetails" type="button" aria-expanded="false" aria-controls="routeDetails">
+                <button class="btn btn-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#route-details" type="button" aria-expanded="false" aria-controls="route-details">
                     Toggle with button
                 </button>
-                <a class="btn btn-outline-primary ripple collapsed" data-ui-toggle="collapse" href="#routeDetails" role="button" aria-expanded="false" aria-controls="routeDetails">
+                <a class="btn btn-outline-primary ripple collapsed" data-ui-toggle="collapse" href="#route-details" role="button" aria-expanded="false" aria-controls="route-details">
                     Toggle with link
                 </a>
             </div>
-            <div class="collapse" id="routeDetails">
+            <div class="collapse" id="route-details">
                 <div class="card card-body">
                     The northern trail is 8.5 kilometres return and includes a steep, exposed final ascent.
                 </div>
@@ -43,10 +43,10 @@
                 <p class="text-body-secondary mb-2">Add the visible state to both the panel and its trigger when content should begin expanded.</p>
                 <code>.collapse.show</code> <code>aria-expanded="true"</code>
             </header>
-            <button class="btn btn-secondary ripple mb-3" data-ui-toggle="collapse" data-ui-target="#packingSummary" type="button" aria-expanded="true" aria-controls="packingSummary">
+            <button class="btn btn-secondary ripple mb-3" data-ui-toggle="collapse" data-ui-target="#packing-summary" type="button" aria-expanded="true" aria-controls="packing-summary">
                 Packing summary
             </button>
-            <div class="collapse show" id="packingSummary">
+            <div class="collapse show" id="packing-summary">
                 <div class="alert alert-info mb-0" role="status">
                     Water, sun protection, a warm layer, and offline navigation are recommended.
                 </div>
@@ -59,11 +59,11 @@
                 <p class="text-body-secondary mb-2">Set a horizontal direction and give the revealed content a stable width.</p>
                 <code>data-ui-direction="right"</code>
             </header>
-            <button class="btn btn-primary ripple mb-3" data-ui-toggle="collapse" data-ui-target="#filterPanel" type="button" aria-expanded="true" aria-controls="filterPanel">
+            <button class="btn btn-primary ripple mb-3" data-ui-toggle="collapse" data-ui-target="#filter-panel" type="button" aria-expanded="true" aria-controls="filter-panel">
                 Toggle filters
             </button>
             <div style="min-height: 8rem;">
-                <div class="collapse show" id="filterPanel" data-ui-direction="right">
+                <div class="collapse show" id="filter-panel" data-ui-direction="right">
                     <div class="card card-body" style="width: 20rem;">
                         <strong class="d-block mb-2">Visible layers</strong>
                         <span class="text-body-secondary">Trails, water points, and transport stops</span>
@@ -79,26 +79,26 @@
                 <code>data-ui-target=".route-note"</code>
             </header>
             <div class="d-flex flex-wrap gap-2 mb-3">
-                <button class="btn btn-outline-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#accessNote" type="button" aria-expanded="false" aria-controls="accessNote">
+                <button class="btn btn-outline-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#access-note" type="button" aria-expanded="false" aria-controls="access-note">
                     Access
                 </button>
-                <button class="btn btn-outline-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#weatherNote" type="button" aria-expanded="false" aria-controls="weatherNote">
+                <button class="btn btn-outline-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#weather-note" type="button" aria-expanded="false" aria-controls="weather-note">
                     Weather
                 </button>
-                <button class="btn btn-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target=".route-note" type="button" aria-expanded="false" aria-controls="accessNote weatherNote">
+                <button class="btn btn-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target=".route-note" type="button" aria-expanded="false" aria-controls="access-note weather-note">
                     Toggle both
                 </button>
             </div>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <div class="collapse route-note" id="accessNote">
+                    <div class="collapse route-note" id="access-note">
                         <div class="card card-body">
                             The trailhead car park closes at sunset and has limited overflow space.
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="collapse route-note" id="weatherNote">
+                    <div class="collapse route-note" id="weather-note">
                         <div class="card card-body">
                             Conditions change quickly above the tree line; check the forecast before leaving.
                         </div>

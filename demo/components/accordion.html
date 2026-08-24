@@ -20,40 +20,40 @@
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Exclusive panels</h2>
                 <p class="text-body-secondary mb-2">A shared parent closes the open panel when another item is expanded.</p>
-                <code>data-ui-parent="#tripAccordion"</code>
+                <code>data-ui-parent="#trip-accordion"</code>
             </header>
-            <div class="accordion" id="tripAccordion">
+            <div class="accordion" id="trip-accordion">
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="tripHeadingOne">
-                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#tripPanelOne" type="button" aria-expanded="true" aria-controls="tripPanelOne">
+                    <h3 class="accordion-header" id="trip-heading-one">
+                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#trip-panel-one" type="button" aria-expanded="true" aria-controls="trip-panel-one">
                             What should I bring?
                         </button>
                     </h3>
-                    <div class="accordion-collapse collapse show" id="tripPanelOne" data-ui-parent="#tripAccordion" aria-labelledby="tripHeadingOne">
+                    <div class="accordion-collapse collapse show" id="trip-panel-one" data-ui-parent="#trip-accordion" aria-labelledby="trip-heading-one">
                         <div class="accordion-body">
                             Carry water, sun protection, a warm layer, and an offline copy of the route.
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="tripHeadingTwo">
-                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#tripPanelTwo" type="button" aria-expanded="false" aria-controls="tripPanelTwo">
+                    <h3 class="accordion-header" id="trip-heading-two">
+                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#trip-panel-two" type="button" aria-expanded="false" aria-controls="trip-panel-two">
                             When should I start?
                         </button>
                     </h3>
-                    <div class="accordion-collapse collapse" id="tripPanelTwo" data-ui-parent="#tripAccordion" aria-labelledby="tripHeadingTwo">
+                    <div class="accordion-collapse collapse" id="trip-panel-two" data-ui-parent="#trip-accordion" aria-labelledby="trip-heading-two">
                         <div class="accordion-body">
                             Leave early enough to complete exposed sections before the afternoon heat and changing weather.
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="tripHeadingThree">
-                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#tripPanelThree" type="button" aria-expanded="false" aria-controls="tripPanelThree">
+                    <h3 class="accordion-header" id="trip-heading-three">
+                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#trip-panel-three" type="button" aria-expanded="false" aria-controls="trip-panel-three">
                             Is the route accessible year-round?
                         </button>
                     </h3>
-                    <div class="accordion-collapse collapse" id="tripPanelThree" data-ui-parent="#tripAccordion" aria-labelledby="tripHeadingThree">
+                    <div class="accordion-collapse collapse" id="trip-panel-three" data-ui-parent="#trip-accordion" aria-labelledby="trip-heading-three">
                         <div class="accordion-body">
                             Seasonal closures can apply after heavy rain, high tides, or periods of elevated fire risk.
                         </div>
@@ -70,38 +70,38 @@
             </header>
             <div class="card">
                 <div class="card-header">Account settings</div>
-                <div class="accordion accordion-flush" id="settingsAccordion">
+                <div class="accordion accordion-flush" id="settings-accordion">
                     <div class="accordion-item">
-                        <h3 class="accordion-header" id="settingsHeadingOne">
-                            <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#settingsPanelOne" type="button" aria-expanded="true" aria-controls="settingsPanelOne">
+                        <h3 class="accordion-header" id="settings-heading-one">
+                            <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#settings-panel-one" type="button" aria-expanded="true" aria-controls="settings-panel-one">
                                 Profile visibility
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse show" id="settingsPanelOne" data-ui-parent="#settingsAccordion" aria-labelledby="settingsHeadingOne">
+                        <div class="accordion-collapse collapse show" id="settings-panel-one" data-ui-parent="#settings-accordion" aria-labelledby="settings-heading-one">
                             <div class="accordion-body">
                                 Choose which profile details are visible to other members of your workspace.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item">
-                        <h3 class="accordion-header" id="settingsHeadingTwo">
-                            <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#settingsPanelTwo" type="button" aria-expanded="false" aria-controls="settingsPanelTwo">
+                        <h3 class="accordion-header" id="settings-heading-two">
+                            <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#settings-panel-two" type="button" aria-expanded="false" aria-controls="settings-panel-two">
                                 Notification schedule
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="settingsPanelTwo" data-ui-parent="#settingsAccordion" aria-labelledby="settingsHeadingTwo">
+                        <div class="accordion-collapse collapse" id="settings-panel-two" data-ui-parent="#settings-accordion" aria-labelledby="settings-heading-two">
                             <div class="accordion-body">
                                 Set quiet hours or group lower-priority updates into a scheduled summary.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item">
-                        <h3 class="accordion-header" id="settingsHeadingThree">
-                            <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#settingsPanelThree" type="button" aria-expanded="false" aria-controls="settingsPanelThree">
+                        <h3 class="accordion-header" id="settings-heading-three">
+                            <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#settings-panel-three" type="button" aria-expanded="false" aria-controls="settings-panel-three">
                                 Connected devices
                             </button>
                         </h3>
-                        <div class="accordion-collapse collapse" id="settingsPanelThree" data-ui-parent="#settingsAccordion" aria-labelledby="settingsHeadingThree">
+                        <div class="accordion-collapse collapse" id="settings-panel-three" data-ui-parent="#settings-accordion" aria-labelledby="settings-heading-three">
                             <div class="accordion-body">
                                 Review active sessions and remove devices that should no longer have access.
                             </div>
@@ -119,36 +119,36 @@
             </header>
             <div class="accordion">
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="independentHeadingOne">
-                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#independentPanelOne" type="button" aria-expanded="true" aria-controls="independentPanelOne">
+                    <h3 class="accordion-header" id="independent-heading-one">
+                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#independent-panel-one" type="button" aria-expanded="true" aria-controls="independent-panel-one">
                             Route conditions
                         </button>
                     </h3>
-                    <div class="accordion-collapse collapse show" id="independentPanelOne" aria-labelledby="independentHeadingOne">
+                    <div class="accordion-collapse collapse show" id="independent-panel-one" aria-labelledby="independent-heading-one">
                         <div class="accordion-body">
                             The upper track is dry, but expect shallow water across the final creek crossing.
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="independentHeadingTwo">
-                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#independentPanelTwo" type="button" aria-expanded="true" aria-controls="independentPanelTwo">
+                    <h3 class="accordion-header" id="independent-heading-two">
+                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#independent-panel-two" type="button" aria-expanded="true" aria-controls="independent-panel-two">
                             Transport update
                         </button>
                     </h3>
-                    <div class="accordion-collapse collapse show" id="independentPanelTwo" aria-labelledby="independentHeadingTwo">
+                    <div class="accordion-collapse collapse show" id="independent-panel-two" aria-labelledby="independent-heading-two">
                         <div class="accordion-body">
                             The return shuttle leaves the southern trailhead at 4:30 pm and 6:00 pm.
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="independentHeadingThree">
-                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#independentPanelThree" type="button" aria-expanded="false" aria-controls="independentPanelThree">
+                    <h3 class="accordion-header" id="independent-heading-three">
+                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#independent-panel-three" type="button" aria-expanded="false" aria-controls="independent-panel-three">
                             Water access
                         </button>
                     </h3>
-                    <div class="accordion-collapse collapse" id="independentPanelThree" aria-labelledby="independentHeadingThree">
+                    <div class="accordion-collapse collapse" id="independent-panel-three" aria-labelledby="independent-heading-three">
                         <div class="accordion-body">
                             Treated water is available at the visitor centre but not elsewhere on the route.
                         </div>

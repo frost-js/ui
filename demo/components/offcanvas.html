@@ -16,17 +16,17 @@
     <div class="container">
         <h1>Offcanvas</h1>
 
-        <section class="mb-5" id="taskPanel">
+        <section class="mb-5" id="task-panel">
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Task panel</h2>
                 <p class="text-body-secondary mb-2">Use an offcanvas surface for supporting controls or navigation that should not permanently reduce the content area.</p>
                 <code>.offcanvas-end</code> <code>data-ui-toggle="offcanvas"</code>
             </header>
-            <button class="btn btn-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#routeFilters" type="button" aria-controls="routeFilters">Filter routes</button>
+            <button class="btn btn-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#route-filters" type="button" aria-controls="route-filters">Filter routes</button>
 
-            <div class="offcanvas offcanvas-end" id="routeFilters" tabindex="-1" role="dialog" aria-labelledby="routeFiltersTitle" aria-hidden="true">
+            <div class="offcanvas offcanvas-end" id="route-filters" tabindex="-1" role="dialog" aria-labelledby="route-filters-title" aria-hidden="true">
                 <div class="offcanvas-header">
-                    <h2 class="offcanvas-title h5" id="routeFiltersTitle">Filter routes</h2>
+                    <h2 class="offcanvas-title h5" id="route-filters-title">Filter routes</h2>
                     <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -34,22 +34,22 @@
                         <fieldset class="mb-4">
                             <legend class="h6">Difficulty</legend>
                             <div class="form-check mb-2">
-                                <input class="input-check" id="easyRoutes" type="checkbox" checked>
-                                <label class="form-check-label" for="easyRoutes">Easy</label>
+                                <input class="input-check" id="easy-routes" type="checkbox" checked>
+                                <label class="form-check-label" for="easy-routes">Easy</label>
                             </div>
                             <div class="form-check mb-2">
-                                <input class="input-check" id="moderateRoutes" type="checkbox" checked>
-                                <label class="form-check-label" for="moderateRoutes">Moderate</label>
+                                <input class="input-check" id="moderate-routes" type="checkbox" checked>
+                                <label class="form-check-label" for="moderate-routes">Moderate</label>
                             </div>
                             <div class="form-check">
-                                <input class="input-check" id="challengingRoutes" type="checkbox">
-                                <label class="form-check-label" for="challengingRoutes">Challenging</label>
+                                <input class="input-check" id="challenging-routes" type="checkbox">
+                                <label class="form-check-label" for="challenging-routes">Challenging</label>
                             </div>
                         </fieldset>
                         <div class="mb-4">
-                            <label class="form-label" for="routeLength">Maximum distance</label>
+                            <label class="form-label" for="route-length">Maximum distance</label>
                             <div class="form-input">
-                                <select class="input-filled" id="routeLength">
+                                <select class="input-filled" id="route-length">
                                     <option>Any distance</option>
                                     <option>Up to 5 km</option>
                                     <option>Up to 10 km</option>
@@ -66,22 +66,22 @@
             </div>
         </section>
 
-        <section class="mb-5" id="placementOptions">
+        <section class="mb-5" id="placement-options">
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Placement</h2>
                 <p class="text-body-secondary mb-2">Choose top or bottom for broad notices and start or end for task and navigation panels.</p>
                 <code>.offcanvas-top|end|bottom|start</code>
             </header>
             <div class="d-flex flex-wrap gap-2">
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#topPanel" type="button" aria-controls="topPanel">Top</button>
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#endPanel" type="button" aria-controls="endPanel">End</button>
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#bottomPanel" type="button" aria-controls="bottomPanel">Bottom</button>
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#startPanel" type="button" aria-controls="startPanel">Start</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#top-panel" type="button" aria-controls="top-panel">Top</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#end-panel" type="button" aria-controls="end-panel">End</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#bottom-panel" type="button" aria-controls="bottom-panel">Bottom</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="offcanvas" data-ui-target="#start-panel" type="button" aria-controls="start-panel">Start</button>
             </div>
 
-            <div class="offcanvas offcanvas-top" id="topPanel" tabindex="-1" role="dialog" aria-labelledby="topPanelTitle" aria-hidden="true">
+            <div class="offcanvas offcanvas-top" id="top-panel" tabindex="-1" role="dialog" aria-labelledby="top-panel-title" aria-hidden="true">
                 <div class="offcanvas-header">
-                    <h2 class="offcanvas-title h5" id="topPanelTitle">Conditions update</h2>
+                    <h2 class="offcanvas-title h5" id="top-panel-title">Conditions update</h2>
                     <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -89,9 +89,9 @@
                 </div>
             </div>
 
-            <div class="offcanvas offcanvas-end" id="endPanel" tabindex="-1" role="dialog" aria-labelledby="endPanelTitle" aria-hidden="true">
+            <div class="offcanvas offcanvas-end" id="end-panel" tabindex="-1" role="dialog" aria-labelledby="end-panel-title" aria-hidden="true">
                 <div class="offcanvas-header">
-                    <h2 class="offcanvas-title h5" id="endPanelTitle">Route details</h2>
+                    <h2 class="offcanvas-title h5" id="end-panel-title">Route details</h2>
                     <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -104,9 +104,9 @@
                 </div>
             </div>
 
-            <div class="offcanvas offcanvas-bottom" id="bottomPanel" tabindex="-1" role="dialog" aria-labelledby="bottomPanelTitle" aria-hidden="true">
+            <div class="offcanvas offcanvas-bottom" id="bottom-panel" tabindex="-1" role="dialog" aria-labelledby="bottom-panel-title" aria-hidden="true">
                 <div class="offcanvas-header">
-                    <h2 class="offcanvas-title h5" id="bottomPanelTitle">Download ready</h2>
+                    <h2 class="offcanvas-title h5" id="bottom-panel-title">Download ready</h2>
                     <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -114,9 +114,9 @@
                 </div>
             </div>
 
-            <div class="offcanvas offcanvas-start" id="startPanel" tabindex="-1" role="dialog" aria-labelledby="startPanelTitle" aria-hidden="true">
+            <div class="offcanvas offcanvas-start" id="start-panel" tabindex="-1" role="dialog" aria-labelledby="start-panel-title" aria-hidden="true">
                 <div class="offcanvas-header">
-                    <h2 class="offcanvas-title h5" id="startPanelTitle">Trip sections</h2>
+                    <h2 class="offcanvas-title h5" id="start-panel-title">Trip sections</h2>
                     <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -129,20 +129,20 @@
             </div>
         </section>
 
-        <section class="mb-5 pb-5" id="backdropOptions">
+        <section class="mb-5 pb-5" id="backdrop-options">
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Scrolling and backdrop behavior</h2>
                 <p class="text-body-secondary mb-2">Keep the page available for reference, or require an explicit close when the panel contains an important decision.</p>
                 <code>data-ui-scroll="true"</code> <code>data-ui-backdrop="false|static"</code>
             </header>
             <div class="d-flex flex-wrap gap-2">
-                <button class="btn btn-secondary ripple" data-ui-toggle="offcanvas" data-ui-target="#referencePanel" type="button" aria-controls="referencePanel">Scrollable page</button>
-                <button class="btn btn-secondary ripple" data-ui-toggle="offcanvas" data-ui-target="#staticPanel" type="button" aria-controls="staticPanel">Static backdrop</button>
+                <button class="btn btn-secondary ripple" data-ui-toggle="offcanvas" data-ui-target="#reference-panel" type="button" aria-controls="reference-panel">Scrollable page</button>
+                <button class="btn btn-secondary ripple" data-ui-toggle="offcanvas" data-ui-target="#static-panel" type="button" aria-controls="static-panel">Static backdrop</button>
             </div>
 
-            <div class="offcanvas offcanvas-start" id="referencePanel" data-ui-backdrop="false" data-ui-scroll="true" tabindex="-1" role="dialog" aria-labelledby="referencePanelTitle" aria-hidden="true">
+            <div class="offcanvas offcanvas-start" id="reference-panel" data-ui-backdrop="false" data-ui-scroll="true" tabindex="-1" role="dialog" aria-labelledby="reference-panel-title" aria-hidden="true">
                 <div class="offcanvas-header">
-                    <h2 class="offcanvas-title h5" id="referencePanelTitle">Map legend</h2>
+                    <h2 class="offcanvas-title h5" id="reference-panel-title">Map legend</h2>
                     <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -155,9 +155,9 @@
                 </div>
             </div>
 
-            <div class="offcanvas offcanvas-end" id="staticPanel" data-ui-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticPanelTitle" aria-hidden="true">
+            <div class="offcanvas offcanvas-end" id="static-panel" data-ui-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="static-panel-title" aria-hidden="true">
                 <div class="offcanvas-header">
-                    <h2 class="offcanvas-title h5" id="staticPanelTitle">Confirm publication</h2>
+                    <h2 class="offcanvas-title h5" id="static-panel-title">Confirm publication</h2>
                     <button class="btn-close" data-ui-dismiss="offcanvas" type="button" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body d-flex flex-column">

@@ -33,7 +33,7 @@
 
         <h4>Live</h4>
         <div class="mb-4">
-            <button class="btn btn-primary ripple" id="showToast" type="button">Show Toast</button>
+            <button class="btn btn-primary ripple" id="show-toast" type="button">Show Toast</button>
         </div>
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
             <div class="toast" id="toast" data-ui-toggle="toast" role="alert" style="display: none !important;" aria-live="assertive" aria-atomic="true">
@@ -134,7 +134,7 @@
     </div>
 
     <script>
-        $.addEvent('#showToast', 'click', e => {
+        $.addEvent('#show-toast', 'click', e => {
             const toast = $.findOne('#toast');
             UI.Toast.init(toast).show();
         });

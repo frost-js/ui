@@ -17,12 +17,12 @@
         <h1>Inputs</h1>
 
         <nav class="nav nav-tabs mb-4" role="tablist" aria-label="Input style">
-            <button class="nav-link active" id="filledInputsTab" data-ui-toggle="tab" data-ui-target="#filledInputs" type="button" role="tab" aria-controls="filledInputs" aria-selected="true">Filled</button>
-            <button class="nav-link" id="outlineInputsTab" data-ui-toggle="tab" data-ui-target="#outlineInputs" type="button" role="tab" aria-controls="outlineInputs" aria-selected="false">Outline</button>
+            <button class="nav-link active" id="filled-inputs-tab" data-ui-toggle="tab" data-ui-target="#filled-inputs" type="button" role="tab" aria-controls="filled-inputs" aria-selected="true">Filled</button>
+            <button class="nav-link" id="outline-inputs-tab" data-ui-toggle="tab" data-ui-target="#outline-inputs" type="button" role="tab" aria-controls="outline-inputs" aria-selected="false">Outline</button>
         </nav>
 
         <form class="tab-content">
-            <div class="tab-pane active" id="filledInputs" role="tabpanel" aria-labelledby="filledInputsTab">
+            <div class="tab-pane active" id="filled-inputs" role="tabpanel" aria-labelledby="filled-inputs-tab">
                 <section class="mb-5">
                     <header class="border-bottom pb-3 mb-4">
                         <h2 class="h4 mb-1">Filled controls</h2>
@@ -31,15 +31,15 @@
                     </header>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="filledText">Text input</label>
+                            <label for="filled-text">Text input</label>
                             <div class="form-input">
-                                <input class="input-filled" id="filledText" type="text" placeholder="Project name" />
+                                <input class="input-filled" id="filled-text" type="text" placeholder="Project name" />
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label for="filledSelect">Select</label>
+                            <label for="filled-select">Select</label>
                             <div class="form-input">
-                                <select class="input-filled" id="filledSelect">
+                                <select class="input-filled" id="filled-select">
                                     <option>Design</option>
                                     <option>Engineering</option>
                                     <option>Marketing</option>
@@ -47,15 +47,15 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <label for="filledTextarea">Message</label>
+                            <label for="filled-textarea">Message</label>
                             <div class="form-input">
-                                <textarea class="input-filled text-expand" id="filledTextarea" placeholder="Add a short note"></textarea>
+                                <textarea class="input-filled text-expand" id="filled-textarea" placeholder="Add a short note"></textarea>
                             </div>
                         </div>
                         <div class="col-12">
-                            <label for="filledMultiSelect">Multiple select</label>
+                            <label for="filled-multi-select">Multiple select</label>
                             <div class="form-input">
-                                <select class="input-filled" id="filledMultiSelect" multiple>
+                                <select class="input-filled" id="filled-multi-select" multiple>
                                     <option>Research</option>
                                     <option selected>Prototype</option>
                                     <option selected>Review</option>
@@ -74,16 +74,16 @@
                     </header>
                     <div class="row g-3 align-items-end">
                         <div class="col-md-4">
-                            <label for="filledSmall">Small</label>
-                            <div class="form-input"><input class="input-filled input-sm" id="filledSmall" type="text" value="Compact" /></div>
+                            <label for="filled-small">Small</label>
+                            <div class="form-input"><input class="input-filled input-sm" id="filled-small" type="text" value="Compact" /></div>
                         </div>
                         <div class="col-md-4">
-                            <label for="filledDefault">Default</label>
-                            <div class="form-input"><input class="input-filled" id="filledDefault" type="text" value="Default" /></div>
+                            <label for="filled-default">Default</label>
+                            <div class="form-input"><input class="input-filled" id="filled-default" type="text" value="Default" /></div>
                         </div>
                         <div class="col-md-4">
-                            <label for="filledLarge">Large</label>
-                            <div class="form-input"><input class="input-filled input-lg" id="filledLarge" type="text" value="Prominent" /></div>
+                            <label for="filled-large">Large</label>
+                            <div class="form-input"><input class="input-filled input-lg" id="filled-large" type="text" value="Prominent" /></div>
                         </div>
                     </div>
                 </section>
@@ -96,26 +96,26 @@
                     </header>
                     <div class="row g-3 align-items-end">
                         <div class="col-md-6">
-                            <label for="filledDisabled">Disabled</label>
-                            <div class="form-input"><input class="input-filled" id="filledDisabled" type="text" value="Unavailable" disabled /></div>
+                            <label for="filled-disabled">Disabled</label>
+                            <div class="form-input"><input class="input-filled" id="filled-disabled" type="text" value="Unavailable" disabled /></div>
                         </div>
                         <div class="col-md-6">
-                            <label for="filledReadonly">Readonly</label>
-                            <div class="form-input"><input class="input-filled" id="filledReadonly" type="text" value="INV-2048" readonly /></div>
+                            <label for="filled-readonly">Readonly</label>
+                            <div class="form-input"><input class="input-filled" id="filled-readonly" type="text" value="INV-2048" readonly /></div>
                         </div>
                         <div class="col-md-8">
-                            <label for="filledFile">File</label>
-                            <div class="form-input"><input class="input-filled" id="filledFile" type="file" /></div>
+                            <label for="filled-file">File</label>
+                            <div class="form-input"><input class="input-filled" id="filled-file" type="file" /></div>
                         </div>
                         <div class="col-md-4">
-                            <label for="filledColor">Color</label>
-                            <div class="form-input"><input class="input-filled input-color" id="filledColor" type="color" value="#315efb" /></div>
+                            <label for="filled-color">Color</label>
+                            <div class="form-input"><input class="input-filled input-color" id="filled-color" type="color" value="#315efb" /></div>
                         </div>
                     </div>
                 </section>
             </div>
 
-            <div class="tab-pane" id="outlineInputs" role="tabpanel" aria-labelledby="outlineInputsTab">
+            <div class="tab-pane" id="outline-inputs" role="tabpanel" aria-labelledby="outline-inputs-tab">
                 <section class="mb-5">
                     <header class="border-bottom pb-3 mb-4">
                         <h2 class="h4 mb-1">Outline controls</h2>
@@ -124,24 +124,24 @@
                     </header>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="outlineText">Text input</label>
-                            <input class="input-outline" id="outlineText" type="text" placeholder="Project name" />
+                            <label for="outline-text">Text input</label>
+                            <input class="input-outline" id="outline-text" type="text" placeholder="Project name" />
                         </div>
                         <div class="col-md-6">
-                            <label for="outlineSelect">Select</label>
-                            <select class="input-outline" id="outlineSelect">
+                            <label for="outline-select">Select</label>
+                            <select class="input-outline" id="outline-select">
                                 <option>Design</option>
                                 <option>Engineering</option>
                                 <option>Marketing</option>
                             </select>
                         </div>
                         <div class="col-12">
-                            <label for="outlineTextarea">Message</label>
-                            <textarea class="input-outline text-expand" id="outlineTextarea" placeholder="Add a short note"></textarea>
+                            <label for="outline-textarea">Message</label>
+                            <textarea class="input-outline text-expand" id="outline-textarea" placeholder="Add a short note"></textarea>
                         </div>
                         <div class="col-12">
-                            <label for="outlineMultiSelect">Multiple select</label>
-                            <select class="input-outline" id="outlineMultiSelect" multiple>
+                            <label for="outline-multi-select">Multiple select</label>
+                            <select class="input-outline" id="outline-multi-select" multiple>
                                 <option>Research</option>
                                 <option selected>Prototype</option>
                                 <option selected>Review</option>
@@ -159,16 +159,16 @@
                     </header>
                     <div class="row g-3 align-items-end">
                         <div class="col-md-4">
-                            <label for="outlineSmall">Small</label>
-                            <input class="input-outline input-sm" id="outlineSmall" type="text" value="Compact" />
+                            <label for="outline-small">Small</label>
+                            <input class="input-outline input-sm" id="outline-small" type="text" value="Compact" />
                         </div>
                         <div class="col-md-4">
-                            <label for="outlineDefault">Default</label>
-                            <input class="input-outline" id="outlineDefault" type="text" value="Default" />
+                            <label for="outline-default">Default</label>
+                            <input class="input-outline" id="outline-default" type="text" value="Default" />
                         </div>
                         <div class="col-md-4">
-                            <label for="outlineLarge">Large</label>
-                            <input class="input-outline input-lg" id="outlineLarge" type="text" value="Prominent" />
+                            <label for="outline-large">Large</label>
+                            <input class="input-outline input-lg" id="outline-large" type="text" value="Prominent" />
                         </div>
                     </div>
                 </section>
@@ -181,20 +181,20 @@
                     </header>
                     <div class="row g-3 align-items-end">
                         <div class="col-md-6">
-                            <label for="outlineDisabled">Disabled</label>
-                            <input class="input-outline" id="outlineDisabled" type="text" value="Unavailable" disabled />
+                            <label for="outline-disabled">Disabled</label>
+                            <input class="input-outline" id="outline-disabled" type="text" value="Unavailable" disabled />
                         </div>
                         <div class="col-md-6">
-                            <label for="outlineReadonly">Readonly</label>
-                            <input class="input-outline" id="outlineReadonly" type="text" value="INV-2048" readonly />
+                            <label for="outline-readonly">Readonly</label>
+                            <input class="input-outline" id="outline-readonly" type="text" value="INV-2048" readonly />
                         </div>
                         <div class="col-md-8">
-                            <label for="outlineFile">File</label>
-                            <input class="input-outline" id="outlineFile" type="file" />
+                            <label for="outline-file">File</label>
+                            <input class="input-outline" id="outline-file" type="file" />
                         </div>
                         <div class="col-md-4">
-                            <label for="outlineColor">Color</label>
-                            <input class="input-outline input-color" id="outlineColor" type="color" value="#315efb" />
+                            <label for="outline-color">Color</label>
+                            <input class="input-outline input-color" id="outline-color" type="color" value="#315efb" />
                         </div>
                     </div>
                 </section>

@@ -17,13 +17,13 @@
         <h1>Validation</h1>
 
         <nav class="nav nav-tabs mb-4" role="tablist" aria-label="Validation input style">
-            <button class="nav-link active" id="filledValidationTab" data-ui-toggle="tab" data-ui-target="#filledValidation" type="button" role="tab" aria-controls="filledValidation" aria-selected="true">Filled</button>
-            <button class="nav-link" id="outlineValidationTab" data-ui-toggle="tab" data-ui-target="#outlineValidation" type="button" role="tab" aria-controls="outlineValidation" aria-selected="false">Outline</button>
+            <button class="nav-link active" id="filled-validation-tab" data-ui-toggle="tab" data-ui-target="#filled-validation" type="button" role="tab" aria-controls="filled-validation" aria-selected="true">Filled</button>
+            <button class="nav-link" id="outline-validation-tab" data-ui-toggle="tab" data-ui-target="#outline-validation" type="button" role="tab" aria-controls="outline-validation" aria-selected="false">Outline</button>
         </nav>
 
         <form>
             <div class="tab-content">
-                <div class="tab-pane active" id="filledValidation" role="tabpanel" aria-labelledby="filledValidationTab">
+                <div class="tab-pane active" id="filled-validation" role="tabpanel" aria-labelledby="filled-validation-tab">
                     <section class="mb-5">
                         <header class="border-bottom pb-3 mb-4">
                             <h2 class="h4 mb-1">Valid filled controls</h2>
@@ -32,22 +32,22 @@
                         </header>
                         <div class="form-success row g-3">
                             <div class="col-md-6">
-                                <label for="filledValidEmail">Email</label>
-                                <div class="form-input"><input class="input-filled" id="filledValidEmail" type="email" value="hello@example.com" /></div>
+                                <label for="filled-valid-email">Email</label>
+                                <div class="form-input"><input class="input-filled" id="filled-valid-email" type="email" value="hello@example.com" /></div>
                                 <div class="valid-feedback">This address is available.</div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-input">
-                                    <input class="input-filled input-floating" id="filledValidName" type="text" value="Ada Lovelace" placeholder="Name" />
-                                    <label class="label-floating" for="filledValidName">Name</label>
+                                    <input class="input-filled input-floating" id="filled-valid-name" type="text" value="Ada Lovelace" placeholder="Name" />
+                                    <label class="label-floating" for="filled-valid-name">Name</label>
                                 </div>
                                 <div class="valid-feedback">Name looks good.</div>
                             </div>
                             <div class="col-12">
-                                <label for="filledValidCode">Invite code</label>
+                                <label for="filled-valid-code">Invite code</label>
                                 <div class="input-group">
                                     <div class="input-group-text">TEAM-</div>
-                                    <input class="input-filled" id="filledValidCode" type="text" value="2048" />
+                                    <input class="input-filled" id="filled-valid-code" type="text" value="2048" />
                                 </div>
                                 <div class="valid-feedback">Invite code accepted.</div>
                             </div>
@@ -62,14 +62,14 @@
                         </header>
                         <div class="form-error row g-3">
                             <div class="col-md-6">
-                                <label for="filledInvalidEmail">Email</label>
-                                <div class="form-input"><input class="input-filled" id="filledInvalidEmail" type="email" value="hello@" /></div>
+                                <label for="filled-invalid-email">Email</label>
+                                <div class="form-input"><input class="input-filled" id="filled-invalid-email" type="email" value="hello@" /></div>
                                 <div class="invalid-feedback">Enter a complete email address.</div>
                             </div>
                             <div class="col-md-6">
-                                <label for="filledInvalidTeam">Team</label>
+                                <label for="filled-invalid-team">Team</label>
                                 <div class="form-input">
-                                    <select class="input-filled" id="filledInvalidTeam">
+                                    <select class="input-filled" id="filled-invalid-team">
                                         <option selected disabled>Select a team</option>
                                         <option>Design</option>
                                         <option>Engineering</option>
@@ -78,10 +78,10 @@
                                 <div class="invalid-feedback">Choose a team.</div>
                             </div>
                             <div class="col-12">
-                                <label for="filledInvalidCode">Invite code</label>
+                                <label for="filled-invalid-code">Invite code</label>
                                 <div class="input-group">
                                     <div class="input-group-text">TEAM-</div>
-                                    <input class="input-filled" id="filledInvalidCode" type="text" value="20" />
+                                    <input class="input-filled" id="filled-invalid-code" type="text" value="20" />
                                 </div>
                                 <div class="invalid-feedback">Enter a four-digit invite code.</div>
                             </div>
@@ -89,7 +89,7 @@
                     </section>
                 </div>
 
-                <div class="tab-pane" id="outlineValidation" role="tabpanel" aria-labelledby="outlineValidationTab">
+                <div class="tab-pane" id="outline-validation" role="tabpanel" aria-labelledby="outline-validation-tab">
                     <section class="mb-5">
                         <header class="border-bottom pb-3 mb-4">
                             <h2 class="h4 mb-1">Valid outline controls</h2>
@@ -98,22 +98,22 @@
                         </header>
                         <div class="form-success row g-3">
                             <div class="col-md-6">
-                                <label for="outlineValidEmail">Email</label>
-                                <input class="input-outline" id="outlineValidEmail" type="email" value="hello@example.com" />
+                                <label for="outline-valid-email">Email</label>
+                                <input class="input-outline" id="outline-valid-email" type="email" value="hello@example.com" />
                                 <div class="valid-feedback">This address is available.</div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-input">
-                                    <input class="input-outline input-floating" id="outlineValidName" type="text" value="Ada Lovelace" placeholder="Name" />
-                                    <label class="label-floating" for="outlineValidName">Name</label>
+                                    <input class="input-outline input-floating" id="outline-valid-name" type="text" value="Ada Lovelace" placeholder="Name" />
+                                    <label class="label-floating" for="outline-valid-name">Name</label>
                                 </div>
                                 <div class="valid-feedback">Name looks good.</div>
                             </div>
                             <div class="col-12">
-                                <label for="outlineValidCode">Invite code</label>
+                                <label for="outline-valid-code">Invite code</label>
                                 <div class="input-group">
                                     <div class="input-group-text">TEAM-</div>
-                                    <input class="input-outline" id="outlineValidCode" type="text" value="2048" />
+                                    <input class="input-outline" id="outline-valid-code" type="text" value="2048" />
                                 </div>
                                 <div class="valid-feedback">Invite code accepted.</div>
                             </div>
@@ -128,13 +128,13 @@
                         </header>
                         <div class="form-error row g-3">
                             <div class="col-md-6">
-                                <label for="outlineInvalidEmail">Email</label>
-                                <input class="input-outline" id="outlineInvalidEmail" type="email" value="hello@" />
+                                <label for="outline-invalid-email">Email</label>
+                                <input class="input-outline" id="outline-invalid-email" type="email" value="hello@" />
                                 <div class="invalid-feedback">Enter a complete email address.</div>
                             </div>
                             <div class="col-md-6">
-                                <label for="outlineInvalidTeam">Team</label>
-                                <select class="input-outline" id="outlineInvalidTeam">
+                                <label for="outline-invalid-team">Team</label>
+                                <select class="input-outline" id="outline-invalid-team">
                                     <option selected disabled>Select a team</option>
                                     <option>Design</option>
                                     <option>Engineering</option>
@@ -142,10 +142,10 @@
                                 <div class="invalid-feedback">Choose a team.</div>
                             </div>
                             <div class="col-12">
-                                <label for="outlineInvalidCode">Invite code</label>
+                                <label for="outline-invalid-code">Invite code</label>
                                 <div class="input-group">
                                     <div class="input-group-text">TEAM-</div>
-                                    <input class="input-outline" id="outlineInvalidCode" type="text" value="20" />
+                                    <input class="input-outline" id="outline-invalid-code" type="text" value="20" />
                                 </div>
                                 <div class="invalid-feedback">Enter a four-digit invite code.</div>
                             </div>
@@ -165,36 +165,36 @@
                         <div class="form-success border rounded-3 p-4 h-100">
                             <h3 class="h5">Valid selection</h3>
                             <div class="form-check">
-                                <input class="input-check" id="validTerms" type="checkbox" checked aria-describedby="validSelectionFeedback" />
-                                <label class="form-check-label" for="validTerms">Terms accepted</label>
+                                <input class="input-check" id="valid-terms" type="checkbox" checked aria-describedby="valid-selection-feedback" />
+                                <label class="form-check-label" for="valid-terms">Terms accepted</label>
                             </div>
                             <div class="form-check">
-                                <input class="input-check" id="validEmailUpdates" name="validUpdates" type="radio" checked />
-                                <label class="form-check-label" for="validEmailUpdates">Email updates</label>
+                                <input class="input-check" id="valid-email-updates" name="validUpdates" type="radio" checked />
+                                <label class="form-check-label" for="valid-email-updates">Email updates</label>
                             </div>
                             <div class="form-check form-switch">
-                                <input class="input-check" id="validSecurityAlerts" type="checkbox" role="switch" checked />
-                                <label class="form-check-label" for="validSecurityAlerts">Security alerts enabled</label>
+                                <input class="input-check" id="valid-security-alerts" type="checkbox" role="switch" checked />
+                                <label class="form-check-label" for="valid-security-alerts">Security alerts enabled</label>
                             </div>
-                            <div class="valid-feedback" id="validSelectionFeedback">Preferences are ready to save.</div>
+                            <div class="valid-feedback" id="valid-selection-feedback">Preferences are ready to save.</div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-error border rounded-3 p-4 h-100">
                             <h3 class="h5">Invalid selection</h3>
                             <div class="form-check">
-                                <input class="input-check" id="invalidTerms" type="checkbox" aria-describedby="invalidSelectionFeedback" />
-                                <label class="form-check-label" for="invalidTerms">Accept the terms</label>
+                                <input class="input-check" id="invalid-terms" type="checkbox" aria-describedby="invalid-selection-feedback" />
+                                <label class="form-check-label" for="invalid-terms">Accept the terms</label>
                             </div>
                             <div class="form-check">
-                                <input class="input-check" id="invalidEmailUpdates" name="invalidUpdates" type="radio" />
-                                <label class="form-check-label" for="invalidEmailUpdates">Email updates</label>
+                                <input class="input-check" id="invalid-email-updates" name="invalidUpdates" type="radio" />
+                                <label class="form-check-label" for="invalid-email-updates">Email updates</label>
                             </div>
                             <div class="form-check form-switch">
-                                <input class="input-check" id="invalidSecurityAlerts" type="checkbox" role="switch" />
-                                <label class="form-check-label" for="invalidSecurityAlerts">Security alerts disabled</label>
+                                <input class="input-check" id="invalid-security-alerts" type="checkbox" role="switch" />
+                                <label class="form-check-label" for="invalid-security-alerts">Security alerts disabled</label>
                             </div>
-                            <div class="invalid-feedback" id="invalidSelectionFeedback">Accept the terms before continuing.</div>
+                            <div class="invalid-feedback" id="invalid-selection-feedback">Accept the terms before continuing.</div>
                         </div>
                     </div>
                 </div>

@@ -221,7 +221,7 @@ const toggleTheme = () => {
 
 const renderNavigationGroup = ({ title, paths }, index) => {
     const expanded = path !== 'index.html' && title === section;
-    const id = `demoNavigation${index}`;
+    const id = `demo-navigation-${index}`;
     const links = paths.map(([label, itemPath]) => {
         const active = itemPath === path;
 
@@ -236,7 +236,7 @@ const renderNavigationGroup = ({ title, paths }, index) => {
                     ${title}
                 </button>
             </h2>
-            <div class="accordion-collapse collapse${expanded ? ' show' : ''}" id="${id}" data-ui-parent="#demoSections">
+            <div class="accordion-collapse collapse${expanded ? ' show' : ''}" id="${id}" data-ui-parent="#demo-sections">
                 <div class="accordion-body p-2">
                     <nav class="list-group list-group-flush" aria-label="${title}">${links}
                     </nav>
@@ -249,24 +249,24 @@ const renderNavigation = () => `
     <header class="navbar bg-glass sticky-top border-bottom d-lg-none" data-demo-header>
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="${root}index.html">FrostUI</a>
-            <button class="navbar-toggler" type="button" data-ui-toggle="offcanvas" data-ui-target="#demoNavigation" aria-controls="demoNavigation" aria-label="Open demo navigation">
+            <button class="navbar-toggler" type="button" data-ui-toggle="offcanvas" data-ui-target="#demo-navigation" aria-controls="demo-navigation" aria-label="Open demo navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
     </header>
-    <aside class="offcanvas offcanvas-start bg-glass" id="demoNavigation" tabindex="-1" aria-labelledby="demoNavigationLabel" data-demo-sidebar>
+    <aside class="offcanvas offcanvas-start bg-glass" id="demo-navigation" tabindex="-1" aria-labelledby="demo-navigation-label" data-demo-sidebar>
         <div class="offcanvas-header border-bottom">
             <a class="d-flex align-items-center gap-2 text-body text-decoration-none" href="${root}index.html">
                 <span class="badge bg-primary bg-gradient shadow-glow fs-5">F</span>
                 <span>
-                    <strong class="d-block" id="demoNavigationLabel">FrostUI</strong>
+                    <strong class="d-block" id="demo-navigation-label">FrostUI</strong>
                     <small class="text-body-secondary">Component demos</small>
                 </span>
             </a>
             <button class="btn-close" type="button" data-ui-dismiss="offcanvas" aria-label="Close navigation"></button>
         </div>
         <div class="offcanvas-body p-3">
-            <div class="accordion accordion-flush" id="demoSections">
+            <div class="accordion accordion-flush" id="demo-sections">
                 ${navigation.map(renderNavigationGroup).join('')}
             </div>
         </div>

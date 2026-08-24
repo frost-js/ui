@@ -22,13 +22,13 @@
                 <p class="text-body-secondary mb-2">Use a modal for a focused decision that needs context, a clear primary action, and an obvious way out.</p>
                 <code>data-ui-toggle="modal"</code> <code>data-ui-dismiss="modal"</code>
             </header>
-            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#archiveModal" type="button">Archive route</button>
+            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#archive-modal" type="button">Archive route</button>
 
-            <div class="modal" id="archiveModal" tabindex="-1" role="dialog" aria-labelledby="archiveModalTitle" aria-hidden="true">
+            <div class="modal" id="archive-modal" tabindex="-1" role="dialog" aria-labelledby="archive-modal-title" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title" id="archiveModalTitle">Archive Alpine Circuit?</h2>
+                            <h2 class="modal-title" id="archive-modal-title">Archive Alpine Circuit?</h2>
                             <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -50,15 +50,15 @@
                 <code>data-ui-backdrop="static"</code> <code>.modal-dialog-centered</code>
             </header>
             <div class="d-flex flex-wrap gap-2">
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#staticModal" type="button">Static backdrop</button>
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#centeredModal" type="button">Centered dialog</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#static-modal" type="button">Static backdrop</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#centered-modal" type="button">Centered dialog</button>
             </div>
 
-            <div class="modal" id="staticModal" data-ui-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticModalTitle" aria-hidden="true">
+            <div class="modal" id="static-modal" data-ui-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="static-modal-title" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title" id="staticModalTitle">Unsaved route changes</h2>
+                            <h2 class="modal-title" id="static-modal-title">Unsaved route changes</h2>
                             <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -72,11 +72,11 @@
                 </div>
             </div>
 
-            <div class="modal" id="centeredModal" tabindex="-1" role="dialog" aria-labelledby="centeredModalTitle" aria-hidden="true">
+            <div class="modal" id="centered-modal" tabindex="-1" role="dialog" aria-labelledby="centered-modal-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title" id="centeredModalTitle">Route published</h2>
+                            <h2 class="modal-title" id="centered-modal-title">Route published</h2>
                             <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -96,13 +96,13 @@
                 <p class="text-body-secondary mb-2">Keep the header and actions visible while a long modal body scrolls independently.</p>
                 <code>.modal-dialog-scrollable</code>
             </header>
-            <button class="btn btn-secondary ripple" data-ui-toggle="modal" data-ui-target="#scrollableModal" type="button">Review trip briefing</button>
+            <button class="btn btn-secondary ripple" data-ui-toggle="modal" data-ui-target="#scrollable-modal" type="button">Review trip briefing</button>
 
-            <div class="modal" id="scrollableModal" tabindex="-1" role="dialog" aria-labelledby="scrollableModalTitle" aria-hidden="true">
+            <div class="modal" id="scrollable-modal" tabindex="-1" role="dialog" aria-labelledby="scrollable-modal-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title" id="scrollableModalTitle">Alpine Circuit briefing</h2>
+                            <h2 class="modal-title" id="scrollable-modal-title">Alpine Circuit briefing</h2>
                             <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -133,16 +133,16 @@
                 <code>.modal-sm</code> <code>.modal-lg</code> <code>.modal-xl</code>
             </header>
             <div class="d-flex flex-wrap gap-2">
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#smallModal" type="button">Small</button>
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#largeModal" type="button">Large</button>
-                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#extraLargeModal" type="button">Extra large</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#small-modal" type="button">Small</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#large-modal" type="button">Large</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#extra-large-modal" type="button">Extra large</button>
             </div>
 
-            <div class="modal" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="smallModalTitle" aria-hidden="true">
+            <div class="modal" id="small-modal" tabindex="-1" role="dialog" aria-labelledby="small-modal-title" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title" id="smallModalTitle">Remove waypoint?</h2>
+                            <h2 class="modal-title" id="small-modal-title">Remove waypoint?</h2>
                             <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -156,11 +156,11 @@
                 </div>
             </div>
 
-            <div class="modal" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalTitle" aria-hidden="true">
+            <div class="modal" id="large-modal" tabindex="-1" role="dialog" aria-labelledby="large-modal-title" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title" id="largeModalTitle">Route summary</h2>
+                            <h2 class="modal-title" id="large-modal-title">Route summary</h2>
                             <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -192,11 +192,11 @@
                 </div>
             </div>
 
-            <div class="modal" id="extraLargeModal" tabindex="-1" role="dialog" aria-labelledby="extraLargeModalTitle" aria-hidden="true">
+            <div class="modal" id="extra-large-modal" tabindex="-1" role="dialog" aria-labelledby="extra-large-modal-title" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title" id="extraLargeModalTitle">Team availability</h2>
+                            <h2 class="modal-title" id="extra-large-modal-title">Team availability</h2>
                             <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -228,26 +228,26 @@
                 <p class="text-body-secondary mb-2">Let a detailed workflow fill smaller screens while returning to a contained dialog when more space is available.</p>
                 <code>.modal-fullscreen-md-down</code>
             </header>
-            <button class="btn btn-secondary ripple" data-ui-toggle="modal" data-ui-target="#responsiveModal" type="button">Plan a departure</button>
+            <button class="btn btn-secondary ripple" data-ui-toggle="modal" data-ui-target="#responsive-modal" type="button">Plan a departure</button>
 
-            <div class="modal" id="responsiveModal" tabindex="-1" role="dialog" aria-labelledby="responsiveModalTitle" aria-hidden="true">
+            <div class="modal" id="responsive-modal" tabindex="-1" role="dialog" aria-labelledby="responsive-modal-title" aria-hidden="true">
                 <div class="modal-dialog modal-fullscreen-md-down">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2 class="modal-title" id="responsiveModalTitle">Plan a departure</h2>
+                            <h2 class="modal-title" id="responsive-modal-title">Plan a departure</h2>
                             <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label" for="departureDate">Departure date</label>
+                                <label class="form-label" for="departure-date">Departure date</label>
                                 <div class="form-input">
-                                    <input class="input-filled" id="departureDate" type="date">
+                                    <input class="input-filled" id="departure-date" type="date">
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="groupSize">Group size</label>
+                                <label class="form-label" for="group-size">Group size</label>
                                 <div class="form-input">
-                                    <select class="input-filled" id="groupSize">
+                                    <select class="input-filled" id="group-size">
                                         <option>2 walkers</option>
                                         <option>3 walkers</option>
                                         <option>4 walkers</option>
@@ -255,8 +255,8 @@
                                 </div>
                             </div>
                             <div class="form-check">
-                                <input class="input-check" id="guideRequired" type="checkbox">
-                                <label class="form-check-label" for="guideRequired">Request a local guide</label>
+                                <input class="input-check" id="guide-required" type="checkbox">
+                                <label class="form-check-label" for="guide-required">Request a local guide</label>
                             </div>
                         </div>
                         <div class="modal-footer">
