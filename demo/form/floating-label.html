@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Floating Labels</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Floating Labels</h1>
+
+        <nav class="nav nav-tabs mb-4" role="tablist" aria-label="Floating label style">
+            <button class="nav-link active" id="filledFloatingTab" data-ui-toggle="tab" data-ui-target="#filledFloating" type="button" role="tab" aria-controls="filledFloating" aria-selected="true">Filled</button>
+            <button class="nav-link" id="outlineFloatingTab" data-ui-toggle="tab" data-ui-target="#outlineFloating" type="button" role="tab" aria-controls="outlineFloating" aria-selected="false">Outline</button>
+        </nav>
+
+        <form class="tab-content">
+            <div class="tab-pane active" id="filledFloating" role="tabpanel" aria-labelledby="filledFloatingTab">
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Filled floating labels</h2>
+                        <p class="text-body-secondary mb-2">Place the label after the control inside a form-input wrapper.</p>
+                        <code>.input-filled .input-floating + .label-floating</code>
+                    </header>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <input class="input-filled input-floating" id="filledFloatingName" type="text" placeholder="Name" />
+                                <label class="label-floating" for="filledFloatingName">Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <select class="input-filled input-floating" id="filledFloatingTeam">
+                                    <option>Design</option>
+                                    <option>Engineering</option>
+                                    <option>Marketing</option>
+                                </select>
+                                <label class="label-floating" for="filledFloatingTeam">Team</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-input">
+                                <textarea class="input-filled input-floating text-expand" id="filledFloatingMessage" placeholder="Message"></textarea>
+                                <label class="label-floating" for="filledFloatingMessage">Message</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Sizes and groups</h2>
+                        <p class="text-body-secondary mb-2">Floating labels respond to input and input-group sizing.</p>
+                        <code>.input-sm</code> <code>.input-lg</code> <code>.input-group</code>
+                    </header>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <input class="input-filled input-sm input-floating" id="filledFloatingSmall" type="text" placeholder="Small" />
+                                <label class="label-floating" for="filledFloatingSmall">Small</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <input class="input-filled input-lg input-floating" id="filledFloatingLarge" type="text" placeholder="Large" />
+                                <label class="label-floating" for="filledFloatingLarge">Large</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="form-input">
+                            <input class="input-filled input-floating" id="filledFloatingGroup" type="email" placeholder="Email" />
+                            <label class="label-floating" for="filledFloatingGroup">Email address</label>
+                        </div>
+                        <div class="input-group-text">Required</div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="tab-pane" id="outlineFloating" role="tabpanel" aria-labelledby="outlineFloatingTab">
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Outline floating labels</h2>
+                        <p class="text-body-secondary mb-2">The label occupies the outlined boundary when the control contains a value.</p>
+                        <code>.input-outline .input-floating + .label-floating</code>
+                    </header>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <input class="input-outline input-floating" id="outlineFloatingName" type="text" placeholder="Name" />
+                                <label class="label-floating" for="outlineFloatingName">Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <select class="input-outline input-floating" id="outlineFloatingTeam">
+                                    <option>Design</option>
+                                    <option>Engineering</option>
+                                    <option>Marketing</option>
+                                </select>
+                                <label class="label-floating" for="outlineFloatingTeam">Team</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-input">
+                                <textarea class="input-outline input-floating text-expand" id="outlineFloatingMessage" placeholder="Message"></textarea>
+                                <label class="label-floating" for="outlineFloatingMessage">Message</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Sizes and groups</h2>
+                        <p class="text-body-secondary mb-2">The same modifiers preserve label alignment in outlined controls.</p>
+                        <code>.input-sm</code> <code>.input-lg</code> <code>.input-group</code>
+                    </header>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <input class="input-outline input-sm input-floating" id="outlineFloatingSmall" type="text" placeholder="Small" />
+                                <label class="label-floating" for="outlineFloatingSmall">Small</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <input class="input-outline input-lg input-floating" id="outlineFloatingLarge" type="text" placeholder="Large" />
+                                <label class="label-floating" for="outlineFloatingLarge">Large</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="form-input">
+                            <input class="input-outline input-floating" id="outlineFloatingGroup" type="email" placeholder="Email" />
+                            <label class="label-floating" for="outlineFloatingGroup">Email address</label>
+                        </div>
+                        <div class="input-group-text">Required</div>
+                    </div>
+                </section>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -22,16 +22,12 @@ const navigation = [
     {
         title: 'Forms',
         paths: [
-            ['Filled inputs', 'form/filled-input.html'],
-            ['Outline inputs', 'form/outline-input.html'],
+            ['Inputs', 'form/input.html'],
             ['Checks and radios', 'form/check.html'],
-            ['Filled input groups', 'form/filled-group.html'],
-            ['Outline input groups', 'form/outline-group.html'],
-            ['Filled floating labels', 'form/filled-floating.html'],
-            ['Outline floating labels', 'form/outline-floating.html'],
+            ['Input groups', 'form/input-group.html'],
+            ['Floating labels', 'form/floating-label.html'],
             ['Form layout', 'form/layout.html'],
-            ['Filled validation', 'form/filled-validation.html'],
-            ['Outline validation', 'form/outline-validation.html'],
+            ['Validation', 'form/validation.html'],
             ['Check validation', 'form/check-validation.html'],
             ['Range controls', 'form/range.html'],
         ],
@@ -127,8 +123,10 @@ const descriptions = {
     'content/figure.html': 'Keep media and its caption together, then adjust alignment with text utilities.',
     'content/image.html': 'Make images responsive and apply thumbnail, float, and alignment treatments.',
     'content/table.html': 'Present structured data with responsive wrappers, row states, and semantic variants.',
-    'form/filled-input.html': 'Compare filled controls across supported input types, sizes, and interaction states.',
-    'form/outline-input.html': 'Compare outlined controls across supported input types, sizes, and interaction states.',
+    'form/floating-label.html': 'Compare floating labels across filled and outline controls, sizes, and input groups.',
+    'form/input-group.html': 'Compose filled and outline controls with text, selections, buttons, and responsive sizes.',
+    'form/input.html': 'Compare filled and outline controls across input types, sizes, and interaction states.',
+    'form/validation.html': 'Apply clear success and error states to filled and outline form controls.',
     'layout/grid.html': 'Combine responsive rows and columns to build layouts that adapt across breakpoints.',
 };
 

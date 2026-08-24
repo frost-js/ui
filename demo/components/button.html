@@ -15,114 +15,135 @@
 <body>
     <div class="container">
         <h1>Buttons</h1>
-        <div class="mb-4">
-            <button class="btn mb-1" type="button">Default</button>
-            <button class="btn btn-primary ripple mb-1" type="button">Primary</button>
-            <button class="btn btn-accent ripple mb-1" type="button">Accent</button>
-            <button class="btn btn-secondary ripple mb-1" type="button">Secondary</button>
-            <button class="btn btn-success ripple mb-1" type="button">Success</button>
-            <button class="btn btn-info ripple mb-1" type="button">Info</button>
-            <button class="btn btn-warning ripple mb-1" type="button">Warning</button>
-            <button class="btn btn-danger ripple mb-1" type="button">Danger</button>
-            <button class="btn btn-light ripple mb-1" type="button">Light</button>
-            <button class="btn btn-dark ripple mb-1" type="button">Dark</button>
-            <button class="btn btn-link mb-1" type="button">Link</button>
-        </div>
 
-        <h4>Gradient</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary btn-gradient ripple mb-1" type="button">Primary</button>
-            <button class="btn btn-accent btn-gradient ripple mb-1" type="button">Accent</button>
-            <button class="btn btn-secondary btn-gradient ripple mb-1" type="button">Secondary</button>
-            <button class="btn btn-success btn-gradient ripple mb-1" type="button">Success</button>
-            <button class="btn btn-info btn-gradient ripple mb-1" type="button">Info</button>
-            <button class="btn btn-warning btn-gradient ripple mb-1" type="button">Warning</button>
-            <button class="btn btn-danger btn-gradient ripple mb-1" type="button">Danger</button>
-            <button class="btn btn-light btn-gradient ripple mb-1" type="button">Light</button>
-            <button class="btn btn-dark btn-gradient ripple mb-1" type="button">Dark</button>
-        </div>
-
-        <h4>Tags</h4>
-        <div class="mb-4">
-            <a class="btn btn-primary ripple mb-1" href="#" role="button">Link</a>
-            <button class="btn btn-primary ripple mb-1" type="button">Button</button>
-            <input class="btn btn-primary mb-1" type="button" value="Input">
-            <input class="btn btn-primary mb-1" type="submit" value="Submit">
-            <input class="btn btn-primary mb-1" type="reset" value="Reset">
-        </div>
-
-        <h4>Outline</h4>
-        <div class="mb-4">
-            <button class="btn btn-outline-primary ripple mb-1" type="button">Primary</button>
-            <button class="btn btn-outline-accent ripple mb-1" type="button">Accent</button>
-            <button class="btn btn-outline-secondary ripple mb-1" type="button">Secondary</button>
-            <button class="btn btn-outline-success ripple mb-1" type="button">Success</button>
-            <button class="btn btn-outline-info ripple mb-1" type="button">Info</button>
-            <button class="btn btn-outline-warning ripple mb-1" type="button">Warning</button>
-            <button class="btn btn-outline-danger ripple mb-1" type="button">Danger</button>
-            <button class="btn btn-outline-light ripple mb-1" type="button">Light</button>
-            <button class="btn btn-outline-dark ripple mb-1" type="button">Dark</button>
-        </div>
-
-        <h4>Sizes</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
-            <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
-        </div>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple btn-sm" type="button">Primary</button>
-            <button class="btn btn-secondary ripple btn-sm" type="button">Secondary</button>
-        </div>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" style="--ui-btn-padding-y: .25rem; --ui-btn-padding-x: .25rem; --ui-btn-font-size: .75rem;" type="button">Primary</button>
-            <button class="btn btn-secondary ripple" style="--ui-btn-padding-y: .25rem; --ui-btn-padding-x: .25rem; --ui-btn-font-size: .75rem;" type="button">Secondary</button>
-        </div>
-
-        <h4>Disabled</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple btn-lg disabled" tabindex="-1" type="button" aria-disabled="true">Primary</button>
-            <button class="btn btn-secondary ripple btn-lg disabled" tabindex="-1" type="button" aria-disabled="true">Secondary</button>
-            <button class="btn btn-outline-primary ripple btn-lg disabled" tabindex="-1" type="button" aria-disabled="true">Primary</button>
-            <button class="btn btn-outline-secondary ripple btn-lg disabled" tabindex="-1" type="button" aria-disabled="true">Secondary</button>
-        </div>
-
-        <h4>Block</h4>
-        <div class="mb-4">
-            <div class="d-grid gap-2">
-                <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
-                <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Solid variants</h2>
+                <p class="text-body-secondary mb-2">Use semantic variants to communicate the purpose of an action.</p>
+                <code>.btn .btn-{variant}</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn" type="button">Default</button>
+                <button class="btn btn-primary ripple" type="button">Primary</button>
+                <button class="btn btn-accent ripple" type="button">Accent</button>
+                <button class="btn btn-secondary ripple" type="button">Secondary</button>
+                <button class="btn btn-success ripple" type="button">Success</button>
+                <button class="btn btn-info ripple" type="button">Info</button>
+                <button class="btn btn-warning ripple" type="button">Warning</button>
+                <button class="btn btn-danger ripple" type="button">Danger</button>
+                <button class="btn btn-light ripple" type="button">Light</button>
+                <button class="btn btn-dark ripple" type="button">Dark</button>
+                <button class="btn btn-link" type="button">Link</button>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-grid gap-2 d-md-block">
-                <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
-                <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Gradient variants</h2>
+                <p class="text-body-secondary mb-2">Add the gradient treatment to any solid semantic variant.</p>
+                <code>.btn .btn-{variant} .btn-gradient</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-primary btn-gradient ripple" type="button">Primary</button>
+                <button class="btn btn-accent btn-gradient ripple" type="button">Accent</button>
+                <button class="btn btn-secondary btn-gradient ripple" type="button">Secondary</button>
+                <button class="btn btn-success btn-gradient ripple" type="button">Success</button>
+                <button class="btn btn-info btn-gradient ripple" type="button">Info</button>
+                <button class="btn btn-warning btn-gradient ripple" type="button">Warning</button>
+                <button class="btn btn-danger btn-gradient ripple" type="button">Danger</button>
+                <button class="btn btn-light btn-gradient ripple" type="button">Light</button>
+                <button class="btn btn-dark btn-gradient ripple" type="button">Dark</button>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
-                <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Outline variants</h2>
+                <p class="text-body-secondary mb-2">Outline buttons retain semantic color with less visual weight.</p>
+                <code>.btn .btn-outline-{variant}</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary ripple" type="button">Primary</button>
+                <button class="btn btn-outline-accent ripple" type="button">Accent</button>
+                <button class="btn btn-outline-secondary ripple" type="button">Secondary</button>
+                <button class="btn btn-outline-success ripple" type="button">Success</button>
+                <button class="btn btn-outline-info ripple" type="button">Info</button>
+                <button class="btn btn-outline-warning ripple" type="button">Warning</button>
+                <button class="btn btn-outline-danger ripple" type="button">Danger</button>
+                <button class="btn btn-outline-light ripple" type="button">Light</button>
+                <button class="btn btn-outline-dark ripple" type="button">Dark</button>
             </div>
-        </div>
-        <div class="mb-4">
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Element types</h2>
+                <p class="text-body-secondary mb-2">The button treatment works consistently across links, buttons, and form controls.</p>
+                <code>.btn .btn-primary</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary ripple" href="#" role="button">Link</a>
+                <button class="btn btn-primary ripple" type="button">Button</button>
+                <input class="btn btn-primary" type="button" value="Input">
+                <input class="btn btn-primary" type="submit" value="Submit">
+                <input class="btn btn-primary" type="reset" value="Reset">
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Sizes</h2>
+                <p class="text-body-secondary mb-2">Choose a compact, default, or prominent control size.</p>
+                <code>.btn-sm</code> <code>.btn-lg</code>
+            </header>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <button class="btn btn-primary btn-sm ripple" type="button">Small</button>
+                <button class="btn btn-primary ripple" type="button">Default</button>
+                <button class="btn btn-primary btn-lg ripple" type="button">Large</button>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Disabled states</h2>
+                <p class="text-body-secondary mb-2">Use the native disabled attribute where possible, or the disabled class with accessibility attributes on links.</p>
+                <code>disabled</code> <code>.disabled</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-primary" type="button" disabled>Solid button</button>
+                <button class="btn btn-outline-primary" type="button" disabled>Outline button</button>
+                <a class="btn btn-secondary disabled" href="#" tabindex="-1" role="button" aria-disabled="true">Link</a>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Responsive layouts</h2>
+                <p class="text-body-secondary mb-2">Combine display, grid, and flex utilities to control button width and alignment.</p>
+                <code>.d-grid .gap-2 .d-md-flex</code>
+            </header>
+            <div class="d-grid gap-2 mb-4">
+                <button class="btn btn-primary ripple" type="button">Full-width primary</button>
+                <button class="btn btn-secondary ripple" type="button">Full-width secondary</button>
+            </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button class="btn btn-primary ripple btn-lg" type="button">Primary</button>
-                <button class="btn btn-secondary ripple btn-lg" type="button">Secondary</button>
+                <button class="btn btn-secondary ripple" type="button">Cancel</button>
+                <button class="btn btn-primary ripple" type="button">Continue</button>
             </div>
-        </div>
+        </section>
 
-        <h4>Toggle</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary active" data-ui-toggle="button" type="button">Toggle</button>
-            <button class="btn btn-primary" data-ui-toggle="button" type="button">Toggle</button>
-            <button class="btn btn-primary disabled" data-ui-toggle="button" type="button">Toggle</button>
-        </div>
-        <div class="mb-4">
-            <a class="btn btn-primary active" data-ui-toggle="button" href="#" role="button">Toggle</a>
-            <a class="btn btn-primary" data-ui-toggle="button" href="#" href="#" role="button">Toggle</a>
-            <a class="btn btn-primary disabled" data-ui-toggle="button" role="button">Toggle</a>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Toggle buttons</h2>
+                <p class="text-body-secondary mb-2">Toggle controls synchronize the active class and pressed state.</p>
+                <code>data-ui-toggle="button"</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-primary active" data-ui-toggle="button" type="button" aria-pressed="true">Active</button>
+                <button class="btn btn-primary" data-ui-toggle="button" type="button" aria-pressed="false">Inactive</button>
+                <button class="btn btn-primary" data-ui-toggle="button" type="button" disabled>Disabled</button>
+            </div>
+        </section>
     </div>
 </body>
 

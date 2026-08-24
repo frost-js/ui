@@ -12,7 +12,7 @@
 
 @media (min-width: 992px) {
     :root[data-demo-catalog] body {
-        padding-inline-start: var(--demo-sidebar-width);
+        margin-inline-start: var(--demo-sidebar-width);
     }
 
     [data-demo-sidebar].offcanvas {

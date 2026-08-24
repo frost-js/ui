@@ -15,83 +15,60 @@
 <body>
     <div class="container">
         <h1>Alerts</h1>
-        <div class="mb-4">
-            <div class="alert alert-primary">
-                This is an example primary alert.
-            </div>
-            <div class="alert alert-accent">
-                This is an example accent alert.
-            </div>
-            <div class="alert alert-secondary">
-                This is an example secondary alert.
-            </div>
-            <div class="alert alert-success">
-                This is an example success alert.
-            </div>
-            <div class="alert alert-info">
-                This is an example info alert.
-            </div>
-            <div class="alert alert-warning">
-                This is an example warning alert.
-            </div>
-            <div class="alert alert-danger">
-                This is an example danger alert.
-            </div>
-            <div class="alert alert-light">
-                This is an example light alert.
-            </div>
-            <div class="alert alert-dark">
-                This is an example dark alert.
-            </div>
-        </div>
 
-        <h4>Links</h4>
-        <div class="mb-4">
-            <div class="alert alert-primary">
-                This is an example primary alert with an <a class="alert-link" href="#">optional link</a>.
-            </div>
-            <div class="alert alert-accent">
-                This is an example accent alert with an <a class="alert-link" href="#">optional link</a>.
-            </div>
-            <div class="alert alert-secondary">
-                This is an example secondary alert with an <a class="alert-link" href="#">optional link</a>.
-            </div>
-            <div class="alert alert-success">
-                This is an example success alert with an <a class="alert-link" href="#">optional link</a>.
-            </div>
-            <div class="alert alert-info">
-                This is an example info alert with an <a class="alert-link" href="#">optional link</a>.
-            </div>
-            <div class="alert alert-warning">
-                This is an example warning alert with an <a class="alert-link" href="#">optional link</a>.
-            </div>
-            <div class="alert alert-danger">
-                This is an example danger alert with an <a class="alert-link" href="#">optional link</a>.
-            </div>
-            <div class="alert alert-light">
-                This is an example light alert with an <a class="alert-link" href="#">optional link</a>.
-            </div>
-            <div class="alert alert-dark">
-                This is an example dark alert with an <a class="alert-link" href="#">optional link</a>.
-            </div>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Contextual variants</h2>
+                <p class="text-body-secondary mb-2">Choose the variant that matches the meaning of the message.</p>
+                <code>.alert .alert-{variant}</code>
+            </header>
+            <div class="alert alert-primary" role="alert">Your workspace is ready to customize.</div>
+            <div class="alert alert-accent" role="alert">A new design preview is available.</div>
+            <div class="alert alert-secondary" role="alert">This record was last updated yesterday.</div>
+            <div class="alert alert-success" role="alert">Your changes were saved successfully.</div>
+            <div class="alert alert-info" role="alert">Maintenance begins tonight at 10:00 PM.</div>
+            <div class="alert alert-warning" role="alert">Your trial expires in three days.</div>
+            <div class="alert alert-danger" role="alert">Payment could not be processed.</div>
+            <div class="alert alert-light" role="alert">The report is being prepared.</div>
+            <div class="alert alert-dark mb-0" role="alert">Advanced settings are enabled.</div>
+        </section>
 
-        <h4>Content</h4>
-        <div class="mb-4">
-            <div class="alert alert-primary">
-                <h5>Alert</h5>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Links</h2>
+                <p class="text-body-secondary mb-2">Alert links preserve contrast while giving the next action clear emphasis.</p>
+                <code>.alert-link</code>
+            </header>
+            <div class="alert alert-info mb-0" role="alert">
+                A newer version is available. <a class="alert-link" href="#">Review the release notes</a> before updating.
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Additional content</h2>
+                <p class="text-body-secondary mb-2">Alerts can contain headings, supporting copy, dividers, links, and actions.</p>
+                <code>.alert</code> <code>.alert-heading</code>
+            </header>
+            <div class="alert alert-success mb-0" role="alert">
+                <h2 class="alert-heading h5">Import complete</h2>
+                <p>All 248 contacts were added to your workspace without errors.</p>
                 <hr />
-                This is an example primary alert with an <a class="alert-link" href="#">optional link</a>.
+                <p class="mb-0"><a class="alert-link" href="#">View imported contacts</a></p>
             </div>
-        </div>
+        </section>
 
-        <h4>Dismissable</h4>
-        <div class="mb-4">
-            <div class="alert alert-warning">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Dismissible alerts</h2>
+                <p class="text-body-secondary mb-2">Add a close button with the alert dismissal behavior for temporary messages.</p>
+                <code>.btn-close data-ui-dismiss="alert"</code>
+            </header>
+            <div class="alert alert-warning mb-0" role="alert">
                 <button class="btn-close" data-ui-dismiss="alert" type="button" aria-label="Close"></button>
-                This is an example warning alert.
+                Your session will expire soon. Save any unfinished work.
             </div>
-        </div>
+        </section>
     </div>
 </body>
 

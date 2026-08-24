@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Validation</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Validation</h1>
+
+        <nav class="nav nav-tabs mb-4" role="tablist" aria-label="Validation input style">
+            <button class="nav-link active" id="filledValidationTab" data-ui-toggle="tab" data-ui-target="#filledValidation" type="button" role="tab" aria-controls="filledValidation" aria-selected="true">Filled</button>
+            <button class="nav-link" id="outlineValidationTab" data-ui-toggle="tab" data-ui-target="#outlineValidation" type="button" role="tab" aria-controls="outlineValidation" aria-selected="false">Outline</button>
+        </nav>
+
+        <form class="tab-content">
+            <div class="tab-pane active" id="filledValidation" role="tabpanel" aria-labelledby="filledValidationTab">
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Valid filled controls</h2>
+                        <p class="text-body-secondary mb-2">Apply the validation state to a parent containing the control and its feedback.</p>
+                        <code>.form-success .input-filled .valid-feedback</code>
+                    </header>
+                    <div class="form-success row g-3">
+                        <div class="col-md-6">
+                            <label for="filledValidEmail">Email</label>
+                            <div class="form-input"><input class="input-filled" id="filledValidEmail" type="email" value="hello@example.com" /></div>
+                            <div class="valid-feedback">This address is available.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <input class="input-filled input-floating" id="filledValidName" type="text" value="Ada Lovelace" placeholder="Name" />
+                                <label class="label-floating" for="filledValidName">Name</label>
+                            </div>
+                            <div class="valid-feedback">Name looks good.</div>
+                        </div>
+                        <div class="col-12">
+                            <label for="filledValidCode">Invite code</label>
+                            <div class="input-group">
+                                <div class="input-group-text">TEAM-</div>
+                                <input class="input-filled" id="filledValidCode" type="text" value="2048" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Invalid filled controls</h2>
+                        <p class="text-body-secondary mb-2">Error feedback should identify the problem and explain how to resolve it.</p>
+                        <code>.form-error .input-filled .invalid-feedback</code>
+                    </header>
+                    <div class="form-error row g-3">
+                        <div class="col-md-6">
+                            <label for="filledInvalidEmail">Email</label>
+                            <div class="form-input"><input class="input-filled" id="filledInvalidEmail" type="email" value="hello@" /></div>
+                            <div class="invalid-feedback">Enter a complete email address.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="filledInvalidTeam">Team</label>
+                            <div class="form-input">
+                                <select class="input-filled" id="filledInvalidTeam">
+                                    <option selected disabled>Select a team</option>
+                                    <option>Design</option>
+                                    <option>Engineering</option>
+                                </select>
+                            </div>
+                            <div class="invalid-feedback">Choose a team.</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="tab-pane" id="outlineValidation" role="tabpanel" aria-labelledby="outlineValidationTab">
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Valid outline controls</h2>
+                        <p class="text-body-secondary mb-2">Validation state updates the outline, label, and feedback together.</p>
+                        <code>.form-success .input-outline .valid-feedback</code>
+                    </header>
+                    <div class="form-success row g-3">
+                        <div class="col-md-6">
+                            <label for="outlineValidEmail">Email</label>
+                            <input class="input-outline" id="outlineValidEmail" type="email" value="hello@example.com" />
+                            <div class="valid-feedback">This address is available.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <input class="input-outline input-floating" id="outlineValidName" type="text" value="Ada Lovelace" placeholder="Name" />
+                                <label class="label-floating" for="outlineValidName">Name</label>
+                            </div>
+                            <div class="valid-feedback">Name looks good.</div>
+                        </div>
+                        <div class="col-12">
+                            <label for="outlineValidCode">Invite code</label>
+                            <div class="input-group">
+                                <div class="input-group-text">TEAM-</div>
+                                <input class="input-outline" id="outlineValidCode" type="text" value="2048" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Invalid outline controls</h2>
+                        <p class="text-body-secondary mb-2">Use the same parent state and feedback structure with outlined inputs.</p>
+                        <code>.form-error .input-outline .invalid-feedback</code>
+                    </header>
+                    <div class="form-error row g-3">
+                        <div class="col-md-6">
+                            <label for="outlineInvalidEmail">Email</label>
+                            <input class="input-outline" id="outlineInvalidEmail" type="email" value="hello@" />
+                            <div class="invalid-feedback">Enter a complete email address.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="outlineInvalidTeam">Team</label>
+                            <select class="input-outline" id="outlineInvalidTeam">
+                                <option selected disabled>Select a team</option>
+                                <option>Design</option>
+                                <option>Engineering</option>
+                            </select>
+                            <div class="invalid-feedback">Choose a team.</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

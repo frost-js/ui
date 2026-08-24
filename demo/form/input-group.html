@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Input Groups</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Input Groups</h1>
+
+        <nav class="nav nav-tabs mb-4" role="tablist" aria-label="Input group style">
+            <button class="nav-link active" id="filledGroupsTab" data-ui-toggle="tab" data-ui-target="#filledGroups" type="button" role="tab" aria-controls="filledGroups" aria-selected="true">Filled</button>
+            <button class="nav-link" id="outlineGroupsTab" data-ui-toggle="tab" data-ui-target="#outlineGroups" type="button" role="tab" aria-controls="outlineGroups" aria-selected="false">Outline</button>
+        </nav>
+
+        <form class="tab-content">
+            <div class="tab-pane active" id="filledGroups" role="tabpanel" aria-labelledby="filledGroupsTab">
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Text add-ons</h2>
+                        <p class="text-body-secondary mb-2">Place labels before, after, or between filled controls.</p>
+                        <code>.input-group .input-filled .input-group-text</code>
+                    </header>
+                    <div class="row g-3">
+                        <div class="col-lg-6">
+                            <label for="filledUsername">Username</label>
+                            <div class="input-group">
+                                <div class="input-group-text">@</div>
+                                <input class="input-filled" id="filledUsername" type="text" placeholder="username" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="filledDomain">Website</label>
+                            <div class="input-group">
+                                <input class="input-filled" id="filledDomain" type="text" placeholder="workspace" />
+                                <div class="input-group-text">.example.com</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="filledAmount">Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-text">$</div>
+                                <input class="input-filled" id="filledAmount" type="number" value="120" />
+                                <div class="input-group-text">AUD</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Controls and actions</h2>
+                        <p class="text-body-secondary mb-2">Groups can combine multiple controls, selection inputs, and buttons.</p>
+                        <code>.input-group</code>
+                    </header>
+                    <div class="input-group mb-3">
+                        <input class="input-filled" aria-label="First name" type="text" placeholder="First name" />
+                        <input class="input-filled" aria-label="Last name" type="text" placeholder="Last name" />
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-text"><input class="input-check mt-0" type="checkbox" aria-label="Select subscription" /></div>
+                        <input class="input-filled" aria-label="Subscription name" type="text" value="Weekly digest" />
+                    </div>
+                    <div class="input-group">
+                        <input class="input-filled" aria-label="Search query" type="search" placeholder="Search projects" />
+                        <button class="btn btn-primary ripple" type="button">Search</button>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Sizes</h2>
+                        <p class="text-body-secondary mb-2">Apply the size modifier to the group so every child stays aligned.</p>
+                        <code>.input-group-sm</code> <code>.input-group-lg</code>
+                    </header>
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-text">Small</div>
+                        <input class="input-filled" aria-label="Small group" type="text" />
+                    </div>
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-text">Large</div>
+                        <input class="input-filled" aria-label="Large group" type="text" />
+                    </div>
+                </section>
+            </div>
+
+            <div class="tab-pane" id="outlineGroups" role="tabpanel" aria-labelledby="outlineGroupsTab">
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Text add-ons</h2>
+                        <p class="text-body-secondary mb-2">The group joins add-ons to the outlined control boundary.</p>
+                        <code>.input-group .input-outline .input-group-text</code>
+                    </header>
+                    <div class="row g-3">
+                        <div class="col-lg-6">
+                            <label for="outlineUsername">Username</label>
+                            <div class="input-group">
+                                <div class="input-group-text">@</div>
+                                <input class="input-outline" id="outlineUsername" type="text" placeholder="username" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="outlineDomain">Website</label>
+                            <div class="input-group">
+                                <input class="input-outline" id="outlineDomain" type="text" placeholder="workspace" />
+                                <div class="input-group-text">.example.com</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="outlineAmount">Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-text">$</div>
+                                <input class="input-outline" id="outlineAmount" type="number" value="120" />
+                                <div class="input-group-text">AUD</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Controls and actions</h2>
+                        <p class="text-body-secondary mb-2">The same composition options work with outlined inputs.</p>
+                        <code>.input-group</code>
+                    </header>
+                    <div class="input-group mb-3">
+                        <input class="input-outline" aria-label="First name" type="text" placeholder="First name" />
+                        <input class="input-outline" aria-label="Last name" type="text" placeholder="Last name" />
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-text"><input class="input-check mt-0" type="checkbox" aria-label="Select subscription" /></div>
+                        <input class="input-outline" aria-label="Subscription name" type="text" value="Weekly digest" />
+                    </div>
+                    <div class="input-group">
+                        <input class="input-outline" aria-label="Search query" type="search" placeholder="Search projects" />
+                        <button class="btn btn-primary ripple" type="button">Search</button>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Sizes</h2>
+                        <p class="text-body-secondary mb-2">Group sizing keeps outlined controls and add-ons on the same rhythm.</p>
+                        <code>.input-group-sm</code> <code>.input-group-lg</code>
+                    </header>
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-text">Small</div>
+                        <input class="input-outline" aria-label="Small group" type="text" />
+                    </div>
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-text">Large</div>
+                        <input class="input-outline" aria-label="Large group" type="text" />
+                    </div>
+                </section>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

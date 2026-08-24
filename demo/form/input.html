@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Inputs</title>
+    <link rel="stylesheet" href="../../dist/frost-ui.css" />
+    <link rel="stylesheet" href="../assets/demo.css" />
+    <script src="../../dist/frost-ui-bundle.js"></script>
+    <script src="../assets/demo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Inputs</h1>
+
+        <nav class="nav nav-tabs mb-4" role="tablist" aria-label="Input style">
+            <button class="nav-link active" id="filledInputsTab" data-ui-toggle="tab" data-ui-target="#filledInputs" type="button" role="tab" aria-controls="filledInputs" aria-selected="true">Filled</button>
+            <button class="nav-link" id="outlineInputsTab" data-ui-toggle="tab" data-ui-target="#outlineInputs" type="button" role="tab" aria-controls="outlineInputs" aria-selected="false">Outline</button>
+        </nav>
+
+        <form class="tab-content">
+            <div class="tab-pane active" id="filledInputs" role="tabpanel" aria-labelledby="filledInputsTab">
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Filled controls</h2>
+                        <p class="text-body-secondary mb-2">Filled controls use a quiet surface and animated focus line.</p>
+                        <code>.input-filled</code>
+                    </header>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="filledText">Text input</label>
+                            <div class="form-input">
+                                <input class="input-filled" id="filledText" type="text" placeholder="Project name" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="filledSelect">Select</label>
+                            <div class="form-input">
+                                <select class="input-filled" id="filledSelect">
+                                    <option>Design</option>
+                                    <option>Engineering</option>
+                                    <option>Marketing</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="filledTextarea">Message</label>
+                            <div class="form-input">
+                                <textarea class="input-filled text-expand" id="filledTextarea" placeholder="Add a short note"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="filledMultiSelect">Multiple select</label>
+                            <div class="form-input">
+                                <select class="input-filled" id="filledMultiSelect" multiple>
+                                    <option>Research</option>
+                                    <option selected>Prototype</option>
+                                    <option selected>Review</option>
+                                    <option>Launch</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Sizes</h2>
+                        <p class="text-body-secondary mb-2">Size modifiers apply to text inputs, selects, textareas, files, and color controls.</p>
+                        <code>.input-sm</code> <code>.input-lg</code>
+                    </header>
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="filledSmall">Small</label>
+                            <div class="form-input"><input class="input-filled input-sm" id="filledSmall" type="text" value="Compact" /></div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="filledDefault">Default</label>
+                            <div class="form-input"><input class="input-filled" id="filledDefault" type="text" value="Default" /></div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="filledLarge">Large</label>
+                            <div class="form-input"><input class="input-filled input-lg" id="filledLarge" type="text" value="Prominent" /></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">States and special inputs</h2>
+                        <p class="text-body-secondary mb-2">Native attributes retain the filled treatment while communicating control state.</p>
+                        <code>disabled</code> <code>readonly</code> <code>.input-color</code>
+                    </header>
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-6">
+                            <label for="filledDisabled">Disabled</label>
+                            <div class="form-input"><input class="input-filled" id="filledDisabled" type="text" value="Unavailable" disabled /></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="filledReadonly">Readonly</label>
+                            <div class="form-input"><input class="input-filled" id="filledReadonly" type="text" value="INV-2048" readonly /></div>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="filledFile">File</label>
+                            <div class="form-input"><input class="input-filled" id="filledFile" type="file" /></div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="filledColor">Color</label>
+                            <div class="form-input"><input class="input-filled input-color" id="filledColor" type="color" value="#315efb" /></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="tab-pane" id="outlineInputs" role="tabpanel" aria-labelledby="outlineInputsTab">
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Outline controls</h2>
+                        <p class="text-body-secondary mb-2">Outline controls keep their boundary visible against the surrounding surface.</p>
+                        <code>.input-outline</code>
+                    </header>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="outlineText">Text input</label>
+                            <input class="input-outline" id="outlineText" type="text" placeholder="Project name" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="outlineSelect">Select</label>
+                            <select class="input-outline" id="outlineSelect">
+                                <option>Design</option>
+                                <option>Engineering</option>
+                                <option>Marketing</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="outlineTextarea">Message</label>
+                            <textarea class="input-outline text-expand" id="outlineTextarea" placeholder="Add a short note"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label for="outlineMultiSelect">Multiple select</label>
+                            <select class="input-outline" id="outlineMultiSelect" multiple>
+                                <option>Research</option>
+                                <option selected>Prototype</option>
+                                <option selected>Review</option>
+                                <option>Launch</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">Sizes</h2>
+                        <p class="text-body-secondary mb-2">The same size modifiers work across both input styles.</p>
+                        <code>.input-sm</code> <code>.input-lg</code>
+                    </header>
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="outlineSmall">Small</label>
+                            <input class="input-outline input-sm" id="outlineSmall" type="text" value="Compact" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="outlineDefault">Default</label>
+                            <input class="input-outline" id="outlineDefault" type="text" value="Default" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="outlineLarge">Large</label>
+                            <input class="input-outline input-lg" id="outlineLarge" type="text" value="Prominent" />
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <header class="border-bottom pb-3 mb-4">
+                        <h2 class="h4 mb-1">States and special inputs</h2>
+                        <p class="text-body-secondary mb-2">Native attributes and specialized input classes behave consistently in the outline style.</p>
+                        <code>disabled</code> <code>readonly</code> <code>.input-color</code>
+                    </header>
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-6">
+                            <label for="outlineDisabled">Disabled</label>
+                            <input class="input-outline" id="outlineDisabled" type="text" value="Unavailable" disabled />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="outlineReadonly">Readonly</label>
+                            <input class="input-outline" id="outlineReadonly" type="text" value="INV-2048" readonly />
+                        </div>
+                        <div class="col-md-8">
+                            <label for="outlineFile">File</label>
+                            <input class="input-outline" id="outlineFile" type="file" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="outlineColor">Color</label>
+                            <input class="input-outline input-color" id="outlineColor" type="color" value="#315efb" />
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
