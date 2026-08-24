@@ -21,6 +21,18 @@
     border: var(--ui-alert-border-width) var(--ui-border-style) var(--ui-alert-border-color);
     border-inline-start-width: var(--ui-alert-accent-border-width);
     @include mixins.border-radius(var(--ui-alert-border-radius));
+
+    &:has(>.btn-close) {
+        padding-inline-end: calc((var(--ui-alert-padding-x) * 2) + #{vars.$btn-close-width});
+
+        >.btn-close {
+            position: absolute;
+            inset-inline-end: 0;
+            top: 0;
+            padding: var(--ui-alert-padding-y) var(--ui-alert-padding-x);
+            color: inherit;
+        }
+    }
 }
 
 .alert-heading {
@@ -30,18 +42,6 @@
 .alert-link {
     font-weight: vars.$alert-link-font-weight;
     color: var(--ui-alert-link-color);
-}
-
-.alert-dismissable {
-    padding-inline-end: calc((var(--ui-alert-padding-x) * 2) + #{vars.$btn-close-width});
-
-    .btn-close {
-        position: absolute;
-        inset-inline-end: 0;
-        top: 0;
-        padding: var(--ui-alert-padding-y) var(--ui-alert-padding-x);
-        color: inherit;
-    }
 }
 
 @each $name, $color in vars.$color-variants {

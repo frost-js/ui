@@ -38,16 +38,15 @@
         transition-timing-function: var(--ui-transition-timing-function);
         transition-duration: var(--ui-transition-duration-fast);
         transition-property: border-color, box-shadow;
-    }
 
-    &:has(.stretched-link:hover) {
-        border-color: var(--ui-card-interactive-hover-border-color);
-        box-shadow: var(--ui-card-interactive-box-shadow);
-    }
+        &:has(.stretched-link:is(:hover, :focus-visible)) {
+            border-color: var(--ui-card-interactive-hover-border-color);
+            box-shadow: var(--ui-card-interactive-box-shadow);
+        }
 
-    &:has(.stretched-link:focus-visible) {
-        border-color: var(--ui-card-interactive-focus-border-color);
-        box-shadow: var(--ui-card-interactive-box-shadow);
+        &:has(.stretched-link:focus-visible) {
+            border-color: var(--ui-card-interactive-focus-border-color);
+        }
     }
 
     >hr {

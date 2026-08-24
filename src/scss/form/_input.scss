@@ -6,6 +6,10 @@
 .form-input {
     position: relative;
     width: 100%;
+
+    &:has(>.input-color) {
+        width: vars.$input-color-width;
+    }
 }
 
 .input-filled,
@@ -199,10 +203,6 @@
     @at-root select#{&}[multiple] option {
         padding: vars.$input-lg-padding-y vars.$input-lg-padding-x;
     }
-}
-
-.form-input-color {
-    width: vars.$input-color-width;
 }
 
 .input-color {

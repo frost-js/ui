@@ -9,20 +9,6 @@
     width: 100%;
     @include mixins.border-radius(vars.$input-outline-border-radius);
 
-    &:has(.input-outline) {
-        transition: box-shadow var(--ui-transition-duration-fast) var(--ui-transition-timing-function);
-    }
-
-    &:has(.input-outline:is(:focus, .focus)) {
-        box-shadow: 0 0 0 vars.$input-outline-focus-shadow-width vars.$input-outline-focus-shadow-color;
-
-        >.form-input > .input-outline,
-        >.input-outline,
-        >.input-group-text {
-            border-color: vars.$input-outline-focus-border-color;
-        }
-    }
-
     >.form-input,
     >.input-filled,
     >.input-outline {
@@ -72,47 +58,61 @@
         transition-duration: var(--ui-transition-duration-fast);
         transition-property: background-color, border-color;
     }
-}
 
-.input-group-filled {
-    @include mixins.border-radius(0);
+    &:has(.input-outline) {
+        transition: box-shadow var(--ui-transition-duration-fast) var(--ui-transition-timing-function);
 
-    &::after {
-        position: absolute;
-        inset-inline: 0;
-        bottom: 0;
-        z-index: 4;
-        height: calc(vars.$input-border-width * 2);
-        pointer-events: none;
-        content: "";
-        background-color: vars.$input-filled-focus-border-color;
-        opacity: 0;
-        transform: scaleX(0);
-        transition-timing-function: var(--ui-transition-timing-function);
-        transition-duration: var(--ui-transition-duration);
-        transition-property: transform, opacity;
+        &:has(.input-outline:is(:focus, .focus)) {
+            box-shadow: 0 0 0 vars.$input-outline-focus-shadow-width vars.$input-outline-focus-shadow-color;
+
+            >.form-input > .input-outline,
+            >.input-outline,
+            >.input-group-text {
+                border-color: vars.$input-outline-focus-border-color;
+            }
+        }
     }
 
-    &:has(.input-filled:is(:focus, .focus)) {
-
-        >.form-input > .input-filled,
-        >.input-filled,
-        >.input-group-text {
-            --ui-input-filled-focus-line-size: 0% calc(#{vars.$input-border-width} * 2);
-
-            background-color: var(--ui-input-filled-focus-bg, #{vars.$input-filled-focus-bg});
-        }
+    &:has(.input-filled) {
+        @include mixins.border-radius(0);
 
         &::after {
-            opacity: 1;
-            transform: scaleX(1);
+            position: absolute;
+            inset-inline: 0;
+            bottom: 0;
+            z-index: 4;
+            height: calc(vars.$input-border-width * 2);
+            pointer-events: none;
+            content: "";
+            background-color: vars.$input-filled-focus-border-color;
+            opacity: 0;
+            transform: scaleX(0);
+            transition-timing-function: var(--ui-transition-timing-function);
+            transition-duration: var(--ui-transition-duration);
+            transition-property: transform, opacity;
         }
-    }
 
-    >.input-group-text {
-        background-color: var(--ui-input-filled-bg, #{vars.$input-filled-bg});
-        border: 0;
-        border-bottom: vars.$input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{vars.$input-filled-border-color});
+        &:has(.input-filled:is(:focus, .focus)) {
+
+            >.form-input > .input-filled,
+            >.input-filled,
+            >.input-group-text {
+                --ui-input-filled-focus-line-size: 0% calc(#{vars.$input-border-width} * 2);
+
+                background-color: var(--ui-input-filled-focus-bg, #{vars.$input-filled-focus-bg});
+            }
+
+            &::after {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        >.input-group-text {
+            background-color: var(--ui-input-filled-bg, #{vars.$input-filled-bg});
+            border: 0;
+            border-bottom: vars.$input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{vars.$input-filled-border-color});
+        }
     }
 }
 
