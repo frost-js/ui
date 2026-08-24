@@ -90,6 +90,7 @@ npm i -D sass
 ```scss
 @use "@fr0st/ui/src/scss/ui" as ui with (
     $primary: #6750a4,
+    $accent: #db2777,
     $secondary: #546e7a,
     $body-bg: #f8fafc,
     $body-color: #172033,

@@ -1,7 +1,7 @@
 @forward "colors";
 @forward "colors-dark";
 @forward "vars";
-@forward "maps";
+@forward "maps" hide $generated-emphasis-colors, $generated-subtle-colors, $generated-subtle-text-colors;
 @forward "content";
 @forward "helpers";
 @forward "components";

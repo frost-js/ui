@@ -5,6 +5,7 @@
 
 $color-variants: (
     primary: colors.$primary,
+    accent: colors.$accent,
     secondary: colors.$secondary,
     success: colors.$success,
     info: colors.$info,
@@ -14,38 +15,23 @@ $color-variants: (
     dark: colors.$dark
 ) !default;
 
-$subtle-colors: (
-    primary-subtle: var(--ui-primary-subtle),
-    secondary-subtle: var(--ui-secondary-subtle),
-    success-subtle: var(--ui-success-subtle),
-    info-subtle: var(--ui-info-subtle),
-    warning-subtle: var(--ui-warning-subtle),
-    danger-subtle: var(--ui-danger-subtle),
-    light-subtle: var(--ui-light-subtle),
-    dark-subtle: var(--ui-dark-subtle)
-) !default;
+$generated-subtle-colors: ();
+$generated-subtle-text-colors: ();
+$generated-emphasis-colors: ();
 
-$subtle-text-colors: (
-    primary-subtle: helpers.color-alpha(primary-subtle-text, var(--ui-text-opacity)),
-    secondary-subtle: helpers.color-alpha(secondary-subtle-text, var(--ui-text-opacity)),
-    success-subtle: helpers.color-alpha(success-subtle-text, var(--ui-text-opacity)),
-    info-subtle: helpers.color-alpha(info-subtle-text, var(--ui-text-opacity)),
-    warning-subtle: helpers.color-alpha(warning-subtle-text, var(--ui-text-opacity)),
-    danger-subtle: helpers.color-alpha(danger-subtle-text, var(--ui-text-opacity)),
-    light-subtle: helpers.color-alpha(light-subtle-text, var(--ui-text-opacity)),
-    dark-subtle: helpers.color-alpha(dark-subtle-text, var(--ui-text-opacity))
-) !default;
+@each $name in map.keys($color-variants) {
+    $subtle-name: #{$name}-subtle;
+    $subtle-text-name: #{$name}-subtle-text;
+    $emphasis-name: #{$name}-emphasis;
 
-$emphasis-colors: (
-    primary-emphasis: var(--ui-primary-emphasis),
-    secondary-emphasis: var(--ui-secondary-emphasis),
-    success-emphasis: var(--ui-success-emphasis),
-    info-emphasis: var(--ui-info-emphasis),
-    warning-emphasis: var(--ui-warning-emphasis),
-    danger-emphasis: var(--ui-danger-emphasis),
-    light-emphasis: var(--ui-light-emphasis),
-    dark-emphasis: var(--ui-dark-emphasis)
-) !default;
+    $generated-subtle-colors: map.set($generated-subtle-colors, $subtle-name, var(--ui-#{$subtle-name}));
+    $generated-subtle-text-colors: map.set($generated-subtle-text-colors, $subtle-name, helpers.color-alpha($subtle-text-name, var(--ui-text-opacity)));
+    $generated-emphasis-colors: map.set($generated-emphasis-colors, $emphasis-name, var(--ui-#{$emphasis-name}));
+}
+
+$subtle-colors: $generated-subtle-colors !default;
+$subtle-text-colors: $generated-subtle-text-colors !default;
+$emphasis-colors: $generated-emphasis-colors !default;
 
 $utilities-colors: map.merge(
     $color-variants,

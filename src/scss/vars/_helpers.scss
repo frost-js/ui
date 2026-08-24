@@ -12,6 +12,18 @@ $caret-size: .25em !default;
 // color links
 $color-link-variants: maps.$utilities-colors !default;
 
+// effects
+$ambient-color: var(--ui-primary) !default;
+$ambient-accent-color: var(--ui-accent) !default;
+$ambient-background-image: radial-gradient(circle at 10% 0%, helpers.color-alpha(ambient-color, .3), transparent 42%),
+    radial-gradient(circle at 90% 100%, helpers.color-alpha(ambient-accent-color, .25), transparent 42%) !default;
+$glass-bg: helpers.color-alpha(body-bg, .88) !default;
+$glass-backdrop-filter: blur(1rem) saturate(150%) !default;
+$shadow-glow-color: var(--ui-primary) !default;
+$shadow-glow: var(--ui-shadow),
+    0 0 1rem helpers.color-alpha(shadow-glow-color, .3),
+    0 0 2.5rem helpers.color-alpha(shadow-glow-color, .18) !default;
+
 // ratio
 $ratios: (
     1x1: list.slash(1, 1),

@@ -22,6 +22,7 @@ $cyan: #06b6d4 !default;
 
 // theme colors
 $primary: $blue !default;
+$accent: $purple !default;
 $secondary: color-mix(in srgb, var(--ui-gray) 80%, var(--ui-black)) !default;
 $success: $green !default;
 $info: $teal !default;
@@ -30,7 +31,7 @@ $danger: $red !default;
 $light: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-white)) !default;
 $dark: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-black)) !default;
 
-$gradient: linear-gradient(135deg, var(--ui-primary), $purple) !default;
+$gradient: linear-gradient(135deg, var(--ui-primary), var(--ui-accent)) !default;
 
 // base colors
 $body-bg: $white !default;

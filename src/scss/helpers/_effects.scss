@@ -1,0 +1,45 @@
+@use "../vars";
+
+.bg-gradient {
+    background-image: var(--ui-gradient);
+}
+
+.bg-ambient {
+    --ui-ambient-color: #{vars.$ambient-color};
+    --ui-ambient-accent-color: #{vars.$ambient-accent-color};
+    --ui-ambient-background-image: #{vars.$ambient-background-image};
+
+    background-image: var(--ui-ambient-background-image);
+}
+
+.bg-glass {
+    --ui-glass-bg: #{vars.$glass-bg};
+    --ui-glass-backdrop-filter: #{vars.$glass-backdrop-filter};
+
+    background-color: var(--ui-glass-bg);
+    backdrop-filter: var(--ui-glass-backdrop-filter);
+}
+
+.text-gradient {
+    --ui-text-gradient: var(--ui-gradient);
+
+    width: fit-content;
+    padding-block-end: .1em;
+    color: transparent;
+    background-image: var(--ui-text-gradient);
+    background-clip: text;
+}
+
+.shadow-glow {
+    --ui-shadow-glow-color: #{vars.$shadow-glow-color};
+    --ui-shadow-glow: #{vars.$shadow-glow};
+
+    box-shadow: var(--ui-shadow-glow);
+}
+
+@media (forced-colors: active) {
+    .text-gradient {
+        color: CanvasText;
+        background-image: none;
+    }
+}

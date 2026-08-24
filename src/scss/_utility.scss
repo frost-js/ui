@@ -22,12 +22,6 @@
     values: vars.$opacities,
     css-var: true
 ));
-@include mixins.utility((
-    property: background-image,
-    class: bg,
-    values: (gradient: var(--ui-gradient))
-));
-
 // border
 @include mixins.utility((
     property: border,

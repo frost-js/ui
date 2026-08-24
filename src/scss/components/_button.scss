@@ -12,6 +12,8 @@
     --ui-btn-border-width: #{vars.$btn-border-width};
     --ui-btn-border-color: transparent;
     --ui-btn-border-radius: #{vars.$btn-border-radius};
+    --ui-btn-background-image: none;
+    --ui-btn-active-transform: #{vars.$btn-active-transform};
     --ui-btn-hover-border-color: transparent;
     --ui-btn-active-border-color: #{vars.$btn-active-border-color};
     --ui-btn-disabled-opacity: #{vars.$btn-disabled-opacity};
@@ -42,6 +44,7 @@
     cursor: pointer;
     user-select: none;
     background-color: var(--ui-btn-bg);
+    background-image: var(--ui-btn-background-image);
     border: var(--ui-btn-border-width) var(--ui-border-style) var(--ui-btn-border-color);
     box-shadow: var(--ui-btn-box-shadow);
     transition-timing-function: var(--ui-transition-timing-function);
@@ -87,7 +90,7 @@
             #{&}.active,
             #{&}:first-child:active,
             :not(.btn-check)+#{&}:active {
-                transform: translateY(1px);
+                transform: var(--ui-btn-active-transform);
             }
         }
 
@@ -106,6 +109,10 @@
             transform: none;
         }
     }
+}
+
+.btn-gradient {
+    --ui-btn-background-image: #{vars.$btn-gradient-background-image};
 }
 
 .btn-lg {
@@ -128,13 +135,25 @@
     --ui-btn-hover-border-color: transparent;
     --ui-btn-active-border-color: transparent;
     --ui-btn-active-color: var(--ui-link-hover-color);
+    --ui-btn-active-transform: none;
     --ui-btn-focus-shadow-color: var(--ui-link-color);
+    --ui-btn-box-shadow: none;
+    --ui-btn-hover-box-shadow: none;
+    --ui-btn-active-box-shadow: none;
 
     text-decoration: var(--ui-link-decoration);
 
     &:hover {
         --ui-btn-color: var(--ui-link-hover-color);
         --ui-link-decoration: var(--ui-link-hover-decoration);
+    }
+
+    @at-root {
+
+        .btn-check:focus-visible+#{&},
+        #{&}:focus-visible {
+            box-shadow: var(--ui-btn-focus-box-shadow);
+        }
     }
 }
 

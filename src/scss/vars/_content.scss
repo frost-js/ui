@@ -108,6 +108,7 @@ $sup-top: -.25em !default;
 // table
 $table-variants: (
     primary: colors.$primary,
+    accent: colors.$accent,
     secondary: colors.$secondary,
     success: colors.$success,
     info: colors.$info,

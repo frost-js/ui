@@ -48,58 +48,64 @@
   --ui-black: #000;
   --ui-gray: #64748b;
   --ui-primary: #315efb;
-  --ui-secondary: color-mix(in srgb, var(--ui-gray) 80%, var(--ui-black));
-  --ui-success: #008442;
-  --ui-info: #0ebbbb;
-  --ui-warning: #f77625;
-  --ui-danger: #c71010;
-  --ui-light: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-white));
-  --ui-dark: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-black));
-  --ui-gradient: linear-gradient(135deg, var(--ui-primary), #7c3aed);
-  --ui-code-color: color-mix(in oklch, var(--ui-danger) 80%, var(--ui-white));
-  --ui-mark-bg: color-mix(in srgb, #ffdd30 20%, var(--ui-white));
-  --ui-focus-ring-color: rgb(from var(--ui-primary) r g b/var(--ui-focus-ring-opacity));
-  --ui-ripple-bg: rgb(from var(--ui-white) r g b/var(--ui-ripple-opacity));
   --ui-primary-contrast: contrast-color(var(--ui-primary));
   --ui-primary-interaction-mix: contrast-color(var(--ui-primary-contrast));
   --ui-primary-highlight: color-mix(in oklch, var(--ui-primary) 85%, var(--ui-primary-interaction-mix));
   --ui-primary-active: color-mix(in oklch, var(--ui-primary) 70%, var(--ui-primary-interaction-mix));
   --ui-primary-subtle-text: color-mix(in oklch, var(--ui-primary) 50%, contrast-color(var(--ui-primary-subtle)));
+  --ui-accent: #7c3aed;
+  --ui-accent-contrast: contrast-color(var(--ui-accent));
+  --ui-accent-interaction-mix: contrast-color(var(--ui-accent-contrast));
+  --ui-accent-highlight: color-mix(in oklch, var(--ui-accent) 85%, var(--ui-accent-interaction-mix));
+  --ui-accent-active: color-mix(in oklch, var(--ui-accent) 70%, var(--ui-accent-interaction-mix));
+  --ui-accent-subtle-text: color-mix(in oklch, var(--ui-accent) 50%, contrast-color(var(--ui-accent-subtle)));
+  --ui-secondary: color-mix(in srgb, var(--ui-gray) 80%, var(--ui-black));
   --ui-secondary-contrast: contrast-color(var(--ui-secondary));
   --ui-secondary-interaction-mix: contrast-color(var(--ui-secondary-contrast));
   --ui-secondary-highlight: color-mix(in oklch, var(--ui-secondary) 85%, var(--ui-secondary-interaction-mix));
   --ui-secondary-active: color-mix(in oklch, var(--ui-secondary) 70%, var(--ui-secondary-interaction-mix));
   --ui-secondary-subtle-text: color-mix(in oklch, var(--ui-secondary) 50%, contrast-color(var(--ui-secondary-subtle)));
+  --ui-success: #008442;
   --ui-success-contrast: contrast-color(var(--ui-success));
   --ui-success-interaction-mix: contrast-color(var(--ui-success-contrast));
   --ui-success-highlight: color-mix(in oklch, var(--ui-success) 85%, var(--ui-success-interaction-mix));
   --ui-success-active: color-mix(in oklch, var(--ui-success) 70%, var(--ui-success-interaction-mix));
   --ui-success-subtle-text: color-mix(in oklch, var(--ui-success) 50%, contrast-color(var(--ui-success-subtle)));
+  --ui-info: #0ebbbb;
   --ui-info-contrast: contrast-color(var(--ui-info));
   --ui-info-interaction-mix: contrast-color(var(--ui-info-contrast));
   --ui-info-highlight: color-mix(in oklch, var(--ui-info) 85%, var(--ui-info-interaction-mix));
   --ui-info-active: color-mix(in oklch, var(--ui-info) 70%, var(--ui-info-interaction-mix));
   --ui-info-subtle-text: color-mix(in oklch, var(--ui-info) 50%, contrast-color(var(--ui-info-subtle)));
+  --ui-warning: #f77625;
   --ui-warning-contrast: contrast-color(var(--ui-warning));
   --ui-warning-interaction-mix: contrast-color(var(--ui-warning-contrast));
   --ui-warning-highlight: color-mix(in oklch, var(--ui-warning) 85%, var(--ui-warning-interaction-mix));
   --ui-warning-active: color-mix(in oklch, var(--ui-warning) 70%, var(--ui-warning-interaction-mix));
   --ui-warning-subtle-text: color-mix(in oklch, var(--ui-warning) 50%, contrast-color(var(--ui-warning-subtle)));
+  --ui-danger: #c71010;
   --ui-danger-contrast: contrast-color(var(--ui-danger));
   --ui-danger-interaction-mix: contrast-color(var(--ui-danger-contrast));
   --ui-danger-highlight: color-mix(in oklch, var(--ui-danger) 85%, var(--ui-danger-interaction-mix));
   --ui-danger-active: color-mix(in oklch, var(--ui-danger) 70%, var(--ui-danger-interaction-mix));
   --ui-danger-subtle-text: color-mix(in oklch, var(--ui-danger) 50%, contrast-color(var(--ui-danger-subtle)));
+  --ui-light: color-mix(in srgb, var(--ui-gray) 20%, var(--ui-white));
   --ui-light-contrast: contrast-color(var(--ui-light));
   --ui-light-interaction-mix: var(--ui-black);
   --ui-light-highlight: color-mix(in srgb, var(--ui-light) 85%, var(--ui-light-interaction-mix));
   --ui-light-active: color-mix(in srgb, var(--ui-light) 70%, var(--ui-light-interaction-mix));
   --ui-light-subtle-text: color-mix(in srgb, var(--ui-light) 50%, contrast-color(var(--ui-light-subtle)));
+  --ui-dark: color-mix(in srgb, var(--ui-gray) 40%, var(--ui-black));
   --ui-dark-contrast: contrast-color(var(--ui-dark));
   --ui-dark-interaction-mix: var(--ui-white);
   --ui-dark-highlight: color-mix(in srgb, var(--ui-dark) 85%, var(--ui-dark-interaction-mix));
   --ui-dark-active: color-mix(in srgb, var(--ui-dark) 70%, var(--ui-dark-interaction-mix));
   --ui-dark-subtle-text: color-mix(in srgb, var(--ui-dark) 50%, contrast-color(var(--ui-dark-subtle)));
+  --ui-gradient: linear-gradient(135deg, var(--ui-primary), var(--ui-accent));
+  --ui-code-color: color-mix(in oklch, var(--ui-danger) 80%, var(--ui-white));
+  --ui-mark-bg: color-mix(in srgb, #ffdd30 20%, var(--ui-white));
+  --ui-focus-ring-color: rgb(from var(--ui-primary) r g b/var(--ui-focus-ring-opacity));
+  --ui-ripple-bg: rgb(from var(--ui-white) r g b/var(--ui-ripple-opacity));
 }
 
 :root,
@@ -122,6 +128,9 @@
   --ui-primary-emphasis: color-mix(in oklch, var(--ui-primary) 95%, var(--ui-black));
   --ui-primary-subtle: color-mix(in srgb, var(--ui-primary) 20%, var(--ui-body-bg));
   --ui-primary-subtle-emphasis: color-mix(in srgb, var(--ui-primary) 30%, var(--ui-body-bg));
+  --ui-accent-emphasis: color-mix(in oklch, var(--ui-accent) 95%, var(--ui-black));
+  --ui-accent-subtle: color-mix(in srgb, var(--ui-accent) 20%, var(--ui-body-bg));
+  --ui-accent-subtle-emphasis: color-mix(in srgb, var(--ui-accent) 30%, var(--ui-body-bg));
   --ui-secondary-emphasis: color-mix(in oklch, var(--ui-secondary) 95%, var(--ui-black));
   --ui-secondary-subtle: color-mix(in srgb, var(--ui-secondary) 20%, var(--ui-body-bg));
   --ui-secondary-subtle-emphasis: color-mix(in srgb, var(--ui-secondary) 30%, var(--ui-body-bg));
@@ -164,6 +173,9 @@
   --ui-primary-emphasis: color-mix(in oklch, var(--ui-primary) 95%, var(--ui-white));
   --ui-primary-subtle: color-mix(in srgb, var(--ui-primary) 40%, var(--ui-body-bg));
   --ui-primary-subtle-emphasis: color-mix(in srgb, var(--ui-primary) 50%, var(--ui-body-bg));
+  --ui-accent-emphasis: color-mix(in oklch, var(--ui-accent) 95%, var(--ui-white));
+  --ui-accent-subtle: color-mix(in srgb, var(--ui-accent) 40%, var(--ui-body-bg));
+  --ui-accent-subtle-emphasis: color-mix(in srgb, var(--ui-accent) 50%, var(--ui-body-bg));
   --ui-secondary-emphasis: color-mix(in oklch, var(--ui-secondary) 95%, var(--ui-white));
   --ui-secondary-subtle: color-mix(in srgb, var(--ui-secondary) 40%, var(--ui-body-bg));
   --ui-secondary-subtle-emphasis: color-mix(in srgb, var(--ui-secondary) 50%, var(--ui-body-bg));
@@ -685,6 +697,12 @@ progress {
   --ui-table-color: var(--ui-primary-subtle-text);
   --ui-table-bg: var(--ui-primary-subtle);
   --ui-table-border-color: var(--ui-primary-subtle-emphasis);
+}
+
+.table-accent {
+  --ui-table-color: var(--ui-accent-subtle-text);
+  --ui-table-bg: var(--ui-accent-subtle);
+  --ui-table-border-color: var(--ui-accent-subtle-emphasis);
 }
 
 .table-secondary {
@@ -2070,6 +2088,13 @@ progress {
   --ui-alert-link-color: var(--ui-primary-subtle-text);
 }
 
+.alert-accent {
+  --ui-alert-bg: var(--ui-accent-subtle);
+  --ui-alert-border-color: var(--ui-accent-subtle-emphasis);
+  --ui-alert-color: var(--ui-accent-subtle-text);
+  --ui-alert-link-color: var(--ui-accent-subtle-text);
+}
+
 .alert-secondary {
   --ui-alert-bg: var(--ui-secondary-subtle);
   --ui-alert-border-color: var(--ui-secondary-subtle-emphasis);
@@ -2186,6 +2211,8 @@ progress {
   --ui-btn-border-width: var(--ui-border-width);
   --ui-btn-border-color: transparent;
   --ui-btn-border-radius: var(--ui-border-radius);
+  --ui-btn-background-image: none;
+  --ui-btn-active-transform: translateY(1px);
   --ui-btn-hover-border-color: transparent;
   --ui-btn-active-border-color: var(--ui-border-color);
   --ui-btn-disabled-opacity: var(--ui-disabled-opacity);
@@ -2216,6 +2243,7 @@ progress {
   -webkit-user-select: none;
   user-select: none;
   background-color: var(--ui-btn-bg);
+  background-image: var(--ui-btn-background-image);
   border: var(--ui-btn-border-width) var(--ui-border-style) var(--ui-btn-border-color);
   box-shadow: var(--ui-btn-box-shadow);
   transition-timing-function: var(--ui-transition-timing-function);
@@ -2257,7 +2285,7 @@ progress {
   .btn.active,
   .btn:first-child:active,
   :not(.btn-check) + .btn:active {
-    transform: translateY(1px);
+    transform: var(--ui-btn-active-transform);
   }
 }
 .btn-check:focus-visible + .btn,
@@ -2273,6 +2301,10 @@ fieldset:disabled .btn {
   box-shadow: var(--ui-btn-box-shadow);
   opacity: var(--ui-btn-disabled-opacity);
   transform: none;
+}
+
+.btn-gradient {
+  --ui-btn-background-image: linear-gradient(135deg, rgb(from var(--ui-white) r g b/0.24), rgb(from var(--ui-btn-bg) r g b/0.1) 45%, rgb(from var(--ui-btn-active-bg) r g b/0.45));
 }
 
 .btn-lg, .btn-group-lg > .btn {
@@ -2295,13 +2327,21 @@ fieldset:disabled .btn {
   --ui-btn-hover-border-color: transparent;
   --ui-btn-active-border-color: transparent;
   --ui-btn-active-color: var(--ui-link-hover-color);
+  --ui-btn-active-transform: none;
   --ui-btn-focus-shadow-color: var(--ui-link-color);
+  --ui-btn-box-shadow: none;
+  --ui-btn-hover-box-shadow: none;
+  --ui-btn-active-box-shadow: none;
   -webkit-text-decoration: var(--ui-link-decoration);
   text-decoration: var(--ui-link-decoration);
 }
 .btn-link:hover {
   --ui-btn-color: var(--ui-link-hover-color);
   --ui-link-decoration: var(--ui-link-hover-decoration);
+}
+.btn-check:focus-visible + .btn-link,
+.btn-link:focus-visible {
+  box-shadow: var(--ui-btn-focus-box-shadow);
 }
 
 .btn-primary {
@@ -2330,6 +2370,36 @@ fieldset:disabled .btn {
   --ui-ripple-bg: rgb(from var(--ui-primary) r g b/var(--ui-ripple-opacity));
   --ui-ripple-active-bg: rgb(from var(--ui-primary-contrast) r g b/var(--ui-ripple-opacity));
   --ui-btn-focus-shadow-color: var(--ui-primary);
+  --ui-btn-active-state-bg: var(--ui-btn-hover-bg);
+  --ui-btn-active-state-border-color: var(--ui-btn-hover-border-color);
+}
+
+.btn-accent {
+  --ui-btn-bg: var(--ui-accent);
+  --ui-btn-border-color: var(--ui-accent);
+  --ui-btn-color: var(--ui-accent-contrast);
+  --ui-btn-hover-bg: var(--ui-accent-highlight);
+  --ui-btn-hover-border-color: var(--ui-accent-highlight);
+  --ui-btn-active-bg: var(--ui-accent-active);
+  --ui-btn-active-border-color: var(--ui-accent-active);
+  --ui-ripple-bg: rgb(from var(--ui-accent-contrast) r g b/var(--ui-ripple-opacity));
+  --ui-btn-focus-shadow-color: var(--ui-accent);
+  --ui-btn-active-state-bg: var(--ui-btn-active-bg);
+  --ui-btn-shadow-color: var(--ui-accent);
+  --ui-btn-highlight-box-shadow: inset 0 1px 0 rgb(from var(--ui-white) r g b/0.2);
+}
+
+.btn-outline-accent {
+  --ui-btn-color: var(--ui-accent-emphasis);
+  --ui-btn-border-color: var(--ui-accent-emphasis);
+  --ui-btn-hover-bg: rgb(from var(--ui-accent-emphasis) r g b/0.2);
+  --ui-btn-hover-border-color: var(--ui-accent-emphasis);
+  --ui-btn-active-bg: var(--ui-accent);
+  --ui-btn-active-color: var(--ui-accent-contrast);
+  --ui-btn-active-border-color: var(--ui-accent);
+  --ui-ripple-bg: rgb(from var(--ui-accent) r g b/var(--ui-ripple-opacity));
+  --ui-ripple-active-bg: rgb(from var(--ui-accent-contrast) r g b/var(--ui-ripple-opacity));
+  --ui-btn-focus-shadow-color: var(--ui-accent);
   --ui-btn-active-state-bg: var(--ui-btn-hover-bg);
   --ui-btn-active-state-border-color: var(--ui-btn-hover-border-color);
 }
@@ -3299,6 +3369,18 @@ fieldset:disabled .btn {
   --ui-list-group-active-color: var(--ui-primary-contrast);
   --ui-list-group-active-bg: var(--ui-primary);
   --ui-list-group-active-border-color: var(--ui-primary);
+}
+
+.list-group-item-accent {
+  --ui-list-group-color: var(--ui-accent-subtle-text);
+  --ui-list-group-bg: var(--ui-accent-subtle);
+  --ui-list-group-border-color: var(--ui-accent-subtle-emphasis);
+  --ui-list-group-action-hover-color: var(--ui-accent-subtle-text);
+  --ui-list-group-action-hover-bg: var(--ui-accent-subtle-emphasis);
+  --ui-list-group-focus-shadow-color: var(--ui-accent);
+  --ui-list-group-active-color: var(--ui-accent-contrast);
+  --ui-list-group-active-bg: var(--ui-accent);
+  --ui-list-group-active-border-color: var(--ui-accent);
 }
 
 .list-group-item-secondary {
@@ -5899,6 +5981,11 @@ select.input-lg[multiple] option {
   background-color: rgb(from var(--ui-primary) r g b/var(--ui-bg-opacity)) !important;
 }
 
+.text-bg-accent {
+  color: var(--ui-accent-contrast) !important;
+  background-color: rgb(from var(--ui-accent) r g b/var(--ui-bg-opacity)) !important;
+}
+
 .text-bg-secondary {
   color: var(--ui-secondary-contrast) !important;
   background-color: rgb(from var(--ui-secondary) r g b/var(--ui-bg-opacity)) !important;
@@ -5941,6 +6028,15 @@ select.input-lg[multiple] option {
 .link-primary:is(:hover, :focus-visible) {
   color: rgb(from var(--ui-primary-emphasis) r g b/var(--ui-link-opacity, 1));
   text-decoration-color: rgb(from var(--ui-primary-emphasis) r g b/var(--ui-link-underline-opacity, 1));
+}
+
+.link-accent {
+  color: rgb(from var(--ui-accent) r g b/var(--ui-link-opacity, 1));
+  text-decoration-color: rgb(from var(--ui-accent) r g b/var(--ui-link-underline-opacity, 1));
+}
+.link-accent:is(:hover, :focus-visible) {
+  color: rgb(from var(--ui-accent-emphasis) r g b/var(--ui-link-opacity, 1));
+  text-decoration-color: rgb(from var(--ui-accent-emphasis) r g b/var(--ui-link-underline-opacity, 1));
 }
 
 .link-secondary {
@@ -6033,6 +6129,46 @@ select.input-lg[multiple] option {
   text-decoration-color: rgb(from var(--ui-emphasis-color) r g b/var(--ui-link-underline-opacity, 0.75));
 }
 
+.bg-gradient {
+  background-image: var(--ui-gradient);
+}
+
+.bg-ambient {
+  --ui-ambient-color: var(--ui-primary);
+  --ui-ambient-accent-color: var(--ui-accent);
+  --ui-ambient-background-image: radial-gradient(circle at 10% 0%, rgb(from var(--ui-ambient-color) r g b/0.3), transparent 42%), radial-gradient(circle at 90% 100%, rgb(from var(--ui-ambient-accent-color) r g b/0.25), transparent 42%);
+  background-image: var(--ui-ambient-background-image);
+}
+
+.bg-glass {
+  --ui-glass-bg: rgb(from var(--ui-body-bg) r g b/0.88);
+  --ui-glass-backdrop-filter: blur(1rem) saturate(150%);
+  background-color: var(--ui-glass-bg);
+  -webkit-backdrop-filter: var(--ui-glass-backdrop-filter);
+  backdrop-filter: var(--ui-glass-backdrop-filter);
+}
+
+.text-gradient {
+  --ui-text-gradient: var(--ui-gradient);
+  width: fit-content;
+  padding-block-end: 0.1em;
+  color: transparent;
+  background-image: var(--ui-text-gradient);
+  background-clip: text;
+}
+
+.shadow-glow {
+  --ui-shadow-glow-color: var(--ui-primary);
+  --ui-shadow-glow: var(--ui-shadow), 0 0 1rem rgb(from var(--ui-shadow-glow-color) r g b/0.3), 0 0 2.5rem rgb(from var(--ui-shadow-glow-color) r g b/0.18);
+  box-shadow: var(--ui-shadow-glow);
+}
+
+@media (forced-colors: active) {
+  .text-gradient {
+    color: CanvasText;
+    background-image: none;
+  }
+}
 .focus-ring:focus-visible {
   outline: 0;
   box-shadow: var(--ui-focus-ring-x, 0) var(--ui-focus-ring-y, 0) var(--ui-focus-ring-blur, 0) var(--ui-focus-ring-width) var(--ui-focus-ring-color);
@@ -6206,6 +6342,11 @@ select.input-lg[multiple] option {
   background-color: rgb(from var(--ui-primary) r g b/var(--ui-bg-opacity)) !important;
 }
 
+.bg-accent {
+  --ui-bg-opacity: 1;
+  background-color: rgb(from var(--ui-accent) r g b/var(--ui-bg-opacity)) !important;
+}
+
 .bg-secondary {
   --ui-bg-opacity: 1;
   background-color: rgb(from var(--ui-secondary) r g b/var(--ui-bg-opacity)) !important;
@@ -6254,6 +6395,11 @@ select.input-lg[multiple] option {
 .bg-primary-subtle {
   --ui-bg-opacity: 1;
   background-color: rgb(from var(--ui-primary-subtle) r g b/var(--ui-bg-opacity)) !important;
+}
+
+.bg-accent-subtle {
+  --ui-bg-opacity: 1;
+  background-color: rgb(from var(--ui-accent-subtle) r g b/var(--ui-bg-opacity)) !important;
 }
 
 .bg-secondary-subtle {
@@ -6330,10 +6476,6 @@ select.input-lg[multiple] option {
   --ui-bg-opacity: 1 !important;
 }
 
-.bg-gradient {
-  background-image: var(--ui-gradient) !important;
-}
-
 .border {
   border: var(--ui-border-width) var(--ui-border-style) var(--ui-border-color) !important;
 }
@@ -6377,6 +6519,11 @@ select.input-lg[multiple] option {
 .border-primary {
   --ui-border-opacity: 1;
   border-color: rgb(from var(--ui-primary) r g b/var(--ui-border-opacity)) !important;
+}
+
+.border-accent {
+  --ui-border-opacity: 1;
+  border-color: rgb(from var(--ui-accent) r g b/var(--ui-border-opacity)) !important;
 }
 
 .border-secondary {
@@ -6427,6 +6574,11 @@ select.input-lg[multiple] option {
 .border-primary-subtle {
   --ui-border-opacity: 1;
   border-color: rgb(from var(--ui-primary-subtle) r g b/var(--ui-border-opacity)) !important;
+}
+
+.border-accent-subtle {
+  --ui-border-opacity: 1;
+  border-color: rgb(from var(--ui-accent-subtle) r g b/var(--ui-border-opacity)) !important;
 }
 
 .border-secondary-subtle {
@@ -6729,6 +6881,11 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-primary) r g b/var(--ui-text-opacity)) !important;
 }
 
+.text-accent {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-accent) r g b/var(--ui-text-opacity)) !important;
+}
+
 .text-secondary {
   --ui-text-opacity: 1;
   color: rgb(from var(--ui-secondary) r g b/var(--ui-text-opacity)) !important;
@@ -6779,6 +6936,11 @@ select.input-lg[multiple] option {
   color: rgb(from var(--ui-primary-emphasis) r g b/var(--ui-text-opacity)) !important;
 }
 
+.text-accent-emphasis {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-accent-emphasis) r g b/var(--ui-text-opacity)) !important;
+}
+
 .text-secondary-emphasis {
   --ui-text-opacity: 1;
   color: rgb(from var(--ui-secondary-emphasis) r g b/var(--ui-text-opacity)) !important;
@@ -6817,6 +6979,11 @@ select.input-lg[multiple] option {
 .text-primary-subtle {
   --ui-text-opacity: 1;
   color: rgb(from var(--ui-primary-subtle-text) r g b/var(--ui-text-opacity)) !important;
+}
+
+.text-accent-subtle {
+  --ui-text-opacity: 1;
+  color: rgb(from var(--ui-accent-subtle-text) r g b/var(--ui-text-opacity)) !important;
 }
 
 .text-secondary-subtle {
@@ -8270,6 +8437,11 @@ select.input-lg[multiple] option {
   text-decoration-color: rgb(from var(--ui-primary) r g b/var(--ui-link-underline-opacity)) !important;
 }
 
+.link-underline-accent {
+  --ui-link-underline-opacity: 1;
+  text-decoration-color: rgb(from var(--ui-accent) r g b/var(--ui-link-underline-opacity)) !important;
+}
+
 .link-underline-secondary {
   --ui-link-underline-opacity: 1;
   text-decoration-color: rgb(from var(--ui-secondary) r g b/var(--ui-link-underline-opacity)) !important;
@@ -8318,6 +8490,11 @@ select.input-lg[multiple] option {
 .link-underline-primary-subtle {
   --ui-link-underline-opacity: 1;
   text-decoration-color: rgb(from var(--ui-primary-subtle) r g b/var(--ui-link-underline-opacity)) !important;
+}
+
+.link-underline-accent-subtle {
+  --ui-link-underline-opacity: 1;
+  text-decoration-color: rgb(from var(--ui-accent-subtle) r g b/var(--ui-link-underline-opacity)) !important;
 }
 
 .link-underline-secondary-subtle {
@@ -8703,6 +8880,10 @@ select.input-lg[multiple] option {
 
 .focus-ring-primary {
   --ui-focus-ring-color: rgb(from var(--ui-primary) r g b/var(--ui-focus-ring-opacity)) !important;
+}
+
+.focus-ring-accent {
+  --ui-focus-ring-color: rgb(from var(--ui-accent) r g b/var(--ui-focus-ring-opacity)) !important;
 }
 
 .focus-ring-secondary {

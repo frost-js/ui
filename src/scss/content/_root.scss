@@ -59,24 +59,8 @@
     --ui-black: #{vars.$black};
     --ui-gray: #{vars.$gray};
 
-    --ui-primary: #{vars.$primary};
-    --ui-secondary: #{vars.$secondary};
-    --ui-success: #{vars.$success};
-    --ui-info: #{vars.$info};
-    --ui-warning: #{vars.$warning};
-    --ui-danger: #{vars.$danger};
-    --ui-light: #{vars.$light};
-    --ui-dark: #{vars.$dark};
-
-    --ui-gradient: #{vars.$gradient};
-
-    --ui-code-color: #{vars.$code-color};
-    --ui-mark-bg: #{vars.$mark-bg};
-
-    --ui-focus-ring-color: #{vars.$focus-ring-color};
-    --ui-ripple-bg: #{vars.$ripple-bg};
-
-    @each $name in map.keys(vars.$color-variants) {
+    @each $name, $color in vars.$color-variants {
+        --ui-#{$name}: #{$color};
         --ui-#{$name}-contrast: contrast-color(var(--ui-#{$name}));
 
         @if $name == light {
@@ -97,6 +81,14 @@
             --ui-#{$name}-subtle-text: color-mix(in oklch, var(--ui-#{$name}) 50%, contrast-color(var(--ui-#{$name}-subtle)));
         }
     }
+
+    --ui-gradient: #{vars.$gradient};
+
+    --ui-code-color: #{vars.$code-color};
+    --ui-mark-bg: #{vars.$mark-bg};
+
+    --ui-focus-ring-color: #{vars.$focus-ring-color};
+    --ui-ripple-bg: #{vars.$ripple-bg};
 }
 
 :root,
