@@ -68,6 +68,7 @@ $input-filled-bg: helpers.color-alpha(body-color, .05) !default;
 $input-filled-border-color: var(--ui-tertiary-color) !default;
 $input-filled-hover-bg: helpers.color-alpha(body-color, .075) !default;
 $input-filled-focus-bg: helpers.color-alpha(body-color, .12) !default;
+$input-filled-focus-border-color: var(--ui-primary) !default;
 $input-outline-bg: var(--ui-body-bg) !default;
 $input-outline-border-radius: var(--ui-border-radius) !default;
 $input-outline-hover-border-color: var(--ui-tertiary-color) !default;
@@ -106,8 +107,6 @@ $input-range-thumb-transition: background-color var(--ui-transition-duration-fas
     border-color var(--ui-transition-duration-fast) var(--ui-transition-timing-function),
     box-shadow var(--ui-transition-duration-fast) var(--ui-transition-timing-function),
     transform var(--ui-transition-duration-fast) var(--ui-transition-timing-function) !default;
-
-$ripple-line-bg: var(--ui-primary) !default;
 
 // label
 $label-floating-padding-y: vars.$spacing * .75 !default;

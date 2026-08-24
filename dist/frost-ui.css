@@ -2631,6 +2631,9 @@ fieldset:disabled .btn {
   --ui-card-inner-border-radius: calc(var(--ui-card-border-radius) - var(--ui-card-border-width));
   --ui-card-bg: var(--ui-body-bg);
   --ui-card-box-shadow: var(--ui-shadow-sm);
+  --ui-card-interactive-hover-border-color: rgb(from var(--ui-primary) r g b/0.35);
+  --ui-card-interactive-focus-border-color: var(--ui-primary);
+  --ui-card-interactive-box-shadow: var(--ui-shadow);
   --ui-card-cap-padding-x: 1.25rem;
   --ui-card-cap-padding-y: 0.625rem;
   --ui-card-cap-bg: rgb(from var(--ui-body-color) r g b/0.05);
@@ -2648,6 +2651,19 @@ fieldset:disabled .btn {
   border: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
   border-radius: var(--ui-card-border-radius);
   box-shadow: var(--ui-card-box-shadow);
+}
+.card:has(.stretched-link) {
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration-fast);
+  transition-property: border-color, box-shadow;
+}
+.card:has(.stretched-link:hover) {
+  border-color: var(--ui-card-interactive-hover-border-color);
+  box-shadow: var(--ui-card-interactive-box-shadow);
+}
+.card:has(.stretched-link:focus-visible) {
+  border-color: var(--ui-card-interactive-focus-border-color);
+  box-shadow: var(--ui-card-interactive-box-shadow);
 }
 .card > hr {
   margin-inline: 0;
@@ -5340,7 +5356,7 @@ fieldset:disabled .btn {
   color: var(--ui-body-color);
   transition-timing-function: var(--ui-transition-timing-function);
   transition-duration: var(--ui-transition-duration);
-  transition-property: background-color, border-color, box-shadow;
+  transition-property: background-color, background-size, border-color, box-shadow;
 }
 .input-filled::placeholder,
 .input-outline::placeholder {
@@ -5441,15 +5457,28 @@ select.input-filled[multiple] option, select.input-outline[multiple] option {
 }
 
 .input-filled {
+  --ui-input-filled-focus-line-size: 0% calc(var(--ui-border-width) * 2);
   background-color: var(--ui-input-filled-bg, rgb(from var(--ui-body-color) r g b/0.05));
+  background-image: linear-gradient(var(--ui-primary) 0 0), linear-gradient(var(--ui-input-filled-border-color, var(--ui-tertiary-color)) 0 0);
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-origin: border-box;
+  background-size: var(--ui-input-filled-focus-line-size), 100% var(--ui-border-width);
   border: 0;
-  border-bottom: var(--ui-border-width) var(--ui-border-style) var(--ui-input-filled-border-color, var(--ui-tertiary-color));
+  border-bottom: var(--ui-border-width) var(--ui-border-style) transparent;
 }
 .input-filled:hover {
   background-color: var(--ui-input-filled-hover-bg, rgb(from var(--ui-body-color) r g b/0.075));
 }
 .input-filled:focus, .input-filled.focus {
+  --ui-input-filled-focus-line-size: 100% calc(var(--ui-border-width) * 2);
   background-color: var(--ui-input-filled-focus-bg, rgb(from var(--ui-body-color) r g b/0.12));
+}
+select.input-filled:not([multiple]) {
+  background-image: var(--ui-select-arrow-background-image), linear-gradient(var(--ui-primary) 0 0), linear-gradient(var(--ui-input-filled-border-color, var(--ui-tertiary-color)) 0 0);
+  background-position: right 0.5rem center, center bottom, center bottom;
+  background-origin: padding-box, border-box, border-box;
+  background-size: 16px 12px, var(--ui-input-filled-focus-line-size), 100% var(--ui-border-width);
 }
 
 .input-outline {
@@ -5524,26 +5553,6 @@ select.input-lg[multiple] option {
   border-radius: var(--ui-border-radius);
 }
 
-.ripple-line {
-  position: absolute;
-  inset-inline-start: 0;
-  bottom: 0;
-  z-index: 4;
-  width: 100%;
-  height: calc(var(--ui-border-width) * 2);
-  background-color: var(--ui-primary);
-  opacity: 0;
-  transform: scaleX(0);
-  transition-timing-function: var(--ui-transition-timing-function);
-  transition-duration: var(--ui-transition-duration);
-  transition-property: transform, opacity;
-}
-.input-filled:focus ~ .ripple-line,
-.input-filled.focus ~ .ripple-line {
-  opacity: 1;
-  transform: scaleX(1);
-}
-
 .input-group {
   position: relative;
   display: flex;
@@ -5551,6 +5560,17 @@ select.input-lg[multiple] option {
   align-items: stretch;
   width: 100%;
   border-radius: var(--ui-border-radius);
+}
+.input-group:has(.input-outline) {
+  transition: box-shadow var(--ui-transition-duration-fast) var(--ui-transition-timing-function);
+}
+.input-group:has(.input-outline:is(:focus, .focus)) {
+  box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
+}
+.input-group:has(.input-outline:is(:focus, .focus)) > .form-input > .input-outline,
+.input-group:has(.input-outline:is(:focus, .focus)) > .input-outline,
+.input-group:has(.input-outline:is(:focus, .focus)) > .input-group-text {
+  border-color: var(--ui-primary);
 }
 .input-group > .form-input,
 .input-group > .input-filled,
@@ -5568,6 +5588,10 @@ select.input-lg[multiple] option {
 .input-group > .input-outline:focus,
 .input-group > .btn:focus {
   z-index: 3;
+}
+.input-group > .form-input > .input-outline:is(:focus, .focus),
+.input-group > .input-outline:is(:focus, .focus) {
+  box-shadow: none;
 }
 .input-group > .btn,
 .input-group > .form-input,
@@ -5599,9 +5623,39 @@ select.input-lg[multiple] option {
   border-start-start-radius: 0;
   border-end-start-radius: 0;
 }
+.input-group > .input-group-text {
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration-fast);
+  transition-property: background-color, border-color;
+}
 
 .input-group-filled {
   border-radius: 0;
+}
+.input-group-filled::after {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 4;
+  height: calc(var(--ui-border-width) * 2);
+  pointer-events: none;
+  content: "";
+  background-color: var(--ui-primary);
+  opacity: 0;
+  transform: scaleX(0);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
+  transition-property: transform, opacity;
+}
+.input-group-filled:has(.input-filled:is(:focus, .focus)) > .form-input > .input-filled,
+.input-group-filled:has(.input-filled:is(:focus, .focus)) > .input-filled,
+.input-group-filled:has(.input-filled:is(:focus, .focus)) > .input-group-text {
+  --ui-input-filled-focus-line-size: 0% calc(var(--ui-border-width) * 2);
+  background-color: var(--ui-input-filled-focus-bg, rgb(from var(--ui-body-color) r g b/0.12));
+}
+.input-group-filled:has(.input-filled:is(:focus, .focus))::after {
+  opacity: 1;
+  transform: scaleX(1);
 }
 .input-group-filled > .input-group-text {
   background-color: var(--ui-input-filled-bg, rgb(from var(--ui-body-color) r g b/0.05));

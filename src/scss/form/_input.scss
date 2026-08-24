@@ -19,7 +19,7 @@
     color: vars.$input-color;
     transition-timing-function: var(--ui-transition-timing-function);
     transition-duration: var(--ui-transition-duration);
-    transition-property: background-color, border-color, box-shadow;
+    transition-property: background-color, background-size, border-color, box-shadow;
 
     &::placeholder {
         color: vars.$input-placeholder-color;
@@ -123,9 +123,16 @@
 }
 
 .input-filled {
+    --ui-input-filled-focus-line-size: 0% calc(#{vars.$input-border-width} * 2);
+
     background-color: var(--ui-input-filled-bg, #{vars.$input-filled-bg});
+    background-image: linear-gradient(vars.$input-filled-focus-border-color 0 0), linear-gradient(var(--ui-input-filled-border-color, #{vars.$input-filled-border-color}) 0 0);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-origin: border-box;
+    background-size: var(--ui-input-filled-focus-line-size), 100% vars.$input-border-width;
     border: 0;
-    border-bottom: vars.$input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{vars.$input-filled-border-color});
+    border-bottom: vars.$input-border-width var(--ui-border-style) transparent;
 
     &:hover {
         background-color: var(--ui-input-filled-hover-bg, #{vars.$input-filled-hover-bg});
@@ -133,7 +140,16 @@
 
     &:focus,
     &.focus {
+        --ui-input-filled-focus-line-size: 100% calc(#{vars.$input-border-width} * 2);
+
         background-color: var(--ui-input-filled-focus-bg, #{vars.$input-filled-focus-bg});
+    }
+
+    @at-root select#{&}:not([multiple]) {
+        background-image: var(--ui-select-arrow-background-image), linear-gradient(vars.$input-filled-focus-border-color 0 0), linear-gradient(var(--ui-input-filled-border-color, #{vars.$input-filled-border-color}) 0 0);
+        background-position: right vars.$input-padding-x center, center bottom, center bottom;
+        background-origin: padding-box, border-box, border-box;
+        background-size: vars.$input-select-arrow-size #{vars.$input-select-arrow-size * .75}, var(--ui-input-filled-focus-line-size), 100% vars.$input-border-width;
     }
 }
 
@@ -221,30 +237,6 @@
 
         &::-webkit-color-swatch {
             @include mixins.border-radius(vars.$input-outline-border-radius);
-        }
-    }
-}
-
-.ripple-line {
-    position: absolute;
-    inset-inline-start: 0;
-    bottom: 0;
-    z-index: 4;
-    width: 100%;
-    height: calc(vars.$input-border-width * 2);
-    background-color: vars.$ripple-line-bg;
-    opacity: 0;
-    transform: scaleX(0);
-    transition-timing-function: var(--ui-transition-timing-function);
-    transition-duration: var(--ui-transition-duration);
-    transition-property: transform, opacity;
-
-    @at-root {
-
-        .input-filled:focus~#{&},
-        .input-filled.focus~#{&} {
-            opacity: 1;
-            transform: scaleX(1);
         }
     }
 }

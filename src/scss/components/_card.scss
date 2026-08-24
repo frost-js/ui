@@ -12,6 +12,9 @@
     --ui-card-inner-border-radius: calc(var(--ui-card-border-radius) - var(--ui-card-border-width));
     --ui-card-bg: #{vars.$card-bg};
     --ui-card-box-shadow: #{vars.$card-box-shadow};
+    --ui-card-interactive-hover-border-color: #{vars.$card-interactive-hover-border-color};
+    --ui-card-interactive-focus-border-color: #{vars.$card-interactive-focus-border-color};
+    --ui-card-interactive-box-shadow: #{vars.$card-interactive-box-shadow};
     --ui-card-cap-padding-x: #{vars.$card-cap-padding-x};
     --ui-card-cap-padding-y: #{vars.$card-cap-padding-y};
     --ui-card-cap-bg: #{vars.$card-cap-bg};
@@ -30,6 +33,22 @@
     border: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
     @include mixins.border-radius(var(--ui-card-border-radius));
     box-shadow: var(--ui-card-box-shadow);
+
+    &:has(.stretched-link) {
+        transition-timing-function: var(--ui-transition-timing-function);
+        transition-duration: var(--ui-transition-duration-fast);
+        transition-property: border-color, box-shadow;
+    }
+
+    &:has(.stretched-link:hover) {
+        border-color: var(--ui-card-interactive-hover-border-color);
+        box-shadow: var(--ui-card-interactive-box-shadow);
+    }
+
+    &:has(.stretched-link:focus-visible) {
+        border-color: var(--ui-card-interactive-focus-border-color);
+        box-shadow: var(--ui-card-interactive-box-shadow);
+    }
 
     >hr {
         margin-inline: 0;
