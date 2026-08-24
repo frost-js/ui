@@ -31,8 +31,9 @@
 }
 
 .list-group-item-action {
+    --ui-list-group-color: var(--ui-list-group-action-color);
+
     width: 100%;
-    color: var(--ui-list-group-action-color);
     text-align: inherit;
 
     &:is(:hover, :focus-visible) {

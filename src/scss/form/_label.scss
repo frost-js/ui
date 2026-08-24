@@ -15,8 +15,8 @@
 }
 
 .col-label-lg {
-    padding-top: calc(#{vars.$input-padding-y} + #{vars.$input-border-width});
-    padding-bottom: calc(#{vars.$input-padding-y} + #{vars.$input-border-width});
+    padding-top: calc(#{vars.$input-lg-padding-y} + #{vars.$input-border-width});
+    padding-bottom: calc(#{vars.$input-lg-padding-y} + #{vars.$input-border-width});
     font-size: vars.$input-lg-font-size;
 }
 

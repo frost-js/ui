@@ -32,7 +32,7 @@
     border: var(--ui-spinner-border-width) solid currentcolor;
     border-right-color: transparent;
     @include mixins.border-radius(50%);
-    animation: spinner-border var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
+    animation: var(--ui-spinner-animation-name) var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
 }
 
 .spinner-grow {
@@ -40,7 +40,7 @@
     --ui-spinner-height: #{vars.$spinner-height};
     --ui-spinner-vertical-align: #{vars.$spinner-vertical-align};
     --ui-spinner-animation-speed: #{vars.$spinner-animation-speed};
-    --ui-spinner-animation-name: spinner-border;
+    --ui-spinner-animation-name: spinner-grow;
 
     display: inline-block;
     width: var(--ui-spinner-width);
@@ -49,7 +49,7 @@
     background-color: currentcolor;
     @include mixins.border-radius(50%);
     opacity: 0;
-    animation: spinner-grow var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
+    animation: var(--ui-spinner-animation-name) var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
 }
 
 .spinner-border-sm {

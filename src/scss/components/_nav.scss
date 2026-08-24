@@ -37,7 +37,7 @@
 
     &:focus-visible {
         outline: 0;
-        box-shadow: vars.$nav-link-focus-box-shadow;
+        box-shadow: var(--ui-nav-link-focus-box-shadow);
     }
 
     &.disabled {

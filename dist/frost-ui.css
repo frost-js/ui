@@ -3088,7 +3088,6 @@ fieldset:disabled .btn {
   --ui-dropdown-border-width: var(--ui-border-width);
   --ui-dropdown-border-color: var(--ui-border-color-translucent);
   --ui-dropdown-border-radius: var(--ui-border-radius-xl);
-  --ui-dropdown-inner-border-radius: calc(var(--ui-dropdown-border-radius) - var(--ui-dropdown-border-width));
   --ui-dropdown-box-shadow: var(--ui-shadow);
   --ui-dropdown-divider-margin-y: 0.5rem;
   --ui-dropdown-divider-border-width: var(--ui-border-width);
@@ -3289,8 +3288,8 @@ fieldset:disabled .btn {
 }
 
 .list-group-item-action {
+  --ui-list-group-color: var(--ui-list-group-action-color);
   width: 100%;
-  color: var(--ui-list-group-action-color);
   text-align: inherit;
 }
 .list-group-item-action:is(:hover, :focus-visible) {
@@ -3758,7 +3757,7 @@ fieldset:disabled .btn {
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 500px;
+    max-width: var(--ui-modal-width);
     margin: 2rem auto;
   }
   .modal-dialog-scrollable {
@@ -3933,7 +3932,7 @@ fieldset:disabled .btn {
 }
 .nav-link:focus-visible {
   outline: 0;
-  box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
+  box-shadow: var(--ui-nav-link-focus-box-shadow);
 }
 .nav-link.disabled {
   color: var(--ui-nav-link-disabled-color);
@@ -4793,7 +4792,6 @@ fieldset:disabled .btn {
   --ui-popover-body-color: var(--ui-body-color);
   --ui-popover-arrow-width: 1rem;
   --ui-popover-arrow-height: 0.5rem;
-  --ui-popover-arrow-border: var(--ui-popover-border-color);
   position: absolute;
   top: 0;
   left: 0;
@@ -5011,7 +5009,7 @@ fieldset:disabled .btn {
   border: var(--ui-spinner-border-width) solid currentcolor;
   border-right-color: transparent;
   border-radius: 50%;
-  animation: spinner-border var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
+  animation: var(--ui-spinner-animation-name) var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
 }
 
 .spinner-grow {
@@ -5019,7 +5017,7 @@ fieldset:disabled .btn {
   --ui-spinner-height: 2em;
   --ui-spinner-vertical-align: text-bottom;
   --ui-spinner-animation-speed: var(--ui-animation-duration);
-  --ui-spinner-animation-name: spinner-border;
+  --ui-spinner-animation-name: spinner-grow;
   display: inline-block;
   width: var(--ui-spinner-width);
   height: var(--ui-spinner-height);
@@ -5027,7 +5025,7 @@ fieldset:disabled .btn {
   background-color: currentcolor;
   border-radius: 50%;
   opacity: 0;
-  animation: spinner-grow var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
+  animation: var(--ui-spinner-animation-name) var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
 }
 
 .spinner-border-sm {
@@ -5108,7 +5106,7 @@ fieldset:disabled .btn {
   color: var(--ui-toast-header-color);
   background-color: var(--ui-toast-header-bg);
   background-clip: padding-box;
-  border-bottom: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-border-color);
+  border-bottom: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-header-border-color);
   border-top-left-radius: calc(var(--ui-toast-border-radius) - var(--ui-toast-border-width));
   border-top-right-radius: calc(var(--ui-toast-border-radius) - var(--ui-toast-border-width));
 }
@@ -8356,54 +8354,6 @@ select.input-lg[multiple] option {
 }
 
 .link-opacity-100-hover:hover {
-  --ui-link-opacity: 1 !important;
-}
-
-.link-hover-opacity-0 {
-  --ui-link-opacity: 0 !important;
-}
-
-.link-hover-opacity-0-hover:hover {
-  --ui-link-opacity: 0 !important;
-}
-
-.link-hover-opacity-10 {
-  --ui-link-opacity: 0.1 !important;
-}
-
-.link-hover-opacity-10-hover:hover {
-  --ui-link-opacity: 0.1 !important;
-}
-
-.link-hover-opacity-25 {
-  --ui-link-opacity: 0.25 !important;
-}
-
-.link-hover-opacity-25-hover:hover {
-  --ui-link-opacity: 0.25 !important;
-}
-
-.link-hover-opacity-50 {
-  --ui-link-opacity: 0.5 !important;
-}
-
-.link-hover-opacity-50-hover:hover {
-  --ui-link-opacity: 0.5 !important;
-}
-
-.link-hover-opacity-75 {
-  --ui-link-opacity: 0.75 !important;
-}
-
-.link-hover-opacity-75-hover:hover {
-  --ui-link-opacity: 0.75 !important;
-}
-
-.link-hover-opacity-100 {
-  --ui-link-opacity: 1 !important;
-}
-
-.link-hover-opacity-100-hover:hover {
   --ui-link-opacity: 1 !important;
 }
 

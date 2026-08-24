@@ -100,7 +100,7 @@ $input-range-thumb-bg: var(--ui-primary) !default;
 $input-range-thumb-border-radius: var(--ui-border-radius-pill) !default;
 $input-range-thumb-box-shadow: var(--ui-shadow-sm), 0 .125rem .5rem helpers.color-alpha(primary, .25) !default;
 $input-range-thumb-focus-box-shadow: 0 0 0 1px var(--ui-body-bg), 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color) !default;
-$input-range-thumb-focus-box-shadow-width: var(--ui-focus-ring-width);
+$input-range-thumb-focus-box-shadow-width: var(--ui-focus-ring-width) !default;
 $input-range-thumb-active-bg: var(--ui-primary-active) !default;
 $input-range-thumb-disabled-bg: var(--ui-secondary-color) !default;
 $input-range-thumb-transition: background-color var(--ui-transition-duration-fast) var(--ui-transition-timing-function),

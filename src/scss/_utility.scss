@@ -319,13 +319,6 @@
     css-var: true
 ));
 @include mixins.utility((
-    property: link-opacity,
-    class: link-hover-opacity,
-    values: vars.$opacities,
-    state: hover,
-    css-var: true
-));
-@include mixins.utility((
     property: text-underline-offset,
     class: link-offset,
     values: (

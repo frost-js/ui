@@ -150,7 +150,7 @@
 
 @include mixins.media-breakpoint-up(sm) {
     .modal-dialog {
-        max-width: vars.$modal-md-max-width;
+        max-width: var(--ui-modal-width);
         margin: vars.$modal-md-dialog-margin-y auto;
     }
 
