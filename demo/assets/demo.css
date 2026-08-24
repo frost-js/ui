@@ -1,5 +1,10 @@
 :root {
+    --demo-section-gap: clamp(4rem, 7vw, 5rem);
     --demo-sidebar-width: 18rem;
+}
+
+[data-demo-catalog] body > .container section {
+    margin-block-end: var(--demo-section-gap) !important;
 }
 
 [data-demo-sidebar] {
