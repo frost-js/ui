@@ -39,14 +39,13 @@
 
     &::before {
         position: absolute;
-        top: 50%;
-        left: 50%;
+        inset: 0;
         display: inline-block;
+        margin: auto;
         content: "";
         background-color: currentcolor;
         opacity: 0;
         scale: .5;
-        translate: -50% -50%;
         transition-timing-function: var(--ui-transition-timing-function);
         transition-duration: var(--ui-transition-duration-fast);
         transition-property: opacity, scale;
