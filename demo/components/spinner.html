@@ -16,140 +16,90 @@
     <div class="container">
         <h1>Spinners</h1>
 
-        <h4>Border</h4>
-        <div class="mb-4">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Border and growing spinners</h2>
+                <p class="text-body-secondary mb-2">Choose the motion that best fits the surrounding interface and include hidden status text when it communicates loading.</p>
+                <code>.spinner-border</code> <code>.spinner-grow</code>
+            </header>
+            <div class="d-flex align-items-center gap-4">
+                <div class="spinner-border" role="status"><span class="visually-hidden">Loading</span></div>
+                <div class="spinner-grow" role="status"><span class="visually-hidden">Loading</span></div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-border text-accent" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-border text-secondary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-border text-success" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-border text-info" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-border text-warning" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-border text-danger" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-border text-light" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-border text-dark" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
+        </section>
 
-        <h4>Growing</h4>
-        <div class="mb-4">
-            <div class="spinner-grow" role="status">
-                <span class="visually-hidden">Loading...</span>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Color utilities</h2>
+                <p class="text-body-secondary mb-2">Spinners use the current text color, so semantic text utilities provide every supported variant.</p>
+                <code>.text-*</code>
+            </header>
+            <div class="d-flex flex-wrap gap-3 mb-4" aria-label="Border spinner color examples">
+                <div class="spinner-border text-primary" aria-hidden="true"></div>
+                <div class="spinner-border text-accent" aria-hidden="true"></div>
+                <div class="spinner-border text-secondary" aria-hidden="true"></div>
+                <div class="spinner-border text-success" aria-hidden="true"></div>
+                <div class="spinner-border text-info" aria-hidden="true"></div>
+                <div class="spinner-border text-warning" aria-hidden="true"></div>
+                <div class="spinner-border text-danger" aria-hidden="true"></div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="spinner-grow text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+            <div class="d-flex flex-wrap gap-3" aria-label="Growing spinner color examples">
+                <div class="spinner-grow text-primary" aria-hidden="true"></div>
+                <div class="spinner-grow text-accent" aria-hidden="true"></div>
+                <div class="spinner-grow text-secondary" aria-hidden="true"></div>
+                <div class="spinner-grow text-success" aria-hidden="true"></div>
+                <div class="spinner-grow text-info" aria-hidden="true"></div>
+                <div class="spinner-grow text-warning" aria-hidden="true"></div>
+                <div class="spinner-grow text-danger" aria-hidden="true"></div>
             </div>
-            <div class="spinner-grow text-accent" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-grow text-secondary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-grow text-success" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-grow text-info" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-grow text-warning" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-grow text-danger" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
+        </section>
 
-        <h4>Alignment</h4>
-        <div class="mb-4">
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Sizes</h2>
+                <p class="text-body-secondary mb-2">Use the small modifier for compact controls or override the component dimensions locally.</p>
+                <code>.spinner-border-sm</code> <code>--ui-spinner-width</code>
+            </header>
+            <div class="d-flex align-items-center gap-4">
+                <div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading</span></div>
+                <div class="spinner-grow spinner-grow-sm" role="status"><span class="visually-hidden">Loading</span></div>
+                <div class="spinner-border" style="--ui-spinner-width: 3rem; --ui-spinner-height: 3rem;" role="status"><span class="visually-hidden">Loading</span></div>
+                <div class="spinner-grow" style="--ui-spinner-width: 3rem; --ui-spinner-height: 3rem;" role="status"><span class="visually-hidden">Loading</span></div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Loading layout</h2>
+                <p class="text-body-secondary mb-2">Flex utilities keep a status label and its spinner aligned within a larger surface.</p>
+                <code>.d-flex .align-items-center</code>
+            </header>
+            <div class="card card-body d-flex flex-row align-items-center gap-3">
+                <div>
+                    <strong class="d-block">Preparing your export</strong>
+                    <span class="text-body-secondary">This usually takes less than a minute.</span>
                 </div>
+                <div class="spinner-border text-primary ms-auto" role="status"><span class="visually-hidden">Preparing export</span></div>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="d-flex align-items-center">
-                <strong>Loading...</strong>
-                <div class="spinner-border ms-auto" role="status"></div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="clearfix">
-                <div class="spinner-border float-end" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="text-center">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <h4>Sizes</h4>
-        <div class="mb-4">
-            <div class="spinner-border spinner-border-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Buttons</h2>
+                <p class="text-body-secondary mb-2">Small spinners fit loading buttons without changing their control height.</p>
+                <code>.btn .spinner-border-sm</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    Saving
+                </button>
+                <button class="btn btn-secondary" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                    Publishing
+                </button>
             </div>
-            <div class="spinner-grow spinner-grow-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-
-        <h4>Buttons</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" type="button" disabled>
-                <span class="spinner-border spinner-border-sm" role="status"></span>
-                <span class="visually-hidden">Loading...</span>
-            </button>
-            <button class="btn btn-primary ripple" type="button" disabled>
-                <span class="spinner-border spinner-border-sm" role="status"></span>
-                Loading...
-            </button>
-        </div>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple" type="button" disabled>
-                <span class="spinner-grow spinner-grow-sm" role="status"></span>
-                <span class="visually-hidden">Loading...</span>
-            </button>
-            <button class="btn btn-primary ripple" type="button" disabled>
-                <span class="spinner-grow spinner-grow-sm" role="status"></span>
-                Loading...
-            </button>
-        </div>
+        </section>
     </div>
 </body>
 

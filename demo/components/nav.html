@@ -15,180 +15,130 @@
 <body>
     <div class="container">
         <h1>Navs</h1>
-        <div class="mb-4">
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" aria-current="page">Active</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
-        </div>
-        <div class="mb-4">
-            <nav class="nav">
-                <a class="nav-link active" href="#" aria-current="page">Active</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Base navigation</h2>
+                <p class="text-body-secondary mb-2">The base nav provides flexible link spacing without imposing a visual treatment.</p>
+                <code>.nav .nav-link</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <h3 class="h6">Horizontal</h3>
+                    <nav class="nav flex-nowrap overflow-auto" aria-label="Project sections">
+                        <a class="nav-link active" href="card.html" aria-current="page">Overview</a>
+                        <a class="nav-link" href="list-group.html">Activity</a>
+                        <a class="nav-link" href="badge.html">Reports</a>
+                        <span class="nav-link disabled" aria-disabled="true">Archive</span>
+                    </nav>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="h6">Vertical</h3>
+                    <nav class="nav flex-column" aria-label="Account sections">
+                        <a class="nav-link active" href="card.html" aria-current="page">Profile</a>
+                        <a class="nav-link" href="list-group.html">Notifications</a>
+                        <a class="nav-link" href="badge.html">Security</a>
+                    </nav>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Visual treatments</h2>
+                <p class="text-body-secondary mb-2">Tabs, pills, and underlines communicate different relationships while preserving the same nav structure.</p>
+                <code>.nav-tabs</code> <code>.nav-pills</code> <code>.nav-underline</code>
+            </header>
+            <div class="mb-4">
+                <h3 class="h6">Tabs</h3>
+                <nav class="nav nav-tabs flex-nowrap overflow-auto" aria-label="Workspace tabs">
+                    <a class="nav-link active" href="card.html" aria-current="page">Overview</a>
+                    <a class="nav-link" href="list-group.html">Updates</a>
+                    <a class="nav-link" href="badge.html">Files</a>
+                    <span class="nav-link disabled" aria-disabled="true">Insights</span>
+                </nav>
+            </div>
+            <div class="mb-4">
+                <h3 class="h6">Pills</h3>
+                <nav class="nav nav-pills" aria-label="Display mode">
+                    <a class="nav-link active" href="card.html" aria-current="page">Cards</a>
+                    <a class="nav-link" href="list-group.html">List</a>
+                    <a class="nav-link" href="../content/table.html">Table</a>
+                </nav>
+            </div>
+            <div>
+                <h3 class="h6">Underline</h3>
+                <nav class="nav nav-underline" aria-label="Report sections">
+                    <a class="nav-link active" href="card.html" aria-current="page">Summary</a>
+                    <a class="nav-link" href="list-group.html">Audience</a>
+                    <a class="nav-link" href="badge.html">Sources</a>
+                </nav>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Fill and justify</h2>
+                <p class="text-body-secondary mb-2">Fill distributes available space by content, while justified navigation gives every item equal width.</p>
+                <code>.nav-fill</code> <code>.nav-justified</code>
+            </header>
+            <div class="mb-4">
+                <h3 class="h6">Content-proportional fill</h3>
+                <nav class="nav nav-pills nav-fill flex-nowrap" aria-label="Filled navigation">
+                    <a class="nav-link active" href="card.html" aria-current="page">Overview</a>
+                    <a class="nav-link" href="list-group.html">Longer activity label</a>
+                    <a class="nav-link" href="badge.html">Files</a>
+                </nav>
+            </div>
+            <div>
+                <h3 class="h6">Equal-width items</h3>
+                <nav class="nav nav-pills nav-justified" aria-label="Justified navigation">
+                    <a class="nav-link active" href="card.html" aria-current="page">Overview</a>
+                    <a class="nav-link" href="list-group.html">Longer activity label</a>
+                    <a class="nav-link" href="badge.html">Files</a>
+                </nav>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Alignment</h2>
+                <p class="text-body-secondary mb-2">Flex utilities align a navigation group without changing the width of its links.</p>
+                <code>.justify-content-center</code> <code>.justify-content-end</code>
+            </header>
+            <nav class="nav nav-underline justify-content-center mb-4" aria-label="Centered navigation">
+                <a class="nav-link active" href="card.html" aria-current="page">Overview</a>
+                <a class="nav-link" href="list-group.html">Activity</a>
+                <a class="nav-link" href="badge.html">Files</a>
             </nav>
-        </div>
-
-        <h4>Alignment</h4>
-        <div class="mb-4">
-            <ul class="nav justify-content-center">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" aria-current="page">Active</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
-        </div>
-        <div class="mb-4">
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" aria-current="page">Active</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
-        </div>
-
-        <h4>Vertical</h4>
-        <div class="mb-4">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" aria-current="page">Active</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
-        </div>
-        <div class="mb-4">
-            <nav class="nav flex-column">
-                <a class="nav-link active" href="#" aria-current="page">Active</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            <nav class="nav nav-underline justify-content-end" aria-label="End-aligned navigation">
+                <a class="nav-link active" href="card.html" aria-current="page">Overview</a>
+                <a class="nav-link" href="list-group.html">Activity</a>
+                <a class="nav-link" href="badge.html">Files</a>
             </nav>
-        </div>
+        </section>
 
-        <h4>Tabs</h4>
-        <div class="mb-4">
-            <div class="nav nav-tabs">
-                <a class="nav-link active" href="#" aria-current="page">Active</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </div>
-        </div>
-
-        <h4>Pills</h4>
-        <div class="mb-4">
-            <div class="nav nav-pills">
-                <a class="nav-link active" href="#" aria-current="page">Active</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </div>
-        </div>
-
-        <h4>Underline</h4>
-        <div class="mb-4">
-            <div class="nav nav-underline">
-                <a class="nav-link active" href="#" aria-current="page">Active</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </div>
-        </div>
-
-        <h4>Fill &amp; Justify</h4>
-        <div class="mb-4">
-            <div class="nav nav-pills nav-fill">
-                <a class="nav-link active" href="#" aria-current="page">Active</a>
-                <a class="nav-link" href="#">Much Longer Link</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="nav nav-pills nav-justified">
-                <a class="nav-link active" href="#" aria-current="page">Active</a>
-                <a class="nav-link" href="#">Much Longer Link</a>
-                <a class="nav-link" href="#">Link</a>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </div>
-        </div>
-
-        <h4>Dropdowns</h4>
-        <div class="mb-4">
-            <div class="nav nav-tabs">
-                <a class="nav-link active" href="#" aria-current="page">Active</a>
-                <a class="nav-link" href="#">Link</a>
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Dropdown navigation</h2>
+                <p class="text-body-secondary mb-2">Place a dropdown inside any nav treatment when secondary destinations need to remain compact.</p>
+                <code>.nav .dropdown .dropdown-toggle</code>
+            </header>
+            <div class="nav nav-tabs" aria-label="Navigation with more destinations">
+                <a class="nav-link active" href="card.html" aria-current="page">Overview</a>
+                <a class="nav-link" href="list-group.html">Activity</a>
                 <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" id="tabDropdown" data-ui-toggle="dropdown" data-ui-spacing="0" href="#" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                    <div class="dropdown-menu" aria-labelledby="tabDropdown">
-                        <a class="dropdown-item" href="#">Link</a>
-                        <a class="dropdown-item" href="#">Link</a>
-                        <a class="dropdown-item" href="#">Link</a>
+                    <button class="nav-link dropdown-toggle" id="navMoreMenu" data-ui-toggle="dropdown" data-ui-spacing="0" type="button" aria-haspopup="true" aria-expanded="false">
+                        More
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="navMoreMenu">
+                        <a class="dropdown-item" href="badge.html">Reports</a>
+                        <a class="dropdown-item" href="pagination.html">History</a>
+                        <a class="dropdown-item" href="breadcrumb.html">Settings</a>
                     </div>
                 </div>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
             </div>
-        </div>
-        <div class="mb-4">
-            <div class="nav nav-pills">
-                <a class="nav-link active" href="#" aria-current="page">Active</a>
-                <a class="nav-link" href="#">Link</a>
-                <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" id="pillDropdown" data-ui-toggle="dropdown" data-ui-spacing="0" href="#" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                    <div class="dropdown-menu" aria-labelledby="pillDropdown">
-                        <a class="dropdown-item" href="#">Link</a>
-                        <a class="dropdown-item" href="#">Link</a>
-                        <a class="dropdown-item" href="#">Link</a>
-                    </div>
-                </div>
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </div>
-        </div>
-
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
+        </section>
     </div>
 </body>
 

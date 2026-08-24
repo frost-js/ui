@@ -15,50 +15,97 @@
 <body>
     <div class="container">
         <h1>Collapse</h1>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple mb-1 collapsed" data-ui-toggle="collapse" data-ui-target="#collapse" type="button" aria-expanded="false" aria-controls="collapse">Toggle Content</button>
-            <button class="btn btn-primary ripple mb-1 collapsed" data-ui-toggle="collapse" href="#collapse" type="button" aria-expanded="false" aria-controls="collapse">Toggle Content</button>
-        </div>
-        <div class="collapse" id="collapse">
-            <div class="card card-body mb-4">
-                This is the body of the card.
-            </div>
-        </div>
 
-        <h4>Horizontal</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple mb-1 collapsed" data-ui-toggle="collapse" data-ui-target="#collapseHorizontal" type="button" aria-expanded="false" aria-controls="collapse">Toggle Content</button>
-        </div>
-        <div style="height: 80px;">
-            <div class="collapse" id="collapseHorizontal" data-ui-direction="right" data-ui-duration="250">
-                <div class="card card-body mb-4" style="width: 500px;">
-                    This is the body of the card.
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Button and link triggers</h2>
+                <p class="text-body-secondary mb-2">A button can target a selector explicitly, while a link can use its destination as the target.</p>
+                <code>data-ui-toggle="collapse"</code> <code>data-ui-target="#routeDetails"</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <button class="btn btn-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#routeDetails" type="button" aria-expanded="false" aria-controls="routeDetails">
+                    Toggle with button
+                </button>
+                <a class="btn btn-outline-primary ripple collapsed" data-ui-toggle="collapse" href="#routeDetails" role="button" aria-expanded="false" aria-controls="routeDetails">
+                    Toggle with link
+                </a>
+            </div>
+            <div class="collapse" id="routeDetails">
+                <div class="card card-body">
+                    The northern trail is 8.5 kilometres return and includes a steep, exposed final ascent.
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Multiple Targets</h4>
-        <div class="mb-4">
-            <button class="btn btn-primary ripple mb-1 collapsed" data-ui-toggle="collapse" data-ui-target="#collapse1" type="button" aria-expanded="false" aria-controls="collapse">Toggle First</button>
-            <button class="btn btn-primary ripple mb-1 collapsed" data-ui-toggle="collapse" data-ui-target="#collapse2" type="button" aria-expanded="false" aria-controls="collapse">Toggle Second</button>
-            <button class="btn btn-primary ripple mb-1 collapsed" data-ui-toggle="collapse" data-ui-target="#collapse1, #collapse2" type="button" aria-expanded="false" aria-controls="collapse">Toggle Both</button>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="collapse" id="collapse1">
-                    <div class="card card-body mb-4">
-                        This is the body of the card.
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Initially visible</h2>
+                <p class="text-body-secondary mb-2">Add the visible state to both the panel and its trigger when content should begin expanded.</p>
+                <code>.collapse.show</code> <code>aria-expanded="true"</code>
+            </header>
+            <button class="btn btn-secondary ripple mb-3" data-ui-toggle="collapse" data-ui-target="#packingSummary" type="button" aria-expanded="true" aria-controls="packingSummary">
+                Packing summary
+            </button>
+            <div class="collapse show" id="packingSummary">
+                <div class="alert alert-info mb-0" role="status">
+                    Water, sun protection, a warm layer, and offline navigation are recommended.
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Horizontal direction</h2>
+                <p class="text-body-secondary mb-2">Set a horizontal direction and give the revealed content a stable width.</p>
+                <code>data-ui-direction="right"</code>
+            </header>
+            <button class="btn btn-primary ripple mb-3" data-ui-toggle="collapse" data-ui-target="#filterPanel" type="button" aria-expanded="true" aria-controls="filterPanel">
+                Toggle filters
+            </button>
+            <div style="min-height: 8rem;">
+                <div class="collapse show" id="filterPanel" data-ui-direction="right">
+                    <div class="card card-body" style="width: 20rem;">
+                        <strong class="d-block mb-2">Visible layers</strong>
+                        <span class="text-body-secondary">Trails, water points, and transport stops</span>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="collapse" id="collapse2">
-                    <div class="card card-body mb-4">
-                        This is the body of the card.
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Multiple targets</h2>
+                <p class="text-body-secondary mb-2">A shared class lets one trigger update several panels while individual triggers retain independent control.</p>
+                <code>data-ui-target=".route-note"</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <button class="btn btn-outline-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#accessNote" type="button" aria-expanded="false" aria-controls="accessNote">
+                    Access
+                </button>
+                <button class="btn btn-outline-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#weatherNote" type="button" aria-expanded="false" aria-controls="weatherNote">
+                    Weather
+                </button>
+                <button class="btn btn-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target=".route-note" type="button" aria-expanded="false" aria-controls="accessNote weatherNote">
+                    Toggle both
+                </button>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="collapse route-note" id="accessNote">
+                        <div class="card card-body">
+                            The trailhead car park closes at sunset and has limited overflow space.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="collapse route-note" id="weatherNote">
+                        <div class="card card-body">
+                            Conditions change quickly above the tree line; check the forecast before leaving.
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 

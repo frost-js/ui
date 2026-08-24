@@ -594,6 +594,30 @@ test.describe('Collapse', () => {
             await expect(page.locator('#collapse1')).toHaveClass('collapse multi-collapse');
             await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse');
         });
+
+        test('normalizes mixed multi-collapse targets', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.body.innerHTML =
+                    '<button class="btn btn-secondary" id="collapseToggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button" aria-expanded="true"></button>' +
+                    '<div class="collapse multi-collapse show" id="collapse1"></div>' +
+                    '<div class="collapse multi-collapse" id="collapse2"></div>';
+            });
+            await page.locator('#collapseToggle').click();
+            await advanceClock(page, 150);
+
+            await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary collapsed');
+            await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#collapse1')).toHaveClass('collapse multi-collapse');
+            await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse');
+
+            await page.locator('#collapseToggle').click();
+            await advanceClock(page, 150);
+
+            await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary');
+            await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'true');
+            await expect(page.locator('#collapse1')).toHaveClass('collapse multi-collapse show');
+            await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse show');
+        });
     });
 
     test.describe('events', () => {

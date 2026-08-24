@@ -10,87 +10,93 @@
     <link rel="stylesheet" href="../assets/demo.css" />
     <script src="../../dist/frost-ui-bundle.js"></script>
     <script src="../assets/demo.js"></script>
-    <style>
-        svg {
-            text-anchor: middle;
-            user-select: none;
-        }
-    </style>
 </head>
 
 <body>
     <div class="container">
         <h1>Placeholders</h1>
-        <div class="d-flex justify-content-around mb-4">
-            <div class="card" style="width: 350px;">
-                <svg class="card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#228c22"></rect>
-                </svg>
-                <div class="card-body">
-                    <h5 class="card-title">Card Title</h5>
-                    <p class="card-text">This is the body of the card, including several several lines of additional body text.</p>
-                    <button class="btn btn-primary btn-lg ripple" type="button">Button</button>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Loading composition</h2>
+                <p class="text-body-secondary mb-2">Match the loading skeleton to the shape and hierarchy of the content it will replace.</p>
+                <code>.placeholder</code> <code>.placeholder-glow</code>
+            </header>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <article class="card h-100">
+                        <img class="card-img-top" src="../assets/coast.webp" alt="Rocky coastline beside blue water" />
+                        <div class="card-body">
+                            <h3 class="card-title h5">Coastal passage</h3>
+                            <p class="card-text">A full-day route linking exposed headlands, sheltered coves, and a quiet harbour.</p>
+                            <a class="btn btn-primary ripple" href="../examples/album.html">View route</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col">
+                    <article class="card h-100" aria-hidden="true">
+                        <div class="card-img-top placeholder bg-secondary w-100" style="height: 12rem;"></div>
+                        <div class="card-body placeholder-glow">
+                            <h3 class="card-title h5"><span class="placeholder col-7"></span></h3>
+                            <p class="card-text">
+                                <span class="placeholder col-12"></span>
+                                <span class="placeholder col-10"></span>
+                                <span class="placeholder col-8"></span>
+                            </p>
+                            <span class="btn btn-primary disabled placeholder col-5"></span>
+                        </div>
+                    </article>
                 </div>
             </div>
-            <div class="card" style="width: 350px;">
-                <svg class="card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#868e96"></rect>
-                </svg>
-                <div class="card-body">
-                    <h5 class="card-title placeholder-glow">
-                        <span class="placeholder col-6"></span>
-                    </h5>
-                    <p class="card-text placeholder-glow">
-                        <span class="placeholder col-7"></span>
-                        <span class="placeholder col-4"></span>
-                        <span class="placeholder col-4"></span>
-                        <span class="placeholder col-6"></span>
-                        <span class="placeholder col-8"></span>
-                    </p>
-                    <button class="btn btn-primary btn-lg disabled placeholder col-5" type="button"></button>
-                </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Widths and sizes</h2>
+                <p class="text-body-secondary mb-2">Grid and sizing utilities control width, while placeholder modifiers adjust line height.</p>
+                <code>.col-*</code> <code>.placeholder-lg</code> <code>.placeholder-sm</code> <code>.placeholder-xs</code>
+            </header>
+            <div class="mb-4">
+                <span class="placeholder col-6 me-2"></span>
+                <span class="placeholder col-3"></span>
             </div>
-        </div>
+            <div>
+                <span class="placeholder placeholder-lg col-12 d-block mb-2"></span>
+                <span class="placeholder col-12 d-block mb-2"></span>
+                <span class="placeholder placeholder-sm col-12 d-block mb-2"></span>
+                <span class="placeholder placeholder-xs col-12 d-block"></span>
+            </div>
+        </section>
 
-        <h4>Width</h4>
-        <div class="mb-4">
-            <span class="placeholder col-6"></span>
-            <span class="placeholder w-75"></span>
-            <span class="placeholder" style="width: 25%;"></span>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Colors</h2>
+                <p class="text-body-secondary mb-2">Background utilities can connect a placeholder to the semantic content it represents.</p>
+                <code>.bg-*</code>
+            </header>
+            <div class="row g-2">
+                <div class="col-sm-6"><span class="placeholder col-12 bg-primary"></span></div>
+                <div class="col-sm-6"><span class="placeholder col-12 bg-accent"></span></div>
+                <div class="col-sm-6"><span class="placeholder col-12 bg-success"></span></div>
+                <div class="col-sm-6"><span class="placeholder col-12 bg-info"></span></div>
+                <div class="col-sm-6"><span class="placeholder col-12 bg-warning"></span></div>
+                <div class="col-sm-6"><span class="placeholder col-12 bg-danger"></span></div>
+            </div>
+        </section>
 
-        <h4>Styles</h4>
-        <div class="mb-4">
-            <span class="placeholder col-12 bg-primary"></span>
-            <span class="placeholder col-12 bg-accent"></span>
-            <span class="placeholder col-12 bg-secondary"></span>
-            <span class="placeholder col-12 bg-success"></span>
-            <span class="placeholder col-12 bg-info"></span>
-            <span class="placeholder col-12 bg-warning"></span>
-            <span class="placeholder col-12 bg-danger"></span>
-            <span class="placeholder col-12 bg-light"></span>
-            <span class="placeholder col-12 bg-dark"></span>
-        </div>
-
-        <h4>Sizes</h4>
-        <div class="mb-4">
-            <span class="placeholder col-12 placeholder-lg"></span>
-            <span class="placeholder col-12"></span>
-            <span class="placeholder col-12 placeholder-sm"></span>
-            <span class="placeholder col-12 placeholder-xs"></span>
-        </div>
-
-        <h4>Animation</h4>
-        <div class="mb-4">
-            <div class="placeholder-glow">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Animation</h2>
+                <p class="text-body-secondary mb-2">Glow and wave treatments indicate pending content and stop automatically when reduced motion is preferred.</p>
+                <code>.placeholder-glow</code> <code>.placeholder-wave</code>
+            </header>
+            <div class="placeholder-glow mb-3">
                 <span class="placeholder col-12"></span>
             </div>
             <div class="placeholder-wave">
                 <span class="placeholder col-12"></span>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 

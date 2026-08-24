@@ -11245,16 +11245,21 @@
 
     initComponent('collapse', Collapse);
 
-    // Toggle every collapse matched by a control.
+    // Keep every collapse matched by a control in the same visible state.
     $$1.addEventDelegate(document, 'click.ui.collapse', '[data-ui-toggle="collapse"]', (e) => {
         e.preventDefault();
 
         const selector = getTargetSelector(e.currentTarget);
         const targets = $$1.find(selector);
+        const collapses = targets.map((target) => Collapse.init(target));
+        const show = !collapses.some((collapse) => $$1.hasClass(collapse.node, 'show'));
 
-        for (const target of targets) {
-            const collapse = Collapse.init(target);
-            collapse.toggle();
+        for (const collapse of collapses) {
+            if (show) {
+                collapse.show();
+            } else {
+                collapse.hide();
+            }
         }
     });
 
@@ -13276,7 +13281,7 @@
 
                 $$1.detach(this.#popover);
                 $$1.removeDataset(this.#popover, 'uiAnimating');
-                $$1.removeAttribute(this.node, 'aria-described-by');
+                $$1.removeAttribute(this.node, 'aria-describedby');
                 $$1.triggerEvent(this.node, 'hidden.ui.popover');
             }).catch((_) => {
                 if ($$1.getDataset(this.#popover, 'uiAnimating') === 'out') {
@@ -13456,7 +13461,7 @@
             if (!this.options.noAttributes) {
                 const id = generateId(this.constructor.DATA_KEY);
                 $$1.setAttribute(this.#popover, { id });
-                $$1.setAttribute(this.node, { 'aria-described-by': id });
+                $$1.setAttribute(this.node, { 'aria-describedby': id });
             }
 
             this.#popper = new Popper(
@@ -13962,7 +13967,7 @@
                 $$1.removeClass(this.#tooltip, 'show');
                 $$1.detach(this.#tooltip);
                 $$1.removeDataset(this.#tooltip, 'uiAnimating');
-                $$1.removeAttribute(this.node, 'aria-described-by');
+                $$1.removeAttribute(this.node, 'aria-describedby');
                 $$1.triggerEvent(this.node, 'hidden.ui.tooltip');
             }).catch((_) => {
                 if ($$1.getDataset(this.#tooltip, 'uiAnimating') === 'out') {
@@ -14124,7 +14129,7 @@
             if (!this.options.noAttributes) {
                 const id = generateId(this.constructor.DATA_KEY);
                 $$1.setAttribute(this.#tooltip, { id });
-                $$1.setAttribute(this.node, { 'aria-described-by': id });
+                $$1.setAttribute(this.node, { 'aria-describedby': id });
             }
 
             this.#popper = new Popper(

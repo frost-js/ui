@@ -15,61 +15,97 @@
 <body>
     <div class="container">
         <h1>Tabs</h1>
-        <div class="mb-4">
-            <div class="nav nav-tabs" role="tablist">
-                <a class="nav-link active" id="tab1Link" data-ui-toggle="tab" href="#tab1" role="tab" aria-selected="true">Active</a>
-                <a class="nav-link" id="tab2Link" data-ui-toggle="tab" href="#tab2" role="tab" aria-selected="false">Link</a>
-                <a class="nav-link disabled" id="tab3Link" data-ui-toggle="tab" href="#tab3" tabindex="-1" role="tab" aria-selected="false" aria-disabled="true">Disabled</a>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Tab navigation</h2>
+                <p class="text-body-secondary mb-2">Connect each trigger to a labelled panel and keep selection state on the trigger.</p>
+                <code>.nav-tabs</code> <code>data-ui-toggle="tab"</code>
+            </header>
+            <div class="nav nav-tabs flex-nowrap overflow-auto" role="tablist" aria-label="Trip details">
+                <button class="nav-link active" id="overviewTab" data-ui-toggle="tab" data-ui-target="#overviewPanel" type="button" role="tab" aria-controls="overviewPanel" aria-selected="true">Overview</button>
+                <button class="nav-link" id="routeTab" data-ui-toggle="tab" data-ui-target="#routePanel" type="button" role="tab" aria-controls="routePanel" aria-selected="false">Route</button>
+                <button class="nav-link" id="conditionsTab" data-ui-toggle="tab" data-ui-target="#conditionsPanel" type="button" role="tab" aria-controls="conditionsPanel" aria-selected="false">Conditions</button>
+                <button class="nav-link disabled" type="button" role="tab" aria-selected="false" aria-disabled="true" disabled>Bookings</button>
             </div>
             <div class="tab-content">
-                <div class="tab-pane active" id="tab1" role="tabpanel" aria-labelledby="tab1Link">
-                    <p class="p-2">This is the active tab content.</p>
+                <div class="tab-pane active p-4" id="overviewPanel" role="tabpanel" aria-labelledby="overviewTab">
+                    <h3 class="h5">Coastal day walk</h3>
+                    <p class="mb-0">An 8.5 kilomet return route linking sheltered coves with an exposed headland lookout.</p>
                 </div>
-                <div class="tab-pane" id="tab2" role="tabpanel" aria-labelledby="tab2Link">
-                    <p class="p-2">This is the hidden tab content.</p>
+                <div class="tab-pane p-4" id="routePanel" role="tabpanel" aria-labelledby="routeTab">
+                    <h3 class="h5">Route profile</h3>
+                    <p class="mb-0">The first half is gradual before a short, steep climb over loose sandstone.</p>
+                </div>
+                <div class="tab-pane p-4" id="conditionsPanel" role="tabpanel" aria-labelledby="conditionsTab">
+                    <h3 class="h5">Current conditions</h3>
+                    <p class="mb-0">The track is dry, with strong wind forecast on the exposed ridge after midday.</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Pills</h4>
-        <div class="mb-4">
-            <div class="nav nav-pills" role="tablist">
-                <a class="nav-link active" id="pillTab1Link" data-ui-toggle="tab" href="#pillTab1" role="tab" aria-selected="true">Active</a>
-                <a class="nav-link" id="pillTab2Link" data-ui-toggle="tab" href="#pillTab2" role="tab" aria-selected="false">Link</a>
-                <a class="nav-link disabled" id="pillTab3Link" data-ui-toggle="tab" href="#pillTab3" tabindex="-1" role="tab" aria-selected="false" aria-disabled="true">Disabled</a>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Pill tabs</h2>
+                <p class="text-body-secondary mb-2">Pills make the selected view more prominent and work well for compact display modes.</p>
+                <code>.nav-pills</code>
+            </header>
+            <div class="nav nav-pills mb-3" role="tablist" aria-label="Content display mode">
+                <button class="nav-link active" id="cardsTab" data-ui-toggle="tab" data-ui-target="#cardsPanel" type="button" role="tab" aria-controls="cardsPanel" aria-selected="true">Cards</button>
+                <button class="nav-link" id="listTab" data-ui-toggle="tab" data-ui-target="#listPanel" type="button" role="tab" aria-controls="listPanel" aria-selected="false">List</button>
+                <button class="nav-link" id="mapTab" data-ui-toggle="tab" data-ui-target="#mapPanel" type="button" role="tab" aria-controls="mapPanel" aria-selected="false">Map</button>
             </div>
             <div class="tab-content">
-                <div class="tab-pane active" id="pillTab1" role="tabpanel" aria-labelledby="pillTab1Link">
-                    <p class="p-2">This is the active tab content.</p>
+                <div class="tab-pane active" id="cardsPanel" role="tabpanel" aria-labelledby="cardsTab">
+                    <div class="alert alert-primary mb-0">Cards highlight imagery and supporting details.</div>
                 </div>
-                <div class="tab-pane" id="pillTab2" role="tabpanel" aria-labelledby="pillTab2Link">
-                    <p class="p-2">This is the hidden tab content.</p>
+                <div class="tab-pane" id="listPanel" role="tabpanel" aria-labelledby="listTab">
+                    <div class="alert alert-primary mb-0">Lists make comparison and scanning more compact.</div>
+                </div>
+                <div class="tab-pane" id="mapPanel" role="tabpanel" aria-labelledby="mapTab">
+                    <div class="alert alert-primary mb-0">Maps emphasize location and spatial relationships.</div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Vertical Pills</h4>
-        <div class="mb-4">
-            <div class="row">
-                <div class="col-3">
-                    <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                        <a class="nav-link active" id="verticalPillTab1Link" data-ui-toggle="tab" href="#verticalPillTab1" role="tab">Active</a>
-                        <a class="nav-link" id="verticalPillTab2Link" data-ui-toggle="tab" href="#verticalPillTab2" role="tab">Link</a>
-                        <a class="nav-link disabled" id="verticalPillTab3Link" data-ui-toggle="tab" href="#verticalPillTab3" tabindex="-1" role="tab" aria-disabled="true">Disabled</a>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Vertical tabs</h2>
+                <p class="text-body-secondary mb-2">A vertical pill list can anchor settings or detail panels with short, predictable labels.</p>
+                <code>.flex-column .nav-pills</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-sm-4 col-lg-3">
+                    <div class="nav flex-column nav-pills w-100" role="tablist" aria-label="Account settings">
+                        <button class="nav-link active text-start" id="profileTab" data-ui-toggle="tab" data-ui-target="#profilePanel" type="button" role="tab" aria-controls="profilePanel" aria-selected="true">Profile</button>
+                        <button class="nav-link text-start" id="notificationsTab" data-ui-toggle="tab" data-ui-target="#notificationsPanel" type="button" role="tab" aria-controls="notificationsPanel" aria-selected="false">Notifications</button>
+                        <button class="nav-link text-start" id="securityTab" data-ui-toggle="tab" data-ui-target="#securityPanel" type="button" role="tab" aria-controls="securityPanel" aria-selected="false">Security</button>
                     </div>
                 </div>
-                <div class="col-9">
+                <div class="col-sm-8 col-lg-9">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="verticalPillTab1" role="tabpanel" aria-labelledby="verticalPillTab1Link">
-                            <p class="p-2">This is the active tab content.</p>
+                        <div class="tab-pane active" id="profilePanel" role="tabpanel" aria-labelledby="profileTab">
+                            <div class="card card-body">
+                                <h3 class="h5">Profile settings</h3>
+                                <p class="mb-0">Update your public name, biography, and preferred contact details.</p>
+                            </div>
                         </div>
-                        <div class="tab-pane" id="verticalPillTab2" role="tabpanel" aria-labelledby="verticalPillTab2Link">
-                            <p class="p-2">This is the hidden tab content.</p>
+                        <div class="tab-pane" id="notificationsPanel" role="tabpanel" aria-labelledby="notificationsTab">
+                            <div class="card card-body">
+                                <h3 class="h5">Notification settings</h3>
+                                <p class="mb-0">Choose which updates arrive immediately and which join your summary.</p>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="securityPanel" role="tabpanel" aria-labelledby="securityTab">
+                            <div class="card card-body">
+                                <h3 class="h5">Security settings</h3>
+                                <p class="mb-0">Review active sessions and configure additional account protection.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 

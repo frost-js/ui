@@ -15,130 +15,147 @@
 <body>
     <div class="container">
         <h1>Accordion</h1>
-        <div class="mb-4">
-            <div class="accordion" id="accordion">
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Exclusive panels</h2>
+                <p class="text-body-secondary mb-2">A shared parent closes the open panel when another item is expanded.</p>
+                <code>data-ui-parent="#tripAccordion"</code>
+            </header>
+            <div class="accordion" id="tripAccordion">
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading1">
-                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#collapseOne" type="button" aria-expanded="true" aria-controls="collapseOne">
-                            Accordion Item 1
+                    <h3 class="accordion-header" id="tripHeadingOne">
+                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#tripPanelOne" type="button" aria-expanded="true" aria-controls="tripPanelOne">
+                            What should I bring?
                         </button>
-                    </h2>
-                    <div class="accordion-collapse collapse show" id="collapseOne" data-ui-parent="#accordion" aria-labelledby="heading1">
+                    </h3>
+                    <div class="accordion-collapse collapse show" id="tripPanelOne" data-ui-parent="#tripAccordion" aria-labelledby="tripHeadingOne">
                         <div class="accordion-body">
-                            <strong>This is the body of the accordion.</strong>
+                            Carry water, sun protection, a warm layer, and an offline copy of the route.
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading2">
-                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#collapseTwo" type="button" aria-expanded="false" aria-controls="collapseTwo">
-                            Accordion Item 2
+                    <h3 class="accordion-header" id="tripHeadingTwo">
+                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#tripPanelTwo" type="button" aria-expanded="false" aria-controls="tripPanelTwo">
+                            When should I start?
                         </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" id="collapseTwo" data-ui-parent="#accordion" aria-labelledby="heading2">
+                    </h3>
+                    <div class="accordion-collapse collapse" id="tripPanelTwo" data-ui-parent="#tripAccordion" aria-labelledby="tripHeadingTwo">
                         <div class="accordion-body">
-                            <strong>This is the body of the accordion.</strong>
+                            Leave early enough to complete exposed sections before the afternoon heat and changing weather.
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading3">
-                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#collapseThree" type="button" aria-expanded="false" aria-controls="collapseThree">
-                            Accordion Item 3
+                    <h3 class="accordion-header" id="tripHeadingThree">
+                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#tripPanelThree" type="button" aria-expanded="false" aria-controls="tripPanelThree">
+                            Is the route accessible year-round?
                         </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" id="collapseThree" data-ui-parent="#accordion" aria-labelledby="heading3">
+                    </h3>
+                    <div class="accordion-collapse collapse" id="tripPanelThree" data-ui-parent="#tripAccordion" aria-labelledby="tripHeadingThree">
                         <div class="accordion-body">
-                            <strong>This is the body of the accordion.</strong>
+                            Seasonal closures can apply after heavy rain, high tides, or periods of elevated fire risk.
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Flush</h4>
-        <div class="mb-4">
-            <div class="accordion accordion-flush" id="accordionFlush">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFlush1">
-                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#collapseFlushOne" type="button" aria-expanded="true" aria-controls="collapseFlushOne">
-                            Accordion Item 1
-                        </button>
-                    </h2>
-                    <div class="accordion-collapse collapse show" id="collapseFlushOne" data-ui-parent="#accordionFlush" aria-labelledby="headingFlush1">
-                        <div class="accordion-body">
-                            <strong>This is the body of the accordion.</strong>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Flush accordion</h2>
+                <p class="text-body-secondary mb-2">The flush modifier removes outer borders and rounding for placement inside another surface.</p>
+                <code>.accordion-flush</code>
+            </header>
+            <div class="card">
+                <div class="card-header">Account settings</div>
+                <div class="accordion accordion-flush" id="settingsAccordion">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="settingsHeadingOne">
+                            <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#settingsPanelOne" type="button" aria-expanded="true" aria-controls="settingsPanelOne">
+                                Profile visibility
+                            </button>
+                        </h3>
+                        <div class="accordion-collapse collapse show" id="settingsPanelOne" data-ui-parent="#settingsAccordion" aria-labelledby="settingsHeadingOne">
+                            <div class="accordion-body">
+                                Choose which profile details are visible to other members of your workspace.
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFlush2">
-                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#collapseFlush2" type="button" aria-expanded="false" aria-controls="collapseFlush2">
-                            Accordion Item 2
-                        </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" id="collapseFlush2" data-ui-parent="#accordionFlush" aria-labelledby="headingFlush2">
-                        <div class="accordion-body">
-                            <strong>This is the body of the accordion.</strong>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="settingsHeadingTwo">
+                            <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#settingsPanelTwo" type="button" aria-expanded="false" aria-controls="settingsPanelTwo">
+                                Notification schedule
+                            </button>
+                        </h3>
+                        <div class="accordion-collapse collapse" id="settingsPanelTwo" data-ui-parent="#settingsAccordion" aria-labelledby="settingsHeadingTwo">
+                            <div class="accordion-body">
+                                Set quiet hours or group lower-priority updates into a scheduled summary.
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingFlush3">
-                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#collapseFlush3" type="button" aria-expanded="false" aria-controls="collapseFlush3">
-                            Accordion Item 3
-                        </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" id="collapseFlush3" data-ui-parent="#accordionFlush" aria-labelledby="headingFlush3">
-                        <div class="accordion-body">
-                            <strong>This is the body of the accordion.</strong>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="settingsHeadingThree">
+                            <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#settingsPanelThree" type="button" aria-expanded="false" aria-controls="settingsPanelThree">
+                                Connected devices
+                            </button>
+                        </h3>
+                        <div class="accordion-collapse collapse" id="settingsPanelThree" data-ui-parent="#settingsAccordion" aria-labelledby="settingsHeadingThree">
+                            <div class="accordion-body">
+                                Review active sessions and remove devices that should no longer have access.
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h4>Always Open</h4>
-        <div class="mb-4">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Independent panels</h2>
+                <p class="text-body-secondary mb-2">Omit the parent property when several answers should remain open at the same time.</p>
+                <code>.accordion</code> <code>data-ui-parent omitted</code>
+            </header>
             <div class="accordion">
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingAlwaysOpen1">
-                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#collapseAlwaysOpenOne" type="button" aria-expanded="true" aria-controls="collapseAlwaysOpenOne">
-                            Accordion Item 1
+                    <h3 class="accordion-header" id="independentHeadingOne">
+                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#independentPanelOne" type="button" aria-expanded="true" aria-controls="independentPanelOne">
+                            Route conditions
                         </button>
-                    </h2>
-                    <div class="accordion-collapse collapse show" id="collapseAlwaysOpenOne" aria-labelledby="headingAlwaysOpen1">
+                    </h3>
+                    <div class="accordion-collapse collapse show" id="independentPanelOne" aria-labelledby="independentHeadingOne">
                         <div class="accordion-body">
-                            <strong>This is the body of the accordion.</strong>
+                            The upper track is dry, but expect shallow water across the final creek crossing.
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingAlwaysOpen2">
-                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#collapseAlwaysOpen2" type="button" aria-expanded="false" aria-controls="collapseAlwaysOpen2">
-                            Accordion Item 2
+                    <h3 class="accordion-header" id="independentHeadingTwo">
+                        <button class="accordion-button" data-ui-toggle="collapse" data-ui-target="#independentPanelTwo" type="button" aria-expanded="true" aria-controls="independentPanelTwo">
+                            Transport update
                         </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" id="collapseAlwaysOpen2" aria-labelledby="headingAlwaysOpen2">
+                    </h3>
+                    <div class="accordion-collapse collapse show" id="independentPanelTwo" aria-labelledby="independentHeadingTwo">
                         <div class="accordion-body">
-                            <strong>This is the body of the accordion.</strong>
+                            The return shuttle leaves the southern trailhead at 4:30 pm and 6:00 pm.
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingAlwaysOpen3">
-                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#collapseAlwaysOpen3" type="button" aria-expanded="false" aria-controls="collapseAlwaysOpen3">
-                            Accordion Item 3
+                    <h3 class="accordion-header" id="independentHeadingThree">
+                        <button class="accordion-button collapsed" data-ui-toggle="collapse" data-ui-target="#independentPanelThree" type="button" aria-expanded="false" aria-controls="independentPanelThree">
+                            Water access
                         </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" id="collapseAlwaysOpen3" aria-labelledby="headingAlwaysOpen3">
+                    </h3>
+                    <div class="accordion-collapse collapse" id="independentPanelThree" aria-labelledby="independentHeadingThree">
                         <div class="accordion-body">
-                            <strong>This is the body of the accordion.</strong>
+                            Treated water is available at the visitor centre but not elsewhere on the route.
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </body>
 

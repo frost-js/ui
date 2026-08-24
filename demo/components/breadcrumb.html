@@ -15,38 +15,79 @@
 <body>
     <div class="container">
         <h1>Breadcrumbs</h1>
-        <div class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page">Active</li>
-            </ol>
-        </div>
-        <div class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Link</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Active</li>
-            </ol>
-        </div>
-        <div class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Link</a></li>
-                <li class="breadcrumb-item"><a href="#">Link</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Active</li>
-            </ol>
-        </div>
 
-        <h4>Dividers</h4>
-        <div class="mb-4">
-            <ol class="breadcrumb" style="--ui-breadcrumb-divider: '>';">
-                <li class="breadcrumb-item"><a href="#">Link</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Active</li>
-            </ol>
-        </div>
-        <div class="mb-4">
-            <ol class="breadcrumb" style="--ui-breadcrumb-divider: '';">
-                <li class="breadcrumb-item"><a href="#">Link</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Active</li>
-            </ol>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Page hierarchy</h2>
+                <p class="text-body-secondary mb-2">Breadcrumbs show a page's position without replacing the primary navigation.</p>
+                <code>.breadcrumb .breadcrumb-item</code>
+            </header>
+            <nav aria-label="Project breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../index.html">Demos</a></li>
+                    <li class="breadcrumb-item"><a href="card.html">Components</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Breadcrumbs</li>
+                </ol>
+            </nav>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Current page only</h2>
+                <p class="text-body-secondary mb-2">A single item is useful when the current view has no intermediate hierarchy.</p>
+                <code>.breadcrumb-item.active</code>
+            </header>
+            <nav aria-label="Current page breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">Account</li>
+                </ol>
+            </nav>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Custom dividers</h2>
+                <p class="text-body-secondary mb-2">Override the divider property locally when a context needs a different visual separator.</p>
+                <code>--ui-breadcrumb-divider</code>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h3 class="h6">Arrow</h3>
+                    <nav aria-label="Arrow breadcrumb">
+                        <ol class="breadcrumb" style="--ui-breadcrumb-divider: '→';">
+                            <li class="breadcrumb-item"><a href="../index.html">Workspace</a></li>
+                            <li class="breadcrumb-item"><a href="card.html">Projects</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">North coast</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="h6">No divider</h3>
+                    <nav aria-label="Undivided breadcrumb">
+                        <ol class="breadcrumb" style="--ui-breadcrumb-divider: ''">
+                            <li class="breadcrumb-item"><a href="../index.html">Library</a></li>
+                            <li class="breadcrumb-item"><a href="card.html">Collections</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Field notes</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Contained breadcrumb</h2>
+                <p class="text-body-secondary mb-2">Background, spacing, and radius utilities can give the trail a stronger presence in dense layouts.</p>
+                <code>.bg-body-tertiary .px-3 .py-2 .rounded-3</code>
+            </header>
+            <nav class="bg-body-tertiary px-3 py-2 rounded-3" aria-label="Contained breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="../index.html">Settings</a></li>
+                    <li class="breadcrumb-item"><a href="card.html">Team</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Permissions</li>
+                </ol>
+            </nav>
+        </section>
     </div>
 </body>
 

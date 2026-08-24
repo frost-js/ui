@@ -145,7 +145,7 @@ export default class Popover extends BaseComponent {
 
             $.detach(this.#popover);
             $.removeDataset(this.#popover, 'uiAnimating');
-            $.removeAttribute(this.node, 'aria-described-by');
+            $.removeAttribute(this.node, 'aria-describedby');
             $.triggerEvent(this.node, 'hidden.ui.popover');
         }).catch((_) => {
             if ($.getDataset(this.#popover, 'uiAnimating') === 'out') {
@@ -325,7 +325,7 @@ export default class Popover extends BaseComponent {
         if (!this.options.noAttributes) {
             const id = generateId(this.constructor.DATA_KEY);
             $.setAttribute(this.#popover, { id });
-            $.setAttribute(this.node, { 'aria-described-by': id });
+            $.setAttribute(this.node, { 'aria-describedby': id });
         }
 
         this.#popper = new Popper(

@@ -11,16 +11,21 @@ Collapse.defaults = {
 
 initComponent('collapse', Collapse);
 
-// Toggle every collapse matched by a control.
+// Keep every collapse matched by a control in the same visible state.
 $.addEventDelegate(document, 'click.ui.collapse', '[data-ui-toggle="collapse"]', (e) => {
     e.preventDefault();
 
     const selector = getTargetSelector(e.currentTarget);
     const targets = $.find(selector);
+    const collapses = targets.map((target) => Collapse.init(target));
+    const show = !collapses.some((collapse) => $.hasClass(collapse.node, 'show'));
 
-    for (const target of targets) {
-        const collapse = Collapse.init(target);
-        collapse.toggle();
+    for (const collapse of collapses) {
+        if (show) {
+            collapse.show();
+        } else {
+            collapse.hide();
+        }
     }
 });
 

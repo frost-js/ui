@@ -15,43 +15,63 @@
 <body>
     <div class="container">
         <h1>Tooltips</h1>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" type="button">Tooltip</button>
-        </div>
 
-        <h4>HTML</h4>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple" data-ui-toggle="tooltip" data-ui-html="true" data-ui-title="This is a <strong>tooltip</strong>" type="button">Tooltip</button>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Default triggers</h2>
+                <p class="text-body-secondary mb-2">Tooltips appear on hover or focus, keeping the same supporting text available to pointer and keyboard users.</p>
+                <code>data-ui-toggle="tooltip"</code> <code>data-ui-title</code>
+            </header>
+            <button class="btn btn-secondary ripple" data-ui-toggle="tooltip" data-ui-title="Save this route for later" type="button">Save route</button>
+        </section>
 
-        <h4>Placement</h4>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="top" data-ui-position="center" data-ui-fixed="true" type="button">Top</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="right" data-ui-position="center" data-ui-fixed="true" type="button">Right</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="bottom" data-ui-position="center" data-ui-fixed="true" type="button">Bottom</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="left" data-ui-position="center" data-ui-fixed="true" type="button">Left</button>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">HTML content</h2>
+                <p class="text-body-secondary mb-2">Enable HTML only when simple emphasis improves the message; content is sanitized by default.</p>
+                <code>data-ui-html="true"</code>
+            </header>
+            <button class="btn btn-secondary ripple" data-ui-toggle="tooltip" data-ui-html="true" data-ui-title="Last synced <strong>2 minutes ago</strong>" type="button">Sync status</button>
+        </section>
 
-        <h4>Position</h4>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="bottom" data-ui-position="start" data-ui-fixed="true" type="button">Start</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="bottom" data-ui-position="center" data-ui-fixed="true" type="button">Center</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" data-ui-placement="bottom" data-ui-position="end" data-ui-fixed="true" type="button">End</button>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Placement</h2>
+                <p class="text-body-secondary mb-2">Request a side explicitly when the surrounding layout provides enough space.</p>
+                <code>data-ui-placement="*"</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="tooltip" data-ui-title="Appears above" data-ui-placement="top" data-ui-fixed="true" type="button">Top</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="tooltip" data-ui-title="Appears to the right" data-ui-placement="right" data-ui-fixed="true" type="button">Right</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="tooltip" data-ui-title="Appears below" data-ui-placement="bottom" data-ui-fixed="true" type="button">Bottom</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="tooltip" data-ui-title="Appears to the left" data-ui-placement="left" data-ui-fixed="true" type="button">Left</button>
+            </div>
+        </section>
 
-        <h4>Disabled</h4>
-        <div class="mb-4">
-            <span class="d-inline-block outline-0" data-ui-toggle="tooltip" data-ui-title="This is a tooltip" tabindex="0">
-                <button class="btn btn-secondary ripple" type="button" disabled>Tooltip</button>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Alignment</h2>
+                <p class="text-body-secondary mb-2">Position controls where a tooltip aligns along its chosen side.</p>
+                <code>data-ui-position="start|center|end"</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="tooltip" data-ui-title="Start aligned" data-ui-placement="bottom" data-ui-position="start" data-ui-fixed="true" type="button">Start</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="tooltip" data-ui-title="Centre aligned" data-ui-placement="bottom" data-ui-position="center" data-ui-fixed="true" type="button">Center</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="tooltip" data-ui-title="End aligned" data-ui-placement="bottom" data-ui-position="end" data-ui-fixed="true" type="button">End</button>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Disabled controls</h2>
+                <p class="text-body-secondary mb-2">Place the tooltip on a focusable wrapper because disabled controls do not receive pointer or keyboard events.</p>
+                <code>tabindex="0"</code>
+            </header>
+            <span class="d-inline-block" data-ui-toggle="tooltip" data-ui-title="Complete the required fields first" tabindex="0">
+                <button class="btn btn-secondary" type="button" disabled>Continue</button>
             </span>
-        </div>
+        </section>
     </div>
-    <script>
-        const nodes = $.find('[data-ui-toggle="tooltip"]');
-        for (const node of nodes) {
-            UI.Tooltip.init(node);
-        }
-    </script>
 </body>
 
 </html>

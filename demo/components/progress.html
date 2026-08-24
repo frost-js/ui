@@ -10,123 +10,105 @@
     <link rel="stylesheet" href="../assets/demo.css" />
     <script src="../../dist/frost-ui-bundle.js"></script>
     <script src="../assets/demo.js"></script>
-    <style>
-        .progress {
-            margin-bottom: 1rem;
-        }
-    </style>
 </head>
 
 <body>
     <div class="container">
         <h1>Progress Bars</h1>
-        <div class="mb-4">
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        </div>
 
-        <h4>Labels</h4>
-        <div class="mb-4">
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-            </div>
-        </div>
-
-        <h4>Height</h4>
-        <div class="mb-4">
-            <div class="progress" style="height: 1px;">
-                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress" style="height: 20px;">
-                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        </div>
-
-        <h4>Styles</h4>
-        <div class="mb-4">
-            <div class="progress">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar bg-info" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        </div>
-        <div class="mb-4">
-            <div class="progress">
-                <div class="progress-bar text-bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar text-bg-info" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar text-bg-warning" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar text-bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
-            </div>
-        </div>
-
-        <h4>Multiple Bars</h4>
-        <div class="mb-4">
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 15%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
-                <div class="progress-bar bg-success" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                <div class="progress-bar bg-info" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        </div>
-
-        <h4>Striped</h4>
-        <div class="mb-4">
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        </div>
-
-        <h4>Animated</h4>
-        <div class="mb-4">
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        </div>
-
-        <h4>Vertical</h4>
-        <div class="mb-4">
-            <div class="progress progress-vertical">
-                <div class="progress-bar" role="progressbar" style="height: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Values and labels</h2>
+                <p class="text-body-secondary mb-2">Keep the visual width and accessible value synchronized as progress changes.</p>
+                <code>.progress .progress-bar</code> <code>aria-valuenow</code>
+            </header>
+            <div class="mb-4">
+                <div class="d-flex justify-content-between mb-2"><span>Uploading media</span><span class="text-body-secondary">35%</span></div>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 35%;" aria-label="Uploading media" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
-        </div>
+            <div>
+                <div class="d-flex justify-content-between mb-2"><span>Processing records</span><span class="text-body-secondary">68%</span></div>
+                <div class="progress" style="--ui-progress-height: 1.25rem;">
+                    <div class="progress-bar" role="progressbar" style="width: 68%;" aria-label="Processing records" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100">68%</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Semantic states</h2>
+                <p class="text-body-secondary mb-2">Background utilities communicate the meaning of a process without changing the component structure.</p>
+                <code>.bg-success</code> <code>.bg-info</code> <code>.bg-warning</code> <code>.bg-danger</code>
+            </header>
+            <div class="progress mb-3">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-label="Import complete" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="progress mb-3">
+                <div class="progress-bar bg-info" role="progressbar" style="width: 72%;" aria-label="Indexing content" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="progress mb-3">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: 46%;" aria-label="Storage approaching limit" aria-valuenow="46" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="progress">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: 24%;" aria-label="Upload interrupted" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Stacked values</h2>
+                <p class="text-body-secondary mb-2">Place several bars in one track to show parts of a shared total.</p>
+                <code>.progress > .progress-bar + .progress-bar</code>
+            </header>
+            <div class="d-flex flex-wrap gap-3 mb-2">
+                <span><span class="badge bg-primary me-1">40%</span> Design</span>
+                <span><span class="badge bg-success me-1">35%</span> Development</span>
+                <span><span class="badge bg-info me-1">15%</span> Review</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 40%;" aria-label="Design" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-success" role="progressbar" style="width: 35%;" aria-label="Development" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-info" role="progressbar" style="width: 15%;" aria-label="Review" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Striped and animated</h2>
+                <p class="text-body-secondary mb-2">Stripes distinguish active work; animation automatically stops when reduced motion is preferred.</p>
+                <code>.progress-bar-striped</code> <code>.progress-bar-animated</code>
+            </header>
+            <div class="progress mb-3">
+                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 58%;" aria-label="Striped progress" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 78%;" aria-label="Animated progress" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Vertical progress</h2>
+                <p class="text-body-secondary mb-2">The vertical modifier fills from the bottom and can stack several values.</p>
+                <code>.progress-vertical</code>
+            </header>
+            <div class="d-flex gap-4 align-items-end">
+                <div class="text-center">
+                    <div class="progress progress-vertical mx-auto mb-2">
+                        <div class="progress-bar" role="progressbar" style="height: 35%;" aria-label="Morning capacity" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">35%</span>
+                </div>
+                <div class="text-center">
+                    <div class="progress progress-vertical mx-auto mb-2">
+                        <div class="progress-bar bg-success" role="progressbar" style="height: 72%;" aria-label="Afternoon capacity" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <span class="text-body-secondary">72%</span>
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 

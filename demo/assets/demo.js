@@ -115,10 +115,25 @@ const navigation = [
 
 const descriptions = {
     'colors.html': 'Review the semantic palette, contrast pairings, subtle surfaces, and theme-aware color states.',
+    'components/accordion.html': 'Organize related disclosure panels with exclusive, flush, and independently open behavior.',
+    'components/collapse.html': 'Reveal content from buttons, links, horizontal transitions, or selectors shared by multiple targets.',
     'components/card.html': 'Compose flexible content surfaces with media, navigation, lists, and contextual treatments.',
+    'components/card-group.html': 'Compare connected cards with aligned content against responsive grids of separate cards.',
     'components/carousel.html': 'Compare slides, controls, indicators, and captions using the same realistic media set.',
+    'components/breadcrumb.html': 'Communicate page hierarchy with accessible trails, local dividers, and utility-based surfaces.',
+    'components/clipboard.html': 'Copy provided text or the current value of a targeted control, with accessible operation feedback.',
+    'components/close-button.html': 'Use a compact, accessible dismissal control that inherits the color of its surrounding surface.',
+    'components/list-group.html': 'Organize static, interactive, contextual, horizontal, and selectable rows into cohesive groups.',
     'components/modal.html': 'Review modal sizes, alignment, scrolling, animation, and interactive content.',
+    'components/nav.html': 'Compose horizontal, vertical, treated, aligned, distributed, and dropdown navigation groups.',
     'components/navbar.html': 'Build responsive navigation across expansion points, color contexts, and offcanvas layouts.',
+    'components/pagination.html': 'Navigate result sets with clear current, disabled, compact, sized, and aligned controls.',
+    'components/placeholder.html': 'Build loading skeletons that preserve content hierarchy across widths, sizes, colors, and motion.',
+    'components/popover.html': 'Reveal richer contextual content with controlled triggers, placement, alignment, and dismissal.',
+    'components/progress.html': 'Communicate values, semantic states, shared totals, active work, and vertical capacity.',
+    'components/spinner.html': 'Indicate indeterminate work with accessible border or growing motion across common compositions.',
+    'components/tabs.html': 'Connect accessible tab, pill, and vertical triggers to focused panels of related content.',
+    'components/tooltip.html': 'Provide concise supporting text across pointer, keyboard, placement, alignment, and disabled states.',
     'content/figure.html': 'Keep media and its caption together, then adjust alignment with text utilities.',
     'content/image.html': 'Make images responsive and apply thumbnail, float, and alignment treatments.',
     'content/table.html': 'Present structured data with responsive wrappers, row states, and semantic variants.',
@@ -142,6 +157,7 @@ const sectionDescriptions = {
 };
 
 const $ = globalThis.$;
+const UI = globalThis.UI;
 const path = window.location.pathname.split('/demo/').pop() || 'index.html';
 const directory = path.includes('/') ? path.split('/').shift() : null;
 const example = directory === 'examples';
@@ -268,6 +284,25 @@ $.ready(() => {
     $('[data-demo-indeterminate]').each((node) => {
         node.indeterminate = true;
     });
+    $('[data-demo-clipboard-tooltip]').each((node) => {
+        const tooltip = UI.Tooltip.init(node, {
+            placement: 'top',
+            trigger: '',
+        });
+        let hideTimer;
+
+        $.addEvent(node, 'copied.ui.clipboard', (_) => {
+            const action = $.getDataset(node, 'uiAction') || 'copy';
+
+            clearTimeout(hideTimer);
+            $.setDataset(node, { uiTitle: action === 'cut' ? 'Cut to clipboard.' : 'Copied to clipboard.' });
+            tooltip.refresh();
+            tooltip.show();
+            hideTimer = setTimeout(() => tooltip.hide(), 2000);
+        });
+    });
+    $('[data-ui-toggle="tooltip"]').each((node) => UI.Tooltip.init(node));
+    $('[data-ui-toggle="popover"]').each((node) => UI.Popover.init(node));
     setTheme(document.documentElement.dataset.uiTheme);
 
     if (!example && path !== 'index.html') {

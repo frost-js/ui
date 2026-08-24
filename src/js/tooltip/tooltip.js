@@ -143,7 +143,7 @@ export default class Tooltip extends BaseComponent {
             $.removeClass(this.#tooltip, 'show');
             $.detach(this.#tooltip);
             $.removeDataset(this.#tooltip, 'uiAnimating');
-            $.removeAttribute(this.node, 'aria-described-by');
+            $.removeAttribute(this.node, 'aria-describedby');
             $.triggerEvent(this.node, 'hidden.ui.tooltip');
         }).catch((_) => {
             if ($.getDataset(this.#tooltip, 'uiAnimating') === 'out') {
@@ -305,7 +305,7 @@ export default class Tooltip extends BaseComponent {
         if (!this.options.noAttributes) {
             const id = generateId(this.constructor.DATA_KEY);
             $.setAttribute(this.#tooltip, { id });
-            $.setAttribute(this.node, { 'aria-described-by': id });
+            $.setAttribute(this.node, { 'aria-describedby': id });
         }
 
         this.#popper = new Popper(

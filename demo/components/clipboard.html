@@ -15,68 +15,48 @@
 <body>
     <div class="container">
         <h1>Clipboard</h1>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple" id="copyTextBtn" data-ui-toggle="clipboard" data-ui-text="Copy This Text">
-                Copy
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Copy provided text</h2>
+                <p class="text-body-secondary mb-2">Use the text property when the clipboard value does not come from a visible element.</p>
+                <code>data-ui-text="support@example.com"</code>
+            </header>
+            <button class="btn btn-primary ripple" data-ui-toggle="clipboard" data-ui-text="support@example.com" data-demo-clipboard-tooltip type="button">
+                Copy support address
             </button>
-        </div>
-        <h4>Copy Input</h4>
-        <div class="mb-4">
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Copy from an input</h2>
+                <p class="text-body-secondary mb-2">Target an input or textarea to copy its current value.</p>
+                <code>data-ui-target="#shareLink"</code>
+            </header>
+            <label for="shareLink">Share link</label>
             <div class="input-group">
-                <div class="form-input">
-                    <input class="input-filled" id="copyInput" type="text" value="Copy This Input Text" />
-                </div>
-                <button class="btn btn-outline-dark ripple" id="copyInputBtn" data-ui-toggle="clipboard" data-ui-target="#copyInput" type="button">
+                <input class="input-outline" id="shareLink" type="text" value="https://example.com/trips/north-coast" readonly />
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="clipboard" data-ui-target="#shareLink" data-demo-clipboard-tooltip type="button">
                     Copy
                 </button>
             </div>
-        </div>
-        <h4>Cut Input</h4>
-        <div class="mb-4">
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Cut from an input</h2>
+                <p class="text-body-secondary mb-2">The cut action copies the selected value and removes it from an editable control.</p>
+                <code>data-ui-action="cut"</code>
+            </header>
+            <label for="draftNote">Draft note</label>
             <div class="input-group">
-                <div class="form-input">
-                    <input class="input-filled" id="cutInput" type="text" value="Cut This Input Text" />
-                </div>
-                <button class="btn btn-outline-dark ripple" id="cutInputBtn" data-ui-toggle="clipboard" data-ui-target="#cutInput" data-ui-action="cut" type="button">
+                <input class="input-outline" id="draftNote" type="text" value="Move this note to the clipboard" />
+                <button class="btn btn-outline-danger ripple" data-ui-toggle="clipboard" data-ui-target="#draftNote" data-ui-action="cut" data-demo-clipboard-tooltip type="button">
                     Cut
                 </button>
             </div>
-        </div>
+        </section>
     </div>
-    <script>
-        $.ready(_ => {
-            const copyTextBtn = $.findOne('#copyTextBtn');
-            const copyInputBtn = $.findOne('#copyInputBtn');
-            const cutInputBtn = $.findOne('#cutInputBtn');
-            const copyTextTooltip = new UI.Tooltip(copyTextBtn, {
-                trigger: '',
-                placement: 'top'
-            });
-            const copyInputTooltip = new UI.Tooltip(copyInputBtn, {
-                trigger: '',
-                placement: 'top'
-            });
-            const cutInputTooltip = new UI.Tooltip(cutInputBtn, {
-                trigger: '',
-                placement: 'top'
-            });
-            $.addEvent(copyTextBtn, 'copied.ui.clipboard', e => {
-                copyTextTooltip._options.title = 'Copied to clipboard.';
-                copyTextTooltip.show();
-                setTimeout(_ => copyTextTooltip.hide(), 5000);
-            });
-            $.addEvent(copyInputBtn, 'copied.ui.clipboard', _ => {
-                copyInputTooltip._options.title = 'Copied to clipboard.';
-                copyInputTooltip.show();
-                setTimeout(_ => copyInputTooltip.hide(), 5000);
-            });
-            $.addEvent(cutInputBtn, 'copied.ui.clipboard', _ => {
-                cutInputTooltip._options.title = 'Cut to clipboard.';
-                cutInputTooltip.show();
-                setTimeout(_ => cutInputTooltip.hide(), 5000);
-            });
-        });
-    </script>
 </body>
 
 </html>

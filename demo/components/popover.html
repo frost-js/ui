@@ -15,48 +15,66 @@
 <body>
     <div class="container">
         <h1>Popovers</h1>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple" data-ui-toggle="popover" data-ui-title="Popover" data-ui-content="This is the popover content. It can include additional text." type="button">Popover</button>
-        </div>
 
-        <h4>HTML</h4>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple" data-ui-toggle="popover" data-ui-html="true" data-ui-content="This is the popover content. <strong>How cool!</strong>" type="button">Popover</button>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Title and content</h2>
+                <p class="text-body-secondary mb-2">Popovers reveal richer supporting content when their trigger is activated.</p>
+                <code>data-ui-title</code> <code>data-ui-content</code>
+            </header>
+            <button class="btn btn-secondary ripple" data-ui-toggle="popover" data-ui-title="Route conditions" data-ui-content="The upper track is dry, with strong wind expected on the ridge after midday." type="button">View conditions</button>
+        </section>
 
-        <h4>Placement</h4>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="popover" data-ui-content="This is the popover content." data-ui-placement="top" data-ui-fixed="true" type="button">Top</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="popover" data-ui-content="This is the popover content." data-ui-placement="right" data-ui-fixed="true" type="button">Right</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="popover" data-ui-content="This is the popover content." data-ui-placement="bottom" data-ui-fixed="true" type="button">Bottom</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="popover" data-ui-content="This is the popover content." data-ui-placement="left" data-ui-fixed="true" type="button">Left</button>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">HTML content</h2>
+                <p class="text-body-secondary mb-2">HTML can add simple structure or emphasis and is sanitized by default.</p>
+                <code>data-ui-html="true"</code>
+            </header>
+            <button class="btn btn-secondary ripple" data-ui-toggle="popover" data-ui-title="Departure" data-ui-html="true" data-ui-content="Meet at <strong>North Trailhead</strong><br><small>Saturday · 7:30 am</small>" type="button">Meeting details</button>
+        </section>
 
-        <h4>Position</h4>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="popover" data-ui-content="This is the popover content." data-ui-placement="bottom" data-ui-position="start" type="button">Start</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="popover" data-ui-content="This is the popover content." data-ui-placement="bottom" data-ui-position="center" type="button">Center</button>
-            <button class="btn btn-secondary ripple mb-1" data-ui-toggle="popover" data-ui-content="This is the popover content." data-ui-placement="bottom" data-ui-position="end" type="button">End</button>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Placement</h2>
+                <p class="text-body-secondary mb-2">Request a preferred side and keep it fixed when the surrounding layout guarantees enough space.</p>
+                <code>data-ui-placement="*"</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="popover" data-ui-content="Placed above the trigger." data-ui-placement="top" data-ui-fixed="true" type="button">Top</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="popover" data-ui-content="Placed to the right of the trigger." data-ui-placement="right" data-ui-fixed="true" type="button">Right</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="popover" data-ui-content="Placed below the trigger." data-ui-placement="bottom" data-ui-fixed="true" type="button">Bottom</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="popover" data-ui-content="Placed to the left of the trigger." data-ui-placement="left" data-ui-fixed="true" type="button">Left</button>
+            </div>
+        </section>
 
-        <h4>Dismiss</h4>
-        <div class="mb-4">
-            <button class="btn btn-secondary ripple" data-ui-toggle="popover" data-ui-title="Popover" data-ui-content="This is the popover content." data-ui-trigger="focus" type="button">Popover</button>
-        </div>
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Alignment</h2>
+                <p class="text-body-secondary mb-2">Position controls alignment along the chosen side without changing placement.</p>
+                <code>data-ui-position="start|center|end"</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="popover" data-ui-content="Start aligned content." data-ui-placement="bottom" data-ui-position="start" type="button">Start</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="popover" data-ui-content="Centre aligned content." data-ui-placement="bottom" data-ui-position="center" type="button">Center</button>
+                <button class="btn btn-outline-primary ripple" data-ui-toggle="popover" data-ui-content="End aligned content." data-ui-placement="bottom" data-ui-position="end" type="button">End</button>
+            </div>
+        </section>
 
-        <h4>Disabled</h4>
-        <div class="mb-4">
-            <span class="d-inline-block outline-0" data-ui-toggle="popover" data-ui-title="Popover" data-ui-content="This is the popover content." data-ui-trigger="hover focus" tabindex="0">
-                <button class="btn btn-secondary ripple" type="button" disabled>Popover</button>
-            </span>
-        </div>
+        <section class="mb-5 pb-5">
+            <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Dismissal and disabled controls</h2>
+                <p class="text-body-secondary mb-2">Focus-triggered popovers dismiss on blur; disabled controls require an interactive wrapper.</p>
+                <code>data-ui-trigger="focus"</code>
+            </header>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-secondary ripple" data-ui-toggle="popover" data-ui-title="Quick tip" data-ui-content="Move focus away to dismiss this popover." data-ui-trigger="focus" type="button">Dismiss on blur</button>
+                <span class="d-inline-block" data-ui-toggle="popover" data-ui-title="Unavailable" data-ui-content="Complete the required fields first." data-ui-trigger="hover focus" tabindex="0">
+                    <button class="btn btn-secondary" type="button" disabled>Continue</button>
+                </span>
+            </div>
+        </section>
     </div>
-    <script>
-        const nodes = $.find('[data-ui-toggle="popover"]');
-        for (const node of nodes) {
-            UI.Popover.init(node);
-        }
-    </script>
 </body>
 
 </html>
