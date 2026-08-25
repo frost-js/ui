@@ -1,0 +1,7 @@
+.fade {
+    transition: opacity var(--ui-transition-duration-fast) var(--ui-transition-timing-function);
+
+    &:not(.show) {
+        opacity: 0;
+    }
+}

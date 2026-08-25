@@ -10,6 +10,7 @@ import { generateId, getDataset, initComponent } from './helpers/component.js';
 import { getPosition, getTouchPositions } from './helpers/pointer.js';
 import { addScrollPadding, getScrollbarSize, getScrollContainer, resetScrollPadding } from './helpers/scroll.js';
 import { getTarget, getTargetSelector } from './helpers/target.js';
+import { waitForTransition } from './helpers/transition.js';
 import Modal from './modal/index.js';
 import Offcanvas from './offcanvas/index.js';
 import Popover from './popover/index.js';
@@ -48,4 +49,5 @@ export {
     getTouchPositions,
     initComponent,
     resetScrollPadding,
+    waitForTransition,
 };

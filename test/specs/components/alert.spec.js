@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+import { resetPage } from '../../setup/browser.js';
+
+test.use({ reducedMotion: 'no-preference' });
 
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -11,10 +11,10 @@ test.describe('Alert', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
             document.body.innerHTML =
-                '<div class="alert alert-success" id="alert1">' +
+                '<div class="alert alert-success fade show" id="alert1">' +
                 '<button class="btn-close" id="button1" data-ui-dismiss="alert" type="button"></button>' +
                 '</div>' +
-                '<div class="alert alert-success" id="alert2">' +
+                '<div class="alert alert-success fade show" id="alert2">' +
                 '<button class="btn-close" id="button2" data-ui-dismiss="alert" type="button"></button>' +
                 '</div>';
         });
@@ -85,35 +85,26 @@ test.describe('Alert', () => {
 
     test.describe('#close', () => {
         test('closes the alert', async ({ page }) => {
-            await page.evaluate((_) => {
+            const state = await page.evaluate((_) => {
                 const alert1 = $.findOne('#alert1');
                 UI.Alert.init(alert1).close();
-            });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#alert1'],
-                    progress: 0.5,
-                    styles: { opacity: '0.5' },
-                },
-            ]);
-            await advanceClock(page, 100);
 
+                return {
+                    connected: alert1.isConnected,
+                    shown: alert1.classList.contains('show'),
+                };
+            });
+
+            expect(state).toEqual({
+                connected: true,
+                shown: false,
+            });
             await expect(page.locator('#alert1')).toHaveCount(0);
             await expect(page.locator('#alert2')).toHaveCount(1);
         });
 
         test('closes the alert (data-ui-dismiss)', async ({ page }) => {
             await page.locator('#button1').click();
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#alert1'],
-                    progress: 0.5,
-                    styles: { opacity: '0.5' },
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#alert1')).toHaveCount(0);
             await expect(page.locator('#alert2')).toHaveCount(1);
@@ -123,15 +114,6 @@ test.describe('Alert', () => {
             await page.evaluate((_) => {
                 $('#alert1').alert('close');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#alert1'],
-                    progress: 0.5,
-                    styles: { opacity: '0.5' },
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#alert1')).toHaveCount(0);
             await expect(page.locator('#alert2')).toHaveCount(1);
@@ -141,7 +123,6 @@ test.describe('Alert', () => {
             await page.evaluate((_) => {
                 $('.alert').alert('close');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.alert')).toHaveCount(0);
         });
@@ -151,8 +132,8 @@ test.describe('Alert', () => {
                 const alert1 = $.findOne('#alert1');
                 UI.Alert.init(alert1).close();
             });
-            await advanceClock(page, 150);
 
+            await expect(page.locator('#alert1')).toHaveCount(0);
             expect(await page.evaluate((_) =>
                 $.hasData('#alert1', 'alert'))).toBe(false);
         });
@@ -165,15 +146,44 @@ test.describe('Alert', () => {
                 alert.close();
                 alert.close();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#alert1'],
-                    progress: 0.5,
-                    styles: { opacity: '0.5' },
-                },
-            ]);
-            await advanceClock(page, 100);
+
+            await expect(page.locator('#alert1')).toHaveCount(0);
+            await expect(page.locator('#alert2')).toHaveCount(1);
+        });
+
+        test('closes without a transition class', async ({ page }) => {
+            await page.evaluate((_) => {
+                const alert1 = $.findOne('#alert1');
+                $.removeClass(alert1, 'fade show');
+                UI.Alert.init(alert1).close();
+            });
+
+            await expect(page.locator('#alert1')).toHaveCount(0);
+            await expect(page.locator('#alert2')).toHaveCount(1);
+        });
+
+        test('closes when the transition is canceled', async ({ page }) => {
+            await page.evaluate((_) => {
+                const alert1 = $.findOne('#alert1');
+                UI.Alert.init(alert1).close();
+                const transition = alert1.getAnimations()
+                    .find((animation) => animation instanceof CSSTransition);
+                transition.cancel();
+            });
+
+            await expect(page.locator('#alert1')).toHaveCount(0);
+            await expect(page.locator('#alert2')).toHaveCount(1);
+        });
+
+        test('closes when no transition is generated', async ({ page }) => {
+            await page.evaluate((_) => {
+                const alert1 = $.findOne('#alert1');
+                $.setStyle(alert1, {
+                    transitionDuration: '1ms',
+                    transitionProperty: 'none',
+                });
+                UI.Alert.init(alert1).close();
+            });
 
             await expect(page.locator('#alert1')).toHaveCount(0);
             await expect(page.locator('#alert2')).toHaveCount(1);
@@ -209,10 +219,9 @@ test.describe('Alert', () => {
                 });
                 UI.Alert.init(alert1).close();
             });
-            await advanceClock(page, 150);
 
-            expect(await page.evaluate((_) => window.alertClosedEventTriggered)).toBe(true);
             await expect(page.locator('#alert1')).toHaveCount(0);
+            expect(await page.evaluate((_) => window.alertClosedEventTriggered)).toBe(true);
             await expect(page.locator('#alert2')).toHaveCount(1);
         });
 
@@ -222,15 +231,9 @@ test.describe('Alert', () => {
                 $.addEvent(alert1, 'close.ui.alert', (_) => false);
                 UI.Alert.init(alert1).close();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('.alert')).toHaveCount(2);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#alert1', '#alert2'],
-                    styles: { opacity: '' },
-                },
-            ]);
+            await expect(page.locator('#alert1')).toHaveClass(/\bshow\b/);
         });
 
         test('can be prevented from closing (prevent default)', async ({ page }) => {
@@ -241,73 +244,9 @@ test.describe('Alert', () => {
                 });
                 UI.Alert.init(alert1).close();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('.alert')).toHaveCount(2);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#alert1', '#alert2'],
-                    styles: { opacity: '' },
-                },
-            ]);
-        });
-    });
-
-    test.describe('duration option', () => {
-        test('works with duration option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const alert1 = $.findOne('#alert1');
-                UI.Alert.init(alert1, { duration: 200 }).close();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#alert1'],
-                    progress: 0.875,
-                    styles: {
-                        opacity: '0.13',
-                    },
-                },
-            ]);
-        });
-
-        test('works with duration option (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const alert1 = $.findOne('#alert1');
-                $.setDataset(alert1, { uiDuration: 200 });
-                UI.Alert.init(alert1).close();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#alert1'],
-                    progress: 0.875,
-                    styles: {
-                        opacity: '0.13',
-                    },
-                },
-            ]);
-        });
-
-        test('works with duration option (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#alert1')
-                    .alert({ duration: 200 })
-                    .close();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#alert1'],
-                    progress: 0.875,
-                    styles: {
-                        opacity: '0.13',
-                    },
-                },
-            ]);
+            await expect(page.locator('#alert1')).toHaveClass(/\bshow\b/);
         });
     });
 });

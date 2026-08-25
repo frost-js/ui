@@ -23,13 +23,13 @@ test.describe('BaseComponent', () => {
     test('exposes frozen merged options', async ({ page }) => {
         expect(await page.evaluate((_) => {
             const node = $.findOne('#alert1');
-            const alert = UI.Alert.init(node, { duration: 200 });
+            const toast = UI.Toast.init(node, { autohide: false });
             return {
-                duration: alert.options.duration,
-                frozen: Object.isFrozen(alert.options),
+                autohide: toast.options.autohide,
+                frozen: Object.isFrozen(toast.options),
             };
         })).toEqual({
-            duration: 200,
+            autohide: false,
             frozen: true,
         });
     });

@@ -6302,6 +6302,13 @@ select.input-lg[multiple] option {
   white-space: nowrap;
 }
 
+.fade {
+  transition: opacity var(--ui-transition-duration-fast) var(--ui-transition-timing-function);
+}
+.fade:not(.show) {
+  opacity: 0;
+}
+
 .vr {
   display: inline-block;
   align-self: stretch;

@@ -10392,47 +10392,52 @@
     }
 
     /**
-     * @typedef {object} AlertOptions
-     * @property {number} [duration=100] The transition duration in milliseconds.
+     * Waits for an element's CSS transitions to finish or be canceled.
+     * @param {HTMLElement} node The transitioning node.
+     * @param {string[]} [properties=[]] The transition properties to wait for.
+     * @returns {Promise<void>} The promise.
      */
+    async function waitForTransition(node, properties = []) {
+        const transitions = node.getAnimations()
+            .filter((animation) =>
+                animation instanceof window$1.CSSTransition &&
+                (!properties.length || properties.includes(animation.transitionProperty)),
+            );
+
+        await Promise.allSettled(
+            transitions.map((transition) => transition.finished),
+        );
+    }
 
     /**
      * Controls a dismissible alert element.
-     * @extends {BaseComponent<AlertOptions>}
      */
     class Alert extends BaseComponent {
+        #transitioning;
+
         /**
          * Closes the alert.
          */
         close() {
             if (
-                $$1.getDataset(this.node, 'uiAnimating') ||
+                this.#transitioning ||
                 !$$1.triggerOne(this.node, 'close.ui.alert')
             ) {
                 return;
             }
 
-            $$1.setDataset(this.node, { uiAnimating: 'out' });
+            const node = this.node;
+            this.#transitioning = true;
+            $$1.removeClass(node, 'show');
 
-            $$1.fadeOut(this.node, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.detach(this.node);
-                $$1.removeDataset(this.node, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'closed.ui.alert');
-                $$1.remove(this.node);
-            }).catch((_) => {
-                if ($$1.getDataset(this.node, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this.node, 'uiAnimating');
-                }
+            waitForTransition(node, ['opacity']).then((_) => {
+                this.#transitioning = false;
+                $$1.detach(node);
+                $$1.triggerEvent(node, 'closed.ui.alert');
+                $$1.remove(node);
             });
         }
     }
-
-    /** @type {import('./alert.js').AlertOptions} */
-    Alert.defaults = {
-        duration: 100,
-    };
 
     initComponent('alert', Alert);
 
@@ -14339,6 +14344,7 @@
     exports.getTouchPositions = getTouchPositions;
     exports.initComponent = initComponent;
     exports.resetScrollPadding = resetScrollPadding;
+    exports.waitForTransition = waitForTransition;
 
 }));
 //# sourceMappingURL=frost-ui-bundle.js.map

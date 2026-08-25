@@ -3,11 +3,6 @@ import { initComponent } from './../helpers/component.js';
 import { getTarget } from './../helpers/target.js';
 import Alert from './alert.js';
 
-/** @type {import('./alert.js').AlertOptions} */
-Alert.defaults = {
-    duration: 100,
-};
-
 initComponent('alert', Alert);
 
 // Dismiss the alert targeted by a dismiss control.
