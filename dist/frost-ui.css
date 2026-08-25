@@ -6307,7 +6307,7 @@ select.input-lg[multiple] option {
 }
 
 .fade {
-  transition: opacity var(--ui-transition-duration-fast) var(--ui-transition-timing-function);
+  transition: opacity var(--ui-transition-duration) var(--ui-transition-timing-function);
 }
 .fade:not(.show) {
   opacity: 0;
