@@ -567,46 +567,82 @@ test.describe('Tab', () => {
     });
 
     test.describe('keyboard navigation', () => {
-        test('focuses the next item on right arrow', async ({ page }) => {
+        test('shows and focuses the next item on right arrow', async ({ page }) => {
             await page.locator('#tabToggle1').focus();
             await page.keyboard.press('ArrowRight');
 
             await expect(page.locator('#tabToggle2')).toBeFocused();
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
+            await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
         });
 
-        test('focuses the next item on down arrow', async ({ page }) => {
+        test('shows and focuses the next item on down arrow', async ({ page }) => {
             await page.locator('#tabToggle1').focus();
             await page.keyboard.press('ArrowDown');
 
             await expect(page.locator('#tabToggle2')).toBeFocused();
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
+            await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
         });
 
-        test('focuses the previous item on left arrow', async ({ page }) => {
-            await page.locator('#tabToggle2').focus();
+        test('shows and focuses the previous item on left arrow', async ({ page }) => {
+            await page.locator('#tabToggle2').click();
             await page.keyboard.press('ArrowLeft');
 
             await expect(page.locator('#tabToggle1')).toBeFocused();
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'false');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
         });
 
-        test('focuses the previous item on up arrow', async ({ page }) => {
-            await page.locator('#tabToggle2').focus();
+        test('shows and focuses the previous item on up arrow', async ({ page }) => {
+            await page.locator('#tabToggle2').click();
             await page.keyboard.press('ArrowUp');
 
             await expect(page.locator('#tabToggle1')).toBeFocused();
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'false');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
         });
 
-        test('focuses the first item on home key', async ({ page }) => {
-            await page.locator('#tabToggle2').focus();
+        test('shows and focuses the first item on home key', async ({ page }) => {
+            await page.locator('#tabToggle2').click();
             await page.keyboard.press('Home');
 
             await expect(page.locator('#tabToggle1')).toBeFocused();
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'false');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
         });
 
-        test('focuses the last item on end key', async ({ page }) => {
+        test('shows and focuses the last item on end key', async ({ page }) => {
             await page.locator('#tabToggle1').focus();
             await page.keyboard.press('End');
 
             await expect(page.locator('#tabToggle2')).toBeFocused();
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
+            await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
         });
     });
 });

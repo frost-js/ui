@@ -3481,7 +3481,7 @@
         tab.show();
     });
 
-    // Move focus between tab controls with navigation keys.
+    // Select and focus tab controls with navigation keys.
     $.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => {
         let newTarget;
 
@@ -3511,6 +3511,7 @@
         e.preventDefault();
 
         $.focus(newTarget);
+        Tab.init(newTarget).show();
     });
 
     /**

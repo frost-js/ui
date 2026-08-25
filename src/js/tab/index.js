@@ -16,7 +16,7 @@ $.addEventDelegate(document, 'click.ui.tab keydown.ui.tab', '[data-ui-toggle="ta
     tab.show();
 });
 
-// Move focus between tab controls with navigation keys.
+// Select and focus tab controls with navigation keys.
 $.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => {
     let newTarget;
 
@@ -46,6 +46,7 @@ $.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => 
     e.preventDefault();
 
     $.focus(newTarget);
+    Tab.init(newTarget).show();
 });
 
 export default Tab;
