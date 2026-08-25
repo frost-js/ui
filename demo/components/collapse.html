@@ -22,7 +22,7 @@
                 <p class="text-body-secondary mb-2">A button can target a selector explicitly, while a link can use its destination as the target.</p>
                 <code>data-ui-toggle="collapse"</code> <code>data-ui-target="#route-details"</code>
             </header>
-            <div class="d-flex flex-wrap gap-2 mb-3">
+            <div class="d-flex flex-wrap gap-2 pb-3">
                 <button class="btn btn-primary ripple collapsed" data-ui-toggle="collapse" data-ui-target="#route-details" type="button" aria-expanded="false" aria-controls="route-details">
                     Toggle with button
                 </button>
@@ -55,15 +55,15 @@
 
         <section class="mb-5">
             <header class="border-bottom pb-3 mb-4">
-                <h2 class="h4 mb-1">Horizontal direction</h2>
-                <p class="text-body-secondary mb-2">Set a horizontal direction and give the revealed content a stable width.</p>
-                <code>data-ui-direction="right"</code>
+                <h2 class="h4 mb-1">Horizontal collapse</h2>
+                <p class="text-body-secondary mb-2">Add the horizontal modifier and give the revealed content a stable width.</p>
+                <code>.collapse-horizontal</code>
             </header>
             <button class="btn btn-primary ripple mb-3" data-ui-toggle="collapse" data-ui-target="#filter-panel" type="button" aria-expanded="true" aria-controls="filter-panel">
                 Toggle filters
             </button>
-            <div style="min-height: 8rem;">
-                <div class="collapse show" id="filter-panel" data-ui-direction="right">
+            <div style="min-height: 8.25rem;">
+                <div class="collapse collapse-horizontal show" id="filter-panel">
                     <div class="card card-body" style="width: 20rem;">
                         <strong class="d-block mb-2">Visible layers</strong>
                         <span class="text-body-secondary">Trails, water points, and transport stops</span>

@@ -10393,11 +10393,13 @@
 
     /**
      * Waits for an element's CSS transitions to finish or be canceled.
+     * @template {Record<string, *>} [Data=Record<string, *>]
      * @param {HTMLElement} node The transitioning node.
      * @param {string[]} [properties=[]] The transition properties to wait for.
-     * @returns {Promise<{completed: boolean, node: HTMLElement}>} The transition result.
+     * @param {Data} [data={}] Additional data to include in the transition result.
+     * @returns {Promise<Data & {completed: boolean, node: HTMLElement}>} The transition result.
      */
-    function waitForTransition(node, properties = []) {
+    function waitForTransition(node, properties = [], data = {}) {
         const transitions = node.getAnimations()
             .filter((animation) =>
                 animation instanceof window$1.CSSTransition &&
@@ -10407,6 +10409,7 @@
         return Promise.allSettled(
             transitions.map((transition) => transition.finished),
         ).then((results) => ({
+            ...data,
             completed: results.every((result) => result.status === 'fulfilled'),
             node,
         }));
@@ -11104,13 +11107,9 @@
         return clickTarget || e.target;
     }
 
-    /** @typedef {import('../popper/popper.js').Direction} Direction */
-
     /**
      * @typedef {object} CollapseOptions
-     * @property {Direction} [direction='bottom'] The collapse direction.
-     * @property {number} [duration=250] The transition duration in milliseconds.
-     * @property {string|null} [parent=null] The selector for an accordion parent.
+     * @property {string} [parent] The selector for an accordion parent.
      */
 
     /**
@@ -11119,6 +11118,7 @@
      */
     class Collapse extends BaseComponent {
         #parent;
+        #transitioning;
         #triggers;
 
         /**
@@ -11153,30 +11153,37 @@
          */
         hide() {
             if (
-                $$1.getDataset(this.node, 'uiAnimating') ||
+                this.#transitioning ||
                 !$$1.hasClass(this.node, 'show') ||
                 !$$1.triggerOne(this.node, 'hide.ui.collapse')
             ) {
                 return;
             }
 
-            $$1.setDataset(this.node, { uiAnimating: 'out' });
-            $$1.addClass(this.#triggers, 'collapsed');
-            $$1.addClass(this.#triggers, 'collapsing');
+            this.#transitioning = true;
 
-            $$1.squeezeOut(this.node, {
-                direction: this.options.direction,
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.removeClass(this.node, 'show');
-                $$1.removeClass(this.#triggers, 'collapsing');
-                $$1.setAttribute(this.#triggers, { 'aria-expanded': false });
-                $$1.removeDataset(this.node, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'hidden.ui.collapse');
-            }).catch((_) => {
-                if ($$1.getDataset(this.node, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this.node, 'uiAnimating');
-                }
+            const dimension = this.#getDimension();
+
+            $$1.setStyle(this.node, { [dimension]: $$1.rect(this.node)[dimension] });
+
+            // Commit the expanded starting dimension before collapsing the node.
+            $$1.css(this.node, dimension);
+
+            $$1.addClass(this.node, 'collapsing');
+            $$1.removeClass(this.node, 'collapse show');
+            $$1.addClass(this.#triggers, 'collapsed');
+            $$1.setStyle(this.node, { [dimension]: 0 });
+
+            waitForTransition(this.node, [dimension], {
+                triggers: this.#triggers,
+            }).then(({ node, triggers }) => {
+                $$1.removeClass(node, 'collapsing');
+                $$1.addClass(node, 'collapse');
+                $$1.removeStyle(node, dimension);
+                $$1.setAttribute(triggers, { 'aria-expanded': false });
+                $$1.triggerEvent(node, 'hidden.ui.collapse');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -11185,7 +11192,7 @@
          */
         show() {
             if (
-                $$1.getDataset(this.node, 'uiAnimating') ||
+                this.#transitioning ||
                 $$1.hasClass(this.node, 'show')
             ) {
                 return;
@@ -11214,23 +11221,29 @@
                 collapse.hide();
             }
 
-            $$1.setDataset(this.node, { uiAnimating: 'in' });
-            $$1.addClass(this.node, 'show');
-            $$1.removeClass(this.#triggers, 'collapsed');
-            $$1.addClass(this.#triggers, 'collapsing');
+            this.#transitioning = true;
 
-            $$1.squeezeIn(this.node, {
-                direction: this.options.direction,
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.removeClass(this.#triggers, 'collapsing');
-                $$1.setAttribute(this.#triggers, { 'aria-expanded': true });
-                $$1.removeDataset(this.node, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'shown.ui.collapse');
-            }).catch((_) => {
-                if ($$1.getDataset(this.node, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this.node, 'uiAnimating');
-                }
+            const dimension = this.#getDimension();
+
+            $$1.removeClass(this.node, 'collapse');
+            $$1.addClass(this.node, 'collapsing');
+            $$1.setStyle(this.node, { [dimension]: 0 });
+            $$1.removeClass(this.#triggers, 'collapsed');
+
+            // Reading the full size commits the collapsed starting dimension.
+            const size = $$1[dimension](this.node, { boxSize: $$1.SCROLL_BOX });
+            $$1.setStyle(this.node, { [dimension]: size });
+
+            waitForTransition(this.node, [dimension], {
+                triggers: this.#triggers,
+            }).then(({ node, triggers }) => {
+                $$1.removeClass(node, 'collapsing');
+                $$1.addClass(node, 'collapse show');
+                $$1.removeStyle(node, dimension);
+                $$1.setAttribute(triggers, { 'aria-expanded': true });
+                $$1.triggerEvent(node, 'shown.ui.collapse');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -11244,13 +11257,17 @@
                 this.show();
             }
         }
-    }
 
-    /** @type {import('./collapse.js').CollapseOptions} */
-    Collapse.defaults = {
-        direction: 'bottom',
-        duration: 250,
-    };
+        /**
+         * Gets the dimension used for the collapse transition.
+         * @returns {'height'|'width'} The dimension.
+         */
+        #getDimension() {
+            return $$1.hasClass(this.node, 'collapse-horizontal') ?
+                'width' :
+                'height';
+        }
+    }
 
     initComponent('collapse', Collapse);
 
@@ -12098,9 +12115,9 @@
             $$1.setStyle(this.#menuNode, { display: 'block' });
             $$1.removeClass(this.#menuNode, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#menuNode, ['opacity']).then(({ node }) => {
+            waitForTransition(this.#menuNode, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ node, toggleNode }) => {
                 if (this.#popper) {
                     this.#popper.dispose();
                     this.#popper = null;
@@ -12181,9 +12198,9 @@
                 this.update();
             });
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#menuNode, ['opacity']).then((_) => {
+            waitForTransition(this.#menuNode, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ toggleNode }) => {
                 $$1.setAttribute(toggleNode, { 'aria-expanded': true });
                 $$1.triggerEvent(toggleNode, 'shown.ui.dropdown');
             }).finally((_) => {
@@ -13291,9 +13308,9 @@
 
             $$1.removeClass(this.#popover, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#popover, ['opacity']).then(({ node }) => {
+            waitForTransition(this.#popover, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ node, toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }
@@ -13390,9 +13407,9 @@
 
             $$1.addClass(this.#popover, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#popover, ['opacity']).then((_) => {
+            waitForTransition(this.#popover, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }
@@ -13645,9 +13662,9 @@
             $$1.css(this.#target, 'opacity');
             $$1.addClass(this.#target, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#target, ['opacity']).then((_) => {
+            waitForTransition(this.#target, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }
@@ -13953,9 +13970,9 @@
 
             $$1.removeClass(this.#tooltip, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#tooltip, ['opacity']).then(({ node }) => {
+            waitForTransition(this.#tooltip, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ node, toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }
@@ -14034,9 +14051,9 @@
 
             $$1.addClass(this.#tooltip, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#tooltip, ['opacity']).then((_) => {
+            waitForTransition(this.#tooltip, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }

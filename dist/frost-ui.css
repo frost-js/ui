@@ -1965,16 +1965,16 @@ progress {
   color: var(--ui-accordion-active-color);
   background-color: var(--ui-accordion-active-bg);
 }
-.accordion-button:not(.collapsed)::after {
-  transform: var(--ui-accordion-icon-transform);
-}
-.accordion-button:is(:not(.collapsed), .collapsing)::before {
+.accordion-button:not(.collapsed)::before {
   position: absolute;
   inset-inline: 0;
   bottom: calc(var(--ui-accordion-border-width) * -1);
   height: var(--ui-accordion-border-width);
   content: "";
   background-color: var(--ui-accordion-border-color);
+}
+.accordion-button:not(.collapsed)::after {
+  transform: var(--ui-accordion-icon-transform);
 }
 .accordion-button::after {
   flex-shrink: 0;
@@ -2729,6 +2729,22 @@ fieldset:disabled .btn {
 }
 .card > .list-group:last-child {
   border-bottom-width: 0;
+  border-bottom-right-radius: var(--ui-card-inner-border-radius);
+  border-bottom-left-radius: var(--ui-card-inner-border-radius);
+}
+.card > .accordion-flush:first-child > .accordion-item:first-child {
+  border-top-left-radius: var(--ui-card-inner-border-radius);
+  border-top-right-radius: var(--ui-card-inner-border-radius);
+}
+.card > .accordion-flush:first-child > .accordion-item:first-child > .accordion-header .accordion-button {
+  border-top-left-radius: var(--ui-card-inner-border-radius);
+  border-top-right-radius: var(--ui-card-inner-border-radius);
+}
+.card > .accordion-flush:last-child > .accordion-item:last-child {
+  border-bottom-right-radius: var(--ui-card-inner-border-radius);
+  border-bottom-left-radius: var(--ui-card-inner-border-radius);
+}
+.card > .accordion-flush:last-child > .accordion-item:last-child > .accordion-header .accordion-button.collapsed {
   border-bottom-right-radius: var(--ui-card-inner-border-radius);
   border-bottom-left-radius: var(--ui-card-inner-border-radius);
 }
@@ -6311,6 +6327,16 @@ select.input-lg[multiple] option {
 }
 .fade:not(.show) {
   opacity: 0;
+}
+
+.collapsing {
+  overflow: hidden;
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
+  transition-property: height;
+}
+.collapsing.collapse-horizontal {
+  transition-property: width;
 }
 
 .vr {

@@ -143,9 +143,9 @@ export default class Popover extends BaseComponent {
 
         $.removeClass(this.#popover, 'show');
 
-        const toggleNode = this.node;
-
-        waitForTransition(this.#popover, ['opacity']).then(({ node }) => {
+        waitForTransition(this.#popover, ['opacity'], {
+            toggleNode: this.node,
+        }).then(({ node, toggleNode }) => {
             if (this.#transition !== transition) {
                 return;
             }
@@ -242,9 +242,9 @@ export default class Popover extends BaseComponent {
 
         $.addClass(this.#popover, 'show');
 
-        const toggleNode = this.node;
-
-        waitForTransition(this.#popover, ['opacity']).then((_) => {
+        waitForTransition(this.#popover, ['opacity'], {
+            toggleNode: this.node,
+        }).then(({ toggleNode }) => {
             if (this.#transition !== transition) {
                 return;
             }

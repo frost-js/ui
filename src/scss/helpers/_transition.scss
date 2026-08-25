@@ -5,3 +5,14 @@
         opacity: 0;
     }
 }
+
+.collapsing {
+    overflow: hidden;
+    transition-timing-function: var(--ui-transition-timing-function);
+    transition-duration: var(--ui-transition-duration);
+    transition-property: height;
+
+    &.collapse-horizontal {
+        transition-property: width;
+    }
+}

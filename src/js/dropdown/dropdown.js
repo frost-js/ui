@@ -104,9 +104,9 @@ export default class Dropdown extends BaseComponent {
         $.setStyle(this.#menuNode, { display: 'block' });
         $.removeClass(this.#menuNode, 'show');
 
-        const toggleNode = this.node;
-
-        waitForTransition(this.#menuNode, ['opacity']).then(({ node }) => {
+        waitForTransition(this.#menuNode, ['opacity'], {
+            toggleNode: this.node,
+        }).then(({ node, toggleNode }) => {
             if (this.#popper) {
                 this.#popper.dispose();
                 this.#popper = null;
@@ -187,9 +187,9 @@ export default class Dropdown extends BaseComponent {
             this.update();
         });
 
-        const toggleNode = this.node;
-
-        waitForTransition(this.#menuNode, ['opacity']).then((_) => {
+        waitForTransition(this.#menuNode, ['opacity'], {
+            toggleNode: this.node,
+        }).then(({ toggleNode }) => {
             $.setAttribute(toggleNode, { 'aria-expanded': true });
             $.triggerEvent(toggleNode, 'shown.ui.dropdown');
         }).finally((_) => {

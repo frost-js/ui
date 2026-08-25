@@ -57,12 +57,6 @@
         color: var(--ui-accordion-active-color);
         background-color: var(--ui-accordion-active-bg);
 
-        &::after {
-            transform: var(--ui-accordion-icon-transform);
-        }
-    }
-
-    &:is(:not(.collapsed), .collapsing) {
         &::before {
             position: absolute;
             inset-inline: 0;
@@ -70,6 +64,10 @@
             height: var(--ui-accordion-border-width);
             content: "";
             background-color: var(--ui-accordion-border-color);
+        }
+
+        &::after {
+            transform: var(--ui-accordion-icon-transform);
         }
     }
 

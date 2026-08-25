@@ -68,6 +68,24 @@
         }
     }
 
+    >.accordion-flush {
+        &:first-child > .accordion-item:first-child {
+            @include mixins.border-top-radius(var(--ui-card-inner-border-radius));
+
+            >.accordion-header .accordion-button {
+                @include mixins.border-top-radius(var(--ui-card-inner-border-radius));
+            }
+        }
+
+        &:last-child > .accordion-item:last-child {
+            @include mixins.border-bottom-radius(var(--ui-card-inner-border-radius));
+
+            >.accordion-header .accordion-button.collapsed {
+                @include mixins.border-bottom-radius(var(--ui-card-inner-border-radius));
+            }
+        }
+    }
+
     >.card-header + .list-group,
     >.list-group + .card-footer {
         border-top: 0;

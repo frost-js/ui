@@ -140,9 +140,9 @@ export default class Tooltip extends BaseComponent {
 
         $.removeClass(this.#tooltip, 'show');
 
-        const toggleNode = this.node;
-
-        waitForTransition(this.#tooltip, ['opacity']).then(({ node }) => {
+        waitForTransition(this.#tooltip, ['opacity'], {
+            toggleNode: this.node,
+        }).then(({ node, toggleNode }) => {
             if (this.#transition !== transition) {
                 return;
             }
@@ -221,9 +221,9 @@ export default class Tooltip extends BaseComponent {
 
         $.addClass(this.#tooltip, 'show');
 
-        const toggleNode = this.node;
-
-        waitForTransition(this.#tooltip, ['opacity']).then((_) => {
+        waitForTransition(this.#tooltip, ['opacity'], {
+            toggleNode: this.node,
+        }).then(({ toggleNode }) => {
             if (this.#transition !== transition) {
                 return;
             }

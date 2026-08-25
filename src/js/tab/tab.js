@@ -103,9 +103,9 @@ export default class Tab extends BaseComponent {
         $.css(this.#target, 'opacity');
         $.addClass(this.#target, 'show');
 
-        const toggleNode = this.node;
-
-        waitForTransition(this.#target, ['opacity']).then((_) => {
+        waitForTransition(this.#target, ['opacity'], {
+            toggleNode: this.node,
+        }).then(({ toggleNode }) => {
             if (this.#transition !== transition) {
                 return;
             }

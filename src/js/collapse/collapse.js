@@ -1,14 +1,11 @@
 import BaseComponent from './../base-component.js';
 import { $ } from './../globals.js';
 import { getTargetSelector } from './../helpers/target.js';
-
-/** @typedef {import('../popper/popper.js').Direction} Direction */
+import { waitForTransition } from './../helpers/transition.js';
 
 /**
  * @typedef {object} CollapseOptions
- * @property {Direction} [direction='bottom'] The collapse direction.
- * @property {number} [duration=250] The transition duration in milliseconds.
- * @property {string|null} [parent=null] The selector for an accordion parent.
+ * @property {string} [parent] The selector for an accordion parent.
  */
 
 /**
@@ -17,6 +14,7 @@ import { getTargetSelector } from './../helpers/target.js';
  */
 export default class Collapse extends BaseComponent {
     #parent;
+    #transitioning;
     #triggers;
 
     /**
@@ -51,30 +49,37 @@ export default class Collapse extends BaseComponent {
      */
     hide() {
         if (
-            $.getDataset(this.node, 'uiAnimating') ||
+            this.#transitioning ||
             !$.hasClass(this.node, 'show') ||
             !$.triggerOne(this.node, 'hide.ui.collapse')
         ) {
             return;
         }
 
-        $.setDataset(this.node, { uiAnimating: 'out' });
-        $.addClass(this.#triggers, 'collapsed');
-        $.addClass(this.#triggers, 'collapsing');
+        this.#transitioning = true;
 
-        $.squeezeOut(this.node, {
-            direction: this.options.direction,
-            duration: this.options.duration,
-        }).then((_) => {
-            $.removeClass(this.node, 'show');
-            $.removeClass(this.#triggers, 'collapsing');
-            $.setAttribute(this.#triggers, { 'aria-expanded': false });
-            $.removeDataset(this.node, 'uiAnimating');
-            $.triggerEvent(this.node, 'hidden.ui.collapse');
-        }).catch((_) => {
-            if ($.getDataset(this.node, 'uiAnimating') === 'out') {
-                $.removeDataset(this.node, 'uiAnimating');
-            }
+        const dimension = this.#getDimension();
+
+        $.setStyle(this.node, { [dimension]: $.rect(this.node)[dimension] });
+
+        // Commit the expanded starting dimension before collapsing the node.
+        $.css(this.node, dimension);
+
+        $.addClass(this.node, 'collapsing');
+        $.removeClass(this.node, 'collapse show');
+        $.addClass(this.#triggers, 'collapsed');
+        $.setStyle(this.node, { [dimension]: 0 });
+
+        waitForTransition(this.node, [dimension], {
+            triggers: this.#triggers,
+        }).then(({ node, triggers }) => {
+            $.removeClass(node, 'collapsing');
+            $.addClass(node, 'collapse');
+            $.removeStyle(node, dimension);
+            $.setAttribute(triggers, { 'aria-expanded': false });
+            $.triggerEvent(node, 'hidden.ui.collapse');
+        }).finally((_) => {
+            this.#transitioning = false;
         });
     }
 
@@ -83,7 +88,7 @@ export default class Collapse extends BaseComponent {
      */
     show() {
         if (
-            $.getDataset(this.node, 'uiAnimating') ||
+            this.#transitioning ||
             $.hasClass(this.node, 'show')
         ) {
             return;
@@ -112,23 +117,29 @@ export default class Collapse extends BaseComponent {
             collapse.hide();
         }
 
-        $.setDataset(this.node, { uiAnimating: 'in' });
-        $.addClass(this.node, 'show');
-        $.removeClass(this.#triggers, 'collapsed');
-        $.addClass(this.#triggers, 'collapsing');
+        this.#transitioning = true;
 
-        $.squeezeIn(this.node, {
-            direction: this.options.direction,
-            duration: this.options.duration,
-        }).then((_) => {
-            $.removeClass(this.#triggers, 'collapsing');
-            $.setAttribute(this.#triggers, { 'aria-expanded': true });
-            $.removeDataset(this.node, 'uiAnimating');
-            $.triggerEvent(this.node, 'shown.ui.collapse');
-        }).catch((_) => {
-            if ($.getDataset(this.node, 'uiAnimating') === 'in') {
-                $.removeDataset(this.node, 'uiAnimating');
-            }
+        const dimension = this.#getDimension();
+
+        $.removeClass(this.node, 'collapse');
+        $.addClass(this.node, 'collapsing');
+        $.setStyle(this.node, { [dimension]: 0 });
+        $.removeClass(this.#triggers, 'collapsed');
+
+        // Reading the full size commits the collapsed starting dimension.
+        const size = $[dimension](this.node, { boxSize: $.SCROLL_BOX });
+        $.setStyle(this.node, { [dimension]: size });
+
+        waitForTransition(this.node, [dimension], {
+            triggers: this.#triggers,
+        }).then(({ node, triggers }) => {
+            $.removeClass(node, 'collapsing');
+            $.addClass(node, 'collapse show');
+            $.removeStyle(node, dimension);
+            $.setAttribute(triggers, { 'aria-expanded': true });
+            $.triggerEvent(node, 'shown.ui.collapse');
+        }).finally((_) => {
+            this.#transitioning = false;
         });
     }
 
@@ -141,5 +152,15 @@ export default class Collapse extends BaseComponent {
         } else {
             this.show();
         }
+    }
+
+    /**
+     * Gets the dimension used for the collapse transition.
+     * @returns {'height'|'width'} The dimension.
+     */
+    #getDimension() {
+        return $.hasClass(this.node, 'collapse-horizontal') ?
+            'width' :
+            'height';
     }
 }

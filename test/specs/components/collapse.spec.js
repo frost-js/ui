@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+import { resetPage } from '../../setup/browser.js';
+
+test.use({ reducedMotion: 'no-preference' });
 
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -13,8 +13,8 @@ test.describe('Collapse', () => {
             document.body.innerHTML =
                 '<button class="btn btn-secondary collapsed" id="collapseToggle1" data-ui-toggle="collapse" data-ui-target="#collapse1" type="button"></button>' +
                 '<button class="btn btn-secondary collapsed" id="collapseToggle2" data-ui-toggle="collapse" data-ui-target="#collapse2" type="button"></button>' +
-                '<div class="collapse" id="collapse1"></div>' +
-                '<div class="collapse" id="collapse2"></div>';
+                '<div class="collapse" id="collapse1"><span style="display:block;width:120px;height:80px"></span></div>' +
+                '<div class="collapse" id="collapse2"><span style="display:block;width:120px;height:80px"></span></div>';
         });
     });
 
@@ -87,14 +87,6 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
@@ -107,14 +99,6 @@ test.describe('Collapse', () => {
             await page.evaluate((_) => {
                 $('#collapse1').collapse('show');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
@@ -127,7 +111,6 @@ test.describe('Collapse', () => {
             await page.evaluate((_) => {
                 $('div').collapse('show');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle1')).not.toHaveClass(/\bcollapsed\b/);
             await expect(page.locator('#collapseToggle2')).not.toHaveClass(/\bcollapsed\b/);
@@ -145,14 +128,9 @@ test.describe('Collapse', () => {
                 collapse.show();
                 collapse.show();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
+            await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
         });
 
         test('can be called on shown collapse', async ({ page }) => {
@@ -160,22 +138,14 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
 
             await expect(page.locator('#collapse1')).toHaveClass('collapse show');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                },
-            ]);
         });
     });
 
@@ -185,23 +155,12 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).hide();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
@@ -214,22 +173,11 @@ test.describe('Collapse', () => {
             await page.evaluate((_) => {
                 $('#collapse1').collapse('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 $('#collapse1').collapse('hide');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
@@ -242,16 +190,12 @@ test.describe('Collapse', () => {
             await page.evaluate((_) => {
                 $('div').collapse('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-                $.stop('#collapse2');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+            await expect(page.locator('#collapse2')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 $('div').collapse('hide');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass(/\bcollapsed\b/);
             await expect(page.locator('#collapseToggle2')).toHaveClass(/\bcollapsed\b/);
@@ -268,16 +212,12 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).hide();
             });
-            await advanceClock(page, 250);
 
             expect(await page.evaluate((_) =>
                 $.getData('#collapse1', 'collapse') instanceof UI.Collapse)).toBe(true);
@@ -288,11 +228,8 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 const collapse = UI.Collapse.init(collapse1);
@@ -300,14 +237,9 @@ test.describe('Collapse', () => {
                 collapse.hide();
                 collapse.hide();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
+            await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#collapse1')).toHaveClass('collapse');
         });
 
         test('can be called on hidden collapse', async ({ page }) => {
@@ -317,11 +249,6 @@ test.describe('Collapse', () => {
             });
 
             await expect(page.locator('#collapse1')).toHaveClass('collapse');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                },
-            ]);
         });
     });
 
@@ -331,14 +258,6 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).toggle();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
@@ -348,14 +267,6 @@ test.describe('Collapse', () => {
 
         test('shows the collapse (data-ui-toggle)', async ({ page }) => {
             await page.locator('#collapseToggle1').click();
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
@@ -367,14 +278,6 @@ test.describe('Collapse', () => {
             await page.evaluate((_) => {
                 $('#collapse1').collapse('toggle');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
@@ -386,7 +289,6 @@ test.describe('Collapse', () => {
             await page.evaluate((_) => {
                 $('div').collapse('toggle');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle1')).not.toHaveClass(/\bcollapsed\b/);
             await expect(page.locator('#collapseToggle2')).not.toHaveClass(/\bcollapsed\b/);
@@ -404,14 +306,9 @@ test.describe('Collapse', () => {
                 collapse.toggle();
                 collapse.toggle();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
+            await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
         });
     });
 
@@ -421,23 +318,12 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).toggle();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
@@ -450,20 +336,9 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.locator('#collapseToggle1').click();
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
@@ -475,22 +350,11 @@ test.describe('Collapse', () => {
             await page.evaluate((_) => {
                 $('#collapse1').collapse('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 $('#collapse1').collapse('toggle');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
@@ -502,16 +366,12 @@ test.describe('Collapse', () => {
             await page.evaluate((_) => {
                 $('div').collapse('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-                $.stop('#collapse2');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+            await expect(page.locator('#collapse2')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 $('div').collapse('toggle');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass(/\bcollapsed\b/);
             await expect(page.locator('#collapseToggle2')).toHaveClass(/\bcollapsed\b/);
@@ -526,11 +386,8 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 const collapse = UI.Collapse.init(collapse1);
@@ -538,14 +395,9 @@ test.describe('Collapse', () => {
                 collapse.toggle();
                 collapse.toggle();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.5,
-                },
-            ]);
+            await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#collapse1')).toHaveClass('collapse');
         });
     });
 
@@ -557,14 +409,12 @@ test.describe('Collapse', () => {
                     '<div class="collapse" id="collapse"></div>';
             });
             await page.locator('#collapseToggle').click();
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#collapse')).toHaveClass('collapse show');
 
             await page.locator('#collapseToggle').click();
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'false');
@@ -579,7 +429,6 @@ test.describe('Collapse', () => {
                     '<div class="collapse multi-collapse" id="collapse2"></div>';
             });
             await page.locator('#collapseToggle').click();
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'true');
@@ -587,7 +436,6 @@ test.describe('Collapse', () => {
             await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse show');
 
             await page.locator('#collapseToggle').click();
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'false');
@@ -603,7 +451,6 @@ test.describe('Collapse', () => {
                     '<div class="collapse multi-collapse" id="collapse2"></div>';
             });
             await page.locator('#collapseToggle').click();
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'false');
@@ -611,7 +458,6 @@ test.describe('Collapse', () => {
             await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse');
 
             await page.locator('#collapseToggle').click();
-            await advanceClock(page, 150);
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'true');
@@ -647,12 +493,11 @@ test.describe('Collapse', () => {
                 });
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 150);
 
-            expect(await page.evaluate((_) => window.collapseShownEventTriggered)).toBe(true);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+            expect(await page.evaluate((_) => window.collapseShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event', async ({ page }) => {
@@ -660,11 +505,8 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             const eventTriggered = await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 let triggered = false;
@@ -685,11 +527,8 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 window.collapseHiddenEventTriggered = false;
@@ -699,12 +538,11 @@ test.describe('Collapse', () => {
                 });
                 UI.Collapse.init(collapse1).hide();
             });
-            await advanceClock(page, 150);
 
-            expect(await page.evaluate((_) => window.collapseHiddenEventTriggered)).toBe(true);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse');
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#collapse1')).toHaveClass('collapse');
+            expect(await page.evaluate((_) => window.collapseHiddenEventTriggered)).toBe(true);
         });
 
         test('triggers show event (toggle)', async ({ page }) => {
@@ -733,12 +571,11 @@ test.describe('Collapse', () => {
                 });
                 UI.Collapse.init(collapse1).toggle();
             });
-            await advanceClock(page, 150);
 
-            expect(await page.evaluate((_) => window.collapseShownEventTriggered)).toBe(true);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+            expect(await page.evaluate((_) => window.collapseShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event (toggle)', async ({ page }) => {
@@ -746,11 +583,8 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             const eventTriggered = await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 let triggered = false;
@@ -771,11 +605,8 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 window.collapseHiddenEventTriggered = false;
@@ -785,12 +616,11 @@ test.describe('Collapse', () => {
                 });
                 UI.Collapse.init(collapse1).toggle();
             });
-            await advanceClock(page, 150);
 
-            expect(await page.evaluate((_) => window.collapseHiddenEventTriggered)).toBe(true);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse');
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#collapse1')).toHaveClass('collapse');
+            expect(await page.evaluate((_) => window.collapseHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
@@ -799,16 +629,10 @@ test.describe('Collapse', () => {
                 $.addEvent(collapse1, 'show.ui.collapse', (_) => false);
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 250);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).not.toHaveAttribute('aria-expanded');
             await expect(page.locator('#collapse1')).toHaveClass('collapse');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                },
-            ]);
         });
 
         test('can be prevented from showing (prevent default)', async ({ page }) => {
@@ -819,16 +643,10 @@ test.describe('Collapse', () => {
                 });
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 250);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle1')).not.toHaveAttribute('aria-expanded');
             await expect(page.locator('#collapse1')).toHaveClass('collapse');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                },
-            ]);
         });
 
         test('can be prevented from hiding', async ({ page }) => {
@@ -836,26 +654,17 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 $.addEvent(collapse1, 'hide.ui.collapse', (_) => false);
                 UI.Collapse.init(collapse1).hide();
             });
-            await advanceClock(page, 250);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#collapse1')).toHaveClass('collapse show');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                },
-            ]);
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
@@ -863,11 +672,8 @@ test.describe('Collapse', () => {
                 const collapse1 = $.findOne('#collapse1');
                 UI.Collapse.init(collapse1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+
             await page.evaluate((_) => {
                 const collapse1 = $.findOne('#collapse1');
                 $.addEvent(collapse1, 'hide.ui.collapse', (event) => {
@@ -875,138 +681,10 @@ test.describe('Collapse', () => {
                 });
                 UI.Collapse.init(collapse1).hide();
             });
-            await advanceClock(page, 250);
 
             await expect(page.locator('#collapseToggle1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle1')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#collapse1')).toHaveClass('collapse show');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                },
-            ]);
-        });
-    });
-
-    test.describe('duration option', () => {
-        test('works with duration option on show', async ({ page }) => {
-            await page.evaluate((_) => {
-                const collapse1 = $.findOne('#collapse1');
-                UI.Collapse.init(collapse1, { duration: 200 }).show();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on show (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const collapse1 = $.findOne('#collapse1');
-                $.setDataset(collapse1, { uiDuration: 200 });
-                UI.Collapse.init(collapse1).show();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on show (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#collapse1')
-                    .collapse({ duration: 200 })
-                    .show();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide', async ({ page }) => {
-            await page.evaluate((_) => {
-                const collapse1 = $.findOne('#collapse1');
-                UI.Collapse.init(collapse1, { duration: 200 }).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const collapse1 = $.findOne('#collapse1');
-                UI.Collapse.init(collapse1).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const collapse1 = $.findOne('#collapse1');
-                $.setDataset(collapse1, { uiDuration: 200 });
-                UI.Collapse.init(collapse1).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const collapse1 = $.findOne('#collapse1');
-                UI.Collapse.init(collapse1).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#collapse1')
-                    .collapse({ duration: 200 })
-                    .show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#collapse1');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $('#collapse1').collapse('hide');
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#collapse1'],
-                    progress: 0.875,
-                },
-            ]);
         });
     });
 });

@@ -197,11 +197,13 @@
 
     /**
      * Waits for an element's CSS transitions to finish or be canceled.
+     * @template {Record<string, *>} [Data=Record<string, *>]
      * @param {HTMLElement} node The transitioning node.
      * @param {string[]} [properties=[]] The transition properties to wait for.
-     * @returns {Promise<{completed: boolean, node: HTMLElement}>} The transition result.
+     * @param {Data} [data={}] Additional data to include in the transition result.
+     * @returns {Promise<Data & {completed: boolean, node: HTMLElement}>} The transition result.
      */
-    function waitForTransition(node, properties = []) {
+    function waitForTransition(node, properties = [], data = {}) {
         const transitions = node.getAnimations()
             .filter((animation) =>
                 animation instanceof window.CSSTransition &&
@@ -211,6 +213,7 @@
         return Promise.allSettled(
             transitions.map((transition) => transition.finished),
         ).then((results) => ({
+            ...data,
             completed: results.every((result) => result.status === 'fulfilled'),
             node,
         }));
@@ -908,13 +911,9 @@
         return clickTarget || e.target;
     }
 
-    /** @typedef {import('../popper/popper.js').Direction} Direction */
-
     /**
      * @typedef {object} CollapseOptions
-     * @property {Direction} [direction='bottom'] The collapse direction.
-     * @property {number} [duration=250] The transition duration in milliseconds.
-     * @property {string|null} [parent=null] The selector for an accordion parent.
+     * @property {string} [parent] The selector for an accordion parent.
      */
 
     /**
@@ -923,6 +922,7 @@
      */
     class Collapse extends BaseComponent {
         #parent;
+        #transitioning;
         #triggers;
 
         /**
@@ -957,30 +957,37 @@
          */
         hide() {
             if (
-                $.getDataset(this.node, 'uiAnimating') ||
+                this.#transitioning ||
                 !$.hasClass(this.node, 'show') ||
                 !$.triggerOne(this.node, 'hide.ui.collapse')
             ) {
                 return;
             }
 
-            $.setDataset(this.node, { uiAnimating: 'out' });
-            $.addClass(this.#triggers, 'collapsed');
-            $.addClass(this.#triggers, 'collapsing');
+            this.#transitioning = true;
 
-            $.squeezeOut(this.node, {
-                direction: this.options.direction,
-                duration: this.options.duration,
-            }).then((_) => {
-                $.removeClass(this.node, 'show');
-                $.removeClass(this.#triggers, 'collapsing');
-                $.setAttribute(this.#triggers, { 'aria-expanded': false });
-                $.removeDataset(this.node, 'uiAnimating');
-                $.triggerEvent(this.node, 'hidden.ui.collapse');
-            }).catch((_) => {
-                if ($.getDataset(this.node, 'uiAnimating') === 'out') {
-                    $.removeDataset(this.node, 'uiAnimating');
-                }
+            const dimension = this.#getDimension();
+
+            $.setStyle(this.node, { [dimension]: $.rect(this.node)[dimension] });
+
+            // Commit the expanded starting dimension before collapsing the node.
+            $.css(this.node, dimension);
+
+            $.addClass(this.node, 'collapsing');
+            $.removeClass(this.node, 'collapse show');
+            $.addClass(this.#triggers, 'collapsed');
+            $.setStyle(this.node, { [dimension]: 0 });
+
+            waitForTransition(this.node, [dimension], {
+                triggers: this.#triggers,
+            }).then(({ node, triggers }) => {
+                $.removeClass(node, 'collapsing');
+                $.addClass(node, 'collapse');
+                $.removeStyle(node, dimension);
+                $.setAttribute(triggers, { 'aria-expanded': false });
+                $.triggerEvent(node, 'hidden.ui.collapse');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -989,7 +996,7 @@
          */
         show() {
             if (
-                $.getDataset(this.node, 'uiAnimating') ||
+                this.#transitioning ||
                 $.hasClass(this.node, 'show')
             ) {
                 return;
@@ -1018,23 +1025,29 @@
                 collapse.hide();
             }
 
-            $.setDataset(this.node, { uiAnimating: 'in' });
-            $.addClass(this.node, 'show');
-            $.removeClass(this.#triggers, 'collapsed');
-            $.addClass(this.#triggers, 'collapsing');
+            this.#transitioning = true;
 
-            $.squeezeIn(this.node, {
-                direction: this.options.direction,
-                duration: this.options.duration,
-            }).then((_) => {
-                $.removeClass(this.#triggers, 'collapsing');
-                $.setAttribute(this.#triggers, { 'aria-expanded': true });
-                $.removeDataset(this.node, 'uiAnimating');
-                $.triggerEvent(this.node, 'shown.ui.collapse');
-            }).catch((_) => {
-                if ($.getDataset(this.node, 'uiAnimating') === 'in') {
-                    $.removeDataset(this.node, 'uiAnimating');
-                }
+            const dimension = this.#getDimension();
+
+            $.removeClass(this.node, 'collapse');
+            $.addClass(this.node, 'collapsing');
+            $.setStyle(this.node, { [dimension]: 0 });
+            $.removeClass(this.#triggers, 'collapsed');
+
+            // Reading the full size commits the collapsed starting dimension.
+            const size = $[dimension](this.node, { boxSize: $.SCROLL_BOX });
+            $.setStyle(this.node, { [dimension]: size });
+
+            waitForTransition(this.node, [dimension], {
+                triggers: this.#triggers,
+            }).then(({ node, triggers }) => {
+                $.removeClass(node, 'collapsing');
+                $.addClass(node, 'collapse show');
+                $.removeStyle(node, dimension);
+                $.setAttribute(triggers, { 'aria-expanded': true });
+                $.triggerEvent(node, 'shown.ui.collapse');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -1048,13 +1061,17 @@
                 this.show();
             }
         }
-    }
 
-    /** @type {import('./collapse.js').CollapseOptions} */
-    Collapse.defaults = {
-        direction: 'bottom',
-        duration: 250,
-    };
+        /**
+         * Gets the dimension used for the collapse transition.
+         * @returns {'height'|'width'} The dimension.
+         */
+        #getDimension() {
+            return $.hasClass(this.node, 'collapse-horizontal') ?
+                'width' :
+                'height';
+        }
+    }
 
     initComponent('collapse', Collapse);
 
@@ -1902,9 +1919,9 @@
             $.setStyle(this.#menuNode, { display: 'block' });
             $.removeClass(this.#menuNode, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#menuNode, ['opacity']).then(({ node }) => {
+            waitForTransition(this.#menuNode, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ node, toggleNode }) => {
                 if (this.#popper) {
                     this.#popper.dispose();
                     this.#popper = null;
@@ -1985,9 +2002,9 @@
                 this.update();
             });
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#menuNode, ['opacity']).then((_) => {
+            waitForTransition(this.#menuNode, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ toggleNode }) => {
                 $.setAttribute(toggleNode, { 'aria-expanded': true });
                 $.triggerEvent(toggleNode, 'shown.ui.dropdown');
             }).finally((_) => {
@@ -3095,9 +3112,9 @@
 
             $.removeClass(this.#popover, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#popover, ['opacity']).then(({ node }) => {
+            waitForTransition(this.#popover, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ node, toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }
@@ -3194,9 +3211,9 @@
 
             $.addClass(this.#popover, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#popover, ['opacity']).then((_) => {
+            waitForTransition(this.#popover, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }
@@ -3449,9 +3466,9 @@
             $.css(this.#target, 'opacity');
             $.addClass(this.#target, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#target, ['opacity']).then((_) => {
+            waitForTransition(this.#target, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }
@@ -3757,9 +3774,9 @@
 
             $.removeClass(this.#tooltip, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#tooltip, ['opacity']).then(({ node }) => {
+            waitForTransition(this.#tooltip, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ node, toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }
@@ -3838,9 +3855,9 @@
 
             $.addClass(this.#tooltip, 'show');
 
-            const toggleNode = this.node;
-
-            waitForTransition(this.#tooltip, ['opacity']).then((_) => {
+            waitForTransition(this.#tooltip, ['opacity'], {
+                toggleNode: this.node,
+            }).then(({ toggleNode }) => {
                 if (this.#transition !== transition) {
                     return;
                 }

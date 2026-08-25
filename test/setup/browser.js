@@ -51,7 +51,6 @@ export async function resetPage(page) {
 
         UI.Carousel.defaults.interval = 200;
         UI.Carousel.defaults.transition = 100;
-        UI.Collapse.defaults.duration = 100;
         UI.Popover.defaults.noAttributes = true;
         UI.Toast.defaults.delay = 200;
         UI.Tooltip.defaults.noAttributes = true;
