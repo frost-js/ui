@@ -186,12 +186,9 @@
                 background-color: transparent;
                 border-inline: 0;
                 box-shadow: none;
+                opacity: 1;
                 backdrop-filter: none;
                 transform: none;
-
-                &:not(.show) {
-                    display: flex;
-                }
             }
 
             .offcanvas-top,
@@ -209,7 +206,7 @@
                 display: flex;
                 flex-grow: 0;
                 padding: 0;
-                overflow-y: visible;
+                overflow: visible;
             }
         }
     }

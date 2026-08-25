@@ -23,8 +23,10 @@
     [data-demo-sidebar].offcanvas {
         --ui-offcanvas-width: var(--demo-sidebar-width);
 
-        display: flex;
+        visibility: visible;
         box-shadow: none;
+        opacity: 1;
+        transform: none;
     }
 
     [data-demo-sidebar] .btn-close {
