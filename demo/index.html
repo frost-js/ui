@@ -25,6 +25,25 @@
                             <a class="btn btn-primary btn-lg ripple" href="components/button.html">Explore components</a>
                             <a class="btn btn-secondary btn-lg" href="#examples">View complete pages</a>
                         </div>
+                        <fieldset class="d-flex flex-wrap align-items-center gap-3 p-3 mb-4 border rounded-3 bg-glass">
+                            <legend class="visually-hidden">Live theme colors</legend>
+                            <strong class="me-sm-2">Live palette</strong>
+                            <label class="d-flex align-items-center gap-2 mb-0" for="demo-theme-primary">
+                                <input class="input-outline input-color input-sm" id="demo-theme-primary" data-demo-theme-color="primary" type="color" value="#315efb">
+                                <span>
+                                    <span class="small fw-bold d-block">Primary</span>
+                                    <output class="small text-body-secondary" data-demo-theme-color-value="primary" for="demo-theme-primary">#315efb</output>
+                                </span>
+                            </label>
+                            <label class="d-flex align-items-center gap-2 mb-0" for="demo-theme-accent">
+                                <input class="input-outline input-color input-sm" id="demo-theme-accent" data-demo-theme-color="accent" type="color" value="#7c3aed">
+                                <span>
+                                    <span class="small fw-bold d-block">Accent</span>
+                                    <output class="small text-body-secondary" data-demo-theme-color-value="accent" for="demo-theme-accent">#7c3aed</output>
+                                </span>
+                            </label>
+                            <button class="btn btn-link btn-sm ms-sm-auto" data-demo-theme-reset type="button">Reset</button>
+                        </fieldset>
                         <div class="d-flex flex-wrap gap-2">
                             <span class="badge bg-secondary-subtle text-secondary-subtle">Light and dark themes</span>
                             <span class="badge bg-secondary-subtle text-secondary-subtle">Responsive by default</span>
@@ -199,6 +218,43 @@
             </div>
         </section>
     </main>
+
+    <script>
+        const themeColorInputs = $('[data-demo-theme-color]');
+        const defaultThemeColors = {};
+        const themeNode = document.documentElement;
+        const themeStyles = getComputedStyle(themeNode);
+
+        themeColorInputs.each((node) => {
+            const color = $.getDataset(node, 'demoThemeColor');
+            const value = themeStyles.getPropertyValue(`--ui-${color}`).trim();
+
+            defaultThemeColors[color] = value;
+            $.setValue(node, value);
+            $(`[data-demo-theme-color-value="${color}"]`).setText(value);
+        });
+
+        themeColorInputs.addEvent('input', (event) => {
+            const color = $.getDataset(event.currentTarget, 'demoThemeColor');
+            const value = $.getValue(event.currentTarget);
+
+            // Derived theme states update from these two base colors.
+            themeNode.style.setProperty(`--ui-${color}`, value);
+            $(`[data-demo-theme-color-value="${color}"]`).setText(value);
+        });
+
+        $('[data-demo-theme-reset]').addEvent('click', () => {
+            themeColorInputs.each((node) => {
+                const color = $.getDataset(node, 'demoThemeColor');
+                const value = defaultThemeColors[color];
+
+                // fQuery normalizes style names, which removes the custom-property prefix.
+                themeNode.style.setProperty(`--ui-${color}`, '');
+                $.setValue(node, value);
+                $(`[data-demo-theme-color-value="${color}"]`).setText(value);
+            });
+        });
+    </script>
 </body>
 
 </html>

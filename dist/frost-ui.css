@@ -59,7 +59,7 @@
   --ui-accent-highlight: color-mix(in oklch, var(--ui-accent) 85%, var(--ui-accent-interaction-mix));
   --ui-accent-active: color-mix(in oklch, var(--ui-accent) 70%, var(--ui-accent-interaction-mix));
   --ui-accent-subtle-text: color-mix(in oklch, var(--ui-accent) 50%, contrast-color(var(--ui-accent-subtle)));
-  --ui-secondary: color-mix(in srgb, var(--ui-gray) 80%, var(--ui-black));
+  --ui-secondary: color-mix(in srgb, var(--ui-gray) 90%, var(--ui-black));
   --ui-secondary-contrast: contrast-color(var(--ui-secondary));
   --ui-secondary-interaction-mix: contrast-color(var(--ui-secondary-contrast));
   --ui-secondary-highlight: color-mix(in oklch, var(--ui-secondary) 85%, var(--ui-secondary-interaction-mix));

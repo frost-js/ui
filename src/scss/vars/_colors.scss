@@ -23,7 +23,7 @@ $cyan: #06b6d4 !default;
 // theme colors
 $primary: $blue !default;
 $accent: $purple !default;
-$secondary: color-mix(in srgb, var(--ui-gray) 80%, var(--ui-black)) !default;
+$secondary: color-mix(in srgb, var(--ui-gray) 90%, var(--ui-black)) !default;
 $success: $green !default;
 $info: $teal !default;
 $warning: $orange !default;
