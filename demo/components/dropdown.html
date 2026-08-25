@@ -20,11 +20,11 @@
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Menu content and states</h2>
                 <p class="text-body-secondary mb-2">Combine actions, section labels, dividers, and clear selected or unavailable states in one menu.</p>
-                <code>.dropdown-menu</code> <code>.dropdown-item</code>
+                <code>.dropdown-menu</code> <code>.dropdown-item</code> <code>.fade</code>
             </header>
             <div class="dropdown">
                 <button class="btn btn-primary ripple dropdown-toggle" id="project-menu" data-ui-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">North Ridge project</button>
-                <div class="dropdown-menu" aria-labelledby="project-menu">
+                <div class="dropdown-menu fade" aria-labelledby="project-menu">
                     <h3 class="dropdown-header">Workspace</h3>
                     <button class="dropdown-item active" type="button">Overview</button>
                     <button class="dropdown-item" type="button">Activity</button>
@@ -46,7 +46,7 @@
                 <div class="btn-group">
                     <button class="btn btn-primary ripple" id="publish-button" type="button">Publish</button>
                     <button class="btn btn-primary ripple dropdown-toggle dropdown-toggle-split" id="publish-menu" data-ui-toggle="dropdown" data-ui-reference="#publish-button" type="button" aria-haspopup="true" aria-expanded="false" aria-label="More publishing options"></button>
-                    <div class="dropdown-menu" aria-labelledby="publish-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="publish-menu">
                         <button class="dropdown-item" type="button">Publish now</button>
                         <button class="dropdown-item" type="button">Schedule publication</button>
                         <button class="dropdown-item" type="button">Save as draft</button>
@@ -54,14 +54,14 @@
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary btn-sm ripple dropdown-toggle" id="compact-menu" data-ui-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">Compact</button>
-                    <div class="dropdown-menu" aria-labelledby="compact-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="compact-menu">
                         <button class="dropdown-item" type="button">Grid view</button>
                         <button class="dropdown-item" type="button">List view</button>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary btn-lg ripple dropdown-toggle" id="large-menu" data-ui-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">Large</button>
-                    <div class="dropdown-menu" aria-labelledby="large-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="large-menu">
                         <button class="dropdown-item" type="button">Grid view</button>
                         <button class="dropdown-item" type="button">List view</button>
                     </div>
@@ -78,28 +78,28 @@
             <div class="d-flex flex-wrap gap-2 mb-3">
                 <div class="dropdown">
                     <button class="btn btn-secondary ripple dropdown-toggle" id="top-menu" data-ui-toggle="dropdown" data-ui-placement="top" type="button" aria-haspopup="true" aria-expanded="false">Top</button>
-                    <div class="dropdown-menu" aria-labelledby="top-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="top-menu">
                         <button class="dropdown-item" type="button">First action</button>
                         <button class="dropdown-item" type="button">Second action</button>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-secondary ripple dropdown-toggle" id="right-menu" data-ui-toggle="dropdown" data-ui-placement="right" type="button" aria-haspopup="true" aria-expanded="false">Right</button>
-                    <div class="dropdown-menu" aria-labelledby="right-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="right-menu">
                         <button class="dropdown-item" type="button">First action</button>
                         <button class="dropdown-item" type="button">Second action</button>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-secondary ripple dropdown-toggle" id="bottom-menu" data-ui-toggle="dropdown" data-ui-placement="bottom" type="button" aria-haspopup="true" aria-expanded="false">Bottom</button>
-                    <div class="dropdown-menu" aria-labelledby="bottom-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="bottom-menu">
                         <button class="dropdown-item" type="button">First action</button>
                         <button class="dropdown-item" type="button">Second action</button>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-secondary ripple dropdown-toggle" id="left-menu" data-ui-toggle="dropdown" data-ui-placement="left" type="button" aria-haspopup="true" aria-expanded="false">Left</button>
-                    <div class="dropdown-menu" aria-labelledby="left-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="left-menu">
                         <button class="dropdown-item" type="button">First action</button>
                         <button class="dropdown-item" type="button">Second action</button>
                     </div>
@@ -108,19 +108,19 @@
             <div class="d-flex flex-wrap gap-2">
                 <div class="dropdown">
                     <button class="btn btn-outline-primary ripple dropdown-toggle" id="start-menu" data-ui-toggle="dropdown" data-ui-position="start" type="button" aria-haspopup="true" aria-expanded="false">Start</button>
-                    <div class="dropdown-menu" aria-labelledby="start-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="start-menu">
                         <button class="dropdown-item" type="button">Aligned to start</button>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary ripple dropdown-toggle" id="center-menu" data-ui-toggle="dropdown" data-ui-position="center" type="button" aria-haspopup="true" aria-expanded="false">Center</button>
-                    <div class="dropdown-menu" aria-labelledby="center-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="center-menu">
                         <button class="dropdown-item" type="button">Aligned to center</button>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary ripple dropdown-toggle" id="end-menu" data-ui-toggle="dropdown" data-ui-position="end" type="button" aria-haspopup="true" aria-expanded="false">End</button>
-                    <div class="dropdown-menu" aria-labelledby="end-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="end-menu">
                         <button class="dropdown-item" type="button">Aligned to end</button>
                     </div>
                 </div>
@@ -136,25 +136,25 @@
             <div class="d-flex flex-wrap gap-2">
                 <div class="dropdown">
                     <button class="btn btn-outline-primary ripple dropdown-toggle" id="default-close-menu" data-ui-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">Close anywhere</button>
-                    <div class="dropdown-menu" aria-labelledby="default-close-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="default-close-menu">
                         <button class="dropdown-item" type="button">Select and close</button>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary ripple dropdown-toggle" id="inside-close-menu" data-ui-toggle="dropdown" data-ui-auto-close="inside" type="button" aria-haspopup="true" aria-expanded="false">Close inside</button>
-                    <div class="dropdown-menu" aria-labelledby="inside-close-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="inside-close-menu">
                         <button class="dropdown-item" type="button">Select and close</button>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary ripple dropdown-toggle" id="outside-close-menu" data-ui-toggle="dropdown" data-ui-auto-close="outside" type="button" aria-haspopup="true" aria-expanded="false">Close outside</button>
-                    <div class="dropdown-menu" aria-labelledby="outside-close-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="outside-close-menu">
                         <button class="dropdown-item" type="button">Keep this menu open</button>
                     </div>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary ripple dropdown-toggle" id="manual-close-menu" data-ui-toggle="dropdown" data-ui-auto-close="false" type="button" aria-haspopup="true" aria-expanded="false">Manual close</button>
-                    <div class="dropdown-menu" aria-labelledby="manual-close-menu">
+                    <div class="dropdown-menu fade" aria-labelledby="manual-close-menu">
                         <button class="dropdown-item" type="button">Use the toggle to close</button>
                     </div>
                 </div>
@@ -169,7 +169,7 @@
             </header>
             <div class="dropdown">
                 <button class="btn btn-secondary ripple dropdown-toggle" id="filter-menu" data-ui-toggle="dropdown" data-ui-auto-close="outside" type="button" aria-haspopup="true" aria-expanded="false">Filter routes</button>
-                <div class="dropdown-menu p-3" style="--ui-dropdown-min-width: 18rem;" aria-labelledby="filter-menu">
+                <div class="dropdown-menu fade p-3" style="--ui-dropdown-min-width: 18rem;" aria-labelledby="filter-menu">
                     <form>
                         <div class="mb-3">
                             <label class="form-label" for="route-region">Region</label>

@@ -12003,7 +12003,6 @@
     /**
      * @typedef {object} DropdownOptions
      * @property {'dynamic'|'static'} [display='dynamic'] The positioning mode.
-     * @property {number} [duration=100] The transition duration in milliseconds.
      * @property {Placement} [placement='bottom'] The preferred menu placement.
      * @property {Position} [position='start'] The menu alignment.
      * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
@@ -12022,6 +12021,7 @@
         #menuNode;
         #popper;
         #referenceNode;
+        #transitioning;
 
         /**
          * Creates a Dropdown.
@@ -12085,31 +12085,31 @@
          */
         hide() {
             if (
-                $$1.getDataset(this.#menuNode, 'uiAnimating') ||
+                this.#transitioning ||
                 !$$1.hasClass(this.#menuNode, 'show') ||
                 !$$1.triggerOne(this.node, 'hide.ui.dropdown')
             ) {
                 return;
             }
 
-            $$1.setDataset(this.#menuNode, { uiAnimating: 'out' });
+            this.#transitioning = true;
 
-            $$1.fadeOut(this.#menuNode, {
-                duration: this.options.duration,
-            }).then((_) => {
+            $$1.setStyle(this.#menuNode, { display: 'block' });
+            $$1.removeClass(this.#menuNode, 'show');
+
+            const toggleNode = this.node;
+
+            waitForTransition(this.#menuNode, ['opacity']).then(({ node }) => {
                 if (this.#popper) {
                     this.#popper.dispose();
                     this.#popper = null;
                 }
 
-                $$1.removeClass(this.#menuNode, 'show');
-                $$1.setAttribute(this.node, { 'aria-expanded': false });
-                $$1.removeDataset(this.#menuNode, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'hidden.ui.dropdown');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#menuNode, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this.#menuNode, 'uiAnimating');
-                }
+                $$1.removeStyle(node, 'display');
+                $$1.setAttribute(toggleNode, { 'aria-expanded': false });
+                $$1.triggerEvent(toggleNode, 'hidden.ui.dropdown');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -12148,15 +12148,19 @@
          */
         show() {
             if (
-                $$1.getDataset(this.#menuNode, 'uiAnimating') ||
+                this.#transitioning ||
                 $$1.hasClass(this.#menuNode, 'show') ||
                 !$$1.triggerOne(this.node, 'show.ui.dropdown')
             ) {
                 return;
             }
 
-            $$1.setDataset(this.#menuNode, { uiAnimating: 'in' });
+            this.#transitioning = true;
+
+            $$1.setStyle(this.#menuNode, { display: 'block' });
+            $$1.css(this.#menuNode, 'opacity');
             $$1.addClass(this.#menuNode, 'show');
+            $$1.removeStyle(this.#menuNode, 'display');
 
             if (this.#display === 'dynamic') {
                 this.#popper = new Popper(this.#menuNode, {
@@ -12173,16 +12177,13 @@
                 this.update();
             });
 
-            $$1.fadeIn(this.#menuNode, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.setAttribute(this.node, { 'aria-expanded': true });
-                $$1.removeDataset(this.#menuNode, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'shown.ui.dropdown');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#menuNode, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this.#menuNode, 'uiAnimating');
-                }
+            const toggleNode = this.node;
+
+            waitForTransition(this.#menuNode, ['opacity']).then((_) => {
+                $$1.setAttribute(toggleNode, { 'aria-expanded': true });
+                $$1.triggerEvent(toggleNode, 'shown.ui.dropdown');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -12210,7 +12211,6 @@
     /** @type {import('./dropdown.js').DropdownOptions} */
     Dropdown.defaults = {
         display: 'dynamic',
-        duration: 100,
         placement: 'bottom',
         position: 'start',
         fixed: false,

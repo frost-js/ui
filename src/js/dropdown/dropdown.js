@@ -1,5 +1,6 @@
 import BaseComponent from './../base-component.js';
 import { $, window } from './../globals.js';
+import { waitForTransition } from './../helpers/transition.js';
 import Popper from './../popper/popper.js';
 
 /** @typedef {import('../popper/popper.js').Placement} Placement */
@@ -8,7 +9,6 @@ import Popper from './../popper/popper.js';
 /**
  * @typedef {object} DropdownOptions
  * @property {'dynamic'|'static'} [display='dynamic'] The positioning mode.
- * @property {number} [duration=100] The transition duration in milliseconds.
  * @property {Placement} [placement='bottom'] The preferred menu placement.
  * @property {Position} [position='start'] The menu alignment.
  * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
@@ -27,6 +27,7 @@ export default class Dropdown extends BaseComponent {
     #menuNode;
     #popper;
     #referenceNode;
+    #transitioning;
 
     /**
      * Creates a Dropdown.
@@ -90,31 +91,31 @@ export default class Dropdown extends BaseComponent {
      */
     hide() {
         if (
-            $.getDataset(this.#menuNode, 'uiAnimating') ||
+            this.#transitioning ||
             !$.hasClass(this.#menuNode, 'show') ||
             !$.triggerOne(this.node, 'hide.ui.dropdown')
         ) {
             return;
         }
 
-        $.setDataset(this.#menuNode, { uiAnimating: 'out' });
+        this.#transitioning = true;
 
-        $.fadeOut(this.#menuNode, {
-            duration: this.options.duration,
-        }).then((_) => {
+        $.setStyle(this.#menuNode, { display: 'block' });
+        $.removeClass(this.#menuNode, 'show');
+
+        const toggleNode = this.node;
+
+        waitForTransition(this.#menuNode, ['opacity']).then(({ node }) => {
             if (this.#popper) {
                 this.#popper.dispose();
                 this.#popper = null;
             }
 
-            $.removeClass(this.#menuNode, 'show');
-            $.setAttribute(this.node, { 'aria-expanded': false });
-            $.removeDataset(this.#menuNode, 'uiAnimating');
-            $.triggerEvent(this.node, 'hidden.ui.dropdown');
-        }).catch((_) => {
-            if ($.getDataset(this.#menuNode, 'uiAnimating') === 'out') {
-                $.removeDataset(this.#menuNode, 'uiAnimating');
-            }
+            $.removeStyle(node, 'display');
+            $.setAttribute(toggleNode, { 'aria-expanded': false });
+            $.triggerEvent(toggleNode, 'hidden.ui.dropdown');
+        }).finally((_) => {
+            this.#transitioning = false;
         });
     }
 
@@ -153,15 +154,19 @@ export default class Dropdown extends BaseComponent {
      */
     show() {
         if (
-            $.getDataset(this.#menuNode, 'uiAnimating') ||
+            this.#transitioning ||
             $.hasClass(this.#menuNode, 'show') ||
             !$.triggerOne(this.node, 'show.ui.dropdown')
         ) {
             return;
         }
 
-        $.setDataset(this.#menuNode, { uiAnimating: 'in' });
+        this.#transitioning = true;
+
+        $.setStyle(this.#menuNode, { display: 'block' });
+        $.css(this.#menuNode, 'opacity');
         $.addClass(this.#menuNode, 'show');
+        $.removeStyle(this.#menuNode, 'display');
 
         if (this.#display === 'dynamic') {
             this.#popper = new Popper(this.#menuNode, {
@@ -178,16 +183,13 @@ export default class Dropdown extends BaseComponent {
             this.update();
         });
 
-        $.fadeIn(this.#menuNode, {
-            duration: this.options.duration,
-        }).then((_) => {
-            $.setAttribute(this.node, { 'aria-expanded': true });
-            $.removeDataset(this.#menuNode, 'uiAnimating');
-            $.triggerEvent(this.node, 'shown.ui.dropdown');
-        }).catch((_) => {
-            if ($.getDataset(this.#menuNode, 'uiAnimating') === 'in') {
-                $.removeDataset(this.#menuNode, 'uiAnimating');
-            }
+        const toggleNode = this.node;
+
+        waitForTransition(this.#menuNode, ['opacity']).then((_) => {
+            $.setAttribute(toggleNode, { 'aria-expanded': true });
+            $.triggerEvent(toggleNode, 'shown.ui.dropdown');
+        }).finally((_) => {
+            this.#transitioning = false;
         });
     }
 

@@ -6,7 +6,6 @@ import Dropdown from './dropdown.js';
 /** @type {import('./dropdown.js').DropdownOptions} */
 Dropdown.defaults = {
     display: 'dynamic',
-    duration: 100,
     placement: 'bottom',
     position: 'start',
     fixed: false,
