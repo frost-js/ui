@@ -2447,7 +2447,7 @@
                 $.setStyle(this.node, { zIndex });
             } else if (!$.findOne('.offcanvas.show')) {
                 this.#scrollNodes.push(document.body);
-                this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
+                this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom'));
             }
 
             addScrollPadding(this.#scrollNodes);
@@ -2813,7 +2813,7 @@
 
             if (!this.options.scroll) {
                 this.#scrollNodes.push(document.body);
-                this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
+                this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom'));
 
                 addScrollPadding(this.#scrollNodes);
 

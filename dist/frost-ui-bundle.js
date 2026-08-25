@@ -12643,7 +12643,7 @@
                 $$1.setStyle(this.node, { zIndex });
             } else if (!$$1.findOne('.offcanvas.show')) {
                 this.#scrollNodes.push(document.body);
-                this.#scrollNodes.push(...$$1.find('.fixed-top, .fixed-bottom, .sticky-top'));
+                this.#scrollNodes.push(...$$1.find('.fixed-top, .fixed-bottom'));
             }
 
             addScrollPadding(this.#scrollNodes);
@@ -13009,7 +13009,7 @@
 
             if (!this.options.scroll) {
                 this.#scrollNodes.push(document.body);
-                this.#scrollNodes.push(...$$1.find('.fixed-top, .fixed-bottom, .sticky-top'));
+                this.#scrollNodes.push(...$$1.find('.fixed-top, .fixed-bottom'));
 
                 addScrollPadding(this.#scrollNodes);
 

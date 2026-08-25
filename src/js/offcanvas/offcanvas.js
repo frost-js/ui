@@ -161,7 +161,7 @@ export default class Offcanvas extends BaseComponent {
 
         if (!this.options.scroll) {
             this.#scrollNodes.push(document.body);
-            this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom, .sticky-top'));
+            this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom'));
 
             addScrollPadding(this.#scrollNodes);
 
