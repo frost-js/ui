@@ -12484,7 +12484,6 @@
 
     /**
      * @typedef {object} ModalOptions
-     * @property {number} [duration=250] The transition duration in milliseconds.
      * @property {boolean|'static'} [backdrop=true] Whether to show a dismissible or static backdrop.
      * @property {boolean} [focus=true] Whether to trap focus while shown.
      * @property {boolean} [show=false] Whether to show the modal immediately.
@@ -12501,6 +12500,8 @@
         #dialog;
         #focusTrap;
         #scrollNodes;
+        #transitioning;
+        #zooming;
 
         /**
          * Creates a Modal.
@@ -12577,15 +12578,17 @@
          */
         hide() {
             if (
-                $$1.getDataset(this.#dialog, 'uiAnimating') ||
+                this.#transitioning ||
                 !$$1.hasClass(this.node, 'show') ||
                 !$$1.triggerOne(this.node, 'hide.ui.modal')
             ) {
                 return;
             }
 
-            $$1.stop(this.#dialog);
-            $$1.setDataset(this.#dialog, { uiAnimating: 'out' });
+            this.#transitioning = true;
+            this.#zooming = false;
+
+            $$1.removeClass(this.node, 'modal-static');
 
             if (this.#focusTrap) {
                 this.#focusTrap.deactivate();
@@ -12593,50 +12596,60 @@
 
             const stackSize = $$1.find('.modal.show').length - 1;
 
-            Promise.all([
-                $$1.fadeOut(this.#dialog, {
-                    duration: this.options.duration,
+            $$1.addClass(this.node, 'hiding');
+            $$1.removeClass(this.node, 'show');
+
+            if (this.#backdrop) {
+                $$1.removeClass(this.#backdrop, 'show');
+            }
+
+            const transitions = [
+                waitForTransition(this.#dialog, ['opacity', 'transform'], {
+                    activeTarget: this.#activeTarget,
+                    backdrop: this.#backdrop,
+                    modalNode: this.node,
+                    scrollNodes: this.#scrollNodes,
                 }),
-                $$1.dropOut(this.#dialog, {
-                    duration: this.options.duration,
-                    direction: 'top',
-                }),
-                $$1.fadeOut(this.#backdrop, {
-                    duration: this.options.duration,
-                }),
-            ]).then((_) => {
-                $$1.setAttribute(this.node, {
+            ];
+
+            if (this.#backdrop) {
+                transitions.push(waitForTransition(this.#backdrop, ['opacity']));
+            }
+
+            Promise.all(transitions).then(([{
+                activeTarget,
+                backdrop,
+                modalNode,
+                scrollNodes,
+            }]) => {
+                $$1.removeClass(modalNode, 'hiding');
+                $$1.setAttribute(modalNode, {
                     'aria-hidden': true,
                     'aria-modal': false,
                 });
 
-                resetScrollPadding(this.#scrollNodes);
+                resetScrollPadding(scrollNodes);
                 this.#scrollNodes = [];
 
                 if (stackSize) {
-                    $$1.setStyle(this.node, { zIndex: '' });
+                    $$1.setStyle(modalNode, { zIndex: '' });
                 } else {
                     $$1.removeClass(document.body, 'modal-open');
                 }
 
-                $$1.removeClass(this.node, 'show');
-
-                if (this.options.backdrop) {
-                    $$1.remove(this.#backdrop);
+                if (backdrop) {
+                    $$1.remove(backdrop);
                     this.#backdrop = null;
                 }
 
-                if (this.#activeTarget) {
-                    $$1.focus(this.#activeTarget);
+                if (activeTarget) {
+                    $$1.focus(activeTarget);
                     this.#activeTarget = null;
                 }
 
-                $$1.removeDataset(this.#dialog, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'hidden.ui.modal');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#dialog, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this.#dialog, 'uiAnimating');
-                }
+                $$1.triggerEvent(modalNode, 'hidden.ui.modal');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -12650,14 +12663,14 @@
             }
 
             if (
-                $$1.getDataset(this.#dialog, 'uiAnimating') ||
+                this.#transitioning ||
                 $$1.hasClass(this.node, 'show') ||
                 !$$1.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this.#activeTarget } })
             ) {
                 return;
             }
 
-            $$1.setDataset(this.#dialog, { uiAnimating: 'in' });
+            this.#transitioning = true;
 
             const stackSize = $$1.find('.modal.show').length;
 
@@ -12680,8 +12693,6 @@
 
             $$1.addClass(document.body, 'modal-open');
 
-            $$1.addClass(this.node, 'show');
-
             if (this.options.backdrop) {
                 this.#backdrop = $$1.create('div', {
                     class: 'modal-backdrop',
@@ -12698,19 +12709,23 @@
                 }
             }
 
-            Promise.all([
-                $$1.fadeIn(this.#dialog, {
-                    duration: this.options.duration,
+            // Commit the rendered hidden state before starting the transitions.
+            $$1.css(this.#dialog, 'opacity');
+            $$1.addClass(this.node, 'show');
+
+            const transitions = [
+                waitForTransition(this.#dialog, ['opacity', 'transform'], {
+                    modalNode: this.node,
                 }),
-                $$1.dropIn(this.#dialog, {
-                    duration: this.options.duration,
-                    direction: 'top',
-                }),
-                $$1.fadeIn(this.#backdrop, {
-                    duration: this.options.duration,
-                }),
-            ]).then((_) => {
-                $$1.setAttribute(this.node, {
+            ];
+
+            if (this.#backdrop) {
+                $$1.addClass(this.#backdrop, 'show');
+                transitions.push(waitForTransition(this.#backdrop, ['opacity']));
+            }
+
+            Promise.all(transitions).then(([{ modalNode }]) => {
+                $$1.setAttribute(modalNode, {
                     'aria-hidden': false,
                     'aria-modal': true,
                 });
@@ -12719,12 +12734,9 @@
                     this.#focusTrap.activate();
                 }
 
-                $$1.removeDataset(this.#dialog, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'shown.ui.modal');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#dialog, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this.#dialog, 'uiAnimating');
-                }
+                $$1.triggerEvent(modalNode, 'shown.ui.modal');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -12743,28 +12755,22 @@
          * Runs the static-backdrop feedback animation.
          */
         #zoom() {
-            if ($$1.getDataset(this.#dialog, 'uiAnimating')) {
+            if (this.#transitioning || this.#zooming) {
                 return;
             }
 
-            $$1.stop(this.#dialog);
+            this.#zooming = true;
 
-            $$1.animate(
-                this.#dialog,
-                (node, progress) => {
-                    if (progress >= 1) {
-                        $$1.setStyle(node, { transform: '' });
-                        return;
-                    }
+            $$1.addClass(this.node, 'modal-static');
 
-                    const zoomOffset = (progress < .5 ? progress : (1 - progress)) / 20;
-                    $$1.setStyle(node, { transform: `scale(${1 + zoomOffset})` });
-                },
-                {
-                    duration: 200,
-                },
-            ).catch((_) => {
-                //
+            waitForTransition(this.#dialog, ['transform'], {
+                modalNode: this.node,
+            }).then(({ modalNode, node }) => {
+                $$1.removeClass(modalNode, 'modal-static');
+
+                return waitForTransition(node, ['transform']);
+            }).finally((_) => {
+                this.#zooming = false;
             });
         }
     }
@@ -12800,7 +12806,6 @@
 
     /** @type {import('./modal.js').ModalOptions} */
     Modal.defaults = {
-        duration: 250,
         backdrop: true,
         focus: true,
         show: false,

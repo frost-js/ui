@@ -39,13 +39,23 @@
     position: fixed;
     inset: 0;
     z-index: var(--ui-modal-z-index);
+    visibility: hidden;
     padding: var(--ui-safe-area-inset-top) var(--ui-safe-area-inset-right) var(--ui-safe-area-inset-bottom) var(--ui-safe-area-inset-left);
     overflow: hidden;
     overscroll-behavior: contain;
     outline: 0;
 
-    &:not(.show) {
-        display: none;
+    &:is(.show, .hiding) {
+        visibility: visible;
+    }
+
+    &.show .modal-dialog {
+        opacity: 1;
+        transform: none;
+    }
+
+    &.modal-static .modal-dialog {
+        transform: scale(1.025);
     }
 }
 
@@ -54,6 +64,11 @@
     width: auto;
     margin: var(--ui-modal-margin);
     pointer-events: none;
+    opacity: 0;
+    transform: translateY(calc(var(--ui-modal-margin) * -2));
+    transition-timing-function: var(--ui-transition-timing-function);
+    transition-duration: var(--ui-transition-duration);
+    transition-property: opacity, transform;
 }
 
 .modal-dialog-scrollable {
@@ -99,7 +114,13 @@
     inset: 0;
     z-index: var(--ui-backdrop-z-index);
     background-color: var(--ui-backdrop-bg);
+    opacity: 0;
     backdrop-filter: var(--ui-backdrop-filter);
+    transition: opacity var(--ui-transition-duration) var(--ui-transition-timing-function);
+
+    &.show {
+        opacity: 1;
+    }
 }
 
 .modal-header {

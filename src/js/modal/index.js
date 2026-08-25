@@ -7,7 +7,6 @@ import Modal from './modal.js';
 
 /** @type {import('./modal.js').ModalOptions} */
 Modal.defaults = {
-    duration: 250,
     backdrop: true,
     focus: true,
     show: false,

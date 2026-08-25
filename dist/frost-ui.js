@@ -2288,7 +2288,6 @@
 
     /**
      * @typedef {object} ModalOptions
-     * @property {number} [duration=250] The transition duration in milliseconds.
      * @property {boolean|'static'} [backdrop=true] Whether to show a dismissible or static backdrop.
      * @property {boolean} [focus=true] Whether to trap focus while shown.
      * @property {boolean} [show=false] Whether to show the modal immediately.
@@ -2305,6 +2304,8 @@
         #dialog;
         #focusTrap;
         #scrollNodes;
+        #transitioning;
+        #zooming;
 
         /**
          * Creates a Modal.
@@ -2381,15 +2382,17 @@
          */
         hide() {
             if (
-                $.getDataset(this.#dialog, 'uiAnimating') ||
+                this.#transitioning ||
                 !$.hasClass(this.node, 'show') ||
                 !$.triggerOne(this.node, 'hide.ui.modal')
             ) {
                 return;
             }
 
-            $.stop(this.#dialog);
-            $.setDataset(this.#dialog, { uiAnimating: 'out' });
+            this.#transitioning = true;
+            this.#zooming = false;
+
+            $.removeClass(this.node, 'modal-static');
 
             if (this.#focusTrap) {
                 this.#focusTrap.deactivate();
@@ -2397,50 +2400,60 @@
 
             const stackSize = $.find('.modal.show').length - 1;
 
-            Promise.all([
-                $.fadeOut(this.#dialog, {
-                    duration: this.options.duration,
+            $.addClass(this.node, 'hiding');
+            $.removeClass(this.node, 'show');
+
+            if (this.#backdrop) {
+                $.removeClass(this.#backdrop, 'show');
+            }
+
+            const transitions = [
+                waitForTransition(this.#dialog, ['opacity', 'transform'], {
+                    activeTarget: this.#activeTarget,
+                    backdrop: this.#backdrop,
+                    modalNode: this.node,
+                    scrollNodes: this.#scrollNodes,
                 }),
-                $.dropOut(this.#dialog, {
-                    duration: this.options.duration,
-                    direction: 'top',
-                }),
-                $.fadeOut(this.#backdrop, {
-                    duration: this.options.duration,
-                }),
-            ]).then((_) => {
-                $.setAttribute(this.node, {
+            ];
+
+            if (this.#backdrop) {
+                transitions.push(waitForTransition(this.#backdrop, ['opacity']));
+            }
+
+            Promise.all(transitions).then(([{
+                activeTarget,
+                backdrop,
+                modalNode,
+                scrollNodes,
+            }]) => {
+                $.removeClass(modalNode, 'hiding');
+                $.setAttribute(modalNode, {
                     'aria-hidden': true,
                     'aria-modal': false,
                 });
 
-                resetScrollPadding(this.#scrollNodes);
+                resetScrollPadding(scrollNodes);
                 this.#scrollNodes = [];
 
                 if (stackSize) {
-                    $.setStyle(this.node, { zIndex: '' });
+                    $.setStyle(modalNode, { zIndex: '' });
                 } else {
                     $.removeClass(document.body, 'modal-open');
                 }
 
-                $.removeClass(this.node, 'show');
-
-                if (this.options.backdrop) {
-                    $.remove(this.#backdrop);
+                if (backdrop) {
+                    $.remove(backdrop);
                     this.#backdrop = null;
                 }
 
-                if (this.#activeTarget) {
-                    $.focus(this.#activeTarget);
+                if (activeTarget) {
+                    $.focus(activeTarget);
                     this.#activeTarget = null;
                 }
 
-                $.removeDataset(this.#dialog, 'uiAnimating');
-                $.triggerEvent(this.node, 'hidden.ui.modal');
-            }).catch((_) => {
-                if ($.getDataset(this.#dialog, 'uiAnimating') === 'out') {
-                    $.removeDataset(this.#dialog, 'uiAnimating');
-                }
+                $.triggerEvent(modalNode, 'hidden.ui.modal');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -2454,14 +2467,14 @@
             }
 
             if (
-                $.getDataset(this.#dialog, 'uiAnimating') ||
+                this.#transitioning ||
                 $.hasClass(this.node, 'show') ||
                 !$.triggerOne(this.node, 'show.ui.modal', { data: { relatedTarget: this.#activeTarget } })
             ) {
                 return;
             }
 
-            $.setDataset(this.#dialog, { uiAnimating: 'in' });
+            this.#transitioning = true;
 
             const stackSize = $.find('.modal.show').length;
 
@@ -2484,8 +2497,6 @@
 
             $.addClass(document.body, 'modal-open');
 
-            $.addClass(this.node, 'show');
-
             if (this.options.backdrop) {
                 this.#backdrop = $.create('div', {
                     class: 'modal-backdrop',
@@ -2502,19 +2513,23 @@
                 }
             }
 
-            Promise.all([
-                $.fadeIn(this.#dialog, {
-                    duration: this.options.duration,
+            // Commit the rendered hidden state before starting the transitions.
+            $.css(this.#dialog, 'opacity');
+            $.addClass(this.node, 'show');
+
+            const transitions = [
+                waitForTransition(this.#dialog, ['opacity', 'transform'], {
+                    modalNode: this.node,
                 }),
-                $.dropIn(this.#dialog, {
-                    duration: this.options.duration,
-                    direction: 'top',
-                }),
-                $.fadeIn(this.#backdrop, {
-                    duration: this.options.duration,
-                }),
-            ]).then((_) => {
-                $.setAttribute(this.node, {
+            ];
+
+            if (this.#backdrop) {
+                $.addClass(this.#backdrop, 'show');
+                transitions.push(waitForTransition(this.#backdrop, ['opacity']));
+            }
+
+            Promise.all(transitions).then(([{ modalNode }]) => {
+                $.setAttribute(modalNode, {
                     'aria-hidden': false,
                     'aria-modal': true,
                 });
@@ -2523,12 +2538,9 @@
                     this.#focusTrap.activate();
                 }
 
-                $.removeDataset(this.#dialog, 'uiAnimating');
-                $.triggerEvent(this.node, 'shown.ui.modal');
-            }).catch((_) => {
-                if ($.getDataset(this.#dialog, 'uiAnimating') === 'in') {
-                    $.removeDataset(this.#dialog, 'uiAnimating');
-                }
+                $.triggerEvent(modalNode, 'shown.ui.modal');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -2547,28 +2559,22 @@
          * Runs the static-backdrop feedback animation.
          */
         #zoom() {
-            if ($.getDataset(this.#dialog, 'uiAnimating')) {
+            if (this.#transitioning || this.#zooming) {
                 return;
             }
 
-            $.stop(this.#dialog);
+            this.#zooming = true;
 
-            $.animate(
-                this.#dialog,
-                (node, progress) => {
-                    if (progress >= 1) {
-                        $.setStyle(node, { transform: '' });
-                        return;
-                    }
+            $.addClass(this.node, 'modal-static');
 
-                    const zoomOffset = (progress < .5 ? progress : (1 - progress)) / 20;
-                    $.setStyle(node, { transform: `scale(${1 + zoomOffset})` });
-                },
-                {
-                    duration: 200,
-                },
-            ).catch((_) => {
-                //
+            waitForTransition(this.#dialog, ['transform'], {
+                modalNode: this.node,
+            }).then(({ modalNode, node }) => {
+                $.removeClass(modalNode, 'modal-static');
+
+                return waitForTransition(node, ['transform']);
+            }).finally((_) => {
+                this.#zooming = false;
             });
         }
     }
@@ -2604,7 +2610,6 @@
 
     /** @type {import('./modal.js').ModalOptions} */
     Modal.defaults = {
-        duration: 250,
         backdrop: true,
         focus: true,
         show: false,

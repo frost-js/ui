@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+import { resetPage } from '../../setup/browser.js';
 import { expectStyles } from '../../support/assertions/styles.js';
 import { measureScrollbarSize } from '../../support/measurements/scrollbar.js';
 
+test.use({ reducedMotion: 'no-preference' });
+
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -79,40 +79,24 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
-            await expect(page.locator('.modal-backdrop')).toHaveAttribute('style', '');
+            await expect(page.locator('.modal-backdrop')).not.toHaveAttribute('style');
             await expect(page.locator('body')).toHaveClass(/\bmodal-open\b/);
         });
 
         test('shows the modal (data-ui-toggle)', async ({ page }) => {
             await page.locator('#modalToggle1').click();
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -120,19 +104,11 @@ test.describe('Modal', () => {
             await page.evaluate((_) => {
                 $('#modal1').modal('show');
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -144,29 +120,9 @@ test.describe('Modal', () => {
                 modal.show();
                 modal.show();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-        });
-
-        test('clears animation state when showing is interrupted', async ({ page }) => {
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                UI.Modal.init(modal1).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1', { finish: false });
-                $.stop('.modal-backdrop', { finish: false });
-            });
-            await advanceClock(page, 0);
-
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('data-ui-animating');
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+            await expect(page.locator('.modal-backdrop')).toHaveCount(1);
         });
 
         test('can be called on shown modal', async ({ page }) => {
@@ -174,23 +130,14 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                },
-            ]);
         });
 
         test('allows modals to stack', async ({ page }) => {
@@ -198,34 +145,24 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal2 = $.findOne('#modal2');
                 UI.Modal.init(modal2).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog2');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal show');
             await expect(page.locator('#modal2')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal2')).toHaveAttribute('aria-modal', 'true');
             await expect(page.locator('#modal2')).toHaveAttribute('style', 'z-index: 1080;');
-            await expect(page.locator('#modalDialog2')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog2')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(2);
-            await expect(page.locator('.modal-backdrop').nth(0)).toHaveAttribute('style', '');
+            await expect(page.locator('.modal-backdrop').nth(0)).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop').nth(1)).toHaveAttribute('style', 'z-index: 1070;');
         });
     });
@@ -236,29 +173,17 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
             await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
@@ -269,26 +194,14 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.locator('#button1').dispatchEvent('click');
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -296,28 +209,16 @@ test.describe('Modal', () => {
             await page.evaluate((_) => {
                 $('#modal1').modal('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 $('#modal1').modal('hide');
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -326,17 +227,13 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });
-            await advanceClock(page, 300);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
 
             expect(await page.evaluate((_) =>
                 $.getData('#modal1', 'modal') instanceof UI.Modal)).toBe(true);
@@ -347,12 +244,8 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 const modal = UI.Modal.init(modal1);
@@ -360,14 +253,9 @@ test.describe('Modal', () => {
                 modal.hide();
                 modal.hide();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
         test('can be called on hidden modal', async ({ page }) => {
@@ -378,11 +266,6 @@ test.describe('Modal', () => {
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1'],
-                },
-            ]);
         });
 
         test('does not close stacked modals (data-ui-dismiss)', async ({ page }) => {
@@ -390,29 +273,15 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal2 = $.findOne('#modal2');
                 UI.Modal.init(modal2).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog2');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal2')).toHaveAttribute('aria-hidden', 'false');
+
             await page.locator('#button2').dispatchEvent('click');
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog2');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
@@ -431,19 +300,11 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).toggle();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -451,19 +312,11 @@ test.describe('Modal', () => {
             await page.evaluate((_) => {
                 $('#modal1').modal('toggle');
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -475,14 +328,9 @@ test.describe('Modal', () => {
                 modal.toggle();
                 modal.toggle();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+            await expect(page.locator('.modal-backdrop')).toHaveCount(1);
         });
     });
 
@@ -492,29 +340,17 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).toggle();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -522,28 +358,16 @@ test.describe('Modal', () => {
             await page.evaluate((_) => {
                 $('#modal1').modal('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 $('#modal1').modal('toggle');
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -552,12 +376,8 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 const modal = UI.Modal.init(modal1);
@@ -565,14 +385,9 @@ test.describe('Modal', () => {
                 modal.toggle();
                 modal.toggle();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
     });
 
@@ -603,12 +418,10 @@ test.describe('Modal', () => {
                 });
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 300);
 
-            expect(await page.evaluate((_) => window.modalShownEventTriggered)).toBe(true);
-            await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
+            expect(await page.evaluate((_) => window.modalShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event', async ({ page }) => {
@@ -616,12 +429,8 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             const eventTriggered = await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 let triggered = false;
@@ -642,12 +451,8 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 window.modalHiddenEventTriggered = false;
@@ -657,12 +462,10 @@ test.describe('Modal', () => {
                 });
                 UI.Modal.init(modal1).hide();
             });
-            await advanceClock(page, 300);
 
-            expect(await page.evaluate((_) => window.modalHiddenEventTriggered)).toBe(true);
-            await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
+            expect(await page.evaluate((_) => window.modalHiddenEventTriggered)).toBe(true);
         });
 
         test('triggers show event (toggle)', async ({ page }) => {
@@ -691,12 +494,10 @@ test.describe('Modal', () => {
                 });
                 UI.Modal.init(modal1).toggle();
             });
-            await advanceClock(page, 300);
 
-            expect(await page.evaluate((_) => window.modalShownEventTriggered)).toBe(true);
-            await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
+            expect(await page.evaluate((_) => window.modalShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event (toggle)', async ({ page }) => {
@@ -704,12 +505,8 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             const eventTriggered = await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 let triggered = false;
@@ -730,12 +527,8 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 window.modalHiddenEventTriggered = false;
@@ -745,12 +538,10 @@ test.describe('Modal', () => {
                 });
                 UI.Modal.init(modal1).toggle();
             });
-            await advanceClock(page, 300);
 
-            expect(await page.evaluate((_) => window.modalHiddenEventTriggered)).toBe(true);
-            await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
+            expect(await page.evaluate((_) => window.modalHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
@@ -759,18 +550,12 @@ test.describe('Modal', () => {
                 $.addEvent(modal1, 'show.ui.modal', (_) => false);
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 300);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).not.toHaveAttribute('aria-hidden');
             await expect(page.locator('#modal1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1'],
-                },
-            ]);
         });
 
         test('can be prevented from showing (prevent default)', async ({ page }) => {
@@ -781,18 +566,12 @@ test.describe('Modal', () => {
                 });
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 300);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).not.toHaveAttribute('aria-hidden');
             await expect(page.locator('#modal1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1'],
-                },
-            ]);
         });
 
         test('can be prevented from hiding', async ({ page }) => {
@@ -800,29 +579,19 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 $.addEvent(modal1, 'hide.ui.modal', (_) => false);
                 UI.Modal.init(modal1).hide();
             });
-            await advanceClock(page, 300);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
             await expect(page.locator('body')).toHaveClass(/\bmodal-open\b/);
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                },
-            ]);
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
@@ -830,12 +599,8 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 $.addEvent(modal1, 'hide.ui.modal', (event) => {
@@ -843,143 +608,12 @@ test.describe('Modal', () => {
                 });
                 UI.Modal.init(modal1).hide();
             });
-            await advanceClock(page, 300);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
             await expect(page.locator('body')).toHaveClass(/\bmodal-open\b/);
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                },
-            ]);
-        });
-    });
-
-    test.describe('duration option', () => {
-        test('works with duration option on show', async ({ page }) => {
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                UI.Modal.init(modal1, { duration: 200 }).show();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on show (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                $.setDataset(modal1, { uiDuration: 200 });
-                UI.Modal.init(modal1).show();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on show (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#modal1')
-                    .modal({ duration: 200 })
-                    .show();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide', async ({ page }) => {
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                UI.Modal.init(modal1, { duration: 200 }).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                UI.Modal.init(modal1).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                $.setDataset(modal1, { uiDuration: 200 });
-                UI.Modal.init(modal1).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                UI.Modal.init(modal1).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#modal1')
-                    .modal({ duration: 200 })
-                    .show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $('#modal1').modal('hide');
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    progress: 0.875,
-                },
-            ]);
         });
     });
 
@@ -989,26 +623,14 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.keyboard.press('Escape');
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -1017,25 +639,15 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1, { keyboard: false }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.keyboard.press('Escape');
-            await advanceClock(page, 300);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                },
-            ]);
         });
 
         test('works with keyboard option (data-ui-keyboard)', async ({ page }) => {
@@ -1044,26 +656,16 @@ test.describe('Modal', () => {
                 $.setDataset(modal1, { uiKeyboard: false });
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.keyboard.press('Escape');
-            await advanceClock(page, 300);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('data-ui-keyboard', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                },
-            ]);
         });
 
         test('works with keyboard option (query)', async ({ page }) => {
@@ -1072,25 +674,15 @@ test.describe('Modal', () => {
                     .modal({ keyboard: false })
                     .show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.keyboard.press('Escape');
-            await advanceClock(page, 300);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                },
-            ]);
         });
     });
 
@@ -1100,19 +692,11 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1, { show: true });
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
         });
 
@@ -1122,20 +706,12 @@ test.describe('Modal', () => {
                 $.setDataset(modal1, { uiShow: true });
                 UI.Modal.init(modal1);
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('data-ui-show', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
         });
 
@@ -1143,19 +719,11 @@ test.describe('Modal', () => {
             await page.evaluate((_) => {
                 $('#modal1').modal({ show: true });
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
         });
 
@@ -1164,17 +732,11 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1);
             });
-            await advanceClock(page, 125);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).not.toHaveAttribute('aria-hidden');
             await expect(page.locator('#modal1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1'],
-                },
-            ]);
         });
     });
 
@@ -1184,19 +746,11 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1, { backdrop: false }).show();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
@@ -1206,20 +760,12 @@ test.describe('Modal', () => {
                 $.setDataset(modal1, { uiBackdrop: false });
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('data-ui-backdrop', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
@@ -1229,19 +775,11 @@ test.describe('Modal', () => {
                     .modal({ backdrop: false })
                     .show();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
@@ -1250,26 +788,14 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.locator('body').dispatchEvent('click');
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).toHaveAttribute('style', '');
+            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
@@ -1278,22 +804,14 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1, { backdrop: false }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.locator('body').dispatchEvent('click');
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1'],
-                },
-            ]);
         });
 
         test('does not hide the modal on document click (static backdrop)', async ({ page }) => {
@@ -1301,14 +819,9 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1, { backdrop: 'static' }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.locator('body').dispatchEvent('click');
-            await advanceClock(page, 250);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
@@ -1321,12 +834,8 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.locator('#modalDialog1').dispatchEvent('mousedown');
             await page.locator('body').dispatchEvent('click');
 
@@ -1334,11 +843,6 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                },
-            ]);
         });
 
         test('hides the modal on dialog click (mousedown on backdrop)', async ({ page }) => {
@@ -1346,22 +850,10 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.locator('.modal-backdrop').dispatchEvent('mousedown');
             await page.locator('#modalDialog1').dispatchEvent('click');
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog1', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
@@ -1374,29 +866,15 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal2 = $.findOne('#modal2');
                 UI.Modal.init(modal2).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog2');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal2')).toHaveAttribute('aria-hidden', 'false');
+
             await page.locator('body').dispatchEvent('click');
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog2');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
@@ -1421,12 +899,6 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1441,12 +913,6 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1467,12 +933,6 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1488,22 +948,13 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
 
             await expectStyles(page, [
                 {
@@ -1522,22 +973,13 @@ test.describe('Modal', () => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog1');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
 
             await expectStyles(page, [
                 {

@@ -221,14 +221,14 @@ Options are combined in this order:
 2. The element's `data-ui-*` attributes
 3. Options passed to `init()`
 
-For example, this element overrides the default backdrop and transition duration:
+For example, this element overrides the default backdrop and keyboard behavior:
 
 ```html
 <div
     class="modal"
     id="settings-modal"
     data-ui-backdrop="static"
-    data-ui-duration="300"
+    data-ui-keyboard="false"
     tabindex="-1"
     aria-hidden="true">
     <!-- modal markup -->
