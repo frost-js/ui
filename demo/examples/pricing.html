@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <header class="navbar navbar-expand-md border-bottom">
+    <nav class="navbar navbar-expand-md border-bottom" aria-label="Primary navigation">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">Frost Cloud</a>
             <button class="navbar-toggler" type="button" data-ui-toggle="collapse" data-ui-target="#pricing-navigation" aria-controls="pricing-navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,7 @@
                 </ul>
             </div>
         </div>
-    </header>
+    </nav>
 
     <main>
         <section class="container text-center py-5">
@@ -57,11 +57,11 @@
                 </div>
                 <div class="col">
                     <div class="card h-100 border-primary shadow-lg">
-                        <div class="card-header text-bg-primary d-flex justify-content-between align-items-center">
-                            <strong>Scale</strong>
-                            <span class="badge bg-white text-primary">Most popular</span>
+                        <div class="card-header text-bg-primary">
+                            <strong>Most popular</strong>
                         </div>
                         <div class="card-body">
+                            <h2 class="card-title">Scale</h2>
                             <p class="text-body-secondary">For teams shipping every week.</p>
                             <p><span class="display-4 fw-bold">$39</span> <span class="text-body-secondary">/ member</span></p>
                             <a class="btn btn-primary ripple w-100" href="#">Start 14-day trial</a>
@@ -99,6 +99,7 @@
             <h2 class="display-5 text-center mb-4">Compare plans</h2>
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
+                    <caption class="visually-hidden">Capabilities included with each Frost Cloud plan.</caption>
                     <thead>
                         <tr>
                             <th scope="col">Capability</th>

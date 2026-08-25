@@ -7,14 +7,34 @@
     <title>Wayfinder · FrostUI Example</title>
     <link rel="stylesheet" href="../../dist/frost-ui.css" />
     <link rel="stylesheet" href="../assets/demo.css" />
+    <style>
+        .wayfinder-cover::after {
+            position: absolute;
+            inset: 0;
+            content: "";
+            background:
+                linear-gradient(90deg, rgb(5 12 30 / 88%), rgb(5 12 30 / 30%) 70%),
+                linear-gradient(0deg, rgb(5 12 30 / 55%), transparent 55%);
+        }
+
+        .wayfinder-cover > .container {
+            z-index: 1;
+        }
+
+        @media (max-width: 575.98px) {
+            .wayfinder-cover::after {
+                background: linear-gradient(0deg, rgb(5 12 30 / 90%), rgb(5 12 30 / 30%));
+            }
+        }
+    </style>
     <script src="../../dist/frost-ui-bundle.js"></script>
     <script src="../assets/demo.js"></script>
 </head>
 
 <body>
-    <main class="min-vh-100 d-flex align-items-center position-relative overflow-hidden text-bg-dark">
-        <img class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover opacity-50" src="../assets/coast.webp" alt="">
-        <div class="container position-relative z-1 py-5">
+    <main class="wayfinder-cover min-vh-100 d-flex align-items-center position-relative overflow-hidden text-bg-dark">
+        <img class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" src="../assets/coast.webp" alt="" fetchpriority="high">
+        <div class="container position-relative py-5">
             <div class="col-lg-7 col-xl-6">
                 <span class="badge text-bg-dark mb-4">Wayfinder Journal · Issue 08</span>
                 <h1 class="display-1 text-white">Go far enough to hear yourself think.</h1>
@@ -29,7 +49,7 @@
 
     <div class="modal fade" id="subscribe-modal" tabindex="-1" aria-labelledby="subscribe-title" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <form class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title" id="subscribe-title">Join Wayfinder</h2>
                     <button class="btn-close" type="button" data-ui-dismiss="modal" aria-label="Close"></button>
@@ -38,13 +58,13 @@
                     <p class="text-body-secondary">One useful field note every second Sunday. No feeds, no noise.</p>
                     <div class="form-input">
                         <label for="cover-email">Email address</label>
-                        <input class="input-outline" id="cover-email" type="email" placeholder="you@example.com">
+                        <input class="input-outline" id="cover-email" type="email" autocomplete="email" placeholder="you@example.com" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary ripple" type="button">Subscribe</button>
+                    <button class="btn btn-primary ripple" type="submit">Subscribe</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </body>

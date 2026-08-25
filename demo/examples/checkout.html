@@ -23,7 +23,13 @@
         <div class="row g-5">
             <section class="col-lg-7">
                 <div class="mb-4">
-                    <span class="badge bg-primary-subtle text-primary-subtle mb-3">Step 2 of 3</span>
+                    <div class="d-flex justify-content-between align-items-center gap-3 mb-2">
+                        <span class="badge bg-primary-subtle text-primary-subtle">Step 2 of 3</span>
+                        <small class="text-body-secondary">Review order next</small>
+                    </div>
+                    <div class="progress mb-3" role="progressbar" aria-label="Checkout progress" aria-valuenow="2" aria-valuemin="1" aria-valuemax="3">
+                        <div class="progress-bar" style="width: 66.6667%"></div>
+                    </div>
                     <h1>Delivery and payment</h1>
                     <p class="lead text-body-secondary">Confirm where your order is going and how you would like to pay.</p>
                 </div>
@@ -49,10 +55,10 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="form-input">
-                                        <input class="input-outline input-floating" id="email" type="email" placeholder="Email address" autocomplete="email" required>
+                                        <input class="input-outline input-floating" id="email" type="email" placeholder="Email address" autocomplete="email" aria-describedby="email-help" required>
                                         <label class="label-floating" for="email">Email address</label>
                                     </div>
-                                    <div class="form-text">We will send tracking updates to this address.</div>
+                                    <div class="form-text" id="email-help">We will send tracking updates to this address.</div>
                                 </div>
                             </div>
                         </div>
@@ -109,13 +115,13 @@
                             <h2 class="h4 mb-0">Payment</h2>
                         </div>
                         <div class="card-body">
-                            <div class="hstack gap-4 mb-4">
+                            <div class="hstack flex-wrap gap-4 mb-4" role="radiogroup" aria-label="Payment method">
                                 <div class="form-check">
-                                    <input class="input-check" id="credit" name="paymentMethod" type="radio" checked>
+                                    <input class="input-check" id="credit" name="payment-method" type="radio" checked>
                                     <label class="form-check-label" for="credit">Credit card</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="input-check" id="paypal" name="paymentMethod" type="radio">
+                                    <input class="input-check" id="paypal" name="payment-method" type="radio">
                                     <label class="form-check-label" for="paypal">PayPal</label>
                                 </div>
                             </div>
@@ -154,10 +160,10 @@
             </section>
 
             <aside class="col-lg-5 order-lg-last">
-                <div class="card shadow-sm sticky-top">
+                <div class="card shadow-sm sticky-lg-top mb-5">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h2 class="h4 mb-0">Order summary</h2>
-                        <span class="badge bg-primary rounded-pill">3</span>
+                        <span class="badge text-bg-primary rounded-pill">3</span>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between gap-3 py-3">

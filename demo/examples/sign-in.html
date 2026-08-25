@@ -15,42 +15,46 @@
     <main class="container-fluid">
         <div class="row min-vh-100">
             <div class="col-lg-6 d-none d-lg-block position-relative p-0">
-                <img class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" src="../assets/cabin.webp" alt="Remote timber cabin beside a mountain lake">
+                <img class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" src="../assets/cabin.webp" alt="Remote timber cabin beside a mountain lake" fetchpriority="high">
                 <div class="position-absolute bottom-0 start-0 end-0 p-5 bg-glass">
-                    <span class="badge bg-accent mb-3">Member story</span>
+                    <span class="badge text-bg-accent mb-3">Member story</span>
                     <blockquote class="blockquote">
                         <p>“The route notes gave us confidence to slow down and stay an extra night.”</p>
                         <footer class="blockquote-footer text-body-secondary">Mara Chen, Alpine Reset 2026</footer>
                     </blockquote>
                 </div>
             </div>
-            <div class="col-lg-6 d-flex align-items-center">
+            <div class="col-lg-6 d-flex align-items-center bg-ambient">
                 <div class="col-sm-9 col-md-7 col-lg-8 col-xl-6 mx-auto py-5">
-                    <a class="h3 text-body text-decoration-none" href="#">Northstar</a>
-                    <div class="my-5">
-                        <span class="badge bg-primary-subtle text-primary-subtle mb-3">Member access</span>
-                        <h1>Welcome back.</h1>
-                        <p class="text-body-secondary">Sign in to view departures, saved routes, and trip details.</p>
-                    </div>
-                    <form>
-                        <div class="form-input mb-3">
-                            <label for="sign-in-email">Email address</label>
-                            <input class="input-outline input-lg" id="sign-in-email" type="email" autocomplete="email" placeholder="you@example.com">
-                        </div>
-                        <div class="form-input mb-3">
-                            <div class="d-flex justify-content-between">
-                                <label for="sign-in-password">Password</label>
-                                <a class="link-secondary" href="#">Forgot password?</a>
+                    <div class="card bg-glass border-0 shadow-lg">
+                        <div class="card-body p-4 p-xl-5">
+                            <a class="h3 text-body text-decoration-none fw-bold" href="#">Northstar</a>
+                            <div class="my-4">
+                                <span class="badge bg-primary-subtle text-primary-subtle mb-3">Member access</span>
+                                <h1>Welcome back.</h1>
+                                <p class="text-body-secondary">Sign in to view departures, saved routes, and trip details.</p>
                             </div>
-                            <input class="input-outline input-lg" id="sign-in-password" type="password" autocomplete="current-password" placeholder="Enter your password">
+                            <form>
+                                <div class="form-input mb-3">
+                                    <label for="sign-in-email">Email address</label>
+                                    <input class="input-outline input-lg" id="sign-in-email" type="email" autocomplete="email" placeholder="you@example.com" required>
+                                </div>
+                                <div class="form-input mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <label for="sign-in-password">Password</label>
+                                        <a class="link-secondary" href="#">Forgot password?</a>
+                                    </div>
+                                    <input class="input-outline input-lg" id="sign-in-password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+                                </div>
+                                <div class="form-check mb-4">
+                                    <input class="input-check" id="remember-me" type="checkbox">
+                                    <label class="form-check-label" for="remember-me">Keep me signed in</label>
+                                </div>
+                                <button class="btn btn-primary btn-lg ripple w-100" type="submit">Sign in</button>
+                            </form>
+                            <p class="text-center text-body-secondary mt-4 mb-0">New to Northstar? <a href="#">Create an account</a></p>
                         </div>
-                        <div class="form-check mb-4">
-                            <input class="input-check" id="remember-me" type="checkbox">
-                            <label class="form-check-label" for="remember-me">Keep me signed in</label>
-                        </div>
-                        <button class="btn btn-primary btn-lg ripple w-100" type="submit">Sign in</button>
-                    </form>
-                    <p class="text-center text-body-secondary mt-4">New to Northstar? <a href="#">Create an account</a></p>
+                    </div>
                 </div>
             </div>
         </div>

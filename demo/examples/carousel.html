@@ -7,13 +7,51 @@
     <title>Northstar · FrostUI Example</title>
     <link rel="stylesheet" href="../../dist/frost-ui.css" />
     <link rel="stylesheet" href="../assets/demo.css" />
+    <style>
+        #northstar-carousel .ratio {
+            min-height: clamp(30rem, 60vw, 44rem);
+        }
+
+        #northstar-carousel .ratio::after {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            content: "";
+            background: linear-gradient(180deg, transparent 30%, rgb(0 0 0 / 45%));
+        }
+
+        @media (max-width: 767.98px) {
+            #northstar-carousel .carousel-caption {
+                inset-inline: 1rem;
+                bottom: 2.5rem;
+                width: auto;
+                max-width: none;
+                padding: 1rem;
+                margin-inline: 0;
+            }
+
+            #northstar-carousel .display-3 {
+                font-size: clamp(2rem, 11vw, 3rem);
+            }
+
+            #northstar-carousel .lead {
+                font-size: 1rem;
+            }
+
+            #northstar-carousel :is(.carousel-control-prev, .carousel-control-next) {
+                inset-block-start: 1rem;
+                inset-block-end: auto;
+                margin-block: 0;
+            }
+        }
+    </style>
     <script src="../../dist/frost-ui-bundle.js"></script>
     <script src="../assets/demo.js"></script>
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-md bg-glass">
+        <nav class="navbar navbar-expand-md bg-glass" aria-label="Primary navigation">
             <div class="container">
                 <a class="navbar-brand fw-bold" href="#">Northstar</a>
                 <button class="navbar-toggler" type="button" data-ui-toggle="collapse" data-ui-target="#northstar-navigation" aria-controls="northstar-navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,10 +78,10 @@
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <div class="ratio ratio-21x9">
-                        <img class="d-block w-100 object-fit-cover" src="../assets/coast.webp" alt="Hiker looking over a coastal headland at twilight">
+                        <img class="d-block w-100 object-fit-cover" src="../assets/coast.webp" alt="Hiker looking over a coastal headland at twilight" fetchpriority="high">
                     </div>
-                    <div class="carousel-caption d-none d-md-block text-start">
-                        <span class="badge bg-primary-subtle text-primary-subtle mb-3">Seven days · Small group</span>
+                    <div class="carousel-caption text-start">
+                        <span class="badge bg-primary-subtle text-primary-subtle d-none d-sm-inline-block mb-3">Seven days · Small group</span>
                         <h1 class="display-3">Walk to the edge of the map.</h1>
                         <p class="lead">A guided coastal traverse shaped by weather, tide, and the best light of the day.</p>
                         <a class="btn btn-primary btn-lg ripple" href="#">Explore the coast</a>
@@ -51,10 +89,10 @@
                 </div>
                 <div class="carousel-item">
                     <div class="ratio ratio-21x9">
-                        <img class="d-block w-100 object-fit-cover" src="../assets/cabin.webp" alt="Remote cabin beside a mountain lake">
+                        <img class="d-block w-100 object-fit-cover" src="../assets/cabin.webp" alt="Remote cabin beside a mountain lake" loading="lazy">
                     </div>
-                    <div class="carousel-caption d-none d-md-block">
-                        <span class="badge bg-primary-subtle text-primary-subtle mb-3">Four nights · Private cabin</span>
+                    <div class="carousel-caption">
+                        <span class="badge bg-primary-subtle text-primary-subtle d-none d-sm-inline-block mb-3">Four nights · Private cabin</span>
                         <h2 class="display-3">Make room for quiet.</h2>
                         <p class="lead">Unhurried days, trail access from the door, and a lake that changes every hour.</p>
                         <a class="btn btn-light btn-lg ripple" href="#">See the retreat</a>
@@ -62,10 +100,10 @@
                 </div>
                 <div class="carousel-item">
                     <div class="ratio ratio-21x9">
-                        <img class="d-block w-100 object-fit-cover" src="../assets/canyon.webp" alt="Expedition vehicle above a desert canyon road">
+                        <img class="d-block w-100 object-fit-cover" src="../assets/canyon.webp" alt="Expedition vehicle above a desert canyon road" loading="lazy">
                     </div>
-                    <div class="carousel-caption d-none d-md-block text-end">
-                        <span class="badge bg-primary-subtle text-primary-subtle mb-3">Nine days · Self-drive</span>
+                    <div class="carousel-caption text-end">
+                        <span class="badge bg-primary-subtle text-primary-subtle d-none d-sm-inline-block mb-3">Nine days · Self-drive</span>
                         <h2 class="display-3">Take the road that keeps going.</h2>
                         <p class="lead">A supported desert crossing with remote camps and a route worth remembering.</p>
                         <a class="btn btn-primary btn-lg ripple" href="#">Plan the crossing</a>
@@ -123,11 +161,11 @@
                     </div>
                     <a class="btn btn-outline-primary ripple" href="#">All departures</a>
                 </div>
-                <div class="row row-cols-1 row-cols-lg-3 g-4">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                     <div class="col">
                         <article class="card h-100">
                             <div class="ratio ratio-4x3">
-                                <img class="card-img-top object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at dusk">
+                                <img class="card-img-top object-fit-cover" src="../assets/coast.webp" alt="Coastal cliffs at dusk" loading="lazy">
                             </div>
                             <div class="card-body">
                                 <span class="text-primary fw-bold">October 12–18</span>
@@ -140,7 +178,7 @@
                     <div class="col">
                         <article class="card h-100">
                             <div class="ratio ratio-4x3">
-                                <img class="card-img-top object-fit-cover" src="../assets/cabin.webp" alt="Lakeside cabin in the mountains">
+                                <img class="card-img-top object-fit-cover" src="../assets/cabin.webp" alt="Lakeside cabin in the mountains" loading="lazy">
                             </div>
                             <div class="card-body">
                                 <span class="text-primary fw-bold">November 3–7</span>
@@ -153,7 +191,7 @@
                     <div class="col">
                         <article class="card h-100">
                             <div class="ratio ratio-4x3">
-                                <img class="card-img-top object-fit-cover" src="../assets/canyon.webp" alt="Vehicle at a desert canyon overlook">
+                                <img class="card-img-top object-fit-cover" src="../assets/canyon.webp" alt="Vehicle at a desert canyon overlook" loading="lazy">
                             </div>
                             <div class="card-body">
                                 <span class="text-primary fw-bold">March 8–16</span>

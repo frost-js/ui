@@ -7,6 +7,19 @@
     <title>Waypoint · FrostUI Example</title>
     <link rel="stylesheet" href="../../dist/frost-ui.css" />
     <link rel="stylesheet" href="../assets/demo.css" />
+    <style>
+        .waypoint-cover .ratio {
+            min-height: clamp(24rem, 50vw, 34rem);
+        }
+
+        .waypoint-cover .card-img-overlay {
+            background: linear-gradient(180deg, transparent 15%, rgb(0 0 0 / 80%));
+        }
+
+        .waypoint-cover .display-3 {
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+        }
+    </style>
     <script src="../../dist/frost-ui-bundle.js"></script>
     <script src="../assets/demo.js"></script>
 </head>
@@ -15,24 +28,24 @@
     <header class="container py-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 border-bottom pb-4">
             <a class="display-6 text-body text-decoration-none fw-bold" href="#">Waypoint</a>
-            <nav class="nav">
+            <nav class="nav" aria-label="Sections">
                 <a class="nav-link active" href="#" aria-current="page">Stories</a>
                 <a class="nav-link" href="#">Design</a>
                 <a class="nav-link" href="#">Culture</a>
                 <a class="nav-link" href="#">Places</a>
             </nav>
-            <a class="btn btn-outline-primary ripple" href="#">Subscribe</a>
+            <a class="btn btn-outline-primary ripple align-self-start align-self-md-auto" href="#">Subscribe</a>
         </div>
     </header>
 
     <main class="container pb-5">
-        <article class="card text-bg-dark border-0 shadow-lg mb-5">
+        <article class="card waypoint-cover text-bg-dark border-0 shadow-lg mb-5">
             <div class="ratio ratio-21x9">
-                <img class="card-img object-fit-cover opacity-75" src="../assets/coast.webp" alt="Coastal headland at blue hour">
+                <img class="card-img object-fit-cover" src="../assets/coast.webp" alt="Coastal headland at blue hour" fetchpriority="high">
             </div>
             <div class="card-img-overlay d-flex align-items-end">
                 <div class="col-lg-8 p-md-4">
-                    <span class="badge bg-primary mb-3">Cover story</span>
+                    <span class="badge text-bg-primary mb-3">Cover story</span>
                     <h1 class="display-3 text-white">Why the best public spaces leave room for weather.</h1>
                     <p class="lead text-light d-none d-md-block">Architect Lina Ortiz on designing coastal places that become richer in wind, salt, rain, and time.</p>
                     <a class="stretched-link text-white fw-bold" href="#">Read the cover story &rarr;</a>
@@ -46,7 +59,7 @@
                     <div class="row g-0">
                         <div class="col-sm-5">
                             <div class="ratio ratio-4x3 h-100">
-                                <img class="object-fit-cover" src="../assets/cabin.webp" alt="Modern cabin beside an alpine lake">
+                                <img class="object-fit-cover" src="../assets/cabin.webp" alt="Modern cabin beside an alpine lake" loading="lazy">
                             </div>
                         </div>
                         <div class="col-sm-7">
@@ -65,7 +78,7 @@
                     <div class="row g-0">
                         <div class="col-sm-5">
                             <div class="ratio ratio-4x3 h-100">
-                                <img class="object-fit-cover" src="../assets/canyon.webp" alt="Desert canyon crossed by a winding road">
+                                <img class="object-fit-cover" src="../assets/canyon.webp" alt="Desert canyon crossed by a winding road" loading="lazy">
                             </div>
                         </div>
                         <div class="col-sm-7">

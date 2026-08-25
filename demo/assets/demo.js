@@ -281,8 +281,8 @@ const renderNavigation = () => `
     </aside>`;
 
 const renderExampleNavigation = () => `
-    <div class="position-fixed top-0 end-0 z-3 p-3">
-        <a class="btn btn-secondary btn-sm shadow-sm" href="../index.html#examples">Demos</a>
+    <div class="position-fixed bottom-0 start-0 z-3 p-3">
+        <a class="btn btn-secondary btn-sm rounded-pill shadow-lg" href="../index.html#examples">&larr; Demos</a>
     </div>`;
 
 const renderThemeToggle = () => `
