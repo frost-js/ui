@@ -1,9 +1,10 @@
 import BaseComponent from './../base-component.js';
 import { $, document } from './../globals.js';
 import { getPosition } from './../helpers/pointer.js';
-import { getDirOffset, getDirection, getIndex } from './helpers.js';
+import { waitForTransition } from './../helpers/transition.js';
+import { getDirOffset, getDirection, getIndex, getTransitionClasses } from './helpers.js';
 
-/** @typedef {import('../popper/popper.js').Direction} Direction */
+/** @typedef {'left'|'right'} CarouselDirection */
 
 /**
  * @typedef {object} CarouselOptions
@@ -18,7 +19,7 @@ import { getDirOffset, getDirection, getIndex } from './helpers.js';
 
 /**
  * @typedef {object} CarouselUpdateOptions
- * @property {Direction} [direction] The transition direction.
+ * @property {CarouselDirection} direction The transition direction.
  * @property {boolean} [dragging=false] Whether the position is being updated by a drag.
  */
 
@@ -31,6 +32,7 @@ export default class Carousel extends BaseComponent {
     #items;
     #mousePaused;
     #paused;
+    #sliding;
     #timer;
 
     /**
@@ -41,11 +43,15 @@ export default class Carousel extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
+        // Custom properties must retain the leading dashes removed by fQuery's style normalization.
+        this.node.style.setProperty('--ui-carousel-transition-duration', `${this.options.transition}ms`);
+
         this.#items = $.find('.carousel-item', this.node);
 
         this.#index = this.#items.findIndex((item) =>
             $.hasClass(item, 'active'),
         );
+        this.#sliding = false;
 
         this.#events();
 
@@ -68,8 +74,15 @@ export default class Carousel extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
-        clearTimeout(this.#timer);
-        this.#timer = null;
+        this.node.style.setProperty('--ui-carousel-transition-duration', '');
+
+        if (this.#sliding) {
+            $.removeClass(this.node, 'carousel-dragging');
+        }
+
+        for (const item of this.#items) {
+            this.#resetStyles(item);
+        }
 
         if (this.options.keyboard) {
             $.removeEvent(this.node, 'keydown.ui.carousel');
@@ -83,6 +96,9 @@ export default class Carousel extends BaseComponent {
         if (this.options.swipe) {
             $.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
         }
+
+        clearTimeout(this.#timer);
+        this.#timer = null;
 
         this.#items = null;
 
@@ -162,7 +178,7 @@ export default class Carousel extends BaseComponent {
                 this.#mousePaused = false;
                 this.#paused = false;
 
-                if (!$.getDataset(this.node, 'uiSliding')) {
+                if (!this.#sliding) {
                     this.#setTimer();
                 }
             });
@@ -177,7 +193,7 @@ export default class Carousel extends BaseComponent {
             const downEvent = (e) => {
                 if (
                     e.button ||
-                    $.getDataset(this.node, 'uiSliding') ||
+                    this.#sliding ||
                     (
                         !$.is(e.target, ':disabled, .disabled') &&
                         (
@@ -190,13 +206,21 @@ export default class Carousel extends BaseComponent {
                 }
 
                 this.pause();
-                $.setDataset(this.node, { uiSliding: true });
+                this.#sliding = true;
+                $.addClass(this.node, 'carousel-dragging');
 
                 const pos = getPosition(e);
                 startX = pos.x;
+                index = null;
+                progress = 0;
+                direction = null;
             };
 
             const moveEvent = (e) => {
+                if (!this.node) {
+                    return;
+                }
+
                 const pos = getPosition(e);
                 const currentX = pos.x;
                 const width = $.width(this.node);
@@ -221,6 +245,12 @@ export default class Carousel extends BaseComponent {
                     } else if (mouseDiffX > 0) {
                         index = this.#index - 1;
                     } else {
+                        this.#resetStyles(this.#items[this.#index]);
+
+                        if (lastIndex !== null) {
+                            this.#resetStyles(this.#items[lastIndex]);
+                        }
+
                         index = this.#index;
                         return;
                     }
@@ -236,68 +266,94 @@ export default class Carousel extends BaseComponent {
                         this.#update(this.#items[this.#index], this.#items[oldIndex], progress, { direction });
                         this.#updateIndicators();
 
-                        if (lastIndex !== this.#index) {
-                            this.#resetStyles(lastIndex);
+                        if (lastIndex !== null && lastIndex !== this.#index) {
+                            this.#resetStyles(this.#items[lastIndex]);
                         }
 
                         progress--;
                     } else {
                         this.#update(this.#items[index], this.#items[this.#index], progress, { direction, dragging: true });
 
-                        if (lastIndex !== index) {
-                            this.#resetStyles(lastIndex);
+                        if (lastIndex !== null && lastIndex !== index) {
+                            this.#resetStyles(this.#items[lastIndex]);
                         }
                     }
                 } while (progress > 1);
             };
 
             const upEvent = (_) => {
+                if (!this.node) {
+                    return;
+                }
+
                 if (index === null || index === this.#index) {
+                    $.removeClass(this.node, 'carousel-dragging');
                     this.#paused = false;
-                    $.removeDataset(this.node, 'uiSliding');
+                    this.#sliding = false;
                     this.#setTimer();
                     return;
                 }
 
+                const completed = progress > .25;
                 let oldIndex;
-                let progressRemaining;
-                if (progress > .25) {
+                if (completed) {
                     oldIndex = this.#setIndex(index);
-                    progressRemaining = 1 - progress;
                 } else {
                     oldIndex = index;
-                    progressRemaining = progress;
-                    direction = direction === 'right' ? 'left' : 'right';
                 }
 
-                this.#resetStyles(this.#index);
+                const nodeIn = this.#items[this.#index];
+                const nodeOut = this.#items[oldIndex];
+                const { enter, exit } = getTransitionClasses(direction);
+                const transitionClass = completed ? exit : enter;
+                const progressRemaining = completed ? 1 - progress : progress;
 
                 index = null;
 
-                $.animate(
-                    this.#items[this.#index],
-                    (node, newProgress) => {
-                        if (!this.#items) {
-                            return;
-                        }
+                $.addClass(nodeOut, transitionClass);
 
-                        if (progress > .25) {
-                            this.#update(node, this.#items[oldIndex], progress + (newProgress * progressRemaining), { direction });
-                        } else {
-                            this.#update(node, this.#items[oldIndex], (1 - progress) + (newProgress * progressRemaining), { direction });
-                        }
-                    },
-                    {
-                        duration: this.options.transition * progressRemaining,
-                    },
-                ).then((_) => {
-                    this.#updateIndicators();
-                    $.removeDataset(this.node, 'uiSliding');
+                this.node.style.setProperty(
+                    '--ui-carousel-transition-duration',
+                    `${this.options.transition * progressRemaining}ms`,
+                );
+                $.removeClass(this.node, 'carousel-dragging');
 
-                    this.#paused = false;
-                    this.#setTimer();
-                }).catch((_) => {
-                    $.removeDataset(this.node, 'uiSliding');
+                // Commit the dragged position with transitions enabled before removing it.
+                $.css(nodeIn, 'transform');
+                $.setStyle([nodeIn, nodeOut], { transform: '' });
+
+                Promise.all([
+                    waitForTransition(nodeIn, ['transform'], {
+                        carousel: this.node,
+                        index: this.#index,
+                        nodeOut,
+                        transitionClass,
+                    }),
+                    waitForTransition(nodeOut, ['transform']),
+                ]).then(([{
+                    carousel,
+                    index,
+                    node: nodeIn,
+                    transitionClass,
+                }, {
+                    node: nodeOut,
+                }]) => {
+                    this.#sliding = false;
+
+                    $.removeClass(nodeOut, transitionClass);
+                    this.#resetStyles(nodeIn);
+                    this.#resetStyles(nodeOut);
+                    this.#updateIndicators(carousel, index);
+
+                    if (this.node) {
+                        this.#paused = false;
+                        this.#setTimer();
+
+                        this.node.style.setProperty(
+                            '--ui-carousel-transition-duration',
+                            `${this.options.transition}ms`,
+                        );
+                    }
                 });
             };
 
@@ -309,10 +365,10 @@ export default class Carousel extends BaseComponent {
 
     /**
      * Resets the transition styles of an item.
-     * @param {number} index The item index.
+     * @param {HTMLElement} node The carousel item.
      */
-    #resetStyles(index) {
-        $.setStyle(this.#items[index], {
+    #resetStyles(node) {
+        $.setStyle(node, {
             display: '',
             transform: '',
         });
@@ -357,7 +413,7 @@ export default class Carousel extends BaseComponent {
      * @param {number|string} index The item index to show.
      */
     #show(index) {
-        if ($.getDataset(this.node, 'uiSliding')) {
+        if (this.#sliding) {
             return;
         }
 
@@ -392,32 +448,51 @@ export default class Carousel extends BaseComponent {
             return;
         }
 
-        $.setDataset(this.node, { uiSliding: true });
+        this.#sliding = true;
         this.pause();
 
-        const oldIndex = this.#setIndex(index);
+        const nodeIn = this.#items[index];
+        const nodeOut = this.#items[this.#index];
+        const { enter, exit } = getTransitionClasses(direction);
 
-        $.animate(
-            this.#items[this.#index],
-            (node, progress) => {
-                if (!this.#items) {
-                    return;
-                }
+        $.addClass(nodeIn, enter);
 
-                this.#update(node, this.#items[oldIndex], progress, { direction });
-            },
-            {
-                duration: this.options.transition,
-            },
-        ).then((_) => {
-            this.#updateIndicators();
-            $.removeDataset(this.node, 'uiSliding');
-            $.triggerEvent(this.node, 'slid.ui.carousel', { data: eventData });
+        // Commit the incoming item's initial position before starting the transition.
+        $.css(nodeIn, 'transform');
 
-            this.#paused = false;
-            this.#setTimer();
-        }).catch((_) => {
-            $.removeDataset(this.node, 'uiSliding');
+        this.#setIndex(index);
+
+        $.addClass(nodeOut, exit);
+        $.removeClass(nodeIn, enter);
+
+        Promise.all([
+            waitForTransition(nodeIn, ['transform'], {
+                carousel: this.node,
+                index: this.#index,
+                transitionClass: exit,
+            }),
+            waitForTransition(nodeOut, ['transform']),
+        ]).then(([{
+            carousel,
+            index,
+            node: nodeIn,
+            transitionClass,
+        }, {
+            node: nodeOut,
+        }]) => {
+            this.#sliding = false;
+
+            $.removeClass(nodeOut, transitionClass);
+            this.#resetStyles(nodeIn);
+            this.#resetStyles(nodeOut);
+            this.#updateIndicators(carousel, index);
+
+            if (this.node) {
+                this.#paused = false;
+                this.#setTimer();
+            }
+
+            $.triggerEvent(carousel, 'slid.ui.carousel', { data: eventData });
         });
     }
 
@@ -460,10 +535,12 @@ export default class Carousel extends BaseComponent {
 
     /**
      * Updates the active carousel indicator.
+     * @param {HTMLElement} [carousel] The carousel node.
+     * @param {number} [index] The active item index.
      */
-    #updateIndicators() {
-        const oldIndicator = $.find('.active[data-ui-slide-to]', this.node);
-        const newIndicator = $.find('[data-ui-slide-to="' + this.#index + '"]', this.node);
+    #updateIndicators(carousel = this.node, index = this.#index) {
+        const oldIndicator = $.find('.active[data-ui-slide-to]', carousel);
+        const newIndicator = $.find('[data-ui-slide-to="' + index + '"]', carousel);
         $.removeClass(oldIndicator, 'active');
         $.addClass(newIndicator, 'active');
     }

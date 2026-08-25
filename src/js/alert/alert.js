@@ -27,7 +27,7 @@ export default class Alert extends BaseComponent {
             $.detach(node);
             $.triggerEvent(node, 'closed.ui.alert');
             $.remove(node);
-        }).finally((_) => {
+
             this.#transitioning = false;
         });
     }

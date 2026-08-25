@@ -144,11 +144,13 @@ export default class Popover extends BaseComponent {
         $.removeClass(this.#popover, 'show');
 
         waitForTransition(this.#popover, ['opacity'], {
-            toggleNode: this.node,
-        }).then(({ node, toggleNode }) => {
+            toggle: this.node,
+        }).then(({ node, toggle }) => {
             if (this.#transition !== transition) {
                 return;
             }
+
+            this.#transition = null;
 
             if (this.#popper) {
                 this.#popper.dispose();
@@ -156,12 +158,8 @@ export default class Popover extends BaseComponent {
             }
 
             $.detach(node);
-            $.removeAttribute(toggleNode, 'aria-describedby');
-            $.triggerEvent(toggleNode, 'hidden.ui.popover');
-        }).finally((_) => {
-            if (this.#transition === transition) {
-                this.#transition = null;
-            }
+            $.removeAttribute(toggle, 'aria-describedby');
+            $.triggerEvent(toggle, 'hidden.ui.popover');
         });
     }
 
@@ -243,17 +241,15 @@ export default class Popover extends BaseComponent {
         $.addClass(this.#popover, 'show');
 
         waitForTransition(this.#popover, ['opacity'], {
-            toggleNode: this.node,
-        }).then(({ toggleNode }) => {
+            toggle: this.node,
+        }).then(({ toggle }) => {
             if (this.#transition !== transition) {
                 return;
             }
 
-            $.triggerEvent(toggleNode, 'shown.ui.popover');
-        }).finally((_) => {
-            if (this.#transition === transition) {
-                this.#transition = null;
-            }
+            this.#transition = null;
+
+            $.triggerEvent(toggle, 'shown.ui.popover');
         });
     }
 

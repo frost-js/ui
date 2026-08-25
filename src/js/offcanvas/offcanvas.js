@@ -105,6 +105,8 @@ export default class Offcanvas extends BaseComponent {
             scroll,
             scrollNodes,
         }) => {
+            this.#transitioning = false;
+
             $.removeClass(node, 'hiding show');
             $.setAttribute(node, {
                 'aria-hidden': true,
@@ -128,8 +130,6 @@ export default class Offcanvas extends BaseComponent {
             }
 
             $.triggerEvent(node, 'hidden.ui.offcanvas');
-        }).finally((_) => {
-            this.#transitioning = false;
         });
     }
 
@@ -173,6 +173,8 @@ export default class Offcanvas extends BaseComponent {
         $.addClass(this.node, 'show');
 
         waitForTransition(this.node, ['opacity', 'transform']).then(({ node }) => {
+            this.#transitioning = false;
+
             $.setAttribute(node, {
                 'aria-hidden': false,
                 'aria-modal': true,
@@ -183,8 +185,6 @@ export default class Offcanvas extends BaseComponent {
             }
 
             $.triggerEvent(node, 'shown.ui.offcanvas');
-        }).finally((_) => {
-            this.#transitioning = false;
         });
     }
 

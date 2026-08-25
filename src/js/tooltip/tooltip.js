@@ -141,11 +141,13 @@ export default class Tooltip extends BaseComponent {
         $.removeClass(this.#tooltip, 'show');
 
         waitForTransition(this.#tooltip, ['opacity'], {
-            toggleNode: this.node,
-        }).then(({ node, toggleNode }) => {
+            toggle: this.node,
+        }).then(({ node, toggle }) => {
             if (this.#transition !== transition) {
                 return;
             }
+
+            this.#transition = null;
 
             if (this.#popper) {
                 this.#popper.dispose();
@@ -153,12 +155,8 @@ export default class Tooltip extends BaseComponent {
             }
 
             $.detach(node);
-            $.removeAttribute(toggleNode, 'aria-describedby');
-            $.triggerEvent(toggleNode, 'hidden.ui.tooltip');
-        }).finally((_) => {
-            if (this.#transition === transition) {
-                this.#transition = null;
-            }
+            $.removeAttribute(toggle, 'aria-describedby');
+            $.triggerEvent(toggle, 'hidden.ui.tooltip');
         });
     }
 
@@ -222,17 +220,15 @@ export default class Tooltip extends BaseComponent {
         $.addClass(this.#tooltip, 'show');
 
         waitForTransition(this.#tooltip, ['opacity'], {
-            toggleNode: this.node,
-        }).then(({ toggleNode }) => {
+            toggle: this.node,
+        }).then(({ toggle }) => {
             if (this.#transition !== transition) {
                 return;
             }
 
-            $.triggerEvent(toggleNode, 'shown.ui.tooltip');
-        }).finally((_) => {
-            if (this.#transition === transition) {
-                this.#transition = null;
-            }
+            this.#transition = null;
+
+            $.triggerEvent(toggle, 'shown.ui.tooltip');
         });
     }
 

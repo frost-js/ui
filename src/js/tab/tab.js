@@ -104,19 +104,15 @@ export default class Tab extends BaseComponent {
         $.addClass(this.#target, 'show');
 
         waitForTransition(this.#target, ['opacity'], {
-            toggleNode: this.node,
-        }).then(({ toggleNode }) => {
+            toggle: this.node,
+        }).then(({ toggle }) => {
             if (this.#transition !== transition) {
                 return;
             }
 
             this.#transition = null;
 
-            $.triggerEvent(toggleNode, 'shown.ui.tab');
-        }).finally((_) => {
-            if (this.#transition === transition) {
-                this.#transition = null;
-            }
+            $.triggerEvent(toggle, 'shown.ui.tab');
         });
     }
 }

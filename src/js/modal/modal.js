@@ -129,7 +129,7 @@ export default class Modal extends BaseComponent {
             waitForTransition(this.#dialog, ['opacity', 'transform'], {
                 activeTarget: this.#activeTarget,
                 backdrop: this.#backdrop,
-                modalNode: this.node,
+                modal: this.node,
                 scrollNodes: this.#scrollNodes,
             }),
         ];
@@ -141,11 +141,13 @@ export default class Modal extends BaseComponent {
         Promise.all(transitions).then(([{
             activeTarget,
             backdrop,
-            modalNode,
+            modal,
             scrollNodes,
         }]) => {
-            $.removeClass(modalNode, 'hiding');
-            $.setAttribute(modalNode, {
+            this.#transitioning = false;
+
+            $.removeClass(modal, 'hiding');
+            $.setAttribute(modal, {
                 'aria-hidden': true,
                 'aria-modal': false,
             });
@@ -154,7 +156,7 @@ export default class Modal extends BaseComponent {
             this.#scrollNodes = [];
 
             if (stackSize) {
-                $.setStyle(modalNode, { zIndex: '' });
+                $.setStyle(modal, { zIndex: '' });
             } else {
                 $.removeClass(document.body, 'modal-open');
             }
@@ -169,9 +171,7 @@ export default class Modal extends BaseComponent {
                 this.#activeTarget = null;
             }
 
-            $.triggerEvent(modalNode, 'hidden.ui.modal');
-        }).finally((_) => {
-            this.#transitioning = false;
+            $.triggerEvent(modal, 'hidden.ui.modal');
         });
     }
 
@@ -237,7 +237,7 @@ export default class Modal extends BaseComponent {
 
         const transitions = [
             waitForTransition(this.#dialog, ['opacity', 'transform'], {
-                modalNode: this.node,
+                modal: this.node,
             }),
         ];
 
@@ -246,8 +246,10 @@ export default class Modal extends BaseComponent {
             transitions.push(waitForTransition(this.#backdrop, ['opacity']));
         }
 
-        Promise.all(transitions).then(([{ modalNode }]) => {
-            $.setAttribute(modalNode, {
+        Promise.all(transitions).then(([{ modal }]) => {
+            this.#transitioning = false;
+
+            $.setAttribute(modal, {
                 'aria-hidden': false,
                 'aria-modal': true,
             });
@@ -256,9 +258,7 @@ export default class Modal extends BaseComponent {
                 this.#focusTrap.activate();
             }
 
-            $.triggerEvent(modalNode, 'shown.ui.modal');
-        }).finally((_) => {
-            this.#transitioning = false;
+            $.triggerEvent(modal, 'shown.ui.modal');
         });
     }
 
@@ -286,12 +286,12 @@ export default class Modal extends BaseComponent {
         $.addClass(this.node, 'modal-static');
 
         waitForTransition(this.#dialog, ['transform'], {
-            modalNode: this.node,
-        }).then(({ modalNode, node }) => {
-            $.removeClass(modalNode, 'modal-static');
+            modal: this.node,
+        }).then(({ modal, node }) => {
+            $.removeClass(modal, 'modal-static');
 
             return waitForTransition(node, ['transform']);
-        }).finally((_) => {
+        }).then((_) => {
             this.#zooming = false;
         });
     }

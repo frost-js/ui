@@ -105,18 +105,18 @@ export default class Dropdown extends BaseComponent {
         $.removeClass(this.#menuNode, 'show');
 
         waitForTransition(this.#menuNode, ['opacity'], {
-            toggleNode: this.node,
-        }).then(({ node, toggleNode }) => {
+            toggle: this.node,
+        }).then(({ node, toggle }) => {
+            this.#transitioning = false;
+
             if (this.#popper) {
                 this.#popper.dispose();
                 this.#popper = null;
             }
 
-            $.removeStyle(node, 'display');
-            $.setAttribute(toggleNode, { 'aria-expanded': false });
-            $.triggerEvent(toggleNode, 'hidden.ui.dropdown');
-        }).finally((_) => {
-            this.#transitioning = false;
+            $.setStyle(node, { display: '' });
+            $.setAttribute(toggle, { 'aria-expanded': false });
+            $.triggerEvent(toggle, 'hidden.ui.dropdown');
         });
     }
 
@@ -170,7 +170,7 @@ export default class Dropdown extends BaseComponent {
         $.addClass(this.#menuNode, 'show');
 
         // The show class now owns the menu's display state.
-        $.removeStyle(this.#menuNode, 'display');
+        $.setStyle(this.#menuNode, { display: '' });
 
         if (this.#display === 'dynamic') {
             this.#popper = new Popper(this.#menuNode, {
@@ -188,12 +188,12 @@ export default class Dropdown extends BaseComponent {
         });
 
         waitForTransition(this.#menuNode, ['opacity'], {
-            toggleNode: this.node,
-        }).then(({ toggleNode }) => {
-            $.setAttribute(toggleNode, { 'aria-expanded': true });
-            $.triggerEvent(toggleNode, 'shown.ui.dropdown');
-        }).finally((_) => {
+            toggle: this.node,
+        }).then(({ toggle }) => {
             this.#transitioning = false;
+
+            $.setAttribute(toggle, { 'aria-expanded': true });
+            $.triggerEvent(toggle, 'shown.ui.dropdown');
         });
     }
 

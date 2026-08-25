@@ -44,10 +44,10 @@ export default class Toast extends BaseComponent {
         $.removeClass(this.node, 'show');
 
         waitForTransition(this.node, ['opacity']).then(({ node }) => {
+            this.#transitioning = false;
+
             $.setStyle(node, { display: 'none' }, null, { important: true });
             $.triggerEvent(node, 'hidden.ui.toast');
-        }).finally((_) => {
-            this.#transitioning = false;
         });
     }
 
@@ -75,6 +75,8 @@ export default class Toast extends BaseComponent {
         $.addClass(this.node, 'show');
 
         waitForTransition(this.node, ['opacity']).then(({ node }) => {
+            this.#transitioning = false;
+
             if (this.options?.autohide) {
                 this.#timer = setTimeout(
                     (_) => {
@@ -86,8 +88,6 @@ export default class Toast extends BaseComponent {
             }
 
             $.triggerEvent(node, 'shown.ui.toast');
-        }).finally((_) => {
-            this.#transitioning = false;
         });
     }
 }

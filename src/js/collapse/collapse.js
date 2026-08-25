@@ -73,13 +73,13 @@ export default class Collapse extends BaseComponent {
         waitForTransition(this.node, [dimension], {
             triggers: this.#triggers,
         }).then(({ node, triggers }) => {
+            this.#transitioning = false;
+
             $.removeClass(node, 'collapsing');
             $.addClass(node, 'collapse');
-            $.removeStyle(node, dimension);
+            $.setStyle(node, { [dimension]: '' });
             $.setAttribute(triggers, { 'aria-expanded': false });
             $.triggerEvent(node, 'hidden.ui.collapse');
-        }).finally((_) => {
-            this.#transitioning = false;
         });
     }
 
@@ -133,13 +133,13 @@ export default class Collapse extends BaseComponent {
         waitForTransition(this.node, [dimension], {
             triggers: this.#triggers,
         }).then(({ node, triggers }) => {
+            this.#transitioning = false;
+
             $.removeClass(node, 'collapsing');
             $.addClass(node, 'collapse show');
-            $.removeStyle(node, dimension);
+            $.setStyle(node, { [dimension]: '' });
             $.setAttribute(triggers, { 'aria-expanded': true });
             $.triggerEvent(node, 'shown.ui.collapse');
-        }).finally((_) => {
-            this.#transitioning = false;
         });
     }
 

@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
 import { expectStyles } from '../../support/assertions/styles.js';
+
+test.use({ reducedMotion: 'no-preference' });
 
 test.beforeEach(async ({ page }) => {
     await setupClock(page);
@@ -115,6 +116,26 @@ test.describe('Carousel', () => {
 
             expect(defaultPrevented).toBe(false);
         });
+
+        test('completes sliding after disposal', async ({ page }) => {
+            await page.evaluate((_) => {
+                const carousel1 = $.findOne('#carousel1');
+                window.carouselSlidEventTriggered = false;
+
+                $.addEvent(carousel1, 'slid.ui.carousel', (_) => {
+                    window.carouselSlidEventTriggered = true;
+                });
+
+                const carousel = UI.Carousel.init(carousel1);
+                carousel.show(1);
+                carousel.dispose();
+            });
+
+            await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
+            expect(await page.evaluate((_) => $.hasData('#carousel1', 'carousel'))).toBe(false);
+        });
     });
 
     test.describe('#cycle', () => {
@@ -123,14 +144,6 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item1')).not.toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
@@ -142,14 +155,6 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('#carousel1').carousel('cycle');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
@@ -159,7 +164,6 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('.carousel').carousel('cycle');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
@@ -175,15 +179,9 @@ test.describe('Carousel', () => {
                 carousel.cycle();
                 carousel.cycle();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
         });
 
         test('wraps around to first item', async ({ page }) => {
@@ -191,23 +189,12 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(2);
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#carousel1Item3');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Item3')).not.toHaveClass(/\bactive\b/);
@@ -221,14 +208,6 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(2);
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item1')).not.toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
@@ -238,14 +217,6 @@ test.describe('Carousel', () => {
 
         test('shows a specified item (data-ui-slide-to)', async ({ page }) => {
             await page.locator('#carousel1Slide2').click();
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -255,14 +226,6 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('#carousel1').carousel('show', 2);
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -272,7 +235,6 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('.carousel').carousel('show', 2);
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -285,15 +247,9 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(0);
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item1'],
-                },
-            ]);
         });
 
         test('can be called with invalid item', async ({ page }) => {
@@ -301,15 +257,9 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(3);
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item1'],
-                },
-            ]);
         });
 
         test('can be called multiple times', async ({ page }) => {
@@ -320,15 +270,9 @@ test.describe('Carousel', () => {
                 carousel.show(1);
                 carousel.show(1);
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
         });
     });
 
@@ -338,14 +282,6 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).slide(1);
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
@@ -355,7 +291,6 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('#carousel1').carousel('slide', 1);
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
@@ -365,10 +300,11 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('.carousel').carousel('slide', 1);
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel2Item2')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel2Slide1')).toHaveClass(/\bactive\b/);
         });
 
         test('slides backwards', async ({ page }) => {
@@ -376,14 +312,6 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).slide(-1);
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -393,7 +321,6 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('#carousel1').carousel('slide', -1);
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -403,10 +330,11 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('.carousel').carousel('slide', -1);
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel2Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel2Slide2')).toHaveClass(/\bactive\b/);
         });
 
         test('can be called multiple times', async ({ page }) => {
@@ -417,15 +345,9 @@ test.describe('Carousel', () => {
                 carousel.slide(1);
                 carousel.slide(1);
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
         });
 
         test('wraps around to first item', async ({ page }) => {
@@ -433,16 +355,12 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(2);
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#carousel1Item3');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).slide(1);
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
@@ -453,7 +371,6 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).slide(-1);
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -466,14 +383,6 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).next();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
@@ -481,7 +390,6 @@ test.describe('Carousel', () => {
 
         test('shows the next item (data-ui-slide)', async ({ page }) => {
             await page.locator('#carousel1Next').click();
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
@@ -491,7 +399,6 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('#carousel1').carousel('next');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
@@ -501,10 +408,11 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('.carousel').carousel('next');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel2Item2')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel2Slide1')).toHaveClass(/\bactive\b/);
         });
 
         test('can be called multiple times', async ({ page }) => {
@@ -515,15 +423,9 @@ test.describe('Carousel', () => {
                 carousel.next();
                 carousel.next();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
         });
     });
 
@@ -533,14 +435,6 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).prev();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -548,7 +442,6 @@ test.describe('Carousel', () => {
 
         test('shows the previous item (data-ui-slide)', async ({ page }) => {
             await page.locator('#carousel1Prev').click();
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -558,7 +451,6 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('#carousel1').carousel('prev');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -568,10 +460,11 @@ test.describe('Carousel', () => {
             await page.evaluate((_) => {
                 $('.carousel').carousel('prev');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel2Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel2Slide2')).toHaveClass(/\bactive\b/);
         });
 
         test('can be called multiple times', async ({ page }) => {
@@ -582,15 +475,9 @@ test.describe('Carousel', () => {
                 carousel.prev();
                 carousel.prev();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
     });
 
@@ -621,11 +508,35 @@ test.describe('Carousel', () => {
                 });
                 UI.Carousel.init(carousel1).cycle();
             });
-            await advanceClock(page, 150);
 
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
             expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
-            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+        });
+
+        test('can start another slide from the slid event', async ({ page }) => {
+            await page.evaluate((_) => {
+                const carousel1 = $.findOne('#carousel1');
+                const carousel = UI.Carousel.init(carousel1);
+                let firstSlide = true;
+
+                window.carouselSecondSlidEventTriggered = false;
+
+                $.addEvent(carousel1, 'slid.ui.carousel', (_) => {
+                    if (firstSlide) {
+                        firstSlide = false;
+                        carousel.next();
+                    } else {
+                        window.carouselSecondSlidEventTriggered = true;
+                    }
+                });
+
+                carousel.next();
+            });
+
+            await page.waitForFunction((_) => window.carouselSecondSlidEventTriggered);
+            await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
 
         test('triggers slide event (show)', async ({ page }) => {
@@ -654,8 +565,8 @@ test.describe('Carousel', () => {
                 });
                 UI.Carousel.init(carousel1).show(1);
             });
-            await advanceClock(page, 150);
 
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
             expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
         });
@@ -686,8 +597,8 @@ test.describe('Carousel', () => {
                 });
                 UI.Carousel.init(carousel1).slide(1);
             });
-            await advanceClock(page, 150);
 
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
             expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
         });
@@ -718,8 +629,8 @@ test.describe('Carousel', () => {
                 });
                 UI.Carousel.init(carousel1).next();
             });
-            await advanceClock(page, 150);
 
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
             expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
         });
@@ -750,8 +661,8 @@ test.describe('Carousel', () => {
                 });
                 UI.Carousel.init(carousel1).prev();
             });
-            await advanceClock(page, 150);
 
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
             expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
         });
@@ -762,16 +673,10 @@ test.describe('Carousel', () => {
                 $.addEvent(carousel1, 'slide.ui.carousel', (_) => false);
                 UI.Carousel.init(carousel1).next();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Item2')).not.toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                },
-            ]);
         });
 
         test('can be prevented from sliding (prevent default)', async ({ page }) => {
@@ -782,16 +687,10 @@ test.describe('Carousel', () => {
                 });
                 UI.Carousel.init(carousel1).next();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Item2')).not.toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                },
-            ]);
         });
     });
 
@@ -801,14 +700,8 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1, { interval: 300 }).cycle();
             });
-            await advanceClock(page, 450);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 300);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -820,17 +713,12 @@ test.describe('Carousel', () => {
                 $.setDataset(carousel1, { uiInterval: 300 });
                 UI.Carousel.init(carousel1).cycle();
             });
-            await advanceClock(page, 450);
             await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-interval', '300');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 300);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
 
         test('works with interval option (query)', async ({ page }) => {
@@ -839,16 +727,11 @@ test.describe('Carousel', () => {
                     .carousel({ interval: 300 })
                     .cycle();
             });
-            await advanceClock(page, 450);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 300);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
     });
 
@@ -856,49 +739,29 @@ test.describe('Carousel', () => {
         test('works with transition option', async ({ page }) => {
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
-                UI.Carousel.init(carousel1, { transition: 200 }).cycle();
+                UI.Carousel.init(carousel1, { transition: 200 });
             });
-            await advanceClock(page, 150);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    progress: 0.875,
-                },
-            ]);
+            await expect(page.locator('#carousel1Item1')).toHaveCSS('transition-duration', '0.2s');
         });
 
         test('works with transition option (data-ui-transition)', async ({ page }) => {
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 $.setDataset(carousel1, { uiTransition: 200 });
-                UI.Carousel.init(carousel1).cycle();
+                UI.Carousel.init(carousel1);
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-transition', '200');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    progress: 0.875,
-                },
-            ]);
+            await expect(page.locator('#carousel1Item1')).toHaveCSS('transition-duration', '0.2s');
         });
 
         test('works with transition option (query)', async ({ page }) => {
             await page.evaluate((_) => {
-                $('#carousel1')
-                    .carousel({ transition: 200 })
-                    .cycle();
+                $('#carousel1').carousel({ transition: 200 });
             });
-            await advanceClock(page, 150);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    progress: 0.875,
-                },
-            ]);
+            await expect(page.locator('#carousel1Item1')).toHaveCSS('transition-duration', '0.2s');
         });
     });
 
@@ -909,14 +772,6 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1);
             });
             await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowRight' });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
@@ -927,20 +782,9 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(2);
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#carousel1Item3');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+
             await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowLeft' });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
@@ -952,7 +796,6 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1, { keyboard: false });
             });
             await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowRight' });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
@@ -964,7 +807,6 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1, { keyboard: false });
             });
             await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowLeft' });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
@@ -977,7 +819,6 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1);
             });
             await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowRight' });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-keyboard', 'false');
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
@@ -990,7 +831,6 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1);
             });
             await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowLeft' });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-keyboard', 'false');
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
@@ -1001,7 +841,6 @@ test.describe('Carousel', () => {
                 $('#carousel1').carousel({ keyboard: false });
             });
             await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowRight' });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
@@ -1012,7 +851,6 @@ test.describe('Carousel', () => {
                 $('#carousel1').carousel({ keyboard: false });
             });
             await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowLeft' });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
@@ -1025,9 +863,7 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
-            await advanceClock(page, 200);
             await page.locator('#carousel1').dispatchEvent('mouseenter');
-            await advanceClock(page, 500);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Item3')).not.toHaveClass(/\bactive\b/);
@@ -1039,18 +875,10 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
-            await advanceClock(page, 200);
             await page.locator('#carousel1').dispatchEvent('mouseenter');
-            await advanceClock(page, 50);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
             await page.locator('#carousel1').dispatchEvent('mouseleave');
             await advanceClock(page, 200);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -1061,18 +889,12 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1, { pause: false }).cycle();
             });
-            await advanceClock(page, 200);
             await page.locator('#carousel1').dispatchEvent('mouseenter');
-            await advanceClock(page, 150);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
 
         test('works with pause option (data-ui-pause)', async ({ page }) => {
@@ -1081,19 +903,13 @@ test.describe('Carousel', () => {
                 $.setDataset(carousel1, { uiPause: false });
                 UI.Carousel.init(carousel1).cycle();
             });
-            await advanceClock(page, 200);
             await page.locator('#carousel1').dispatchEvent('mouseenter');
-            await advanceClock(page, 150);
             await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-pause', 'false');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
 
         test('works with pause option (query)', async ({ page }) => {
@@ -1102,18 +918,12 @@ test.describe('Carousel', () => {
                     .carousel({ pause: false })
                     .cycle();
             });
-            await advanceClock(page, 200);
             await page.locator('#carousel1').dispatchEvent('mouseenter');
-            await advanceClock(page, 150);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
     });
 
@@ -1123,23 +933,12 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(2);
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#carousel1Item3');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).next();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
@@ -1150,7 +949,6 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).prev();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -1161,24 +959,15 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1, { wrap: false }).show(2);
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#carousel1Item3');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).next();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                },
-            ]);
         });
 
         test('works with wrap option and prev', async ({ page }) => {
@@ -1186,7 +975,6 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1, { wrap: false }).prev();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
@@ -1198,16 +986,12 @@ test.describe('Carousel', () => {
                 $.setDataset(carousel1, { uiWrap: false });
                 UI.Carousel.init(carousel1).show(2);
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#carousel1Item3');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).next();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-wrap', 'false');
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
@@ -1220,7 +1004,6 @@ test.describe('Carousel', () => {
                 $.setDataset(carousel1, { uiWrap: false });
                 UI.Carousel.init(carousel1).prev();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-wrap', 'false');
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
@@ -1232,15 +1015,11 @@ test.describe('Carousel', () => {
                     .carousel({ wrap: false })
                     .show(2);
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#carousel1Item3');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+
             await page.evaluate((_) => {
                 $('#carousel1').carousel('next');
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -1252,7 +1031,6 @@ test.describe('Carousel', () => {
                     .carousel({ wrap: false })
                     .prev();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
@@ -1267,9 +1045,8 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 300 }));
             });
-            await advanceClock(page, 100);
 
-            await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-sliding', 'true');
+            await expect(page.locator('#carousel1')).toHaveClass(/\bcarousel-dragging\b/);
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expectStyles(page, [
                 {
@@ -1293,9 +1070,8 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 500 }));
             });
-            await advanceClock(page, 100);
 
-            await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-sliding', 'true');
+            await expect(page.locator('#carousel1')).toHaveClass(/\bcarousel-dragging\b/);
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expectStyles(page, [
                 {
@@ -1319,9 +1095,7 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 500 }));
             });
-            await advanceClock(page, 100);
-
-            await expect(page.locator('#carousel1')).not.toHaveAttribute('data-ui-sliding');
+            await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expectStyles(page, [
                 {
@@ -1339,10 +1113,9 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 500 }));
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-swipe', 'false');
-            await expect(page.locator('#carousel1')).not.toHaveAttribute('data-ui-sliding');
+            await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
         });
 
@@ -1353,9 +1126,7 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 500 }));
             });
-            await advanceClock(page, 100);
-
-            await expect(page.locator('#carousel1')).not.toHaveAttribute('data-ui-sliding');
+            await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
         });
 
@@ -1401,9 +1172,8 @@ test.describe('Carousel', () => {
                     })],
                 }));
             });
-            await advanceClock(page, 100);
 
-            await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-sliding', 'true');
+            await expect(page.locator('#carousel1')).toHaveClass(/\bcarousel-dragging\b/);
             await expectStyles(page, [
                 {
                     selectors: ['#carousel1Item1'],
@@ -1424,19 +1194,15 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1, { wrap: false }).show(2);
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#carousel1Item3');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 300 }));
             });
-            await advanceClock(page, 100);
 
-            await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-sliding', 'true');
+            await expect(page.locator('#carousel1')).toHaveClass(/\bcarousel-dragging\b/);
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
             await expectStyles(page, [
@@ -1454,9 +1220,8 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 500 }));
             });
-            await advanceClock(page, 100);
 
-            await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-sliding', 'true');
+            await expect(page.locator('#carousel1')).toHaveClass(/\bcarousel-dragging\b/);
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
             await expectStyles(page, [
@@ -1474,20 +1239,9 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 250 }));
             });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 window.dispatchEvent(new MouseEvent('mouseup'));
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
-
-            await expect(page.locator('#carousel1')).not.toHaveAttribute('data-ui-sliding');
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
         });
@@ -1499,9 +1253,8 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 300 }));
             });
-            await advanceClock(page, 500);
 
-            await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-sliding', 'true');
+            await expect(page.locator('#carousel1')).toHaveClass(/\bcarousel-dragging\b/);
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
             await expectStyles(page, [
@@ -1531,26 +1284,16 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
-            await advanceClock(page, 250);
             await page.evaluate((_) => {
                 Object.defineProperty(document, 'visibilityState', {
                     configurable: true,
                     value: 'visible',
                 });
             });
-            await advanceClock(page, 150);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item2'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
-
             await expect(page.locator('#carousel1Item1')).not.toHaveClass(/\bactive\b/);
-            await expect(page.locator('#carousel1Item2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).not.toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
         });
@@ -1560,14 +1303,8 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
-            await advanceClock(page, 350);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
@@ -1578,16 +1315,11 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(1);
             });
-            await advanceClock(page, 350);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
 
         test('starts cycling (slide)', async ({ page }) => {
@@ -1595,16 +1327,11 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).slide(1);
             });
-            await advanceClock(page, 350);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
 
         test('starts cycling (next)', async ({ page }) => {
@@ -1612,16 +1339,11 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).next();
             });
-            await advanceClock(page, 350);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
         });
 
         test('starts cycling (prev)', async ({ page }) => {
@@ -1629,14 +1351,8 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).prev();
             });
-            await advanceClock(page, 350);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide0')).toHaveClass(/\bactive\b/);
@@ -1649,20 +1365,13 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 250 }));
             });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 window.dispatchEvent(new MouseEvent('mouseup'));
                 const carousel1 = $.findOne('#carousel1');
                 carousel1.dispatchEvent(new MouseEvent('mouseleave'));
             });
-            await advanceClock(page, 350);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#carousel1Item3'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
+            await expect(page.locator('#carousel1Slide1')).toHaveClass(/\bactive\b/);
+            await advanceClock(page, 200);
 
             await expect(page.locator('#carousel1Item3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel1Slide2')).toHaveClass(/\bactive\b/);

@@ -2860,6 +2860,7 @@ fieldset:disabled .btn {
 
 .carousel {
   --ui-carousel-bg: var(--ui-body-color);
+  --ui-carousel-transition-duration: var(--ui-transition-duration);
   --ui-carousel-control-size: 3rem;
   --ui-carousel-control-spacer: 1rem;
   --ui-carousel-control-color: var(--ui-body-color);
@@ -2904,19 +2905,39 @@ fieldset:disabled .btn {
 }
 
 .carousel-item {
+  position: relative;
   display: none;
   backface-visibility: hidden;
+  transition: transform var(--ui-carousel-transition-duration) var(--ui-transition-timing-function);
 }
 .carousel-item:not(.active) {
   position: absolute;
   inset: 0;
 }
-.carousel-item.active {
-  position: relative;
+
+.carousel-item.active,
+.carousel-item-prev,
+.carousel-item-next {
   display: block;
-  width: 100%;
 }
 
+.carousel-item-prev {
+  transform: translateX(-100%);
+}
+
+.carousel-item-next {
+  transform: translateX(100%);
+}
+
+.carousel-dragging .carousel-item {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-item {
+    transition-duration: 0s;
+  }
+}
 .carousel-control-prev,
 .carousel-control-next {
   position: absolute;

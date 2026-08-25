@@ -1,4 +1,4 @@
-/** @typedef {import('../popper/popper.js').Direction} Direction */
+/** @typedef {import('./carousel.js').CarouselDirection} CarouselDirection */
 
 /**
  * Gets the boundary offset for an item index.
@@ -23,7 +23,7 @@ export function getDirOffset(index, totalItems) {
  * @param {number} offset The direction offset.
  * @param {number} oldIndex The old item index.
  * @param {number} newIndex The new item index.
- * @returns {Direction} The transition direction.
+ * @returns {CarouselDirection} The transition direction.
  */
 export function getDirection(offset, oldIndex, newIndex) {
     if (offset == -1 || (offset == 0 && newIndex < oldIndex)) {
@@ -31,6 +31,26 @@ export function getDirection(offset, oldIndex, newIndex) {
     }
 
     return 'right';
+};
+
+/**
+ * Gets the entering and exiting classes for a slide direction.
+ * @param {CarouselDirection} direction The slide direction.
+ * @returns {{enter: string, exit: string}} The transition classes.
+ */
+export function getTransitionClasses(direction) {
+    switch (direction) {
+        case 'left':
+            return {
+                enter: 'carousel-item-prev',
+                exit: 'carousel-item-next',
+            };
+        case 'right':
+            return {
+                enter: 'carousel-item-next',
+                exit: 'carousel-item-prev',
+            };
+    }
 };
 
 /**
