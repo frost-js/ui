@@ -24,10 +24,11 @@ export default class Alert extends BaseComponent {
         $.removeClass(node, 'show');
 
         waitForTransition(node, ['opacity']).then((_) => {
-            this.#transitioning = false;
             $.detach(node);
             $.triggerEvent(node, 'closed.ui.alert');
             $.remove(node);
+        }).finally((_) => {
+            this.#transitioning = false;
         });
     }
 }

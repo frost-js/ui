@@ -10395,17 +10395,19 @@
      * Waits for an element's CSS transitions to finish or be canceled.
      * @param {HTMLElement} node The transitioning node.
      * @param {string[]} [properties=[]] The transition properties to wait for.
-     * @returns {Promise<void>} The promise.
+     * @returns {Promise<boolean>} Whether every transition finished.
      */
-    async function waitForTransition(node, properties = []) {
+    function waitForTransition(node, properties = []) {
         const transitions = node.getAnimations()
             .filter((animation) =>
                 animation instanceof window$1.CSSTransition &&
                 (!properties.length || properties.includes(animation.transitionProperty)),
             );
 
-        await Promise.allSettled(
+        return Promise.allSettled(
             transitions.map((transition) => transition.finished),
+        ).then((results) =>
+            results.every((result) => result.status === 'fulfilled'),
         );
     }
 
@@ -10431,10 +10433,11 @@
             $$1.removeClass(node, 'show');
 
             waitForTransition(node, ['opacity']).then((_) => {
-                this.#transitioning = false;
                 $$1.detach(node);
                 $$1.triggerEvent(node, 'closed.ui.alert');
                 $$1.remove(node);
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
     }
