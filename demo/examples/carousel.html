@@ -17,7 +17,27 @@
             inset: 0;
             pointer-events: none;
             content: "";
-            background: linear-gradient(180deg, transparent 30%, rgb(0 0 0 / 45%));
+            background: linear-gradient(180deg, rgb(4 8 18 / 5%) 20%, rgb(4 8 18 / 35%) 55%, rgb(4 8 18 / 82%));
+        }
+
+        #northstar-carousel .carousel-caption {
+            --ui-carousel-caption-width: 48rem;
+            --ui-carousel-caption-color: var(--ui-white);
+            --ui-carousel-caption-bg: rgb(8 15 30 / 65%);
+            --ui-carousel-caption-backdrop-filter: blur(1.5rem) saturate(160%);
+            --ui-carousel-caption-border-color: rgb(255 255 255 / 20%);
+            --ui-carousel-caption-box-shadow: inset 0 1px 0 rgb(255 255 255 / 20%), 0 1.5rem 4rem rgb(0 0 0 / 35%);
+
+            inset-inline: clamp(4rem, 8vw, 8rem);
+            bottom: clamp(4.5rem, 8vw, 6rem);
+        }
+
+        #northstar-carousel .carousel-caption.text-start {
+            margin-inline: 0 auto;
+        }
+
+        #northstar-carousel .carousel-caption.text-end {
+            margin-inline: auto 0;
         }
 
         @media (max-width: 767.98px) {
@@ -81,7 +101,7 @@
                         <img class="d-block w-100 object-fit-cover" src="../assets/coast.webp" alt="Hiker looking over a coastal headland at twilight" fetchpriority="high">
                     </div>
                     <div class="carousel-caption text-start">
-                        <span class="badge bg-primary-subtle text-primary-subtle d-none d-sm-inline-block mb-3">Seven days · Small group</span>
+                        <span class="badge text-bg-primary d-none d-sm-inline-block mb-3">Seven days · Small group</span>
                         <h1 class="display-3">Walk to the edge of the map.</h1>
                         <p class="lead">A guided coastal traverse shaped by weather, tide, and the best light of the day.</p>
                         <a class="btn btn-primary btn-lg ripple" href="#">Explore the coast</a>
@@ -92,7 +112,7 @@
                         <img class="d-block w-100 object-fit-cover" src="../assets/cabin.webp" alt="Remote cabin beside a mountain lake" loading="lazy">
                     </div>
                     <div class="carousel-caption">
-                        <span class="badge bg-primary-subtle text-primary-subtle d-none d-sm-inline-block mb-3">Four nights · Private cabin</span>
+                        <span class="badge text-bg-primary d-none d-sm-inline-block mb-3">Four nights · Private cabin</span>
                         <h2 class="display-3">Make room for quiet.</h2>
                         <p class="lead">Unhurried days, trail access from the door, and a lake that changes every hour.</p>
                         <a class="btn btn-light btn-lg ripple" href="#">See the retreat</a>
@@ -103,7 +123,7 @@
                         <img class="d-block w-100 object-fit-cover" src="../assets/canyon.webp" alt="Expedition vehicle above a desert canyon road" loading="lazy">
                     </div>
                     <div class="carousel-caption text-end">
-                        <span class="badge bg-primary-subtle text-primary-subtle d-none d-sm-inline-block mb-3">Nine days · Self-drive</span>
+                        <span class="badge text-bg-primary d-none d-sm-inline-block mb-3">Nine days · Self-drive</span>
                         <h2 class="display-3">Take the road that keeps going.</h2>
                         <p class="lead">A supported desert crossing with remote camps and a route worth remembering.</p>
                         <a class="btn btn-primary btn-lg ripple" href="#">Plan the crossing</a>

@@ -2881,17 +2881,17 @@ fieldset:disabled .btn {
   --ui-carousel-indicator-bg: var(--ui-body-bg);
   --ui-carousel-indicator-opacity: 0.5;
   --ui-carousel-indicator-border-radius: var(--ui-border-radius);
-  --ui-carousel-caption-width: 70%;
-  --ui-carousel-caption-padding-x: 1.25rem;
-  --ui-carousel-caption-padding-y: 0.75rem;
+  --ui-carousel-caption-width: 40rem;
+  --ui-carousel-caption-padding-x: 1.5rem;
+  --ui-carousel-caption-padding-y: 1rem;
   --ui-carousel-caption-spacer: 2rem;
   --ui-carousel-caption-color: var(--ui-body-color);
-  --ui-carousel-caption-bg: rgb(from var(--ui-body-bg) r g b/0.88);
-  --ui-carousel-caption-backdrop-filter: blur(1rem) saturate(140%);
+  --ui-carousel-caption-bg: rgb(from var(--ui-body-bg) r g b/0.78);
+  --ui-carousel-caption-backdrop-filter: blur(1.25rem) saturate(160%);
   --ui-carousel-caption-border-width: var(--ui-border-width);
   --ui-carousel-caption-border-color: var(--ui-border-color-translucent);
   --ui-carousel-caption-border-radius: var(--ui-border-radius-xl);
-  --ui-carousel-caption-box-shadow: inset 0 1px 0 rgb(from var(--ui-white) r g b/0.12), var(--ui-shadow);
+  --ui-carousel-caption-box-shadow: inset 0 1px 0 rgb(from var(--ui-white) r g b/0.2), var(--ui-shadow-lg);
   position: relative;
   -webkit-user-select: none;
   user-select: none;
@@ -3033,7 +3033,7 @@ fieldset:disabled .btn {
   inset-inline: 0;
   bottom: var(--ui-carousel-caption-spacer);
   width: fit-content;
-  max-width: var(--ui-carousel-caption-width);
+  max-width: min(var(--ui-carousel-caption-width), 100% - var(--ui-carousel-caption-spacer) - var(--ui-carousel-caption-spacer));
   padding: var(--ui-carousel-caption-padding-y) var(--ui-carousel-caption-padding-x);
   margin-inline: auto;
   color: var(--ui-carousel-caption-color);
@@ -4989,7 +4989,6 @@ fieldset:disabled .btn {
   --ui-progress-vertical-width: 1rem;
   --ui-progress-bar-color: var(--ui-white);
   --ui-progress-bar-bg: var(--ui-primary);
-  --ui-progress-bar-background-image: var(--ui-gradient);
   --ui-progress-bar-box-shadow: 0 0 0.5rem rgb(from var(--ui-primary) r g b/0.35);
   display: flex;
   height: var(--ui-progress-height);
@@ -5012,9 +5011,6 @@ fieldset:disabled .btn {
 }
 .progress-bar:not([class*=bg-]) {
   box-shadow: var(--ui-progress-bar-box-shadow);
-}
-.progress-bar:not(.progress-bar-striped):not([class*=bg-]) {
-  background-image: var(--ui-progress-bar-background-image);
 }
 
 .progress-bar-striped {

@@ -19,7 +19,6 @@
     --ui-progress-vertical-width: #{vars.$progress-vertical-width};
     --ui-progress-bar-color: #{vars.$progress-bar-color};
     --ui-progress-bar-bg: #{vars.$progress-bar-bg};
-    --ui-progress-bar-background-image: #{vars.$progress-bar-background-image};
     --ui-progress-bar-box-shadow: #{vars.$progress-bar-box-shadow};
 
     display: flex;
@@ -43,10 +42,6 @@
 
     &:not([class*="bg-"]) {
         box-shadow: var(--ui-progress-bar-box-shadow);
-    }
-
-    &:not(.progress-bar-striped):not([class*="bg-"]) {
-        background-image: var(--ui-progress-bar-background-image);
     }
 }
 

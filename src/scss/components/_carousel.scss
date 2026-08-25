@@ -181,7 +181,7 @@
     inset-inline: 0;
     bottom: var(--ui-carousel-caption-spacer);
     width: fit-content;
-    max-width: var(--ui-carousel-caption-width);
+    max-width: min(var(--ui-carousel-caption-width), calc(100% - var(--ui-carousel-caption-spacer) - var(--ui-carousel-caption-spacer)));
     padding: var(--ui-carousel-caption-padding-y) var(--ui-carousel-caption-padding-x);
     margin-inline: auto;
     color: var(--ui-carousel-caption-color);
