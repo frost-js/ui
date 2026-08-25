@@ -22,7 +22,6 @@ import Popper from './../popper/index.js';
  * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
  * @property {number} [spacing=2] The spacing from the reference element.
  * @property {number|false} [minContact=false] The minimum contact with the reference element.
- * @property {boolean} [noAttributes=false] Whether to omit placement and accessibility attributes.
  * @property {string} [title] The tooltip title.
  */
 
@@ -321,11 +320,9 @@ export default class Tooltip extends BaseComponent {
             $.after(this.node, this.#tooltip);
         }
 
-        if (!this.options.noAttributes) {
-            const id = generateId(this.constructor.DATA_KEY);
-            $.setAttribute(this.#tooltip, { id });
-            $.setAttribute(this.node, { 'aria-describedby': id });
-        }
+        const id = generateId(this.constructor.DATA_KEY);
+        $.setAttribute(this.#tooltip, { id });
+        $.setAttribute(this.node, { 'aria-describedby': id });
 
         this.#popper = new Popper(
             this.#tooltip,
@@ -337,7 +334,6 @@ export default class Tooltip extends BaseComponent {
                 fixed: this.options.fixed,
                 spacing: this.options.spacing,
                 minContact: this.options.minContact,
-                noAttributes: this.options.noAttributes,
             },
         );
 

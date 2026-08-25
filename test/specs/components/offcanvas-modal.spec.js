@@ -1,9 +1,7 @@
-import { test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+import { expect, test } from '@playwright/test';
+import { resetPage } from '../../setup/browser.js';
 
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -25,79 +23,49 @@ test.describe('Offcanvas/Modal', () => {
     });
 
     test.describe('user events', () => {
-        test('does not hide the offcanvas on document click when modal is open', async ({ page }) => {
-            await page.evaluate((_) => {
+        test.beforeEach(async ({ page }) => {
+            await page.evaluate(async (_) => {
                 const offcanvas = $.findOne('#offcanvas');
-                UI.Offcanvas.init(offcanvas).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
+
+                await new Promise((resolve) => {
+                    $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
+                    UI.Offcanvas.init(offcanvas).show();
+                });
+
                 const modal = $.findOne('#modal');
-                UI.Modal.init(modal).show();
+
+                await new Promise((resolve) => {
+                    $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
+                    UI.Modal.init(modal).show();
+                });
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
+        });
+
+        test('does not hide the offcanvas on document click when modal is open', async ({ page }) => {
             await page.evaluate((_) => {
                 $.click(document.body);
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog', '.modal-backdrop'],
-                    active: true,
-                },
-                {
-                    selectors: ['#offcanvas'],
-                },
-            ]);
+            await expect(page.locator('#modal')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('#modal')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('.modal-backdrop')).toHaveCount(0);
+            await expect(page.locator('#offcanvas')).toHaveAttribute('aria-hidden', 'false');
+            await expect(page.locator('#offcanvas')).toHaveClass(/\bshow\b/);
         });
 
         test('does not hide the offcanvas on escape when modal is open', async ({ page }) => {
-            await page.evaluate((_) => {
-                const offcanvas = $.findOne('#offcanvas');
-                UI.Offcanvas.init(offcanvas).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const modal = $.findOne('#modal');
-                UI.Modal.init(modal).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 document.body.dispatchEvent(new KeyboardEvent('keydown', {
                     bubbles: true,
                     code: 'Escape',
                 }));
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#modalDialog', '.modal-backdrop'],
-                    active: true,
-                },
-                {
-                    selectors: ['#offcanvas'],
-                },
-            ]);
+            await expect(page.locator('#modal')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('#modal')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('.modal-backdrop')).toHaveCount(0);
+            await expect(page.locator('#offcanvas')).toHaveAttribute('aria-hidden', 'false');
+            await expect(page.locator('#offcanvas')).toHaveClass(/\bshow\b/);
         });
     });
 });

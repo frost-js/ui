@@ -1,8 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
+import { resetPage } from '../../setup/browser.js';
 
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -20,22 +19,24 @@ test.describe('Offcanvas FocusTrap', () => {
 
     test.describe('focus trap', () => {
         test('prevents focus outside the offcanvas', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const offcanvas = $.findOne('#offcanvas');
+
+                $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
                 UI.Offcanvas.init(offcanvas).show();
-            });
-            await advanceClock(page, 300);
+            }));
             await page.locator('#offcanvasToggle').focus();
 
             await expect(page.locator('#button1')).toBeFocused();
         });
 
         test('reverses focus if shift/tab key is pressed', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const offcanvas = $.findOne('#offcanvas');
+
+                $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
                 UI.Offcanvas.init(offcanvas).show();
-            });
-            await advanceClock(page, 300);
+            }));
             await page.evaluate((_) => {
                 document.dispatchEvent(new KeyboardEvent('keydown', {
                     key: 'Tab',
@@ -54,14 +55,15 @@ test.describe('Offcanvas FocusTrap', () => {
         });
 
         test('allows focus outside the offcanvas with scroll and no backdrop', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const offcanvas = $.findOne('#offcanvas');
+
+                $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
                 UI.Offcanvas.init(offcanvas, {
                     backdrop: false,
                     scroll: true,
                 }).show();
-            });
-            await advanceClock(page, 300);
+            }));
             await page.locator('#offcanvasToggle').focus();
 
             await expect(page.locator('#offcanvasToggle')).toBeFocused();

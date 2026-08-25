@@ -126,6 +126,7 @@ test.describe('Popover', () => {
             await expect(page.locator('#popoverToggle1 + .popover')).toHaveAttribute('data-ui-placement', 'right');
             await expect(page.locator('#popoverToggle1 + .popover')).toHaveCSS('position', 'absolute');
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('aria-describedby', /^popover/);
+            await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-placement', 'right');
         });
 
         test('shows the popover (query)', async ({ page }) => {
@@ -226,6 +227,7 @@ test.describe('Popover', () => {
 
             await expect(page.locator('.popover')).toHaveCount(0);
             await expect(page.locator('#popoverToggle1')).not.toHaveAttribute('aria-describedby');
+            await expect(page.locator('#popoverToggle1')).not.toHaveAttribute('data-ui-placement');
         });
 
         test('hides the popover (query)', async ({ page }) => {

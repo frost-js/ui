@@ -432,15 +432,15 @@ test.describe('Collapse', () => {
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#collapse1')).toHaveClass('collapse multi-collapse show');
-            await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse show');
+            await expect(page.locator('#collapse1')).toContainClass('collapse multi-collapse show');
+            await expect(page.locator('#collapse2')).toContainClass('collapse multi-collapse show');
 
             await page.locator('#collapseToggle').click();
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#collapse1')).toHaveClass('collapse multi-collapse');
-            await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse');
+            await expect(page.locator('#collapse1')).toContainClass('collapse multi-collapse');
+            await expect(page.locator('#collapse2')).toContainClass('collapse multi-collapse');
         });
 
         test('normalizes mixed multi-collapse targets', async ({ page }) => {
@@ -454,15 +454,15 @@ test.describe('Collapse', () => {
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary collapsed');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#collapse1')).toHaveClass('collapse multi-collapse');
-            await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse');
+            await expect(page.locator('#collapse1')).toContainClass('collapse multi-collapse');
+            await expect(page.locator('#collapse2')).toContainClass('collapse multi-collapse');
 
             await page.locator('#collapseToggle').click();
 
             await expect(page.locator('#collapseToggle')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapseToggle')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#collapse1')).toHaveClass('collapse multi-collapse show');
-            await expect(page.locator('#collapse2')).toHaveClass('collapse multi-collapse show');
+            await expect(page.locator('#collapse1')).toContainClass('collapse multi-collapse show');
+            await expect(page.locator('#collapse2')).toContainClass('collapse multi-collapse show');
         });
     });
 

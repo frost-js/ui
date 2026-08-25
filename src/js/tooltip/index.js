@@ -20,7 +20,6 @@ Tooltip.defaults = {
     fixed: false,
     spacing: 2,
     minContact: false,
-    noAttributes: false,
 };
 
 initComponent('tooltip', Tooltip);

@@ -14,7 +14,6 @@ Popper.defaults = {
     spacing: 0,
     minContact: null,
     useGpu: true,
-    noAttributes: false,
 };
 
 initComponent('popper', Popper);

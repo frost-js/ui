@@ -1,8 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
+import { resetPage } from '../../setup/browser.js';
 
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -22,22 +21,24 @@ test.describe('Modal FocusTrap', () => {
 
     test.describe('focus trap', () => {
         test('prevents focus outside the modal', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const modal = $.findOne('#modal');
+
+                $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
                 UI.Modal.init(modal).show();
-            });
-            await advanceClock(page, 300);
+            }));
             await page.locator('#modalToggle').focus();
 
             await expect(page.locator('#button1')).toBeFocused();
         });
 
         test('reverses focus if shift/tab key is pressed', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const modal = $.findOne('#modal');
+
+                $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
                 UI.Modal.init(modal).show();
-            });
-            await advanceClock(page, 300);
+            }));
             await page.evaluate((_) => {
                 document.dispatchEvent(new KeyboardEvent('keydown', {
                     key: 'Tab',
@@ -56,11 +57,12 @@ test.describe('Modal FocusTrap', () => {
         });
 
         test('allows focus outside the modal with no focus', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const modal = $.findOne('#modal');
+
+                $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
                 UI.Modal.init(modal, { focus: false }).show();
-            });
-            await advanceClock(page, 300);
+            }));
             await page.locator('#modalToggle').focus();
 
             await expect(page.locator('#modalToggle')).toBeFocused();

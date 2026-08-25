@@ -9,9 +9,8 @@ import { measureScrollbarSize } from '../measurements/scrollbar.js';
 /**
  * Assert that a popper is placed and aligned relative to its reference node.
  *
- * The assertion uses the rendered boxes instead of absolute document
- * coordinates so it remains valid when browsers render text at slightly
- * different dimensions.
+ * The assertion compares rendered boxes instead of absolute transforms so it
+ * remains valid across browser coordinate rounding and positioning contexts.
  *
  * @param {import('@playwright/test').Page} page The Playwright page.
  * @param {object} expectation The expected position.
@@ -23,7 +22,6 @@ import { measureScrollbarSize } from '../measurements/scrollbar.js';
  * @param {string} [expectation.boundary] The boundary element selector.
  * @param {PopperPlacement} [expectation.boundaryEdge] The expected clamped edge.
  * @param {number} [expectation.minContact] The minimum reference overlap.
- * @param {boolean} [expectation.referencePlacement] Whether to assert the reference attribute.
  * @returns {Promise<void>} The promise.
  */
 export async function expectPopperPosition(page, {
@@ -35,15 +33,12 @@ export async function expectPopperPosition(page, {
     boundary,
     boundaryEdge,
     minContact,
-    referencePlacement = true,
 }) {
     const popperLocator = page.locator(popper);
     const referenceLocator = page.locator(reference);
 
     await expect(popperLocator).toHaveAttribute('data-ui-placement', placement);
-    if (referencePlacement) {
-        await expect(referenceLocator).toHaveAttribute('data-ui-placement', placement);
-    }
+    await expect(referenceLocator).toHaveAttribute('data-ui-placement', placement);
 
     const [popperBox, referenceBox] = await Promise.all([
         popperLocator.boundingBox(),

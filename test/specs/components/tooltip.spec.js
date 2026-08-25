@@ -127,6 +127,7 @@ test.describe('Tooltip', () => {
             await expect(page.locator('#tooltipToggle1 + .tooltip')).toHaveAttribute('data-ui-placement', 'right');
             await expect(page.locator('#tooltipToggle1 + .tooltip')).toHaveCSS('position', 'absolute');
             await expect(page.locator('#tooltipToggle1')).toHaveAttribute('aria-describedby', /^tooltip/);
+            await expect(page.locator('#tooltipToggle1')).toHaveAttribute('data-ui-placement', 'right');
         });
 
         test('shows the tooltip (query)', async ({ page }) => {
@@ -230,6 +231,7 @@ test.describe('Tooltip', () => {
 
             await expect(page.locator('.tooltip')).toHaveCount(0);
             await expect(page.locator('#tooltipToggle1')).not.toHaveAttribute('aria-describedby');
+            await expect(page.locator('#tooltipToggle1')).not.toHaveAttribute('data-ui-placement');
         });
 
         test('hides the tooltip (query)', async ({ page }) => {

@@ -1,9 +1,7 @@
-import { test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+import { expect, test } from '@playwright/test';
+import { resetPage } from '../../setup/browser.js';
 
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -29,80 +27,49 @@ test.describe('Modal/Dropdown', () => {
     });
 
     test.describe('user events', () => {
-        test('hides the modal and dropdown on document click when dropdown is open', async ({ page }) => {
-            await page.evaluate((_) => {
+        test.beforeEach(async ({ page }) => {
+            await page.evaluate(async (_) => {
                 const modal = $.findOne('#modal');
-                UI.Modal.init(modal).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
+
+                await new Promise((resolve) => {
+                    $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
+                    UI.Modal.init(modal).show();
+                });
+
                 const dropdownToggle = $.findOne('#dropdownToggle');
-                UI.Dropdown.init(dropdownToggle).show();
+
+                await new Promise((resolve) => {
+                    $.addEventOnce(dropdownToggle, 'shown.ui.dropdown', (_) => resolve());
+                    UI.Dropdown.init(dropdownToggle).show();
+                });
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#dropdown');
-            });
-            await advanceClock(page, 50);
+        });
+
+        test('hides the modal and dropdown on document click when dropdown is open', async ({ page }) => {
             await page.evaluate((_) => {
                 $.click(document.body);
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#dropdown'],
-                    active: true,
-                },
-                {
-                    selectors: ['#modalDialog', '.modal-backdrop'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#dropdownToggle')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#dropdown')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#modal')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('#modal')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
         test('does not hide the modal on escape when dropdown is open', async ({ page }) => {
-            await page.evaluate((_) => {
-                const modal = $.findOne('#modal');
-                UI.Modal.init(modal).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#modalDialog');
-                $.stop('.modal-backdrop');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const dropdownToggle = $.findOne('#dropdownToggle');
-                UI.Dropdown.init(dropdownToggle).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#dropdown');
-            });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 document.body.dispatchEvent(new KeyboardEvent('keydown', {
                     bubbles: true,
                     code: 'Escape',
                 }));
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#dropdown'],
-                    active: true,
-                },
-                {
-                    selectors: ['#modalDialog'],
-                },
-            ]);
+            await expect(page.locator('#dropdownToggle')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#dropdown')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#modal')).toHaveAttribute('aria-hidden', 'false');
+            await expect(page.locator('#modal')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('.modal-backdrop')).toHaveClass(/\bshow\b/);
         });
     });
 });

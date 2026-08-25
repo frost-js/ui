@@ -22,7 +22,6 @@ import Popper from './../popper/index.js';
  * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
  * @property {number} [spacing=3] The spacing from the reference element.
  * @property {number|false} [minContact=false] The minimum contact with the reference element.
- * @property {boolean} [noAttributes=false] Whether to omit placement and accessibility attributes.
  * @property {string} [title] The popover title.
  * @property {string} [content] The popover body content.
  */
@@ -343,11 +342,9 @@ export default class Popover extends BaseComponent {
             $.after(this.node, this.#popover);
         }
 
-        if (!this.options.noAttributes) {
-            const id = generateId(this.constructor.DATA_KEY);
-            $.setAttribute(this.#popover, { id });
-            $.setAttribute(this.node, { 'aria-describedby': id });
-        }
+        const id = generateId(this.constructor.DATA_KEY);
+        $.setAttribute(this.#popover, { id });
+        $.setAttribute(this.node, { 'aria-describedby': id });
 
         this.#popper = new Popper(
             this.#popover,
@@ -359,7 +356,6 @@ export default class Popover extends BaseComponent {
                 fixed: this.options.fixed,
                 spacing: this.options.spacing,
                 minContact: this.options.minContact,
-                noAttributes: this.options.noAttributes,
             },
         );
 

@@ -21,7 +21,6 @@ Popover.defaults = {
     fixed: false,
     spacing: 3,
     minContact: false,
-    noAttributes: false,
 };
 
 initComponent('popover', Popover);

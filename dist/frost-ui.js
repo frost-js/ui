@@ -238,6 +238,9 @@
 
             this.#transitioning = true;
 
+            // Commit the rendered visible state before starting the transition.
+            $.css(this.node, 'opacity');
+
             $.removeClass(this.node, 'show');
 
             waitForTransition(this.node, ['opacity']).then(({ node }) => {
@@ -1526,7 +1529,6 @@
      * @property {number} [spacing=0] The spacing from the reference element.
      * @property {number|false|null} [minContact=null] The minimum contact with the reference element.
      * @property {boolean} [useGpu=true] Whether to position using a transform.
-     * @property {boolean} [noAttributes=false] Whether to omit placement attributes.
      */
 
     /**
@@ -1570,12 +1572,10 @@
                 $.removeDataset(this.node, 'uiPlacement');
             }
 
-            if (!this.options.noAttributes) {
-                if (this.#referencePlacement) {
-                    $.setDataset(this.options.reference, { uiPlacement: this.#referencePlacement });
-                } else {
-                    $.removeDataset(this.options.reference, 'uiPlacement');
-                }
+            if (this.#referencePlacement) {
+                $.setDataset(this.options.reference, { uiPlacement: this.#referencePlacement });
+            } else {
+                $.removeDataset(this.options.reference, 'uiPlacement');
             }
 
             removePopper(this);
@@ -1622,18 +1622,23 @@
             const nodeBox = $.rect(this.node, { offset: true });
             const referenceBox = $.rect(this.options.reference, { offset: true });
             const windowBox = getScrollContainer(window, document);
+            const positionParent = $.offsetParent(this.node);
 
-            const scrollParent = $.closest(
-                this.node,
-                (parent) =>
-                    $.css(parent, 'position') === 'relative' &&
-                    ['overflow', 'overflowX', 'overflowY'].some((overflow) =>
-                        ['auto', 'scroll'].includes(
-                            $.css(parent, overflow),
+            // Overflow only clips an absolute child when it contains the child's positioning context.
+            const scrollParent = positionParent ?
+                $.closest(
+                    this.node,
+                    (parent) =>
+                        (
+                            $.isSame(parent, positionParent) ||
+                            $.hasDescendent(parent, positionParent)
+                        ) &&
+                        ['overflow', 'overflowX', 'overflowY'].some((property) =>
+                            ['auto', 'scroll'].includes($.css(parent, property)),
                         ),
-                    ),
-                document.body,
-            ).shift();
+                    document.body,
+                ).shift() :
+                null;
 
             const scrollBox = scrollParent ?
                 getScrollContainer(scrollParent, scrollParent) :
@@ -1679,10 +1684,7 @@
                     this.options.spacing + 2,
                 );
 
-            if (!this.options.noAttributes) {
-                $.setDataset(this.options.reference, { uiPlacement: placement });
-            }
-
+            $.setDataset(this.options.reference, { uiPlacement: placement });
             $.setDataset(this.node, { uiPlacement: placement });
 
             const position = this.options.position;
@@ -1693,20 +1695,14 @@
                 y: Math.round(referenceBox.y),
             };
 
-            // Adjust for the nearest positioned ancestor.
-            const relativeParent = $.closest(
-                this.node,
-                (parent) =>
-                    $.css(parent, 'position') === 'relative',
-                document.body,
-            ).shift();
-            const relativeBox = relativeParent ?
-                $.rect(relativeParent, { offset: true }) :
+            // Adjust for the element's positioning context.
+            const positionBox = positionParent && !$.isSame(positionParent, document.body) ?
+                $.rect(positionParent, { offset: true }) :
                 null;
 
-            if (relativeBox) {
-                offset.x -= Math.round(relativeBox.x);
-                offset.y -= Math.round(relativeBox.y);
+            if (positionBox) {
+                offset.x -= Math.round(positionBox.x);
+                offset.y -= Math.round(positionBox.y);
             }
 
             // Move the element onto the resolved placement edge.
@@ -1748,9 +1744,9 @@
                 let offsetY = offset.y;
                 let refTop = referenceBox.top;
 
-                if (relativeBox) {
-                    offsetY += relativeBox.top;
-                    refTop -= relativeBox.top;
+                if (positionBox) {
+                    offsetY += positionBox.top;
+                    refTop -= positionBox.top;
                 }
 
                 const minSize = this.options.minContact !== null ?
@@ -1778,9 +1774,9 @@
                 let offsetX = offset.x;
                 let refLeft = referenceBox.left;
 
-                if (relativeBox) {
-                    offsetX += relativeBox.left;
-                    refLeft -= relativeBox.left;
+                if (positionBox) {
+                    offsetX += positionBox.left;
+                    refLeft -= positionBox.left;
                 }
 
                 const minSize = this.options.minContact !== null ?
@@ -1809,10 +1805,10 @@
             offset.x = Math.round(offset.x);
             offset.y = Math.round(offset.y);
 
-            // Compensate for the scrolling ancestor.
-            if (scrollParent) {
-                offset.x += $.getScrollX(scrollParent);
-                offset.y += $.getScrollY(scrollParent);
+            // Compensate for scrolling within the positioning context.
+            if (positionBox) {
+                offset.x += $.getScrollX(positionParent);
+                offset.y += $.getScrollY(positionParent);
             }
 
             // Apply the final position.
@@ -3037,7 +3033,6 @@
         spacing: 0,
         minContact: null,
         useGpu: true,
-        noAttributes: false,
     };
 
     initComponent('popper', Popper);
@@ -3060,7 +3055,6 @@
      * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
      * @property {number} [spacing=3] The spacing from the reference element.
      * @property {number|false} [minContact=false] The minimum contact with the reference element.
-     * @property {boolean} [noAttributes=false] Whether to omit placement and accessibility attributes.
      * @property {string} [title] The popover title.
      * @property {string} [content] The popover body content.
      */
@@ -3381,11 +3375,9 @@
                 $.after(this.node, this.#popover);
             }
 
-            if (!this.options.noAttributes) {
-                const id = generateId(this.constructor.DATA_KEY);
-                $.setAttribute(this.#popover, { id });
-                $.setAttribute(this.node, { 'aria-describedby': id });
-            }
+            const id = generateId(this.constructor.DATA_KEY);
+            $.setAttribute(this.#popover, { id });
+            $.setAttribute(this.node, { 'aria-describedby': id });
 
             this.#popper = new Popper(
                 this.#popover,
@@ -3397,7 +3389,6 @@
                     fixed: this.options.fixed,
                     spacing: this.options.spacing,
                     minContact: this.options.minContact,
-                    noAttributes: this.options.noAttributes,
                 },
             );
 
@@ -3426,7 +3417,6 @@
         fixed: false,
         spacing: 3,
         minContact: false,
-        noAttributes: false,
     };
 
     initComponent('popover', Popover);
@@ -3717,7 +3707,6 @@
      * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
      * @property {number} [spacing=2] The spacing from the reference element.
      * @property {number|false} [minContact=false] The minimum contact with the reference element.
-     * @property {boolean} [noAttributes=false] Whether to omit placement and accessibility attributes.
      * @property {string} [title] The tooltip title.
      */
 
@@ -4016,11 +4005,9 @@
                 $.after(this.node, this.#tooltip);
             }
 
-            if (!this.options.noAttributes) {
-                const id = generateId(this.constructor.DATA_KEY);
-                $.setAttribute(this.#tooltip, { id });
-                $.setAttribute(this.node, { 'aria-describedby': id });
-            }
+            const id = generateId(this.constructor.DATA_KEY);
+            $.setAttribute(this.#tooltip, { id });
+            $.setAttribute(this.node, { 'aria-describedby': id });
 
             this.#popper = new Popper(
                 this.#tooltip,
@@ -4032,7 +4019,6 @@
                     fixed: this.options.fixed,
                     spacing: this.options.spacing,
                     minContact: this.options.minContact,
-                    noAttributes: this.options.noAttributes,
                 },
             );
 
@@ -4060,7 +4046,6 @@
         fixed: false,
         spacing: 2,
         minContact: false,
-        noAttributes: false,
     };
 
     initComponent('tooltip', Tooltip);

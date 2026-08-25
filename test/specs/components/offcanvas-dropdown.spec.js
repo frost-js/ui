@@ -1,9 +1,7 @@
-import { test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+import { expect, test } from '@playwright/test';
+import { resetPage } from '../../setup/browser.js';
 
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -27,78 +25,49 @@ test.describe('Offcanvas/Dropdown', () => {
     });
 
     test.describe('user events', () => {
-        test('hides the offcanvas and dropdown on document click when dropdown is open', async ({ page }) => {
-            await page.evaluate((_) => {
+        test.beforeEach(async ({ page }) => {
+            await page.evaluate(async (_) => {
                 const offcanvas = $.findOne('#offcanvas');
-                UI.Offcanvas.init(offcanvas).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
+
+                await new Promise((resolve) => {
+                    $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
+                    UI.Offcanvas.init(offcanvas).show();
+                });
+
                 const dropdownToggle = $.findOne('#dropdownToggle');
-                UI.Dropdown.init(dropdownToggle).show();
+
+                await new Promise((resolve) => {
+                    $.addEventOnce(dropdownToggle, 'shown.ui.dropdown', (_) => resolve());
+                    UI.Dropdown.init(dropdownToggle).show();
+                });
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#dropdown');
-            });
-            await advanceClock(page, 50);
+        });
+
+        test('hides the offcanvas and dropdown on document click when dropdown is open', async ({ page }) => {
             await page.evaluate((_) => {
                 $.click(document.body);
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#dropdown'],
-                    active: true,
-                },
-                {
-                    selectors: ['#offcanvas'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#dropdownToggle')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#dropdown')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#offcanvas')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('#offcanvas')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('body')).not.toHaveClass(/\boffcanvas-backdrop\b/);
         });
 
         test('does not hide the offcanvas on escape when dropdown is open', async ({ page }) => {
-            await page.evaluate((_) => {
-                const offcanvas = $.findOne('#offcanvas');
-                UI.Offcanvas.init(offcanvas).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const dropdownToggle = $.findOne('#dropdownToggle');
-                UI.Dropdown.init(dropdownToggle).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#dropdown');
-            });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 document.body.dispatchEvent(new KeyboardEvent('keydown', {
                     bubbles: true,
                     code: 'Escape',
                 }));
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#dropdown'],
-                    active: true,
-                },
-                {
-                    selectors: ['#offcanvas'],
-                },
-            ]);
+            await expect(page.locator('#dropdownToggle')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#dropdown')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#offcanvas')).toHaveAttribute('aria-hidden', 'false');
+            await expect(page.locator('#offcanvas')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('body')).toHaveClass(/\boffcanvas-backdrop\b/);
         });
     });
 });
