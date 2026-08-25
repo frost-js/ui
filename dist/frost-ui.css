@@ -4577,6 +4577,7 @@ fieldset:disabled .btn {
   bottom: 0;
   z-index: var(--ui-offcanvas-z-index);
   display: flex;
+  visibility: hidden;
   flex-direction: column;
   max-width: 100%;
   padding: var(--ui-safe-area-inset-top) var(--ui-safe-area-inset-right) var(--ui-safe-area-inset-bottom) var(--ui-safe-area-inset-left);
@@ -4585,11 +4586,19 @@ fieldset:disabled .btn {
   background-color: var(--ui-offcanvas-bg);
   background-clip: padding-box;
   box-shadow: var(--ui-offcanvas-box-shadow);
+  opacity: 0;
   -webkit-backdrop-filter: var(--ui-offcanvas-content-backdrop-filter);
   backdrop-filter: var(--ui-offcanvas-content-backdrop-filter);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-duration: var(--ui-transition-duration);
+  transition-property: opacity, transform;
 }
-.offcanvas:not(.show) {
-  display: none;
+.offcanvas.show {
+  visibility: visible;
+}
+.offcanvas.show:not(.hiding) {
+  opacity: 1;
+  transform: none;
 }
 
 .offcanvas-header {
@@ -4612,6 +4621,7 @@ fieldset:disabled .btn {
 .offcanvas-body {
   flex-grow: 1;
   padding: var(--ui-offcanvas-padding-y) var(--ui-offcanvas-padding-x);
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -4621,6 +4631,7 @@ fieldset:disabled .btn {
   left: 0;
   width: var(--ui-offcanvas-width);
   border-right: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
+  transform: translateX(-100%);
 }
 
 .offcanvas-end {
@@ -4628,6 +4639,7 @@ fieldset:disabled .btn {
   right: 0;
   width: var(--ui-offcanvas-width);
   border-left: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
+  transform: translateX(100%);
 }
 
 .offcanvas-top {
@@ -4636,6 +4648,7 @@ fieldset:disabled .btn {
   height: var(--ui-offcanvas-height);
   max-height: 100%;
   border-bottom: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
+  transform: translateY(-100%);
 }
 
 .offcanvas-bottom {
@@ -4643,6 +4656,7 @@ fieldset:disabled .btn {
   height: var(--ui-offcanvas-height);
   max-height: 100%;
   border-top: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
+  transform: translateY(100%);
 }
 
 .offcanvas-backdrop {

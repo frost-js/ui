@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+import { resetPage } from '../../setup/browser.js';
 import { expectStyles } from '../../support/assertions/styles.js';
 import { measureScrollbarSize } from '../../support/measurements/scrollbar.js';
 
+test.use({ reducedMotion: 'no-preference' });
+
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -75,19 +75,11 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('body')).toHaveClass('offcanvas-backdrop');
             await expectStyles(page, [
@@ -100,19 +92,11 @@ test.describe('Offcanvas', () => {
 
         test('shows the offcanvas (data-ui-toggle)', async ({ page }) => {
             await page.locator('#offcanvasToggle1').click();
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -120,19 +104,11 @@ test.describe('Offcanvas', () => {
             await page.evaluate((_) => {
                 $('#offcanvas1').offcanvas('show');
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -144,14 +120,8 @@ test.describe('Offcanvas', () => {
                 offcanvas.show();
                 offcanvas.show();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
         });
 
         test('can be called on shown offcanvas', async ({ page }) => {
@@ -159,22 +129,14 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
         });
     });
 
@@ -184,28 +146,17 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).hide();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
             await expectStyles(page, [
@@ -221,25 +172,14 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.locator('#button1').click();
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -247,27 +187,16 @@ test.describe('Offcanvas', () => {
             await page.evaluate((_) => {
                 $('#offcanvas1').offcanvas('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 $('#offcanvas1').offcanvas('hide');
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -276,16 +205,13 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).hide();
             });
-            await advanceClock(page, 300);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
 
             expect(await page.evaluate((_) =>
                 $.getData('#offcanvas1', 'offcanvas') instanceof UI.Offcanvas)).toBe(true);
@@ -296,11 +222,8 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 const offcanvas = UI.Offcanvas.init(offcanvas1);
@@ -308,14 +231,8 @@ test.describe('Offcanvas', () => {
                 offcanvas.hide();
                 offcanvas.hide();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
         });
 
         test('can be called on hidden offcanvas', async ({ page }) => {
@@ -326,11 +243,6 @@ test.describe('Offcanvas', () => {
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
         });
     });
 
@@ -340,19 +252,11 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).toggle();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -360,19 +264,11 @@ test.describe('Offcanvas', () => {
             await page.evaluate((_) => {
                 $('#offcanvas1').offcanvas('toggle');
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -384,14 +280,8 @@ test.describe('Offcanvas', () => {
                 offcanvas.toggle();
                 offcanvas.toggle();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
         });
     });
 
@@ -401,28 +291,17 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).toggle();
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -430,27 +309,16 @@ test.describe('Offcanvas', () => {
             await page.evaluate((_) => {
                 $('#offcanvas1').offcanvas('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 $('#offcanvas1').offcanvas('toggle');
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -459,11 +327,8 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 const offcanvas = UI.Offcanvas.init(offcanvas1);
@@ -471,14 +336,8 @@ test.describe('Offcanvas', () => {
                 offcanvas.toggle();
                 offcanvas.toggle();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
         });
     });
 
@@ -509,12 +368,10 @@ test.describe('Offcanvas', () => {
                 });
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 300);
 
-            expect(await page.evaluate((_) => window.offcanvasShownEventTriggered)).toBe(true);
-            await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
+            expect(await page.evaluate((_) => window.offcanvasShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event', async ({ page }) => {
@@ -522,11 +379,8 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             const eventTriggered = await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 let triggered = false;
@@ -547,11 +401,8 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 window.offcanvasHiddenEventTriggered = false;
@@ -561,12 +412,10 @@ test.describe('Offcanvas', () => {
                 });
                 UI.Offcanvas.init(offcanvas1).hide();
             });
-            await advanceClock(page, 300);
 
-            expect(await page.evaluate((_) => window.offcanvasHiddenEventTriggered)).toBe(true);
-            await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
+            expect(await page.evaluate((_) => window.offcanvasHiddenEventTriggered)).toBe(true);
         });
 
         test('triggers show event (toggle)', async ({ page }) => {
@@ -595,12 +444,10 @@ test.describe('Offcanvas', () => {
                 });
                 UI.Offcanvas.init(offcanvas1).toggle();
             });
-            await advanceClock(page, 300);
 
-            expect(await page.evaluate((_) => window.offcanvasShownEventTriggered)).toBe(true);
-            await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
+            expect(await page.evaluate((_) => window.offcanvasShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event (toggle)', async ({ page }) => {
@@ -608,11 +455,8 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             const eventTriggered = await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 let triggered = false;
@@ -633,11 +477,8 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 window.offcanvasHiddenEventTriggered = false;
@@ -647,12 +488,10 @@ test.describe('Offcanvas', () => {
                 });
                 UI.Offcanvas.init(offcanvas1).toggle();
             });
-            await advanceClock(page, 300);
 
-            expect(await page.evaluate((_) => window.offcanvasHiddenEventTriggered)).toBe(true);
-            await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
+            expect(await page.evaluate((_) => window.offcanvasHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
@@ -661,17 +500,11 @@ test.describe('Offcanvas', () => {
                 $.addEvent(offcanvas1, 'show.ui.offcanvas', (_) => false);
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).not.toHaveAttribute('aria-hidden');
             await expect(page.locator('#offcanvas1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
         });
 
         test('can be prevented from showing (prevent default)', async ({ page }) => {
@@ -682,17 +515,11 @@ test.describe('Offcanvas', () => {
                 });
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).not.toHaveAttribute('aria-hidden');
             await expect(page.locator('#offcanvas1')).not.toHaveAttribute('aria-modal');
             await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
         });
 
         test('can be prevented from hiding', async ({ page }) => {
@@ -700,149 +527,18 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 $.addEvent(offcanvas1, 'hide.ui.offcanvas', (_) => false);
                 UI.Offcanvas.init(offcanvas1).hide();
             });
-            await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
             await expect(page.locator('body')).toHaveClass('offcanvas-backdrop');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
-        });
-    });
-
-    test.describe('duration option', () => {
-        test('works with duration option on show', async ({ page }) => {
-            await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                UI.Offcanvas.init(offcanvas1, { duration: 200 }).show();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on show (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                $.setDataset(offcanvas1, { uiDuration: 200 });
-                UI.Offcanvas.init(offcanvas1).show();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on show (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#offcanvas1')
-                    .offcanvas({ duration: 200 })
-                    .show();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide', async ({ page }) => {
-            await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                UI.Offcanvas.init(offcanvas1, { duration: 200 }).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                UI.Offcanvas.init(offcanvas1).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                $.setDataset(offcanvas1, { uiDuration: 200 });
-                UI.Offcanvas.init(offcanvas1).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                UI.Offcanvas.init(offcanvas1).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#offcanvas1')
-                    .offcanvas({ duration: 200 })
-                    .show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $('#offcanvas1').offcanvas('hide');
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    progress: 0.875,
-                },
-            ]);
         });
     });
 
@@ -852,25 +548,14 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.keyboard.press('Escape');
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -879,24 +564,15 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1, { keyboard: false }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.keyboard.press('Escape');
-            await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
         });
 
         test('works with keyboard option (data-ui-keyboard)', async ({ page }) => {
@@ -905,25 +581,16 @@ test.describe('Offcanvas', () => {
                 $.setDataset(offcanvas1, { uiKeyboard: false });
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.keyboard.press('Escape');
-            await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('data-ui-keyboard', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
         });
 
         test('works with keyboard option (query)', async ({ page }) => {
@@ -932,24 +599,15 @@ test.describe('Offcanvas', () => {
                     .offcanvas({ keyboard: false })
                     .show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.keyboard.press('Escape');
-            await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
         });
     });
 
@@ -959,7 +617,6 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('body')).toHaveClass('offcanvas-backdrop');
         });
@@ -969,7 +626,6 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1, { backdrop: false }).show();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
         });
@@ -980,7 +636,6 @@ test.describe('Offcanvas', () => {
                 $.setDataset(offcanvas1, { uiBackdrop: false });
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('data-ui-backdrop', 'false');
@@ -992,7 +647,6 @@ test.describe('Offcanvas', () => {
                     .offcanvas({ backdrop: false })
                     .show();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
         });
@@ -1002,27 +656,16 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 $.click(document.body);
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
@@ -1031,26 +674,17 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1, { backdrop: false }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 $.click(document.body);
             });
-            await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
         });
 
         test('does not hide the offcanvas on document click (mousedown on offcanvas)', async ({ page }) => {
@@ -1058,27 +692,18 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 $.triggerEvent('#offcanvas1', 'mousedown');
                 $.click(document.body);
             });
-            await advanceClock(page, 300);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                },
-            ]);
         });
 
         test('hides the offcanvas on offcanvas click (mousedown on backdrop)', async ({ page }) => {
@@ -1086,28 +711,19 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 $.triggerEvent(document.body, 'mousedown');
-                $.stop('#offcanvas1');
             });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 $.click('#offcanvas1');
             });
-            await advanceClock(page, 125);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#offcanvas1'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 175);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('style', '');
+            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
     });
@@ -1118,7 +734,6 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1133,7 +748,6 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1, { scroll: true }).show();
             });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1149,7 +763,6 @@ test.describe('Offcanvas', () => {
                 $.setDataset(offcanvas1, { uiScroll: true });
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1166,7 +779,6 @@ test.describe('Offcanvas', () => {
                     .offcanvas({ scroll: true })
                     .show();
             });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1189,11 +801,6 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1208,11 +815,6 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1233,11 +835,6 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
 
             await expectStyles(page, [
                 {
@@ -1253,20 +850,13 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).hide();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
 
             await expectStyles(page, [
                 {
@@ -1285,20 +875,13 @@ test.describe('Offcanvas', () => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
             await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).hide();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#offcanvas1');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
 
             await expectStyles(page, [
                 {

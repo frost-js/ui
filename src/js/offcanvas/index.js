@@ -6,7 +6,6 @@ import Offcanvas from './offcanvas.js';
 
 /** @type {import('./offcanvas.js').OffcanvasOptions} */
 Offcanvas.defaults = {
-    duration: 250,
     backdrop: true,
     keyboard: true,
     scroll: false,

@@ -10546,7 +10546,7 @@
      * @param {number} newIndex The new item index.
      * @returns {Direction} The transition direction.
      */
-    function getDirection$1(offset, oldIndex, newIndex) {
+    function getDirection(offset, oldIndex, newIndex) {
         if (offset == -1 || (offset == 0 && newIndex < oldIndex)) {
             return 'left';
         }
@@ -10793,7 +10793,7 @@
 
                         const offset = getDirOffset(index, this.#items.length);
                         index = getIndex(index, this.#items.length);
-                        direction = getDirection$1(offset, this.#index, index);
+                        direction = getDirection(offset, this.#index, index);
 
                         if (progress >= 1) {
                             startX = currentX;
@@ -10945,7 +10945,7 @@
                 return;
             }
 
-            const direction = getDirection$1(offset, this.#index, index);
+            const direction = getDirection(offset, this.#index, index);
 
             const eventData = {
                 direction,
@@ -12859,32 +12859,8 @@
         modal.handleEscape();
     });
 
-    /** @typedef {import('../popper/popper.js').Direction} Direction */
-
-    /**
-     * Gets the slide animation direction.
-     * @param {HTMLElement} node The offcanvas node.
-     * @returns {Direction} The animation direction.
-     */
-    function getDirection(node) {
-        if ($$1.hasClass(node, 'offcanvas-end')) {
-            return 'right';
-        }
-
-        if ($$1.hasClass(node, 'offcanvas-bottom')) {
-            return 'bottom';
-        }
-
-        if ($$1.hasClass(node, 'offcanvas-start')) {
-            return 'left';
-        }
-
-        return 'top';
-    }
-
     /**
      * @typedef {object} OffcanvasOptions
-     * @property {number} [duration=250] The transition duration in milliseconds.
      * @property {boolean|'static'} [backdrop=true] Whether to show a dismissible or static backdrop.
      * @property {boolean} [keyboard=true] Whether Escape hides the offcanvas element.
      * @property {boolean} [scroll=false] Whether body scrolling remains enabled while shown.
@@ -12898,6 +12874,7 @@
         #activeTarget;
         #focusTrap;
         #scrollNodes;
+        #transitioning;
 
         /**
          * Creates an Offcanvas.
@@ -12956,57 +12933,58 @@
          */
         hide() {
             if (
-                $$1.getDataset(this.node, 'uiAnimating') ||
+                this.#transitioning ||
                 !$$1.hasClass(this.node, 'show') ||
                 !$$1.triggerOne(this.node, 'hide.ui.offcanvas')
             ) {
                 return;
             }
 
-            $$1.setDataset(this.node, { uiAnimating: 'out' });
+            this.#transitioning = true;
 
             if (this.#focusTrap) {
                 this.#focusTrap.deactivate();
             }
 
-            Promise.all([
-                $$1.fadeOut(this.node, {
-                    duration: this.options.duration,
-                }),
-                $$1.dropOut(this.node, {
-                    duration: this.options.duration,
-                    direction: getDirection(this.node),
-                }),
-            ]).then((_) => {
-                $$1.setAttribute(this.node, {
+            $$1.addClass(this.node, 'hiding');
+
+            waitForTransition(this.node, ['opacity', 'transform'], {
+                activeTarget: this.#activeTarget,
+                backdrop: this.options.backdrop,
+                scroll: this.options.scroll,
+                scrollNodes: this.#scrollNodes,
+            }).then(({
+                activeTarget,
+                backdrop,
+                node,
+                scroll,
+                scrollNodes,
+            }) => {
+                $$1.removeClass(node, 'hiding show');
+                $$1.setAttribute(node, {
                     'aria-hidden': true,
                     'aria-modal': false,
                 });
 
-                $$1.removeClass(this.node, 'show');
-
-                if (this.options.backdrop) {
+                if (backdrop) {
                     $$1.removeClass(document.body, 'offcanvas-backdrop');
                 }
 
-                if (!this.options.scroll) {
-                    resetScrollPadding(this.#scrollNodes);
+                if (!scroll) {
+                    resetScrollPadding(scrollNodes);
                     this.#scrollNodes = [];
 
                     $$1.setStyle(document.body, { overflow: '' });
                 }
 
-                if (this.#activeTarget) {
-                    $$1.focus(this.#activeTarget);
+                if (activeTarget) {
+                    $$1.focus(activeTarget);
                     this.#activeTarget = null;
                 }
 
-                $$1.removeDataset(this.node, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'hidden.ui.offcanvas');
-            }).catch((_) => {
-                if ($$1.getDataset(this.node, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this.node, 'uiAnimating');
-                }
+                $$1.triggerEvent(node, 'hidden.ui.offcanvas');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -13020,7 +12998,7 @@
             }
 
             if (
-                $$1.getDataset(this.node, 'uiAnimating') ||
+                this.#transitioning ||
                 $$1.hasClass(this.node, 'show') ||
                 $$1.findOne('.offcanvas.show') ||
                 !$$1.triggerOne(this.node, 'show.ui.offcanvas')
@@ -13028,8 +13006,7 @@
                 return;
             }
 
-            $$1.setDataset(this.node, { uiAnimating: 'in' });
-            $$1.addClass(this.node, 'show');
+            this.#transitioning = true;
 
             if (this.options.backdrop) {
                 $$1.addClass(document.body, 'offcanvas-backdrop');
@@ -13046,16 +13023,12 @@
                 $$1.setStyle(document.body, { overflow: 'hidden' });
             }
 
-            Promise.all([
-                $$1.fadeIn(this.node, {
-                    duration: this.options.duration,
-                }),
-                $$1.dropIn(this.node, {
-                    duration: this.options.duration,
-                    direction: getDirection(this.node),
-                }),
-            ]).then((_) => {
-                $$1.setAttribute(this.node, {
+            // Commit the rendered hidden state before starting the transition.
+            $$1.css(this.node, 'opacity');
+            $$1.addClass(this.node, 'show');
+
+            waitForTransition(this.node, ['opacity', 'transform']).then(({ node }) => {
+                $$1.setAttribute(node, {
                     'aria-hidden': false,
                     'aria-modal': true,
                 });
@@ -13064,12 +13037,9 @@
                     this.#focusTrap.activate();
                 }
 
-                $$1.removeDataset(this.node, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'shown.ui.offcanvas');
-            }).catch((_) => {
-                if ($$1.getDataset(this.node, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this.node, 'uiAnimating');
-                }
+                $$1.triggerEvent(node, 'shown.ui.offcanvas');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -13087,7 +13057,6 @@
 
     /** @type {import('./offcanvas.js').OffcanvasOptions} */
     Offcanvas.defaults = {
-        duration: 250,
         backdrop: true,
         keyboard: true,
         scroll: false,
