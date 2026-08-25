@@ -2,11 +2,6 @@ import { $, document } from './../globals.js';
 import { initComponent } from './../helpers/component.js';
 import Tab from './tab.js';
 
-/** @type {import('./tab.js').TabOptions} */
-Tab.defaults = {
-    duration: 100,
-};
-
 initComponent('tab', Tab);
 
 // Select a tab from pointer or Space-key activation.

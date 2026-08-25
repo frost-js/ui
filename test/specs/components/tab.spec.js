@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+import { resetPage } from '../../setup/browser.js';
+
+test.use({ reducedMotion: 'no-preference' });
 
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -16,16 +16,16 @@ test.describe('Tab', () => {
                 '<a class="nav-link" id="tabToggle2" href="#tab2" data-ui-toggle="tab"></a>' +
                 '</div>' +
                 '<div class="tab-content">' +
-                '<div class="tab-pane active" id="tab1"></div>' +
-                '<div class="tab-pane" id="tab2"></div>' +
+                '<div class="tab-pane fade active show" id="tab1"></div>' +
+                '<div class="tab-pane fade" id="tab2"></div>' +
                 '</div>' +
                 '<div class="nav nav-tabs">' +
                 '<a class="nav-link active" id="tabToggle3" href="#tab3" data-ui-toggle="tab"></a>' +
                 '<a class="nav-link" id="tabToggle4" href="#tab4" data-ui-toggle="tab"></a>' +
                 '</div>' +
                 '<div class="tab-content">' +
-                '<div class="tab-pane active" id="tab3"></div>' +
-                '<div class="tab-pane" id="tab4"></div>' +
+                '<div class="tab-pane fade active show" id="tab3"></div>' +
+                '<div class="tab-pane fade" id="tab4"></div>' +
                 '</div>';
         });
     });
@@ -99,56 +99,36 @@ test.describe('Tab', () => {
                 const tabToggle1 = $.findOne('#tabToggle1');
                 UI.Tab.init(tabToggle1).hide();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                    styles: { opacity: '0.5' },
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab1')).toBeHidden();
+            await expect(page.locator('#tab1')).not.toHaveAttribute('style');
         });
 
         test('hides the tab (query)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('#tabToggle1').tab('hide');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                    styles: { opacity: '0.5' },
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab1')).toBeHidden();
         });
 
         test('hides multiple tabs (query)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('#tabToggle1, #tabToggle3').tab('hide');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle3')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
             await expect(page.locator('#tabToggle3')).toHaveAttribute('aria-selected', 'false');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab3')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
-            await expect(page.locator('#tab3')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab3')).toHaveClass('tab-pane fade');
         });
 
         test('does not remove the tab after hiding', async ({ page }) => {
@@ -156,7 +136,7 @@ test.describe('Tab', () => {
                 const tabToggle1 = $.findOne('#tabToggle1');
                 UI.Tab.init(tabToggle1).hide();
             });
-            await advanceClock(page, 150);
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
 
             expect(await page.evaluate((_) =>
                 $.getData('#tabToggle1', 'tab') instanceof UI.Tab)).toBe(true);
@@ -166,18 +146,18 @@ test.describe('Tab', () => {
             await page.evaluate((_) => {
                 const tabToggle1 = $.findOne('#tabToggle1');
                 const tab = UI.Tab.init(tabToggle1);
+                window.tabHiddenEvents = 0;
+
+                $.addEvent(tabToggle1, 'hidden.ui.tab', (_) => {
+                    window.tabHiddenEvents++;
+                });
                 tab.hide();
                 tab.hide();
                 tab.hide();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                },
-            ]);
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            expect(await page.evaluate((_) => window.tabHiddenEvents)).toBe(1);
         });
 
         test('can be called on hidden tab', async ({ page }) => {
@@ -187,12 +167,31 @@ test.describe('Tab', () => {
             });
 
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab2'],
-                },
-            ]);
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
+        });
+
+        test('hides without a transition class', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tab1 = $.findOne('#tab1');
+                $.removeClass(tab1, 'fade');
+                UI.Tab.init($.findOne('#tabToggle1')).hide();
+            });
+
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
+        });
+
+        test('hides while transitioning in', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tabToggle2 = $.findOne('#tabToggle2');
+                const tab = UI.Tab.init(tabToggle2);
+                tab.show();
+                tab.hide();
+            });
+
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'false');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
         });
     });
 
@@ -202,95 +201,46 @@ test.describe('Tab', () => {
                 const tabToggle2 = $.findOne('#tabToggle2');
                 UI.Tab.init(tabToggle2).show();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab2'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
             await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
-            await expect(page.locator('#tab2')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab2')).toHaveCSS('opacity', '1');
+            await expect(page.locator('#tab1')).not.toHaveAttribute('style');
+            await expect(page.locator('#tab2')).not.toHaveAttribute('style');
         });
 
         test('shows the tab (data-ui-toggle)', async ({ page }) => {
             await page.locator('#tabToggle2').click();
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab2'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
             await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
-            await expect(page.locator('#tab2')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
         });
 
         test('shows the tab (query)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('#tabToggle2').tab('show');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab2'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
             await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
-            await expect(page.locator('#tab2')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
         });
 
         test('shows multiple tabs (query)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('#tabToggle2, #tabToggle4').tab('show');
             });
-            await advanceClock(page, 250);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
@@ -300,14 +250,10 @@ test.describe('Tab', () => {
             await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
             await expect(page.locator('#tabToggle3')).toHaveAttribute('aria-selected', 'false');
             await expect(page.locator('#tabToggle4')).toHaveAttribute('aria-selected', 'true');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab3')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab4')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
-            await expect(page.locator('#tab2')).toHaveAttribute('style', '');
-            await expect(page.locator('#tab3')).toHaveAttribute('style', '');
-            await expect(page.locator('#tab4')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab3')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab4')).toHaveClass('tab-pane fade active show');
         });
 
         test('can be called multiple times', async ({ page }) => {
@@ -323,32 +269,45 @@ test.describe('Tab', () => {
                 tab.show();
                 tab.show();
             });
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab2'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 100);
-
+            await expect(page.locator('#tab2')).toHaveCSS('opacity', '1');
             expect(await page.evaluate((_) => window.tabShownEvents)).toBe(1);
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
             await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
-            await expect(page.locator('#tab2')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
+        });
+
+        test('uses the latest tab during rapid navigation', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tabToggle1 = $.findOne('#tabToggle1');
+                const tabToggle2 = $.findOne('#tabToggle2');
+                const tab1 = UI.Tab.init(tabToggle1);
+                const tab2 = UI.Tab.init(tabToggle2);
+                window.tab1ShownEvents = 0;
+                window.tab2ShownEvents = 0;
+
+                $.addEvent(tabToggle1, 'shown.ui.tab', (_) => {
+                    window.tab1ShownEvents++;
+                });
+                $.addEvent(tabToggle2, 'shown.ui.tab', (_) => {
+                    window.tab2ShownEvents++;
+                });
+
+                tab2.show();
+                tab1.show();
+                tab2.show();
+            });
+
+            await expect(page.locator('#tab2')).toHaveCSS('opacity', '1');
+            expect(await page.evaluate((_) => window.tab1ShownEvents)).toBe(0);
+            expect(await page.evaluate((_) => window.tab2ShownEvents)).toBe(1);
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
         });
 
         test('can be called on shown tab', async ({ page }) => {
@@ -358,12 +317,32 @@ test.describe('Tab', () => {
             });
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane active');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                },
-            ]);
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+        });
+
+        test('shows without transition classes', async ({ page }) => {
+            await page.evaluate((_) => {
+                $('#tab1, #tab2').removeClass('fade');
+                UI.Tab.init($.findOne('#tabToggle2')).show();
+            });
+
+            await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
+            await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane active show');
+        });
+
+        test('shows when the transition is canceled', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tabToggle2 = $.findOne('#tabToggle2');
+                UI.Tab.init(tabToggle2).show();
+                $.findOne('#tab2').getAnimations()
+                    .find((animation) => animation instanceof CSSTransition)
+                    .cancel();
+            });
+
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
         });
     });
 
@@ -394,13 +373,11 @@ test.describe('Tab', () => {
                 });
                 UI.Tab.init(tabToggle1).hide();
             });
-            await advanceClock(page, 150);
 
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
             expect(await page.evaluate((_) => window.tabHiddenEventTriggered)).toBe(true);
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
         });
 
         test('triggers show event', async ({ page }) => {
@@ -429,17 +406,15 @@ test.describe('Tab', () => {
                 });
                 UI.Tab.init(tabToggle2).show();
             });
-            await advanceClock(page, 250);
 
+            await expect(page.locator('#tab2')).toHaveCSS('opacity', '1');
             expect(await page.evaluate((_) => window.tabShownEventTriggered)).toBe(true);
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
             await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'true');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab1')).toHaveAttribute('style', '');
-            await expect(page.locator('#tab2')).toHaveAttribute('style', '');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade active show');
         });
 
         test('triggers hide event on active tab', async ({ page }) => {
@@ -470,9 +445,40 @@ test.describe('Tab', () => {
                 });
                 UI.Tab.init(tabToggle2).show();
             });
-            await advanceClock(page, 150);
 
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
             expect(await page.evaluate((_) => window.activeTabHiddenEventTriggered)).toBe(true);
+        });
+
+        test('can show from the hidden event', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tabToggle1 = $.findOne('#tabToggle1');
+                const tab = UI.Tab.init(tabToggle1);
+
+                $.addEventOnce(tabToggle1, 'hidden.ui.tab', (_) => {
+                    tab.show();
+                });
+                tab.hide();
+            });
+
+            await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'true');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab1')).toHaveCSS('opacity', '1');
+        });
+
+        test('can hide from the shown event', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tabToggle2 = $.findOne('#tabToggle2');
+                const tab = UI.Tab.init(tabToggle2);
+
+                $.addEventOnce(tabToggle2, 'shown.ui.tab', (_) => {
+                    tab.hide();
+                });
+                tab.show();
+            });
+
+            await expect(page.locator('#tabToggle2')).toHaveAttribute('aria-selected', 'false');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
         });
 
         test('can be prevented from hiding', async ({ page }) => {
@@ -481,15 +487,10 @@ test.describe('Tab', () => {
                 $.addEvent(tabToggle1, 'hide.ui.tab', (_) => false);
                 UI.Tab.init(tabToggle1).hide();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane active');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                },
-            ]);
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab1')).toHaveCSS('opacity', '1');
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
@@ -500,15 +501,10 @@ test.describe('Tab', () => {
                 });
                 UI.Tab.init(tabToggle1).hide();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane active');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                },
-            ]);
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab1')).toHaveCSS('opacity', '1');
         });
 
         test('can be prevented from showing', async ({ page }) => {
@@ -517,12 +513,11 @@ test.describe('Tab', () => {
                 $.addEvent(tabToggle2, 'show.ui.tab', (_) => false);
                 UI.Tab.init(tabToggle2).show();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
         });
 
         test('can be prevented from showing (prevent default)', async ({ page }) => {
@@ -533,12 +528,11 @@ test.describe('Tab', () => {
                 });
                 UI.Tab.init(tabToggle2).show();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
         });
 
         test('can be prevented from hiding active tab', async ({ page }) => {
@@ -548,12 +542,11 @@ test.describe('Tab', () => {
                 $.addEvent(tabToggle1, 'hide.ui.tab', (_) => false);
                 UI.Tab.init(tabToggle2).show();
             });
-            await advanceClock(page, 250);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane');
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
         });
 
         test('can be prevented from hiding active tab (prevent default)', async ({ page }) => {
@@ -563,137 +556,13 @@ test.describe('Tab', () => {
                 $.addEvent(tabToggle1, 'hide.ui.tab', (event) => {
                     event.preventDefault();
                 });
-                UI.Tab.init(tabToggle2).hide();
+                UI.Tab.init(tabToggle2).show();
             });
-            await advanceClock(page, 250);
 
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link active');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link');
-            await expect(page.locator('#tab1')).toHaveClass('tab-pane active');
-            await expect(page.locator('#tab2')).toHaveClass('tab-pane');
-        });
-    });
-
-    test.describe('duration option', () => {
-        test('works with duration option on hide', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tabToggle1 = $.findOne('#tabToggle1');
-                UI.Tab.init(tabToggle1, { duration: 200 }).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.875,
-                    styles: { opacity: '0.13' },
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tabToggle1 = $.findOne('#tabToggle1');
-                $.setDataset(tabToggle1, { uiDuration: 200 });
-                UI.Tab.init(tabToggle1).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.875,
-                    styles: { opacity: '0.13' },
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#tabToggle1')
-                    .tab({ duration: 200 })
-                    .hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.875,
-                    styles: { opacity: '0.13' },
-                },
-            ]);
-        });
-
-        test('works with duration option on show', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tabToggle2 = $.findOne('#tabToggle2');
-                UI.Tab.init(tabToggle2, { duration: 200 }).show();
-            });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab2'],
-                    progress: 0.5,
-                    styles: { opacity: '0.5' },
-                },
-            ]);
-        });
-
-        test('works with duration option on show (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tabToggle2 = $.findOne('#tabToggle2');
-                $.setDataset(tabToggle2, { uiDuration: 200 });
-                UI.Tab.init(tabToggle2).show();
-            });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab2'],
-                    progress: 0.5,
-                    styles: { opacity: '0.5' },
-                },
-            ]);
-        });
-
-        test('works with duration option on show (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#tabToggle2')
-                    .tab({ duration: 200 })
-                    .show();
-            });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab1'],
-                    progress: 0.5,
-                },
-            ]);
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#tab2'],
-                    progress: 0.5,
-                    styles: { opacity: '0.5' },
-                },
-            ]);
+            await expect(page.locator('#tab1')).toHaveClass('tab-pane fade active show');
+            await expect(page.locator('#tab2')).toHaveClass('tab-pane fade');
         });
     });
 

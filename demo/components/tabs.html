@@ -20,24 +20,24 @@
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Tab navigation</h2>
                 <p class="text-body-secondary mb-2">Connect each trigger to a labelled panel and keep selection state on the trigger.</p>
-                <code>.nav-tabs</code> <code>data-ui-toggle="tab"</code>
+                <code>.nav-tabs</code> <code>.tab-pane.fade</code> <code>data-ui-toggle="tab"</code>
             </header>
-            <div class="nav nav-tabs flex-nowrap overflow-auto" role="tablist" aria-label="Trip details">
+            <div class="nav nav-tabs" role="tablist" aria-label="Trip details">
                 <button class="nav-link active" id="overview-tab" data-ui-toggle="tab" data-ui-target="#overview-panel" type="button" role="tab" aria-controls="overview-panel" aria-selected="true">Overview</button>
                 <button class="nav-link" id="route-tab" data-ui-toggle="tab" data-ui-target="#route-panel" type="button" role="tab" aria-controls="route-panel" aria-selected="false">Route</button>
                 <button class="nav-link" id="conditions-tab" data-ui-toggle="tab" data-ui-target="#conditions-panel" type="button" role="tab" aria-controls="conditions-panel" aria-selected="false">Conditions</button>
                 <button class="nav-link disabled" type="button" role="tab" aria-selected="false" aria-disabled="true" disabled>Bookings</button>
             </div>
             <div class="tab-content">
-                <div class="tab-pane active p-4" id="overview-panel" role="tabpanel" aria-labelledby="overview-tab">
+                <div class="tab-pane fade active show p-4" id="overview-panel" role="tabpanel" aria-labelledby="overview-tab">
                     <h3 class="h5">Coastal day walk</h3>
-                    <p class="mb-0">An 8.5 kilomet return route linking sheltered coves with an exposed headland lookout.</p>
+                    <p class="mb-0">An 8.5-kilometre return route linking sheltered coves with an exposed headland lookout.</p>
                 </div>
-                <div class="tab-pane p-4" id="route-panel" role="tabpanel" aria-labelledby="route-tab">
+                <div class="tab-pane fade p-4" id="route-panel" role="tabpanel" aria-labelledby="route-tab">
                     <h3 class="h5">Route profile</h3>
                     <p class="mb-0">The first half is gradual before a short, steep climb over loose sandstone.</p>
                 </div>
-                <div class="tab-pane p-4" id="conditions-panel" role="tabpanel" aria-labelledby="conditions-tab">
+                <div class="tab-pane fade p-4" id="conditions-panel" role="tabpanel" aria-labelledby="conditions-tab">
                     <h3 class="h5">Current conditions</h3>
                     <p class="mb-0">The track is dry, with strong wind forecast on the exposed ridge after midday.</p>
                 </div>
@@ -56,13 +56,13 @@
                 <button class="nav-link" id="map-tab" data-ui-toggle="tab" data-ui-target="#map-panel" type="button" role="tab" aria-controls="map-panel" aria-selected="false">Map</button>
             </div>
             <div class="tab-content">
-                <div class="tab-pane active" id="cards-panel" role="tabpanel" aria-labelledby="cards-tab">
+                <div class="tab-pane fade active show" id="cards-panel" role="tabpanel" aria-labelledby="cards-tab">
                     <div class="alert alert-primary mb-0">Cards highlight imagery and supporting details.</div>
                 </div>
-                <div class="tab-pane" id="list-panel" role="tabpanel" aria-labelledby="list-tab">
+                <div class="tab-pane fade" id="list-panel" role="tabpanel" aria-labelledby="list-tab">
                     <div class="alert alert-primary mb-0">Lists make comparison and scanning more compact.</div>
                 </div>
-                <div class="tab-pane" id="map-panel" role="tabpanel" aria-labelledby="map-tab">
+                <div class="tab-pane fade" id="map-panel" role="tabpanel" aria-labelledby="map-tab">
                     <div class="alert alert-primary mb-0">Maps emphasize location and spatial relationships.</div>
                 </div>
             </div>
@@ -84,19 +84,19 @@
                 </div>
                 <div class="col-sm-8 col-xl-9">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="profile-panel" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade active show" id="profile-panel" role="tabpanel" aria-labelledby="profile-tab">
                             <div class="card card-body">
                                 <h3 class="h5">Profile settings</h3>
                                 <p class="mb-0">Update your public name, biography, and preferred contact details.</p>
                             </div>
                         </div>
-                        <div class="tab-pane" id="notifications-panel" role="tabpanel" aria-labelledby="notifications-tab">
+                        <div class="tab-pane fade" id="notifications-panel" role="tabpanel" aria-labelledby="notifications-tab">
                             <div class="card card-body">
                                 <h3 class="h5">Notification settings</h3>
                                 <p class="mb-0">Choose which updates arrive immediately and which join your summary.</p>
                             </div>
                         </div>
-                        <div class="tab-pane" id="security-panel" role="tabpanel" aria-labelledby="security-tab">
+                        <div class="tab-pane fade" id="security-panel" role="tabpanel" aria-labelledby="security-tab">
                             <div class="card card-body">
                                 <h3 class="h5">Security settings</h3>
                                 <p class="mb-0">Review active sessions and configure additional account protection.</p>

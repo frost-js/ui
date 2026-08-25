@@ -13546,25 +13546,19 @@
     initComponent('popover', Popover);
 
     /**
-     * @typedef {object} TabOptions
-     * @property {number} [duration=100] The transition duration in milliseconds.
-     */
-
-    /**
      * Controls a tab trigger and its associated panel.
-     * @extends {BaseComponent<TabOptions>}
      */
     class Tab extends BaseComponent {
         #siblings;
         #target;
+        #transition;
 
         /**
          * Creates a Tab.
          * @param {HTMLElement} node The input node.
-         * @param {TabOptions} [options] The tab options.
          */
-        constructor(node, options) {
-            super(node, options);
+        constructor(node) {
+            super(node);
 
             const selector = getTargetSelector(this.node);
             this.#target = $$1.findOne(selector);
@@ -13573,8 +13567,9 @@
 
         /** @inheritdoc */
         dispose() {
-            this.#target = null;
             this.#siblings = null;
+            this.#target = null;
+            this.#transition = null;
 
             super.dispose();
         }
@@ -13584,7 +13579,6 @@
          */
         hide() {
             if (
-                $$1.getDataset(this.#target, 'uiAnimating') ||
                 !$$1.hasClass(this.#target, 'active') ||
                 !$$1.triggerOne(this.node, 'hide.ui.tab')
             ) {
@@ -13592,17 +13586,14 @@
             }
 
             this.#hide();
+            $$1.triggerEvent(this.node, 'hidden.ui.tab');
         }
 
         /**
          * Hides the active tab and shows the current tab.
          */
         show() {
-            if (
-                $$1.getDataset(this.#target, 'uiAnimating') ||
-                $$1.hasClass(this.#target, 'active') ||
-                !$$1.triggerOne(this.node, 'show.ui.tab')
-            ) {
+            if ($$1.hasClass(this.#target, 'active')) {
                 return;
             }
 
@@ -13610,24 +13601,21 @@
                 $$1.hasClass(sibling, 'active'),
             );
 
-            if (!active) {
-                this.#show();
-            } else {
-                const activeTab = this.constructor.init(active);
+            const canHide = !active || $$1.triggerOne(active, 'hide.ui.tab');
+            const canShow = $$1.triggerOne(this.node, 'show.ui.tab');
 
-                if ($$1.getDataset(activeTab.#target, 'uiAnimating')) {
-                    return;
-                }
+            if (!canHide || !canShow) {
+                return;
+            }
 
-                if (!$$1.triggerOne(active, 'hide.ui.tab')) {
-                    return;
-                }
+            if (active) {
+                this.constructor.init(active).#hide();
+            }
 
-                $$1.addEventOnce(active, 'hidden.ui.tab', (_) => {
-                    this.#show();
-                });
+            this.#show();
 
-                activeTab.#hide();
+            if (active) {
+                $$1.triggerEvent(active, 'hidden.ui.tab');
             }
         }
 
@@ -13635,50 +13623,45 @@
          * Hides the current tab without checking its state or events.
          */
         #hide() {
-            $$1.setDataset(this.#target, { uiAnimating: 'out' });
+            this.#transition = null;
 
-            $$1.fadeOut(this.#target, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.removeClass(this.#target, 'active');
-                $$1.removeClass(this.node, 'active');
-                $$1.removeDataset(this.#target, 'uiAnimating');
-                $$1.setAttribute(this.node, { 'aria-selected': false });
-                $$1.triggerEvent(this.node, 'hidden.ui.tab');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#target, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this.#target, 'uiAnimating');
-                }
-            });
+            $$1.removeClass(this.#target, 'active show');
+            $$1.removeClass(this.node, 'active');
+            $$1.setAttribute(this.node, { 'aria-selected': false });
         }
 
         /**
          * Shows the current tab without checking its state or events.
          */
         #show() {
-            $$1.setDataset(this.#target, { uiAnimating: 'in' });
+            const transition = {};
+            this.#transition = transition;
 
             $$1.addClass(this.#target, 'active');
             $$1.addClass(this.node, 'active');
+            $$1.setAttribute(this.node, { 'aria-selected': true });
 
-            $$1.fadeIn(this.#target, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.setAttribute(this.node, { 'aria-selected': true });
-                $$1.removeDataset(this.#target, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'shown.ui.tab');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#target, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this.#target, 'uiAnimating');
+            // Commit the rendered hidden panel before starting the transition.
+            $$1.css(this.#target, 'opacity');
+            $$1.addClass(this.#target, 'show');
+
+            const toggleNode = this.node;
+
+            waitForTransition(this.#target, ['opacity']).then((_) => {
+                if (this.#transition !== transition) {
+                    return;
+                }
+
+                this.#transition = null;
+
+                $$1.triggerEvent(toggleNode, 'shown.ui.tab');
+            }).finally((_) => {
+                if (this.#transition === transition) {
+                    this.#transition = null;
                 }
             });
         }
     }
-
-    /** @type {import('./tab.js').TabOptions} */
-    Tab.defaults = {
-        duration: 100,
-    };
 
     initComponent('tab', Tab);
 
