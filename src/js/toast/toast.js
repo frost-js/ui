@@ -69,6 +69,8 @@ export default class Toast extends BaseComponent {
         this.#transitioning = true;
 
         $.setStyle(this.node, { display: '' });
+
+        // Commit the rendered hidden state before starting the transition.
         $.css(this.node, 'opacity');
         $.addClass(this.node, 'show');
 

@@ -12094,6 +12094,7 @@
 
             this.#transitioning = true;
 
+            // Keep the menu rendered until the opacity transition finishes.
             $$1.setStyle(this.#menuNode, { display: 'block' });
             $$1.removeClass(this.#menuNode, 'show');
 
@@ -12157,9 +12158,12 @@
 
             this.#transitioning = true;
 
+            // Render and commit the hidden menu before starting the transition.
             $$1.setStyle(this.#menuNode, { display: 'block' });
             $$1.css(this.#menuNode, 'opacity');
             $$1.addClass(this.#menuNode, 'show');
+
+            // The show class now owns the menu's display state.
             $$1.removeStyle(this.#menuNode, 'display');
 
             if (this.#display === 'dynamic') {
@@ -13790,6 +13794,8 @@
             this.#transitioning = true;
 
             $$1.setStyle(this.node, { display: '' });
+
+            // Commit the rendered hidden state before starting the transition.
             $$1.css(this.node, 'opacity');
             $$1.addClass(this.node, 'show');
 

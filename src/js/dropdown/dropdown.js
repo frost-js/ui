@@ -100,6 +100,7 @@ export default class Dropdown extends BaseComponent {
 
         this.#transitioning = true;
 
+        // Keep the menu rendered until the opacity transition finishes.
         $.setStyle(this.#menuNode, { display: 'block' });
         $.removeClass(this.#menuNode, 'show');
 
@@ -163,9 +164,12 @@ export default class Dropdown extends BaseComponent {
 
         this.#transitioning = true;
 
+        // Render and commit the hidden menu before starting the transition.
         $.setStyle(this.#menuNode, { display: 'block' });
         $.css(this.#menuNode, 'opacity');
         $.addClass(this.#menuNode, 'show');
+
+        // The show class now owns the menu's display state.
         $.removeStyle(this.#menuNode, 'display');
 
         if (this.#display === 'dynamic') {
