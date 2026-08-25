@@ -10395,7 +10395,7 @@
      * Waits for an element's CSS transitions to finish or be canceled.
      * @param {HTMLElement} node The transitioning node.
      * @param {string[]} [properties=[]] The transition properties to wait for.
-     * @returns {Promise<boolean>} Whether every transition finished.
+     * @returns {Promise<{completed: boolean, node: HTMLElement}>} The transition result.
      */
     function waitForTransition(node, properties = []) {
         const transitions = node.getAnimations()
@@ -10406,9 +10406,10 @@
 
         return Promise.allSettled(
             transitions.map((transition) => transition.finished),
-        ).then((results) =>
-            results.every((result) => result.status === 'fulfilled'),
-        );
+        ).then((results) => ({
+            completed: results.every((result) => result.status === 'fulfilled'),
+            node,
+        }));
     }
 
     /**
@@ -10428,11 +10429,11 @@
                 return;
             }
 
-            const node = this.node;
             this.#transitioning = true;
-            $$1.removeClass(node, 'show');
 
-            waitForTransition(node, ['opacity']).then((_) => {
+            $$1.removeClass(this.node, 'show');
+
+            waitForTransition(this.node, ['opacity']).then(({ node }) => {
                 $$1.detach(node);
                 $$1.triggerEvent(node, 'closed.ui.alert');
                 $$1.remove(node);
@@ -13726,7 +13727,6 @@
      * @typedef {object} ToastOptions
      * @property {boolean} [autohide=true] Whether to hide the toast automatically.
      * @property {number} [delay=5000] The autohide delay in milliseconds.
-     * @property {number} [duration=100] The transition duration in milliseconds.
      */
 
     /**
@@ -13735,6 +13735,7 @@
      */
     class Toast extends BaseComponent {
         #timer;
+        #transitioning;
 
         /** @inheritdoc */
         dispose() {
@@ -13749,8 +13750,8 @@
          */
         hide() {
             if (
-                $$1.getDataset(this.node, 'uiAnimating') ||
-                !$$1.isVisible(this.node) ||
+                this.#transitioning ||
+                !$$1.hasClass(this.node, 'show') ||
                 !$$1.triggerOne(this.node, 'hide.ui.toast')
             ) {
                 return;
@@ -13759,19 +13760,15 @@
             clearTimeout(this.#timer);
             this.#timer = null;
 
-            $$1.setDataset(this.node, { uiAnimating: 'out' });
+            this.#transitioning = true;
 
-            $$1.fadeOut(this.node, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.setStyle(this.node, { display: 'none' }, null, { important: true });
-                $$1.removeClass(this.node, 'show');
-                $$1.removeDataset(this.node, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'hidden.ui.toast');
-            }).catch((_) => {
-                if ($$1.getDataset(this.node, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this.node, 'uiAnimating');
-                }
+            $$1.removeClass(this.node, 'show');
+
+            waitForTransition(this.node, ['opacity']).then(({ node }) => {
+                $$1.setStyle(node, { display: 'none' }, null, { important: true });
+                $$1.triggerEvent(node, 'hidden.ui.toast');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
 
@@ -13780,8 +13777,8 @@
          */
         show() {
             if (
-                $$1.getDataset(this.node, 'uiAnimating') ||
-                $$1.isVisible(this.node) ||
+                this.#transitioning ||
+                $$1.hasClass(this.node, 'show') ||
                 !$$1.triggerOne(this.node, 'show.ui.toast')
             ) {
                 return;
@@ -13790,17 +13787,14 @@
             clearTimeout(this.#timer);
             this.#timer = null;
 
-            $$1.setDataset(this.node, { uiAnimating: 'in' });
+            this.#transitioning = true;
+
             $$1.setStyle(this.node, { display: '' });
+            $$1.css(this.node, 'opacity');
             $$1.addClass(this.node, 'show');
 
-            $$1.fadeIn(this.node, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.removeDataset(this.node, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'shown.ui.toast');
-
-                if (this.options.autohide) {
+            waitForTransition(this.node, ['opacity']).then(({ node }) => {
+                if (this.options?.autohide) {
                     this.#timer = setTimeout(
                         (_) => {
                             this.#timer = null;
@@ -13809,10 +13803,10 @@
                         this.options.delay,
                     );
                 }
-            }).catch((_) => {
-                if ($$1.getDataset(this.node, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this.node, 'uiAnimating');
-                }
+
+                $$1.triggerEvent(node, 'shown.ui.toast');
+            }).finally((_) => {
+                this.#transitioning = false;
             });
         }
     }
@@ -13821,7 +13815,6 @@
     Toast.defaults = {
         autohide: true,
         delay: 5000,
-        duration: 100,
     };
 
     initComponent('toast', Toast);

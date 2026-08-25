@@ -140,7 +140,7 @@ Components can also be created and controlled directly:
 
 ```html
 <div
-    class="toast"
+    class="toast fade"
     id="status-toast"
     role="status"
     aria-live="polite"
@@ -385,7 +385,7 @@ Use Sass configuration when derived colors, utility maps, breakpoints, component
 - Component options are resolved once, frozen, and retained until the instance is disposed.
 - Tooltip and popover HTML is sanitized by default when HTML content is enabled.
 - Event namespaces are managed by fQuery; the underlying native event types are `show`, `shown`, `hide`, `hidden`, and so on.
-- Transition durations are expressed in milliseconds by JavaScript component options.
+- Transition timing is controlled by CSS transition variables or millisecond component options, depending on the component.
 - Component markup and accessibility attributes remain the application's responsibility; interactive components update the state they own.
 
 ## Development

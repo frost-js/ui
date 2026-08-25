@@ -7,7 +7,6 @@ import Toast from './toast.js';
 Toast.defaults = {
     autohide: true,
     delay: 5000,
-    duration: 100,
 };
 
 initComponent('toast', Toast);

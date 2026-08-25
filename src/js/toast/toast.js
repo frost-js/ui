@@ -1,11 +1,11 @@
 import BaseComponent from './../base-component.js';
 import { $ } from './../globals.js';
+import { waitForTransition } from './../helpers/transition.js';
 
 /**
  * @typedef {object} ToastOptions
  * @property {boolean} [autohide=true] Whether to hide the toast automatically.
  * @property {number} [delay=5000] The autohide delay in milliseconds.
- * @property {number} [duration=100] The transition duration in milliseconds.
  */
 
 /**
@@ -14,6 +14,7 @@ import { $ } from './../globals.js';
  */
 export default class Toast extends BaseComponent {
     #timer;
+    #transitioning;
 
     /** @inheritdoc */
     dispose() {
@@ -28,8 +29,8 @@ export default class Toast extends BaseComponent {
      */
     hide() {
         if (
-            $.getDataset(this.node, 'uiAnimating') ||
-            !$.isVisible(this.node) ||
+            this.#transitioning ||
+            !$.hasClass(this.node, 'show') ||
             !$.triggerOne(this.node, 'hide.ui.toast')
         ) {
             return;
@@ -38,19 +39,15 @@ export default class Toast extends BaseComponent {
         clearTimeout(this.#timer);
         this.#timer = null;
 
-        $.setDataset(this.node, { uiAnimating: 'out' });
+        this.#transitioning = true;
 
-        $.fadeOut(this.node, {
-            duration: this.options.duration,
-        }).then((_) => {
-            $.setStyle(this.node, { display: 'none' }, null, { important: true });
-            $.removeClass(this.node, 'show');
-            $.removeDataset(this.node, 'uiAnimating');
-            $.triggerEvent(this.node, 'hidden.ui.toast');
-        }).catch((_) => {
-            if ($.getDataset(this.node, 'uiAnimating') === 'out') {
-                $.removeDataset(this.node, 'uiAnimating');
-            }
+        $.removeClass(this.node, 'show');
+
+        waitForTransition(this.node, ['opacity']).then(({ node }) => {
+            $.setStyle(node, { display: 'none' }, null, { important: true });
+            $.triggerEvent(node, 'hidden.ui.toast');
+        }).finally((_) => {
+            this.#transitioning = false;
         });
     }
 
@@ -59,8 +56,8 @@ export default class Toast extends BaseComponent {
      */
     show() {
         if (
-            $.getDataset(this.node, 'uiAnimating') ||
-            $.isVisible(this.node) ||
+            this.#transitioning ||
+            $.hasClass(this.node, 'show') ||
             !$.triggerOne(this.node, 'show.ui.toast')
         ) {
             return;
@@ -69,17 +66,14 @@ export default class Toast extends BaseComponent {
         clearTimeout(this.#timer);
         this.#timer = null;
 
-        $.setDataset(this.node, { uiAnimating: 'in' });
+        this.#transitioning = true;
+
         $.setStyle(this.node, { display: '' });
+        $.css(this.node, 'opacity');
         $.addClass(this.node, 'show');
 
-        $.fadeIn(this.node, {
-            duration: this.options.duration,
-        }).then((_) => {
-            $.removeDataset(this.node, 'uiAnimating');
-            $.triggerEvent(this.node, 'shown.ui.toast');
-
-            if (this.options.autohide) {
+        waitForTransition(this.node, ['opacity']).then(({ node }) => {
+            if (this.options?.autohide) {
                 this.#timer = setTimeout(
                     (_) => {
                         this.#timer = null;
@@ -88,10 +82,10 @@ export default class Toast extends BaseComponent {
                     this.options.delay,
                 );
             }
-        }).catch((_) => {
-            if ($.getDataset(this.node, 'uiAnimating') === 'in') {
-                $.removeDataset(this.node, 'uiAnimating');
-            }
+
+            $.triggerEvent(node, 'shown.ui.toast');
+        }).finally((_) => {
+            this.#transitioning = false;
         });
     }
 }

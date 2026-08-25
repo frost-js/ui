@@ -81,6 +81,25 @@ test.describe('Alert', () => {
                 );
             })).toBe(false);
         });
+
+        test('completes closing after disposal', async ({ page }) => {
+            await page.evaluate((_) => {
+                const alert1 = $.findOne('#alert1');
+                window.alertClosedEventTriggered = false;
+
+                $.addEvent(alert1, 'closed.ui.alert', (_) => {
+                    window.alertClosedEventTriggered = true;
+                });
+
+                const alert = UI.Alert.init(alert1);
+                alert.close();
+                alert.dispose();
+            });
+
+            await expect(page.locator('#alert1')).toHaveCount(0);
+            expect(await page.evaluate((_) => window.alertClosedEventTriggered)).toBe(true);
+            expect(await page.evaluate((_) => $.hasData('#alert1', 'alert'))).toBe(false);
+        });
     });
 
     test.describe('#close', () => {

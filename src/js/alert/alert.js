@@ -19,11 +19,11 @@ export default class Alert extends BaseComponent {
             return;
         }
 
-        const node = this.node;
         this.#transitioning = true;
-        $.removeClass(node, 'show');
 
-        waitForTransition(node, ['opacity']).then((_) => {
+        $.removeClass(this.node, 'show');
+
+        waitForTransition(this.node, ['opacity']).then(({ node }) => {
             $.detach(node);
             $.triggerEvent(node, 'closed.ui.alert');
             $.remove(node);

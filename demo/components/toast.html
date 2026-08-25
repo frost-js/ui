@@ -22,7 +22,7 @@
                 <p class="text-body-secondary mb-2">Combine an optional header with a concise message and a dismissal control.</p>
                 <code>.toast .toast-header .toast-body</code>
             </header>
-            <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
+            <div class="toast fade show" role="status" aria-live="polite" aria-atomic="true">
                 <div class="toast-header">
                     <span class="badge text-bg-primary rounded-pill me-2" aria-hidden="true">F</span>
                     <strong class="me-auto">Route planner</strong>
@@ -42,8 +42,8 @@
                 <code>UI.Toast.init(node).show()</code>
             </header>
             <button class="btn btn-primary ripple" id="show-toast" type="button">Save route</button>
-            <div class="position-fixed top-0 end-0 z-3 p-3 mt-5">
-                <div class="toast" id="live-toast" role="status" style="display: none !important;" aria-live="polite" aria-atomic="true">
+            <div class="position-fixed end-0 z-3 p-3" style="top: 4rem;">
+                <div class="toast fade" id="live-toast" role="status" style="display: none !important;" aria-live="polite" aria-atomic="true">
                     <div class="toast-header">
                         <span class="badge text-bg-success rounded-pill me-2" aria-hidden="true">✓</span>
                         <strong class="me-auto">Route saved</strong>
@@ -64,7 +64,7 @@
                 <code>.toast</code>
             </header>
             <div class="bg-ambient rounded-3 p-4">
-                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
+                <div class="toast fade show" role="status" aria-live="polite" aria-atomic="true">
                     <div class="toast-header">
                         <span class="badge text-bg-accent rounded-pill me-2" aria-hidden="true">F</span>
                         <strong class="me-auto">Field notes</strong>
@@ -85,7 +85,7 @@
                 <code>.toast-container</code>
             </header>
             <div class="toast-container">
-                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
+                <div class="toast fade show" role="status" aria-live="polite" aria-atomic="true">
                     <div class="toast-header">
                         <span class="badge text-bg-success rounded-pill me-2" aria-hidden="true">✓</span>
                         <strong class="me-auto">Offline maps ready</strong>
@@ -96,7 +96,7 @@
                         Three map regions were downloaded to this device.
                     </div>
                 </div>
-                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
+                <div class="toast fade show" role="status" aria-live="polite" aria-atomic="true">
                     <div class="toast-header">
                         <span class="badge text-bg-warning rounded-pill me-2" aria-hidden="true">!</span>
                         <strong class="me-auto">Weather update</strong>
@@ -117,12 +117,12 @@
                 <code>.toast-body</code>
             </header>
             <div class="d-flex flex-column gap-3">
-                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
+                <div class="toast fade show" role="status" aria-live="polite" aria-atomic="true">
                     <div class="toast-body">
                         Your equipment checklist is up to date.
                     </div>
                 </div>
-                <div class="toast show" role="status" aria-live="polite" aria-atomic="true">
+                <div class="toast fade show" role="status" aria-live="polite" aria-atomic="true">
                     <div class="toast-body">
                         A newer route briefing is available.
                         <div class="d-flex gap-2 mt-2 pt-2 border-top">
@@ -140,7 +140,7 @@
                 <p class="text-body-secondary mb-2">Combine color and border utilities when a notification needs stronger semantic emphasis.</p>
                 <code>.text-bg-{variant} .border-0</code>
             </header>
-            <div class="toast d-flex align-items-center text-bg-primary border-0 show" role="status" aria-live="polite" aria-atomic="true">
+            <div class="toast fade d-flex align-items-center text-bg-primary border-0 show" role="status" aria-live="polite" aria-atomic="true">
                 <div class="toast-body">
                     A guide has joined your trip workspace.
                 </div>
