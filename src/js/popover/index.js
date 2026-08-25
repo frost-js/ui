@@ -10,7 +10,7 @@ Popover.defaults = {
         '<div class="popover-body"></div>' +
         '</div>',
     customClass: null,
-    duration: 100,
+    animation: true,
     enable: true,
     html: false,
     appendTo: null,

@@ -1,6 +1,7 @@
 import BaseComponent from './../base-component.js';
 import { $, window } from './../globals.js';
 import { generateId } from './../helpers/component.js';
+import { waitForTransition } from './../helpers/transition.js';
 import Popper from './../popper/index.js';
 
 /** @typedef {import('../popper/popper.js').Placement} Placement */
@@ -10,7 +11,7 @@ import Popper from './../popper/index.js';
  * @typedef {object} TooltipOptions
  * @property {string} [template] The tooltip markup template.
  * @property {string|null} [customClass=null] An additional class for the tooltip.
- * @property {number} [duration=100] The transition duration in milliseconds.
+ * @property {boolean} [animation=true] Whether to animate the tooltip.
  * @property {boolean} [enable=true] Whether the tooltip starts enabled.
  * @property {boolean} [html=false] Whether the title may contain HTML.
  * @property {string} [trigger='hover focus'] The space-separated interaction triggers.
@@ -37,6 +38,7 @@ export default class Tooltip extends BaseComponent {
     #popper;
     #tooltip;
     #tooltipInner;
+    #transition;
     #triggers;
 
     /**
@@ -125,29 +127,37 @@ export default class Tooltip extends BaseComponent {
     hide({ force = true } = {}) {
         if (
             (!force && !this.#enabled) ||
-            $.getDataset(this.#tooltip, 'uiAnimating') ||
+            this.#transition?.direction === 'out' ||
             !$.isConnected(this.#tooltip) ||
             !$.triggerOne(this.node, 'hide.ui.tooltip')
         ) {
             return;
         }
 
-        $.setDataset(this.#tooltip, { uiAnimating: 'out' });
+        // Reversing direction replaces this token and skips stale completion.
+        const transition = { direction: 'out' };
+        this.#transition = transition;
 
-        $.fadeOut(this.#tooltip, {
-            duration: this.options.duration,
-        }).then((_) => {
-            this.#popper.dispose();
-            this.#popper = null;
+        $.removeClass(this.#tooltip, 'show');
 
-            $.removeClass(this.#tooltip, 'show');
-            $.detach(this.#tooltip);
-            $.removeDataset(this.#tooltip, 'uiAnimating');
-            $.removeAttribute(this.node, 'aria-describedby');
-            $.triggerEvent(this.node, 'hidden.ui.tooltip');
-        }).catch((_) => {
-            if ($.getDataset(this.#tooltip, 'uiAnimating') === 'out') {
-                $.removeDataset(this.#tooltip, 'uiAnimating');
+        const toggleNode = this.node;
+
+        waitForTransition(this.#tooltip, ['opacity']).then(({ node }) => {
+            if (this.#transition !== transition) {
+                return;
+            }
+
+            if (this.#popper) {
+                this.#popper.dispose();
+                this.#popper = null;
+            }
+
+            $.detach(node);
+            $.removeAttribute(toggleNode, 'aria-describedby');
+            $.triggerEvent(toggleNode, 'hidden.ui.tooltip');
+        }).finally((_) => {
+            if (this.#transition === transition) {
+                this.#transition = null;
             }
         });
     }
@@ -187,28 +197,41 @@ export default class Tooltip extends BaseComponent {
      * Shows the tooltip.
      */
     show() {
+        const connected = $.isConnected(this.#tooltip);
+
         if (
             !this.#enabled ||
-            $.getDataset(this.#tooltip, 'uiAnimating') ||
-            $.isConnected(this.#tooltip) ||
+            (connected && this.#transition?.direction !== 'out') ||
             !$.triggerOne(this.node, 'show.ui.tooltip')
         ) {
             return;
         }
 
-        $.setDataset(this.#tooltip, { uiAnimating: 'in' });
-        $.addClass(this.#tooltip, 'show');
         this.refresh();
-        this.#show();
+        if (!connected) {
+            this.#show();
 
-        $.fadeIn(this.#tooltip, {
-            duration: this.options.duration,
-        }).then((_) => {
-            $.removeDataset(this.#tooltip, 'uiAnimating');
-            $.triggerEvent(this.node, 'shown.ui.tooltip');
-        }).catch((_) => {
-            if ($.getDataset(this.#tooltip, 'uiAnimating') === 'in') {
-                $.removeDataset(this.#tooltip, 'uiAnimating');
+            // Commit the rendered hidden state before starting the transition.
+            $.css(this.#tooltip, 'opacity');
+        }
+
+        // Reversing direction replaces this token and skips stale completion.
+        const transition = { direction: 'in' };
+        this.#transition = transition;
+
+        $.addClass(this.#tooltip, 'show');
+
+        const toggleNode = this.node;
+
+        waitForTransition(this.#tooltip, ['opacity']).then((_) => {
+            if (this.#transition !== transition) {
+                return;
+            }
+
+            $.triggerEvent(toggleNode, 'shown.ui.tooltip');
+        }).finally((_) => {
+            if (this.#transition === transition) {
+                this.#transition = null;
             }
         });
     }
@@ -218,7 +241,10 @@ export default class Tooltip extends BaseComponent {
      * @param {{force?: boolean}} [options] The toggle options. Force defaults to `true`.
      */
     toggle({ force = true } = {}) {
-        if ($.isConnected(this.#tooltip)) {
+        if (
+            $.isConnected(this.#tooltip) &&
+            this.#transition?.direction !== 'out'
+        ) {
             this.hide({ force });
         } else {
             this.show();
@@ -240,24 +266,20 @@ export default class Tooltip extends BaseComponent {
     #events() {
         if (this.#triggers.includes('hover')) {
             $.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
-                this.#stop();
                 this.show();
             });
 
             $.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
-                this.#stop();
                 this.hide({ force: false });
             });
         }
 
         if (this.#triggers.includes('focus')) {
             $.addEvent(this.node, 'focus.ui.tooltip', (_) => {
-                this.#stop();
                 this.show();
             });
 
             $.addEvent(this.node, 'blur.ui.tooltip', (_) => {
-                this.#stop();
                 this.hide({ force: false });
             });
         }
@@ -266,14 +288,12 @@ export default class Tooltip extends BaseComponent {
             $.addEvent(this.node, 'click.ui.tooltip', (e) => {
                 e.preventDefault();
 
-                this.#stop();
                 this.toggle({ force: false });
             });
         }
 
         if (this.#modal) {
             this.#hideModalEvent = (_) => {
-                this.#stop();
                 this.hide();
             };
             $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
@@ -285,6 +305,9 @@ export default class Tooltip extends BaseComponent {
      */
     #render() {
         this.#tooltip = $.parseHTML(this.options.template).shift();
+        if (this.options.animation) {
+            $.addClass(this.#tooltip, 'fade');
+        }
         if (this.options.customClass) {
             $.addClass(this.#tooltip, this.options.customClass);
         }
@@ -325,31 +348,5 @@ export default class Tooltip extends BaseComponent {
         window.requestAnimationFrame((_) => {
             this.update();
         });
-    }
-
-    /**
-     * Stops the active tooltip transition.
-     */
-    #stop() {
-        if (!this.#enabled) {
-            return;
-        }
-
-        const animating = $.getDataset(this.#tooltip, 'uiAnimating');
-
-        if (!animating) {
-            return;
-        }
-
-        $.stop(this.#tooltip, { finish: false });
-        $.removeDataset(this.#tooltip, 'uiAnimating');
-
-        if (animating === 'out') {
-            this.#popper.dispose();
-            this.#popper = null;
-
-            $.removeClass(this.#tooltip, 'show');
-            $.detach(this.#tooltip);
-        }
     }
 }

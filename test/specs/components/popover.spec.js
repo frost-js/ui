@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+import { resetPage } from '../../setup/browser.js';
+
+test.use({ reducedMotion: 'no-preference' });
 
 test.beforeEach(async ({ page }) => {
-    await setupClock(page);
     await resetPage(page);
 });
 
@@ -90,7 +90,6 @@ test.describe('Popover', () => {
                 UI.Popover.init(popoverToggle1);
                 UI.Popover.init(popoverToggle2).show();
             });
-            await advanceClock(page, 150);
 
             await page.evaluate((_) => {
                 UI.Popover.init($.findOne('#popoverToggle1')).dispose();
@@ -98,7 +97,6 @@ test.describe('Popover', () => {
             });
 
             expect(await page.evaluate((_) => window.modalHideEventTriggered)).toBe(true);
-            await advanceClock(page, 150);
             await expect(page.locator('.popover')).toHaveCount(0);
         });
 
@@ -120,16 +118,10 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#popoverToggle1 + .popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#popoverToggle1 + .popover')).toBeVisible();
+            await expect(page.locator('#popoverToggle1 + .popover')).toHaveClass(/\bfade\b/);
+            await expect(page.locator('#popoverToggle1 + .popover')).toHaveCSS('opacity', '1');
             await expect(page.locator('#popoverToggle1 + .popover')).toHaveAttribute('role', 'tooltip');
             await expect(page.locator('#popoverToggle1 + .popover')).toHaveAttribute('data-ui-placement', 'right');
             await expect(page.locator('#popoverToggle1 + .popover')).toHaveCSS('position', 'absolute');
@@ -140,16 +132,9 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('show');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#popoverToggle1 + .popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#popoverToggle1 + .popover')).toBeVisible();
+            await expect(page.locator('#popoverToggle1 + .popover')).toHaveCSS('opacity', '1');
             await expect(page.locator('#popoverToggle1 + .popover')).toHaveAttribute('role', 'tooltip');
         });
 
@@ -157,7 +142,6 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('button').popover('show');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveCount(2);
             await expect(page.locator('.popover').nth(0)).toBeVisible();
@@ -172,15 +156,44 @@ test.describe('Popover', () => {
                 popover.show();
                 popover.show();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+        });
+
+        test('shows when the transition is canceled', async ({ page }) => {
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                UI.Popover.init(popoverToggle1).show();
+                const transition = $.findOne('.popover').getAnimations()
+                    .find((animation) => animation instanceof CSSTransition);
+                transition.cancel();
+            });
+
+            await expect(page.locator('.popover')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+        });
+
+        test('can be interrupted by hiding', async ({ page }) => {
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                window.popoverShownEventTriggered = false;
+                window.popoverHiddenEventTriggered = false;
+
+                $.addEvent(popoverToggle1, 'shown.ui.popover', (_) => {
+                    window.popoverShownEventTriggered = true;
+                });
+                $.addEvent(popoverToggle1, 'hidden.ui.popover', (_) => {
+                    window.popoverHiddenEventTriggered = true;
+                });
+
+                const popover = UI.Popover.init(popoverToggle1);
+                popover.show();
+                popover.hide();
+            });
+
+            await expect(page.locator('.popover')).toHaveCount(0);
+            expect(await page.evaluate((_) => window.popoverShownEventTriggered)).toBe(false);
+            expect(await page.evaluate((_) => window.popoverHiddenEventTriggered)).toBe(true);
         });
 
         test('can be called on shown popover', async ({ page }) => {
@@ -188,22 +201,13 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
 
             await expect(page.locator('.popover')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveClass(/\bshow\b/);
         });
     });
 
@@ -213,23 +217,12 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).hide();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#popoverToggle1 + .popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(0);
             await expect(page.locator('#popoverToggle1')).not.toHaveAttribute('aria-describedby');
@@ -239,22 +232,11 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('hide');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#popoverToggle1 + .popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -263,16 +245,12 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('button').popover('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-                $.stop('#popoverToggle2 + .popover');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover').nth(0)).toHaveCSS('opacity', '1');
+            await expect(page.locator('.popover').nth(1)).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 $('button').popover('hide');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -282,16 +260,12 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).hide();
             });
-            await advanceClock(page, 150);
 
             expect(await page.evaluate((_) =>
                 $.getData('#popoverToggle1', 'popover') instanceof UI.Popover)).toBe(true);
@@ -302,11 +276,8 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 const popover = UI.Popover.init(popoverToggle1);
@@ -314,15 +285,8 @@ test.describe('Popover', () => {
                 popover.hide();
                 popover.hide();
             });
-            await advanceClock(page, 50);
 
-            await expect(page.locator('.popover')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveCount(0);
         });
 
         test('can be called on hidden popover', async ({ page }) => {
@@ -333,6 +297,66 @@ test.describe('Popover', () => {
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
+
+        test('hides without animation', async ({ page }) => {
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                UI.Popover.init(popoverToggle1, {
+                    animation: false,
+                }).show();
+            });
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
+            await page.evaluate((_) => {
+                UI.Popover.init($.findOne('#popoverToggle1')).hide();
+            });
+
+            await expect(page.locator('.popover')).toHaveCount(0);
+        });
+
+        test('hides when the transition is canceled', async ({ page }) => {
+            await page.evaluate((_) => {
+                UI.Popover.init($.findOne('#popoverToggle1')).show();
+            });
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
+            await page.evaluate((_) => {
+                UI.Popover.init($.findOne('#popoverToggle1')).hide();
+                const transition = $.findOne('.popover').getAnimations()
+                    .find((animation) => animation instanceof CSSTransition);
+                transition.cancel();
+            });
+
+            await expect(page.locator('.popover')).toHaveCount(0);
+        });
+
+        test('can be interrupted by showing', async ({ page }) => {
+            await page.evaluate((_) => {
+                UI.Popover.init($.findOne('#popoverToggle1')).show();
+            });
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                window.popoverShownEventTriggered = false;
+                window.popoverHiddenEventTriggered = false;
+
+                $.addEvent(popoverToggle1, 'shown.ui.popover', (_) => {
+                    window.popoverShownEventTriggered = true;
+                });
+                $.addEvent(popoverToggle1, 'hidden.ui.popover', (_) => {
+                    window.popoverHiddenEventTriggered = true;
+                });
+
+                const popover = UI.Popover.init(popoverToggle1);
+                popover.hide();
+                popover.show();
+            });
+
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            expect(await page.evaluate((_) => window.popoverShownEventTriggered)).toBe(true);
+            expect(await page.evaluate((_) => window.popoverHiddenEventTriggered)).toBe(false);
+        });
     });
 
     test.describe('#toggle (show)', () => {
@@ -341,14 +365,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).toggle();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#popoverToggle1 + .popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#popoverToggle1 + .popover')).toBeVisible();
         });
@@ -357,14 +373,6 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('toggle');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#popoverToggle1 + .popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('#popoverToggle1 + .popover')).toBeVisible();
         });
@@ -373,7 +381,6 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('button').popover('toggle');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveCount(2);
         });
@@ -386,15 +393,8 @@ test.describe('Popover', () => {
                 popover.toggle();
                 popover.toggle();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
         });
     });
 
@@ -404,23 +404,12 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).toggle();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#popoverToggle1 + .popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -429,22 +418,11 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('toggle');
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#popoverToggle1 + .popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -453,16 +431,12 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('button').popover('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-                $.stop('#popoverToggle2 + .popover');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover').nth(0)).toHaveCSS('opacity', '1');
+            await expect(page.locator('.popover').nth(1)).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 $('button').popover('toggle');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -472,11 +446,8 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 const popover = UI.Popover.init(popoverToggle1);
@@ -484,15 +455,8 @@ test.describe('Popover', () => {
                 popover.toggle();
                 popover.toggle();
             });
-            await advanceClock(page, 50);
 
-            await expect(page.locator('.popover')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveCount(0);
         });
     });
 
@@ -504,7 +468,6 @@ test.describe('Popover', () => {
                 popover.disable();
                 popover.show();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -514,7 +477,6 @@ test.describe('Popover', () => {
                 $('#popoverToggle1').popover('disable');
                 $('#popoverToggle1').popover('show');
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -524,7 +486,6 @@ test.describe('Popover', () => {
                 $('button').popover('disable');
                 $('button').popover('show');
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -537,7 +498,6 @@ test.describe('Popover', () => {
                 popover.disable();
                 popover.show();
             });
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -547,20 +507,13 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 150);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 const popover = UI.Popover.init($.findOne('#popoverToggle1'));
                 popover.disable();
                 popover.hide();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -570,22 +523,17 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { trigger: 'hover focus click' }).show();
             });
-            await advanceClock(page, 150);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+
             await page.evaluate((_) => {
                 UI.Popover.init($.findOne('#popoverToggle1')).disable();
             });
             await page.locator('#popoverToggle1').dispatchEvent('mouseout');
             await page.locator('#popoverToggle1').dispatchEvent('blur');
             await page.locator('#popoverToggle1').dispatchEvent('click');
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveCount(1);
             await expect(page.locator('.popover')).toBeVisible();
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                },
-            ]);
         });
     });
 
@@ -598,14 +546,6 @@ test.describe('Popover', () => {
                 popover.enable();
                 popover.show();
             });
-            await advanceClock(page, 50);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
-            await advanceClock(page, 100);
 
             await expect(page.locator('.popover')).toHaveCount(1);
         });
@@ -616,7 +556,6 @@ test.describe('Popover', () => {
                 $('#popoverToggle1').popover('enable');
                 $('#popoverToggle1').popover('show');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveCount(1);
             await expect(page.locator('.popover')).toBeVisible();
@@ -628,7 +567,6 @@ test.describe('Popover', () => {
                 $('button').popover('enable');
                 $('button').popover('show');
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveCount(2);
         });
@@ -641,7 +579,6 @@ test.describe('Popover', () => {
                 popover.enable();
                 popover.show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveCount(1);
         });
@@ -653,11 +590,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 100);
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 $.setDataset(popoverToggle1, { uiTitle: 'Test' });
@@ -672,11 +604,6 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 100);
             await page.evaluate((_) => {
                 $('#popoverToggle1')
                     .setDataset({ uiTitle: 'Test' })
@@ -690,12 +617,6 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('button').popover('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-                $.stop('#popoverToggle2 + .popover');
-            });
-            await advanceClock(page, 100);
             await page.evaluate((_) => {
                 $('button')
                     .setDataset({ uiTitle: 'Test' })
@@ -710,11 +631,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 100);
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 $.setDataset(popoverToggle1, { uiContent: 'Test' });
@@ -729,11 +645,6 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 100);
             await page.evaluate((_) => {
                 $('#popoverToggle1')
                     .setDataset({ uiContent: 'Test' })
@@ -747,12 +658,6 @@ test.describe('Popover', () => {
             await page.evaluate((_) => {
                 $('button').popover('show');
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-                $.stop('#popoverToggle2 + .popover');
-            });
-            await advanceClock(page, 100);
             await page.evaluate((_) => {
                 $('button')
                     .setDataset({ uiContent: 'Test' })
@@ -790,8 +695,8 @@ test.describe('Popover', () => {
                 });
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 150);
 
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
             expect(await page.evaluate((_) => window.popoverShownEventTriggered)).toBe(true);
             await expect(page.locator('.popover')).toHaveCount(1);
         });
@@ -801,11 +706,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
             const eventTriggered = await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 let triggered = false;
@@ -826,11 +726,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 window.popoverHiddenEventTriggered = false;
@@ -840,10 +735,9 @@ test.describe('Popover', () => {
                 });
                 UI.Popover.init(popoverToggle1).hide();
             });
-            await advanceClock(page, 150);
 
-            expect(await page.evaluate((_) => window.popoverHiddenEventTriggered)).toBe(true);
             await expect(page.locator('.popover')).toHaveCount(0);
+            expect(await page.evaluate((_) => window.popoverHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
@@ -852,7 +746,6 @@ test.describe('Popover', () => {
                 $.addEvent(popoverToggle1, 'show.ui.popover', (_) => false);
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -865,7 +758,6 @@ test.describe('Popover', () => {
                 });
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -875,24 +767,14 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 $.addEvent(popoverToggle1, 'hide.ui.popover', (_) => false);
                 UI.Popover.init(popoverToggle1).hide();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
@@ -900,11 +782,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('#popoverToggle1 + .popover');
-            });
-            await advanceClock(page, 50);
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 $.addEvent(popoverToggle1, 'hide.ui.popover', (event) => {
@@ -912,14 +789,9 @@ test.describe('Popover', () => {
                 });
                 UI.Popover.init(popoverToggle1).hide();
             });
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(1);
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
         });
     });
 
@@ -929,7 +801,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { title: 'Test' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-header')).toHaveText('Test');
         });
@@ -940,7 +811,6 @@ test.describe('Popover', () => {
                 $.setDataset(popoverToggle1, { uiTitle: 'Test' });
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-title', 'Test');
             await expect(page.locator('.popover-header')).toHaveText('Test');
@@ -952,7 +822,6 @@ test.describe('Popover', () => {
                 $.setAttribute(popoverToggle1, { title: 'Test' });
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).not.toHaveAttribute('title');
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-original-title', 'Test');
@@ -965,7 +834,6 @@ test.describe('Popover', () => {
                     .popover({ title: 'Test' })
                     .show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-header')).toHaveText('Test');
         });
@@ -976,7 +844,6 @@ test.describe('Popover', () => {
                 $.setDataset(popoverToggle1, { uiTitle: 'Test' });
                 UI.Popover.init(popoverToggle1, { title: 'Test 2' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-title', 'Test');
             await expect(page.locator('.popover-header')).toHaveText('Test');
@@ -988,7 +855,6 @@ test.describe('Popover', () => {
                 $.setAttribute(popoverToggle1, { title: 'Test 2' });
                 UI.Popover.init(popoverToggle1, { title: 'Test' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-original-title', 'Test 2');
             await expect(page.locator('.popover-header')).toHaveText('Test');
@@ -1001,7 +867,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { content: 'Test' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-header')).toBeHidden();
             await expect(page.locator('.popover-body')).toHaveText('Test');
@@ -1013,7 +878,6 @@ test.describe('Popover', () => {
                 $.setDataset(popoverToggle1, { uiContent: 'Test' });
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-content', 'Test');
             await expect(page.locator('.popover-body')).toHaveText('Test');
@@ -1025,7 +889,6 @@ test.describe('Popover', () => {
                     .popover({ content: 'Test' })
                     .show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-body')).toHaveText('Test');
         });
@@ -1036,7 +899,6 @@ test.describe('Popover', () => {
                 $.setDataset(popoverToggle1, { uiContent: 'Test' });
                 UI.Popover.init(popoverToggle1, { content: 'Test 2' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-content', 'Test');
             await expect(page.locator('.popover-body')).toHaveText('Test');
@@ -1051,7 +913,6 @@ test.describe('Popover', () => {
                     template: '<div class="popover" role="tooltip" data-test="Test"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
                 }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveAttribute('data-test', 'Test');
             await expect(page.locator('.popover > .popover-arrow')).toHaveCount(1);
@@ -1067,7 +928,6 @@ test.describe('Popover', () => {
                 });
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute(
                 'data-ui-template',
@@ -1082,7 +942,6 @@ test.describe('Popover', () => {
                     template: '<div class="popover" role="tooltip" data-test="Test"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
                 }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveAttribute('data-test', 'Test');
         });
@@ -1094,7 +953,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { customClass: 'test' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveClass(/\btest\b/);
         });
@@ -1105,7 +963,6 @@ test.describe('Popover', () => {
                 $.setDataset(popoverToggle1, { uiCustomClass: 'test' });
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-custom-class', 'test');
             await expect(page.locator('.popover')).toHaveClass(/\btest\b/);
@@ -1117,131 +974,42 @@ test.describe('Popover', () => {
                     .popover({ customClass: 'test' })
                     .show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover')).toHaveClass(/\btest\b/);
         });
     });
 
-    test.describe('duration option', () => {
-        test('works with duration option on', async ({ page }) => {
+    test.describe('animation option', () => {
+        test('works with animation option', async ({ page }) => {
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
-                UI.Popover.init(popoverToggle1, { duration: 200 }).show();
+                UI.Popover.init(popoverToggle1, { animation: false }).show();
             });
-            await advanceClock(page, 150);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    progress: 0.875,
-                },
-            ]);
+            await expect(page.locator('.popover')).not.toHaveClass(/\bfade\b/);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
         });
 
-        test('works with duration option on (data-ui-duration)', async ({ page }) => {
+        test('works with animation option (data-ui-animation)', async ({ page }) => {
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
-                $.setDataset(popoverToggle1, { uiDuration: 200 });
+                $.setDataset(popoverToggle1, { uiAnimation: false });
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 150);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    progress: 0.875,
-                },
-            ]);
+            await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-animation', 'false');
+            await expect(page.locator('.popover')).not.toHaveClass(/\bfade\b/);
         });
 
-        test('works with duration option on (query)', async ({ page }) => {
+        test('works with animation option (query)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('#popoverToggle1')
-                    .popover({ duration: 200 })
+                    .popover({ animation: false })
                     .show();
             });
-            await advanceClock(page, 150);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide', async ({ page }) => {
-            await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popoverToggle1');
-                UI.Popover.init(popoverToggle1, { duration: 200 }).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('.popover');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popoverToggle1');
-                UI.Popover.init(popoverToggle1).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (data-ui-duration)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popoverToggle1');
-                $.setDataset(popoverToggle1, { uiDuration: 200 });
-                UI.Popover.init(popoverToggle1).show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('.popover');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popoverToggle1');
-                UI.Popover.init(popoverToggle1).hide();
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    progress: 0.875,
-                },
-            ]);
-        });
-
-        test('works with duration option on hide (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#popoverToggle1')
-                    .popover({ duration: 200 })
-                    .show();
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('.popover');
-            });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $('#popoverToggle1').popover('hide');
-            });
-            await advanceClock(page, 150);
-
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    progress: 0.875,
-                },
-            ]);
+            await expect(page.locator('.popover')).not.toHaveClass(/\bfade\b/);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
         });
     });
 
@@ -1251,7 +1019,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { title: '<b>Test</b>' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-header')).toHaveText('<b>Test</b>');
             await expect(page.locator('.popover-header b')).toHaveCount(0);
@@ -1262,7 +1029,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { title: '<b>Test</b>', html: true }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-header > b')).toHaveText('Test');
         });
@@ -1273,7 +1039,6 @@ test.describe('Popover', () => {
                 $.setDataset(popoverToggle1, { uiHtml: true });
                 UI.Popover.init(popoverToggle1, { title: '<b>Test</b>' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-html', 'true');
             await expect(page.locator('.popover-header > b')).toHaveText('Test');
@@ -1285,7 +1050,6 @@ test.describe('Popover', () => {
                     .popover({ title: '<b>Test</b>', html: true })
                     .show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-header > b')).toHaveText('Test');
         });
@@ -1295,7 +1059,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { content: '<b>Test</b>' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-body')).toHaveText('<b>Test</b>');
             await expect(page.locator('.popover-body b')).toHaveCount(0);
@@ -1306,7 +1069,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { content: '<b>Test</b>', html: true }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-body > b')).toHaveText('Test');
         });
@@ -1317,7 +1079,6 @@ test.describe('Popover', () => {
                 $.setDataset(popoverToggle1, { uiHtml: true });
                 UI.Popover.init(popoverToggle1, { content: '<b>Test</b>' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-html', 'true');
             await expect(page.locator('.popover-body > b')).toHaveText('Test');
@@ -1329,7 +1090,6 @@ test.describe('Popover', () => {
                     .popover({ content: '<b>Test</b>', html: true })
                     .show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-body > b')).toHaveText('Test');
         });
@@ -1342,14 +1102,8 @@ test.describe('Popover', () => {
                 UI.Popover.init(popoverToggle1, { trigger: 'hover' });
             });
             await page.locator('#popoverToggle1').hover();
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
         });
 
         test('shows on focus with focus trigger option', async ({ page }) => {
@@ -1358,14 +1112,8 @@ test.describe('Popover', () => {
                 UI.Popover.init(popoverToggle1, { trigger: 'focus' });
             });
             await page.locator('#popoverToggle1').focus();
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
         });
 
         test('shows on click with click trigger option', async ({ page }) => {
@@ -1374,14 +1122,8 @@ test.describe('Popover', () => {
                 UI.Popover.init(popoverToggle1, { trigger: 'click' });
             });
             await page.locator('#popoverToggle1').click();
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
         });
 
         test('hides on mouseout with hover trigger option', async ({ page }) => {
@@ -1389,20 +1131,12 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { trigger: 'hover' }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('.popover');
-            });
-            await advanceClock(page, 50);
-            await page.locator('#popoverToggle1').dispatchEvent('mouseout');
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await page.locator('#popoverToggle1').dispatchEvent('mouseout');
+
+            await expect(page.locator('.popover')).toHaveCount(0);
+            await expect(page.locator('#popoverToggle1')).not.toHaveAttribute('aria-describedby');
         });
 
         test('hides on blur with focus trigger option', async ({ page }) => {
@@ -1410,20 +1144,12 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { trigger: 'focus' }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('.popover');
-            });
-            await advanceClock(page, 50);
-            await page.locator('#popoverToggle1').dispatchEvent('blur');
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await page.locator('#popoverToggle1').dispatchEvent('blur');
+
+            await expect(page.locator('.popover')).toHaveCount(0);
+            await expect(page.locator('#popoverToggle1')).not.toHaveAttribute('aria-describedby');
         });
 
         test('hides on click with click trigger option', async ({ page }) => {
@@ -1431,20 +1157,12 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { trigger: 'click' }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('.popover');
-            });
-            await advanceClock(page, 50);
-            await page.locator('#popoverToggle1').click();
-            await advanceClock(page, 50);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await page.locator('#popoverToggle1').click();
+
+            await expect(page.locator('.popover')).toHaveCount(0);
+            await expect(page.locator('#popoverToggle1')).not.toHaveAttribute('aria-describedby');
         });
 
         test('does not on mouseover without hover trigger option', async ({ page }) => {
@@ -1453,7 +1171,6 @@ test.describe('Popover', () => {
                 UI.Popover.init(popoverToggle1, { trigger: '' });
             });
             await page.locator('#popoverToggle1').hover();
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -1464,7 +1181,6 @@ test.describe('Popover', () => {
                 UI.Popover.init(popoverToggle1, { trigger: '' });
             });
             await page.locator('#popoverToggle1').focus();
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -1475,7 +1191,6 @@ test.describe('Popover', () => {
                 UI.Popover.init(popoverToggle1, { trigger: '' });
             });
             await page.locator('#popoverToggle1').click();
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(0);
         });
@@ -1485,21 +1200,10 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { trigger: '' }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('.popover');
-            });
-            await advanceClock(page, 50);
             await page.locator('#popoverToggle1').dispatchEvent('mouseout');
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(1);
             await expect(page.locator('.popover')).toBeVisible();
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                },
-            ]);
         });
 
         test('does not hide on blur without focus trigger option', async ({ page }) => {
@@ -1507,21 +1211,10 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { trigger: '' }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('.popover');
-            });
-            await advanceClock(page, 50);
             await page.locator('#popoverToggle1').dispatchEvent('blur');
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(1);
             await expect(page.locator('.popover')).toBeVisible();
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                },
-            ]);
         });
 
         test('does not hide on click without click trigger option', async ({ page }) => {
@@ -1529,21 +1222,10 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { trigger: '' }).show();
             });
-            await advanceClock(page, 50);
-            await page.evaluate((_) => {
-                $.stop('.popover');
-            });
-            await advanceClock(page, 50);
             await page.locator('#popoverToggle1').click();
-            await advanceClock(page, 50);
 
             await expect(page.locator('.popover')).toHaveCount(1);
             await expect(page.locator('.popover')).toBeVisible();
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                },
-            ]);
         });
 
         test('works with trigger option (data-ui-trigger)', async ({ page }) => {
@@ -1553,15 +1235,8 @@ test.describe('Popover', () => {
                 UI.Popover.init(popoverToggle1);
             });
             await page.locator('#popoverToggle1').click();
-            await advanceClock(page, 50);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-trigger', 'click');
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
         });
 
         test('works with trigger option (query)', async ({ page }) => {
@@ -1569,14 +1244,8 @@ test.describe('Popover', () => {
                 $('#popoverToggle1').popover({ trigger: 'click' });
             });
             await page.locator('#popoverToggle1').click();
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
         });
 
         test('works with multiple trigger options', async ({ page }) => {
@@ -1585,16 +1254,9 @@ test.describe('Popover', () => {
                 UI.Popover.init(popoverToggle1, { trigger: 'hover focus' });
             });
             await page.locator('#popoverToggle1').dispatchEvent('mouseover');
-            await advanceClock(page, 150);
             await page.locator('#popoverToggle1').dispatchEvent('blur');
-            await advanceClock(page, 50);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['.popover'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('.popover')).toHaveCount(0);
         });
     });
 
@@ -1606,7 +1268,6 @@ test.describe('Popover', () => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1, { appendTo: '.test' }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.test > .popover')).toHaveCount(1);
             await expect(page.locator('#popoverToggle1 + .popover')).toHaveCount(0);
@@ -1620,7 +1281,6 @@ test.describe('Popover', () => {
                 $.setDataset(popoverToggle1, { uiAppendTo: '.test' });
                 UI.Popover.init(popoverToggle1).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-append-to', '.test');
             await expect(page.locator('.test > .popover')).toHaveCount(1);
@@ -1634,7 +1294,6 @@ test.describe('Popover', () => {
                     .popover({ appendTo: '.test' })
                     .show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.test > .popover')).toHaveCount(1);
             await expect(page.locator('.test > .popover')).toBeVisible();
@@ -1650,7 +1309,6 @@ test.describe('Popover', () => {
                     html: true,
                 }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-header > b')).toHaveText('Test');
             await expect(page.locator('.popover-header > b')).not.toHaveAttribute('data-test');
@@ -1665,7 +1323,6 @@ test.describe('Popover', () => {
                     sanitize: false,
                 }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-header > b')).toHaveAttribute('data-test', 'test');
             await expect(page.locator('.popover-header > b')).toHaveText('Test');
@@ -1680,7 +1337,6 @@ test.describe('Popover', () => {
                     html: true,
                 }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-sanitize', 'false');
             await expect(page.locator('.popover-header > b')).toHaveAttribute('data-test', 'test');
@@ -1696,7 +1352,6 @@ test.describe('Popover', () => {
                     })
                     .show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-header > b')).toHaveAttribute('data-test', 'test');
             await expect(page.locator('.popover-header > b')).toHaveText('Test');
@@ -1710,7 +1365,6 @@ test.describe('Popover', () => {
                     html: true,
                 }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-body > b')).toHaveText('Test');
             await expect(page.locator('.popover-body > b')).not.toHaveAttribute('data-test');
@@ -1725,7 +1379,6 @@ test.describe('Popover', () => {
                     sanitize: false,
                 }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-body > b')).toHaveAttribute('data-test', 'test');
             await expect(page.locator('.popover-body > b')).toHaveText('Test');
@@ -1740,7 +1393,6 @@ test.describe('Popover', () => {
                     html: true,
                 }).show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('#popoverToggle1')).toHaveAttribute('data-ui-sanitize', 'false');
             await expect(page.locator('.popover-body > b')).toHaveAttribute('data-test', 'test');
@@ -1756,7 +1408,6 @@ test.describe('Popover', () => {
                     })
                     .show();
             });
-            await advanceClock(page, 150);
 
             await expect(page.locator('.popover-body > b')).toHaveAttribute('data-test', 'test');
             await expect(page.locator('.popover-body > b')).toHaveText('Test');

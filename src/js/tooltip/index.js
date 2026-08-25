@@ -9,7 +9,7 @@ Tooltip.defaults = {
         '<div class="tooltip-inner"></div>' +
         '</div>',
     customClass: null,
-    duration: 100,
+    animation: true,
     enable: true,
     html: false,
     trigger: 'hover focus',

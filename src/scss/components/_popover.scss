@@ -35,8 +35,13 @@
     background-clip: padding-box;
     border: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);
     box-shadow: var(--ui-popover-box-shadow);
+    opacity: 0;
     backdrop-filter: var(--ui-popover-backdrop-filter);
     @include mixins.border-radius(var(--ui-popover-border-radius));
+
+    &.show {
+        opacity: 1;
+    }
 
     .popover-arrow {
         position: absolute;

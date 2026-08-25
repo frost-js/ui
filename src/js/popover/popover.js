@@ -1,6 +1,7 @@
 import BaseComponent from './../base-component.js';
 import { $, window } from './../globals.js';
 import { generateId } from './../helpers/component.js';
+import { waitForTransition } from './../helpers/transition.js';
 import Popper from './../popper/index.js';
 
 /** @typedef {import('../popper/popper.js').Placement} Placement */
@@ -10,7 +11,7 @@ import Popper from './../popper/index.js';
  * @typedef {object} PopoverOptions
  * @property {string} [template] The popover markup template.
  * @property {string|null} [customClass=null] An additional class for the popover.
- * @property {number} [duration=100] The transition duration in milliseconds.
+ * @property {boolean} [animation=true] Whether to animate the popover.
  * @property {boolean} [enable=true] Whether the popover starts enabled.
  * @property {boolean} [html=false] Whether title and content may contain HTML.
  * @property {string|HTMLElement|null} [appendTo=null] The popover container.
@@ -39,6 +40,7 @@ export default class Popover extends BaseComponent {
     #popoverBody;
     #popoverHeader;
     #popper;
+    #transition;
     #triggers;
 
     /**
@@ -128,28 +130,37 @@ export default class Popover extends BaseComponent {
     hide({ force = true } = {}) {
         if (
             (!force && !this.#enabled) ||
-            $.getDataset(this.#popover, 'uiAnimating') ||
+            this.#transition?.direction === 'out' ||
             !$.isConnected(this.#popover) ||
             !$.triggerOne(this.node, 'hide.ui.popover')
         ) {
             return;
         }
 
-        $.setDataset(this.#popover, { uiAnimating: 'out' });
+        // Reversing direction replaces this token and skips stale completion.
+        const transition = { direction: 'out' };
+        this.#transition = transition;
 
-        $.fadeOut(this.#popover, {
-            duration: this.options.duration,
-        }).then((_) => {
-            this.#popper.dispose();
-            this.#popper = null;
+        $.removeClass(this.#popover, 'show');
 
-            $.detach(this.#popover);
-            $.removeDataset(this.#popover, 'uiAnimating');
-            $.removeAttribute(this.node, 'aria-describedby');
-            $.triggerEvent(this.node, 'hidden.ui.popover');
-        }).catch((_) => {
-            if ($.getDataset(this.#popover, 'uiAnimating') === 'out') {
-                $.removeDataset(this.#popover, 'uiAnimating');
+        const toggleNode = this.node;
+
+        waitForTransition(this.#popover, ['opacity']).then(({ node }) => {
+            if (this.#transition !== transition) {
+                return;
+            }
+
+            if (this.#popper) {
+                this.#popper.dispose();
+                this.#popper = null;
+            }
+
+            $.detach(node);
+            $.removeAttribute(toggleNode, 'aria-describedby');
+            $.triggerEvent(toggleNode, 'hidden.ui.popover');
+        }).finally((_) => {
+            if (this.#transition === transition) {
+                this.#transition = null;
             }
         });
     }
@@ -207,27 +218,41 @@ export default class Popover extends BaseComponent {
      * Shows the popover.
      */
     show() {
+        const connected = $.isConnected(this.#popover);
+
         if (
             !this.#enabled ||
-            $.getDataset(this.#popover, 'uiAnimating') ||
-            $.isConnected(this.#popover) ||
+            (connected && this.#transition?.direction !== 'out') ||
             !$.triggerOne(this.node, 'show.ui.popover')
         ) {
             return;
         }
 
-        $.setDataset(this.#popover, { uiAnimating: 'in' });
         this.refresh();
-        this.#show();
+        if (!connected) {
+            this.#show();
 
-        $.fadeIn(this.#popover, {
-            duration: this.options.duration,
-        }).then((_) => {
-            $.removeDataset(this.#popover, 'uiAnimating');
-            $.triggerEvent(this.node, 'shown.ui.popover');
-        }).catch((_) => {
-            if ($.getDataset(this.#popover, 'uiAnimating') === 'in') {
-                $.removeDataset(this.#popover, 'uiAnimating');
+            // Commit the rendered hidden state before starting the transition.
+            $.css(this.#popover, 'opacity');
+        }
+
+        // Reversing direction replaces this token and skips stale completion.
+        const transition = { direction: 'in' };
+        this.#transition = transition;
+
+        $.addClass(this.#popover, 'show');
+
+        const toggleNode = this.node;
+
+        waitForTransition(this.#popover, ['opacity']).then((_) => {
+            if (this.#transition !== transition) {
+                return;
+            }
+
+            $.triggerEvent(toggleNode, 'shown.ui.popover');
+        }).finally((_) => {
+            if (this.#transition === transition) {
+                this.#transition = null;
             }
         });
     }
@@ -237,7 +262,10 @@ export default class Popover extends BaseComponent {
      * @param {{force?: boolean}} [options] The toggle options. Force defaults to `true`.
      */
     toggle({ force = true } = {}) {
-        if ($.isConnected(this.#popover)) {
+        if (
+            $.isConnected(this.#popover) &&
+            this.#transition?.direction !== 'out'
+        ) {
             this.hide({ force });
         } else {
             this.show();
@@ -259,24 +287,20 @@ export default class Popover extends BaseComponent {
     #events() {
         if (this.#triggers.includes('hover')) {
             $.addEvent(this.node, 'mouseover.ui.popover', (_) => {
-                this.#stop();
                 this.show();
             });
 
             $.addEvent(this.node, 'mouseout.ui.popover', (_) => {
-                this.#stop();
                 this.hide({ force: false });
             });
         }
 
         if (this.#triggers.includes('focus')) {
             $.addEvent(this.node, 'focus.ui.popover', (_) => {
-                this.#stop();
                 this.show();
             });
 
             $.addEvent(this.node, 'blur.ui.popover', (_) => {
-                this.#stop();
                 this.hide({ force: false });
             });
         }
@@ -285,14 +309,12 @@ export default class Popover extends BaseComponent {
             $.addEvent(this.node, 'click.ui.popover', (e) => {
                 e.preventDefault();
 
-                this.#stop();
                 this.toggle({ force: false });
             });
         }
 
         if (this.#modal) {
             this.#hideModalEvent = (_) => {
-                this.#stop();
                 this.hide();
             };
             $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
@@ -304,6 +326,9 @@ export default class Popover extends BaseComponent {
      */
     #render() {
         this.#popover = $.parseHTML(this.options.template).shift();
+        if (this.options.animation) {
+            $.addClass(this.#popover, 'fade');
+        }
         if (this.options.customClass) {
             $.addClass(this.#popover, this.options.customClass);
         }
@@ -345,30 +370,5 @@ export default class Popover extends BaseComponent {
         window.requestAnimationFrame((_) => {
             this.update();
         });
-    }
-
-    /**
-     * Stops the active popover transition.
-     */
-    #stop() {
-        if (!this.#enabled) {
-            return;
-        }
-
-        const animating = $.getDataset(this.#popover, 'uiAnimating');
-
-        if (!animating) {
-            return;
-        }
-
-        $.stop(this.#popover, { finish: false });
-        $.removeDataset(this.#popover, 'uiAnimating');
-
-        if (animating === 'out') {
-            this.#popper.dispose();
-            this.#popper = null;
-
-            $.detach(this.#popover);
-        }
     }
 }

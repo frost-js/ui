@@ -13159,7 +13159,7 @@
      * @typedef {object} PopoverOptions
      * @property {string} [template] The popover markup template.
      * @property {string|null} [customClass=null] An additional class for the popover.
-     * @property {number} [duration=100] The transition duration in milliseconds.
+     * @property {boolean} [animation=true] Whether to animate the popover.
      * @property {boolean} [enable=true] Whether the popover starts enabled.
      * @property {boolean} [html=false] Whether title and content may contain HTML.
      * @property {string|HTMLElement|null} [appendTo=null] The popover container.
@@ -13188,6 +13188,7 @@
         #popoverBody;
         #popoverHeader;
         #popper;
+        #transition;
         #triggers;
 
         /**
@@ -13277,28 +13278,37 @@
         hide({ force = true } = {}) {
             if (
                 (!force && !this.#enabled) ||
-                $$1.getDataset(this.#popover, 'uiAnimating') ||
+                this.#transition?.direction === 'out' ||
                 !$$1.isConnected(this.#popover) ||
                 !$$1.triggerOne(this.node, 'hide.ui.popover')
             ) {
                 return;
             }
 
-            $$1.setDataset(this.#popover, { uiAnimating: 'out' });
+            // Reversing direction replaces this token and skips stale completion.
+            const transition = { direction: 'out' };
+            this.#transition = transition;
 
-            $$1.fadeOut(this.#popover, {
-                duration: this.options.duration,
-            }).then((_) => {
-                this.#popper.dispose();
-                this.#popper = null;
+            $$1.removeClass(this.#popover, 'show');
 
-                $$1.detach(this.#popover);
-                $$1.removeDataset(this.#popover, 'uiAnimating');
-                $$1.removeAttribute(this.node, 'aria-describedby');
-                $$1.triggerEvent(this.node, 'hidden.ui.popover');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#popover, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this.#popover, 'uiAnimating');
+            const toggleNode = this.node;
+
+            waitForTransition(this.#popover, ['opacity']).then(({ node }) => {
+                if (this.#transition !== transition) {
+                    return;
+                }
+
+                if (this.#popper) {
+                    this.#popper.dispose();
+                    this.#popper = null;
+                }
+
+                $$1.detach(node);
+                $$1.removeAttribute(toggleNode, 'aria-describedby');
+                $$1.triggerEvent(toggleNode, 'hidden.ui.popover');
+            }).finally((_) => {
+                if (this.#transition === transition) {
+                    this.#transition = null;
                 }
             });
         }
@@ -13356,27 +13366,41 @@
          * Shows the popover.
          */
         show() {
+            const connected = $$1.isConnected(this.#popover);
+
             if (
                 !this.#enabled ||
-                $$1.getDataset(this.#popover, 'uiAnimating') ||
-                $$1.isConnected(this.#popover) ||
+                (connected && this.#transition?.direction !== 'out') ||
                 !$$1.triggerOne(this.node, 'show.ui.popover')
             ) {
                 return;
             }
 
-            $$1.setDataset(this.#popover, { uiAnimating: 'in' });
             this.refresh();
-            this.#show();
+            if (!connected) {
+                this.#show();
 
-            $$1.fadeIn(this.#popover, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.removeDataset(this.#popover, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'shown.ui.popover');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#popover, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this.#popover, 'uiAnimating');
+                // Commit the rendered hidden state before starting the transition.
+                $$1.css(this.#popover, 'opacity');
+            }
+
+            // Reversing direction replaces this token and skips stale completion.
+            const transition = { direction: 'in' };
+            this.#transition = transition;
+
+            $$1.addClass(this.#popover, 'show');
+
+            const toggleNode = this.node;
+
+            waitForTransition(this.#popover, ['opacity']).then((_) => {
+                if (this.#transition !== transition) {
+                    return;
+                }
+
+                $$1.triggerEvent(toggleNode, 'shown.ui.popover');
+            }).finally((_) => {
+                if (this.#transition === transition) {
+                    this.#transition = null;
                 }
             });
         }
@@ -13386,7 +13410,10 @@
          * @param {{force?: boolean}} [options] The toggle options. Force defaults to `true`.
          */
         toggle({ force = true } = {}) {
-            if ($$1.isConnected(this.#popover)) {
+            if (
+                $$1.isConnected(this.#popover) &&
+                this.#transition?.direction !== 'out'
+            ) {
                 this.hide({ force });
             } else {
                 this.show();
@@ -13408,24 +13435,20 @@
         #events() {
             if (this.#triggers.includes('hover')) {
                 $$1.addEvent(this.node, 'mouseover.ui.popover', (_) => {
-                    this.#stop();
                     this.show();
                 });
 
                 $$1.addEvent(this.node, 'mouseout.ui.popover', (_) => {
-                    this.#stop();
                     this.hide({ force: false });
                 });
             }
 
             if (this.#triggers.includes('focus')) {
                 $$1.addEvent(this.node, 'focus.ui.popover', (_) => {
-                    this.#stop();
                     this.show();
                 });
 
                 $$1.addEvent(this.node, 'blur.ui.popover', (_) => {
-                    this.#stop();
                     this.hide({ force: false });
                 });
             }
@@ -13434,14 +13457,12 @@
                 $$1.addEvent(this.node, 'click.ui.popover', (e) => {
                     e.preventDefault();
 
-                    this.#stop();
                     this.toggle({ force: false });
                 });
             }
 
             if (this.#modal) {
                 this.#hideModalEvent = (_) => {
-                    this.#stop();
                     this.hide();
                 };
                 $$1.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
@@ -13453,6 +13474,9 @@
          */
         #render() {
             this.#popover = $$1.parseHTML(this.options.template).shift();
+            if (this.options.animation) {
+                $$1.addClass(this.#popover, 'fade');
+            }
             if (this.options.customClass) {
                 $$1.addClass(this.#popover, this.options.customClass);
             }
@@ -13495,31 +13519,6 @@
                 this.update();
             });
         }
-
-        /**
-         * Stops the active popover transition.
-         */
-        #stop() {
-            if (!this.#enabled) {
-                return;
-            }
-
-            const animating = $$1.getDataset(this.#popover, 'uiAnimating');
-
-            if (!animating) {
-                return;
-            }
-
-            $$1.stop(this.#popover, { finish: false });
-            $$1.removeDataset(this.#popover, 'uiAnimating');
-
-            if (animating === 'out') {
-                this.#popper.dispose();
-                this.#popper = null;
-
-                $$1.detach(this.#popover);
-            }
-        }
     }
 
     /** @type {import('./popover.js').PopoverOptions} */
@@ -13530,7 +13529,7 @@
             '<div class="popover-body"></div>' +
             '</div>',
         customClass: null,
-        duration: 100,
+        animation: true,
         enable: true,
         html: false,
         appendTo: null,
@@ -13841,7 +13840,7 @@
      * @typedef {object} TooltipOptions
      * @property {string} [template] The tooltip markup template.
      * @property {string|null} [customClass=null] An additional class for the tooltip.
-     * @property {number} [duration=100] The transition duration in milliseconds.
+     * @property {boolean} [animation=true] Whether to animate the tooltip.
      * @property {boolean} [enable=true] Whether the tooltip starts enabled.
      * @property {boolean} [html=false] Whether the title may contain HTML.
      * @property {string} [trigger='hover focus'] The space-separated interaction triggers.
@@ -13868,6 +13867,7 @@
         #popper;
         #tooltip;
         #tooltipInner;
+        #transition;
         #triggers;
 
         /**
@@ -13956,29 +13956,37 @@
         hide({ force = true } = {}) {
             if (
                 (!force && !this.#enabled) ||
-                $$1.getDataset(this.#tooltip, 'uiAnimating') ||
+                this.#transition?.direction === 'out' ||
                 !$$1.isConnected(this.#tooltip) ||
                 !$$1.triggerOne(this.node, 'hide.ui.tooltip')
             ) {
                 return;
             }
 
-            $$1.setDataset(this.#tooltip, { uiAnimating: 'out' });
+            // Reversing direction replaces this token and skips stale completion.
+            const transition = { direction: 'out' };
+            this.#transition = transition;
 
-            $$1.fadeOut(this.#tooltip, {
-                duration: this.options.duration,
-            }).then((_) => {
-                this.#popper.dispose();
-                this.#popper = null;
+            $$1.removeClass(this.#tooltip, 'show');
 
-                $$1.removeClass(this.#tooltip, 'show');
-                $$1.detach(this.#tooltip);
-                $$1.removeDataset(this.#tooltip, 'uiAnimating');
-                $$1.removeAttribute(this.node, 'aria-describedby');
-                $$1.triggerEvent(this.node, 'hidden.ui.tooltip');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#tooltip, 'uiAnimating') === 'out') {
-                    $$1.removeDataset(this.#tooltip, 'uiAnimating');
+            const toggleNode = this.node;
+
+            waitForTransition(this.#tooltip, ['opacity']).then(({ node }) => {
+                if (this.#transition !== transition) {
+                    return;
+                }
+
+                if (this.#popper) {
+                    this.#popper.dispose();
+                    this.#popper = null;
+                }
+
+                $$1.detach(node);
+                $$1.removeAttribute(toggleNode, 'aria-describedby');
+                $$1.triggerEvent(toggleNode, 'hidden.ui.tooltip');
+            }).finally((_) => {
+                if (this.#transition === transition) {
+                    this.#transition = null;
                 }
             });
         }
@@ -14018,28 +14026,41 @@
          * Shows the tooltip.
          */
         show() {
+            const connected = $$1.isConnected(this.#tooltip);
+
             if (
                 !this.#enabled ||
-                $$1.getDataset(this.#tooltip, 'uiAnimating') ||
-                $$1.isConnected(this.#tooltip) ||
+                (connected && this.#transition?.direction !== 'out') ||
                 !$$1.triggerOne(this.node, 'show.ui.tooltip')
             ) {
                 return;
             }
 
-            $$1.setDataset(this.#tooltip, { uiAnimating: 'in' });
-            $$1.addClass(this.#tooltip, 'show');
             this.refresh();
-            this.#show();
+            if (!connected) {
+                this.#show();
 
-            $$1.fadeIn(this.#tooltip, {
-                duration: this.options.duration,
-            }).then((_) => {
-                $$1.removeDataset(this.#tooltip, 'uiAnimating');
-                $$1.triggerEvent(this.node, 'shown.ui.tooltip');
-            }).catch((_) => {
-                if ($$1.getDataset(this.#tooltip, 'uiAnimating') === 'in') {
-                    $$1.removeDataset(this.#tooltip, 'uiAnimating');
+                // Commit the rendered hidden state before starting the transition.
+                $$1.css(this.#tooltip, 'opacity');
+            }
+
+            // Reversing direction replaces this token and skips stale completion.
+            const transition = { direction: 'in' };
+            this.#transition = transition;
+
+            $$1.addClass(this.#tooltip, 'show');
+
+            const toggleNode = this.node;
+
+            waitForTransition(this.#tooltip, ['opacity']).then((_) => {
+                if (this.#transition !== transition) {
+                    return;
+                }
+
+                $$1.triggerEvent(toggleNode, 'shown.ui.tooltip');
+            }).finally((_) => {
+                if (this.#transition === transition) {
+                    this.#transition = null;
                 }
             });
         }
@@ -14049,7 +14070,10 @@
          * @param {{force?: boolean}} [options] The toggle options. Force defaults to `true`.
          */
         toggle({ force = true } = {}) {
-            if ($$1.isConnected(this.#tooltip)) {
+            if (
+                $$1.isConnected(this.#tooltip) &&
+                this.#transition?.direction !== 'out'
+            ) {
                 this.hide({ force });
             } else {
                 this.show();
@@ -14071,24 +14095,20 @@
         #events() {
             if (this.#triggers.includes('hover')) {
                 $$1.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
-                    this.#stop();
                     this.show();
                 });
 
                 $$1.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
-                    this.#stop();
                     this.hide({ force: false });
                 });
             }
 
             if (this.#triggers.includes('focus')) {
                 $$1.addEvent(this.node, 'focus.ui.tooltip', (_) => {
-                    this.#stop();
                     this.show();
                 });
 
                 $$1.addEvent(this.node, 'blur.ui.tooltip', (_) => {
-                    this.#stop();
                     this.hide({ force: false });
                 });
             }
@@ -14097,14 +14117,12 @@
                 $$1.addEvent(this.node, 'click.ui.tooltip', (e) => {
                     e.preventDefault();
 
-                    this.#stop();
                     this.toggle({ force: false });
                 });
             }
 
             if (this.#modal) {
                 this.#hideModalEvent = (_) => {
-                    this.#stop();
                     this.hide();
                 };
                 $$1.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
@@ -14116,6 +14134,9 @@
          */
         #render() {
             this.#tooltip = $$1.parseHTML(this.options.template).shift();
+            if (this.options.animation) {
+                $$1.addClass(this.#tooltip, 'fade');
+            }
             if (this.options.customClass) {
                 $$1.addClass(this.#tooltip, this.options.customClass);
             }
@@ -14157,32 +14178,6 @@
                 this.update();
             });
         }
-
-        /**
-         * Stops the active tooltip transition.
-         */
-        #stop() {
-            if (!this.#enabled) {
-                return;
-            }
-
-            const animating = $$1.getDataset(this.#tooltip, 'uiAnimating');
-
-            if (!animating) {
-                return;
-            }
-
-            $$1.stop(this.#tooltip, { finish: false });
-            $$1.removeDataset(this.#tooltip, 'uiAnimating');
-
-            if (animating === 'out') {
-                this.#popper.dispose();
-                this.#popper = null;
-
-                $$1.removeClass(this.#tooltip, 'show');
-                $$1.detach(this.#tooltip);
-            }
-        }
     }
 
     /** @type {import('./tooltip.js').TooltipOptions} */
@@ -14192,7 +14187,7 @@
             '<div class="tooltip-inner"></div>' +
             '</div>',
         customClass: null,
-        duration: 100,
+        animation: true,
         enable: true,
         html: false,
         trigger: 'hover focus',
