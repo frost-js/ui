@@ -209,18 +209,26 @@ if (!example) {
 }
 
 const setTheme = (theme) => {
-    const isDark = theme === 'dark';
+    const themeNode = $(document.documentElement);
 
-    $(document.documentElement).setAttribute('data-ui-theme', theme);
-    $('[data-demo-theme]')
-        .setAttribute('aria-label', `Use ${isDark ? 'light' : 'dark'} theme`)
-        .setText(isDark ? 'Light theme' : 'Dark theme');
+    if (theme === 'system') {
+        themeNode.removeAttribute('data-ui-theme');
+    } else {
+        themeNode.setAttribute('data-ui-theme', theme);
+    }
+
+    $('[data-demo-theme]').setValue(theme);
 };
 
-const toggleTheme = () => {
-    const theme = document.documentElement.dataset.uiTheme === 'dark' ? 'light' : 'dark';
+const updateTheme = (event) => {
+    const theme = $.getValue(event.currentTarget);
 
-    localStorage.setItem('frostui-demo-theme', theme);
+    if (theme === 'system') {
+        localStorage.removeItem('frostui-demo-theme');
+    } else {
+        localStorage.setItem('frostui-demo-theme', theme);
+    }
+
     setTheme(theme);
 };
 
@@ -287,7 +295,12 @@ const renderExampleNavigation = () => `
 
 const renderThemeToggle = () => `
     <div class="position-fixed bottom-0 end-0 z-3 p-3">
-        <button class="btn btn-secondary btn-sm rounded-pill shadow-lg" data-demo-theme type="button">Dark theme</button>
+        <label class="visually-hidden" for="demo_theme">Theme</label>
+        <select class="input-outline input-sm w-auto rounded-pill shadow-lg" id="demo_theme" data-demo-theme>
+            <option value="system">System theme</option>
+            <option value="light">Light theme</option>
+            <option value="dark">Dark theme</option>
+        </select>
     </div>`;
 
 const renderPageHeader = () => {
@@ -310,19 +323,19 @@ const renderPageHeader = () => {
 };
 
 const storedTheme = localStorage.getItem('frostui-demo-theme');
-setTheme(storedTheme === 'dark' ? 'dark' : 'light');
+setTheme(['light', 'dark'].includes(storedTheme) ? storedTheme : 'system');
 
 $.ready(() => {
     const navigationElements = $.parseHTML(`${example ? renderExampleNavigation() : renderNavigation()}${renderThemeToggle()}`);
 
     $(document.body).prepend(navigationElements);
-    $('[data-demo-theme]').addEvent('click', toggleTheme);
+    $('[data-demo-theme]').addEvent('change', updateTheme);
     $('[data-demo-indeterminate]').each((node) => {
         node.indeterminate = true;
     });
     $('[data-ui-toggle="tooltip"]').each((node) => UI.Tooltip.init(node));
     $('[data-ui-toggle="popover"]').each((node) => UI.Popover.init(node));
-    setTheme(document.documentElement.dataset.uiTheme);
+    setTheme(document.documentElement.dataset.uiTheme || 'system');
 
     if (!example && path !== 'index.html') {
         renderPageHeader();

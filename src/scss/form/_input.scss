@@ -59,17 +59,6 @@
         appearance: none;
 
         &:not([multiple]) {
-            @at-root {
-                #{&},
-                #{selector.nest("[data-ui-theme=\"light\"]", &)} {
-                    --ui-select-arrow-background-image: #{vars.$input-select-arrow-background-image};
-                }
-
-                #{selector.nest("[data-ui-theme=\"dark\"]", &)} {
-                    --ui-select-arrow-background-image: #{vars.$input-select-arrow-background-image-dark};
-                }
-            }
-
             padding-right: calc(#{vars.$input-padding-x * 2} + #{vars.$input-select-arrow-size});
             background-image: var(--ui-select-arrow-background-image);
             background-repeat: no-repeat;

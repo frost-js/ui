@@ -353,7 +353,7 @@ CSS-only components and utilities do not require FrostUI's JavaScript. Load the 
 
 ## Themes and Customization
 
-Light mode is used by default. Set `data-ui-theme="dark"` on the document or any container to select dark theme variables for that subtree:
+FrostUI follows the user's preferred color scheme by default. Set `data-ui-theme="light"` or `data-ui-theme="dark"` on the document or any container to select an explicit theme for that subtree:
 
 ```html
 <html lang="en" data-ui-theme="dark">
@@ -364,6 +364,8 @@ Light mode is used by default. Set `data-ui-theme="dark"` on the document or any
     <!-- a dark themed region inside a light page -->
 </nav>
 ```
+
+Theme attributes can be nested. Each boundary recalculates the theme colors and overrides the inherited color scheme for its subtree.
 
 Generated styles expose colors, typography, borders, shadows, focus rings, and component values through `--ui-*` custom properties. Override them after FrostUI for runtime theming:
 

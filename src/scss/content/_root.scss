@@ -2,7 +2,16 @@
 
 @use "sass:map";
 
+@mixin dark-theme() {
+    --ui-shadow: #{vars.$shadow-dark};
+    --ui-shadow-sm: #{vars.$shadow-sm-dark};
+    --ui-shadow-lg: #{vars.$shadow-lg-dark};
+    --ui-select-arrow-background-image: #{vars.$input-select-arrow-background-image-dark};
+}
+
 :root {
+    color-scheme: light dark;
+
     --ui-safe-area-inset-top: env(safe-area-inset-top, 0px);
     --ui-safe-area-inset-right: env(safe-area-inset-right, 0px);
     --ui-safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
@@ -58,6 +67,23 @@
     --ui-black: #{vars.$black};
     --ui-gray: #{vars.$gray};
 
+    --ui-body-bg: light-dark(#{vars.$body-bg}, #{vars.$body-bg-dark});
+    --ui-body-color: light-dark(#{vars.$body-color}, #{vars.$body-color-dark});
+
+    --ui-secondary-bg: light-dark(#{vars.$body-secondary-bg}, #{vars.$body-secondary-bg-dark});
+    --ui-secondary-color: light-dark(#{vars.$body-secondary-color}, #{vars.$body-secondary-color-dark});
+
+    --ui-tertiary-bg: light-dark(#{vars.$body-tertiary-bg}, #{vars.$body-tertiary-bg-dark});
+    --ui-tertiary-color: light-dark(#{vars.$body-tertiary-color}, #{vars.$body-tertiary-color-dark});
+
+    --ui-emphasis-color: light-dark(#{vars.$emphasis-color}, #{vars.$emphasis-color-dark});
+
+    --ui-link-color: light-dark(#{vars.$link-color}, #{vars.$link-color-dark});
+    --ui-link-hover-color: light-dark(#{vars.$link-color-hover}, #{vars.$link-color-hover-dark});
+
+    --ui-border-color: light-dark(#{vars.$border-color}, #{vars.$border-color-dark});
+    --ui-border-color-translucent: light-dark(#{vars.$border-color-translucent}, #{vars.$border-color-translucent-dark});
+
     @each $name, $color in vars.$color-variants {
         --ui-#{$name}: #{$color};
         --ui-#{$name}-contrast: contrast-color(var(--ui-#{$name}));
@@ -70,11 +96,27 @@
             --ui-#{$name}-interaction-mix: contrast-color(var(--ui-#{$name}-contrast));
         }
 
+        --ui-#{$name}-subtle:
+            light-dark(
+                color-mix(in srgb, var(--ui-#{$name}) 20%, var(--ui-body-bg)),
+                color-mix(in srgb, var(--ui-#{$name}) 40%, var(--ui-body-bg))
+            );
+
         @if $name == light or $name == dark {
+            --ui-#{$name}-emphasis:
+                light-dark(
+                    color-mix(in srgb, var(--ui-#{$name}) 95%, var(--ui-black)),
+                    color-mix(in srgb, var(--ui-#{$name}) 95%, var(--ui-white))
+                );
             --ui-#{$name}-highlight: color-mix(in srgb, var(--ui-#{$name}) 85%, var(--ui-#{$name}-interaction-mix));
             --ui-#{$name}-active: color-mix(in srgb, var(--ui-#{$name}) 70%, var(--ui-#{$name}-interaction-mix));
             --ui-#{$name}-subtle-text: color-mix(in srgb, var(--ui-#{$name}) 50%, contrast-color(var(--ui-#{$name}-subtle)));
         } @else {
+            --ui-#{$name}-emphasis:
+                light-dark(
+                    color-mix(in oklch, var(--ui-#{$name}) 95%, var(--ui-black)),
+                    color-mix(in oklch, var(--ui-#{$name}) 95%, var(--ui-white))
+                );
             --ui-#{$name}-highlight: color-mix(in oklch, var(--ui-#{$name}) 85%, var(--ui-#{$name}-interaction-mix));
             --ui-#{$name}-active: color-mix(in oklch, var(--ui-#{$name}) 70%, var(--ui-#{$name}-interaction-mix));
             --ui-#{$name}-subtle-text: color-mix(in oklch, var(--ui-#{$name}) 50%, contrast-color(var(--ui-#{$name}-subtle)));
@@ -92,72 +134,25 @@
 
 :root,
 [data-ui-theme="light"] {
-    color-scheme: light;
-
-    --ui-body-bg: #{vars.$body-bg};
-    --ui-body-color: #{vars.$body-color};
-
-    --ui-secondary-bg: #{vars.$body-secondary-bg};
-    --ui-secondary-color: #{vars.$body-secondary-color};
-
-    --ui-tertiary-bg: #{vars.$body-tertiary-bg};
-    --ui-tertiary-color: #{vars.$body-tertiary-color};
-
-    --ui-emphasis-color: #{vars.$emphasis-color};
-
-    --ui-link-color: #{vars.$link-color};
-    --ui-link-hover-color: #{vars.$link-color-hover};
-
-    --ui-border-color: #{vars.$border-color};
-    --ui-border-color-translucent: #{vars.$border-color-translucent};
-
     --ui-shadow: #{vars.$shadow};
     --ui-shadow-sm: #{vars.$shadow-sm};
     --ui-shadow-lg: #{vars.$shadow-lg};
+    --ui-select-arrow-background-image: #{vars.$input-select-arrow-background-image};
+}
 
-    @each $name in map.keys(vars.$color-variants) {
-        @if $name == light or $name == dark {
-            --ui-#{$name}-emphasis: color-mix(in srgb, var(--ui-#{$name}) 95%, var(--ui-black));
-        } @else {
-            --ui-#{$name}-emphasis: color-mix(in oklch, var(--ui-#{$name}) 95%, var(--ui-black));
-        }
-
-        --ui-#{$name}-subtle: color-mix(in srgb, var(--ui-#{$name}) 20%, var(--ui-body-bg));
-    }
+[data-ui-theme="light"] {
+    color-scheme: light;
 }
 
 [data-ui-theme="dark"] {
     color-scheme: dark;
 
-    --ui-body-bg: #{vars.$body-bg-dark};
-    --ui-body-color: #{vars.$body-color-dark};
+    @include dark-theme();
+}
 
-    --ui-secondary-bg: #{vars.$body-secondary-bg-dark};
-    --ui-secondary-color: #{vars.$body-secondary-color-dark};
-
-    --ui-tertiary-bg: #{vars.$body-tertiary-bg-dark};
-    --ui-tertiary-color: #{vars.$body-tertiary-color-dark};
-
-    --ui-emphasis-color: #{vars.$emphasis-color-dark};
-
-    --ui-link-color: #{vars.$link-color-dark};
-    --ui-link-hover-color: #{vars.$link-color-hover-dark};
-
-    --ui-border-color: #{vars.$border-color-dark};
-    --ui-border-color-translucent: #{vars.$border-color-translucent-dark};
-
-    --ui-shadow: #{vars.$shadow-dark};
-    --ui-shadow-sm: #{vars.$shadow-sm-dark};
-    --ui-shadow-lg: #{vars.$shadow-lg-dark};
-
-    @each $name in map.keys(vars.$color-variants) {
-        @if $name == light or $name == dark {
-            --ui-#{$name}-emphasis: color-mix(in srgb, var(--ui-#{$name}) 95%, var(--ui-white));
-        } @else {
-            --ui-#{$name}-emphasis: color-mix(in oklch, var(--ui-#{$name}) 95%, var(--ui-white));
-        }
-
-        --ui-#{$name}-subtle: color-mix(in srgb, var(--ui-#{$name}) 40%, var(--ui-body-bg));
+@media (prefers-color-scheme: dark) {
+    :root:not([data-ui-theme]) {
+        @include dark-theme();
     }
 }
 
