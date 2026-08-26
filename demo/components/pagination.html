@@ -16,7 +16,7 @@
     <div class="container">
         <h1>Pagination</h1>
 
-        <section class="mb-5">
+        <section class="mb-5" id="page-navigation">
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Page navigation</h2>
                 <p class="text-body-secondary mb-2">Mark the current page and use a non-interactive element for unavailable destinations.</p>
@@ -30,14 +30,14 @@
                     <li class="page-item active" aria-current="page">
                         <span class="page-link">1</span>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="#page-navigation">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#page-navigation">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#page-navigation">Next</a></li>
                 </ul>
             </nav>
         </section>
 
-        <section class="mb-5">
+        <section class="mb-5" id="compact-controls">
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Compact controls</h2>
                 <p class="text-body-secondary mb-2">Short directional labels leave more room for page numbers while accessible names preserve their meaning.</p>
@@ -46,19 +46,19 @@
             <nav aria-label="Article pages">
                 <ul class="pagination">
                     <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous page"><span aria-hidden="true">‹</span></a>
+                        <a class="page-link" href="#compact-controls" aria-label="Previous page"><span aria-hidden="true">‹</span></a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#compact-controls">3</a></li>
                     <li class="page-item active" aria-current="page"><span class="page-link">4</span></li>
-                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item"><a class="page-link" href="#compact-controls">5</a></li>
                     <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next page"><span aria-hidden="true">›</span></a>
+                        <a class="page-link" href="#compact-controls" aria-label="Next page"><span aria-hidden="true">›</span></a>
                     </li>
                 </ul>
             </nav>
         </section>
 
-        <section class="mb-5">
+        <section class="mb-5" id="sizes">
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Sizes</h2>
                 <p class="text-body-secondary mb-2">Large controls support prominent navigation, while small controls fit denser interfaces.</p>
@@ -70,8 +70,8 @@
                     <nav aria-label="Large pagination example">
                         <ul class="pagination pagination-lg mb-0">
                             <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#sizes">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#sizes">3</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -80,15 +80,15 @@
                     <nav aria-label="Small pagination example">
                         <ul class="pagination pagination-sm mb-0">
                             <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#sizes">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#sizes">3</a></li>
                         </ul>
                     </nav>
                 </div>
             </div>
         </section>
 
-        <section class="mb-5">
+        <section class="mb-5" id="alignment">
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Alignment</h2>
                 <p class="text-body-secondary mb-2">Flex alignment utilities position the complete pagination list within its available width.</p>
@@ -98,9 +98,9 @@
                 <h3 class="h6">Centered</h3>
                 <nav aria-label="Centered pagination example">
                     <ul class="pagination justify-content-center mb-0">
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#alignment">1</a></li>
                         <li class="page-item active" aria-current="page"><span class="page-link">2</span></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#alignment">3</a></li>
                     </ul>
                 </nav>
             </div>
@@ -108,9 +108,9 @@
                 <h3 class="h6">End aligned</h3>
                 <nav aria-label="End-aligned pagination example">
                     <ul class="pagination justify-content-end mb-0">
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#alignment">1</a></li>
                         <li class="page-item active" aria-current="page"><span class="page-link">2</span></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#alignment">3</a></li>
                     </ul>
                 </nav>
             </div>
