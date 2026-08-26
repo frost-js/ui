@@ -16,7 +16,8 @@ Customizable JavaScript UI framework with responsive components, utilities, and 
 - Consistent component markup and responsive utility conventions
 - Modals, offcanvas panels, dropdowns, carousels, tabs, toasts, tooltips, popovers, and more
 - Keyboard navigation, focus trapping, scroll handling, and dynamic popper positioning
-- Light and dark color modes powered by CSS custom properties
+- System-aware light and dark themes with nested scopes and runtime CSS custom properties
+- Frosted overlays, ambient gradients, glass surfaces, and theme-aware elevation
 - Configurable Sass variables with public functions and mixins
 - Browser UMD builds with external or bundled [`fQuery`](https://www.npmjs.com/package/@fr0st/query)
 - JSDoc-powered IntelliSense
@@ -94,6 +95,8 @@ npm i -D sass
     $secondary: #546e7a,
     $body-bg: #f8fafc,
     $body-color: #172033,
+    $body-bg-dark: #111318,
+    $body-color-dark: #e4e7ee,
     $font-sans-serif: ("Inter", system-ui, sans-serif),
     $border-radius: .75rem,
     $grid-size: 16
@@ -161,7 +164,7 @@ const toast = Toast.init(document.querySelector('#status-toast'), {
 toast.show();
 ```
 
-See the [`demo/`](./demo/) folder for complete light and dark examples covering components, forms, layout, helpers, and utilities.
+See the [`demo/`](./demo/) folder for theme-aware examples with a System, Light, and Dark switcher covering components, forms, layout, helpers, and utilities.
 
 ## What's Included
 
@@ -173,7 +176,7 @@ FrostUI combines a CSS framework with optional JavaScript behavior.
 | Layout | Responsive containers, a configurable grid, columns, offsets, and gutters |
 | Forms | Filled and outline inputs, floating labels, checks, ranges, input groups, and validation states |
 | Components | Accordions, alerts, badges, breadcrumbs, buttons, cards, carousels, dropdowns, list groups, modals, navigation, navbars, offcanvas panels, pagination, placeholders, popovers, progress bars, spinners, tabs, toasts, and tooltips |
-| Helpers | Clearfix, color backgrounds and links, focus rings, aspect ratios, stacks, stretched links, text truncation, vertical rules, and visually hidden content |
+| Helpers | Clearfix, color backgrounds and links, focus rings, aspect ratios, stacks, stretched links, ambient and glass surfaces, gradient text, glow shadows, text truncation, vertical rules, and visually hidden content |
 | Utilities | Colors, borders, display, flexbox, grid, spacing, sizing, positioning, overflow, shadows, text, visibility, and responsive variants |
 | Enhancements | Clipboard controls, click ripples, and expanding text areas |
 
@@ -196,7 +199,7 @@ FrostUI combines a CSS framework with optional JavaScript behavior.
 | `Popper` | Positions floating content relative to a reference element |
 | `BaseComponent` | Provides shared initialization, options, element data, and disposal |
 
-The package also exports focused helpers for component registration, target resolution, pointer positions, scroll containers, scrollbar compensation, and generated IDs.
+The package also exports focused helpers for component registration, target resolution, pointer positions, scroll containers, scrollbar compensation, CSS transition waiting, and generated IDs.
 
 ## Component Model
 
@@ -370,9 +373,14 @@ Theme attributes can be nested. Each boundary recalculates the theme colors and 
 Generated styles expose colors, typography, borders, shadows, focus rings, and component values through `--ui-*` custom properties. Override them after FrostUI for runtime theming:
 
 ```css
-[data-ui-theme="dark"] {
-    --ui-body-bg: #111318;
-    --ui-body-color: #e4e7ee;
+:root,
+[data-ui-theme] {
+    --ui-primary: #6750a4;
+    --ui-body-bg: light-dark(#f8fafc, #111318);
+    --ui-body-color: light-dark(#172033, #e4e7ee);
+}
+
+:root {
     --ui-border-radius: .5rem;
 }
 ```
@@ -387,7 +395,9 @@ Use Sass configuration when derived colors, utility maps, breakpoints, component
 - Component options are resolved once, frozen, and retained until the instance is disposed.
 - Tooltip and popover HTML is sanitized by default when HTML content is enabled.
 - Event namespaces are managed by fQuery; the underlying native event types are `show`, `shown`, `hide`, `hidden`, and so on.
-- Transition timing is controlled by CSS transition variables or millisecond component options, depending on the component.
+- Motion styles are enabled under `prefers-reduced-motion: no-preference`, with component transition timing controlled through CSS custom properties.
+- Carousel's millisecond `transition` option is the exception and writes its duration to the component's transition custom property.
+- Compiled CSS targets browsers in the Baseline Widely Available Browserslist range.
 - Component markup and accessibility attributes remain the application's responsibility; interactive components update the state they own.
 
 ## Development
@@ -404,7 +414,7 @@ npm run build
 npm pack --dry-run
 ```
 
-CI lints JavaScript and Sass, runs the Playwright suite in Chromium, Firefox, and WebKit across the supported Node.js release lines, rebuilds the distribution files, verifies that `dist/` is current, and validates the package contents.
+CI lints JavaScript and Sass, runs Chromium across every supported Node.js release line, runs Firefox and WebKit on the latest supported Node.js release line, rebuilds the distribution files, verifies that `dist/` is current, and validates the package contents.
 
 ## License
 

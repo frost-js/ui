@@ -129,7 +129,7 @@ const descriptions = {
     'components/collapse.html': 'Reveal content from buttons, links, horizontal transitions, or selectors shared by multiple targets.',
     'components/dropdown.html': 'Compose menus with clear states, split actions, adaptive placement, dismissal policies, and interactive content.',
     'components/list-group.html': 'Organize static, interactive, contextual, horizontal, and selectable rows into cohesive groups.',
-    'components/modal.html': 'Review modal stacking, sizes, alignment, scrolling, animation, and interactive content.',
+    'components/modal.html': 'Review modal stacking, sizes, alignment, scrolling, transitions, and interactive content.',
     'components/nav.html': 'Compose horizontal, vertical, treated, aligned, distributed, and dropdown navigation groups.',
     'components/navbar.html': 'Build responsive navigation across expansion points, color contexts, and offcanvas layouts.',
     'components/offcanvas.html': 'Reveal supporting controls from any edge with deliberate scrolling, backdrop, and dismissal behavior.',
@@ -249,7 +249,7 @@ const renderNavigationGroup = ({ title, paths }, index) => {
                     ${title}
                 </button>
             </h2>
-            <div class="accordion-collapse collapse${expanded ? ' show' : ''}" id="${id}" data-ui-parent="#demo-sections">
+            <div class="collapse${expanded ? ' show' : ''}" id="${id}" data-ui-parent="#demo-sections">
                 <div class="accordion-body p-2">
                     <nav class="list-group list-group-flush" aria-label="${title}">${links}
                     </nav>
