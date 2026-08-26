@@ -42,20 +42,17 @@
     min-height: 1.2em;
 }
 
-.placeholder-glow .placeholder {
-    animation: placeholder-glow calc(var(--ui-animation-duration) * 2) var(--ui-transition-timing-function) infinite;
-}
-
 .placeholder-wave {
     mask-image: linear-gradient(130deg, vars.$black 55%, functions.color-alpha("black", (1 - vars.$placeholder-opacity-min)) 75%, vars.$black 95%);
     mask-size: 200% 100%;
-    animation: placeholder-wave calc(var(--ui-animation-duration) * 2) linear infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: no-preference) {
+    .placeholder-glow .placeholder {
+        animation: placeholder-glow calc(var(--ui-animation-duration) * 2) var(--ui-transition-timing-function) infinite;
+    }
 
-    .placeholder-glow .placeholder,
     .placeholder-wave {
-        animation: none;
+        animation: placeholder-wave calc(var(--ui-animation-duration) * 2) linear infinite;
     }
 }

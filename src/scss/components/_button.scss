@@ -88,15 +88,6 @@
             box-shadow: var(--ui-btn-active-box-shadow);
         }
 
-        @media (prefers-reduced-motion: no-preference) {
-            .btn-check:checked+#{&},
-            #{&}.active,
-            #{&}:first-child:active,
-            :not(.btn-check)+#{&}:active {
-                transform: var(--ui-btn-active-transform);
-            }
-        }
-
         .btn-check:focus-visible+#{&},
         #{&}:focus-visible {
             outline: 0;
@@ -190,5 +181,15 @@
         --ui-btn-focus-shadow-color: var(--ui-#{$name});
         --ui-btn-active-state-bg: var(--ui-btn-hover-bg);
         --ui-btn-active-state-border-color: var(--ui-btn-hover-border-color);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .btn-check:checked + .btn,
+    .btn.active,
+    .btn:first-child:active,
+    :not(.btn-check) + .btn:active {
+        transform: var(--ui-btn-active-transform);
     }
 }

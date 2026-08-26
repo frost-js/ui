@@ -17,7 +17,6 @@
     opacity: 1;
     transform: scale(0);
     transition-timing-function: ease-in-out, ease-in;
-    transition-duration: var(--ui-ripple-transition-duration);
     transition-property: transform, opacity;
 
     &.show {
@@ -26,8 +25,8 @@
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: no-preference) {
     .ripple-effect {
-        transition-duration: 0s;
+        transition-duration: var(--ui-ripple-transition-duration);
     }
 }

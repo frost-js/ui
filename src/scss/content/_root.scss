@@ -8,8 +8,8 @@
     --ui-safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
     --ui-safe-area-inset-left: env(safe-area-inset-left, 0px);
     --ui-animation-duration: #{vars.$animation-time};
-    --ui-transition-duration-fast: #{vars.$transition-time-fast};
-    --ui-transition-duration: #{vars.$transition-time};
+    --ui-transition-duration-fast: 0s;
+    --ui-transition-duration: 0s;
     --ui-transition-timing-function: #{vars.$transition-type};
 
     --ui-font-sans-serif: #{vars.$font-sans-serif};
@@ -163,13 +163,9 @@
 
 @media (prefers-reduced-motion: no-preference) {
     :root {
-        scroll-behavior: smooth;
-    }
-}
+        --ui-transition-duration-fast: #{vars.$transition-time-fast};
+        --ui-transition-duration: #{vars.$transition-time};
 
-@media (prefers-reduced-motion: reduce) {
-    :root {
-        --ui-transition-duration-fast: 0s;
-        --ui-transition-duration: 0s;
+        scroll-behavior: smooth;
     }
 }

@@ -95,12 +95,6 @@
         box-shadow: 0 0 0 vars.$input-check-focus-shadow-width vars.$input-check-focus-shadow-color;
     }
 
-    @media (prefers-reduced-motion: no-preference) {
-        &:not(:disabled):active {
-            transform: scale(.92);
-        }
-    }
-
     &:disabled {
         pointer-events: none;
         box-shadow: none;
@@ -164,6 +158,12 @@
     position: absolute;
     pointer-events: none;
     clip-path: inset(50%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .input-check:not(:disabled):active {
+        transform: scale(.92);
+    }
 }
 
 @media (forced-colors: active) {

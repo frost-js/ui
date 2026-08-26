@@ -28,7 +28,6 @@
     height: var(--ui-spinner-height);
     vertical-align: var(--ui-spinner-vertical-align);
     @include mixins.border-radius(50%);
-    animation: var(--ui-spinner-animation-name) var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
 }
 
 .spinner-border {
@@ -45,7 +44,7 @@
 
     display: inline-block;
     background-color: currentcolor;
-    opacity: 0;
+    opacity: 1;
 }
 
 .spinner-border-sm,
@@ -66,14 +65,14 @@
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: no-preference) {
 
-    .spinner-grow,
-    .spinner-border {
-        animation: none;
+    .spinner-border,
+    .spinner-grow {
+        animation: var(--ui-spinner-animation-name) var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
     }
 
     .spinner-grow {
-        opacity: 1;
+        opacity: 0;
     }
 }

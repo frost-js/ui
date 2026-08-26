@@ -52,7 +52,6 @@
     position: relative;
     display: none;
     backface-visibility: hidden;
-    transition: transform var(--ui-carousel-transition-duration) var(--ui-transition-timing-function);
 
     &:not(.active) {
         position: absolute;
@@ -76,12 +75,6 @@
 
 .carousel-dragging .carousel-item {
     transition: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .carousel-item {
-        transition-duration: 0s;
-    }
 }
 
 .carousel-control-prev,
@@ -196,5 +189,11 @@
 
     > :last-child {
         margin-bottom: 0;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .carousel-item {
+        transition: transform var(--ui-carousel-transition-duration) var(--ui-transition-timing-function);
     }
 }
