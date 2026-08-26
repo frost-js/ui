@@ -13,7 +13,6 @@ Customizable JavaScript UI framework with responsive components, utilities, and 
 - Responsive containers, grid layout, gutters, and utility classes
 - Styled content, forms, navigation, feedback, and overlay components
 - Declarative `data-ui-*` APIs alongside programmatic component classes
-- Consistent component markup and responsive utility conventions
 - Modals, offcanvas panels, dropdowns, carousels, tabs, toasts, tooltips, popovers, and more
 - Keyboard navigation, focus trapping, scroll handling, and dynamic popper positioning
 - System-aware light and dark themes with nested scopes and runtime CSS custom properties
@@ -168,8 +167,6 @@ See the [`demo/`](./demo/) folder for theme-aware examples with a System, Light,
 
 ## What's Included
 
-FrostUI combines a CSS framework with optional JavaScript behavior.
-
 | Area | Included features |
 | --- | --- |
 | Content | Base styles, typography, images, figures, and tables |
@@ -199,7 +196,7 @@ FrostUI combines a CSS framework with optional JavaScript behavior.
 | `Popper` | Positions floating content relative to a reference element |
 | `BaseComponent` | Provides shared initialization, options, element data, and disposal |
 
-The package also exports focused helpers for component registration, target resolution, pointer positions, scroll containers, scrollbar compensation, CSS transition waiting, and generated IDs.
+The package also exports helpers for component registration, target resolution, pointer positions, scroll containers, scrollbar compensation, CSS transition waiting, and generated IDs.
 
 ## Component Model
 
@@ -333,7 +330,7 @@ Clipboard controls emit `copied.ui.clipboard` with the completed action and copi
 
 ## Styling and Layout
 
-FrostUI uses familiar responsive layout and utility conventions:
+FrostUI layouts use containers, rows, a configurable twelve-column grid, breakpoint prefixes, and spacing utilities:
 
 ```html
 <main class="container py-5">
