@@ -92,6 +92,76 @@
 
         <section class="mb-5">
             <header class="border-bottom pb-3 mb-4">
+                <h2 class="h4 mb-1">Stacked dialogs</h2>
+                <p class="text-body-secondary mb-2">Open supporting information without abandoning the current task. Closing the top dialog returns focus to the underlying modal.</p>
+                <code>data-ui-toggle="modal"</code> <code>data-ui-target="#account-details-modal"</code>
+            </header>
+            <button class="btn btn-primary ripple" data-ui-toggle="modal" data-ui-target="#access-request-modal" type="button">Review access request</button>
+
+            <div class="modal" id="access-request-modal" tabindex="-1" role="dialog" aria-labelledby="access-request-modal-title" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="access-request-modal-title">Route access request</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Maya Chen requested access to edit the Alpine Circuit route and manage its seasonal notices.</p>
+                            <div class="list-group mb-4">
+                                <div class="list-group-item d-flex align-items-center justify-content-between gap-3">
+                                    <div>
+                                        <strong class="d-block">Route content</strong>
+                                        <small class="text-body-secondary">Edit descriptions, waypoints, and trip notes</small>
+                                    </div>
+                                    <span class="badge bg-success">Requested</span>
+                                </div>
+                                <div class="list-group-item d-flex align-items-center justify-content-between gap-3">
+                                    <div>
+                                        <strong class="d-block">Seasonal notices</strong>
+                                        <small class="text-body-secondary">Publish closures and safety updates</small>
+                                    </div>
+                                    <span class="badge bg-success">Requested</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-primary ripple" data-ui-toggle="modal" data-ui-target="#account-details-modal" type="button">View account details</button>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary ripple" data-ui-dismiss="modal" type="button">Decline</button>
+                            <button class="btn btn-primary ripple" data-ui-dismiss="modal" type="button">Approve access</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="account-details-modal" tabindex="-1" role="dialog" aria-labelledby="account-details-modal-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="account-details-modal-title">Account details</h2>
+                            <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4">Name</dt>
+                                <dd class="col-sm-8">Maya Chen</dd>
+                                <dt class="col-sm-4">Role</dt>
+                                <dd class="col-sm-8">Route editor</dd>
+                                <dt class="col-sm-4">Member since</dt>
+                                <dd class="col-sm-8">March 2024</dd>
+                                <dt class="col-sm-4">Last active</dt>
+                                <dd class="col-sm-8 mb-0">12 minutes ago</dd>
+                            </dl>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary ripple" data-ui-dismiss="modal" type="button">Back to request</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Scrollable content</h2>
                 <p class="text-body-secondary mb-2">Keep the header and actions visible while a long modal body scrolls independently.</p>
                 <code>.modal-dialog-scrollable</code>

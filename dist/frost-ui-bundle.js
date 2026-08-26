@@ -12573,6 +12573,8 @@
 
     initComponent('focustrap', FocusTrap);
 
+    const modalStackOffset = 20;
+
     /**
      * @typedef {object} ModalOptions
      * @property {boolean|'static'} [backdrop=true] Whether to show a dismissible or static backdrop.
@@ -12593,6 +12595,29 @@
         #scrollNodes;
         #transitioning;
         #zooming;
+
+        /**
+         * Reindexes visible modals and their backdrops.
+         * @returns {Modal[]} The ordered modal instances.
+         */
+        static #updateStack() {
+            const nodes = $$1.find('.modal.show');
+
+            nodes.sort((nodeA, nodeB) =>
+                parseInt($$1.css(nodeA, 'zIndex')) - parseInt($$1.css(nodeB, 'zIndex')),
+            );
+
+            const modals = [];
+
+            for (const [index, node] of nodes.entries()) {
+                const modal = Modal.init(node);
+
+                modal.#setStackIndex(index);
+                modals.push(modal);
+            }
+
+            return modals;
+        }
 
         /**
          * Creates a Modal.
@@ -12685,8 +12710,6 @@
                 this.#focusTrap.deactivate();
             }
 
-            const stackSize = $$1.find('.modal.show').length - 1;
-
             $$1.addClass(this.node, 'hiding');
             $$1.removeClass(this.node, 'show');
 
@@ -12721,18 +12744,27 @@
                     'aria-modal': false,
                 });
 
-                resetScrollPadding(scrollNodes);
+                const [dialog, ...sharedScrollNodes] = scrollNodes;
+
+                resetScrollPadding([dialog]);
                 this.#scrollNodes = [];
 
-                if (stackSize) {
+                if ($$1.getStyle(modal, 'zIndex')) {
                     $$1.setStyle(modal, { zIndex: '' });
-                } else {
-                    $$1.removeClass(document.body, 'modal-open');
                 }
 
                 if (backdrop) {
                     $$1.remove(backdrop);
                     this.#backdrop = null;
+                }
+
+                const modals = Modal.#updateStack();
+
+                if (modals.length) {
+                    modals[0].#scrollNodes.push(...sharedScrollNodes);
+                } else {
+                    resetScrollPadding(sharedScrollNodes);
+                    $$1.removeClass(document.body, 'modal-open');
                 }
 
                 if (activeTarget) {
@@ -12763,19 +12795,13 @@
 
             this.#transitioning = true;
 
-            const stackSize = $$1.find('.modal.show').length;
+            const stackSize = $$1.find('.modal:is(.show, .hiding)').length;
 
             $$1.removeClass(document.body, 'modal-open');
 
             this.#scrollNodes = [this.#dialog];
 
-            if (stackSize) {
-                let zIndex = $$1.css(this.node, 'zIndex');
-                zIndex = parseInt(zIndex);
-                zIndex += stackSize * 20;
-
-                $$1.setStyle(this.node, { zIndex });
-            } else if (!$$1.findOne('.offcanvas.show')) {
+            if (!stackSize && !$$1.findOne('.offcanvas.show')) {
                 this.#scrollNodes.push(document.body);
                 this.#scrollNodes.push(...$$1.find('.fixed-top, .fixed-bottom'));
             }
@@ -12790,15 +12816,9 @@
                 });
 
                 $$1.append(document.body, this.#backdrop);
-
-                if (stackSize) {
-                    let zIndex = $$1.css(this.#backdrop, 'zIndex');
-                    zIndex = parseInt(zIndex);
-                    zIndex += stackSize * 20;
-
-                    $$1.setStyle(this.#backdrop, { zIndex });
-                }
             }
+
+            this.#setStackIndex(stackSize);
 
             // Commit the rendered hidden state before starting the transitions.
             $$1.css(this.#dialog, 'opacity');
@@ -12839,6 +12859,32 @@
                 this.hide();
             } else {
                 this.show();
+            }
+        }
+
+        /**
+         * Sets the modal and backdrop stacking level.
+         * @param {number} index The zero-based stack index.
+         */
+        #setStackIndex(index) {
+            $$1.setStyle(this.node, { zIndex: '' });
+
+            if (this.#backdrop) {
+                $$1.setStyle(this.#backdrop, { zIndex: '' });
+            }
+
+            if (!index) {
+                return;
+            }
+
+            const modalZIndex = parseInt($$1.css(this.node, 'zIndex')) + (index * modalStackOffset);
+
+            $$1.setStyle(this.node, { zIndex: modalZIndex });
+
+            if (this.#backdrop) {
+                const backdropZIndex = parseInt($$1.css(this.#backdrop, 'zIndex')) + (index * modalStackOffset);
+
+                $$1.setStyle(this.#backdrop, { zIndex: backdropZIndex });
             }
         }
 

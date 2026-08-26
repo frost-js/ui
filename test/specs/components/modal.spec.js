@@ -189,6 +189,44 @@ test.describe('Modal', () => {
             await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
         });
 
+        test('reindexes remaining modals when an older modal is hidden', async ({ page }) => {
+            await page.evaluate((_) => {
+                const modal1 = $.findOne('#modal1');
+                UI.Modal.init(modal1).show();
+            });
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
+            await page.evaluate((_) => {
+                const modal2 = $.findOne('#modal2');
+                UI.Modal.init(modal2).show();
+            });
+            await expect(page.locator('#modal2')).toHaveAttribute('aria-hidden', 'false');
+
+            await page.evaluate((_) => {
+                const modal1 = $.findOne('#modal1');
+                UI.Modal.init(modal1).hide();
+            });
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
+
+            await expect(page.locator('#modal2')).toHaveAttribute('style', '');
+            await expect(page.locator('.modal-backdrop')).toHaveCount(1);
+            await expect(page.locator('.modal-backdrop')).toHaveAttribute('style', '');
+
+            await page.evaluate((_) => {
+                const modal1 = $.findOne('#modal1');
+                UI.Modal.init(modal1).show();
+            });
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
+            await expect(page.locator('#modal1')).toHaveAttribute('style', 'z-index: 1080;');
+            await expect(page.locator('.modal-backdrop').nth(1)).toHaveAttribute('style', 'z-index: 1070;');
+
+            await page.keyboard.press('Escape');
+
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('#modal2')).toHaveAttribute('aria-hidden', 'false');
+        });
+
         test('hides the modal (data-ui-dismiss)', async ({ page }) => {
             await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
@@ -985,6 +1023,39 @@ test.describe('Modal', () => {
                 {
                     selectors: ['body'],
                     styles: { paddingRight: '10px' },
+                },
+            ]);
+        });
+
+        test('retains scroll padding when an older modal is hidden', async ({ page }) => {
+            const scrollbarSize = await measureScrollbarSize(page);
+
+            await page.evaluate((_) => {
+                $.setStyle(document.body, {
+                    height: '2000px',
+                    paddingRight: '10px',
+                });
+                const modal1 = $.findOne('#modal1');
+                UI.Modal.init(modal1).show();
+            });
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
+            await page.evaluate((_) => {
+                const modal2 = $.findOne('#modal2');
+                UI.Modal.init(modal2).show();
+            });
+            await expect(page.locator('#modal2')).toHaveAttribute('aria-hidden', 'false');
+
+            await page.evaluate((_) => {
+                const modal1 = $.findOne('#modal1');
+                UI.Modal.init(modal1).hide();
+            });
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
+
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: `${scrollbarSize + 10}px` },
                 },
             ]);
         });
