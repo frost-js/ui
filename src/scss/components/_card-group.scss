@@ -21,13 +21,11 @@
             &:not(:first-child) {
                 @include mixins.border-start-radius(0);
 
-                > .card-img-top,
-                > .card-header {
+                > :is(.card-img-top, .card-header) {
                     border-start-start-radius: 0;
                 }
 
-                > .card-img-bottom,
-                > .card-footer {
+                > :is(.card-img-bottom, .card-footer) {
                     border-end-start-radius: 0;
                 }
             }
@@ -35,13 +33,11 @@
             &:not(:last-child) {
                 @include mixins.border-end-radius(0);
 
-                > .card-img-top,
-                > .card-header {
+                > :is(.card-img-top, .card-header) {
                     border-start-end-radius: 0;
                 }
 
-                > .card-img-bottom,
-                > .card-footer {
+                > :is(.card-img-bottom, .card-footer) {
                     border-end-end-radius: 0;
                 }
             }

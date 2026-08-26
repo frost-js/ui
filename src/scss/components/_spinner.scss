@@ -17,56 +17,50 @@
     }
 }
 
-.spinner-border {
-    --ui-spinner-width: #{vars.$spinner-width};
-    --ui-spinner-height: #{vars.$spinner-height};
-    --ui-spinner-vertical-align: #{vars.$spinner-vertical-align};
-    --ui-spinner-border-width: #{vars.$spinner-border-width};
-    --ui-spinner-animation-speed: #{vars.$spinner-animation-speed};
-    --ui-spinner-animation-name: spinner-border;
-
-    display: inline-flex;
-    width: var(--ui-spinner-width);
-    height: var(--ui-spinner-height);
-    vertical-align: var(--ui-spinner-vertical-align);
-    border: var(--ui-spinner-border-width) solid currentcolor;
-    border-right-color: transparent;
-    @include mixins.border-radius(50%);
-    animation: var(--ui-spinner-animation-name) var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
-}
-
+.spinner-border,
 .spinner-grow {
     --ui-spinner-width: #{vars.$spinner-width};
     --ui-spinner-height: #{vars.$spinner-height};
     --ui-spinner-vertical-align: #{vars.$spinner-vertical-align};
     --ui-spinner-animation-speed: #{vars.$spinner-animation-speed};
-    --ui-spinner-animation-name: spinner-grow;
 
-    display: inline-block;
     width: var(--ui-spinner-width);
     height: var(--ui-spinner-height);
     vertical-align: var(--ui-spinner-vertical-align);
-    background-color: currentcolor;
     @include mixins.border-radius(50%);
-    opacity: 0;
     animation: var(--ui-spinner-animation-name) var(--ui-spinner-animation-speed) var(--ui-transition-timing-function) infinite;
 }
 
-.spinner-border-sm {
-    --ui-spinner-width: #{vars.$spinner-width-sm};
-    --ui-spinner-height: #{vars.$spinner-height-sm};
-    --ui-spinner-border-width: #{vars.$spinner-border-width-sm};
+.spinner-border {
+    --ui-spinner-border-width: #{vars.$spinner-border-width};
+    --ui-spinner-animation-name: spinner-border;
+
+    display: inline-flex;
+    border: var(--ui-spinner-border-width) solid currentcolor;
+    border-right-color: transparent;
 }
 
+.spinner-grow {
+    --ui-spinner-animation-name: spinner-grow;
+
+    display: inline-block;
+    background-color: currentcolor;
+    opacity: 0;
+}
+
+.spinner-border-sm,
 .spinner-grow-sm {
     --ui-spinner-width: #{vars.$spinner-width-sm};
     --ui-spinner-height: #{vars.$spinner-height-sm};
 }
 
+.spinner-border-sm {
+    --ui-spinner-border-width: #{vars.$spinner-border-width-sm};
+}
+
 .btn {
 
-    .spinner-border,
-    .spinner-grow {
+    :is(.spinner-border, .spinner-grow) {
         position: relative;
         top: calc(var(--ui-btn-border-width) * -1);
     }

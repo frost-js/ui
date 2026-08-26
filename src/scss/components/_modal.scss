@@ -217,9 +217,7 @@
                 border: 0;
             }
 
-            .modal-content,
-            .modal-header,
-            .modal-footer {
+            :is(.modal-content, .modal-header, .modal-footer) {
                 @include mixins.border-radius(0);
             }
 

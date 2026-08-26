@@ -12,8 +12,7 @@
         flex: 1 1 auto;
     }
 
-    >.btn-check:checked + .btn,
-    >.btn-check:focus-visible + .btn,
+    >.btn-check:is(:checked, :focus-visible) + .btn,
     >.btn:is(:hover, :focus-visible, :active, .active) {
         z-index: 1;
     }

@@ -191,8 +191,7 @@
                 transform: none;
             }
 
-            .offcanvas-top,
-            .offcanvas-bottom {
+            :is(.offcanvas-top, .offcanvas-bottom) {
                 height: auto;
                 border-top: 0;
                 border-bottom: 0;
