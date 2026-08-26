@@ -13,8 +13,8 @@ test.describe('Offcanvas', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
             document.body.innerHTML =
-                '<button class="btn btn-secondary" id="offcanvasToggle1" data-ui-toggle="offcanvas" data-ui-target="#offcanvas1" type="button"></button>' +
-                '<button class="btn btn-secondary" id="offcanvasToggle2" data-ui-toggle="offcanvas" data-ui-target="#offcanvas2" type="button"></button>' +
+                '<button class="btn btn-secondary" id="offcanvas-toggle-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvas1" type="button"></button>' +
+                '<button class="btn btn-secondary" id="offcanvas-toggle-2" data-ui-toggle="offcanvas" data-ui-target="#offcanvas2" type="button"></button>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas1">' +
                 '<button class="btn-close" id="button1" data-ui-dismiss="offcanvas" type="button"></button>' +
                 '</div>' +
@@ -33,7 +33,7 @@ test.describe('Offcanvas', () => {
         });
 
         test('creates an offcanvas (data-ui-toggle)', async ({ page }) => {
-            await page.locator('#offcanvasToggle1').click();
+            await page.locator('#offcanvas-toggle-1').click();
 
             expect(await page.evaluate((_) =>
                 $.getData('#offcanvas1', 'offcanvas') instanceof UI.Offcanvas)).toBe(true);
@@ -91,7 +91,7 @@ test.describe('Offcanvas', () => {
         });
 
         test('shows the offcanvas (data-ui-toggle)', async ({ page }) => {
-            await page.locator('#offcanvasToggle1').click();
+            await page.locator('#offcanvas-toggle-1').click();
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');

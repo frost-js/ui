@@ -9,9 +9,9 @@ test.describe('Modal FocusTrap', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
             document.body.innerHTML =
-                '<button class="btn btn-secondary" id="modalToggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>' +
+                '<button class="btn btn-secondary" id="modal-toggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>' +
                 '<div class="modal" id="modal">' +
-                '<div class="modal-dialog" id="modalDialog">' +
+                '<div class="modal-dialog" id="modal-dialog">' +
                 '<button class="btn-close" id="button1" data-ui-dismiss="modal" type="button"></button>' +
                 '<button id="button2" type="button"></button>' +
                 '</div>' +
@@ -27,7 +27,7 @@ test.describe('Modal FocusTrap', () => {
                 $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
                 UI.Modal.init(modal).show();
             }));
-            await page.locator('#modalToggle').focus();
+            await page.locator('#modal-toggle').focus();
 
             await expect(page.locator('#button1')).toBeFocused();
         });
@@ -44,7 +44,7 @@ test.describe('Modal FocusTrap', () => {
                     key: 'Tab',
                     shiftKey: true,
                 }));
-                $.focus('#modalToggle');
+                $.focus('#modal-toggle');
             });
 
             await expect(page.locator('#button2')).toBeFocused();
@@ -63,9 +63,9 @@ test.describe('Modal FocusTrap', () => {
                 $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
                 UI.Modal.init(modal, { focus: false }).show();
             }));
-            await page.locator('#modalToggle').focus();
+            await page.locator('#modal-toggle').focus();
 
-            await expect(page.locator('#modalToggle')).toBeFocused();
+            await expect(page.locator('#modal-toggle')).toBeFocused();
         });
     });
 });

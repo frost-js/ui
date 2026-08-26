@@ -13,15 +13,15 @@ test.describe('Modal', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
             document.body.innerHTML =
-                '<button class="btn btn-secondary" id="modalToggle1" data-ui-toggle="modal" data-ui-target="#modal1" type="button"></button>' +
-                '<button class="btn btn-secondary" id="modalToggle2" data-ui-toggle="modal" data-ui-target="#modal2" type="button"></button>' +
+                '<button class="btn btn-secondary" id="modal-toggle-1" data-ui-toggle="modal" data-ui-target="#modal1" type="button"></button>' +
+                '<button class="btn btn-secondary" id="modal-toggle-2" data-ui-toggle="modal" data-ui-target="#modal2" type="button"></button>' +
                 '<div class="modal" id="modal1">' +
-                '<div class="modal-dialog" id="modalDialog1">' +
+                '<div class="modal-dialog" id="modal-dialog-1">' +
                 '<button class="btn-close" id="button1" data-ui-dismiss="modal" type="button"></button>' +
                 '</div>' +
                 '</div>' +
                 '<div class="modal" id="modal2">' +
-                '<div class="modal-dialog" id="modalDialog2">' +
+                '<div class="modal-dialog" id="modal-dialog-2">' +
                 '<button class="btn-close" id="button2" data-ui-dismiss="modal" type="button"></button>' +
                 '</div>' +
                 '</div>';
@@ -37,7 +37,7 @@ test.describe('Modal', () => {
         });
 
         test('creates a modal (data-ui-toggle)', async ({ page }) => {
-            await page.locator('#modalToggle1').click();
+            await page.locator('#modal-toggle-1').click();
 
             expect(await page.evaluate((_) =>
                 $.getData('#modal1', 'modal') instanceof UI.Modal)).toBe(true);
@@ -83,7 +83,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
             await expect(page.locator('.modal-backdrop')).not.toHaveAttribute('style');
@@ -91,12 +91,12 @@ test.describe('Modal', () => {
         });
 
         test('shows the modal (data-ui-toggle)', async ({ page }) => {
-            await page.locator('#modalToggle1').click();
+            await page.locator('#modal-toggle-1').click();
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -108,7 +108,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -155,12 +155,12 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal show');
             await expect(page.locator('#modal2')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal2')).toHaveAttribute('aria-modal', 'true');
             await expect(page.locator('#modal2')).toHaveAttribute('style', 'z-index: 1080;');
-            await expect(page.locator('#modalDialog2')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-2')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(2);
             await expect(page.locator('.modal-backdrop').nth(0)).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop').nth(1)).toHaveAttribute('style', 'z-index: 1070;');
@@ -183,7 +183,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
             await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
@@ -201,7 +201,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -218,7 +218,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -304,7 +304,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -316,7 +316,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -350,7 +350,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -367,7 +367,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -630,7 +630,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -646,7 +646,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -664,7 +664,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveAttribute('data-ui-keyboard', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
@@ -681,7 +681,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
     });
@@ -696,7 +696,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
         });
 
@@ -711,7 +711,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveAttribute('data-ui-show', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
         });
 
@@ -723,7 +723,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
         });
 
@@ -750,7 +750,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
@@ -765,7 +765,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveAttribute('data-ui-backdrop', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
@@ -779,7 +779,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal show');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
@@ -795,7 +795,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            await expect(page.locator('#modalDialog1')).not.toHaveAttribute('style');
+            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
         });
 
@@ -836,7 +836,7 @@ test.describe('Modal', () => {
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.locator('#modalDialog1').dispatchEvent('mousedown');
+            await page.locator('#modal-dialog-1').dispatchEvent('mousedown');
             await page.locator('body').dispatchEvent('click');
 
             await expect(page.locator('#modal1')).toHaveClass('modal show');
@@ -853,7 +853,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
             await page.locator('.modal-backdrop').dispatchEvent('mousedown');
-            await page.locator('#modalDialog1').dispatchEvent('click');
+            await page.locator('#modal-dialog-1').dispatchEvent('click');
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
@@ -902,7 +902,7 @@ test.describe('Modal', () => {
 
             await expectStyles(page, [
                 {
-                    selectors: ['body', '#modalDialog1'],
+                    selectors: ['body', '#modal-dialog-1'],
                     styles: { paddingRight },
                 },
             ]);
@@ -916,7 +916,7 @@ test.describe('Modal', () => {
 
             await expectStyles(page, [
                 {
-                    selectors: ['body', '#modalDialog1'],
+                    selectors: ['body', '#modal-dialog-1'],
                     styles: { paddingRight: '' },
                 },
             ]);
@@ -958,7 +958,7 @@ test.describe('Modal', () => {
 
             await expectStyles(page, [
                 {
-                    selectors: ['body', '#modalDialog1'],
+                    selectors: ['body', '#modal-dialog-1'],
                     styles: { paddingRight: '' },
                 },
             ]);

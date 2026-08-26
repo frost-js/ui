@@ -9,15 +9,15 @@ test.describe('Offcanvas/Dropdown', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
             document.body.innerHTML =
-                '<button class="btn btn-secondary" id="offcanvasToggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
+                '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas">' +
                 '<button class="btn-close" id="button" data-ui-dismiss="offcanvas" type="button"></button>' +
                 '<div>' +
-                '<button class="btn btn-secondary" id="dropdownToggle" data-ui-toggle="dropdown" type="button"></button>' +
+                '<button class="btn btn-secondary" id="dropdown-toggle" data-ui-toggle="dropdown" type="button"></button>' +
                 '<div class="dropdown-menu" id="dropdown">' +
-                '<button class="dropdown-item" id="dropdownItem1"></button>' +
-                '<button class="dropdown-item" id="dropdownItem2"></button>' +
-                '<button class="dropdown-item" id="dropdownItem3"></button>' +
+                '<button class="dropdown-item" id="dropdown-item-1"></button>' +
+                '<button class="dropdown-item" id="dropdown-item-2"></button>' +
+                '<button class="dropdown-item" id="dropdown-item-3"></button>' +
                 '</div>' +
                 '</div>' +
                 '</div>';
@@ -34,7 +34,7 @@ test.describe('Offcanvas/Dropdown', () => {
                     UI.Offcanvas.init(offcanvas).show();
                 });
 
-                const dropdownToggle = $.findOne('#dropdownToggle');
+                const dropdownToggle = $.findOne('#dropdown-toggle');
 
                 await new Promise((resolve) => {
                     $.addEventOnce(dropdownToggle, 'shown.ui.dropdown', (_) => resolve());
@@ -48,7 +48,7 @@ test.describe('Offcanvas/Dropdown', () => {
                 $.click(document.body);
             });
 
-            await expect(page.locator('#dropdownToggle')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#dropdown-toggle')).toHaveAttribute('aria-expanded', 'false');
             await expect(page.locator('#dropdown')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#offcanvas')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas')).not.toHaveClass(/\bshow\b/);
@@ -63,7 +63,7 @@ test.describe('Offcanvas/Dropdown', () => {
                 }));
             });
 
-            await expect(page.locator('#dropdownToggle')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#dropdown-toggle')).toHaveAttribute('aria-expanded', 'false');
             await expect(page.locator('#dropdown')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#offcanvas')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas')).toHaveClass(/\bshow\b/);

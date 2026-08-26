@@ -9,7 +9,7 @@ test.describe('Offcanvas FocusTrap', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
             document.body.innerHTML =
-                '<button class="btn btn-secondary" id="offcanvasToggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
+                '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas">' +
                 '<button class="btn-close" id="button1" data-ui-dismiss="offcanvas" type="button"></button>' +
                 '<button id="button2" type="button"></button>' +
@@ -25,7 +25,7 @@ test.describe('Offcanvas FocusTrap', () => {
                 $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
                 UI.Offcanvas.init(offcanvas).show();
             }));
-            await page.locator('#offcanvasToggle').focus();
+            await page.locator('#offcanvas-toggle').focus();
 
             await expect(page.locator('#button1')).toBeFocused();
         });
@@ -42,7 +42,7 @@ test.describe('Offcanvas FocusTrap', () => {
                     key: 'Tab',
                     shiftKey: true,
                 }));
-                $.focus('#offcanvasToggle');
+                $.focus('#offcanvas-toggle');
             });
 
             await expect(page.locator('#button2')).toBeFocused();
@@ -64,9 +64,9 @@ test.describe('Offcanvas FocusTrap', () => {
                     scroll: true,
                 }).show();
             }));
-            await page.locator('#offcanvasToggle').focus();
+            await page.locator('#offcanvas-toggle').focus();
 
-            await expect(page.locator('#offcanvasToggle')).toBeFocused();
+            await expect(page.locator('#offcanvas-toggle')).toBeFocused();
         });
     });
 });
