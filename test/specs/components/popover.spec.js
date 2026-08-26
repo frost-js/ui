@@ -198,10 +198,11 @@ test.describe('Popover', () => {
         });
 
         test('can be called on shown popover', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
+            }));
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 UI.Popover.init(popoverToggle1).show();
@@ -214,11 +215,11 @@ test.describe('Popover', () => {
 
     test.describe('#hide', () => {
         test('hides the popover', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
@@ -231,10 +232,11 @@ test.describe('Popover', () => {
         });
 
         test('hides the popover (query)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 $('#popoverToggle1').popover('show');
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('hide');
@@ -244,11 +246,20 @@ test.describe('Popover', () => {
         });
 
         test('hides multiple popovers (query)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(async (_) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                const popoverToggle2 = $.findOne('#popoverToggle2');
+                const shown1 = new Promise((resolve) => {
+                    $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
+                });
+                const shown2 = new Promise((resolve) => {
+                    $.addEventOnce(popoverToggle2, 'shown.ui.popover', (_) => resolve());
+                });
+
                 $('button').popover('show');
+
+                await Promise.all([shown1, shown2]);
             });
-            await expect(page.locator('.popover').nth(0)).toHaveCSS('opacity', '1');
-            await expect(page.locator('.popover').nth(1)).toHaveCSS('opacity', '1');
 
             await page.evaluate((_) => {
                 $('button').popover('hide');
@@ -258,11 +269,11 @@ test.describe('Popover', () => {
         });
 
         test('does not remove the popover after hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
@@ -274,11 +285,11 @@ test.describe('Popover', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
@@ -301,13 +312,13 @@ test.describe('Popover', () => {
         });
 
         test('hides without animation', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1, {
                     animation: false,
                 }).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 UI.Popover.init($.findOne('#popoverToggle1')).hide();
@@ -317,10 +328,11 @@ test.describe('Popover', () => {
         });
 
         test('hides when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
-                UI.Popover.init($.findOne('#popoverToggle1')).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            await page.evaluate((_) => new Promise((resolve) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
+                UI.Popover.init(popoverToggle1).show();
+            }));
 
             await page.evaluate((_) => {
                 UI.Popover.init($.findOne('#popoverToggle1')).hide();
@@ -333,31 +345,31 @@ test.describe('Popover', () => {
         });
 
         test('can be interrupted by showing', async ({ page }) => {
-            await page.evaluate((_) => {
-                UI.Popover.init($.findOne('#popoverToggle1')).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
-
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
-                window.popoverShownEventTriggered = false;
-                window.popoverHiddenEventTriggered = false;
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
+                UI.Popover.init(popoverToggle1).show();
+            }));
 
-                $.addEvent(popoverToggle1, 'shown.ui.popover', (_) => {
-                    window.popoverShownEventTriggered = true;
-                });
+            const events = await page.evaluate((_) => new Promise((resolve) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                let hidden = false;
+
                 $.addEvent(popoverToggle1, 'hidden.ui.popover', (_) => {
-                    window.popoverHiddenEventTriggered = true;
+                    hidden = true;
+                });
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => {
+                    resolve({ hidden, shown: true });
                 });
 
                 const popover = UI.Popover.init(popoverToggle1);
                 popover.hide();
                 popover.show();
-            });
+            }));
 
+            expect(events.shown).toBe(true);
+            expect(events.hidden).toBe(false);
             await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
-            expect(await page.evaluate((_) => window.popoverShownEventTriggered)).toBe(true);
-            expect(await page.evaluate((_) => window.popoverHiddenEventTriggered)).toBe(false);
         });
     });
 
@@ -402,11 +414,11 @@ test.describe('Popover', () => {
 
     test.describe('#toggle (hide)', () => {
         test('hides the popover', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
@@ -417,10 +429,11 @@ test.describe('Popover', () => {
         });
 
         test('hides the popover (query)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 $('#popoverToggle1').popover('show');
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 $('#popoverToggle1').popover('toggle');
@@ -430,11 +443,20 @@ test.describe('Popover', () => {
         });
 
         test('hide multiple popovers (query)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(async (_) => {
+                const popoverToggle1 = $.findOne('#popoverToggle1');
+                const popoverToggle2 = $.findOne('#popoverToggle2');
+                const shown1 = new Promise((resolve) => {
+                    $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
+                });
+                const shown2 = new Promise((resolve) => {
+                    $.addEventOnce(popoverToggle2, 'shown.ui.popover', (_) => resolve());
+                });
+
                 $('button').popover('show');
+
+                await Promise.all([shown1, shown2]);
             });
-            await expect(page.locator('.popover').nth(0)).toHaveCSS('opacity', '1');
-            await expect(page.locator('.popover').nth(1)).toHaveCSS('opacity', '1');
 
             await page.evaluate((_) => {
                 $('button').popover('toggle');
@@ -444,11 +466,11 @@ test.describe('Popover', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
@@ -505,11 +527,11 @@ test.describe('Popover', () => {
         });
 
         test('allows a visible popover to be hidden programmatically', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const popover = UI.Popover.init($.findOne('#popoverToggle1'));
@@ -521,11 +543,11 @@ test.describe('Popover', () => {
         });
 
         test('ignores hide trigger events when disabled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1, { trigger: 'hover focus click' }).show();
-            });
-            await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 UI.Popover.init($.findOne('#popoverToggle1')).disable();
@@ -688,26 +710,24 @@ test.describe('Popover', () => {
         });
 
         test('triggers shown event', async ({ page }) => {
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
-                window.popoverShownEventTriggered = false;
 
-                $.addEvent(popoverToggle1, 'shown.ui.popover', (_) => {
-                    window.popoverShownEventTriggered = true;
-                });
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve(true));
                 UI.Popover.init(popoverToggle1).show();
-            });
+            }));
 
+            expect(eventTriggered).toBe(true);
             await expect(page.locator('.popover')).toHaveCSS('opacity', '1');
-            expect(await page.evaluate((_) => window.popoverShownEventTriggered)).toBe(true);
             await expect(page.locator('.popover')).toHaveCount(1);
         });
 
         test('triggers hide event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
+            }));
             const eventTriggered = await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 let triggered = false;
@@ -724,22 +744,20 @@ test.describe('Popover', () => {
         });
 
         test('triggers hidden event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
-            await page.evaluate((_) => {
+            }));
+            const eventTriggered = await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
-                window.popoverHiddenEventTriggered = false;
 
-                $.addEvent(popoverToggle1, 'hidden.ui.popover', (_) => {
-                    window.popoverHiddenEventTriggered = true;
-                });
+                $.addEventOnce(popoverToggle1, 'hidden.ui.popover', (_) => resolve(true));
                 UI.Popover.init(popoverToggle1).hide();
-            });
+            }));
 
+            expect(eventTriggered).toBe(true);
             await expect(page.locator('.popover')).toHaveCount(0);
-            expect(await page.evaluate((_) => window.popoverHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
@@ -765,10 +783,11 @@ test.describe('Popover', () => {
         });
 
         test('can be prevented from hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
+            }));
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 $.addEvent(popoverToggle1, 'hide.ui.popover', (_) => false);
@@ -780,10 +799,11 @@ test.describe('Popover', () => {
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
                 UI.Popover.init(popoverToggle1).show();
-            });
+            }));
             await page.evaluate((_) => {
                 const popoverToggle1 = $.findOne('#popoverToggle1');
                 $.addEvent(popoverToggle1, 'hide.ui.popover', (event) => {

@@ -41,6 +41,9 @@ export default class Toast extends BaseComponent {
 
         this.#transitioning = true;
 
+        // Commit the rendered visible state before starting the transition.
+        $.css(this.node, 'opacity');
+
         $.removeClass(this.node, 'show');
 
         waitForTransition(this.node, ['opacity']).then(({ node }) => {

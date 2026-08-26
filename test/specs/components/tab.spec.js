@@ -257,21 +257,28 @@ test.describe('Tab', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            const shownEvents = await page.evaluate(async (_) => {
                 const tabToggle2 = $.findOne('#tabToggle2');
                 const tab = UI.Tab.init(tabToggle2);
-                window.tabShownEvents = 0;
+                let shownEvents = 0;
 
-                $.addEvent(tabToggle2, 'shown.ui.tab', (_) => {
-                    window.tabShownEvents++;
+                const shown = new Promise((resolve) => {
+                    $.addEvent(tabToggle2, 'shown.ui.tab', (_) => {
+                        shownEvents++;
+                        resolve();
+                    });
                 });
                 tab.show();
                 tab.show();
                 tab.show();
+
+                await shown;
+
+                return shownEvents;
             });
 
+            expect(shownEvents).toBe(1);
             await expect(page.locator('#tab2')).toHaveCSS('opacity', '1');
-            expect(await page.evaluate((_) => window.tabShownEvents)).toBe(1);
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
@@ -281,29 +288,36 @@ test.describe('Tab', () => {
         });
 
         test('uses the latest tab during rapid navigation', async ({ page }) => {
-            await page.evaluate((_) => {
+            const shownEvents = await page.evaluate(async (_) => {
                 const tabToggle1 = $.findOne('#tabToggle1');
                 const tabToggle2 = $.findOne('#tabToggle2');
                 const tab1 = UI.Tab.init(tabToggle1);
                 const tab2 = UI.Tab.init(tabToggle2);
-                window.tab1ShownEvents = 0;
-                window.tab2ShownEvents = 0;
+                let tab1Events = 0;
+                let tab2Events = 0;
 
                 $.addEvent(tabToggle1, 'shown.ui.tab', (_) => {
-                    window.tab1ShownEvents++;
+                    tab1Events++;
                 });
-                $.addEvent(tabToggle2, 'shown.ui.tab', (_) => {
-                    window.tab2ShownEvents++;
+                const shown = new Promise((resolve) => {
+                    $.addEvent(tabToggle2, 'shown.ui.tab', (_) => {
+                        tab2Events++;
+                        resolve();
+                    });
                 });
 
                 tab2.show();
                 tab1.show();
                 tab2.show();
+
+                await shown;
+
+                return { tab1Events, tab2Events };
             });
 
+            expect(shownEvents.tab1Events).toBe(0);
+            expect(shownEvents.tab2Events).toBe(1);
             await expect(page.locator('#tab2')).toHaveCSS('opacity', '1');
-            expect(await page.evaluate((_) => window.tab1ShownEvents)).toBe(0);
-            expect(await page.evaluate((_) => window.tab2ShownEvents)).toBe(1);
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');
             await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
@@ -397,18 +411,15 @@ test.describe('Tab', () => {
         });
 
         test('triggers shown event', async ({ page }) => {
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => new Promise((resolve) => {
                 const tabToggle2 = $.findOne('#tabToggle2');
-                window.tabShownEventTriggered = false;
 
-                $.addEvent(tabToggle2, 'shown.ui.tab', (_) => {
-                    window.tabShownEventTriggered = true;
-                });
+                $.addEventOnce(tabToggle2, 'shown.ui.tab', (_) => resolve(true));
                 UI.Tab.init(tabToggle2).show();
-            });
+            }));
 
+            expect(eventTriggered).toBe(true);
             await expect(page.locator('#tab2')).toHaveCSS('opacity', '1');
-            expect(await page.evaluate((_) => window.tabShownEventTriggered)).toBe(true);
             await expect(page.locator('#tabToggle1')).toHaveClass('nav-link');
             await expect(page.locator('#tabToggle1')).toHaveAttribute('aria-selected', 'false');
             await expect(page.locator('#tabToggle2')).toHaveClass('nav-link active');

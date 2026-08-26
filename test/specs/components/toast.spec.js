@@ -116,23 +116,20 @@ test.describe('Toast', () => {
         });
 
         test('completes showing after disposal', async ({ page }) => {
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => new Promise((resolve) => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'show');
                 $.setStyle(toast1, { display: 'none' }, null, { important: true });
-                window.toastShownEventTriggered = false;
 
-                $.addEvent(toast1, 'shown.ui.toast', (_) => {
-                    window.toastShownEventTriggered = true;
-                });
+                $.addEventOnce(toast1, 'shown.ui.toast', (_) => resolve(true));
 
                 const toast = UI.Toast.init(toast1);
                 toast.show();
                 toast.dispose();
-            });
+            }));
 
+            expect(eventTriggered).toBe(true);
             await expect(page.locator('#toast1')).toHaveCSS('opacity', '1');
-            expect(await page.evaluate((_) => window.toastShownEventTriggered)).toBe(true);
             expect(await page.evaluate((_) => $.hasData('#toast1', 'toast'))).toBe(false);
         });
 

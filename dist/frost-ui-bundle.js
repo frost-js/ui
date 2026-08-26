@@ -13817,6 +13817,9 @@
 
             this.#transitioning = true;
 
+            // Commit the rendered visible state before starting the transition.
+            $$1.css(this.node, 'opacity');
+
             $$1.removeClass(this.node, 'show');
 
             waitForTransition(this.node, ['opacity']).then(({ node }) => {

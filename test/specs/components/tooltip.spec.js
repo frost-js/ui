@@ -166,10 +166,11 @@ test.describe('Tooltip', () => {
         });
 
         test('can be called on shown tooltip', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
+            }));
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
                 UI.Tooltip.init(tooltipToggle1).show();
@@ -218,11 +219,11 @@ test.describe('Tooltip', () => {
 
     test.describe('#hide', () => {
         test('hides the tooltip', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
@@ -235,10 +236,11 @@ test.describe('Tooltip', () => {
         });
 
         test('hides the tooltip (query)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
+                const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 $('#tooltipToggle1').tooltip('show');
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 $('#tooltipToggle1').tooltip('hide');
@@ -248,11 +250,20 @@ test.describe('Tooltip', () => {
         });
 
         test('hides multiple tooltips (query)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(async (_) => {
+                const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                const tooltipToggle2 = $.findOne('#tooltipToggle2');
+                const shown1 = new Promise((resolve) => {
+                    $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
+                });
+                const shown2 = new Promise((resolve) => {
+                    $.addEventOnce(tooltipToggle2, 'shown.ui.tooltip', (_) => resolve());
+                });
+
                 $('button').tooltip('show');
+
+                await Promise.all([shown1, shown2]);
             });
-            await expect(page.locator('.tooltip').nth(0)).toHaveCSS('opacity', '1');
-            await expect(page.locator('.tooltip').nth(1)).toHaveCSS('opacity', '1');
 
             await page.evaluate((_) => {
                 $('button').tooltip('hide');
@@ -262,11 +273,11 @@ test.describe('Tooltip', () => {
         });
 
         test('does not remove the tooltip after hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
@@ -278,11 +289,11 @@ test.describe('Tooltip', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
@@ -305,13 +316,13 @@ test.describe('Tooltip', () => {
         });
 
         test('hides without animation', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1, {
                     animation: false,
                 }).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 UI.Tooltip.init($.findOne('#tooltipToggle1')).hide();
@@ -321,10 +332,11 @@ test.describe('Tooltip', () => {
         });
 
         test('hides when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
-                UI.Tooltip.init($.findOne('#tooltipToggle1')).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            await page.evaluate((_) => new Promise((resolve) => {
+                const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
+                UI.Tooltip.init(tooltipToggle1).show();
+            }));
 
             await page.evaluate((_) => {
                 UI.Tooltip.init($.findOne('#tooltipToggle1')).hide();
@@ -337,31 +349,31 @@ test.describe('Tooltip', () => {
         });
 
         test('can be interrupted by showing', async ({ page }) => {
-            await page.evaluate((_) => {
-                UI.Tooltip.init($.findOne('#tooltipToggle1')).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
-
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
-                window.tooltipShownEventTriggered = false;
-                window.tooltipHiddenEventTriggered = false;
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
+                UI.Tooltip.init(tooltipToggle1).show();
+            }));
 
-                $.addEvent(tooltipToggle1, 'shown.ui.tooltip', (_) => {
-                    window.tooltipShownEventTriggered = true;
-                });
+            const events = await page.evaluate((_) => new Promise((resolve) => {
+                const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                let hidden = false;
+
                 $.addEvent(tooltipToggle1, 'hidden.ui.tooltip', (_) => {
-                    window.tooltipHiddenEventTriggered = true;
+                    hidden = true;
+                });
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => {
+                    resolve({ hidden, shown: true });
                 });
 
                 const tooltip = UI.Tooltip.init(tooltipToggle1);
                 tooltip.hide();
                 tooltip.show();
-            });
+            }));
 
+            expect(events.shown).toBe(true);
+            expect(events.hidden).toBe(false);
             await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
-            expect(await page.evaluate((_) => window.tooltipShownEventTriggered)).toBe(true);
-            expect(await page.evaluate((_) => window.tooltipHiddenEventTriggered)).toBe(false);
         });
     });
 
@@ -410,11 +422,11 @@ test.describe('Tooltip', () => {
 
     test.describe('#toggle (hide)', () => {
         test('hides the tooltip', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
@@ -425,10 +437,11 @@ test.describe('Tooltip', () => {
         });
 
         test('hides the tooltip (query)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
+                const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 $('#tooltipToggle1').tooltip('show');
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 $('#tooltipToggle1').tooltip('toggle');
@@ -438,11 +451,20 @@ test.describe('Tooltip', () => {
         });
 
         test('hide multiple tooltips (query)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(async (_) => {
+                const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                const tooltipToggle2 = $.findOne('#tooltipToggle2');
+                const shown1 = new Promise((resolve) => {
+                    $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
+                });
+                const shown2 = new Promise((resolve) => {
+                    $.addEventOnce(tooltipToggle2, 'shown.ui.tooltip', (_) => resolve());
+                });
+
                 $('button').tooltip('show');
+
+                await Promise.all([shown1, shown2]);
             });
-            await expect(page.locator('.tooltip').nth(0)).toHaveCSS('opacity', '1');
-            await expect(page.locator('.tooltip').nth(1)).toHaveCSS('opacity', '1');
 
             await page.evaluate((_) => {
                 $('button').tooltip('toggle');
@@ -452,11 +474,11 @@ test.describe('Tooltip', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
@@ -513,11 +535,11 @@ test.describe('Tooltip', () => {
         });
 
         test('allows a visible tooltip to be hidden programmatically', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 const tooltip = UI.Tooltip.init($.findOne('#tooltipToggle1'));
@@ -529,11 +551,11 @@ test.describe('Tooltip', () => {
         });
 
         test('ignores hide trigger events when disabled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1, { trigger: 'hover focus click' }).show();
-            });
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            }));
 
             await page.evaluate((_) => {
                 UI.Tooltip.init($.findOne('#tooltipToggle1')).disable();
@@ -661,27 +683,25 @@ test.describe('Tooltip', () => {
         });
 
         test('triggers shown event', async ({ page }) => {
-            await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
-                window.tooltipShownEventTriggered = false;
 
-                $.addEvent(tooltipToggle1, 'shown.ui.tooltip', (_) => {
-                    window.tooltipShownEventTriggered = true;
-                });
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve(true));
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
+            }));
 
+            expect(eventTriggered).toBe(true);
             await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
-            expect(await page.evaluate((_) => window.tooltipShownEventTriggered)).toBe(true);
             await expect(page.locator('.tooltip')).toHaveCount(1);
             await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
         });
 
         test('triggers hide event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
+            }));
             const eventTriggered = await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
                 let triggered = false;
@@ -698,22 +718,20 @@ test.describe('Tooltip', () => {
         });
 
         test('triggers hidden event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
-            await page.evaluate((_) => {
+            }));
+            const eventTriggered = await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
-                window.tooltipHiddenEventTriggered = false;
 
-                $.addEvent(tooltipToggle1, 'hidden.ui.tooltip', (_) => {
-                    window.tooltipHiddenEventTriggered = true;
-                });
+                $.addEventOnce(tooltipToggle1, 'hidden.ui.tooltip', (_) => resolve(true));
                 UI.Tooltip.init(tooltipToggle1).hide();
-            });
+            }));
 
+            expect(eventTriggered).toBe(true);
             await expect(page.locator('.tooltip')).toHaveCount(0);
-            expect(await page.evaluate((_) => window.tooltipHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
@@ -739,10 +757,11 @@ test.describe('Tooltip', () => {
         });
 
         test('can be prevented from hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
+            }));
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
                 $.addEvent(tooltipToggle1, 'hide.ui.tooltip', (_) => false);
@@ -755,10 +774,11 @@ test.describe('Tooltip', () => {
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate((_) => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
-            });
+            }));
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltipToggle1');
                 $.addEvent(tooltipToggle1, 'hide.ui.tooltip', (event) => {
