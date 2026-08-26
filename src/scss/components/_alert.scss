@@ -26,14 +26,14 @@
 
     &:has(>.btn-close) {
         padding-inline-end: calc((var(--ui-alert-padding-x) * 2) + #{vars.$btn-close-width});
+    }
 
-        >.btn-close {
-            position: absolute;
-            inset-inline-end: 0;
-            top: 0;
-            padding: var(--ui-alert-padding-y) var(--ui-alert-padding-x);
-            color: inherit;
-        }
+    >.btn-close {
+        position: absolute;
+        inset-inline-end: 0;
+        top: 0;
+        padding: var(--ui-alert-padding-y) var(--ui-alert-padding-x);
+        color: inherit;
     }
 }
 

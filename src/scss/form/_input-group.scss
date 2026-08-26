@@ -61,15 +61,15 @@
 
     &:has(.input-outline) {
         transition: box-shadow var(--ui-transition-duration-fast) var(--ui-transition-timing-function);
+    }
 
-        &:has(.input-outline:is(:focus, .focus)) {
-            box-shadow: 0 0 0 vars.$input-outline-focus-shadow-width vars.$input-outline-focus-shadow-color;
+    &:has(.input-outline:is(:focus, .focus)) {
+        box-shadow: 0 0 0 vars.$input-outline-focus-shadow-width vars.$input-outline-focus-shadow-color;
 
-            >.form-input > .input-outline,
-            >.input-outline,
-            >.input-group-text {
-                border-color: vars.$input-outline-focus-border-color;
-            }
+        >.form-input > .input-outline,
+        >.input-outline,
+        >.input-group-text {
+            border-color: vars.$input-outline-focus-border-color;
         }
     }
 
@@ -92,26 +92,26 @@
             transition-property: transform, opacity;
         }
 
-        &:has(.input-filled:is(:focus, .focus)) {
-
-            >.form-input > .input-filled,
-            >.input-filled,
-            >.input-group-text {
-                --ui-input-filled-focus-line-size: 0% calc(#{vars.$input-border-width} * 2);
-
-                background-color: var(--ui-input-filled-focus-bg, #{vars.$input-filled-focus-bg});
-            }
-
-            &::after {
-                opacity: 1;
-                transform: scaleX(1);
-            }
-        }
-
         >.input-group-text {
             background-color: var(--ui-input-filled-bg, #{vars.$input-filled-bg});
             border: 0;
             border-bottom: vars.$input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{vars.$input-filled-border-color});
+        }
+    }
+
+    &:has(.input-filled:is(:focus, .focus)) {
+
+        >.form-input > .input-filled,
+        >.input-filled,
+        >.input-group-text {
+            --ui-input-filled-focus-line-size: 0% calc(#{vars.$input-border-width} * 2);
+
+            background-color: var(--ui-input-filled-focus-bg, #{vars.$input-filled-focus-bg});
+        }
+
+        &::after {
+            opacity: 1;
+            transform: scaleX(1);
         }
     }
 }

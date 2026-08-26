@@ -2050,7 +2050,7 @@ progress {
 .alert:has(> .btn-close) {
   padding-inline-end: calc(var(--ui-alert-padding-x) * 2 + 1em);
 }
-.alert:has(> .btn-close) > .btn-close {
+.alert > .btn-close {
   position: absolute;
   inset-inline-end: 0;
   top: 0;
@@ -2708,11 +2708,11 @@ fieldset:disabled .btn {
   transition-duration: var(--ui-transition-duration-fast);
   transition-property: border-color, box-shadow;
 }
-.card:has(.stretched-link):has(.stretched-link:is(:hover, :focus-visible)) {
+.card:has(.stretched-link:is(:hover, :focus-visible)) {
   border-color: var(--ui-card-interactive-hover-border-color);
   box-shadow: var(--ui-card-interactive-box-shadow);
 }
-.card:has(.stretched-link):has(.stretched-link:focus-visible) {
+.card:has(.stretched-link:focus-visible) {
   border-color: var(--ui-card-interactive-focus-border-color);
 }
 .card > hr {
@@ -5738,12 +5738,12 @@ select.input-lg[multiple] option {
 .input-group:has(.input-outline) {
   transition: box-shadow var(--ui-transition-duration-fast) var(--ui-transition-timing-function);
 }
-.input-group:has(.input-outline):has(.input-outline:is(:focus, .focus)) {
+.input-group:has(.input-outline:is(:focus, .focus)) {
   box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
 }
-.input-group:has(.input-outline):has(.input-outline:is(:focus, .focus)) > .form-input > .input-outline,
-.input-group:has(.input-outline):has(.input-outline:is(:focus, .focus)) > .input-outline,
-.input-group:has(.input-outline):has(.input-outline:is(:focus, .focus)) > .input-group-text {
+.input-group:has(.input-outline:is(:focus, .focus)) > .form-input > .input-outline,
+.input-group:has(.input-outline:is(:focus, .focus)) > .input-outline,
+.input-group:has(.input-outline:is(:focus, .focus)) > .input-group-text {
   border-color: var(--ui-primary);
 }
 .input-group:has(.input-filled) {
@@ -5764,20 +5764,20 @@ select.input-lg[multiple] option {
   transition-duration: var(--ui-transition-duration);
   transition-property: transform, opacity;
 }
-.input-group:has(.input-filled):has(.input-filled:is(:focus, .focus)) > .form-input > .input-filled,
-.input-group:has(.input-filled):has(.input-filled:is(:focus, .focus)) > .input-filled,
-.input-group:has(.input-filled):has(.input-filled:is(:focus, .focus)) > .input-group-text {
-  --ui-input-filled-focus-line-size: 0% calc(var(--ui-border-width) * 2);
-  background-color: var(--ui-input-filled-focus-bg, rgb(from var(--ui-body-color) r g b/0.12));
-}
-.input-group:has(.input-filled):has(.input-filled:is(:focus, .focus))::after {
-  opacity: 1;
-  transform: scaleX(1);
-}
 .input-group:has(.input-filled) > .input-group-text {
   background-color: var(--ui-input-filled-bg, rgb(from var(--ui-body-color) r g b/0.05));
   border: 0;
   border-bottom: var(--ui-border-width) var(--ui-border-style) var(--ui-input-filled-border-color, var(--ui-tertiary-color));
+}
+.input-group:has(.input-filled:is(:focus, .focus)) > .form-input > .input-filled,
+.input-group:has(.input-filled:is(:focus, .focus)) > .input-filled,
+.input-group:has(.input-filled:is(:focus, .focus)) > .input-group-text {
+  --ui-input-filled-focus-line-size: 0% calc(var(--ui-border-width) * 2);
+  background-color: var(--ui-input-filled-focus-bg, rgb(from var(--ui-body-color) r g b/0.12));
+}
+.input-group:has(.input-filled:is(:focus, .focus))::after {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 .input-group-sm .btn,
