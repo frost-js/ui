@@ -95,7 +95,7 @@
     }
 
     .nav-link.active,
-    .nav-item.show .nav-link {
+    .dropdown:has(>.dropdown-menu.show) > .nav-link {
         color: var(--ui-nav-tabs-link-active-color);
         background-size: calc(100% - (var(--ui-nav-tabs-link-padding-x) + var(--ui-nav-tabs-link-padding-x))) var(--ui-nav-tabs-link-active-border-width);
     }
@@ -134,7 +134,7 @@
     }
 
     .nav-link.active,
-    .nav-item.show .nav-link {
+    .dropdown:has(>.dropdown-menu.show) > .nav-link {
         color: var(--ui-nav-pills-link-active-color);
         background-color: var(--ui-nav-pills-link-active-bg);
         box-shadow: var(--ui-nav-pills-link-active-box-shadow);
@@ -158,7 +158,7 @@
     }
 
     .nav-link.active,
-    .show > .nav-link {
+    .dropdown:has(>.dropdown-menu.show) > .nav-link {
         font-weight: map.get(vars.$font-weights, bold);
         color: var(--ui-nav-underline-link-active-color);
         border-bottom-color: currentcolor;

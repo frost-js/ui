@@ -85,7 +85,7 @@
     list-style: none;
 
     .nav-link.active,
-    .show > .nav-link {
+    .dropdown:has(>.dropdown-menu.show) > .nav-link {
         color: var(--ui-navbar-active-color);
     }
 

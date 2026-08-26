@@ -2962,13 +2962,14 @@ fieldset:disabled .btn {
   transition-property: color, background-color, border-color, box-shadow;
   border-radius: var(--ui-carousel-control-border-radius);
 }
-.carousel-control-prev:is(:hover, :focus-visible),
-.carousel-control-next:is(:hover, :focus-visible) {
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
   --ui-carousel-control-opacity: 1;
   box-shadow: var(--ui-carousel-control-hover-box-shadow);
 }
 .carousel-control-prev:focus-visible,
 .carousel-control-next:focus-visible {
+  --ui-carousel-control-opacity: 1;
   outline: 0;
   box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color), var(--ui-carousel-control-hover-box-shadow);
 }
@@ -4041,7 +4042,7 @@ fieldset:disabled .btn {
   background-color: transparent;
 }
 .nav-tabs .nav-link.active,
-.nav-tabs .nav-item.show .nav-link {
+.nav-tabs .dropdown:has(> .dropdown-menu.show) > .nav-link {
   color: var(--ui-nav-tabs-link-active-color);
   background-size: calc(100% - (var(--ui-nav-tabs-link-padding-x) + var(--ui-nav-tabs-link-padding-x))) var(--ui-nav-tabs-link-active-border-width);
 }
@@ -4075,7 +4076,7 @@ fieldset:disabled .btn {
   border-color: transparent;
 }
 .nav-pills .nav-link.active,
-.nav-pills .nav-item.show .nav-link {
+.nav-pills .dropdown:has(> .dropdown-menu.show) > .nav-link {
   color: var(--ui-nav-pills-link-active-color);
   background-color: var(--ui-nav-pills-link-active-bg);
   box-shadow: var(--ui-nav-pills-link-active-box-shadow);
@@ -4095,7 +4096,7 @@ fieldset:disabled .btn {
   border-bottom-color: currentcolor;
 }
 .nav-underline .nav-link.active,
-.nav-underline .show > .nav-link {
+.nav-underline .dropdown:has(> .dropdown-menu.show) > .nav-link {
   font-weight: 500;
   color: var(--ui-nav-underline-link-active-color);
   border-bottom-color: currentcolor;
@@ -4204,7 +4205,7 @@ fieldset:disabled .btn {
   list-style: none;
 }
 .navbar-nav .nav-link.active,
-.navbar-nav .show > .nav-link {
+.navbar-nav .dropdown:has(> .dropdown-menu.show) > .nav-link {
   color: var(--ui-navbar-active-color);
 }
 .navbar-nav .dropdown-menu {
