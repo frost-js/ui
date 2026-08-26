@@ -396,7 +396,6 @@ Use Sass configuration when derived colors, utility maps, breakpoints, component
 - Tooltip and popover HTML is sanitized by default when HTML content is enabled.
 - Event namespaces are managed by fQuery; the underlying native event types are `show`, `shown`, `hide`, `hidden`, and so on.
 - Motion styles are enabled under `prefers-reduced-motion: no-preference`, with component transition timing controlled through CSS custom properties.
-- Carousel's millisecond `transition` option is the exception and writes its duration to the component's transition custom property.
 - Compiled CSS targets browsers in the Baseline Widely Available Browserslist range.
 - Component markup and accessibility attributes remain the application's responsibility; interactive components update the state they own.
 

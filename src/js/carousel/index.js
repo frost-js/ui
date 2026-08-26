@@ -6,7 +6,6 @@ import Carousel from './carousel.js';
 /** @type {import('./carousel.js').CarouselOptions} */
 Carousel.defaults = {
     interval: 5000,
-    transition: 500,
     keyboard: true,
     ride: false,
     pause: true,

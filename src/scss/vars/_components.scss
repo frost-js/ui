@@ -114,6 +114,7 @@ $card-group-margin: vars.$spacing !default;
 
 // carousel
 $carousel-bg: var(--ui-body-color) !default;
+$carousel-transition-duration: .5s !default;
 
 $carousel-control-size: 3rem !default;
 $carousel-control-spacer: vars.$spacing !default;

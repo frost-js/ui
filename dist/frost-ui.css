@@ -2907,7 +2907,7 @@ fieldset:disabled .btn {
 
 .carousel {
   --ui-carousel-bg: var(--ui-body-color);
-  --ui-carousel-transition-duration: var(--ui-transition-duration);
+  --ui-carousel-transition-duration: 0.5s;
   --ui-carousel-control-size: 3rem;
   --ui-carousel-control-spacer: 1rem;
   --ui-carousel-control-color: var(--ui-body-color);
@@ -2955,6 +2955,8 @@ fieldset:disabled .btn {
   position: relative;
   display: none;
   backface-visibility: hidden;
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-property: transform;
 }
 .carousel-item:not(.active) {
   position: absolute;
@@ -3093,7 +3095,7 @@ fieldset:disabled .btn {
 
 @media (prefers-reduced-motion: no-preference) {
   .carousel-item {
-    transition: transform var(--ui-carousel-transition-duration) var(--ui-transition-timing-function);
+    transition-duration: calc(var(--ui-carousel-transition-duration) * var(--ui-carousel-transition-scale, 1));
   }
 }
 .btn-close {

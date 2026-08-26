@@ -400,7 +400,6 @@
     /**
      * @typedef {object} CarouselOptions
      * @property {number} [interval=5000] The cycle interval in milliseconds.
-     * @property {number} [transition=500] The transition duration in milliseconds.
      * @property {boolean} [keyboard=true] Whether to support keyboard navigation.
      * @property {false|'carousel'} [ride=false] Whether to cycle automatically.
      * @property {boolean} [pause=true] Whether to pause while hovered.
@@ -434,9 +433,6 @@
         constructor(node, options) {
             super(node, options);
 
-            // Custom properties must retain the leading dashes removed by fQuery's style normalization.
-            this.node.style.setProperty('--ui-carousel-transition-duration', `${this.options.transition}ms`);
-
             this.#items = $.find('.carousel-item', this.node);
 
             this.#index = this.#items.findIndex((item) =>
@@ -465,7 +461,7 @@
 
         /** @inheritdoc */
         dispose() {
-            this.node.style.setProperty('--ui-carousel-transition-duration', '');
+            this.node.style.setProperty('--ui-carousel-transition-scale', '');
 
             if (this.#sliding) {
                 $.removeClass(this.node, 'carousel-dragging');
@@ -703,10 +699,8 @@
 
                     $.addClass(nodeOut, transitionClass);
 
-                    this.node.style.setProperty(
-                        '--ui-carousel-transition-duration',
-                        `${this.options.transition * progressRemaining}ms`,
-                    );
+                    // Shorten the transition to match the distance left after dragging.
+                    this.node.style.setProperty('--ui-carousel-transition-scale', progressRemaining);
                     $.removeClass(this.node, 'carousel-dragging');
 
                     // Commit the dragged position with transitions enabled before removing it.
@@ -740,10 +734,7 @@
                             this.#paused = false;
                             this.#setTimer();
 
-                            this.node.style.setProperty(
-                                '--ui-carousel-transition-duration',
-                                `${this.options.transition}ms`,
-                            );
+                            this.node.style.setProperty('--ui-carousel-transition-scale', '');
                         }
                     });
                 };
@@ -940,7 +931,6 @@
     /** @type {import('./carousel.js').CarouselOptions} */
     Carousel.defaults = {
         interval: 5000,
-        transition: 500,
         keyboard: true,
         ride: false,
         pause: true,

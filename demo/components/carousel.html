@@ -19,10 +19,10 @@
         <section class="mb-5">
             <header class="border-bottom pb-3 mb-4">
                 <h2 class="h4 mb-1">Slides</h2>
-                <p class="text-body-secondary mb-2">Set the initial item as active and optionally start cycling when the page loads.</p>
-                <code>.carousel .carousel-inner .carousel-item</code> <code>data-ui-ride="carousel"</code>
+                <p class="text-body-secondary mb-2">Set the initial item as active, optionally start cycling when the page loads, and customize its transition duration in CSS.</p>
+                <code>.carousel .carousel-inner .carousel-item</code> <code>data-ui-ride="carousel"</code> <code>--ui-carousel-transition-duration</code>
             </header>
-            <div class="carousel" data-ui-ride="carousel">
+            <div class="carousel" data-ui-ride="carousel" style="--ui-carousel-transition-duration: 600ms;">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <div class="ratio ratio-21x9">

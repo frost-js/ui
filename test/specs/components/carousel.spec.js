@@ -735,30 +735,11 @@ test.describe('Carousel', () => {
         });
     });
 
-    test.describe('transition option', () => {
-        test('works with transition option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                UI.Carousel.init(carousel1, { transition: 200 });
-            });
-
-            await expect(page.locator('#carousel-1-item-1')).toHaveCSS('transition-duration', '0.2s');
-        });
-
-        test('works with transition option (data-ui-transition)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                $.setDataset(carousel1, { uiTransition: 200 });
-                UI.Carousel.init(carousel1);
-            });
-
-            await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-transition', '200');
-            await expect(page.locator('#carousel-1-item-1')).toHaveCSS('transition-duration', '0.2s');
-        });
-
-        test('works with transition option (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#carousel1').carousel({ transition: 200 });
+    test.describe('transition duration', () => {
+        test('preserves a custom CSS transition duration', async ({ page }) => {
+            await page.locator('#carousel1').evaluate((node) => {
+                node.style.setProperty('--ui-carousel-transition-duration', '200ms');
+                UI.Carousel.init(node);
             });
 
             await expect(page.locator('#carousel-1-item-1')).toHaveCSS('transition-duration', '0.2s');

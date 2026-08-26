@@ -4,7 +4,7 @@
 
 .carousel {
     --ui-carousel-bg: #{vars.$carousel-bg};
-    --ui-carousel-transition-duration: var(--ui-transition-duration);
+    --ui-carousel-transition-duration: #{vars.$carousel-transition-duration};
     --ui-carousel-control-size: #{vars.$carousel-control-size};
     --ui-carousel-control-spacer: #{vars.$carousel-control-spacer};
     --ui-carousel-control-color: #{vars.$carousel-control-color};
@@ -52,6 +52,8 @@
     position: relative;
     display: none;
     backface-visibility: hidden;
+    transition-timing-function: var(--ui-transition-timing-function);
+    transition-property: transform;
 
     &:not(.active) {
         position: absolute;
@@ -194,6 +196,6 @@
 
 @media (prefers-reduced-motion: no-preference) {
     .carousel-item {
-        transition: transform var(--ui-carousel-transition-duration) var(--ui-transition-timing-function);
+        transition-duration: calc(var(--ui-carousel-transition-duration) * var(--ui-carousel-transition-scale, 1));
     }
 }
