@@ -1,4 +1,5 @@
 import { $, document } from './../globals.js';
+import { waitForTransition } from './../helpers/transition.js';
 
 // Render a click-centered ripple animation.
 $.addEventDelegate(document, 'click.ui.ripple', '.ripple', (e) => {
@@ -30,20 +31,14 @@ $.addEventDelegate(document, 'click.ui.ripple', '.ripple', (e) => {
             top: mouseY - pos.y,
         },
     });
+    ripple.style.setProperty('--ui-ripple-scale', `${scaleMultiple}`);
     $.append(target, ripple);
 
-    $.animate(
-        ripple,
-        (node, progress) => {
-            $.setStyle(node, {
-                transform: 'scale(' + Math.floor(progress * scaleMultiple) + ')',
-                opacity: 1 - Math.pow(progress, 2),
-            });
-        },
-        {
-            duration: 500,
-        },
-    ).finally((_) => {
-        $.detach(ripple);
+    // Commit the initial scale before starting the transition.
+    $.css(ripple, 'transform');
+    $.addClass(ripple, 'show');
+
+    waitForTransition(ripple, ['transform', 'opacity']).then(({ node }) => {
+        $.detach(node);
     });
 });

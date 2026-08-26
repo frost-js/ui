@@ -33,5 +33,6 @@ $ratios: (
 ) !default;
 
 // ripple
+$ripple-transition-duration: 500ms !default;
 $ripple-opacity: .3 !default;
 $ripple-bg: helpers.color-alpha("white", var(--ui-ripple-opacity)) !default;

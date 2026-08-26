@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
-import { expectAnimationState } from '../../support/assertions/animation.js';
+
+test.use({ reducedMotion: 'no-preference' });
 
 test.beforeEach(async ({ page }) => {
     await setupClock(page);
@@ -20,12 +21,8 @@ test.describe('Ripple', () => {
             await page.locator('#button').click();
             await advanceClock(page, 250);
 
-            await expectAnimationState(page, [
-                {
-                    selectors: ['#button > .ripple-effect'],
-                    active: true,
-                },
-            ]);
+            await expect(page.locator('#button > .ripple-effect')).toHaveClass('ripple-effect show');
+            await expect(page.locator('#button > .ripple-effect')).toHaveCSS('--ui-ripple-scale', /[1-9]\d*/);
         });
 
         test('removes ripple effect after animation completes', async ({ page }) => {

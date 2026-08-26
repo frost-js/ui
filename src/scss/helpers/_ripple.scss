@@ -1,4 +1,8 @@
+@use "../vars";
+
 .ripple {
+    --ui-ripple-transition-duration: #{vars.$ripple-transition-duration};
+
     position: relative;
     overflow: hidden;
 }
@@ -10,4 +14,20 @@
     pointer-events: none;
     background-color: var(--ui-ripple-bg);
     border-radius: 50%;
+    opacity: 1;
+    transform: scale(0);
+    transition-timing-function: ease-in-out, ease-in;
+    transition-duration: var(--ui-ripple-transition-duration);
+    transition-property: transform, opacity;
+
+    &.show {
+        opacity: 0;
+        transform: scale(var(--ui-ripple-scale));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ripple-effect {
+        transition-duration: 0s;
+    }
 }

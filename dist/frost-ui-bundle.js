@@ -14330,21 +14330,15 @@
                 top: mouseY - pos.y,
             },
         });
+        ripple.style.setProperty('--ui-ripple-scale', `${scaleMultiple}`);
         $$1.append(target, ripple);
 
-        $$1.animate(
-            ripple,
-            (node, progress) => {
-                $$1.setStyle(node, {
-                    transform: 'scale(' + Math.floor(progress * scaleMultiple) + ')',
-                    opacity: 1 - Math.pow(progress, 2),
-                });
-            },
-            {
-                duration: 500,
-            },
-        ).finally((_) => {
-            $$1.detach(ripple);
+        // Commit the initial scale before starting the transition.
+        $$1.css(ripple, 'transform');
+        $$1.addClass(ripple, 'show');
+
+        waitForTransition(ripple, ['transform', 'opacity']).then(({ node }) => {
+            $$1.detach(node);
         });
     });
 
