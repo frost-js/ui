@@ -1,9 +1,7 @@
-import { $, document, window } from './../globals.js';
+/** @import { BoundingRect } from '../helpers/scroll.js'; */
+/** @import Popper, { Direction, Placement } from './popper.js'; */
 
-/** @typedef {import('./popper.js').default} Popper */
-/** @typedef {import('../helpers/scroll.js').BoundingRect} BoundingRect */
-/** @typedef {import('./popper.js').Direction} Direction */
-/** @typedef {import('./popper.js').Placement} Placement */
+import { $, document, window } from './../globals.js';
 
 const poppers = new Set();
 

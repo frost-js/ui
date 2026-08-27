@@ -10,7 +10,7 @@ import { waitForTransition } from './../helpers/transition.js';
 
 /**
  * Controls a transient toast notification.
- * @extends {BaseComponent<ToastOptions>}
+ * @augments {BaseComponent<ToastOptions>}
  */
 export default class Toast extends BaseComponent {
     #timer;

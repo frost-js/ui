@@ -1,3 +1,5 @@
+/** @import BaseComponent from '../base-component.js'; */
+
 import { $ } from './../globals.js';
 
 /**
@@ -34,7 +36,7 @@ export function getDataset(node) {
 /**
  * Registers a UI component and its QuerySet method.
  * @param {string} key The component key.
- * @param {typeof import('../base-component.js').default} component The component class.
+ * @param {typeof BaseComponent} component The component class.
  */
 export function initComponent(key, component) {
     component.DATA_KEY = key;

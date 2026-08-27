@@ -1,6 +1,8 @@
+/** @import { Page } from '@playwright/test'; */
+
 /**
  * Measure the current browser's native scrollbar size.
- * @param {import('@playwright/test').Page} page The Playwright page.
+ * @param {Page} page The Playwright page.
  * @returns {Promise<number>} The scrollbar size in pixels.
  */
 export async function measureScrollbarSize(page) {

@@ -1,3 +1,5 @@
+/** @import { BoundingBox, Page } from '@playwright/test'; */
+
 import { expect } from '@playwright/test';
 import { measureScrollbarSize } from '../measurements/scrollbar.js';
 
@@ -12,7 +14,7 @@ import { measureScrollbarSize } from '../measurements/scrollbar.js';
  * The assertion compares rendered boxes instead of absolute transforms so it
  * remains valid across browser coordinate rounding and positioning contexts.
  *
- * @param {import('@playwright/test').Page} page The Playwright page.
+ * @param {Page} page The Playwright page.
  * @param {object} expectation The expected position.
  * @param {string} expectation.popper The popper selector.
  * @param {string} expectation.reference The reference selector.
@@ -79,8 +81,8 @@ export async function expectPopperPosition(page, {
  * @param {string} popper The popper selector.
  * @param {PopperPlacement} placement The expected placement.
  * @param {number} spacing The expected spacing between nodes.
- * @param {import('@playwright/test').BoundingBox} popperBox The popper box.
- * @param {import('@playwright/test').BoundingBox} referenceBox The reference box.
+ * @param {BoundingBox} popperBox The popper box.
+ * @param {BoundingBox} referenceBox The reference box.
  */
 function expectPlacement(popper, placement, spacing, popperBox, referenceBox) {
     const popperEdges = getBoxEdges(popperBox);
@@ -109,8 +111,8 @@ function expectPlacement(popper, placement, spacing, popperBox, referenceBox) {
  * @param {string} popper The popper selector.
  * @param {PopperPlacement} placement The expected placement.
  * @param {PopperPosition} position The expected alignment.
- * @param {import('@playwright/test').BoundingBox} popperBox The popper box.
- * @param {import('@playwright/test').BoundingBox} referenceBox The reference box.
+ * @param {BoundingBox} popperBox The popper box.
+ * @param {BoundingBox} referenceBox The reference box.
  */
 function expectAlignment(popper, placement, position, popperBox, referenceBox) {
     switch (placement) {
@@ -131,8 +133,8 @@ function expectAlignment(popper, placement, position, popperBox, referenceBox) {
  * Assert the horizontal popper alignment.
  * @param {string} popper The popper selector.
  * @param {PopperPosition} position The expected alignment.
- * @param {import('@playwright/test').BoundingBox} popperBox The popper box.
- * @param {import('@playwright/test').BoundingBox} referenceBox The reference box.
+ * @param {BoundingBox} popperBox The popper box.
+ * @param {BoundingBox} referenceBox The reference box.
  */
 function expectHorizontalAlignment(popper, position, popperBox, referenceBox) {
     const popperEdges = getBoxEdges(popperBox);
@@ -161,8 +163,8 @@ function expectHorizontalAlignment(popper, position, popperBox, referenceBox) {
  * Assert the vertical popper alignment.
  * @param {string} popper The popper selector.
  * @param {PopperPosition} position The expected alignment.
- * @param {import('@playwright/test').BoundingBox} popperBox The popper box.
- * @param {import('@playwright/test').BoundingBox} referenceBox The reference box.
+ * @param {BoundingBox} popperBox The popper box.
+ * @param {BoundingBox} referenceBox The reference box.
  */
 function expectVerticalAlignment(popper, position, popperBox, referenceBox) {
     const popperEdges = getBoxEdges(popperBox);
@@ -196,8 +198,8 @@ function expectVerticalAlignment(popper, position, popperBox, referenceBox) {
  * @param {string} popper The popper selector.
  * @param {PopperPlacement} boundaryEdge The expected clamped edge.
  * @param {number} contact The minimum reference overlap.
- * @param {import('@playwright/test').BoundingBox} popperBox The popper box.
- * @param {import('@playwright/test').BoundingBox} referenceBox The reference box.
+ * @param {BoundingBox} popperBox The popper box.
+ * @param {BoundingBox} referenceBox The reference box.
  * @param {{top: number, right: number, bottom: number, left: number}} boundaryBox The boundary box.
  */
 function expectBoundary(popper, boundaryEdge, contact, popperBox, referenceBox, boundaryBox) {
@@ -220,7 +222,7 @@ function expectBoundary(popper, boundaryEdge, contact, popperBox, referenceBox, 
  * Get the expected coordinate for a boundary-clamped popper edge.
  * @param {PopperPlacement} boundaryEdge The expected clamped edge.
  * @param {number} contact The minimum reference overlap.
- * @param {import('@playwright/test').BoundingBox} referenceBox The reference box.
+ * @param {BoundingBox} referenceBox The reference box.
  * @param {{top: number, right: number, bottom: number, left: number}} boundaryBox The boundary box.
  * @returns {number} The expected coordinate.
  */
@@ -246,8 +248,8 @@ function getClampedBoundaryCoordinate(boundaryEdge, contact, referenceBox, bound
  * @param {string} popper The popper selector.
  * @param {PopperPlacement} placement The expected placement.
  * @param {number} minContact The minimum reference overlap.
- * @param {import('@playwright/test').BoundingBox} popperBox The popper box.
- * @param {import('@playwright/test').BoundingBox} referenceBox The reference box.
+ * @param {BoundingBox} popperBox The popper box.
+ * @param {BoundingBox} referenceBox The reference box.
  */
 function expectReferenceContact(popper, placement, minContact, popperBox, referenceBox) {
     const popperEdges = getBoxEdges(popperBox);
@@ -274,7 +276,7 @@ function expectReferenceContact(popper, placement, minContact, popperBox, refere
 
 /**
  * Get the viewport-relative edges for a bounding box.
- * @param {import('@playwright/test').BoundingBox} box The bounding box.
+ * @param {BoundingBox} box The bounding box.
  * @returns {{top: number, right: number, bottom: number, left: number}} The box edges.
  */
 function getBoxEdges(box) {
@@ -288,7 +290,7 @@ function getBoxEdges(box) {
 
 /**
  * Get the viewport-relative window boundary box.
- * @param {import('@playwright/test').Page} page The Playwright page.
+ * @param {Page} page The Playwright page.
  * @returns {Promise<{top: number, right: number, bottom: number, left: number}>} The box.
  */
 async function getWindowBoundaryBox(page) {
@@ -314,7 +316,7 @@ async function getWindowBoundaryBox(page) {
 
 /**
  * Get the viewport-relative boundary box for an element.
- * @param {import('@playwright/test').Page} page The Playwright page.
+ * @param {Page} page The Playwright page.
  * @param {string} selector The boundary selector.
  * @returns {Promise<{top: number, right: number, bottom: number, left: number}>} The box.
  */

@@ -2,7 +2,7 @@ import BaseComponent from './../base-component.js';
 import { $, document } from './../globals.js';
 import { getPosition } from './../helpers/pointer.js';
 import { waitForTransition } from './../helpers/transition.js';
-import { getDirOffset, getDirection, getIndex, getTransitionClasses } from './helpers.js';
+import { getDirection, getDirOffset, getIndex, getTransitionClasses } from './helpers.js';
 
 /** @typedef {'left'|'right'} CarouselDirection */
 
@@ -24,7 +24,7 @@ import { getDirOffset, getDirection, getIndex, getTransitionClasses } from './he
 
 /**
  * Controls an animated carousel.
- * @extends {BaseComponent<CarouselOptions>}
+ * @augments {BaseComponent<CarouselOptions>}
  */
 export default class Carousel extends BaseComponent {
     #index;

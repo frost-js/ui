@@ -1,6 +1,8 @@
+/** @import { Page } from '@playwright/test'; */
+
 /**
  * Install Playwright's browser clock and pause it at a stable fixed time.
- * @param {import('@playwright/test').Page} page The Playwright page.
+ * @param {Page} page The Playwright page.
  * @returns {Promise<void>} The promise.
  */
 export async function setupClock(page) {
@@ -11,7 +13,7 @@ export async function setupClock(page) {
 /**
  * Deterministically advance the browser clock, including enough margin for a
  * queued start and a frame on the requested boundary to be processed.
- * @param {import('@playwright/test').Page} page The Playwright page.
+ * @param {Page} page The Playwright page.
  * @param {number} milliseconds The duration to advance.
  * @returns {Promise<void>} The promise.
  */
@@ -21,7 +23,7 @@ export async function advanceClock(page, milliseconds) {
 
 /**
  * Wait for callbacks queued for the next animation frame.
- * @param {import('@playwright/test').Page} page The Playwright page.
+ * @param {Page} page The Playwright page.
  * @returns {Promise<void>} The promise.
  */
 export async function waitForFrame(page) {
@@ -32,7 +34,7 @@ export async function waitForFrame(page) {
 
 /**
  * Reset the browser page and FrostUI defaults.
- * @param {import('@playwright/test').Page} page The Playwright page.
+ * @param {Page} page The Playwright page.
  * @returns {Promise<void>} The promise.
  */
 export async function resetPage(page) {

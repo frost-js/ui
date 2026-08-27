@@ -13,7 +13,7 @@ import { waitForTransition } from './../helpers/transition.js';
 
 /**
  * Controls an offcanvas panel and its backdrop.
- * @extends {BaseComponent<OffcanvasOptions>}
+ * @augments {BaseComponent<OffcanvasOptions>}
  */
 export default class Offcanvas extends BaseComponent {
     #activeTarget;

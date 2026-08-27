@@ -9,7 +9,7 @@ import { addFocusTrap, removeFocusTrap } from './helpers.js';
 
 /**
  * Keeps keyboard focus within an element while active.
- * @extends {BaseComponent<FocusTrapOptions>}
+ * @augments {BaseComponent<FocusTrapOptions>}
  */
 export default class FocusTrap extends BaseComponent {
     #active;

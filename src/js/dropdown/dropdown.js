@@ -1,10 +1,9 @@
+/** @import { Placement, Position } from '../popper/popper.js'; */
+
 import BaseComponent from './../base-component.js';
 import { $, window } from './../globals.js';
 import { waitForTransition } from './../helpers/transition.js';
 import Popper from './../popper/popper.js';
-
-/** @typedef {import('../popper/popper.js').Placement} Placement */
-/** @typedef {import('../popper/popper.js').Position} Position */
 
 /**
  * @typedef {object} DropdownOptions
@@ -20,7 +19,7 @@ import Popper from './../popper/popper.js';
 
 /**
  * Controls a dropdown menu.
- * @extends {BaseComponent<DropdownOptions>}
+ * @augments {BaseComponent<DropdownOptions>}
  */
 export default class Dropdown extends BaseComponent {
     #display;

@@ -1,6 +1,6 @@
-import { $, document } from './../globals.js';
+/** @import FocusTrap from './focus-trap.js'; */
 
-/** @typedef {import('./focus-trap.js').default} FocusTrap */
+import { $, document } from './../globals.js';
 
 const focusTraps = new Set();
 

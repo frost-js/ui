@@ -1,3 +1,5 @@
+/** @import { Page } from '@playwright/test'; */
+
 import { expect } from '@playwright/test';
 
 /**
@@ -8,7 +10,7 @@ import { expect } from '@playwright/test';
 
 /**
  * Expects inline styles on the matched nodes.
- * @param {import('@playwright/test').Page} page The Playwright page.
+ * @param {Page} page The Playwright page.
  * @param {StyleExpectation[]} expectations The expected style states.
  * @returns {Promise<void>} The promise.
  */

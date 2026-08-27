@@ -1,8 +1,10 @@
+/** @import { PopoverOptions } from './popover.js'; */
+
 import { $ } from './../globals.js';
 import { initComponent } from './../helpers/component.js';
 import Popover from './popover.js';
 
-/** @type {import('./popover.js').PopoverOptions} */
+/** @type {PopoverOptions} */
 Popover.defaults = {
     template: '<div class="popover" role="tooltip">' +
         '<div class="popover-arrow"></div>' +

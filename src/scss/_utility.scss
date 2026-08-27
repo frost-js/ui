@@ -22,6 +22,7 @@
     values: vars.$opacities,
     css-var: true
 ));
+
 // border
 @include mixins.utility((
     property: border,

@@ -1,9 +1,11 @@
+/** @import { CarouselOptions } from './carousel.js'; */
+
 import { $, document } from './../globals.js';
 import { initComponent } from './../helpers/component.js';
 import { getTarget } from './../helpers/target.js';
 import Carousel from './carousel.js';
 
-/** @type {import('./carousel.js').CarouselOptions} */
+/** @type {CarouselOptions} */
 Carousel.defaults = {
     interval: 5000,
     keyboard: true,

@@ -1,3 +1,5 @@
+/** @import { ModalOptions } from './modal.js'; */
+
 import { getClickTarget } from './../click-target/index.js';
 import { $, document, window } from './../globals.js';
 import { initComponent } from './../helpers/component.js';
@@ -5,7 +7,7 @@ import { getTarget } from './../helpers/target.js';
 import { getTopModal } from './helpers.js';
 import Modal from './modal.js';
 
-/** @type {import('./modal.js').ModalOptions} */
+/** @type {ModalOptions} */
 Modal.defaults = {
     backdrop: true,
     focus: true,

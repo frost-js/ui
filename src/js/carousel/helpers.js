@@ -1,4 +1,4 @@
-/** @typedef {import('./carousel.js').CarouselDirection} CarouselDirection */
+/** @import { CarouselDirection } from './carousel.js'; */
 
 /**
  * Gets the boundary offset for an item index.

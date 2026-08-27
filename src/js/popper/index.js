@@ -1,7 +1,9 @@
+/** @import { PopperOptions } from './popper.js'; */
+
 import { initComponent } from './../helpers/component.js';
 import Popper from './popper.js';
 
-/** @type {import('./popper.js').PopperOptions} */
+/** @type {PopperOptions} */
 Popper.defaults = {
     reference: null,
     container: null,

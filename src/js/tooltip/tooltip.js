@@ -1,11 +1,10 @@
+/** @import { Placement, Position } from '../popper/popper.js'; */
+
 import BaseComponent from './../base-component.js';
 import { $, window } from './../globals.js';
 import { generateId } from './../helpers/component.js';
 import { waitForTransition } from './../helpers/transition.js';
 import Popper from './../popper/index.js';
-
-/** @typedef {import('../popper/popper.js').Placement} Placement */
-/** @typedef {import('../popper/popper.js').Position} Position */
 
 /**
  * @typedef {object} TooltipOptions
@@ -27,7 +26,7 @@ import Popper from './../popper/index.js';
 
 /**
  * Controls a tooltip anchored to a reference element.
- * @extends {BaseComponent<TooltipOptions>}
+ * @augments {BaseComponent<TooltipOptions>}
  */
 export default class Tooltip extends BaseComponent {
     #arrow;

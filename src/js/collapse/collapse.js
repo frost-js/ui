@@ -10,7 +10,7 @@ import { waitForTransition } from './../helpers/transition.js';
 
 /**
  * Controls a collapsible element and its triggers.
- * @extends {BaseComponent<CollapseOptions>}
+ * @augments {BaseComponent<CollapseOptions>}
  */
 export default class Collapse extends BaseComponent {
     #parent;

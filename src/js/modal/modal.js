@@ -16,7 +16,7 @@ const modalStackOffset = 20;
 
 /**
  * Controls a modal dialog and its backdrop.
- * @extends {BaseComponent<ModalOptions>}
+ * @augments {BaseComponent<ModalOptions>}
  */
 export default class Modal extends BaseComponent {
     #activeTarget;

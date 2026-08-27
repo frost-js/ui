@@ -41,7 +41,7 @@ import { addPopper, getPopperPlacement, removePopper } from './helpers.js';
 
 /**
  * Positions an element relative to a reference element.
- * @extends {BaseComponent<PopperOptions>}
+ * @augments {BaseComponent<PopperOptions>}
  */
 export default class Popper extends BaseComponent {
     #placement;
