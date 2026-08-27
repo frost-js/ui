@@ -4754,10 +4754,21 @@ fieldset:disabled .btn {
   z-index: 1039;
   content: "";
   background-color: var(--ui-backdrop-bg);
+  opacity: 0;
   -webkit-backdrop-filter: var(--ui-backdrop-filter);
   backdrop-filter: var(--ui-backdrop-filter);
+  transition-timing-function: var(--ui-transition-timing-function);
+  transition-property: opacity;
+}
+.offcanvas-backdrop:has(.offcanvas.show:not(.hiding))::before {
+  opacity: 1;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .offcanvas-backdrop::before {
+    transition-duration: var(--ui-transition-duration);
+  }
+}
 .pagination {
   --ui-pagination-padding-x: 0.75rem;
   --ui-pagination-padding-y: 0.25rem;
