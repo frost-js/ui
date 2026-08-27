@@ -2933,12 +2933,12 @@ fieldset:disabled .btn {
   --ui-carousel-caption-padding-y: 1rem;
   --ui-carousel-caption-spacer: 2rem;
   --ui-carousel-caption-color: var(--ui-body-color);
-  --ui-carousel-caption-bg: rgb(from var(--ui-body-bg) r g b/0.78);
+  --ui-carousel-caption-bg: rgb(from var(--ui-body-bg) r g b/0.7);
   --ui-carousel-caption-backdrop-filter: blur(1.25rem) saturate(160%);
   --ui-carousel-caption-border-width: var(--ui-border-width);
-  --ui-carousel-caption-border-color: var(--ui-border-color-translucent);
+  --ui-carousel-caption-border-color: rgb(from var(--ui-border-color) r g b/0.1);
   --ui-carousel-caption-border-radius: var(--ui-border-radius-xl);
-  --ui-carousel-caption-box-shadow: inset 0 1px 0 rgb(from var(--ui-white) r g b/0.2), var(--ui-shadow-lg);
+  --ui-carousel-caption-box-shadow: inset 0 1px 0 rgb(from var(--ui-white) r g b/0.16), var(--ui-shadow-lg), 0 0 2rem rgb(from var(--ui-primary) r g b/0.12);
   position: relative;
   -webkit-user-select: none;
   user-select: none;
