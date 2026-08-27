@@ -403,9 +403,9 @@ FrostUI supports Node.js `^20.19.0`, `^22.13.0`, or `>=24`.
 ```bash
 npm ci
 npm test
-npm run js-lint
-npm run css-lint
-npm run sass-unused
+npm run lint:js
+npm run lint:css
+npm run lint:sass:unused
 npm run build
 npm pack --dry-run
 ```
