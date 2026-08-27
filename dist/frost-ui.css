@@ -2395,6 +2395,9 @@ fieldset:disabled .btn {
 .btn-outline-primary {
   --ui-btn-color: var(--ui-primary-emphasis);
   --ui-btn-border-color: var(--ui-primary-emphasis);
+  --ui-btn-box-shadow: 0 0 transparent;
+  --ui-btn-hover-box-shadow: var(--ui-shadow-sm);
+  --ui-btn-active-box-shadow: 0 0 transparent;
   --ui-btn-hover-bg: rgb(from var(--ui-primary-emphasis) r g b/0.2);
   --ui-btn-hover-border-color: var(--ui-primary-emphasis);
   --ui-btn-active-bg: var(--ui-primary);
@@ -2425,6 +2428,9 @@ fieldset:disabled .btn {
 .btn-outline-accent {
   --ui-btn-color: var(--ui-accent-emphasis);
   --ui-btn-border-color: var(--ui-accent-emphasis);
+  --ui-btn-box-shadow: 0 0 transparent;
+  --ui-btn-hover-box-shadow: var(--ui-shadow-sm);
+  --ui-btn-active-box-shadow: 0 0 transparent;
   --ui-btn-hover-bg: rgb(from var(--ui-accent-emphasis) r g b/0.2);
   --ui-btn-hover-border-color: var(--ui-accent-emphasis);
   --ui-btn-active-bg: var(--ui-accent);
@@ -2455,6 +2461,9 @@ fieldset:disabled .btn {
 .btn-outline-secondary {
   --ui-btn-color: var(--ui-secondary-emphasis);
   --ui-btn-border-color: var(--ui-secondary-emphasis);
+  --ui-btn-box-shadow: 0 0 transparent;
+  --ui-btn-hover-box-shadow: var(--ui-shadow-sm);
+  --ui-btn-active-box-shadow: 0 0 transparent;
   --ui-btn-hover-bg: rgb(from var(--ui-secondary-emphasis) r g b/0.2);
   --ui-btn-hover-border-color: var(--ui-secondary-emphasis);
   --ui-btn-active-bg: var(--ui-secondary);
@@ -2485,6 +2494,9 @@ fieldset:disabled .btn {
 .btn-outline-success {
   --ui-btn-color: var(--ui-success-emphasis);
   --ui-btn-border-color: var(--ui-success-emphasis);
+  --ui-btn-box-shadow: 0 0 transparent;
+  --ui-btn-hover-box-shadow: var(--ui-shadow-sm);
+  --ui-btn-active-box-shadow: 0 0 transparent;
   --ui-btn-hover-bg: rgb(from var(--ui-success-emphasis) r g b/0.2);
   --ui-btn-hover-border-color: var(--ui-success-emphasis);
   --ui-btn-active-bg: var(--ui-success);
@@ -2515,6 +2527,9 @@ fieldset:disabled .btn {
 .btn-outline-info {
   --ui-btn-color: var(--ui-info-emphasis);
   --ui-btn-border-color: var(--ui-info-emphasis);
+  --ui-btn-box-shadow: 0 0 transparent;
+  --ui-btn-hover-box-shadow: var(--ui-shadow-sm);
+  --ui-btn-active-box-shadow: 0 0 transparent;
   --ui-btn-hover-bg: rgb(from var(--ui-info-emphasis) r g b/0.2);
   --ui-btn-hover-border-color: var(--ui-info-emphasis);
   --ui-btn-active-bg: var(--ui-info);
@@ -2545,6 +2560,9 @@ fieldset:disabled .btn {
 .btn-outline-warning {
   --ui-btn-color: var(--ui-warning-emphasis);
   --ui-btn-border-color: var(--ui-warning-emphasis);
+  --ui-btn-box-shadow: 0 0 transparent;
+  --ui-btn-hover-box-shadow: var(--ui-shadow-sm);
+  --ui-btn-active-box-shadow: 0 0 transparent;
   --ui-btn-hover-bg: rgb(from var(--ui-warning-emphasis) r g b/0.2);
   --ui-btn-hover-border-color: var(--ui-warning-emphasis);
   --ui-btn-active-bg: var(--ui-warning);
@@ -2575,6 +2593,9 @@ fieldset:disabled .btn {
 .btn-outline-danger {
   --ui-btn-color: var(--ui-danger-emphasis);
   --ui-btn-border-color: var(--ui-danger-emphasis);
+  --ui-btn-box-shadow: 0 0 transparent;
+  --ui-btn-hover-box-shadow: var(--ui-shadow-sm);
+  --ui-btn-active-box-shadow: 0 0 transparent;
   --ui-btn-hover-bg: rgb(from var(--ui-danger-emphasis) r g b/0.2);
   --ui-btn-hover-border-color: var(--ui-danger-emphasis);
   --ui-btn-active-bg: var(--ui-danger);
@@ -2605,6 +2626,9 @@ fieldset:disabled .btn {
 .btn-outline-light {
   --ui-btn-color: var(--ui-light-emphasis);
   --ui-btn-border-color: var(--ui-light-emphasis);
+  --ui-btn-box-shadow: 0 0 transparent;
+  --ui-btn-hover-box-shadow: var(--ui-shadow-sm);
+  --ui-btn-active-box-shadow: 0 0 transparent;
   --ui-btn-hover-bg: rgb(from var(--ui-light-emphasis) r g b/0.2);
   --ui-btn-hover-border-color: var(--ui-light-emphasis);
   --ui-btn-active-bg: var(--ui-light);
@@ -2635,6 +2659,9 @@ fieldset:disabled .btn {
 .btn-outline-dark {
   --ui-btn-color: var(--ui-dark-emphasis);
   --ui-btn-border-color: var(--ui-dark-emphasis);
+  --ui-btn-box-shadow: 0 0 transparent;
+  --ui-btn-hover-box-shadow: var(--ui-shadow-sm);
+  --ui-btn-active-box-shadow: 0 0 transparent;
   --ui-btn-hover-bg: rgb(from var(--ui-dark-emphasis) r g b/0.2);
   --ui-btn-hover-border-color: var(--ui-dark-emphasis);
   --ui-btn-active-bg: var(--ui-dark);

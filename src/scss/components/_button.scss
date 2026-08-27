@@ -171,6 +171,9 @@
     .btn-outline-#{$name} {
         --ui-btn-color: var(--ui-#{$name}-emphasis);
         --ui-btn-border-color: var(--ui-#{$name}-emphasis);
+        --ui-btn-box-shadow: #{vars.$btn-outline-box-shadow};
+        --ui-btn-hover-box-shadow: #{vars.$btn-outline-hover-box-shadow};
+        --ui-btn-active-box-shadow: #{vars.$btn-outline-active-box-shadow};
         --ui-btn-hover-bg: #{functions.color-alpha("#{$name}-emphasis", vars.$btn-outline-hover-opacity)};
         --ui-btn-hover-border-color: var(--ui-#{$name}-emphasis);
         --ui-btn-active-bg: var(--ui-#{$name});

@@ -88,6 +88,9 @@ $btn-sm-font-size: var(--ui-font-size-sm) !default;
 $btn-sm-border-radius: var(--ui-border-radius-sm) !default;
 
 $btn-ripple-opacity: var(--ui-ripple-opacity) !default;
+$btn-outline-box-shadow: 0 0 transparent !default;
+$btn-outline-hover-box-shadow: var(--ui-shadow-sm) !default;
+$btn-outline-active-box-shadow: 0 0 transparent !default;
 $btn-outline-hover-opacity: .2 !default;
 
 // card
