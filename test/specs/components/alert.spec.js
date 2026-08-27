@@ -10,13 +10,17 @@ test.beforeEach(async ({ page }) => {
 test.describe('Alert', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<div class="alert alert-success fade show" id="alert1">' +
-                '<button class="btn-close" id="button1" data-ui-dismiss="alert" type="button"></button>' +
-                '</div>' +
-                '<div class="alert alert-success fade show" id="alert2">' +
-                '<button class="btn-close" id="button2" data-ui-dismiss="alert" type="button"></button>' +
-                '</div>';
+            $.setHTML(
+                document.body,
+                `
+                    <div class="alert alert-success fade show" id="alert1">
+                        <button class="btn-close" id="button1" data-ui-dismiss="alert" type="button"></button>
+                    </div>
+                    <div class="alert alert-success fade show" id="alert2">
+                        <button class="btn-close" id="button2" data-ui-dismiss="alert" type="button"></button>
+                    </div>
+                `,
+            );
         });
     });
 
@@ -109,8 +113,8 @@ test.describe('Alert', () => {
                 UI.Alert.init(alert1).close();
 
                 return {
-                    connected: alert1.isConnected,
-                    shown: alert1.classList.contains('show'),
+                    connected: $.isConnected(alert1),
+                    shown: $.hasClass(alert1, 'show'),
                 };
             });
 

@@ -12,15 +12,19 @@ test.beforeEach(async ({ page }) => {
 test.describe('Offcanvas', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<button class="btn btn-secondary" id="offcanvas-toggle-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvas1" type="button"></button>' +
-                '<button class="btn btn-secondary" id="offcanvas-toggle-2" data-ui-toggle="offcanvas" data-ui-target="#offcanvas2" type="button"></button>' +
-                '<div class="offcanvas offcanvas-start" id="offcanvas1">' +
-                '<button class="btn-close" id="button1" data-ui-dismiss="offcanvas" type="button"></button>' +
-                '</div>' +
-                '<div class="offcanvas offcanvas-start" id="offcanvas2">' +
-                '<button class="btn-close" id="button2" data-ui-dismiss="offcanvas" type="button"></button>' +
-                '</div>';
+            $.setHTML(
+                document.body,
+                `
+                    <button class="btn btn-secondary" id="offcanvas-toggle-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvas1" type="button"></button>
+                    <button class="btn btn-secondary" id="offcanvas-toggle-2" data-ui-toggle="offcanvas" data-ui-target="#offcanvas2" type="button"></button>
+                    <div class="offcanvas offcanvas-start" id="offcanvas1">
+                        <button class="btn-close" id="button1" data-ui-dismiss="offcanvas" type="button"></button>
+                    </div>
+                    <div class="offcanvas offcanvas-start" id="offcanvas2">
+                        <button class="btn-close" id="button2" data-ui-dismiss="offcanvas" type="button"></button>
+                    </div>
+                `,
+            );
         });
     });
 

@@ -13,8 +13,10 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (data-ui-text)', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 1"></button>';
+                $.setHTML(
+                    document.body,
+                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 1"></button>',
+                );
             });
             await page.locator('#button').click();
 
@@ -24,9 +26,13 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (data-ui-target)', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>' +
-                    '<div id="test">Test 2</div>';
+                $.setHTML(
+                    document.body,
+                    `
+                        <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>
+                        <div id="test">Test 2</div>
+                    `,
+                );
             });
             await page.locator('#button').click();
 
@@ -36,9 +42,13 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (input)', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>' +
-                    '<input class="input-filled" id="test" value="Test 3">';
+                $.setHTML(
+                    document.body,
+                    `
+                        <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>
+                        <input class="input-filled" id="test" value="Test 3">
+                    `,
+                );
             });
             await page.locator('#button').click();
 
@@ -49,9 +59,13 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (textarea)', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>' +
-                    '<textarea class="input-filled" id="test">Test 4</textarea>';
+                $.setHTML(
+                    document.body,
+                    `
+                        <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>
+                        <textarea class="input-filled" id="test">Test 4</textarea>
+                    `,
+                );
             });
             await page.locator('#button').click();
 
@@ -68,9 +82,13 @@ test.describe('Clipboard', () => {
 
         test('works with cut action (input)', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>' +
-                    '<input class="input-filled" id="test" value="Test 5">';
+                $.setHTML(
+                    document.body,
+                    `
+                        <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>
+                        <input class="input-filled" id="test" value="Test 5">
+                    `,
+                );
             });
             await page.locator('#button').click();
 
@@ -81,9 +99,13 @@ test.describe('Clipboard', () => {
 
         test('works with cut action (textarea)', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>' +
-                    '<textarea class="input-filled" id="test">Test 6</textarea>';
+                $.setHTML(
+                    document.body,
+                    `
+                        <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>
+                        <textarea class="input-filled" id="test">Test 6</textarea>
+                    `,
+                );
             });
             await page.locator('#button').click();
 
@@ -94,9 +116,13 @@ test.describe('Clipboard', () => {
 
         test('does not remove text content for elements', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>' +
-                    '<div id="test">Test 7</div>';
+                $.setHTML(
+                    document.body,
+                    `
+                        <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>
+                        <div id="test">Test 7</div>
+                    `,
+                );
             });
             await page.locator('#button').click();
 
@@ -109,8 +135,10 @@ test.describe('Clipboard', () => {
     test.describe('events', () => {
         test('triggers copied event', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 8"></button>';
+                $.setHTML(
+                    document.body,
+                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 8"></button>',
+                );
                 window.clipboardCopiedEventTriggered = false;
 
                 $.addEvent('#button', 'copied.ui.clipboard', (_) => {

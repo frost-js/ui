@@ -10,11 +10,15 @@ test.beforeEach(async ({ page }) => {
 test.describe('Collapse', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<button class="btn btn-secondary collapsed" id="collapse-toggle-1" data-ui-toggle="collapse" data-ui-target="#collapse1" type="button"></button>' +
-                '<button class="btn btn-secondary collapsed" id="collapse-toggle-2" data-ui-toggle="collapse" data-ui-target="#collapse2" type="button"></button>' +
-                '<div class="collapse" id="collapse1"><span style="display:block;width:120px;height:80px"></span></div>' +
-                '<div class="collapse" id="collapse2"><span style="display:block;width:120px;height:80px"></span></div>';
+            $.setHTML(
+                document.body,
+                `
+                    <button class="btn btn-secondary collapsed" id="collapse-toggle-1" data-ui-toggle="collapse" data-ui-target="#collapse1" type="button"></button>
+                    <button class="btn btn-secondary collapsed" id="collapse-toggle-2" data-ui-toggle="collapse" data-ui-target="#collapse2" type="button"></button>
+                    <div class="collapse" id="collapse1"><span style="display:block;width:120px;height:80px"></span></div>
+                    <div class="collapse" id="collapse2"><span style="display:block;width:120px;height:80px"></span></div>
+                `,
+            );
         });
     });
 
@@ -404,9 +408,13 @@ test.describe('Collapse', () => {
     test.describe('trigger selectors', () => {
         test('updates an href trigger', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<a class="btn btn-secondary collapsed" id="collapse-toggle" data-ui-toggle="collapse" href="#collapse"></a>' +
-                    '<div class="collapse" id="collapse"></div>';
+                $.setHTML(
+                    document.body,
+                    `
+                        <a class="btn btn-secondary collapsed" id="collapse-toggle" data-ui-toggle="collapse" href="#collapse"></a>
+                        <div class="collapse" id="collapse"></div>
+                    `,
+                );
             });
             await page.locator('#collapse-toggle').click();
 
@@ -423,10 +431,14 @@ test.describe('Collapse', () => {
 
         test('updates a class-based multi-collapse trigger', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary collapsed" id="collapse-toggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button"></button>' +
-                    '<div class="collapse multi-collapse" id="collapse1"></div>' +
-                    '<div class="collapse multi-collapse" id="collapse2"></div>';
+                $.setHTML(
+                    document.body,
+                    `
+                        <button class="btn btn-secondary collapsed" id="collapse-toggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button"></button>
+                        <div class="collapse multi-collapse" id="collapse1"></div>
+                        <div class="collapse multi-collapse" id="collapse2"></div>
+                    `,
+                );
             });
             await page.locator('#collapse-toggle').click();
 
@@ -445,10 +457,14 @@ test.describe('Collapse', () => {
 
         test('normalizes mixed multi-collapse targets', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="collapse-toggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button" aria-expanded="true"></button>' +
-                    '<div class="collapse multi-collapse show" id="collapse1"></div>' +
-                    '<div class="collapse multi-collapse" id="collapse2"></div>';
+                $.setHTML(
+                    document.body,
+                    `
+                        <button class="btn btn-secondary" id="collapse-toggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button" aria-expanded="true"></button>
+                        <div class="collapse multi-collapse show" id="collapse1"></div>
+                        <div class="collapse multi-collapse" id="collapse2"></div>
+                    `,
+                );
             });
             await page.locator('#collapse-toggle').click();
 

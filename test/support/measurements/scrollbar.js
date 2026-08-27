@@ -7,20 +7,20 @@
  */
 export async function measureScrollbarSize(page) {
     return page.evaluate((_) => {
-        const node = document.createElement('div');
-
-        Object.assign(node.style, {
-            height: '100px',
-            overflow: 'scroll',
-            position: 'absolute',
-            top: '-9999px',
-            width: '100px',
+        const node = $.create('div', {
+            style: {
+                height: '100px',
+                overflow: 'scroll',
+                position: 'absolute',
+                top: '-9999px',
+                width: '100px',
+            },
         });
-        document.body.append(node);
+        $.append(document.body, node);
 
         const size = node.offsetWidth - node.clientWidth;
 
-        node.remove();
+        $.remove(node);
 
         return size;
     });

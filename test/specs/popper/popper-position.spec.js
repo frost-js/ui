@@ -9,10 +9,14 @@ test.beforeEach(async ({ page }) => {
 test.describe('Popper positioning', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.documentElement.style.overflow = 'hidden';
-            document.body.innerHTML =
-                '<div id="reference" style="position: absolute; left: 360px; top: 283px; width: 80px; height: 34px;"></div>' +
-                '<div id="popper" style="width: 160px; height: 80px;"></div>';
+            $.setStyle(document.documentElement, { overflow: 'hidden' });
+            $.setHTML(
+                document.body,
+                `
+                    <div id="reference" style="position: absolute; left: 360px; top: 283px; width: 80px; height: 34px;"></div>
+                    <div id="popper" style="width: 160px; height: 80px;"></div>
+                `,
+            );
         });
     });
 
@@ -1257,8 +1261,8 @@ test.describe('Popper positioning', () => {
 
         test('remains attached after document scroll', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.style.minHeight = '2000px';
-                document.documentElement.style.overflow = '';
+                $.setStyle(document.body, { minHeight: '2000px' });
+                $.setStyle(document.documentElement, { overflow: '' });
                 $.setStyle('#reference', { position: 'fixed' });
 
                 UI.Popper.init($.findOne('#popper'), {

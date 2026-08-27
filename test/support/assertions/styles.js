@@ -23,13 +23,13 @@ export async function expectStyles(page, expectations) {
     );
     const actualStates = await page.evaluate((expectedStates) => {
         return expectedStates.map(({ selector, styles }) => {
-            const nodes = document.querySelectorAll(selector);
-            const node = nodes.item(0);
+            const nodes = $.find(selector);
+            const node = nodes[0];
 
             return {
                 matches: nodes.length,
                 styles: node ? Object.fromEntries(
-                    Object.keys(styles).map((property) => [property, node.style[property]]),
+                    Object.keys(styles).map((property) => [property, $.getStyle(node, property)]),
                 ) : null,
             };
         });

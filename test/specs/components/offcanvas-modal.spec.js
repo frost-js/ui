@@ -8,17 +8,21 @@ test.beforeEach(async ({ page }) => {
 test.describe('Offcanvas/Modal', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
-                '<div class="offcanvas offcanvas-start" id="offcanvas">' +
-                '<button class="btn-close" id="button" data-ui-dismiss="offcanvas" type="button"></button>' +
-                '<button class="btn btn-secondary" id="modal-toggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>' +
-                '</div>' +
-                '<div class="modal" id="modal">' +
-                '<div class="modal-dialog" id="modal-dialog">' +
-                '<button class="btn-close" id="button2" data-ui-dismiss="modal" type="button"></button>' +
-                '</div>' +
-                '</div>';
+            $.setHTML(
+                document.body,
+                `
+                    <button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>
+                    <div class="offcanvas offcanvas-start" id="offcanvas">
+                        <button class="btn-close" id="button" data-ui-dismiss="offcanvas" type="button"></button>
+                        <button class="btn btn-secondary" id="modal-toggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>
+                    </div>
+                    <div class="modal" id="modal">
+                        <div class="modal-dialog" id="modal-dialog">
+                            <button class="btn-close" id="button2" data-ui-dismiss="modal" type="button"></button>
+                        </div>
+                    </div>
+                `,
+            );
         });
     });
 

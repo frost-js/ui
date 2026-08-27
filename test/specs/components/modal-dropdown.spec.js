@@ -8,21 +8,25 @@ test.beforeEach(async ({ page }) => {
 test.describe('Modal/Dropdown', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<button class="btn btn-secondary" id="modal-toggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>' +
-                '<div class="modal" id="modal">' +
-                '<div class="modal-dialog" id="modal-dialog">' +
-                '<button class="btn-close" id="button" data-ui-dismiss="modal" type="button"></button>' +
-                '<div>' +
-                '<button class="btn btn-secondary" id="dropdown-toggle" data-ui-toggle="dropdown" type="button"></button>' +
-                '<div class="dropdown-menu" id="dropdown">' +
-                '<button class="dropdown-item" id="dropdown-item-1"></button>' +
-                '<button class="dropdown-item" id="dropdown-item-2"></button>' +
-                '<button class="dropdown-item" id="dropdown-item-3"></button>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>';
+            $.setHTML(
+                document.body,
+                `
+                    <button class="btn btn-secondary" id="modal-toggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>
+                    <div class="modal" id="modal">
+                        <div class="modal-dialog" id="modal-dialog">
+                            <button class="btn-close" id="button" data-ui-dismiss="modal" type="button"></button>
+                            <div>
+                                <button class="btn btn-secondary" id="dropdown-toggle" data-ui-toggle="dropdown" type="button"></button>
+                                <div class="dropdown-menu" id="dropdown">
+                                    <button class="dropdown-item" id="dropdown-item-1"></button>
+                                    <button class="dropdown-item" id="dropdown-item-2"></button>
+                                    <button class="dropdown-item" id="dropdown-item-3"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+            );
         });
     });
 

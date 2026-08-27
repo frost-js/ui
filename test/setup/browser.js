@@ -56,7 +56,7 @@ export async function resetPage(page) {
         UI.Toast.defaults.delay = 200;
         UI._clickTarget = null;
 
-        document.body.replaceChildren();
+        $.empty(document.body);
 
         return window.$ === window.fQuery;
     });
@@ -66,11 +66,10 @@ export async function resetPage(page) {
     }
 
     await page.waitForFunction((_) => {
-        const test = document.createElement('div');
-        test.className = 'text-center';
-        document.body.append(test);
-        const ready = getComputedStyle(test).textAlign === 'center';
-        test.remove();
+        const test = $.create('div', { class: 'text-center' });
+        $.append(document.body, test);
+        const ready = $.css(test, 'text-align') === 'center';
+        $.remove(test);
         return ready;
     });
 }

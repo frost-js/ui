@@ -10,23 +10,27 @@ test.beforeEach(async ({ page }) => {
 test.describe('Dropdown', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<div>' +
-                '<button class="btn btn-secondary" id="dropdown-toggle-1" data-ui-toggle="dropdown" type="button"></button>' +
-                '<div class="dropdown-menu fade" id="dropdown1">' +
-                '<button class="dropdown-item" id="dropdown-1-item-1"></button>' +
-                '<button class="dropdown-item" id="dropdown-1-item-2"></button>' +
-                '<button class="dropdown-item" id="dropdown-1-item-3"></button>' +
-                '</div>' +
-                '</div>' +
-                '<div>' +
-                '<button class="btn btn-secondary" id="dropdown-toggle-2" data-ui-toggle="dropdown" type="button"></button>' +
-                '<div class="dropdown-menu fade" id="dropdown2">' +
-                '<button class="dropdown-item" id="dropdown-2-item-1"></button>' +
-                '<button class="dropdown-item" id="dropdown-2-item-2"></button>' +
-                '<button class="dropdown-item" id="dropdown-2-item-3"></button>' +
-                '</div>' +
-                '</div>';
+            $.setHTML(
+                document.body,
+                `
+                    <div>
+                        <button class="btn btn-secondary" id="dropdown-toggle-1" data-ui-toggle="dropdown" type="button"></button>
+                        <div class="dropdown-menu fade" id="dropdown1">
+                            <button class="dropdown-item" id="dropdown-1-item-1"></button>
+                            <button class="dropdown-item" id="dropdown-1-item-2"></button>
+                            <button class="dropdown-item" id="dropdown-1-item-3"></button>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary" id="dropdown-toggle-2" data-ui-toggle="dropdown" type="button"></button>
+                        <div class="dropdown-menu fade" id="dropdown2">
+                            <button class="dropdown-item" id="dropdown-2-item-1"></button>
+                            <button class="dropdown-item" id="dropdown-2-item-2"></button>
+                            <button class="dropdown-item" id="dropdown-2-item-3"></button>
+                        </div>
+                    </div>
+                `,
+            );
         });
     });
 

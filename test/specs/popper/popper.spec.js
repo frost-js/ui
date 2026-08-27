@@ -9,9 +9,13 @@ test.beforeEach(async ({ page }) => {
 test.describe('Popper', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<button class="btn btn-secondary" id="button" style="width: 80px; height: 34px;" type="button">Button</button>' +
-                '<div class="badge" id="badge" style="width: 60px; height: 21px;">Badge</div>';
+            $.setHTML(
+                document.body,
+                `
+                    <button class="btn btn-secondary" id="button" style="width: 80px; height: 34px;" type="button">Button</button>
+                    <div class="badge" id="badge" style="width: 60px; height: 21px;">Badge</div>
+                `,
+            );
         });
     });
 
@@ -108,9 +112,9 @@ test.describe('Popper', () => {
         test('updates when an ancestor of the popper scrolls', async ({ page }) => {
             expect(await page.evaluate(async (_) => {
                 const badge = $.findOne('#badge');
-                const scroll = document.createElement('div');
-                badge.before(scroll);
-                scroll.append(badge);
+                const scroll = $.create('div');
+                $.before(badge, scroll);
+                $.append(scroll, badge);
 
                 let initialized = false;
                 let updated = false;
@@ -124,7 +128,7 @@ test.describe('Popper', () => {
                 });
                 initialized = true;
 
-                scroll.dispatchEvent(new Event('scroll'));
+                $.triggerEvent(scroll, 'scroll');
                 await Promise.resolve();
 
                 return updated;
@@ -135,9 +139,9 @@ test.describe('Popper', () => {
             expect(await page.evaluate(async (_) => {
                 const badge = $.findOne('#badge');
                 const button = $.findOne('#button');
-                const scroll = document.createElement('div');
-                button.before(scroll);
-                scroll.append(button);
+                const scroll = $.create('div');
+                $.before(button, scroll);
+                $.append(scroll, button);
 
                 let initialized = false;
                 let updated = false;
@@ -151,7 +155,7 @@ test.describe('Popper', () => {
                 });
                 initialized = true;
 
-                scroll.dispatchEvent(new Event('scroll'));
+                $.triggerEvent(scroll, 'scroll');
                 await Promise.resolve();
 
                 return updated;
@@ -173,9 +177,9 @@ test.describe('Popper', () => {
                 });
                 initialized = true;
 
-                const scroll = document.createElement('div');
-                document.body.append(scroll);
-                scroll.dispatchEvent(new Event('scroll'));
+                const scroll = $.create('div');
+                $.append(document.body, scroll);
+                $.triggerEvent(scroll, 'scroll');
                 await Promise.resolve();
 
                 return updated;

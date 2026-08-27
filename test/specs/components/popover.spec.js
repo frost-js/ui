@@ -10,9 +10,13 @@ test.beforeEach(async ({ page }) => {
 test.describe('Popover', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<button class="btn btn-secondary" id="popover-toggle-1" type="button"></button>' +
-                '<button class="btn btn-secondary" id="popover-toggle-2" type="button"></button>';
+            $.setHTML(
+                document.body,
+                `
+                    <button class="btn btn-secondary" id="popover-toggle-1" type="button"></button>
+                    <button class="btn btn-secondary" id="popover-toggle-2" type="button"></button>
+                `,
+            );
         });
     });
 
@@ -73,11 +77,15 @@ test.describe('Popover', () => {
 
         test('removes only its modal hide event', async ({ page }) => {
             await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<div class="modal" id="modal">' +
-                    '<button id="popover-toggle-1" type="button"></button>' +
-                    '<button id="popover-toggle-2" type="button"></button>' +
-                    '</div>';
+                $.setHTML(
+                    document.body,
+                    `
+                        <div class="modal" id="modal">
+                            <button id="popover-toggle-1" type="button"></button>
+                            <button id="popover-toggle-2" type="button"></button>
+                        </div>
+                    `,
+                );
 
                 const modal = $.findOne('#modal');
                 const popoverToggle1 = $.findOne('#popover-toggle-1');

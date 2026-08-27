@@ -10,23 +10,27 @@ test.beforeEach(async ({ page }) => {
 test.describe('Tab', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<div class="nav nav-tabs">' +
-                '<a class="nav-link active" id="tab-toggle-1" href="#tab1" data-ui-toggle="tab"></a>' +
-                '<a class="nav-link" id="tab-toggle-2" href="#tab2" data-ui-toggle="tab"></a>' +
-                '</div>' +
-                '<div class="tab-content">' +
-                '<div class="tab-pane fade active show" id="tab1"></div>' +
-                '<div class="tab-pane fade" id="tab2"></div>' +
-                '</div>' +
-                '<div class="nav nav-tabs">' +
-                '<a class="nav-link active" id="tab-toggle-3" href="#tab3" data-ui-toggle="tab"></a>' +
-                '<a class="nav-link" id="tab-toggle-4" href="#tab4" data-ui-toggle="tab"></a>' +
-                '</div>' +
-                '<div class="tab-content">' +
-                '<div class="tab-pane fade active show" id="tab3"></div>' +
-                '<div class="tab-pane fade" id="tab4"></div>' +
-                '</div>';
+            $.setHTML(
+                document.body,
+                `
+                    <div class="nav nav-tabs">
+                        <a class="nav-link active" id="tab-toggle-1" href="#tab1" data-ui-toggle="tab"></a>
+                        <a class="nav-link" id="tab-toggle-2" href="#tab2" data-ui-toggle="tab"></a>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="tab1"></div>
+                        <div class="tab-pane fade" id="tab2"></div>
+                    </div>
+                    <div class="nav nav-tabs">
+                        <a class="nav-link active" id="tab-toggle-3" href="#tab3" data-ui-toggle="tab"></a>
+                        <a class="nav-link" id="tab-toggle-4" href="#tab4" data-ui-toggle="tab"></a>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="tab3"></div>
+                        <div class="tab-pane fade" id="tab4"></div>
+                    </div>
+                `,
+            );
         });
     });
 

@@ -10,13 +10,17 @@ test.beforeEach(async ({ page }) => {
 test.describe('Toast', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<div class="toast fade show" id="toast1">' +
-                '<button class="btn-close" id="button1" data-ui-dismiss="toast" type="button"></button>' +
-                '</div>' +
-                '<div class="toast fade show" id="toast2">' +
-                '<button class="btn-close" id="button2" data-ui-dismiss="toast" type="button"></button>' +
-                '</div>';
+            $.setHTML(
+                document.body,
+                `
+                    <div class="toast fade show" id="toast1">
+                        <button class="btn-close" id="button1" data-ui-dismiss="toast" type="button"></button>
+                    </div>
+                    <div class="toast fade show" id="toast2">
+                        <button class="btn-close" id="button2" data-ui-dismiss="toast" type="button"></button>
+                    </div>
+                `,
+            );
         });
     });
 
@@ -263,7 +267,7 @@ test.describe('Toast', () => {
         test.beforeEach(async ({ page }) => {
             await page.locator('.toast').evaluateAll((toasts) => {
                 for (const toast of toasts) {
-                    toast.classList.remove('show');
+                    $.removeClass(toast, 'show');
                     $.setStyle(toast, { display: 'none' }, null, { important: true });
                 }
             });
@@ -487,7 +491,7 @@ test.describe('Toast', () => {
         test.beforeEach(async ({ page }) => {
             await setupClock(page);
             await page.locator('#toast1').evaluate((toast) => {
-                toast.classList.remove('fade', 'show');
+                $.removeClass(toast, 'fade', 'show');
                 $.setStyle(toast, { display: 'none' }, null, { important: true });
             });
         });
@@ -601,7 +605,7 @@ test.describe('Toast', () => {
         test.beforeEach(async ({ page }) => {
             await setupClock(page);
             await page.locator('#toast1').evaluate((toast) => {
-                toast.classList.remove('fade', 'show');
+                $.removeClass(toast, 'fade', 'show');
                 $.setStyle(toast, { display: 'none' }, null, { important: true });
             });
         });

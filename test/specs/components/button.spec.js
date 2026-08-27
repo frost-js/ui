@@ -8,9 +8,13 @@ test.beforeEach(async ({ page }) => {
 test.describe('Button', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            document.body.innerHTML =
-                '<button class="btn btn-secondary" id="button1" data-ui-toggle="button" type="button"></button>' +
-                '<button class="btn btn-secondary" id="button2" data-ui-toggle="button" type="button"></button>';
+            $.setHTML(
+                document.body,
+                `
+                    <button class="btn btn-secondary" id="button1" data-ui-toggle="button" type="button"></button>
+                    <button class="btn btn-secondary" id="button2" data-ui-toggle="button" type="button"></button>
+                `,
+            );
         });
     });
 

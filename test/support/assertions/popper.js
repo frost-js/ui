@@ -324,8 +324,8 @@ async function getElementBoundaryBox(page, selector) {
     const scrollbarSize = await measureScrollbarSize(page);
 
     return page.evaluate(({ selector, scrollbarSize }) => {
-        const node = document.querySelector(selector);
-        const rect = node.getBoundingClientRect();
+        const node = $.findOne(selector);
+        const rect = $.rect(node);
         const scrollSizeX = node.scrollWidth > node.clientWidth ?
             scrollbarSize :
             0;
