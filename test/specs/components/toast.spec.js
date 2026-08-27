@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
+import { advanceClock, resetPage, setupClock, waitForFrame } from '../../setup/browser.js';
 
 test.use({ reducedMotion: 'no-preference' });
 
@@ -271,6 +271,7 @@ test.describe('Toast', () => {
                     $.setStyle(toast, { display: 'none' }, null, { important: true });
                 }
             });
+            await waitForFrame(page);
         });
 
         test('shows the toast', async ({ page }) => {
