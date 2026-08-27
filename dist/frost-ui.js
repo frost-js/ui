@@ -19,6 +19,9 @@
     const document = $.getContext();
     const window = $.getWindow();
 
+    /** @import BaseComponent from '../base-component.js'; */
+
+
     /**
      * Generates a unique component element ID.
      * @param {string} prefix The ID prefix.
@@ -51,7 +54,7 @@
     /**
      * Registers a UI component and its QuerySet method.
      * @param {string} key The component key.
-     * @param {typeof import('../base-component.js').default} component The component class.
+     * @param {typeof BaseComponent} component The component class.
      */
     function initComponent(key, component) {
         component.DATA_KEY = key;
@@ -327,7 +330,7 @@
             .map((touch) => ({ x: touch.pageX, y: touch.pageY }));
     }
 
-    /** @typedef {import('./carousel.js').CarouselDirection} CarouselDirection */
+    /** @import { CarouselDirection } from './carousel.js'; */
 
     /**
      * Gets the boundary offset for an item index.
@@ -415,7 +418,7 @@
 
     /**
      * Controls an animated carousel.
-     * @extends {BaseComponent<CarouselOptions>}
+     * @augments {BaseComponent<CarouselOptions>}
      */
     class Carousel extends BaseComponent {
         #index;
@@ -461,7 +464,7 @@
 
         /** @inheritdoc */
         dispose() {
-            this.node.style.setProperty('--ui-carousel-transition-scale', '');
+            $.setStyle(this.node, { '--ui-carousel-transition-scale': '' });
 
             if (this.#sliding) {
                 $.removeClass(this.node, 'carousel-dragging');
@@ -700,7 +703,7 @@
                     $.addClass(nodeOut, transitionClass);
 
                     // Shorten the transition to match the distance left after dragging.
-                    this.node.style.setProperty('--ui-carousel-transition-scale', progressRemaining);
+                    $.setStyle(this.node, { '--ui-carousel-transition-scale': progressRemaining });
                     $.removeClass(this.node, 'carousel-dragging');
 
                     // Commit the dragged position with transitions enabled before removing it.
@@ -734,7 +737,7 @@
                             this.#paused = false;
                             this.#setTimer();
 
-                            this.node.style.setProperty('--ui-carousel-transition-scale', '');
+                            $.setStyle(this.node, { '--ui-carousel-transition-scale': '' });
                         }
                     });
                 };
@@ -928,7 +931,10 @@
         }
     }
 
-    /** @type {import('./carousel.js').CarouselOptions} */
+    /** @import { CarouselOptions } from './carousel.js'; */
+
+
+    /** @type {CarouselOptions} */
     Carousel.defaults = {
         interval: 5000,
         keyboard: true,
@@ -1006,7 +1012,7 @@
 
     /**
      * Controls a collapsible element and its triggers.
-     * @extends {BaseComponent<CollapseOptions>}
+     * @augments {BaseComponent<CollapseOptions>}
      */
     class Collapse extends BaseComponent {
         #parent;
@@ -1330,10 +1336,9 @@
         }
     }
 
-    /** @typedef {import('./popper.js').default} Popper */
-    /** @typedef {import('../helpers/scroll.js').BoundingRect} BoundingRect */
-    /** @typedef {import('./popper.js').Direction} Direction */
-    /** @typedef {import('./popper.js').Placement} Placement */
+    /** @import { BoundingRect } from '../helpers/scroll.js'; */
+    /** @import Popper, { Direction, Placement } from './popper.js'; */
+
 
     const poppers = new Set();
 
@@ -1523,7 +1528,7 @@
 
     /**
      * Positions an element relative to a reference element.
-     * @extends {BaseComponent<PopperOptions>}
+     * @augments {BaseComponent<PopperOptions>}
      */
     class Popper extends BaseComponent {
         #placement;
@@ -1899,8 +1904,8 @@
         }
     }
 
-    /** @typedef {import('../popper/popper.js').Placement} Placement */
-    /** @typedef {import('../popper/popper.js').Position} Position */
+    /** @import { Placement, Position } from '../popper/popper.js'; */
+
 
     /**
      * @typedef {object} DropdownOptions
@@ -1916,7 +1921,7 @@
 
     /**
      * Controls a dropdown menu.
-     * @extends {BaseComponent<DropdownOptions>}
+     * @augments {BaseComponent<DropdownOptions>}
      */
     class Dropdown extends BaseComponent {
         #display;
@@ -2114,7 +2119,10 @@
         }
     }
 
-    /** @type {import('./dropdown.js').DropdownOptions} */
+    /** @import { DropdownOptions } from './dropdown.js'; */
+
+
+    /** @type {DropdownOptions} */
     Dropdown.defaults = {
         display: 'dynamic',
         placement: 'bottom',
@@ -2240,7 +2248,8 @@
         }
     }, { capture: true });
 
-    /** @typedef {import('./focus-trap.js').default} FocusTrap */
+    /** @import FocusTrap from './focus-trap.js'; */
+
 
     const focusTraps = new Set();
 
@@ -2318,7 +2327,7 @@
 
     /**
      * Keeps keyboard focus within an element while active.
-     * @extends {BaseComponent<FocusTrapOptions>}
+     * @augments {BaseComponent<FocusTrapOptions>}
      */
     class FocusTrap extends BaseComponent {
         #active;
@@ -2360,7 +2369,10 @@
         }
     }
 
-    /** @type {import('./focus-trap.js').FocusTrapOptions} */
+    /** @import { FocusTrapOptions } from './focus-trap.js'; */
+
+
+    /** @type {FocusTrapOptions} */
     FocusTrap.defaults = {
         autoFocus: true,
     };
@@ -2379,7 +2391,7 @@
 
     /**
      * Controls a modal dialog and its backdrop.
-     * @extends {BaseComponent<ModalOptions>}
+     * @augments {BaseComponent<ModalOptions>}
      */
     class Modal extends BaseComponent {
         #activeTarget;
@@ -2735,7 +2747,10 @@
         return Modal.init(node);
     }
 
-    /** @type {import('./modal.js').ModalOptions} */
+    /** @import { ModalOptions } from './modal.js'; */
+
+
+    /** @type {ModalOptions} */
     Modal.defaults = {
         backdrop: true,
         focus: true,
@@ -2804,7 +2819,7 @@
 
     /**
      * Controls an offcanvas panel and its backdrop.
-     * @extends {BaseComponent<OffcanvasOptions>}
+     * @augments {BaseComponent<OffcanvasOptions>}
      */
     class Offcanvas extends BaseComponent {
         #activeTarget;
@@ -2991,7 +3006,10 @@
         }
     }
 
-    /** @type {import('./offcanvas.js').OffcanvasOptions} */
+    /** @import { OffcanvasOptions } from './offcanvas.js'; */
+
+
+    /** @type {OffcanvasOptions} */
     Offcanvas.defaults = {
         backdrop: true,
         keyboard: true,
@@ -3056,7 +3074,10 @@
         }
     });
 
-    /** @type {import('./popper.js').PopperOptions} */
+    /** @import { PopperOptions } from './popper.js'; */
+
+
+    /** @type {PopperOptions} */
     Popper.defaults = {
         reference: null,
         container: null,
@@ -3073,8 +3094,8 @@
 
     initComponent('popper', Popper);
 
-    /** @typedef {import('../popper/popper.js').Placement} Placement */
-    /** @typedef {import('../popper/popper.js').Position} Position */
+    /** @import { Placement, Position } from '../popper/popper.js'; */
+
 
     /**
      * @typedef {object} PopoverOptions
@@ -3097,7 +3118,7 @@
 
     /**
      * Controls a popover anchored to a reference element.
-     * @extends {BaseComponent<PopoverOptions>}
+     * @augments {BaseComponent<PopoverOptions>}
      */
     class Popover extends BaseComponent {
         #arrow;
@@ -3434,7 +3455,10 @@
         }
     }
 
-    /** @type {import('./popover.js').PopoverOptions} */
+    /** @import { PopoverOptions } from './popover.js'; */
+
+
+    /** @type {PopoverOptions} */
     Popover.defaults = {
         template: '<div class="popover" role="tooltip">' +
             '<div class="popover-arrow"></div>' +
@@ -3626,7 +3650,7 @@
 
     /**
      * Controls a transient toast notification.
-     * @extends {BaseComponent<ToastOptions>}
+     * @augments {BaseComponent<ToastOptions>}
      */
     class Toast extends BaseComponent {
         #timer;
@@ -3711,7 +3735,10 @@
         }
     }
 
-    /** @type {import('./toast.js').ToastOptions} */
+    /** @import { ToastOptions } from './toast.js'; */
+
+
+    /** @type {ToastOptions} */
     Toast.defaults = {
         autohide: true,
         delay: 5000,
@@ -3728,8 +3755,8 @@
         toast.hide();
     });
 
-    /** @typedef {import('../popper/popper.js').Placement} Placement */
-    /** @typedef {import('../popper/popper.js').Position} Position */
+    /** @import { Placement, Position } from '../popper/popper.js'; */
+
 
     /**
      * @typedef {object} TooltipOptions
@@ -3751,7 +3778,7 @@
 
     /**
      * Controls a tooltip anchored to a reference element.
-     * @extends {BaseComponent<TooltipOptions>}
+     * @augments {BaseComponent<TooltipOptions>}
      */
     class Tooltip extends BaseComponent {
         #arrow;
@@ -4067,7 +4094,10 @@
         }
     }
 
-    /** @type {import('./tooltip.js').TooltipOptions} */
+    /** @import { TooltipOptions } from './tooltip.js'; */
+
+
+    /** @type {TooltipOptions} */
     Tooltip.defaults = {
         template: '<div class="tooltip" role="tooltip">' +
             '<div class="tooltip-arrow"></div>' +
@@ -4170,7 +4200,7 @@
                 top: mouseY - pos.y,
             },
         });
-        ripple.style.setProperty('--ui-ripple-scale', `${scaleMultiple}`);
+        $.setStyle(ripple, { '--ui-ripple-scale': scaleMultiple });
         $.append(target, ripple);
 
         // Commit the initial scale before starting the transition.

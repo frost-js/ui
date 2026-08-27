@@ -264,7 +264,7 @@ test.describe('Toast', () => {
             await page.locator('.toast').evaluateAll((toasts) => {
                 for (const toast of toasts) {
                     toast.classList.remove('show');
-                    toast.style.setProperty('display', 'none', 'important');
+                    $.setStyle(toast, { display: 'none' }, null, { important: true });
                 }
             });
         });
@@ -488,7 +488,7 @@ test.describe('Toast', () => {
             await setupClock(page);
             await page.locator('#toast1').evaluate((toast) => {
                 toast.classList.remove('fade', 'show');
-                toast.style.setProperty('display', 'none', 'important');
+                $.setStyle(toast, { display: 'none' }, null, { important: true });
             });
         });
 
@@ -602,7 +602,7 @@ test.describe('Toast', () => {
             await setupClock(page);
             await page.locator('#toast1').evaluate((toast) => {
                 toast.classList.remove('fade', 'show');
-                toast.style.setProperty('display', 'none', 'important');
+                $.setStyle(toast, { display: 'none' }, null, { important: true });
             });
         });
 

@@ -31,7 +31,7 @@ $.addEventDelegate(document, 'click.ui.ripple', '.ripple', (e) => {
             top: mouseY - pos.y,
         },
     });
-    ripple.style.setProperty('--ui-ripple-scale', `${scaleMultiple}`);
+    $.setStyle(ripple, { '--ui-ripple-scale': scaleMultiple });
     $.append(target, ripple);
 
     // Commit the initial scale before starting the transition.

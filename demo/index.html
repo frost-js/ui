@@ -238,7 +238,7 @@
             const value = $.getValue(event.currentTarget);
 
             // Derived theme states update from these two base colors.
-            themeNode.style.setProperty(`--ui-${color}`, value);
+            $.setStyle(themeNode, { [`--ui-${color}`]: value });
             $(`[data-demo-theme-color-value="${color}"]`).setText(value);
         });
 
@@ -247,8 +247,7 @@
                 const color = $.getDataset(node, 'demoThemeColor');
                 const value = defaultThemeColors[color];
 
-                // fQuery normalizes style names, which removes the custom-property prefix.
-                themeNode.style.setProperty(`--ui-${color}`, '');
+                $.setStyle(themeNode, { [`--ui-${color}`]: '' });
                 $.setValue(node, value);
                 $(`[data-demo-theme-color-value="${color}"]`).setText(value);
             });

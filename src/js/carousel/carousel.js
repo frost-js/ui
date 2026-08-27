@@ -70,7 +70,7 @@ export default class Carousel extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
-        this.node.style.setProperty('--ui-carousel-transition-scale', '');
+        $.setStyle(this.node, { '--ui-carousel-transition-scale': '' });
 
         if (this.#sliding) {
             $.removeClass(this.node, 'carousel-dragging');
@@ -309,7 +309,7 @@ export default class Carousel extends BaseComponent {
                 $.addClass(nodeOut, transitionClass);
 
                 // Shorten the transition to match the distance left after dragging.
-                this.node.style.setProperty('--ui-carousel-transition-scale', progressRemaining);
+                $.setStyle(this.node, { '--ui-carousel-transition-scale': progressRemaining });
                 $.removeClass(this.node, 'carousel-dragging');
 
                 // Commit the dragged position with transitions enabled before removing it.
@@ -343,7 +343,7 @@ export default class Carousel extends BaseComponent {
                         this.#paused = false;
                         this.#setTimer();
 
-                        this.node.style.setProperty('--ui-carousel-transition-scale', '');
+                        $.setStyle(this.node, { '--ui-carousel-transition-scale': '' });
                     }
                 });
             };

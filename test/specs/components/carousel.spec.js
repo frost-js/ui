@@ -738,7 +738,7 @@ test.describe('Carousel', () => {
     test.describe('transition duration', () => {
         test('preserves a custom CSS transition duration', async ({ page }) => {
             await page.locator('#carousel1').evaluate((node) => {
-                node.style.setProperty('--ui-carousel-transition-duration', '200ms');
+                $.setStyle(node, { '--ui-carousel-transition-duration': '200ms' });
                 UI.Carousel.init(node);
             });
 
