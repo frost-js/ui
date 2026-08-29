@@ -127,12 +127,14 @@
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    padding: var(--ui-modal-header-padding-y) var(--ui-modal-header-padding-x);
+    padding-block: var(--ui-modal-header-padding-y);
+    padding-inline: var(--ui-modal-header-padding-x);
     border-block-end: var(--ui-modal-header-border-width) var(--ui-border-style) var(--ui-modal-header-border-color);
     @include mixins.border-top-radius(var(--ui-modal-inner-border-radius));
 
     .btn-close {
-        padding: calc(var(--ui-modal-header-padding-y) * .5) calc(var(--ui-modal-header-padding-x) * .5);
+        padding-block: calc(var(--ui-modal-header-padding-y) * .5);
+        padding-inline: calc(var(--ui-modal-header-padding-x) * .5);
         margin-block: calc(var(--ui-modal-header-padding-y) * -.5);
         margin-inline-start: auto;
         margin-inline-end: calc(var(--ui-modal-header-padding-x) * -.5);
@@ -140,7 +142,7 @@
 }
 
 .modal-title {
-    margin-bottom: 0;
+    margin-block-end: 0;
     font-size: var(--ui-modal-title-font-size);
     font-weight: var(--ui-modal-title-font-weight);
     line-height: var(--ui-modal-title-line-height);
@@ -149,7 +151,8 @@
 .modal-body {
     position: relative;
     flex: 1 1 auto;
-    padding: var(--ui-modal-padding-y) var(--ui-modal-padding-x);
+    padding-block: var(--ui-modal-padding-y);
+    padding-inline: var(--ui-modal-padding-x);
     overscroll-behavior: contain;
 }
 
@@ -160,7 +163,8 @@
     gap: vars.$spacing * .5;
     align-items: center;
     justify-content: flex-end;
-    padding: var(--ui-modal-padding-y) var(--ui-modal-padding-x);
+    padding-block: var(--ui-modal-padding-y);
+    padding-inline: var(--ui-modal-padding-x);
     border-block-start: var(--ui-modal-footer-border-width) var(--ui-border-style) var(--ui-modal-footer-border-color);
     @include mixins.border-bottom-radius(var(--ui-modal-inner-border-radius));
 }
@@ -168,7 +172,8 @@
 @include mixins.media-breakpoint-up(sm) {
     .modal-dialog {
         max-width: var(--ui-modal-width);
-        margin: vars.$modal-md-dialog-margin-y auto;
+        margin-block: vars.$modal-md-dialog-margin-y;
+        margin-inline: auto;
     }
 
     .modal-dialog-scrollable {

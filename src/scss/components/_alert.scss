@@ -16,8 +16,9 @@
     --ui-alert-border-radius: #{vars.$alert-border-radius};
 
     position: relative;
-    padding: var(--ui-alert-padding-y) var(--ui-alert-padding-x);
-    margin-bottom: var(--ui-alert-margin-bottom);
+    padding-block: var(--ui-alert-padding-y);
+    padding-inline: var(--ui-alert-padding-x);
+    margin-block-end: var(--ui-alert-margin-bottom);
     color: var(--ui-alert-color);
     background-color: var(--ui-alert-bg);
     border: var(--ui-alert-border-width) var(--ui-border-style) var(--ui-alert-border-color);
@@ -32,7 +33,8 @@
         position: absolute;
         inset-inline-end: 0;
         top: 0;
-        padding: var(--ui-alert-padding-y) var(--ui-alert-padding-x);
+        padding-block: var(--ui-alert-padding-y);
+        padding-inline: var(--ui-alert-padding-x);
         color: inherit;
     }
 }

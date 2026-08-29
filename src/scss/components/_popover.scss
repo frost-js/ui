@@ -134,8 +134,9 @@
 }
 
 .popover-header {
-    padding: var(--ui-popover-header-padding-y) var(--ui-popover-header-padding-x);
-    margin-bottom: 0;
+    padding-block: var(--ui-popover-header-padding-y);
+    padding-inline: var(--ui-popover-header-padding-x);
+    margin-block-end: 0;
     font-size: var(--ui-popover-header-font-size);
     font-weight: var(--ui-popover-header-font-weight);
     line-height: var(--ui-popover-header-line-height);
@@ -150,6 +151,7 @@
 }
 
 .popover-body {
-    padding: var(--ui-popover-body-padding-y) var(--ui-popover-body-padding-x);
+    padding-block: var(--ui-popover-body-padding-y);
+    padding-inline: var(--ui-popover-body-padding-x);
     color: var(--ui-popover-body-color);
 }

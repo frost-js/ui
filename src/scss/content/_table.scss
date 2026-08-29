@@ -16,14 +16,15 @@
     --ui-table-cell-padding-x: #{vars.$table-cell-padding-x};
 
     width: 100%;
-    margin-bottom: var(--ui-table-margin-bottom);
+    margin-block-end: var(--ui-table-margin-bottom);
     border-color: var(--ui-table-border-color);
 
     > :not(caption) > * {
         border-color: var(--ui-table-border-color);
 
         > * {
-            padding: var(--ui-table-cell-padding-y) var(--ui-table-cell-padding-x);
+            padding-block: var(--ui-table-cell-padding-y);
+            padding-inline: var(--ui-table-cell-padding-x);
             color: var(--ui-table-color);
             background-color: var(--ui-table-bg);
             border-color: var(--ui-table-border-color);

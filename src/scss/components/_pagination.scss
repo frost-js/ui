@@ -32,7 +32,8 @@
 .page-link {
     position: relative;
     display: block;
-    padding: var(--ui-pagination-padding-y) var(--ui-pagination-padding-x);
+    padding-block: var(--ui-pagination-padding-y);
+    padding-inline: var(--ui-pagination-padding-x);
     font-size: var(--ui-pagination-font-size);
     color: var(--ui-pagination-color);
     text-decoration: none;

@@ -45,14 +45,15 @@
     pointer-events: none;
 
     > :not(:last-child) {
-        margin-bottom: var(--ui-toast-margin-bottom);
+        margin-block-end: var(--ui-toast-margin-bottom);
     }
 }
 
 .toast-header {
     display: flex;
     align-items: center;
-    padding: var(--ui-toast-padding-y) var(--ui-toast-padding-x);
+    padding-block: var(--ui-toast-padding-y);
+    padding-inline: var(--ui-toast-padding-x);
     color: var(--ui-toast-header-color);
     background-color: var(--ui-toast-header-bg);
     background-clip: padding-box;

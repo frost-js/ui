@@ -33,7 +33,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--ui-btn-padding-y) var(--ui-btn-padding-x);
+    padding-block: var(--ui-btn-padding-y);
+    padding-inline: var(--ui-btn-padding-x);
     font-family: var(--ui-btn-font-family);
     font-size: var(--ui-btn-font-size);
     font-weight: var(--ui-btn-font-weight);

@@ -3,13 +3,13 @@
 @use "base";
 
 .blockquote {
-    margin-bottom: vars.$blockquote-margin-bottom;
+    margin-block-end: vars.$blockquote-margin-bottom;
     font-size: vars.$blockquote-font-size;
 }
 
 .blockquote-footer {
     display: block;
-    margin-top: vars.$blockquote-footer-margin-top;
+    margin-block-start: vars.$blockquote-footer-margin-top;
     font-size: vars.$blockquote-footer-font-size;
     color: vars.$blockquote-footer-color;
 
@@ -43,8 +43,7 @@
 }
 
 %display-heading {
-    margin-top: 0;
-    margin-bottom: vars.$headings-margin-bottom;
+    margin-block: 0 vars.$headings-margin-bottom;
     font-family: vars.$headings-font-family;
     font-style: vars.$headings-font-style;
     font-weight: vars.$display-font-weight;

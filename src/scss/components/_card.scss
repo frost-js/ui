@@ -93,8 +93,9 @@
 }
 
 .card-header {
-    padding: var(--ui-card-cap-padding-y) var(--ui-card-cap-padding-x);
-    margin-bottom: 0;
+    padding-block: var(--ui-card-cap-padding-y);
+    padding-inline: var(--ui-card-cap-padding-x);
+    margin-block-end: 0;
     font-weight: var(--ui-card-header-font-weight);
     background-color: var(--ui-card-cap-bg);
     border-block-end: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
@@ -105,7 +106,8 @@
 }
 
 .card-footer {
-    padding: var(--ui-card-cap-padding-y) var(--ui-card-cap-padding-x);
+    padding-block: var(--ui-card-cap-padding-y);
+    padding-inline: var(--ui-card-cap-padding-x);
     background-color: var(--ui-card-cap-bg);
     border-block-start: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
 
@@ -116,21 +118,21 @@
 
 .card-body {
     flex: 1 1 auto;
-    padding: var(--ui-card-spacer-y) var(--ui-card-spacer-x);
+    padding-block: var(--ui-card-spacer-y);
+    padding-inline: var(--ui-card-spacer-x);
 }
 
 .card-title {
-    margin-bottom: var(--ui-card-title-spacer-y);
+    margin-block-end: var(--ui-card-title-spacer-y);
     font-weight: var(--ui-card-title-font-weight);
 }
 
 .card-subtitle {
-    margin-top: calc(var(--ui-card-title-spacer-y) * -.5);
-    margin-bottom: 0;
+    margin-block: calc(var(--ui-card-title-spacer-y) * -.5) 0;
 }
 
 .card-text:last-child {
-    margin-bottom: 0;
+    margin-block-end: 0;
 }
 
 .card-link + .card-link {

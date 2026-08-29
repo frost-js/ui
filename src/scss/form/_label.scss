@@ -1,22 +1,19 @@
 @use "../vars";
 
 .col-label {
-    padding-top: calc(#{vars.$input-padding-y} + #{vars.$input-border-width});
-    padding-bottom: calc(#{vars.$input-padding-y} + #{vars.$input-border-width});
-    margin-bottom: 0;
+    padding-block: calc(#{vars.$input-padding-y} + #{vars.$input-border-width});
+    margin-block-end: 0;
     font-size: inherit;
     line-height: vars.$input-line-height;
 }
 
 .col-label-sm {
-    padding-top: calc(#{vars.$input-sm-padding-y} + #{vars.$input-border-width});
-    padding-bottom: calc(#{vars.$input-sm-padding-y} + #{vars.$input-border-width});
+    padding-block: calc(#{vars.$input-sm-padding-y} + #{vars.$input-border-width});
     font-size: vars.$input-sm-font-size;
 }
 
 .col-label-lg {
-    padding-top: calc(#{vars.$input-lg-padding-y} + #{vars.$input-border-width});
-    padding-bottom: calc(#{vars.$input-lg-padding-y} + #{vars.$input-border-width});
+    padding-block: calc(#{vars.$input-lg-padding-y} + #{vars.$input-border-width});
     font-size: vars.$input-lg-font-size;
 }
 
@@ -26,8 +23,9 @@
     top: 0;
     display: block;
     width: 100%;
-    padding: vars.$label-floating-padding-y vars.$input-padding-x;
-    margin-bottom: 0;
+    padding-block: vars.$label-floating-padding-y;
+    padding-inline: vars.$input-padding-x;
+    margin-block-end: 0;
     font-size: vars.$input-font-size;
     line-height: vars.$input-line-height;
     color: vars.$input-placeholder-color;
@@ -42,8 +40,7 @@
 
     &,
     .input-group & {
-        padding-top: vars.$label-floating-padding-y;
-        padding-bottom: vars.$label-floating-padding-y;
+        padding-block: vars.$label-floating-padding-y;
     }
 
     &::placeholder {
@@ -76,11 +73,10 @@
     }
 
     &:is(:focus, .focus, :not(:placeholder-shown)) {
-        padding-top: vars.$input-padding-y + vars.$label-floating-padding-y;
-        padding-bottom: vars.$input-padding-y * .5;
+        padding-block: vars.$input-padding-y + vars.$label-floating-padding-y vars.$input-padding-y * .5;
 
         ~.label-floating {
-            padding-top: vars.$input-padding-y * .5;
+            padding-block-start: vars.$input-padding-y * .5;
             font-size: vars.$label-floating-font-size;
             color: vars.$label-floating-color;
         }

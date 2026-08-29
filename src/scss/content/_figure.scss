@@ -9,7 +9,7 @@
 }
 
 .figure-img {
-    margin-bottom: vars.$figure-img-margin-bottom;
+    margin-block-end: vars.$figure-img-margin-bottom;
     line-height: map.get(vars.$line-heights, 1);
 }
 

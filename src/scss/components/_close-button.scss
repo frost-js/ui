@@ -16,7 +16,8 @@
     box-sizing: content-box;
     width: var(--ui-btn-close-width);
     height: var(--ui-btn-close-height);
-    padding: var(--ui-btn-close-padding-y) var(--ui-btn-close-padding-x);
+    padding-block: var(--ui-btn-close-padding-y);
+    padding-inline: var(--ui-btn-close-padding-x);
     color: inherit;
     background-color: transparent;
     border: 0;

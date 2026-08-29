@@ -28,7 +28,7 @@
 .invalid-feedback {
     display: none;
     width: 100%;
-    margin-top: vars.$form-feedback-margin-top;
+    margin-block-start: vars.$form-feedback-margin-top;
     font-size: vars.$form-feedback-font-size;
     color: var(--ui-input-feedback-color);
 }

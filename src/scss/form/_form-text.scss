@@ -1,7 +1,7 @@
 @use "../vars";
 
 .form-text {
-    margin-top: vars.$form-text-margin-top;
+    margin-block-start: vars.$form-text-margin-top;
     font-size: vars.$form-text-font-size;
     color: vars.$form-text-color;
 }
@@ -9,8 +9,9 @@
 .input-plain-text {
     display: block;
     width: 100%;
-    padding: vars.$input-padding-y 0;
-    margin-bottom: 0;
+    padding-block: vars.$input-padding-y;
+    padding-inline: 0;
+    margin-block-end: 0;
     line-height: vars.$input-line-height;
     color: vars.$input-plain-text-color;
     outline: 0;
@@ -23,7 +24,8 @@
 .input-group-text {
     display: flex;
     align-items: center;
-    padding: vars.$input-padding-y vars.$input-padding-x;
+    padding-block: vars.$input-padding-y;
+    padding-inline: vars.$input-padding-x;
     font-size: vars.$input-font-size;
     font-weight: vars.$input-group-text-font-weight;
     line-height: vars.$input-line-height;

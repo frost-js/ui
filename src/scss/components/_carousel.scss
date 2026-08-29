@@ -179,7 +179,8 @@
     bottom: var(--ui-carousel-caption-spacer);
     width: fit-content;
     max-width: min(var(--ui-carousel-caption-width), calc(100% - var(--ui-carousel-caption-spacer) - var(--ui-carousel-caption-spacer)));
-    padding: var(--ui-carousel-caption-padding-y) var(--ui-carousel-caption-padding-x);
+    padding-block: var(--ui-carousel-caption-padding-y);
+    padding-inline: var(--ui-carousel-caption-padding-x);
     margin-inline: auto;
     color: var(--ui-carousel-caption-color);
     text-align: center;
@@ -190,7 +191,7 @@
     @include mixins.border-radius(var(--ui-carousel-caption-border-radius));
 
     > :last-child {
-        margin-bottom: 0;
+        margin-block-end: 0;
     }
 }
 

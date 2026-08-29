@@ -10,7 +10,8 @@
     --ui-badge-border-radius: #{vars.$badge-border-radius};
 
     display: inline-block;
-    padding: var(--ui-badge-padding-y) var(--ui-badge-padding-x);
+    padding-block: var(--ui-badge-padding-y);
+    padding-inline: var(--ui-badge-padding-x);
     font-size: var(--ui-badge-font-size);
     font-weight: var(--ui-badge-font-weight);
     line-height: 1;

@@ -10,7 +10,8 @@
     display: flex;
     flex-wrap: wrap;
     padding: 0;
-    margin: 0 0 var(--ui-breadcrumb-margin-bottom);
+    margin-block: 0 var(--ui-breadcrumb-margin-bottom);
+    margin-inline: 0;
     list-style: none;
 }
 

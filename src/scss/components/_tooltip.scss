@@ -90,7 +90,8 @@
 
 .tooltip-inner {
     max-width: var(--ui-tooltip-max-width);
-    padding: var(--ui-tooltip-padding-y) var(--ui-tooltip-padding-x);
+    padding-block: var(--ui-tooltip-padding-y);
+    padding-inline: var(--ui-tooltip-padding-x);
     color: var(--ui-tooltip-color);
     text-align: center;
     background-color: var(--ui-tooltip-bg);

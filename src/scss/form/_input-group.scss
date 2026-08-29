@@ -122,7 +122,8 @@
     .input-filled,
     .input-outline,
     .input-group-text {
-        padding: vars.$input-sm-padding-y vars.$input-sm-padding-x;
+        padding-block: vars.$input-sm-padding-y;
+        padding-inline: vars.$input-sm-padding-x;
         font-size: vars.$input-sm-font-size;
     }
 }
@@ -133,7 +134,8 @@
     .input-filled,
     .input-outline,
     .input-group-text {
-        padding: vars.$input-lg-padding-y vars.$input-lg-padding-x;
+        padding-block: vars.$input-lg-padding-y;
+        padding-inline: vars.$input-lg-padding-x;
         font-size: vars.$input-lg-font-size;
     }
 }
