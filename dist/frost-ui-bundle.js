@@ -9014,6 +9014,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (this.#scrollNodes) this.#cleanup(false);
 			if (this.#focusTrap) {
 				this.#focusTrap.dispose();
 				this.#focusTrap = null;
@@ -9059,38 +9060,12 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			$$1.addClass(this.node, "hiding");
 			$$1.removeClass(this.node, "show");
 			if (this.#backdrop) $$1.removeClass(this.#backdrop, "show");
-			const transitions = [waitForTransition(this.#dialog, ["opacity", "transform"], {
-				activeTarget: this.#activeTarget,
-				backdrop: this.#backdrop,
-				modal: this.node,
-				scrollNodes: this.#scrollNodes
-			})];
+			const transitions = [waitForTransition(this.#dialog, ["opacity", "transform"])];
 			if (this.#backdrop) transitions.push(waitForTransition(this.#backdrop, ["opacity"]));
-			Promise.all(transitions).then(([{ activeTarget, backdrop, modal, scrollNodes }]) => {
-				this.#transitioning = false;
-				$$1.removeClass(modal, "hiding");
-				$$1.setAttribute(modal, {
-					"aria-hidden": true,
-					"aria-modal": false
-				});
-				const [dialog, ...sharedScrollNodes] = scrollNodes;
-				resetScrollPadding([dialog]);
-				this.#scrollNodes = [];
-				if ($$1.getStyle(modal, "zIndex")) $$1.setStyle(modal, { zIndex: "" });
-				if (backdrop) {
-					$$1.remove(backdrop);
-					this.#backdrop = null;
-				}
-				const modals = Modal.#updateStack();
-				if (modals.length) modals[0].#scrollNodes.push(...sharedScrollNodes);
-				else {
-					resetScrollPadding(sharedScrollNodes);
-					$$1.removeClass(document.body, "modal-open");
-				}
-				if (activeTarget) {
-					$$1.focus(activeTarget);
-					this.#activeTarget = null;
-				}
+			Promise.all(transitions).then((_) => {
+				if (!this.node) return;
+				const modal = this.node;
+				this.#cleanup();
 				$$1.triggerEvent(modal, "hidden.ui.modal");
 			});
 		}
@@ -9124,6 +9099,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				transitions.push(waitForTransition(this.#backdrop, ["opacity"]));
 			}
 			Promise.all(transitions).then(([{ modal }]) => {
+				if (!this.node) return;
 				this.#transitioning = false;
 				$$1.setAttribute(modal, {
 					"aria-hidden": false,
@@ -9139,6 +9115,33 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		toggle() {
 			if ($$1.hasClass(this.node, "show")) this.hide();
 			else this.show();
+		}
+		/**
+		* Restores the hidden modal state.
+		* @param {boolean} [restoreFocus=true] Whether to restore focus to the active target.
+		*/
+		#cleanup(restoreFocus = true) {
+			const [dialog, ...sharedScrollNodes] = this.#scrollNodes;
+			$$1.removeClass(this.node, "hiding modal-static show");
+			$$1.setAttribute(this.node, {
+				"aria-hidden": true,
+				"aria-modal": false
+			});
+			if (dialog) resetScrollPadding([dialog]);
+			if ($$1.getStyle(this.node, "zIndex")) $$1.setStyle(this.node, { zIndex: "" });
+			if (this.#backdrop) $$1.remove(this.#backdrop);
+			const modals = Modal.#updateStack();
+			if (modals.length) modals[0].#scrollNodes.push(...sharedScrollNodes);
+			else {
+				resetScrollPadding(sharedScrollNodes);
+				$$1.removeClass(document.body, "modal-open");
+			}
+			if (restoreFocus && this.#activeTarget) $$1.focus(this.#activeTarget);
+			this.#activeTarget = null;
+			this.#scrollNodes = null;
+			this.#backdrop = null;
+			this.#transitioning = false;
+			this.#zooming = false;
 		}
 		/**
 		* Sets the modal and backdrop stacking level.
@@ -9163,10 +9166,11 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			this.#zooming = true;
 			$$1.addClass(this.node, "modal-static");
 			waitForTransition(this.#dialog, ["transform"], { modal: this.node }).then(({ modal, node }) => {
+				if (!this.node) return;
 				$$1.removeClass(modal, "modal-static");
 				return waitForTransition(node, ["transform"]);
 			}).then((_) => {
-				this.#zooming = false;
+				if (this.node) this.#zooming = false;
 			});
 		}
 	};
@@ -9255,6 +9259,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (this.#scrollNodes) this.#cleanup(false);
 			if (this.#focusTrap) {
 				this.#focusTrap.dispose();
 				this.#focusTrap = null;
@@ -9285,29 +9290,11 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			this.#transitioning = true;
 			if (this.#focusTrap) this.#focusTrap.deactivate();
 			$$1.addClass(this.node, "hiding");
-			waitForTransition(this.node, ["opacity", "transform"], {
-				activeTarget: this.#activeTarget,
-				backdrop: this.options.backdrop,
-				scroll: this.options.scroll,
-				scrollNodes: this.#scrollNodes
-			}).then(({ activeTarget, backdrop, node, scroll, scrollNodes }) => {
-				this.#transitioning = false;
-				$$1.removeClass(node, "hiding show");
-				$$1.setAttribute(node, {
-					"aria-hidden": true,
-					"aria-modal": false
-				});
-				if (backdrop) $$1.removeClass(document.body, "offcanvas-backdrop");
-				if (!scroll) {
-					resetScrollPadding(scrollNodes);
-					this.#scrollNodes = [];
-					$$1.setStyle(document.body, { overflow: "" });
-				}
-				if (activeTarget) {
-					$$1.focus(activeTarget);
-					this.#activeTarget = null;
-				}
-				$$1.triggerEvent(node, "hidden.ui.offcanvas");
+			waitForTransition(this.node, ["opacity", "transform"]).then((_) => {
+				if (!this.node) return;
+				const offcanvas = this.node;
+				this.#cleanup();
+				$$1.triggerEvent(offcanvas, "hidden.ui.offcanvas");
 			});
 		}
 		/**
@@ -9329,6 +9316,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			$$1.css(this.node, "opacity");
 			$$1.addClass(this.node, "show");
 			waitForTransition(this.node, ["opacity", "transform"]).then(({ node }) => {
+				if (!this.node) return;
 				this.#transitioning = false;
 				$$1.setAttribute(node, {
 					"aria-hidden": false,
@@ -9344,6 +9332,26 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		toggle() {
 			if ($$1.hasClass(this.node, "show")) this.hide();
 			else this.show();
+		}
+		/**
+		* Restores the hidden offcanvas state.
+		* @param {boolean} [restoreFocus=true] Whether to restore focus to the active target.
+		*/
+		#cleanup(restoreFocus = true) {
+			$$1.removeClass(this.node, "hiding show");
+			$$1.setAttribute(this.node, {
+				"aria-hidden": true,
+				"aria-modal": false
+			});
+			if (this.options.backdrop) $$1.removeClass(document.body, "offcanvas-backdrop");
+			if (!this.options.scroll) {
+				resetScrollPadding(this.#scrollNodes);
+				$$1.setStyle(document.body, { overflow: "" });
+			}
+			if (restoreFocus && this.#activeTarget) $$1.focus(this.#activeTarget);
+			this.#activeTarget = null;
+			this.#scrollNodes = null;
+			this.#transitioning = false;
 		}
 	};
 

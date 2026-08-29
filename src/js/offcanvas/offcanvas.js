@@ -36,6 +36,10 @@ export default class Offcanvas extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
+        if (this.#scrollNodes) {
+            this.#cleanup(false);
+        }
+
         if (this.#focusTrap) {
             this.#focusTrap.dispose();
             this.#focusTrap = null;
@@ -93,43 +97,15 @@ export default class Offcanvas extends BaseComponent {
 
         $.addClass(this.node, 'hiding');
 
-        waitForTransition(this.node, ['opacity', 'transform'], {
-            activeTarget: this.#activeTarget,
-            backdrop: this.options.backdrop,
-            scroll: this.options.scroll,
-            scrollNodes: this.#scrollNodes,
-        }).then(({
-            activeTarget,
-            backdrop,
-            node,
-            scroll,
-            scrollNodes,
-        }) => {
-            this.#transitioning = false;
-
-            $.removeClass(node, 'hiding show');
-            $.setAttribute(node, {
-                'aria-hidden': true,
-                'aria-modal': false,
-            });
-
-            if (backdrop) {
-                $.removeClass(document.body, 'offcanvas-backdrop');
+        waitForTransition(this.node, ['opacity', 'transform']).then((_) => {
+            if (!this.node) {
+                return;
             }
 
-            if (!scroll) {
-                resetScrollPadding(scrollNodes);
-                this.#scrollNodes = [];
+            const offcanvas = this.node;
 
-                $.setStyle(document.body, { overflow: '' });
-            }
-
-            if (activeTarget) {
-                $.focus(activeTarget);
-                this.#activeTarget = null;
-            }
-
-            $.triggerEvent(node, 'hidden.ui.offcanvas');
+            this.#cleanup();
+            $.triggerEvent(offcanvas, 'hidden.ui.offcanvas');
         });
     }
 
@@ -173,6 +149,10 @@ export default class Offcanvas extends BaseComponent {
         $.addClass(this.node, 'show');
 
         waitForTransition(this.node, ['opacity', 'transform']).then(({ node }) => {
+            if (!this.node) {
+                return;
+            }
+
             this.#transitioning = false;
 
             $.setAttribute(node, {
@@ -197,5 +177,35 @@ export default class Offcanvas extends BaseComponent {
         } else {
             this.show();
         }
+    }
+
+    /**
+     * Restores the hidden offcanvas state.
+     * @param {boolean} [restoreFocus=true] Whether to restore focus to the active target.
+     */
+    #cleanup(restoreFocus = true) {
+        $.removeClass(this.node, 'hiding show');
+        $.setAttribute(this.node, {
+            'aria-hidden': true,
+            'aria-modal': false,
+        });
+
+        if (this.options.backdrop) {
+            $.removeClass(document.body, 'offcanvas-backdrop');
+        }
+
+        if (!this.options.scroll) {
+            resetScrollPadding(this.#scrollNodes);
+
+            $.setStyle(document.body, { overflow: '' });
+        }
+
+        if (restoreFocus && this.#activeTarget) {
+            $.focus(this.#activeTarget);
+        }
+
+        this.#activeTarget = null;
+        this.#scrollNodes = null;
+        this.#transitioning = false;
     }
 }

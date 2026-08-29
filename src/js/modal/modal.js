@@ -71,6 +71,10 @@ export default class Modal extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
+        if (this.#scrollNodes) {
+            this.#cleanup(false);
+        }
+
         if (this.#focusTrap) {
             this.#focusTrap.dispose();
             this.#focusTrap = null;
@@ -149,60 +153,21 @@ export default class Modal extends BaseComponent {
         }
 
         const transitions = [
-            waitForTransition(this.#dialog, ['opacity', 'transform'], {
-                activeTarget: this.#activeTarget,
-                backdrop: this.#backdrop,
-                modal: this.node,
-                scrollNodes: this.#scrollNodes,
-            }),
+            waitForTransition(this.#dialog, ['opacity', 'transform']),
         ];
 
         if (this.#backdrop) {
             transitions.push(waitForTransition(this.#backdrop, ['opacity']));
         }
 
-        Promise.all(transitions).then(([{
-            activeTarget,
-            backdrop,
-            modal,
-            scrollNodes,
-        }]) => {
-            this.#transitioning = false;
-
-            $.removeClass(modal, 'hiding');
-            $.setAttribute(modal, {
-                'aria-hidden': true,
-                'aria-modal': false,
-            });
-
-            const [dialog, ...sharedScrollNodes] = scrollNodes;
-
-            resetScrollPadding([dialog]);
-            this.#scrollNodes = [];
-
-            if ($.getStyle(modal, 'zIndex')) {
-                $.setStyle(modal, { zIndex: '' });
+        Promise.all(transitions).then((_) => {
+            if (!this.node) {
+                return;
             }
 
-            if (backdrop) {
-                $.remove(backdrop);
-                this.#backdrop = null;
-            }
+            const modal = this.node;
 
-            const modals = Modal.#updateStack();
-
-            if (modals.length) {
-                modals[0].#scrollNodes.push(...sharedScrollNodes);
-            } else {
-                resetScrollPadding(sharedScrollNodes);
-                $.removeClass(document.body, 'modal-open');
-            }
-
-            if (activeTarget) {
-                $.focus(activeTarget);
-                this.#activeTarget = null;
-            }
-
+            this.#cleanup();
             $.triggerEvent(modal, 'hidden.ui.modal');
         });
     }
@@ -267,6 +232,10 @@ export default class Modal extends BaseComponent {
         }
 
         Promise.all(transitions).then(([{ modal }]) => {
+            if (!this.node) {
+                return;
+            }
+
             this.#transitioning = false;
 
             $.setAttribute(modal, {
@@ -291,6 +260,51 @@ export default class Modal extends BaseComponent {
         } else {
             this.show();
         }
+    }
+
+    /**
+     * Restores the hidden modal state.
+     * @param {boolean} [restoreFocus=true] Whether to restore focus to the active target.
+     */
+    #cleanup(restoreFocus = true) {
+        const [dialog, ...sharedScrollNodes] = this.#scrollNodes;
+
+        $.removeClass(this.node, 'hiding modal-static show');
+        $.setAttribute(this.node, {
+            'aria-hidden': true,
+            'aria-modal': false,
+        });
+
+        if (dialog) {
+            resetScrollPadding([dialog]);
+        }
+
+        if ($.getStyle(this.node, 'zIndex')) {
+            $.setStyle(this.node, { zIndex: '' });
+        }
+
+        if (this.#backdrop) {
+            $.remove(this.#backdrop);
+        }
+
+        const modals = Modal.#updateStack();
+
+        if (modals.length) {
+            modals[0].#scrollNodes.push(...sharedScrollNodes);
+        } else {
+            resetScrollPadding(sharedScrollNodes);
+            $.removeClass(document.body, 'modal-open');
+        }
+
+        if (restoreFocus && this.#activeTarget) {
+            $.focus(this.#activeTarget);
+        }
+
+        this.#activeTarget = null;
+        this.#scrollNodes = null;
+        this.#backdrop = null;
+        this.#transitioning = false;
+        this.#zooming = false;
     }
 
     /**
@@ -334,11 +348,17 @@ export default class Modal extends BaseComponent {
         waitForTransition(this.#dialog, ['transform'], {
             modal: this.node,
         }).then(({ modal, node }) => {
+            if (!this.node) {
+                return;
+            }
+
             $.removeClass(modal, 'modal-static');
 
             return waitForTransition(node, ['transform']);
         }).then((_) => {
-            this.#zooming = false;
+            if (this.node) {
+                this.#zooming = false;
+            }
         });
     }
 }

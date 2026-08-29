@@ -75,6 +75,84 @@ test.describe('Modal', () => {
                 return $.hasData('#modal1', 'modal');
             })).toBe(false);
         });
+
+        test('cleans up a shown modal', async ({ page }) => {
+            await page.evaluate((_) => {
+                $.setStyle(document.body, {
+                    height: '2000px',
+                    paddingRight: '10px',
+                });
+
+                const modal1 = $.findOne('#modal1');
+
+                UI.Modal.init(modal1).show();
+            });
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
+            const hiddenEventTriggered = await page.evaluate((_) => {
+                const modal1 = $.findOne('#modal1');
+                let triggered = false;
+
+                $.addEvent(modal1, 'hidden.ui.modal', (_) => {
+                    triggered = true;
+                });
+                UI.Modal.init(modal1).dispose();
+
+                return triggered;
+            });
+
+            expect(hiddenEventTriggered).toBe(false);
+            await expect(page.locator('#modal1')).toHaveClass('modal');
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
+            await expect(page.locator('.modal-backdrop')).toHaveCount(0);
+            await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { paddingRight: '10px' },
+                },
+                {
+                    selectors: ['#modal-dialog-1'],
+                    styles: { paddingRight: '' },
+                },
+            ]);
+            expect(await page.evaluate((_) => $.hasData('#modal1', 'modal'))).toBe(false);
+        });
+
+        test('cleans up while showing', async ({ page }) => {
+            await page.evaluate((_) => {
+                const modal1 = $.findOne('#modal1');
+
+                window.modalDisposeEvents = {
+                    hidden: false,
+                    shown: false,
+                };
+                $.addEvent(modal1, 'hidden.ui.modal', (_) => {
+                    window.modalDisposeEvents.hidden = true;
+                });
+                $.addEvent(modal1, 'shown.ui.modal', (_) => {
+                    window.modalDisposeEvents.shown = true;
+                });
+
+                const modal = UI.Modal.init(modal1);
+
+                modal.show();
+                modal.dispose();
+            });
+
+            await page.waitForTimeout(400);
+
+            await expect(page.locator('#modal1')).toHaveClass('modal');
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
+            await expect(page.locator('.modal-backdrop')).toHaveCount(0);
+            await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
+            expect(await page.evaluate((_) => window.modalDisposeEvents)).toEqual({
+                hidden: false,
+                shown: false,
+            });
+        });
     });
 
     test.describe('#show', () => {

@@ -71,6 +71,87 @@ test.describe('Offcanvas', () => {
                 return $.hasData('#offcanvas1', 'offcanvas');
             })).toBe(false);
         });
+
+        test('cleans up a shown offcanvas', async ({ page }) => {
+            await page.evaluate((_) => {
+                $.setStyle(document.body, {
+                    height: '2000px',
+                    paddingRight: '10px',
+                });
+
+                const offcanvas1 = $.findOne('#offcanvas1');
+
+                UI.Offcanvas.init(offcanvas1).show();
+            });
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
+            const hiddenEventTriggered = await page.evaluate((_) => {
+                const offcanvas1 = $.findOne('#offcanvas1');
+                let triggered = false;
+
+                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', (_) => {
+                    triggered = true;
+                });
+                UI.Offcanvas.init(offcanvas1).dispose();
+
+                return triggered;
+            });
+
+            expect(hiddenEventTriggered).toBe(false);
+            await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
+            await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: {
+                        overflow: '',
+                        paddingRight: '10px',
+                    },
+                },
+            ]);
+            expect(await page.evaluate((_) => $.hasData('#offcanvas1', 'offcanvas'))).toBe(false);
+        });
+
+        test('cleans up while showing', async ({ page }) => {
+            await page.evaluate((_) => {
+                const offcanvas1 = $.findOne('#offcanvas1');
+
+                window.offcanvasDisposeEvents = {
+                    hidden: false,
+                    shown: false,
+                };
+                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', (_) => {
+                    window.offcanvasDisposeEvents.hidden = true;
+                });
+                $.addEvent(offcanvas1, 'shown.ui.offcanvas', (_) => {
+                    window.offcanvasDisposeEvents.shown = true;
+                });
+
+                const offcanvas = UI.Offcanvas.init(offcanvas1);
+
+                offcanvas.show();
+                offcanvas.dispose();
+            });
+
+            await page.waitForTimeout(400);
+
+            await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
+            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
+            await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
+            await expectStyles(page, [
+                {
+                    selectors: ['body'],
+                    styles: { overflow: '' },
+                },
+            ]);
+            expect(await page.evaluate((_) => window.offcanvasDisposeEvents)).toEqual({
+                hidden: false,
+                shown: false,
+            });
+        });
     });
 
     test.describe('#show', () => {

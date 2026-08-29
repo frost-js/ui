@@ -1676,6 +1676,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (this.#scrollNodes) this.#cleanup(false);
 			if (this.#focusTrap) {
 				this.#focusTrap.dispose();
 				this.#focusTrap = null;
@@ -1721,38 +1722,12 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			$.addClass(this.node, "hiding");
 			$.removeClass(this.node, "show");
 			if (this.#backdrop) $.removeClass(this.#backdrop, "show");
-			const transitions = [waitForTransition(this.#dialog, ["opacity", "transform"], {
-				activeTarget: this.#activeTarget,
-				backdrop: this.#backdrop,
-				modal: this.node,
-				scrollNodes: this.#scrollNodes
-			})];
+			const transitions = [waitForTransition(this.#dialog, ["opacity", "transform"])];
 			if (this.#backdrop) transitions.push(waitForTransition(this.#backdrop, ["opacity"]));
-			Promise.all(transitions).then(([{ activeTarget, backdrop, modal, scrollNodes }]) => {
-				this.#transitioning = false;
-				$.removeClass(modal, "hiding");
-				$.setAttribute(modal, {
-					"aria-hidden": true,
-					"aria-modal": false
-				});
-				const [dialog, ...sharedScrollNodes] = scrollNodes;
-				resetScrollPadding([dialog]);
-				this.#scrollNodes = [];
-				if ($.getStyle(modal, "zIndex")) $.setStyle(modal, { zIndex: "" });
-				if (backdrop) {
-					$.remove(backdrop);
-					this.#backdrop = null;
-				}
-				const modals = Modal.#updateStack();
-				if (modals.length) modals[0].#scrollNodes.push(...sharedScrollNodes);
-				else {
-					resetScrollPadding(sharedScrollNodes);
-					$.removeClass(document.body, "modal-open");
-				}
-				if (activeTarget) {
-					$.focus(activeTarget);
-					this.#activeTarget = null;
-				}
+			Promise.all(transitions).then((_) => {
+				if (!this.node) return;
+				const modal = this.node;
+				this.#cleanup();
 				$.triggerEvent(modal, "hidden.ui.modal");
 			});
 		}
@@ -1786,6 +1761,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				transitions.push(waitForTransition(this.#backdrop, ["opacity"]));
 			}
 			Promise.all(transitions).then(([{ modal }]) => {
+				if (!this.node) return;
 				this.#transitioning = false;
 				$.setAttribute(modal, {
 					"aria-hidden": false,
@@ -1801,6 +1777,33 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		toggle() {
 			if ($.hasClass(this.node, "show")) this.hide();
 			else this.show();
+		}
+		/**
+		* Restores the hidden modal state.
+		* @param {boolean} [restoreFocus=true] Whether to restore focus to the active target.
+		*/
+		#cleanup(restoreFocus = true) {
+			const [dialog, ...sharedScrollNodes] = this.#scrollNodes;
+			$.removeClass(this.node, "hiding modal-static show");
+			$.setAttribute(this.node, {
+				"aria-hidden": true,
+				"aria-modal": false
+			});
+			if (dialog) resetScrollPadding([dialog]);
+			if ($.getStyle(this.node, "zIndex")) $.setStyle(this.node, { zIndex: "" });
+			if (this.#backdrop) $.remove(this.#backdrop);
+			const modals = Modal.#updateStack();
+			if (modals.length) modals[0].#scrollNodes.push(...sharedScrollNodes);
+			else {
+				resetScrollPadding(sharedScrollNodes);
+				$.removeClass(document.body, "modal-open");
+			}
+			if (restoreFocus && this.#activeTarget) $.focus(this.#activeTarget);
+			this.#activeTarget = null;
+			this.#scrollNodes = null;
+			this.#backdrop = null;
+			this.#transitioning = false;
+			this.#zooming = false;
 		}
 		/**
 		* Sets the modal and backdrop stacking level.
@@ -1825,10 +1828,11 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			this.#zooming = true;
 			$.addClass(this.node, "modal-static");
 			waitForTransition(this.#dialog, ["transform"], { modal: this.node }).then(({ modal, node }) => {
+				if (!this.node) return;
 				$.removeClass(modal, "modal-static");
 				return waitForTransition(node, ["transform"]);
 			}).then((_) => {
-				this.#zooming = false;
+				if (this.node) this.#zooming = false;
 			});
 		}
 	};
@@ -1917,6 +1921,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (this.#scrollNodes) this.#cleanup(false);
 			if (this.#focusTrap) {
 				this.#focusTrap.dispose();
 				this.#focusTrap = null;
@@ -1947,29 +1952,11 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			this.#transitioning = true;
 			if (this.#focusTrap) this.#focusTrap.deactivate();
 			$.addClass(this.node, "hiding");
-			waitForTransition(this.node, ["opacity", "transform"], {
-				activeTarget: this.#activeTarget,
-				backdrop: this.options.backdrop,
-				scroll: this.options.scroll,
-				scrollNodes: this.#scrollNodes
-			}).then(({ activeTarget, backdrop, node, scroll, scrollNodes }) => {
-				this.#transitioning = false;
-				$.removeClass(node, "hiding show");
-				$.setAttribute(node, {
-					"aria-hidden": true,
-					"aria-modal": false
-				});
-				if (backdrop) $.removeClass(document.body, "offcanvas-backdrop");
-				if (!scroll) {
-					resetScrollPadding(scrollNodes);
-					this.#scrollNodes = [];
-					$.setStyle(document.body, { overflow: "" });
-				}
-				if (activeTarget) {
-					$.focus(activeTarget);
-					this.#activeTarget = null;
-				}
-				$.triggerEvent(node, "hidden.ui.offcanvas");
+			waitForTransition(this.node, ["opacity", "transform"]).then((_) => {
+				if (!this.node) return;
+				const offcanvas = this.node;
+				this.#cleanup();
+				$.triggerEvent(offcanvas, "hidden.ui.offcanvas");
 			});
 		}
 		/**
@@ -1991,6 +1978,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			$.css(this.node, "opacity");
 			$.addClass(this.node, "show");
 			waitForTransition(this.node, ["opacity", "transform"]).then(({ node }) => {
+				if (!this.node) return;
 				this.#transitioning = false;
 				$.setAttribute(node, {
 					"aria-hidden": false,
@@ -2006,6 +1994,26 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		toggle() {
 			if ($.hasClass(this.node, "show")) this.hide();
 			else this.show();
+		}
+		/**
+		* Restores the hidden offcanvas state.
+		* @param {boolean} [restoreFocus=true] Whether to restore focus to the active target.
+		*/
+		#cleanup(restoreFocus = true) {
+			$.removeClass(this.node, "hiding show");
+			$.setAttribute(this.node, {
+				"aria-hidden": true,
+				"aria-modal": false
+			});
+			if (this.options.backdrop) $.removeClass(document.body, "offcanvas-backdrop");
+			if (!this.options.scroll) {
+				resetScrollPadding(this.#scrollNodes);
+				$.setStyle(document.body, { overflow: "" });
+			}
+			if (restoreFocus && this.#activeTarget) $.focus(this.#activeTarget);
+			this.#activeTarget = null;
+			this.#scrollNodes = null;
+			this.#transitioning = false;
 		}
 	};
 

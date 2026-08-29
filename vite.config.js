@@ -3,7 +3,6 @@ import { defineConfig } from 'vite';
 export default defineConfig(({ mode }) => {
     const external = [];
     const output = [];
-    let emptyOutDir = false;
 
     switch (mode) {
         case 'bundle':
@@ -46,7 +45,6 @@ export default defineConfig(({ mode }) => {
             );
             break;
         default:
-            emptyOutDir = true;
             external.push('@fr0st/query');
             output.push(
                 {
@@ -64,7 +62,7 @@ export default defineConfig(({ mode }) => {
 
     return {
         build: {
-            emptyOutDir,
+            emptyOutDir: false,
             lib: {
                 entry: 'src/js/index.js',
                 name: 'UI',
