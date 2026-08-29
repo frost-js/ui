@@ -1,9 +1,11 @@
 # FrostUI
 
 [![CI](https://github.com/elusivecodes/FrostUI/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/elusivecodes/FrostUI/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/elusivecodes/FrostUI/branch/main/graph/badge.svg)](https://codecov.io/gh/elusivecodes/FrostUI)
 [![npm version](https://img.shields.io/npm/v/%40fr0st%2Fui?style=flat-square)](https://www.npmjs.com/package/@fr0st/ui)
 [![npm downloads](https://img.shields.io/npm/dm/%40fr0st%2Fui?style=flat-square)](https://www.npmjs.com/package/@fr0st/ui)
-[![minzipped size](https://img.shields.io/bundlejs/size/%40fr0st%2Fui?format=minzip&style=flat-square)](https://bundlejs.com/?q=@fr0st/ui)
+[![CSS gzip size](https://img.badgesize.io/elusivecodes/FrostUI/main/dist/frost-ui.min.css?compression=gzip&label=CSS%20gzip%20size&style=flat-square)](https://github.com/elusivecodes/FrostUI/blob/main/dist/frost-ui.min.css)
+[![JS gzip size](https://img.badgesize.io/elusivecodes/FrostUI/main/dist/frost-ui-bundle.min.js?compression=gzip&label=JS%20gzip%20size&style=flat-square)](https://github.com/elusivecodes/FrostUI/blob/main/dist/frost-ui-bundle.min.js)
 [![license](https://img.shields.io/github/license/elusivecodes/FrostUI?style=flat-square)](./LICENSE)
 
 Customizable JavaScript UI framework with responsive components, utilities, and opinionated Sass styling.
@@ -18,18 +20,18 @@ Customizable JavaScript UI framework with responsive components, utilities, and 
 - System-aware light and dark themes with nested scopes and runtime CSS custom properties
 - Frosted overlays, ambient gradients, glass surfaces, and theme-aware elevation
 - Configurable Sass variables with public functions and mixins
-- Browser UMD builds with external or bundled [`fQuery`](https://www.npmjs.com/package/@fr0st/query)
+- Prebuilt ESM and UMD bundles, with external or bundled [`fQuery`](https://www.npmjs.com/package/@fr0st/query)
 - JSDoc-powered IntelliSense
 
 ## Installation
 
-### Browser projects and bundlers
+### Browser projects / bundlers
 
 ```bash
 npm i @fr0st/ui
 ```
 
-Import the compiled CSS and use the named component exports from the JavaScript entry point:
+FrostUI's package entry point is ESM-only. Import the compiled CSS and use the named component exports from the JavaScript entry point:
 
 ```js
 import '@fr0st/ui/dist/frost-ui.min.css';
@@ -46,6 +48,29 @@ import Modal from '@fr0st/ui/src/js/modal/index.js';
 ```
 
 [`@fr0st/query`](https://www.npmjs.com/package/@fr0st/query) is installed as a dependency.
+
+### Browser (ESM)
+
+The ESM bundle imports `@fr0st/query`, which in turn imports `@fr0st/core`. Map both dependencies when loading the bundle directly in a browser:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.min.css">
+
+<script type="importmap">
+{
+    "imports": {
+        "@fr0st/core": "https://cdn.jsdelivr.net/npm/@fr0st/core@latest/dist/frost-core.esm.min.js",
+        "@fr0st/query": "https://cdn.jsdelivr.net/npm/@fr0st/query@latest/dist/fquery.esm.min.js"
+    }
+}
+</script>
+<script type="module">
+    import { Modal } from 'https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.esm.min.js';
+
+    const modal = Modal.init(document.querySelector('#settings-modal'));
+    modal.show();
+</script>
+```
 
 ### Browser (UMD)
 
@@ -76,6 +101,8 @@ An all-in-one build containing fQuery is also available:
 ```
 
 Do not load the separate fQuery script when using `frost-ui-bundle.js` or `frost-ui-bundle.min.js`.
+
+The package root resolves to the prebuilt ESM bundle. Published files under `dist/` and `src/` are also available through matching package subpaths.
 
 ### Custom Sass builds
 
@@ -398,19 +425,14 @@ Use Sass configuration when derived colors, utility maps, breakpoints, component
 
 ## Development
 
-FrostUI supports Node.js `^20.19.0`, `^22.13.0`, or `>=24`.
-
 ```bash
-npm ci
 npm test
-npm run lint:js
-npm run lint:css
+npm run lint
 npm run lint:sass:unused
 npm run build
-npm pack --dry-run
 ```
 
-CI lints JavaScript and Sass, runs Chromium across every supported Node.js release line, runs Firefox and WebKit on the latest supported Node.js release line, rebuilds the distribution files, verifies that `dist/` is current, and validates the package contents.
+`npm test` runs the Playwright suite in Chromium, Firefox, and WebKit.
 
 ## License
 

@@ -25,7 +25,7 @@
         "url": "git+https://github.com/elusivecodes/FrostUI.git"
     },
     "license": "MIT",
-    "author": "Elusive",
+    "author": "Elusive <elusivecodes@gmail.com>",
     "type": "module",
     "exports": {
         ".": {
@@ -51,6 +51,7 @@
         "build:js": "vite build && vite build --mode umd && vite build --mode bundle",
         "autoprefix:css": "postcss --replace dist/frost-ui.css",
         "compile:css": "sass --style expanded --source-map --embed-sources --no-error-css src/scss/ui.scss dist/frost-ui.css",
+        "lint": "npm run lint:js && npm run lint:css",
         "lint:css": "stylelint \"src/scss/**/*.scss\"",
         "lint:js": "eslint",
         "lint:sass:unused": "fusv src/scss",
