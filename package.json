@@ -15,14 +15,14 @@
         "ui",
         "ui-framework"
     ],
-    "homepage": "https://github.com/elusivecodes/FrostUI",
+    "homepage": "https://github.com/frost-js/ui",
     "bugs": {
-        "url": "https://github.com/elusivecodes/FrostUI/issues",
+        "url": "https://github.com/frost-js/ui/issues",
         "email": "elusivecodes@gmail.com"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/elusivecodes/FrostUI.git"
+        "url": "git+https://github.com/frost-js/ui.git"
     },
     "license": "MIT",
     "author": "Elusive <elusivecodes@gmail.com>",

@@ -1,12 +1,12 @@
 # Frost UI
 
-[![CI](https://github.com/elusivecodes/FrostUI/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/elusivecodes/FrostUI/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/elusivecodes/FrostUI/branch/main/graph/badge.svg)](https://codecov.io/gh/elusivecodes/FrostUI)
+[![CI](https://github.com/frost-js/ui/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/frost-js/ui/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/frost-js/ui/branch/main/graph/badge.svg)](https://codecov.io/gh/frost-js/ui)
 [![npm version](https://img.shields.io/npm/v/%40fr0st%2Fui?style=flat-square)](https://www.npmjs.com/package/@fr0st/ui)
 [![npm downloads](https://img.shields.io/npm/dm/%40fr0st%2Fui?style=flat-square)](https://www.npmjs.com/package/@fr0st/ui)
-[![CSS gzip size](https://img.badgesize.io/elusivecodes/FrostUI/main/dist/frost-ui.min.css?compression=gzip&label=CSS%20gzip%20size&style=flat-square)](https://github.com/elusivecodes/FrostUI/blob/main/dist/frost-ui.min.css)
-[![JS gzip size](https://img.badgesize.io/elusivecodes/FrostUI/main/dist/frost-ui.min.js?compression=gzip&label=JS%20gzip%20size&style=flat-square)](https://github.com/elusivecodes/FrostUI/blob/main/dist/frost-ui.min.js)
-[![license](https://img.shields.io/github/license/elusivecodes/FrostUI?style=flat-square)](./LICENSE)
+[![CSS gzip size](https://img.badgesize.io/frost-js/ui/main/dist/frost-ui.min.css?compression=gzip&label=CSS%20gzip%20size&style=flat-square)](https://github.com/frost-js/ui/blob/main/dist/frost-ui.min.css)
+[![JS gzip size](https://img.badgesize.io/frost-js/ui/main/dist/frost-ui.min.js?compression=gzip&label=JS%20gzip%20size&style=flat-square)](https://github.com/frost-js/ui/blob/main/dist/frost-ui.min.js)
+[![license](https://img.shields.io/github/license/frost-js/ui?style=flat-square)](./LICENSE)
 
 Customizable JavaScript UI framework with responsive components, utilities, and opinionated Sass styling.
 
