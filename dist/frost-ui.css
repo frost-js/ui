@@ -3013,9 +3013,15 @@ fieldset:disabled .btn {
 .carousel-item-prev {
   transform: translateX(-100%);
 }
+.carousel-item-prev:dir(rtl) {
+  transform: translateX(100%);
+}
 
 .carousel-item-next {
   transform: translateX(100%);
+}
+.carousel-item-next:dir(rtl) {
+  transform: translateX(-100%);
 }
 
 .carousel-dragging .carousel-item {
@@ -3079,9 +3085,15 @@ fieldset:disabled .btn {
 .carousel-control-prev-icon {
   mask-image: var(--ui-carousel-control-prev-icon);
 }
+.carousel-control-prev-icon:dir(rtl) {
+  mask-image: var(--ui-carousel-control-next-icon);
+}
 
 .carousel-control-next-icon {
   mask-image: var(--ui-carousel-control-next-icon);
+}
+.carousel-control-next-icon:dir(rtl) {
+  mask-image: var(--ui-carousel-control-prev-icon);
 }
 
 .carousel-indicators {

@@ -292,7 +292,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 
 //#endregion
 //#region src/js/carousel/helpers.js
-/** @import { CarouselDirection } from './carousel.js'; */
+/** @import { CarouselDirection, PhysicalDirection } from './carousel.js'; */
 	/**
 	* Gets the boundary offset for an item index.
 	* @param {number} index The index.
@@ -312,8 +312,18 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	* @returns {CarouselDirection} The transition direction.
 	*/
 	function getDirection(offset, oldIndex, newIndex) {
-		if (offset == -1 || offset == 0 && newIndex < oldIndex) return "left";
-		return "right";
+		if (offset == -1 || offset == 0 && newIndex < oldIndex) return "prev";
+		return "next";
+	}
+	/**
+	* Resolves a carousel direction to a physical direction.
+	* @param {CarouselDirection} direction The carousel direction.
+	* @param {boolean} rtl Whether the inline direction is right-to-left.
+	* @returns {PhysicalDirection} The physical direction.
+	*/
+	function getPhysicalDirection(direction, rtl) {
+		if (direction === "prev") return rtl ? "right" : "left";
+		return rtl ? "left" : "right";
 	}
 	/**
 	* Gets the entering and exiting classes for a slide direction.
@@ -322,11 +332,11 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	*/
 	function getTransitionClasses(direction) {
 		switch (direction) {
-			case "left": return {
+			case "prev": return {
 				enter: "carousel-item-prev",
 				exit: "carousel-item-next"
 			};
-			case "right": return {
+			case "next": return {
 				enter: "carousel-item-next",
 				exit: "carousel-item-prev"
 			};
@@ -346,7 +356,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 
 //#endregion
 //#region src/js/carousel/carousel.js
-/** @typedef {'left'|'right'} CarouselDirection */
+/** @typedef {'prev'|'next'} CarouselDirection */
+	/** @typedef {'left'|'right'} PhysicalDirection */
 	/**
 	* @typedef {object} CarouselOptions
 	* @property {number} [interval=5000] The cycle interval in milliseconds.
@@ -370,6 +381,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		#items;
 		#mousePaused;
 		#paused;
+		#rtl;
 		#sliding;
 		#timer;
 		/**
@@ -379,6 +391,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		constructor(node, options) {
 			super(node, options);
+			this.#rtl = $.css(this.node, "direction") === "rtl";
 			this.#items = $.find(".carousel-item", this.node);
 			this.#index = this.#items.findIndex((item) => $.hasClass(item, "active"));
 			this.#sliding = false;
@@ -449,19 +462,17 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		* Attaches carousel interaction handlers.
 		*/
 		#events() {
-			if (this.options.keyboard) $.addEvent(this.node, "keydown.ui.carousel", (e) => {
-				const target = e.target;
-				if ($.is(target, "input, select")) return;
-				switch (e.code) {
-					case "ArrowLeft":
-						e.preventDefault();
-						this.prev();
-						break;
-					case "ArrowRight":
-						e.preventDefault();
-						this.next();
-				}
-			});
+			if (this.options.keyboard) {
+				const previousKey = this.#rtl ? "ArrowRight" : "ArrowLeft";
+				$.addEvent(this.node, "keydown.ui.carousel", (e) => {
+					const target = e.target;
+					if ($.is(target, "input, select")) return;
+					if (!["ArrowLeft", "ArrowRight"].includes(e.code)) return;
+					e.preventDefault();
+					if (e.code === previousKey) this.prev();
+					else this.next();
+				});
+			}
 			if (this.options.pause) {
 				$.addEvent(this.node, "mouseenter.ui.carousel", (_) => {
 					this.#mousePaused = true;
@@ -492,13 +503,14 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 					if (!this.node) return;
 					const currentX = getPosition(e).x;
 					const scrollX = $.width(this.node) / 2;
-					let mouseDiffX = currentX - startX;
-					if (!this.options.wrap) mouseDiffX = $._clamp(mouseDiffX, -(this.#items.length - 1 - this.#index) * scrollX, this.#index * scrollX);
-					progress = $._map(Math.abs(mouseDiffX), 0, scrollX, 0, 1);
+					let inlineDiffX = currentX - startX;
+					if (this.#rtl) inlineDiffX *= -1;
+					if (!this.options.wrap) inlineDiffX = $._clamp(inlineDiffX, -(this.#items.length - 1 - this.#index) * scrollX, this.#index * scrollX);
+					progress = $._map(Math.abs(inlineDiffX), 0, scrollX, 0, 1);
 					do {
 						const lastIndex = index;
-						if (mouseDiffX < 0) index = this.#index + 1;
-						else if (mouseDiffX > 0) index = this.#index - 1;
+						if (inlineDiffX < 0) index = this.#index + 1;
+						else if (inlineDiffX > 0) index = this.#index - 1;
 						else {
 							this.#resetStyles(this.#items[this.#index]);
 							if (lastIndex !== null) this.#resetStyles(this.#items[lastIndex]);
@@ -616,7 +628,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			if (index === this.#index) return;
 			const direction = getDirection(offset, this.#index, index);
 			const eventData = {
-				direction,
+				direction: getPhysicalDirection(direction, this.#rtl),
 				relatedTarget: this.#items[index],
 				from: this.#index,
 				to: index
@@ -665,7 +677,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				inStyles.transform = "";
 				outStyles.transform = "";
 			} else {
-				const inverse = direction === "right";
+				const inverse = getPhysicalDirection(direction, this.#rtl) === "right";
 				if (dragging) inStyles.display = "block";
 				else outStyles.display = "block";
 				inStyles.transform = `translateX(${Math.round((1 - progress) * 100) * (inverse ? 1 : -1)}%)`;

@@ -502,6 +502,23 @@ test.describe('Carousel', () => {
             expect(eventTriggered).toBe(true);
         });
 
+        test('uses the physical direction for slide events in RTL', async ({ page }) => {
+            const direction = await page.evaluate((_) => {
+                const carousel1 = $.findOne('#carousel1');
+                carousel1.dir = 'rtl';
+                let direction;
+
+                $.addEvent(carousel1, 'slide.ui.carousel', (e) => {
+                    direction = e.direction;
+                });
+                UI.Carousel.init(carousel1).next();
+
+                return direction;
+            });
+
+            expect(direction).toBe('left');
+        });
+
         test('triggers slid event', async ({ page }) => {
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
@@ -773,6 +790,30 @@ test.describe('Carousel', () => {
 
             await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
+        });
+
+        test('shows the next item on left arrow in RTL', async ({ page }) => {
+            await page.evaluate((_) => {
+                const carousel1 = $.findOne('#carousel1');
+                carousel1.dir = 'rtl';
+                UI.Carousel.init(carousel1);
+            });
+            await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowLeft' });
+
+            await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
+        });
+
+        test('shows the previous item on right arrow in RTL', async ({ page }) => {
+            await page.evaluate((_) => {
+                const carousel1 = $.findOne('#carousel1');
+                carousel1.dir = 'rtl';
+                UI.Carousel.init(carousel1);
+            });
+            await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowRight' });
+
+            await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
         });
 
         test('works with keyboard option and next', async ({ page }) => {
@@ -1071,6 +1112,20 @@ test.describe('Carousel', () => {
                     },
                 },
             ]);
+        });
+
+        test('swipes to next item in RTL', async ({ page }) => {
+            await page.evaluate((_) => {
+                const carousel1 = $.findOne('#carousel1');
+                carousel1.dir = 'rtl';
+                UI.Carousel.init(carousel1);
+                carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
+                window.dispatchEvent(new MouseEvent('mousemove', { clientX: 550 }));
+                window.dispatchEvent(new MouseEvent('mouseup'));
+            });
+
+            await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
         });
 
         test('works with swipe option', async ({ page }) => {

@@ -2,9 +2,10 @@ import BaseComponent from './../base-component.js';
 import { $, document } from './../globals.js';
 import { getPosition } from './../helpers/pointer.js';
 import { waitForTransition } from './../helpers/transition.js';
-import { getDirection, getDirOffset, getIndex, getTransitionClasses } from './helpers.js';
+import { getDirection, getDirOffset, getIndex, getPhysicalDirection, getTransitionClasses } from './helpers.js';
 
-/** @typedef {'left'|'right'} CarouselDirection */
+/** @typedef {'prev'|'next'} CarouselDirection */
+/** @typedef {'left'|'right'} PhysicalDirection */
 
 /**
  * @typedef {object} CarouselOptions
@@ -31,6 +32,7 @@ export default class Carousel extends BaseComponent {
     #items;
     #mousePaused;
     #paused;
+    #rtl;
     #sliding;
     #timer;
 
@@ -42,6 +44,7 @@ export default class Carousel extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
+        this.#rtl = $.css(this.node, 'direction') === 'rtl';
         this.#items = $.find('.carousel-item', this.node);
 
         this.#index = this.#items.findIndex((item) =>
@@ -145,21 +148,24 @@ export default class Carousel extends BaseComponent {
      */
     #events() {
         if (this.options.keyboard) {
+            const previousKey = this.#rtl ? 'ArrowRight' : 'ArrowLeft';
+
             $.addEvent(this.node, 'keydown.ui.carousel', (e) => {
                 const target = e.target;
                 if ($.is(target, 'input, select')) {
                     return;
                 }
 
-                switch (e.code) {
-                    case 'ArrowLeft':
-                        e.preventDefault();
-                        this.prev();
-                        break;
-                    case 'ArrowRight':
-                        e.preventDefault();
-                        this.next();
-                        break;
+                if (!['ArrowLeft', 'ArrowRight'].includes(e.code)) {
+                    return;
+                }
+
+                e.preventDefault();
+
+                if (e.code === previousKey) {
+                    this.prev();
+                } else {
+                    this.next();
                 }
             });
         }
@@ -222,23 +228,27 @@ export default class Carousel extends BaseComponent {
                 const width = $.width(this.node);
                 const scrollX = width / 2;
 
-                let mouseDiffX = currentX - startX;
+                let inlineDiffX = currentX - startX;
+                if (this.#rtl) {
+                    inlineDiffX *= -1;
+                }
+
                 if (!this.options.wrap) {
-                    mouseDiffX = $._clamp(
-                        mouseDiffX,
+                    inlineDiffX = $._clamp(
+                        inlineDiffX,
                         -(this.#items.length - 1 - this.#index) * scrollX,
                         this.#index * scrollX,
                     );
                 }
 
-                progress = $._map(Math.abs(mouseDiffX), 0, scrollX, 0, 1);
+                progress = $._map(Math.abs(inlineDiffX), 0, scrollX, 0, 1);
 
                 do {
                     const lastIndex = index;
 
-                    if (mouseDiffX < 0) {
+                    if (inlineDiffX < 0) {
                         index = this.#index + 1;
-                    } else if (mouseDiffX > 0) {
+                    } else if (inlineDiffX > 0) {
                         index = this.#index - 1;
                     } else {
                         this.#resetStyles(this.#items[this.#index]);
@@ -429,7 +439,7 @@ export default class Carousel extends BaseComponent {
         const direction = getDirection(offset, this.#index, index);
 
         const eventData = {
-            direction,
+            direction: getPhysicalDirection(direction, this.#rtl),
             relatedTarget: this.#items[index],
             from: this.#index,
             to: index,
@@ -508,7 +518,8 @@ export default class Carousel extends BaseComponent {
             inStyles.transform = '';
             outStyles.transform = '';
         } else {
-            const inverse = direction === 'right';
+            const physicalDirection = getPhysicalDirection(direction, this.#rtl);
+            const inverse = physicalDirection === 'right';
 
             if (dragging) {
                 inStyles.display = 'block';

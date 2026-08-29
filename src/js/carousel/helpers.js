@@ -1,4 +1,4 @@
-/** @import { CarouselDirection } from './carousel.js'; */
+/** @import { CarouselDirection, PhysicalDirection } from './carousel.js'; */
 
 /**
  * Gets the boundary offset for an item index.
@@ -27,10 +27,24 @@ export function getDirOffset(index, totalItems) {
  */
 export function getDirection(offset, oldIndex, newIndex) {
     if (offset == -1 || (offset == 0 && newIndex < oldIndex)) {
-        return 'left';
+        return 'prev';
     }
 
-    return 'right';
+    return 'next';
+};
+
+/**
+ * Resolves a carousel direction to a physical direction.
+ * @param {CarouselDirection} direction The carousel direction.
+ * @param {boolean} rtl Whether the inline direction is right-to-left.
+ * @returns {PhysicalDirection} The physical direction.
+ */
+export function getPhysicalDirection(direction, rtl) {
+    if (direction === 'prev') {
+        return rtl ? 'right' : 'left';
+    }
+
+    return rtl ? 'left' : 'right';
 };
 
 /**
@@ -40,12 +54,12 @@ export function getDirection(offset, oldIndex, newIndex) {
  */
 export function getTransitionClasses(direction) {
     switch (direction) {
-        case 'left':
+        case 'prev':
             return {
                 enter: 'carousel-item-prev',
                 exit: 'carousel-item-next',
             };
-        case 'right':
+        case 'next':
             return {
                 enter: 'carousel-item-next',
                 exit: 'carousel-item-prev',
