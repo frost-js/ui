@@ -4,7 +4,8 @@ import { expect } from '@playwright/test';
 import { measureScrollbarSize } from '../measurements/scrollbar.js';
 
 /**
- * @typedef {'top'|'right'|'bottom'|'left'} PopperPlacement
+ * @typedef {'top'|'end'|'bottom'|'start'} PopperPlacement
+ * @typedef {'top'|'right'|'bottom'|'left'} PhysicalPlacement
  * @typedef {'start'|'center'|'end'} PopperPosition
  */
 
@@ -22,7 +23,7 @@ import { measureScrollbarSize } from '../measurements/scrollbar.js';
  * @param {PopperPosition} [expectation.position] The expected alignment.
  * @param {number} [expectation.spacing] The expected spacing between nodes.
  * @param {string} [expectation.boundary] The boundary element selector.
- * @param {PopperPlacement} [expectation.boundaryEdge] The expected clamped edge.
+ * @param {PhysicalPlacement} [expectation.boundaryEdge] The expected clamped edge.
  * @param {number} [expectation.minContact] The minimum reference overlap.
  * @returns {Promise<void>} The promise.
  */
@@ -42,18 +43,21 @@ export async function expectPopperPosition(page, {
     await expect(popperLocator).toHaveAttribute('data-ui-placement', placement);
     await expect(referenceLocator).toHaveAttribute('data-ui-placement', placement);
 
-    const [popperBox, referenceBox] = await Promise.all([
+    const [popperBox, referenceBox, rtl] = await Promise.all([
         popperLocator.boundingBox(),
         referenceLocator.boundingBox(),
+        referenceLocator.evaluate((node) => getComputedStyle(node).direction === 'rtl'),
     ]);
 
     expect(popperBox, `Bounding box for ${popper}`).not.toBeNull();
     expect(referenceBox, `Bounding box for ${reference}`).not.toBeNull();
 
-    expectPlacement(popper, placement, spacing, popperBox, referenceBox);
+    const physicalPlacement = getPhysicalPlacement(placement, rtl);
+
+    expectPlacement(popper, physicalPlacement, spacing, popperBox, referenceBox);
 
     if (position) {
-        expectAlignment(popper, placement, position, popperBox, referenceBox);
+        expectAlignment(popper, physicalPlacement, position, popperBox, referenceBox, rtl);
     }
 
     if (boundaryEdge) {
@@ -72,14 +76,14 @@ export async function expectPopperPosition(page, {
     }
 
     if (minContact !== undefined) {
-        expectReferenceContact(popper, placement, minContact, popperBox, referenceBox);
+        expectReferenceContact(popper, physicalPlacement, minContact, popperBox, referenceBox);
     }
 }
 
 /**
  * Assert the popper placement relative to its reference.
  * @param {string} popper The popper selector.
- * @param {PopperPlacement} placement The expected placement.
+ * @param {PhysicalPlacement} placement The expected placement.
  * @param {number} spacing The expected spacing between nodes.
  * @param {BoundingBox} popperBox The popper box.
  * @param {BoundingBox} referenceBox The reference box.
@@ -109,16 +113,17 @@ function expectPlacement(popper, placement, spacing, popperBox, referenceBox) {
 /**
  * Assert the popper alignment relative to its reference.
  * @param {string} popper The popper selector.
- * @param {PopperPlacement} placement The expected placement.
+ * @param {PhysicalPlacement} placement The expected placement.
  * @param {PopperPosition} position The expected alignment.
  * @param {BoundingBox} popperBox The popper box.
  * @param {BoundingBox} referenceBox The reference box.
+ * @param {boolean} rtl Whether the inline direction is right-to-left.
  */
-function expectAlignment(popper, placement, position, popperBox, referenceBox) {
+function expectAlignment(popper, placement, position, popperBox, referenceBox, rtl) {
     switch (placement) {
         case 'top':
         case 'bottom':
-            expectHorizontalAlignment(popper, position, popperBox, referenceBox);
+            expectHorizontalAlignment(popper, position, popperBox, referenceBox, rtl);
             break;
         case 'right':
         case 'left':
@@ -135,14 +140,23 @@ function expectAlignment(popper, placement, position, popperBox, referenceBox) {
  * @param {PopperPosition} position The expected alignment.
  * @param {BoundingBox} popperBox The popper box.
  * @param {BoundingBox} referenceBox The reference box.
+ * @param {boolean} rtl Whether the inline direction is right-to-left.
  */
-function expectHorizontalAlignment(popper, position, popperBox, referenceBox) {
+function expectHorizontalAlignment(popper, position, popperBox, referenceBox, rtl) {
     const popperEdges = getBoxEdges(popperBox);
     const referenceEdges = getBoxEdges(referenceBox);
 
     switch (position) {
         case 'start':
-            expectCoordinate(popperBox.x, referenceBox.x, `${popper} left alignment`);
+            if (rtl) {
+                expectCoordinate(
+                    popperEdges.right,
+                    referenceEdges.right,
+                    `${popper} right alignment`,
+                );
+            } else {
+                expectCoordinate(popperBox.x, referenceBox.x, `${popper} left alignment`);
+            }
             break;
         case 'center':
             expectCoordinate(
@@ -152,7 +166,15 @@ function expectHorizontalAlignment(popper, position, popperBox, referenceBox) {
             );
             break;
         case 'end':
-            expectCoordinate(popperEdges.right, referenceEdges.right, `${popper} right alignment`);
+            if (rtl) {
+                expectCoordinate(popperBox.x, referenceBox.x, `${popper} left alignment`);
+            } else {
+                expectCoordinate(
+                    popperEdges.right,
+                    referenceEdges.right,
+                    `${popper} right alignment`,
+                );
+            }
             break;
         default:
             throw new Error(`Unknown Popper position: ${position}`);
@@ -196,7 +218,7 @@ function expectVerticalAlignment(popper, position, popperBox, referenceBox) {
 /**
  * Assert the popper edge clamped to a boundary.
  * @param {string} popper The popper selector.
- * @param {PopperPlacement} boundaryEdge The expected clamped edge.
+ * @param {PhysicalPlacement} boundaryEdge The expected clamped edge.
  * @param {number} contact The minimum reference overlap.
  * @param {BoundingBox} popperBox The popper box.
  * @param {BoundingBox} referenceBox The reference box.
@@ -220,7 +242,7 @@ function expectBoundary(popper, boundaryEdge, contact, popperBox, referenceBox, 
 
 /**
  * Get the expected coordinate for a boundary-clamped popper edge.
- * @param {PopperPlacement} boundaryEdge The expected clamped edge.
+ * @param {PhysicalPlacement} boundaryEdge The expected clamped edge.
  * @param {number} contact The minimum reference overlap.
  * @param {BoundingBox} referenceBox The reference box.
  * @param {{top: number, right: number, bottom: number, left: number}} boundaryBox The boundary box.
@@ -246,7 +268,7 @@ function getClampedBoundaryCoordinate(boundaryEdge, contact, referenceBox, bound
 /**
  * Assert the minimum contact between a popper and its reference.
  * @param {string} popper The popper selector.
- * @param {PopperPlacement} placement The expected placement.
+ * @param {PhysicalPlacement} placement The expected placement.
  * @param {number} minContact The minimum reference overlap.
  * @param {BoundingBox} popperBox The popper box.
  * @param {BoundingBox} referenceBox The reference box.
@@ -286,6 +308,27 @@ function getBoxEdges(box) {
         bottom: box.y + box.height,
         left: box.x,
     };
+}
+
+/**
+ * Resolve a logical placement to the expected physical direction.
+ * @param {PopperPlacement} placement The logical placement.
+ * @param {boolean} rtl Whether the inline direction is right-to-left.
+ * @returns {PhysicalPlacement} The physical placement.
+ */
+function getPhysicalPlacement(placement, rtl) {
+    const [start, end] = rtl ?
+        ['right', 'left'] :
+        ['left', 'right'];
+
+    switch (placement) {
+        case 'start':
+            return start;
+        case 'end':
+            return end;
+        default:
+            return placement;
+    }
 }
 
 /**

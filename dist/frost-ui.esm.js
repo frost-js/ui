@@ -940,7 +940,7 @@ function resetScrollPadding(nodes) {
 //#endregion
 //#region src/js/popper/helpers.js
 /** @import { BoundingRect } from '../helpers/scroll.js'; */
-/** @import Popper, { Direction, Placement } from './popper.js'; */
+/** @import Popper, { Direction, PhysicalDirection, Placement } from './popper.js'; */
 var poppers = /* @__PURE__ */ new Set();
 var running$1 = false;
 /**
@@ -965,39 +965,55 @@ function addPopper(popper) {
 	running$1 = true;
 }
 /**
+* Resolves a logical placement to a physical direction.
+* @param {Direction} placement The logical placement.
+* @param {boolean} rtl Whether the inline direction is right-to-left.
+* @returns {PhysicalDirection} The physical placement.
+*/
+function getPhysicalPlacement(placement, rtl) {
+	const [start, end] = rtl ? ["right", "left"] : ["left", "right"];
+	switch (placement) {
+		case "start": return start;
+		case "end": return end;
+		default: return placement;
+	}
+}
+/**
 * Resolves the best available popper placement.
 * @param {DOMRect} nodeBox The computed bounding rectangle of the node.
 * @param {DOMRect} referenceBox The computed bounding rectangle of the reference.
 * @param {BoundingRect} minimumBox The available positioning boundary.
 * @param {Placement} placement The preferred placement.
 * @param {number} spacing The amount of spacing to use.
+* @param {boolean} rtl Whether the inline direction is right-to-left.
 * @returns {Direction} The resolved placement.
 */
-function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement, spacing) {
+function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement, spacing, rtl) {
 	const spaceTop = referenceBox.top - minimumBox.top;
 	const spaceRight = minimumBox.right - referenceBox.right;
 	const spaceBottom = minimumBox.bottom - referenceBox.bottom;
 	const spaceLeft = referenceBox.left - minimumBox.left;
+	const [spaceStart, spaceEnd] = rtl ? [spaceRight, spaceLeft] : [spaceLeft, spaceRight];
 	if (placement === "top") {
 		if (spaceTop < nodeBox.height + spacing && spaceBottom > spaceTop) return "bottom";
-	} else if (placement === "right") {
-		if (spaceRight < nodeBox.width + spacing && spaceLeft > spaceRight) return "left";
+	} else if (placement === "end") {
+		if (spaceEnd < nodeBox.width + spacing && spaceStart > spaceEnd) return "start";
 	} else if (placement === "bottom") {
 		if (spaceBottom < nodeBox.height + spacing && spaceTop > spaceBottom) return "top";
-	} else if (placement === "left") {
-		if (spaceLeft < nodeBox.width + spacing && spaceRight > spaceLeft) return "right";
+	} else if (placement === "start") {
+		if (spaceStart < nodeBox.width + spacing && spaceEnd > spaceStart) return "end";
 	} else if (placement === "auto") {
 		const maxVSpace = Math.max(spaceTop, spaceBottom);
 		const maxHSpace = Math.max(spaceRight, spaceLeft);
 		const minVSpace = Math.min(spaceTop, spaceBottom);
-		if (maxHSpace > maxVSpace && maxHSpace >= nodeBox.width + spacing && minVSpace + referenceBox.height >= nodeBox.height + spacing - Math.max(0, nodeBox.height - referenceBox.height)) return spaceLeft > spaceRight ? "left" : "right";
+		if (maxHSpace > maxVSpace && maxHSpace >= nodeBox.width + spacing && minVSpace + referenceBox.height >= nodeBox.height + spacing - Math.max(0, nodeBox.height - referenceBox.height)) return spaceStart > spaceEnd ? "start" : "end";
 		const minHSpace = Math.min(spaceRight, spaceLeft);
 		if (maxVSpace >= nodeBox.height + spacing && minHSpace + referenceBox.width >= nodeBox.width + spacing - Math.max(0, nodeBox.width - referenceBox.width)) return spaceBottom > spaceTop ? "bottom" : "top";
 		const maxSpace = Math.max(maxVSpace, maxHSpace);
 		if (spaceBottom === maxSpace && spaceBottom >= nodeBox.height + spacing) return "bottom";
 		if (spaceTop === maxSpace && spaceTop >= nodeBox.height + spacing) return "top";
-		if (spaceRight === maxSpace && spaceRight >= nodeBox.width + spacing) return "right";
-		if (spaceLeft === maxSpace && spaceLeft >= nodeBox.width + spacing) return "left";
+		if (spaceEnd === maxSpace && spaceEnd >= nodeBox.width + spacing) return "end";
+		if (spaceStart === maxSpace && spaceStart >= nodeBox.width + spacing) return "start";
 		return "bottom";
 	}
 	return placement;
@@ -1016,7 +1032,8 @@ function removePopper(popper) {
 
 //#endregion
 //#region src/js/popper/popper.js
-/** @typedef {'top'|'right'|'bottom'|'left'} Direction */
+/** @typedef {'top'|'end'|'bottom'|'start'} Direction */
+/** @typedef {'top'|'right'|'bottom'|'left'} PhysicalDirection */
 /** @typedef {'auto'|Direction} Placement */
 /** @typedef {'start'|'center'|'end'} Position */
 /** @typedef {string|HTMLElement} ElementInput */
@@ -1046,7 +1063,6 @@ function removePopper(popper) {
 * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
 * @property {number} [spacing=0] The spacing from the reference element.
 * @property {number|false|null} [minContact=null] The minimum contact with the reference element.
-* @property {boolean} [useGpu=true] Whether to position using a transform.
 */
 /**
 * Positions an element relative to a reference element.
@@ -1055,6 +1071,7 @@ function removePopper(popper) {
 var Popper = class extends BaseComponent {
 	#placement;
 	#referencePlacement;
+	#rtl;
 	/**
 	* Creates a Popper.
 	* @param {HTMLElement} node The input node.
@@ -1062,6 +1079,7 @@ var Popper = class extends BaseComponent {
 	*/
 	constructor(node, options) {
 		super(node, options);
+		this.#rtl = $.css(this.options.reference, "direction") === "rtl";
 		this.#placement = $.getDataset(this.node, "uiPlacement");
 		this.#referencePlacement = $.getDataset(this.options.reference, "uiPlacement");
 		$.setStyle(this.node, {
@@ -1097,13 +1115,7 @@ var Popper = class extends BaseComponent {
 	*/
 	update() {
 		if (!$.isConnected(this.node) || !$.isVisible(this.node)) return;
-		const resetStyle = {};
-		if (this.options.useGpu) resetStyle.transform = "";
-		else {
-			resetStyle.marginLeft = 0;
-			resetStyle.marginTop = 0;
-		}
-		$.setStyle(this.node, resetStyle);
+		$.setStyle(this.node, { transform: "" });
 		if (this.options.beforeUpdate) this.options.beforeUpdate(this.node, this.options.reference);
 		const nodeBox = $.rect(this.node, { offset: true });
 		const referenceBox = $.rect(this.options.reference, { offset: true });
@@ -1135,7 +1147,8 @@ var Popper = class extends BaseComponent {
 			minimumBox.width = minimumBox.right - minimumBox.left;
 			minimumBox.height = minimumBox.bottom - minimumBox.top;
 		}
-		const placement = this.options.fixed && this.options.placement !== "auto" ? this.options.placement : getPopperPlacement(nodeBox, referenceBox, minimumBox, this.options.placement, this.options.spacing + 2);
+		const placement = this.options.fixed && this.options.placement !== "auto" ? this.options.placement : getPopperPlacement(nodeBox, referenceBox, minimumBox, this.options.placement, this.options.spacing + 2, this.#rtl);
+		const physicalPlacement = getPhysicalPlacement(placement, this.#rtl);
 		$.setDataset(this.options.reference, { uiPlacement: placement });
 		$.setDataset(this.node, { uiPlacement: placement });
 		const position = this.options.position;
@@ -1148,14 +1161,14 @@ var Popper = class extends BaseComponent {
 			offset.x -= Math.round(positionBox.x);
 			offset.y -= Math.round(positionBox.y);
 		}
-		if (placement === "top") offset.y -= Math.round(nodeBox.height) + this.options.spacing;
-		else if (placement === "right") offset.x += Math.round(referenceBox.width) + this.options.spacing;
-		else if (placement === "bottom") offset.y += Math.round(referenceBox.height) + this.options.spacing;
-		else if (placement === "left") offset.x -= Math.round(nodeBox.width) + this.options.spacing;
-		if (["top", "bottom"].includes(placement)) {
+		if (physicalPlacement === "top") offset.y -= Math.round(nodeBox.height) + this.options.spacing;
+		else if (physicalPlacement === "right") offset.x += Math.round(referenceBox.width) + this.options.spacing;
+		else if (physicalPlacement === "bottom") offset.y += Math.round(referenceBox.height) + this.options.spacing;
+		else if (physicalPlacement === "left") offset.x -= Math.round(nodeBox.width) + this.options.spacing;
+		if (["top", "bottom"].includes(physicalPlacement)) {
 			const deltaX = Math.round(nodeBox.width) - Math.round(referenceBox.width);
 			if (position === "center") offset.x -= Math.round(deltaX / 2);
-			else if (position === "end") offset.x -= deltaX;
+			else if (position === (this.#rtl ? "start" : "end")) offset.x -= deltaX;
 		} else {
 			const deltaY = Math.round(nodeBox.height) - Math.round(referenceBox.height);
 			if (position === "center") offset.y -= Math.round(deltaY / 2);
@@ -1163,7 +1176,7 @@ var Popper = class extends BaseComponent {
 		}
 		offset.x -= parseInt($.css(this.node, "marginLeft"));
 		offset.y -= parseInt($.css(this.node, "marginTop"));
-		if (["left", "right"].includes(placement)) {
+		if (["left", "right"].includes(physicalPlacement)) {
 			let offsetY = offset.y;
 			let refTop = referenceBox.top;
 			if (positionBox) {
@@ -1202,13 +1215,7 @@ var Popper = class extends BaseComponent {
 			offset.x += $.getScrollX(positionParent);
 			offset.y += $.getScrollY(positionParent);
 		}
-		const style = {};
-		if (this.options.useGpu) style.transform = `translate3d(${offset.x}px , ${offset.y}px , 0)`;
-		else {
-			style.marginLeft = `${offset.x}px`;
-			style.marginTop = `${offset.y}px`;
-		}
-		$.setStyle(this.node, style);
+		$.setStyle(this.node, { transform: `translate3d(${offset.x}px , ${offset.y}px , 0)` });
 		if (this.options.arrow) this.#updateArrow(placement, position);
 		if (this.options.afterUpdate) this.options.afterUpdate(this.node, this.options.reference, placement, position);
 	}
@@ -1218,6 +1225,7 @@ var Popper = class extends BaseComponent {
 	* @param {Position} position The resolved alignment.
 	*/
 	#updateArrow(placement, position) {
+		const physicalPlacement = getPhysicalPlacement(placement, this.#rtl);
 		const nodeBox = $.rect(this.node, { offset: true });
 		const referenceBox = $.rect(this.options.reference, { offset: true });
 		const arrowStyles = {
@@ -1229,12 +1237,14 @@ var Popper = class extends BaseComponent {
 		};
 		$.setStyle(this.options.arrow, arrowStyles);
 		const arrowBox = $.rect(this.options.arrow, { offset: true });
-		if (["top", "bottom"].includes(placement)) {
-			arrowStyles[placement === "top" ? "bottom" : "top"] = -Math.floor(arrowBox.height);
+		if (["top", "bottom"].includes(physicalPlacement)) {
+			const arrowPlacement = physicalPlacement === "top" ? "bottom" : "top";
+			arrowStyles[arrowPlacement] = -Math.floor(arrowBox.height);
 			const diff = (referenceBox.width - nodeBox.width) / 2;
+			const [left, right] = this.#rtl ? ["end", "start"] : ["start", "end"];
 			let offset = nodeBox.width / 2 - arrowBox.width / 2;
-			if (position === "start") offset += diff;
-			else if (position === "end") offset -= diff;
+			if (position === left) offset += diff;
+			else if (position === right) offset -= diff;
 			let min = Math.max(referenceBox.left, nodeBox.left) - arrowBox.left;
 			let max = Math.min(referenceBox.right, nodeBox.right) - arrowBox.left - arrowBox.width;
 			if (referenceBox.width < arrowBox.width) {
@@ -1246,7 +1256,8 @@ var Popper = class extends BaseComponent {
 			max = Math.round(max);
 			arrowStyles.left = $._clamp(offset, min, max);
 		} else {
-			arrowStyles[placement === "right" ? "left" : "right"] = -Math.floor(arrowBox.width);
+			const arrowPlacement = physicalPlacement === "right" ? "left" : "right";
+			arrowStyles[arrowPlacement] = -Math.floor(arrowBox.width);
 			const diff = (referenceBox.height - nodeBox.height) / 2;
 			let offset = nodeBox.height / 2 - arrowBox.height;
 			if (position === "start") offset += diff;
@@ -2002,8 +2013,7 @@ Popper.defaults = {
 	position: "center",
 	fixed: false,
 	spacing: 0,
-	minContact: null,
-	useGpu: true
+	minContact: null
 };
 initComponent("popper", Popper);
 var popper_default = Popper;

@@ -131,10 +131,24 @@ test.describe('Popover', () => {
             await expect(page.locator('#popover-toggle-1 + .popover')).toHaveClass(/\bfade\b/);
             await expect(page.locator('#popover-toggle-1 + .popover')).toHaveCSS('opacity', '1');
             await expect(page.locator('#popover-toggle-1 + .popover')).toHaveAttribute('role', 'tooltip');
-            await expect(page.locator('#popover-toggle-1 + .popover')).toHaveAttribute('data-ui-placement', 'right');
+            await expect(page.locator('#popover-toggle-1 + .popover')).toHaveAttribute('data-ui-placement', 'end');
             await expect(page.locator('#popover-toggle-1 + .popover')).toHaveCSS('position', 'absolute');
             await expect(page.locator('#popover-toggle-1')).toHaveAttribute('aria-describedby', /^popover/);
-            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-placement', 'right');
+            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-placement', 'end');
+        });
+
+        test('shows the popover on inline-start in RTL', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.documentElement.dir = 'rtl';
+                UI.Popover.init($.findOne('#popover-toggle-1'), {
+                    fixed: true,
+                    placement: 'start',
+                }).show();
+            });
+
+            await expect(page.locator('#popover-toggle-1 + .popover')).toBeVisible();
+            await expect(page.locator('#popover-toggle-1 + .popover')).toHaveAttribute('data-ui-placement', 'start');
+            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-placement', 'start');
         });
 
         test('shows the popover (query)', async ({ page }) => {

@@ -1,9 +1,15 @@
 import BaseComponent from './../base-component.js';
 import { $, document, window } from './../globals.js';
 import { getScrollContainer } from './../helpers/scroll.js';
-import { addPopper, getPopperPlacement, removePopper } from './helpers.js';
+import {
+    addPopper,
+    getPhysicalPlacement,
+    getPopperPlacement,
+    removePopper,
+} from './helpers.js';
 
-/** @typedef {'top'|'right'|'bottom'|'left'} Direction */
+/** @typedef {'top'|'end'|'bottom'|'start'} Direction */
+/** @typedef {'top'|'right'|'bottom'|'left'} PhysicalDirection */
 /** @typedef {'auto'|Direction} Placement */
 /** @typedef {'start'|'center'|'end'} Position */
 /** @typedef {string|HTMLElement} ElementInput */
@@ -36,7 +42,6 @@ import { addPopper, getPopperPlacement, removePopper } from './helpers.js';
  * @property {boolean} [fixed=false] Whether to preserve the preferred placement.
  * @property {number} [spacing=0] The spacing from the reference element.
  * @property {number|false|null} [minContact=null] The minimum contact with the reference element.
- * @property {boolean} [useGpu=true] Whether to position using a transform.
  */
 
 /**
@@ -46,6 +51,7 @@ import { addPopper, getPopperPlacement, removePopper } from './helpers.js';
 export default class Popper extends BaseComponent {
     #placement;
     #referencePlacement;
+    #rtl;
 
     /**
      * Creates a Popper.
@@ -55,6 +61,7 @@ export default class Popper extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
+        this.#rtl = $.css(this.options.reference, 'direction') === 'rtl';
         this.#placement = $.getDataset(this.node, 'uiPlacement');
         this.#referencePlacement = $.getDataset(this.options.reference, 'uiPlacement');
 
@@ -111,16 +118,7 @@ export default class Popper extends BaseComponent {
         }
 
         // Reset the previous position before measuring.
-        const resetStyle = {};
-
-        if (this.options.useGpu) {
-            resetStyle.transform = '';
-        } else {
-            resetStyle.marginLeft = 0;
-            resetStyle.marginTop = 0;
-        }
-
-        $.setStyle(this.node, resetStyle);
+        $.setStyle(this.node, { transform: '' });
 
         if (this.options.beforeUpdate) {
             this.options.beforeUpdate(this.node, this.options.reference);
@@ -190,7 +188,10 @@ export default class Popper extends BaseComponent {
                 minimumBox,
                 this.options.placement,
                 this.options.spacing + 2,
+                this.#rtl,
             );
+
+        const physicalPlacement = getPhysicalPlacement(placement, this.#rtl);
 
         $.setDataset(this.options.reference, { uiPlacement: placement });
         $.setDataset(this.node, { uiPlacement: placement });
@@ -214,23 +215,25 @@ export default class Popper extends BaseComponent {
         }
 
         // Move the element onto the resolved placement edge.
-        if (placement === 'top') {
+        if (physicalPlacement === 'top') {
             offset.y -= Math.round(nodeBox.height) + this.options.spacing;
-        } else if (placement === 'right') {
+        } else if (physicalPlacement === 'right') {
             offset.x += Math.round(referenceBox.width) + this.options.spacing;
-        } else if (placement === 'bottom') {
+        } else if (physicalPlacement === 'bottom') {
             offset.y += Math.round(referenceBox.height) + this.options.spacing;
-        } else if (placement === 'left') {
+        } else if (physicalPlacement === 'left') {
             offset.x -= Math.round(nodeBox.width) + this.options.spacing;
         }
 
         // Align the element along the placement edge.
-        if (['top', 'bottom'].includes(placement)) {
+        if (['top', 'bottom'].includes(physicalPlacement)) {
             const deltaX = Math.round(nodeBox.width) - Math.round(referenceBox.width);
 
             if (position === 'center') {
                 offset.x -= Math.round(deltaX / 2);
-            } else if (position === 'end') {
+            } else if (
+                position === (this.#rtl ? 'start' : 'end')
+            ) {
                 offset.x -= deltaX;
             }
         } else {
@@ -248,7 +251,7 @@ export default class Popper extends BaseComponent {
         offset.y -= parseInt($.css(this.node, 'marginTop'));
 
         // Keep enough of the element in contact with its reference.
-        if (['left', 'right'].includes(placement)) {
+        if (['left', 'right'].includes(physicalPlacement)) {
             let offsetY = offset.y;
             let refTop = referenceBox.top;
 
@@ -320,15 +323,9 @@ export default class Popper extends BaseComponent {
         }
 
         // Apply the final position.
-        const style = {};
-        if (this.options.useGpu) {
-            style.transform = `translate3d(${offset.x}px , ${offset.y}px , 0)`;
-        } else {
-            style.marginLeft = `${offset.x}px`;
-            style.marginTop = `${offset.y}px`;
-        }
-
-        $.setStyle(this.node, style);
+        $.setStyle(this.node, {
+            transform: `translate3d(${offset.x}px , ${offset.y}px , 0)`,
+        });
 
         // Align the arrow with the reference element.
         if (this.options.arrow) {
@@ -346,6 +343,7 @@ export default class Popper extends BaseComponent {
      * @param {Position} position The resolved alignment.
      */
     #updateArrow(placement, position) {
+        const physicalPlacement = getPhysicalPlacement(placement, this.#rtl);
         const nodeBox = $.rect(this.node, { offset: true });
         const referenceBox = $.rect(this.options.reference, { offset: true });
 
@@ -360,14 +358,16 @@ export default class Popper extends BaseComponent {
 
         const arrowBox = $.rect(this.options.arrow, { offset: true });
 
-        if (['top', 'bottom'].includes(placement)) {
-            arrowStyles[placement === 'top' ? 'bottom' : 'top'] = -Math.floor(arrowBox.height);
+        if (['top', 'bottom'].includes(physicalPlacement)) {
+            const arrowPlacement = physicalPlacement === 'top' ? 'bottom' : 'top';
+            arrowStyles[arrowPlacement] = -Math.floor(arrowBox.height);
             const diff = (referenceBox.width - nodeBox.width) / 2;
+            const [left, right] = this.#rtl ? ['end', 'start'] : ['start', 'end'];
 
             let offset = (nodeBox.width / 2) - (arrowBox.width / 2);
-            if (position === 'start') {
+            if (position === left) {
                 offset += diff;
-            } else if (position === 'end') {
+            } else if (position === right) {
                 offset -= diff;
             }
 
@@ -385,8 +385,8 @@ export default class Popper extends BaseComponent {
 
             arrowStyles.left = $._clamp(offset, min, max);
         } else {
-            arrowStyles[placement === 'right' ? 'left' : 'right'] = -Math.floor(arrowBox.width);
-
+            const arrowPlacement = physicalPlacement === 'right' ? 'left' : 'right';
+            arrowStyles[arrowPlacement] = -Math.floor(arrowBox.width);
             const diff = (referenceBox.height - nodeBox.height) / 2;
 
             let offset = (nodeBox.height / 2) - arrowBox.height;

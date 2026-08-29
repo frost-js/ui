@@ -132,10 +132,24 @@ test.describe('Tooltip', () => {
             await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveCSS('opacity', '1');
             await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toBeVisible();
             await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('role', 'tooltip');
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('data-ui-placement', 'right');
+            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('data-ui-placement', 'end');
             await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveCSS('position', 'absolute');
             await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('aria-describedby', /^tooltip/);
-            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-placement', 'right');
+            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-placement', 'end');
+        });
+
+        test('shows the tooltip on inline-start in RTL', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.documentElement.dir = 'rtl';
+                UI.Tooltip.init($.findOne('#tooltip-toggle-1'), {
+                    fixed: true,
+                    placement: 'start',
+                }).show();
+            });
+
+            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toBeVisible();
+            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('data-ui-placement', 'start');
+            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-placement', 'start');
         });
 
         test('shows the tooltip (query)', async ({ page }) => {

@@ -11,9 +11,9 @@
             margin-inline-end: helpers.$caret-spacing;
             vertical-align: helpers.$caret-vertical-align - (helpers.$caret-size * .5);
             content: "";
-            border-top: helpers.$caret-size solid transparent;
-            border-right: helpers.$caret-size solid;
-            border-bottom: helpers.$caret-size solid transparent;
+            border-block: helpers.$caret-size solid transparent;
+            border-inline-start: 0;
+            border-inline-end: helpers.$caret-size solid;
         }
 
         &:empty::before {
@@ -44,10 +44,9 @@
                 border-bottom: helpers.$caret-size solid;
                 border-left: helpers.$caret-size solid transparent;
             } @else if $direction == end {
-                border-top: helpers.$caret-size solid transparent;
-                border-right: 0;
-                border-bottom: helpers.$caret-size solid transparent;
-                border-left: helpers.$caret-size solid;
+                border-block: helpers.$caret-size solid transparent;
+                border-inline-start: helpers.$caret-size solid;
+                border-inline-end: 0;
             }
         }
 

@@ -72,11 +72,11 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('positions right/start', async ({ page }) => {
+        test('positions inline-end/start', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'start',
                 });
             });
@@ -84,16 +84,16 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'start',
             });
         });
 
-        test('positions right/center', async ({ page }) => {
+        test('positions inline-end/center', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'center',
                 });
             });
@@ -101,16 +101,16 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'center',
             });
         });
 
-        test('positions right/end', async ({ page }) => {
+        test('positions inline-end/end', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'end',
                 });
             });
@@ -118,7 +118,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'end',
             });
         });
@@ -174,11 +174,11 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('positions left/start', async ({ page }) => {
+        test('positions inline-start/start', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'start',
                 });
             });
@@ -186,16 +186,16 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 position: 'start',
             });
         });
 
-        test('positions left/center', async ({ page }) => {
+        test('positions inline-start/center', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'center',
                 });
             });
@@ -203,16 +203,16 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 position: 'center',
             });
         });
 
-        test('positions left/end', async ({ page }) => {
+        test('positions inline-start/end', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'end',
                 });
             });
@@ -220,7 +220,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 position: 'end',
             });
         });
@@ -248,7 +248,7 @@ test.describe('Popper positioning', () => {
             await page.evaluate((_) => {
                 $('#popper').popper({
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'start',
                 });
             });
@@ -256,8 +256,120 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 position: 'start',
+            });
+        });
+    });
+
+    test.describe('RTL placement/position options', () => {
+        test.beforeEach(async ({ page }) => {
+            await page.evaluate((_) => {
+                document.documentElement.dir = 'rtl';
+            });
+        });
+
+        test('positions inline-start', async ({ page }) => {
+            await page.evaluate((_) => {
+                UI.Popper.init($.findOne('#popper'), {
+                    reference: $.findOne('#reference'),
+                    placement: 'start',
+                    position: 'center',
+                });
+            });
+
+            await expectPopperPosition(page, {
+                popper: '#popper',
+                reference: '#reference',
+                placement: 'start',
+                position: 'center',
+            });
+        });
+
+        test('positions inline-end', async ({ page }) => {
+            await page.evaluate((_) => {
+                UI.Popper.init($.findOne('#popper'), {
+                    reference: $.findOne('#reference'),
+                    placement: 'end',
+                    position: 'center',
+                });
+            });
+
+            await expectPopperPosition(page, {
+                popper: '#popper',
+                reference: '#reference',
+                placement: 'end',
+                position: 'center',
+            });
+        });
+
+        test('aligns top/inline-start', async ({ page }) => {
+            await page.evaluate((_) => {
+                UI.Popper.init($.findOne('#popper'), {
+                    reference: $.findOne('#reference'),
+                    placement: 'top',
+                    position: 'start',
+                });
+            });
+
+            await expectPopperPosition(page, {
+                popper: '#popper',
+                reference: '#reference',
+                placement: 'top',
+                position: 'start',
+            });
+        });
+
+        test('aligns bottom/inline-end', async ({ page }) => {
+            await page.evaluate((_) => {
+                UI.Popper.init($.findOne('#popper'), {
+                    reference: $.findOne('#reference'),
+                    placement: 'bottom',
+                    position: 'end',
+                });
+            });
+
+            await expectPopperPosition(page, {
+                popper: '#popper',
+                reference: '#reference',
+                placement: 'bottom',
+                position: 'end',
+            });
+        });
+
+        test('selects inline-start automatically', async ({ page }) => {
+            await page.evaluate((_) => {
+                $.setStyle('#reference', { left: '40px' });
+                UI.Popper.init($.findOne('#popper'), {
+                    reference: $.findOne('#reference'),
+                    placement: 'auto',
+                    position: 'center',
+                });
+            });
+
+            await expectPopperPosition(page, {
+                popper: '#popper',
+                reference: '#reference',
+                placement: 'start',
+                position: 'center',
+            });
+        });
+
+        test('flips inline-start to inline-end', async ({ page }) => {
+            await page.evaluate((_) => {
+                $.setStyle('#reference', { left: '720px' });
+                UI.Popper.init($.findOne('#popper'), {
+                    reference: $.findOne('#reference'),
+                    placement: 'start',
+                    position: 'center',
+                });
+            });
+
+            await expectPopperPosition(page, {
+                popper: '#popper',
+                reference: '#reference',
+                placement: 'end',
+                position: 'center',
             });
         });
     });
@@ -284,7 +396,7 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('selects right', async ({ page }) => {
+        test('selects inline-end', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '20px',
@@ -300,7 +412,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'center',
             });
         });
@@ -326,7 +438,7 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('selects left', async ({ page }) => {
+        test('selects inline-start', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '700px',
@@ -342,7 +454,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 position: 'center',
             });
         });
@@ -370,7 +482,7 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('flips right to left', async ({ page }) => {
+        test('flips inline-end to inline-start', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '720px',
@@ -378,7 +490,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'center',
                 });
             });
@@ -386,7 +498,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 position: 'center',
             });
         });
@@ -412,7 +524,7 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('flips left to right', async ({ page }) => {
+        test('flips inline-start to inline-end', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '10px',
@@ -420,7 +532,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'center',
                 });
             });
@@ -428,7 +540,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'center',
             });
         });
@@ -523,7 +635,7 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('clamps right/start to the bottom edge', async ({ page }) => {
+        test('clamps inline-end/start to the bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '360px',
@@ -531,7 +643,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'start',
                     fixed: true,
                 });
@@ -540,12 +652,12 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 boundaryEdge: 'bottom',
             });
         });
 
-        test('clamps right/center to the bottom edge', async ({ page }) => {
+        test('clamps inline-end/center to the bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '360px',
@@ -553,7 +665,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'center',
                     fixed: true,
                 });
@@ -562,12 +674,12 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 boundaryEdge: 'bottom',
             });
         });
 
-        test('clamps right/center to the top edge', async ({ page }) => {
+        test('clamps inline-end/center to the top edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '360px',
@@ -575,7 +687,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'center',
                     fixed: true,
                 });
@@ -584,12 +696,12 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 boundaryEdge: 'top',
             });
         });
 
-        test('clamps right/end to the top edge', async ({ page }) => {
+        test('clamps inline-end/end to the top edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '360px',
@@ -597,7 +709,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'end',
                     fixed: true,
                 });
@@ -606,7 +718,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 boundaryEdge: 'top',
             });
         });
@@ -699,7 +811,7 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('clamps left/start to the bottom edge', async ({ page }) => {
+        test('clamps inline-start/start to the bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '360px',
@@ -707,7 +819,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'start',
                     fixed: true,
                 });
@@ -716,12 +828,12 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 boundaryEdge: 'bottom',
             });
         });
 
-        test('clamps left/center to the bottom edge', async ({ page }) => {
+        test('clamps inline-start/center to the bottom edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '360px',
@@ -729,7 +841,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'center',
                     fixed: true,
                 });
@@ -738,12 +850,12 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 boundaryEdge: 'bottom',
             });
         });
 
-        test('clamps left/center to the top edge', async ({ page }) => {
+        test('clamps inline-start/center to the top edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '360px',
@@ -751,7 +863,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'center',
                     fixed: true,
                 });
@@ -760,12 +872,12 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 boundaryEdge: 'top',
             });
         });
 
-        test('clamps left/end to the top edge', async ({ page }) => {
+        test('clamps inline-start/end to the top edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '360px',
@@ -773,7 +885,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'end',
                     fixed: true,
                 });
@@ -782,7 +894,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 boundaryEdge: 'top',
             });
         });
@@ -811,7 +923,7 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('preserves right at the viewport edge', async ({ page }) => {
+        test('preserves inline-end at the viewport edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '720px',
@@ -819,7 +931,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'center',
                     fixed: true,
                 });
@@ -828,7 +940,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'center',
             });
         });
@@ -855,7 +967,7 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('preserves left at the viewport edge', async ({ page }) => {
+        test('preserves inline-start at the viewport edge', async ({ page }) => {
             await page.evaluate((_) => {
                 $.setStyle('#reference', {
                     left: '10px',
@@ -863,7 +975,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'center',
                     fixed: true,
                 });
@@ -872,7 +984,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 position: 'center',
             });
         });
@@ -937,11 +1049,11 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('adds spacing right of the reference', async ({ page }) => {
+        test('adds spacing at the inline-end of the reference', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'center',
                     fixed: true,
                     spacing: 50,
@@ -951,7 +1063,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'center',
                 spacing: 50,
             });
@@ -977,11 +1089,11 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('adds spacing left of the reference', async ({ page }) => {
+        test('adds spacing at the inline-start of the reference', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'center',
                     fixed: true,
                     spacing: 50,
@@ -991,7 +1103,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 position: 'center',
                 spacing: 50,
             });
@@ -1001,7 +1113,7 @@ test.describe('Popper positioning', () => {
             await page.evaluate((_) => {
                 $.setAttribute('#popper', {
                     'data-ui-fixed': true,
-                    'data-ui-placement': 'right',
+                    'data-ui-placement': 'end',
                     'data-ui-spacing': 50,
                 });
                 UI.Popper.init($.findOne('#popper'), {
@@ -1012,7 +1124,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'center',
                 spacing: 50,
             });
@@ -1022,7 +1134,7 @@ test.describe('Popper positioning', () => {
             await page.evaluate((_) => {
                 $('#popper').popper({
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'center',
                     fixed: true,
                     spacing: 50,
@@ -1032,7 +1144,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'center',
                 spacing: 50,
             });
@@ -1048,7 +1160,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'center',
                     fixed: true,
                     minContact: 10,
@@ -1058,7 +1170,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 boundaryEdge: 'top',
                 minContact: 10,
             });
@@ -1096,7 +1208,7 @@ test.describe('Popper positioning', () => {
                 });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'center',
                     fixed: true,
                     minContact: 10,
@@ -1106,7 +1218,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 boundaryEdge: 'bottom',
                 minContact: 10,
             });
@@ -1205,11 +1317,11 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('positions right', async ({ page }) => {
+        test('positions inline-end', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'right',
+                    placement: 'end',
                     position: 'center',
                     fixed: true,
                 });
@@ -1218,7 +1330,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'right',
+                placement: 'end',
                 position: 'center',
             });
         });
@@ -1241,11 +1353,11 @@ test.describe('Popper positioning', () => {
             });
         });
 
-        test('positions left', async ({ page }) => {
+        test('positions inline-start', async ({ page }) => {
             await page.evaluate((_) => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
-                    placement: 'left',
+                    placement: 'start',
                     position: 'center',
                     fixed: true,
                 });
@@ -1254,7 +1366,7 @@ test.describe('Popper positioning', () => {
             await expectPopperPosition(page, {
                 popper: '#popper',
                 reference: '#reference',
-                placement: 'left',
+                placement: 'start',
                 position: 'center',
             });
         });

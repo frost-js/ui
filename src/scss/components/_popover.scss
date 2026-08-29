@@ -76,19 +76,23 @@
         }
     }
 
-    &[data-ui-placement="right"] .popover-arrow {
-        left: 0;
+    &[data-ui-placement="end"] .popover-arrow {
+        inset-inline-start: 0;
 
         &::before {
-            right: var(--ui-popover-border-width);
-            border-width: var(--ui-popover-arrow-height) var(--ui-popover-arrow-height) var(--ui-popover-arrow-height) 0;
-            border-right-color: var(--ui-popover-border-color);
+            inset-inline-end: var(--ui-popover-border-width);
+            border-block-width: var(--ui-popover-arrow-height);
+            border-inline-start-width: 0;
+            border-inline-end-color: var(--ui-popover-border-color);
+            border-inline-end-width: var(--ui-popover-arrow-height);
         }
 
         &::after {
-            right: 0;
-            border-width: var(--ui-popover-arrow-height) var(--ui-popover-arrow-height) var(--ui-popover-arrow-height) 0;
-            border-right-color: var(--ui-popover-bg);
+            inset-inline-end: 0;
+            border-block-width: var(--ui-popover-arrow-height);
+            border-inline-start-width: 0;
+            border-inline-end-color: var(--ui-popover-bg);
+            border-inline-end-width: var(--ui-popover-arrow-height);
         }
     }
 
@@ -108,19 +112,23 @@
         }
     }
 
-    &[data-ui-placement="left"] .popover-arrow {
-        right: 0;
+    &[data-ui-placement="start"] .popover-arrow {
+        inset-inline-end: 0;
 
         &::before {
-            left: var(--ui-popover-border-width);
-            border-width: var(--ui-popover-arrow-height) 0 var(--ui-popover-arrow-height) var(--ui-popover-arrow-height);
-            border-left-color: var(--ui-popover-border-color);
+            inset-inline-start: var(--ui-popover-border-width);
+            border-block-width: var(--ui-popover-arrow-height);
+            border-inline-start-color: var(--ui-popover-border-color);
+            border-inline-start-width: var(--ui-popover-arrow-height);
+            border-inline-end-width: 0;
         }
 
         &::after {
-            left: 0;
-            border-width: var(--ui-popover-arrow-height) 0 var(--ui-popover-arrow-height) var(--ui-popover-arrow-height);
-            border-left-color: var(--ui-popover-bg);
+            inset-inline-start: 0;
+            border-block-width: var(--ui-popover-arrow-height);
+            border-inline-start-color: var(--ui-popover-bg);
+            border-inline-start-width: var(--ui-popover-arrow-height);
+            border-inline-end-width: 0;
         }
     }
 }

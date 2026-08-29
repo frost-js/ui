@@ -1,5 +1,5 @@
 /** @import { BoundingRect } from '../helpers/scroll.js'; */
-/** @import Popper, { Direction, Placement } from './popper.js'; */
+/** @import Popper, { Direction, PhysicalDirection, Placement } from './popper.js'; */
 
 import { $, document, window } from './../globals.js';
 
@@ -50,19 +50,44 @@ export function addPopper(popper) {
 };
 
 /**
+ * Resolves a logical placement to a physical direction.
+ * @param {Direction} placement The logical placement.
+ * @param {boolean} rtl Whether the inline direction is right-to-left.
+ * @returns {PhysicalDirection} The physical placement.
+ */
+export function getPhysicalPlacement(placement, rtl) {
+    const [start, end] = rtl ?
+        ['right', 'left'] :
+        ['left', 'right'];
+
+    switch (placement) {
+        case 'start':
+            return start;
+        case 'end':
+            return end;
+        default:
+            return placement;
+    }
+}
+
+/**
  * Resolves the best available popper placement.
  * @param {DOMRect} nodeBox The computed bounding rectangle of the node.
  * @param {DOMRect} referenceBox The computed bounding rectangle of the reference.
  * @param {BoundingRect} minimumBox The available positioning boundary.
  * @param {Placement} placement The preferred placement.
  * @param {number} spacing The amount of spacing to use.
+ * @param {boolean} rtl Whether the inline direction is right-to-left.
  * @returns {Direction} The resolved placement.
  */
-export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement, spacing) {
+export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement, spacing, rtl) {
     const spaceTop = referenceBox.top - minimumBox.top;
     const spaceRight = minimumBox.right - referenceBox.right;
     const spaceBottom = minimumBox.bottom - referenceBox.bottom;
     const spaceLeft = referenceBox.left - minimumBox.left;
+    const [spaceStart, spaceEnd] = rtl ?
+        [spaceRight, spaceLeft] :
+        [spaceLeft, spaceRight];
 
     if (placement === 'top') {
         // Flip below when it offers more vertical space.
@@ -70,11 +95,11 @@ export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement,
             spaceBottom > spaceTop) {
             return 'bottom';
         }
-    } else if (placement === 'right') {
-        // Flip left when it offers more horizontal space.
-        if (spaceRight < nodeBox.width + spacing &&
-            spaceLeft > spaceRight) {
-            return 'left';
+    } else if (placement === 'end') {
+        // Flip to inline-start when it offers more horizontal space.
+        if (spaceEnd < nodeBox.width + spacing &&
+            spaceStart > spaceEnd) {
+            return 'start';
         }
     } else if (placement === 'bottom') {
         // Flip above when it offers more vertical space.
@@ -82,11 +107,11 @@ export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement,
             spaceTop > spaceBottom) {
             return 'top';
         }
-    } else if (placement === 'left') {
-        // Flip right when it offers more horizontal space.
-        if (spaceLeft < nodeBox.width + spacing &&
-            spaceRight > spaceLeft) {
-            return 'right';
+    } else if (placement === 'start') {
+        // Flip to inline-end when it offers more horizontal space.
+        if (spaceStart < nodeBox.width + spacing &&
+            spaceEnd > spaceStart) {
+            return 'end';
         }
     } else if (placement === 'auto') {
         const maxVSpace = Math.max(spaceTop, spaceBottom);
@@ -98,9 +123,9 @@ export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement,
             maxHSpace >= nodeBox.width + spacing &&
             minVSpace + referenceBox.height >= nodeBox.height + spacing - Math.max(0, nodeBox.height - referenceBox.height)
         ) {
-            return spaceLeft > spaceRight ?
-                'left' :
-                'right';
+            return spaceStart > spaceEnd ?
+                'start' :
+                'end';
         }
 
         const minHSpace = Math.min(spaceRight, spaceLeft);
@@ -124,12 +149,12 @@ export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement,
             return 'top';
         }
 
-        if (spaceRight === maxSpace && spaceRight >= nodeBox.width + spacing) {
-            return 'right';
+        if (spaceEnd === maxSpace && spaceEnd >= nodeBox.width + spacing) {
+            return 'end';
         }
 
-        if (spaceLeft === maxSpace && spaceLeft >= nodeBox.width + spacing) {
-            return 'left';
+        if (spaceStart === maxSpace && spaceStart >= nodeBox.width + spacing) {
+            return 'start';
         }
 
         return 'bottom';

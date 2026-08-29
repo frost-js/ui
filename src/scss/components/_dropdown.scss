@@ -125,21 +125,21 @@
         @include mixins.caret(up);
     }
 
-    &[data-ui-placement="right"] {
+    &[data-ui-placement="end"] {
         +.dropdown-menu {
-            top: 0;
-            right: auto;
-            left: 100%;
+            inset-block-start: 0;
+            inset-inline-start: 100%;
+            inset-inline-end: auto;
         }
 
         @include mixins.caret(end);
     }
 
-    &[data-ui-placement="left"] {
+    &[data-ui-placement="start"] {
         +.dropdown-menu {
-            top: 0;
-            right: 100%;
-            left: auto;
+            inset-block-start: 0;
+            inset-inline-start: auto;
+            inset-inline-end: 100%;
         }
 
         @include mixins.caret(start);

@@ -368,45 +368,4 @@ test.describe('Popper', () => {
             })).toBe(4);
         });
     });
-
-    test.describe('useGpu option', () => {
-        test('uses margin offsets when not using gpu', async ({ page }) => {
-            await page.evaluate((_) => {
-                const badge = $.findOne('#badge');
-                UI.Popper.init(badge, {
-                    reference: $.findOne('#button'),
-                    useGpu: false,
-                });
-            });
-
-            await expectStyles(page, [
-                {
-                    selectors: ['#badge'],
-                    styles: {
-                        margin: '34px 0px 0px 10px',
-                        transform: '',
-                    },
-                },
-            ]);
-        });
-
-        test('uses margin offsets when not using gpu (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#badge').popper({
-                    reference: $.findOne('#button'),
-                    useGpu: false,
-                });
-            });
-
-            await expectStyles(page, [
-                {
-                    selectors: ['#badge'],
-                    styles: {
-                        margin: '34px 0px 0px 10px',
-                        transform: '',
-                    },
-                },
-            ]);
-        });
-    });
 });

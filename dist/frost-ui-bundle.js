@@ -21,8 +21,72 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	};
 
 //#endregion
-//#region node_modules/@fr0st/core/src/testing.js
-/**
+//#region node_modules/@fr0st/core/dist/frost-core.esm.js
+	var frost_core_esm_exports = /* @__PURE__ */ __exportAll({
+		animation: () => animation,
+		camelCase: () => camelCase,
+		capitalize: () => capitalize,
+		clamp: () => clamp,
+		clampPercent: () => clampPercent,
+		compose: () => compose,
+		curry: () => curry,
+		debounce: () => debounce$1,
+		diff: () => diff,
+		dist: () => dist,
+		escape: () => escape,
+		escapeRegExp: () => escapeRegExp,
+		evaluate: () => evaluate,
+		extend: () => extend,
+		flatten: () => flatten,
+		forgetDot: () => forgetDot,
+		getDot: () => getDot,
+		hasDot: () => hasDot,
+		humanize: () => humanize,
+		intersect: () => intersect,
+		inverseLerp: () => inverseLerp,
+		isArray: () => isArray,
+		isArrayLike: () => isArrayLike,
+		isBoolean: () => isBoolean,
+		isDocument: () => isDocument,
+		isElement: () => isElement,
+		isFragment: () => isFragment,
+		isFunction: () => isFunction,
+		isNaN: () => isNaN,
+		isNode: () => isNode,
+		isNull: () => isNull,
+		isNumeric: () => isNumeric,
+		isObject: () => isObject,
+		isPlainObject: () => isPlainObject,
+		isShadow: () => isShadow,
+		isString: () => isString,
+		isText: () => isText,
+		isUndefined: () => isUndefined,
+		isWindow: () => isWindow,
+		kebabCase: () => kebabCase,
+		len: () => len,
+		lerp: () => lerp,
+		map: () => map,
+		merge: () => merge,
+		once: () => once,
+		partial: () => partial,
+		pascalCase: () => pascalCase,
+		pipe: () => pipe,
+		pluckDot: () => pluckDot,
+		random: () => random,
+		randomInt: () => randomInt,
+		randomString: () => randomString,
+		randomValue: () => randomValue,
+		range: () => range,
+		setDot: () => setDot,
+		snakeCase: () => snakeCase,
+		throttle: () => throttle,
+		times: () => times,
+		toStep: () => toStep,
+		unescape: () => unescape,
+		unique: () => unique,
+		wrap: () => wrap
+	});
+	/**
 	* Testing methods
 	*/
 	var ELEMENT_NODE = 1;
@@ -144,10 +208,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {boolean} Whether the value is a Window.
 	*/
 	var isWindow = (value) => !!value && !!value.document && value.document.defaultView === value;
-
-//#endregion
-//#region node_modules/@fr0st/core/src/math.js
-/**
+	/**
 	* Math methods
 	*/
 	/**
@@ -250,10 +311,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (precision > 100) return result;
 		return parseFloat(result.toFixed(precision));
 	};
-
-//#endregion
-//#region node_modules/@fr0st/core/src/array.js
-/**
+	/**
 	* Array methods
 	*/
 	/**
@@ -332,16 +390,13 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {T|T[]|ArrayLike<T>|Iterable<T>|undefined} value The input value.
 	* @returns {T[]} The wrapped array.
 	*/
-	var wrap$2 = (value) => {
+	var wrap = (value) => {
 		if (isUndefined(value)) return [];
 		if (isArray(value)) return value;
 		if (isObject(value) && isFunction(value[Symbol.iterator])) return Array.from(value);
 		return isArrayLike(value) ? merge([], value) : [value];
 	};
-
-//#endregion
-//#region node_modules/@fr0st/core/src/function.js
-/**
+	/**
 	* Function methods
 	*/
 	/**
@@ -355,7 +410,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {Function} callback The callback to execute.
 	* @returns {number} The request ID.
 	*/
-	var _requestAnimationFrame = isBrowser ? (...args) => window.requestAnimationFrame(...args) : (callback) => setTimeout(callback, 1e3 / 60);
+	var _requestAnimationFrame = isBrowser ? (callback) => window.requestAnimationFrame(callback) : (callback) => setTimeout(callback, 1e3 / 60);
 	/**
 	* Creates a wrapped version of a function that executes at most once per animation frame
 	* (using the most recent arguments passed to it).
@@ -598,10 +653,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	var times = (callback, amount) => {
 		while (amount-- > 0) if (callback() === false) break;
 	};
-
-//#endregion
-//#region node_modules/@fr0st/core/src/object.js
-/**
+	/**
 	* Object methods
 	*/
 	var hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
@@ -738,9 +790,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {void} Nothing.
 	*/
 	var setDot = (object, key, value, { overwrite = true } = {}) => setDotSegments(object, key.split("."), value, overwrite);
-
-//#endregion
-//#region node_modules/@fr0st/core/src/string.js
 	var escapeChars = {
 		"&": "&amp;",
 		"<": "&lt;",
@@ -836,74 +885,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	var unescape = (string) => string.replace(/&(amp|lt|gt|quot|apos);/g, (_, code) => unescapeChars[code]);
 
 //#endregion
-//#region node_modules/@fr0st/core/src/index.js
-	var src_exports = /* @__PURE__ */ __exportAll({
-		animation: () => animation,
-		camelCase: () => camelCase,
-		capitalize: () => capitalize,
-		clamp: () => clamp,
-		clampPercent: () => clampPercent,
-		compose: () => compose,
-		curry: () => curry,
-		debounce: () => debounce$1,
-		diff: () => diff,
-		dist: () => dist,
-		escape: () => escape,
-		escapeRegExp: () => escapeRegExp,
-		evaluate: () => evaluate,
-		extend: () => extend,
-		flatten: () => flatten,
-		forgetDot: () => forgetDot,
-		getDot: () => getDot,
-		hasDot: () => hasDot,
-		humanize: () => humanize,
-		intersect: () => intersect,
-		inverseLerp: () => inverseLerp,
-		isArray: () => isArray,
-		isArrayLike: () => isArrayLike,
-		isBoolean: () => isBoolean,
-		isDocument: () => isDocument,
-		isElement: () => isElement,
-		isFragment: () => isFragment,
-		isFunction: () => isFunction,
-		isNaN: () => isNaN,
-		isNode: () => isNode,
-		isNull: () => isNull,
-		isNumeric: () => isNumeric,
-		isObject: () => isObject,
-		isPlainObject: () => isPlainObject,
-		isShadow: () => isShadow,
-		isString: () => isString,
-		isText: () => isText,
-		isUndefined: () => isUndefined,
-		isWindow: () => isWindow,
-		kebabCase: () => kebabCase,
-		len: () => len,
-		lerp: () => lerp,
-		map: () => map,
-		merge: () => merge,
-		once: () => once,
-		partial: () => partial,
-		pascalCase: () => pascalCase,
-		pipe: () => pipe,
-		pluckDot: () => pluckDot,
-		random: () => random,
-		randomInt: () => randomInt,
-		randomString: () => randomString,
-		randomValue: () => randomValue,
-		range: () => range,
-		setDot: () => setDot,
-		snakeCase: () => snakeCase,
-		throttle: () => throttle,
-		times: () => times,
-		toStep: () => toStep,
-		unescape: () => unescape,
-		unique: () => unique,
-		wrap: () => wrap$2
-	});
-
-//#endregion
-//#region node_modules/@fr0st/query/src/config.js
+//#region node_modules/@fr0st/query/dist/fquery.esm.js
 /** @import { AjaxOptions } from './ajax/ajax-request.js'; */
 	/** @import { AnimationOptions } from './animation/animation.js'; */
 	var ajaxDefaults = {
@@ -1006,10 +988,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function useTimeout(enable = true) {
 		config.useTimeout = enable;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/ajax/helpers.js
-/** @typedef {{name: string, value: *}} FormEntry */
+	/** @typedef {{name: string, value: *}} FormEntry */
 	/** @typedef {FormEntry[]|Record<string, *>} FormInput */
 	/** @typedef {[string, *]} ParamEntry */
 	/**
@@ -1109,10 +1088,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		const pos = newUrl.indexOf(url);
 		return newUrl.substring(pos);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/ajax/ajax-request.js
-/**
+	/**
 	* @typedef {boolean|string|Array<*>|Record<string, *>|FormData|null} AjaxData
 	*/
 	/**
@@ -1286,10 +1262,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 	};
 	Object.setPrototypeOf(AjaxRequest.prototype, Promise.prototype);
-
-//#endregion
-//#region node_modules/@fr0st/query/src/ajax/ajax.js
-/** @import { AjaxData } from './ajax-request.js'; */
+	/** @import { AjaxData } from './ajax-request.js'; */
 	/** @import { AjaxOptions } from './ajax-request.js'; */
 	/**
 	* Performs an XHR DELETE request.
@@ -1371,10 +1344,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			...options
 		});
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/query-set-core.js
-/**
+	/**
 	* Represents an ordered, chainable collection of DOM nodes.
 	*/
 	var QuerySet = class QuerySet {
@@ -1438,10 +1408,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			return this.#nodes.values();
 		}
 	};
-
-//#endregion
-//#region node_modules/@fr0st/query/src/helpers.js
-/**
+	/**
 	* @typedef {string|Element|Array<string|Element>|NodeList|HTMLCollection|QuerySet} ElementInput
 	*/
 	/**
@@ -1606,10 +1573,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (nodes && typeof nodes.item === "function") return merge([], nodes).filter(nodeFilter);
 		return [];
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/parser/parser.js
-/**
+	/**
 	* Creates a Document object from a string.
 	* @param {string} input The input string.
 	* @param {{contentType?: DOMParserSupportedType}} [options] The parsing options.
@@ -1628,10 +1592,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		const childNodes = getContext().createRange().createContextualFragment(html).children;
 		return merge([], childNodes);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/traversal/find.js
-/** @import QuerySet from '../query/query-set.js'; */
+	/** @import QuerySet from '../query/query-set.js'; */
 	/**
 	* @typedef {Element|Document|DocumentFragment|ShadowRoot} QueryContext
 	*/
@@ -1801,10 +1762,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		return null;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/filters.js
-/** @import { NodeFilterCallback } from './helpers.js'; */
+	/** @import { NodeFilterCallback } from './helpers.js'; */
 	/** @import { NodeInput } from './helpers.js'; */
 	/** @import { QueryContextInput } from './traversal/find.js'; */
 	/** @import { QueryInput } from './helpers.js'; */
@@ -1905,9 +1863,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (options.shadow) callbacks.push(isShadow);
 		return (node) => callbacks.some((callback) => callback(node));
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/vars.js
 	var allowedTags = {
 		"*": [
 			"class",
@@ -1982,10 +1937,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	var events = /* @__PURE__ */ new WeakMap();
 	var queues = /* @__PURE__ */ new WeakMap();
 	var styles = /* @__PURE__ */ new WeakMap();
-
-//#endregion
-//#region node_modules/@fr0st/query/src/animation/animation-set.js
-/** @import Animation from './animation.js'; */
+	/** @import Animation from './animation.js'; */
 	/** @import { StopAnimationOptions } from './animation.js'; */
 	/**
 	* Represents a Promise-compatible collection of animations.
@@ -2035,9 +1987,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 	};
 	Object.setPrototypeOf(AnimationSet.prototype, Promise.prototype);
-
-//#endregion
-//#region node_modules/@fr0st/query/src/animation/helpers.js
 	var animating = false;
 	/**
 	* Gets the current time.
@@ -2070,10 +2019,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		else if (config.useTimeout) setTimeout(update, 1e3 / 60);
 		else requestAnimationFrame(update);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/animation/animation.js
-/**
+	/**
 	* @typedef {'linear'|'ease-in'|'ease-out'|'ease-in-out'} AnimationType
 	*/
 	/**
@@ -2237,10 +2183,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 	};
 	Object.setPrototypeOf(Animation.prototype, Promise.prototype);
-
-//#endregion
-//#region node_modules/@fr0st/query/src/animation/animate.js
-/** @import { AnimationCallback } from './animation.js'; */
+	/** @import { AnimationCallback } from './animation.js'; */
 	/** @import { AnimationOptions } from './animation.js'; */
 	/** @import { ElementInput } from '../helpers.js'; */
 	/** @import { StopAnimationOptions } from './animation.js'; */
@@ -2269,10 +2212,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			for (const animation of currentAnimations) animation.stop({ finish });
 		}
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/animation/animations.js
-/** @import { AnimationOptions } from './animation.js'; */
+	/** @import { AnimationOptions } from './animation.js'; */
 	/** @import AnimationSet from './animation-set.js'; */
 	/** @import { ElementInput } from '../helpers.js'; */
 	/**
@@ -2545,10 +2485,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			for (const [property, { priority, value }] of Object.entries(styles)) node.style.setProperty(property, value, priority);
 		}, options);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/manipulation/create.js
-/** @import { ElementInput } from '../helpers.js'; */
+	/** @import { ElementInput } from '../helpers.js'; */
 	/**
 	* @typedef {object} CreateOptions
 	* @property {string} [html] The HTML contents.
@@ -2582,7 +2519,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if ("html" in options) node.innerHTML = options.html;
 		else if ("text" in options) node.textContent = options.text;
 		if ("class" in options) {
-			const classes = parseClasses(wrap$2(options.class));
+			const classes = parseClasses(wrap(options.class));
 			node.classList.add(...classes);
 		}
 		if ("style" in options) for (let [style, value] of Object.entries(options.style)) {
@@ -2632,10 +2569,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function createText(text) {
 		return getContext().createTextNode(text);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/utility/utility.js
-/** @import { ElementInput } from '../helpers.js'; */
+	/** @import { ElementInput } from '../helpers.js'; */
 	/** @import { NodeFilterInput } from '../filters.js'; */
 	/** @import { NodeInput } from '../helpers.js'; */
 	/** @import { QueryInput } from '../helpers.js'; */
@@ -2767,10 +2701,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (!node) return;
 		return node.tagName.toLowerCase();
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/traversal/traversal.js
-/** @import { NodeFilterInput } from '../filters.js'; */
+	/** @import { NodeFilterInput } from '../filters.js'; */
 	/** @import { NodeInput } from '../helpers.js'; */
 	/**
 	* Returns the first child of each node (optionally matching a filter).
@@ -3021,10 +2952,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		return nodes.length > 1 && results.length > 1 ? unique(results) : results;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/events/event-wrappers.js
-/** @import { EventCallback } from './event-handlers.js'; */
+	/** @import { EventCallback } from './event-handlers.js'; */
 	/**
 	* @callback DelegateCallback
 	* @param {Element} target The event target to test.
@@ -3132,10 +3060,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			return callback(event);
 		};
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/events/event-handlers.js
-/** @import QuerySet from '../query/query-set.js'; */
+	/** @import QuerySet from '../query/query-set.js'; */
 	/**
 	* @typedef {Element|Document|ShadowRoot|Window} EventTargetNode
 	*/
@@ -3392,10 +3317,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		return node.dispatchEvent(eventData);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/manipulation/manipulation.js
-/** @import { NodeInput } from '../helpers.js'; */
+	/** @import { NodeInput } from '../helpers.js'; */
 	/**
 	* @typedef {object} CloneOptions
 	* @property {boolean} [deep=true] Whether to also clone all descendant nodes.
@@ -3567,10 +3489,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		remove$1(nodes);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/attributes/attributes.js
-/** @import { ElementInput } from '../helpers.js'; */
+	/** @import { ElementInput } from '../helpers.js'; */
 	/**
 	* @typedef {Record<string, *>} AttributeValues
 	*/
@@ -3592,7 +3511,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {string} [key] The dataset key.
 	* @returns {*|undefined} The dataset value, all dataset values, or `undefined` if no element matches.
 	*/
-	function getDataset$2(selector, key) {
+	function getDataset$1(selector, key) {
 		const node = parseNode(selector);
 		if (!node) return;
 		if (key) {
@@ -3741,10 +3660,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		const nodes = parseNodes(selector);
 		for (const node of nodes) node.value = value;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/attributes/data.js
-/** @import { QueryInput } from '../helpers.js'; */
+	/** @import { QueryInput } from '../helpers.js'; */
 	/**
 	* Clones custom data from each node to each other node.
 	* @param {QueryInput} selector The input node(s), or a query selector string.
@@ -3824,10 +3740,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			Object.assign(nodeData, newData);
 		}
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/attributes/styles.js
-/** @import { ElementInput } from '../helpers.js'; */
+	/** @import { ElementInput } from '../helpers.js'; */
 	/** @typedef {Record<string, string|number>} StyleValues */
 	/**
 	* Adds classes to each node.
@@ -3948,10 +3861,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (!classes.length) return;
 		for (const node of nodes) for (const className of classes) node.classList.toggle(className);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/attributes/position.js
-/** @import { ElementInput } from '../helpers.js'; */
+	/** @import { ElementInput } from '../helpers.js'; */
 	/**
 	* @typedef {object} Coordinates
 	* @property {number} x The X co-ordinate.
@@ -4148,10 +4058,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		return result;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/attributes/scroll.js
-/** @import { QueryInput } from '../helpers.js'; */
+	/** @import { QueryInput } from '../helpers.js'; */
 	/**
 	* Gets the scroll X position of the first node.
 	* @param {QueryInput} selector The input node(s), or a query selector string.
@@ -4230,10 +4137,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		else if (isDocument(node)) node.scrollingElement.scrollTop = y;
 		else node.scrollTop = y;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/attributes/size.js
-/** @import { QueryInput } from '../helpers.js'; */
+	/** @import { QueryInput } from '../helpers.js'; */
 	/**
 	* @typedef {object} SizeOptions
 	* @property {number} [boxSize=PADDING_BOX] The box sizing to calculate.
@@ -4299,10 +4203,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		return result;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/cookie/cookie.js
-/**
+	/**
 	* Gets a cookie value.
 	* @param {string} name The cookie name.
 	* @returns {string|null} The cookie value, or `null` if it does not exist.
@@ -4343,10 +4244,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (secure) cookie += ";secure";
 		getContext().cookie = cookie;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/events/event-factory.js
-/** @import { EventCallback } from './event-handlers.js'; */
+	/** @import { EventCallback } from './event-handlers.js'; */
 	/**
 	* Returns a wrapped mouse drag event (optionally debounced).
 	* @param {EventCallback} down The callback to execute on mousedown.
@@ -4355,8 +4253,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {{debounce?: boolean, passive?: boolean, preventDefault?: boolean, touches?: number}} [options] The mouse drag options.
 	* @returns {EventCallback} The mouse drag event callback.
 	*/
-	function mouseDragFactory(down, move, up, { debounce: debounce$2 = true, passive = true, preventDefault = true, touches = 1 } = {}) {
-		if (move && debounce$2) {
+	function mouseDragFactory(down, move, up, { debounce: debounce$1 = true, passive = true, preventDefault = true, touches = 1 } = {}) {
+		if (move && debounce$1) {
 			move = debounce(move);
 			if (up) up = debounce(up);
 		}
@@ -4385,10 +4283,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			addEvent$1(window, upEvent, realUp);
 		};
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/events/events.js
-/** @import { ElementInput } from '../helpers.js'; */
+	/** @import { ElementInput } from '../helpers.js'; */
 	/** @import { EventCallback } from './event-handlers.js'; */
 	/**
 	* Triggers a blur event on the first node.
@@ -4425,9 +4320,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (getContext().readyState !== "loading") callback();
 		else getWindow().addEventListener("DOMContentLoaded", callback, { once: true });
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/globals.js
 	var _$;
 	var fQuery;
 	/**
@@ -4452,10 +4344,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		window.$ = fQuery;
 		return fQuery;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/manipulation/move.js
-/** @import { NodeInput } from '../helpers.js'; */
+	/** @import { NodeInput } from '../helpers.js'; */
 	/**
 	* Inserts each other node after each node.
 	* @param {NodeInput} selector The input node(s), or a query selector string.
@@ -4593,10 +4482,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function prependTo$1(selector, otherSelector) {
 		prepend$1(otherSelector, selector);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/manipulation/wrap.js
-/** @import { NodeFilterInput } from '../filters.js'; */
+	/** @import { NodeFilterInput } from '../filters.js'; */
 	/** @import { NodeInput } from '../helpers.js'; */
 	/**
 	* Unwraps each node.
@@ -4627,7 +4513,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {NodeInput} selector The input node(s), or a query selector string.
 	* @param {NodeInput} otherSelector The other node(s), or a query selector or HTML string.
 	*/
-	function wrap$1(selector, otherSelector) {
+	function wrap$2(selector, otherSelector) {
 		const nodes = parseNodes(selector, { node: true });
 		const others = parseNodes(otherSelector, {
 			fragment: true,
@@ -4655,11 +4541,10 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	*/
 	function wrapAll$1(selector, otherSelector) {
 		const nodes = parseNodes(selector, { node: true });
-		const others = parseNodes(otherSelector, {
+		const clones = clone$1(parseNodes(otherSelector, {
 			fragment: true,
 			html: true
-		});
-		const clones = clone$1(others, {
+		}), {
 			events: true,
 			data: true,
 			animations: true
@@ -4703,10 +4588,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			for (const child of children) deepest.insertBefore(child, null);
 		}
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/animation/animate.js
-/** @import { AnimationCallback } from '../../animation/animation.js'; */
+	/** @import { AnimationCallback } from '../../animation/animation.js'; */
 	/** @import QuerySet from '../query-set.js'; */
 	/** @import { QueuedAnimationOptions } from '../../animation/animation.js'; */
 	/** @import { StopAnimationOptions } from '../../animation/animation.js'; */
@@ -4729,10 +4611,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		stop$1(this, { finish });
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/animation/animations.js
-/** @import QuerySet from '../query-set.js'; */
+	/** @import QuerySet from '../query-set.js'; */
 	/** @import { QueuedAnimationOptions } from '../../animation/animation.js'; */
 	/**
 	* Adds a drop in animation to the queue for each node.
@@ -4814,10 +4693,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function squeezeOut({ queueName = "default", ...options } = {}) {
 		return this.queue((node) => squeezeOut$1(node, options), { queueName });
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/attributes/attributes.js
-/** @import { AttributeValues } from '../../attributes/attributes.js'; */
+	/** @import { AttributeValues } from '../../attributes/attributes.js'; */
 	/** @import QuerySet from '../query-set.js'; */
 	/**
 	* Gets attribute value(s) for the first node.
@@ -4832,8 +4708,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {string} [key] The dataset key.
 	* @returns {*|undefined} The dataset value, all dataset values, or `undefined` if no element matches.
 	*/
-	function getDataset$1(key) {
-		return getDataset$2(this, key);
+	function getDataset$2(key) {
+		return getDataset$1(this, key);
 	}
 	/**
 	* Gets the HTML contents of the first node.
@@ -4948,10 +4824,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		setValue$1(this, value);
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/attributes/data.js
-/** @import { QueryInput } from '../../helpers.js'; */
+	/** @import { QueryInput } from '../../helpers.js'; */
 	/** @import QuerySet from '../query-set.js'; */
 	/**
 	* Clones custom data from each node to each other node.
@@ -4989,10 +4862,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		setData$1(this, key, value);
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/attributes/position.js
-/** @import { Coordinates } from '../../attributes/position.js'; */
+	/** @import { Coordinates } from '../../attributes/position.js'; */
 	/** @import { ElementInput } from '../../helpers.js'; */
 	/** @import { OffsetOptions } from '../../attributes/position.js'; */
 	/** @import { PercentOptions } from '../../attributes/position.js'; */
@@ -5091,10 +4961,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function rect({ offset = false } = {}) {
 		return rect$1(this, { offset });
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/attributes/scroll.js
-/** @import QuerySet from '../query-set.js'; */
+	/** @import QuerySet from '../query-set.js'; */
 	/**
 	* Gets the scroll X position of the first node.
 	* @returns {number|undefined} The scroll X position, or `undefined` if no node matches.
@@ -5137,10 +5004,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		setScrollY$1(this, y);
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/attributes/size.js
-/** @import { SizeOptions } from '../../attributes/size.js'; */
+	/** @import { SizeOptions } from '../../attributes/size.js'; */
 	/**
 	* Gets the computed height of the first node.
 	* @param {SizeOptions} [options] The sizing options.
@@ -5163,10 +5027,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			outer
 		});
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/attributes/styles.js
-/** @import QuerySet from '../query-set.js'; */
+	/** @import QuerySet from '../query-set.js'; */
 	/** @import { StyleValues } from '../../attributes/styles.js'; */
 	/**
 	* Adds classes to each node.
@@ -5255,10 +5116,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		toggleClass$1(this, ...classes);
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/events/event-handlers.js
-/** @import { EventCallback } from '../../events/event-handlers.js'; */
+	/** @import { EventCallback } from '../../events/event-handlers.js'; */
 	/** @import { EventOptions } from '../../events/event-handlers.js'; */
 	/** @import { EventTargetInput } from '../../events/event-handlers.js'; */
 	/** @import QuerySet from '../query-set.js'; */
@@ -5383,10 +5241,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			cancelable
 		});
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/events/events.js
-/** @import QuerySet from '../query-set.js'; */
+	/** @import QuerySet from '../query-set.js'; */
 	/**
 	* Triggers a blur event on the first node.
 	* @returns {QuerySet} The QuerySet object.
@@ -5411,10 +5266,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		focus$1(this);
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/manipulation/create.js
-/**
+	/**
 	* Attaches a shadow DOM tree to the first node.
 	* @param {{open?: boolean}} [options] The shadow DOM options.
 	* @returns {QuerySet} A new QuerySet object.
@@ -5423,10 +5275,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		const shadow = attachShadow$1(this, { open });
 		return new QuerySet(shadow ? [shadow] : []);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/manipulation/manipulation.js
-/** @import { CloneOptions } from '../../manipulation/manipulation.js'; */
+	/** @import { CloneOptions } from '../../manipulation/manipulation.js'; */
 	/** @import { NodeInput } from '../../helpers.js'; */
 	/**
 	* Clones each node.
@@ -5434,8 +5283,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {QuerySet} A new QuerySet object.
 	*/
 	function clone(options) {
-		const clones = clone$1(this, options);
-		return new QuerySet(clones);
+		return new QuerySet(clone$1(this, options));
 	}
 	/**
 	* Detaches each node from the DOM.
@@ -5479,10 +5327,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		replaceWith$1(this, otherSelector);
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/manipulation/move.js
-/** @import { NodeInput } from '../../helpers.js'; */
+	/** @import { NodeInput } from '../../helpers.js'; */
 	/** @import QuerySet from '../query-set.js'; */
 	/**
 	* Inserts each other node after the first node.
@@ -5556,10 +5401,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		prependTo$1(this, otherSelector);
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/manipulation/wrap.js
-/** @import { NodeFilterInput } from '../../filters.js'; */
+	/** @import { NodeFilterInput } from '../../filters.js'; */
 	/** @import { NodeInput } from '../../helpers.js'; */
 	/** @import QuerySet from '../query-set.js'; */
 	/**
@@ -5576,8 +5418,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {NodeInput} otherSelector The other node(s), or a query selector or HTML string.
 	* @returns {QuerySet} The QuerySet object.
 	*/
-	function wrap(otherSelector) {
-		wrap$1(this, otherSelector);
+	function wrap$1(otherSelector) {
+		wrap$2(this, otherSelector);
 		return this;
 	}
 	/**
@@ -5598,10 +5440,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		wrapInner$1(this, otherSelector);
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/queue/queue.js
-/** @import { ElementInput } from '../helpers.js'; */
+	/** @import { ElementInput } from '../helpers.js'; */
 	/**
 	* @callback QueueCallback
 	* @param {Element} node The queued element.
@@ -5673,10 +5512,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			if (!runningQueue) dequeue(node, { queueName });
 		}
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/queue/queue.js
-/** @import QuerySet from '../query-set.js'; */
+	/** @import QuerySet from '../query-set.js'; */
 	/** @import { QueueCallback } from '../../queue/queue.js'; */
 	/** @import { QueueOptions } from '../../queue/queue.js'; */
 	/**
@@ -5708,10 +5544,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		queue$1(this, callback, { queueName });
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/traversal/filter.js
-/** @import { ElementInput } from '../helpers.js'; */
+	/** @import { ElementInput } from '../helpers.js'; */
 	/** @import { NodeFilterInput } from '../filters.js'; */
 	/** @import { NodeInput } from '../helpers.js'; */
 	/** @import { QueryInput } from '../helpers.js'; */
@@ -5957,10 +5790,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function withProperty$1(selector, property) {
 		return parseNodes(selector).filter((node) => Object.hasOwn(node, property));
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/traversal/filter.js
-/** @import { NodeFilterInput } from '../../filters.js'; */
+	/** @import { NodeFilterInput } from '../../filters.js'; */
 	/** @import { NodeInput } from '../../helpers.js'; */
 	/**
 	* Returns all nodes connected to the DOM.
@@ -6108,10 +5938,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function withProperty(property) {
 		return new QuerySet(withProperty$1(this, property));
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/traversal/find.js
-/**
+	/**
 	* Returns all descendant nodes matching a selector.
 	* @param {string} selector The query selector.
 	* @returns {QuerySet} The QuerySet object.
@@ -6179,10 +6006,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		const node = findOneByTag$1(tagName, this);
 		return new QuerySet(node ? [node] : []);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/traversal/traversal.js
-/** @import { NodeFilterInput } from '../../filters.js'; */
+	/** @import { NodeFilterInput } from '../../filters.js'; */
 	/**
 	* Returns the first child of each node (optionally matching a filter).
 	* @param {NodeFilterInput} [nodeFilter] The filter node(s), a query selector string or custom filter function.
@@ -6308,10 +6132,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function siblings(nodeFilter, { elementsOnly = true } = {}) {
 		return new QuerySet(siblings$1(this, nodeFilter, { elementsOnly }));
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/utility/selection.js
-/** @import { NodeInput } from '../helpers.js'; */
+	/** @import { NodeInput } from '../helpers.js'; */
 	/**
 	* Inserts each node after the selection.
 	* @param {NodeInput} selector The input node(s), or a query selector or HTML string.
@@ -6438,10 +6259,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		for (const child of childNodes) deepest.insertBefore(child, null);
 		for (const node of nodes) range.insertNode(node);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/utility/selection.js
-/** @import QuerySet from '../query-set.js'; */
+	/** @import QuerySet from '../query-set.js'; */
 	/**
 	* Inserts each node after the selection.
 	* @returns {QuerySet} The QuerySet object.
@@ -6482,10 +6300,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		wrapSelection$1(this);
 		return this;
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/utility/tests.js
-/** @import { ElementInput } from '../helpers.js'; */
+	/** @import { ElementInput } from '../helpers.js'; */
 	/** @import { NodeFilterInput } from '../filters.js'; */
 	/** @import { NodeInput } from '../helpers.js'; */
 	/** @import { QueryInput } from '../helpers.js'; */
@@ -6720,10 +6535,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			return node.offsetParent;
 		});
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/utility/tests.js
-/** @import { NodeFilterInput } from '../../filters.js'; */
+	/** @import { NodeFilterInput } from '../../filters.js'; */
 	/** @import { NodeInput } from '../../helpers.js'; */
 	/** @import QuerySet from '../query-set.js'; */
 	/**
@@ -6869,10 +6681,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function isVisible() {
 		return isVisible$1(this);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/utility/utility.js
-/** @import { NodeFilterInput } from '../../filters.js'; */
+	/** @import { NodeFilterInput } from '../../filters.js'; */
 	/** @import { QueryContextInput } from '../../traversal/find.js'; */
 	/** @import { QueryInput } from '../../helpers.js'; */
 	/**
@@ -6891,8 +6700,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			html: true,
 			context: context || getContext()
 		});
-		const nodes = sort$1(unique(merge([], this.get(), otherNodes)));
-		return new QuerySet(nodes);
+		return new QuerySet(sort$1(unique(merge([], this.get(), otherNodes))));
 	}
 	/**
 	* Reduces the set of nodes to the one at the specified index.
@@ -6968,9 +6776,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	function tagName() {
 		return tagName$1(this);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/query-set.js
 	var methods = {
 		add,
 		addClass,
@@ -7028,7 +6833,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		fragment,
 		getAttribute,
 		getData,
-		getDataset: getDataset$1,
+		getDataset: getDataset$2,
 		getHTML,
 		getProperty,
 		getScrollX,
@@ -7137,7 +6942,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		withData,
 		withDescendent,
 		withProperty,
-		wrap,
+		wrap: wrap$1,
 		wrapAll,
 		wrapInner,
 		wrapSelection
@@ -7149,10 +6954,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		writable: true
 	});
 	var query_set_default = QuerySet;
-
-//#endregion
-//#region node_modules/@fr0st/query/src/query/query.js
-/** @import { QueryContextInput } from '../traversal/find.js'; */
+	/** @import { QueryContextInput } from '../traversal/find.js'; */
 	/** @import { QueryInput } from '../helpers.js'; */
 	/**
 	* Adds a function to the ready queue or returns a QuerySet.
@@ -7162,7 +6964,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	*/
 	function query(selector, context = null) {
 		if (isFunction(selector)) return ready(selector);
-		const nodes = parseNodes(selector, {
+		return new query_set_default(parseNodes(selector, {
 			node: true,
 			fragment: true,
 			shadow: true,
@@ -7170,8 +6972,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			window: true,
 			html: true,
 			context: context || getContext()
-		});
-		return new query_set_default(nodes);
+		}));
 	}
 	/**
 	* Returns a QuerySet for the first node.
@@ -7191,10 +6992,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		});
 		return new query_set_default(node ? [node] : []);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/scripts/scripts.js
-/** @typedef {Record<string, *>} ScriptAttributes */
+	/** @typedef {Record<string, *>} ScriptAttributes */
 	/** @typedef {string|ScriptAttributes} ScriptSource */
 	/**
 	* @typedef {object} ScriptLoadOptions
@@ -7257,10 +7055,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			context
 		})));
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/styles/styles.js
-/** @typedef {Record<string, *>} StyleAttributes */
+	/** @typedef {Record<string, *>} StyleAttributes */
 	/** @typedef {string|StyleAttributes} StyleSource */
 	/**
 	* @typedef {object} StyleLoadOptions
@@ -7304,10 +7099,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			context
 		})));
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/utility/sanitize.js
-/** @typedef {Record<string, Array<string|RegExp>>} AllowedTags */
+	/** @typedef {Record<string, Array<string|RegExp>>} AllowedTags */
 	/**
 	* Sanitizes a HTML string.
 	* @param {string} html The input HTML string.
@@ -7358,9 +7150,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		const childNodes = merge([], node.children);
 		for (const child of childNodes) sanitizeNode(child, allowedTags$2);
 	}
-
-//#endregion
-//#region node_modules/@fr0st/query/src/fquery.js
 	Object.assign(query, {
 		BORDER_BOX: 2,
 		CONTENT_BOX: 0,
@@ -7437,7 +7226,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		getContext,
 		getCookie,
 		getData: getData$1,
-		getDataset: getDataset$2,
+		getDataset: getDataset$1,
 		getHTML: getHTML$1,
 		getProperty: getProperty$1,
 		getScrollX: getScrollX$1,
@@ -7571,16 +7360,13 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		withData: withData$1,
 		withDescendent: withDescendent$1,
 		withProperty: withProperty$1,
-		wrap: wrap$1,
+		wrap: wrap$2,
 		wrapAll: wrapAll$1,
 		wrapInner: wrapInner$1,
 		wrapSelection: wrapSelection$1
 	});
-	for (const [key, value] of Object.entries(src_exports)) query[`_${key}`] = value;
+	for (const [key, value] of Object.entries(frost_core_esm_exports)) query[`_${key}`] = value;
 	var fquery_default = query;
-
-//#endregion
-//#region node_modules/@fr0st/query/src/index.js
 	var register = (window, document) => registerGlobals(window, document, fquery_default);
 	var src_default = isWindow(globalThis) ? register(globalThis) : register;
 
@@ -8525,7 +8311,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 //#endregion
 //#region src/js/popper/helpers.js
 /** @import { BoundingRect } from '../helpers/scroll.js'; */
-	/** @import Popper, { Direction, Placement } from './popper.js'; */
+	/** @import Popper, { Direction, PhysicalDirection, Placement } from './popper.js'; */
 	var poppers = /* @__PURE__ */ new Set();
 	var running$1 = false;
 	/**
@@ -8550,39 +8336,55 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		running$1 = true;
 	}
 	/**
+	* Resolves a logical placement to a physical direction.
+	* @param {Direction} placement The logical placement.
+	* @param {boolean} rtl Whether the inline direction is right-to-left.
+	* @returns {PhysicalDirection} The physical placement.
+	*/
+	function getPhysicalPlacement(placement, rtl) {
+		const [start, end] = rtl ? ["right", "left"] : ["left", "right"];
+		switch (placement) {
+			case "start": return start;
+			case "end": return end;
+			default: return placement;
+		}
+	}
+	/**
 	* Resolves the best available popper placement.
 	* @param {DOMRect} nodeBox The computed bounding rectangle of the node.
 	* @param {DOMRect} referenceBox The computed bounding rectangle of the reference.
 	* @param {BoundingRect} minimumBox The available positioning boundary.
 	* @param {Placement} placement The preferred placement.
 	* @param {number} spacing The amount of spacing to use.
+	* @param {boolean} rtl Whether the inline direction is right-to-left.
 	* @returns {Direction} The resolved placement.
 	*/
-	function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement, spacing) {
+	function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement, spacing, rtl) {
 		const spaceTop = referenceBox.top - minimumBox.top;
 		const spaceRight = minimumBox.right - referenceBox.right;
 		const spaceBottom = minimumBox.bottom - referenceBox.bottom;
 		const spaceLeft = referenceBox.left - minimumBox.left;
+		const [spaceStart, spaceEnd] = rtl ? [spaceRight, spaceLeft] : [spaceLeft, spaceRight];
 		if (placement === "top") {
 			if (spaceTop < nodeBox.height + spacing && spaceBottom > spaceTop) return "bottom";
-		} else if (placement === "right") {
-			if (spaceRight < nodeBox.width + spacing && spaceLeft > spaceRight) return "left";
+		} else if (placement === "end") {
+			if (spaceEnd < nodeBox.width + spacing && spaceStart > spaceEnd) return "start";
 		} else if (placement === "bottom") {
 			if (spaceBottom < nodeBox.height + spacing && spaceTop > spaceBottom) return "top";
-		} else if (placement === "left") {
-			if (spaceLeft < nodeBox.width + spacing && spaceRight > spaceLeft) return "right";
+		} else if (placement === "start") {
+			if (spaceStart < nodeBox.width + spacing && spaceEnd > spaceStart) return "end";
 		} else if (placement === "auto") {
 			const maxVSpace = Math.max(spaceTop, spaceBottom);
 			const maxHSpace = Math.max(spaceRight, spaceLeft);
 			const minVSpace = Math.min(spaceTop, spaceBottom);
-			if (maxHSpace > maxVSpace && maxHSpace >= nodeBox.width + spacing && minVSpace + referenceBox.height >= nodeBox.height + spacing - Math.max(0, nodeBox.height - referenceBox.height)) return spaceLeft > spaceRight ? "left" : "right";
+			if (maxHSpace > maxVSpace && maxHSpace >= nodeBox.width + spacing && minVSpace + referenceBox.height >= nodeBox.height + spacing - Math.max(0, nodeBox.height - referenceBox.height)) return spaceStart > spaceEnd ? "start" : "end";
 			const minHSpace = Math.min(spaceRight, spaceLeft);
 			if (maxVSpace >= nodeBox.height + spacing && minHSpace + referenceBox.width >= nodeBox.width + spacing - Math.max(0, nodeBox.width - referenceBox.width)) return spaceBottom > spaceTop ? "bottom" : "top";
 			const maxSpace = Math.max(maxVSpace, maxHSpace);
 			if (spaceBottom === maxSpace && spaceBottom >= nodeBox.height + spacing) return "bottom";
 			if (spaceTop === maxSpace && spaceTop >= nodeBox.height + spacing) return "top";
-			if (spaceRight === maxSpace && spaceRight >= nodeBox.width + spacing) return "right";
-			if (spaceLeft === maxSpace && spaceLeft >= nodeBox.width + spacing) return "left";
+			if (spaceEnd === maxSpace && spaceEnd >= nodeBox.width + spacing) return "end";
+			if (spaceStart === maxSpace && spaceStart >= nodeBox.width + spacing) return "start";
 			return "bottom";
 		}
 		return placement;
@@ -8601,7 +8403,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 
 //#endregion
 //#region src/js/popper/popper.js
-/** @typedef {'top'|'right'|'bottom'|'left'} Direction */
+/** @typedef {'top'|'end'|'bottom'|'start'} Direction */
+	/** @typedef {'top'|'right'|'bottom'|'left'} PhysicalDirection */
 	/** @typedef {'auto'|Direction} Placement */
 	/** @typedef {'start'|'center'|'end'} Position */
 	/** @typedef {string|HTMLElement} ElementInput */
@@ -8631,7 +8434,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @property {boolean} [fixed=false] Whether to preserve the preferred placement.
 	* @property {number} [spacing=0] The spacing from the reference element.
 	* @property {number|false|null} [minContact=null] The minimum contact with the reference element.
-	* @property {boolean} [useGpu=true] Whether to position using a transform.
 	*/
 	/**
 	* Positions an element relative to a reference element.
@@ -8640,6 +8442,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	var Popper = class extends BaseComponent {
 		#placement;
 		#referencePlacement;
+		#rtl;
 		/**
 		* Creates a Popper.
 		* @param {HTMLElement} node The input node.
@@ -8647,6 +8450,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		*/
 		constructor(node, options) {
 			super(node, options);
+			this.#rtl = $$1.css(this.options.reference, "direction") === "rtl";
 			this.#placement = $$1.getDataset(this.node, "uiPlacement");
 			this.#referencePlacement = $$1.getDataset(this.options.reference, "uiPlacement");
 			$$1.setStyle(this.node, {
@@ -8682,13 +8486,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		*/
 		update() {
 			if (!$$1.isConnected(this.node) || !$$1.isVisible(this.node)) return;
-			const resetStyle = {};
-			if (this.options.useGpu) resetStyle.transform = "";
-			else {
-				resetStyle.marginLeft = 0;
-				resetStyle.marginTop = 0;
-			}
-			$$1.setStyle(this.node, resetStyle);
+			$$1.setStyle(this.node, { transform: "" });
 			if (this.options.beforeUpdate) this.options.beforeUpdate(this.node, this.options.reference);
 			const nodeBox = $$1.rect(this.node, { offset: true });
 			const referenceBox = $$1.rect(this.options.reference, { offset: true });
@@ -8720,7 +8518,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				minimumBox.width = minimumBox.right - minimumBox.left;
 				minimumBox.height = minimumBox.bottom - minimumBox.top;
 			}
-			const placement = this.options.fixed && this.options.placement !== "auto" ? this.options.placement : getPopperPlacement(nodeBox, referenceBox, minimumBox, this.options.placement, this.options.spacing + 2);
+			const placement = this.options.fixed && this.options.placement !== "auto" ? this.options.placement : getPopperPlacement(nodeBox, referenceBox, minimumBox, this.options.placement, this.options.spacing + 2, this.#rtl);
+			const physicalPlacement = getPhysicalPlacement(placement, this.#rtl);
 			$$1.setDataset(this.options.reference, { uiPlacement: placement });
 			$$1.setDataset(this.node, { uiPlacement: placement });
 			const position = this.options.position;
@@ -8733,14 +8532,14 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				offset.x -= Math.round(positionBox.x);
 				offset.y -= Math.round(positionBox.y);
 			}
-			if (placement === "top") offset.y -= Math.round(nodeBox.height) + this.options.spacing;
-			else if (placement === "right") offset.x += Math.round(referenceBox.width) + this.options.spacing;
-			else if (placement === "bottom") offset.y += Math.round(referenceBox.height) + this.options.spacing;
-			else if (placement === "left") offset.x -= Math.round(nodeBox.width) + this.options.spacing;
-			if (["top", "bottom"].includes(placement)) {
+			if (physicalPlacement === "top") offset.y -= Math.round(nodeBox.height) + this.options.spacing;
+			else if (physicalPlacement === "right") offset.x += Math.round(referenceBox.width) + this.options.spacing;
+			else if (physicalPlacement === "bottom") offset.y += Math.round(referenceBox.height) + this.options.spacing;
+			else if (physicalPlacement === "left") offset.x -= Math.round(nodeBox.width) + this.options.spacing;
+			if (["top", "bottom"].includes(physicalPlacement)) {
 				const deltaX = Math.round(nodeBox.width) - Math.round(referenceBox.width);
 				if (position === "center") offset.x -= Math.round(deltaX / 2);
-				else if (position === "end") offset.x -= deltaX;
+				else if (position === (this.#rtl ? "start" : "end")) offset.x -= deltaX;
 			} else {
 				const deltaY = Math.round(nodeBox.height) - Math.round(referenceBox.height);
 				if (position === "center") offset.y -= Math.round(deltaY / 2);
@@ -8748,7 +8547,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			}
 			offset.x -= parseInt($$1.css(this.node, "marginLeft"));
 			offset.y -= parseInt($$1.css(this.node, "marginTop"));
-			if (["left", "right"].includes(placement)) {
+			if (["left", "right"].includes(physicalPlacement)) {
 				let offsetY = offset.y;
 				let refTop = referenceBox.top;
 				if (positionBox) {
@@ -8787,13 +8586,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				offset.x += $$1.getScrollX(positionParent);
 				offset.y += $$1.getScrollY(positionParent);
 			}
-			const style = {};
-			if (this.options.useGpu) style.transform = `translate3d(${offset.x}px , ${offset.y}px , 0)`;
-			else {
-				style.marginLeft = `${offset.x}px`;
-				style.marginTop = `${offset.y}px`;
-			}
-			$$1.setStyle(this.node, style);
+			$$1.setStyle(this.node, { transform: `translate3d(${offset.x}px , ${offset.y}px , 0)` });
 			if (this.options.arrow) this.#updateArrow(placement, position);
 			if (this.options.afterUpdate) this.options.afterUpdate(this.node, this.options.reference, placement, position);
 		}
@@ -8803,6 +8596,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		* @param {Position} position The resolved alignment.
 		*/
 		#updateArrow(placement, position) {
+			const physicalPlacement = getPhysicalPlacement(placement, this.#rtl);
 			const nodeBox = $$1.rect(this.node, { offset: true });
 			const referenceBox = $$1.rect(this.options.reference, { offset: true });
 			const arrowStyles = {
@@ -8814,12 +8608,14 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			};
 			$$1.setStyle(this.options.arrow, arrowStyles);
 			const arrowBox = $$1.rect(this.options.arrow, { offset: true });
-			if (["top", "bottom"].includes(placement)) {
-				arrowStyles[placement === "top" ? "bottom" : "top"] = -Math.floor(arrowBox.height);
+			if (["top", "bottom"].includes(physicalPlacement)) {
+				const arrowPlacement = physicalPlacement === "top" ? "bottom" : "top";
+				arrowStyles[arrowPlacement] = -Math.floor(arrowBox.height);
 				const diff = (referenceBox.width - nodeBox.width) / 2;
+				const [left, right] = this.#rtl ? ["end", "start"] : ["start", "end"];
 				let offset = nodeBox.width / 2 - arrowBox.width / 2;
-				if (position === "start") offset += diff;
-				else if (position === "end") offset -= diff;
+				if (position === left) offset += diff;
+				else if (position === right) offset -= diff;
 				let min = Math.max(referenceBox.left, nodeBox.left) - arrowBox.left;
 				let max = Math.min(referenceBox.right, nodeBox.right) - arrowBox.left - arrowBox.width;
 				if (referenceBox.width < arrowBox.width) {
@@ -8831,7 +8627,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				max = Math.round(max);
 				arrowStyles.left = $$1._clamp(offset, min, max);
 			} else {
-				arrowStyles[placement === "right" ? "left" : "right"] = -Math.floor(arrowBox.width);
+				const arrowPlacement = physicalPlacement === "right" ? "left" : "right";
+				arrowStyles[arrowPlacement] = -Math.floor(arrowBox.width);
 				const diff = (referenceBox.height - nodeBox.height) / 2;
 				let offset = nodeBox.height / 2 - arrowBox.height;
 				if (position === "start") offset += diff;
@@ -9587,8 +9384,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		position: "center",
 		fixed: false,
 		spacing: 0,
-		minContact: null,
-		useGpu: true
+		minContact: null
 	};
 	initComponent("popper", Popper);
 	var popper_default = Popper;

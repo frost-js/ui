@@ -3321,42 +3321,41 @@ fieldset:disabled .btn {
 .dropdown-toggle[data-ui-placement=top]:empty::after {
   margin-inline-start: 0;
 }
-.dropdown-toggle[data-ui-placement=right] + .dropdown-menu {
-  top: 0;
-  right: auto;
-  left: 100%;
+.dropdown-toggle[data-ui-placement=end] + .dropdown-menu {
+  inset-block-start: 0;
+  inset-inline-start: 100%;
+  inset-inline-end: auto;
 }
-.dropdown-toggle[data-ui-placement=right]::after {
+.dropdown-toggle[data-ui-placement=end]::after {
   display: inline-block;
   margin-inline-start: 0.5rem;
   vertical-align: 0.075em;
   content: "";
-  border-top: 0.25em solid transparent;
-  border-right: 0;
-  border-bottom: 0.25em solid transparent;
-  border-left: 0.25em solid;
+  border-block: 0.25em solid transparent;
+  border-inline-start: 0.25em solid;
+  border-inline-end: 0;
 }
-.dropdown-toggle[data-ui-placement=right]:empty::after {
+.dropdown-toggle[data-ui-placement=end]:empty::after {
   margin-inline-start: 0;
 }
-.dropdown-toggle[data-ui-placement=left] + .dropdown-menu {
-  top: 0;
-  right: 100%;
-  left: auto;
+.dropdown-toggle[data-ui-placement=start] + .dropdown-menu {
+  inset-block-start: 0;
+  inset-inline-start: auto;
+  inset-inline-end: 100%;
 }
-.dropdown-toggle[data-ui-placement=left]::before {
+.dropdown-toggle[data-ui-placement=start]::before {
   display: inline-block;
   margin-inline-end: 0.5rem;
   vertical-align: 0.075em;
   content: "";
-  border-top: 0.25em solid transparent;
-  border-right: 0.25em solid;
-  border-bottom: 0.25em solid transparent;
+  border-block: 0.25em solid transparent;
+  border-inline-start: 0;
+  border-inline-end: 0.25em solid;
 }
-.dropdown-toggle[data-ui-placement=left]:empty::before {
+.dropdown-toggle[data-ui-placement=start]:empty::before {
   margin-inline-end: 0;
 }
-.dropdown-toggle[data-ui-placement=left]::after {
+.dropdown-toggle[data-ui-placement=start]::after {
   display: none;
 }
 
@@ -4986,18 +4985,22 @@ fieldset:disabled .btn {
   border-width: var(--ui-popover-arrow-height) var(--ui-popover-arrow-height) 0;
   border-top-color: var(--ui-popover-bg);
 }
-.popover[data-ui-placement=right] .popover-arrow {
-  left: 0;
+.popover[data-ui-placement=end] .popover-arrow {
+  inset-inline-start: 0;
 }
-.popover[data-ui-placement=right] .popover-arrow::before {
-  right: var(--ui-popover-border-width);
-  border-width: var(--ui-popover-arrow-height) var(--ui-popover-arrow-height) var(--ui-popover-arrow-height) 0;
-  border-right-color: var(--ui-popover-border-color);
+.popover[data-ui-placement=end] .popover-arrow::before {
+  inset-inline-end: var(--ui-popover-border-width);
+  border-block-width: var(--ui-popover-arrow-height);
+  border-inline-start-width: 0;
+  border-inline-end-color: var(--ui-popover-border-color);
+  border-inline-end-width: var(--ui-popover-arrow-height);
 }
-.popover[data-ui-placement=right] .popover-arrow::after {
-  right: 0;
-  border-width: var(--ui-popover-arrow-height) var(--ui-popover-arrow-height) var(--ui-popover-arrow-height) 0;
-  border-right-color: var(--ui-popover-bg);
+.popover[data-ui-placement=end] .popover-arrow::after {
+  inset-inline-end: 0;
+  border-block-width: var(--ui-popover-arrow-height);
+  border-inline-start-width: 0;
+  border-inline-end-color: var(--ui-popover-bg);
+  border-inline-end-width: var(--ui-popover-arrow-height);
 }
 .popover[data-ui-placement=bottom] .popover-arrow {
   top: 0;
@@ -5012,18 +5015,22 @@ fieldset:disabled .btn {
   border-width: 0 var(--ui-popover-arrow-height) var(--ui-popover-arrow-height);
   border-bottom-color: var(--ui-popover-bg);
 }
-.popover[data-ui-placement=left] .popover-arrow {
-  right: 0;
+.popover[data-ui-placement=start] .popover-arrow {
+  inset-inline-end: 0;
 }
-.popover[data-ui-placement=left] .popover-arrow::before {
-  left: var(--ui-popover-border-width);
-  border-width: var(--ui-popover-arrow-height) 0 var(--ui-popover-arrow-height) var(--ui-popover-arrow-height);
-  border-left-color: var(--ui-popover-border-color);
+.popover[data-ui-placement=start] .popover-arrow::before {
+  inset-inline-start: var(--ui-popover-border-width);
+  border-block-width: var(--ui-popover-arrow-height);
+  border-inline-start-color: var(--ui-popover-border-color);
+  border-inline-start-width: var(--ui-popover-arrow-height);
+  border-inline-end-width: 0;
 }
-.popover[data-ui-placement=left] .popover-arrow::after {
-  left: 0;
-  border-width: var(--ui-popover-arrow-height) 0 var(--ui-popover-arrow-height) var(--ui-popover-arrow-height);
-  border-left-color: var(--ui-popover-bg);
+.popover[data-ui-placement=start] .popover-arrow::after {
+  inset-inline-start: 0;
+  border-block-width: var(--ui-popover-arrow-height);
+  border-inline-start-color: var(--ui-popover-bg);
+  border-inline-start-width: var(--ui-popover-arrow-height);
+  border-inline-end-width: 0;
 }
 
 .popover-header {
@@ -5300,13 +5307,15 @@ fieldset:disabled .btn {
   border-width: var(--ui-tooltip-arrow-height) var(--ui-tooltip-arrow-height) 0;
   border-top-color: var(--ui-tooltip-bg);
 }
-.tooltip[data-ui-placement=right] .tooltip-arrow {
-  left: 0;
+.tooltip[data-ui-placement=end] .tooltip-arrow {
+  inset-inline-start: 0;
 }
-.tooltip[data-ui-placement=right] .tooltip-arrow::before {
-  right: 0;
-  border-width: var(--ui-tooltip-arrow-height) var(--ui-tooltip-arrow-height) var(--ui-tooltip-arrow-height) 0;
-  border-right-color: var(--ui-tooltip-bg);
+.tooltip[data-ui-placement=end] .tooltip-arrow::before {
+  inset-inline-end: 0;
+  border-block-width: var(--ui-tooltip-arrow-height);
+  border-inline-start-width: 0;
+  border-inline-end-color: var(--ui-tooltip-bg);
+  border-inline-end-width: var(--ui-tooltip-arrow-height);
 }
 .tooltip[data-ui-placement=bottom] .tooltip-arrow {
   top: 0;
@@ -5316,13 +5325,15 @@ fieldset:disabled .btn {
   border-width: 0 var(--ui-tooltip-arrow-height) var(--ui-tooltip-arrow-height);
   border-bottom-color: var(--ui-tooltip-bg);
 }
-.tooltip[data-ui-placement=left] .tooltip-arrow {
-  right: 0;
+.tooltip[data-ui-placement=start] .tooltip-arrow {
+  inset-inline-end: 0;
 }
-.tooltip[data-ui-placement=left] .tooltip-arrow::before {
-  left: 0;
-  border-width: var(--ui-tooltip-arrow-height) 0 var(--ui-tooltip-arrow-height) var(--ui-tooltip-arrow-height);
-  border-left-color: var(--ui-tooltip-bg);
+.tooltip[data-ui-placement=start] .tooltip-arrow::before {
+  inset-inline-start: 0;
+  border-block-width: var(--ui-tooltip-arrow-height);
+  border-inline-start-color: var(--ui-tooltip-bg);
+  border-inline-start-width: var(--ui-tooltip-arrow-height);
+  border-inline-end-width: 0;
 }
 
 .tooltip-inner {
