@@ -589,6 +589,7 @@ var Carousel = class extends BaseComponent {
 	#show(index) {
 		if (this.#sliding) return;
 		index = parseInt(index);
+		if (Number.isNaN(index)) return;
 		if (!this.options.wrap && (index < 0 || index > this.#items.length - 1)) return;
 		const offset = getDirOffset(index, this.#items.length);
 		index = getIndex(index, this.#items.length);
@@ -1350,7 +1351,7 @@ var Dropdown = class extends BaseComponent {
 	* Focuses the first enabled dropdown item.
 	*/
 	focusFirstItem() {
-		const focusNode = $.findOne(".dropdown-item:not([tabindex=\"-1\"])", this.#menuNode);
+		const focusNode = $.findOne(".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])", this.#menuNode);
 		$.focus(focusNode);
 	}
 	/**
@@ -1459,10 +1460,10 @@ $.addEventDelegate(document, "keydown.ui.dropdown", ".dropdown-menu.show .dropdo
 	let focusNode;
 	switch (e.code) {
 		case "ArrowDown":
-			focusNode = $.next(e.currentTarget, ".dropdown-item:not([tabindex=\"-1\"])").shift();
+			focusNode = $.nextAll(e.currentTarget, ".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])").shift();
 			break;
 		case "ArrowUp":
-			focusNode = $.prev(e.currentTarget, ".dropdown-item:not([tabindex=\"-1\"])").pop();
+			focusNode = $.prevAll(e.currentTarget, ".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])").pop();
 			break;
 		default: return;
 	}

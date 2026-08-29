@@ -7960,6 +7960,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		#show(index) {
 			if (this.#sliding) return;
 			index = parseInt(index);
+			if (Number.isNaN(index)) return;
 			if (!this.options.wrap && (index < 0 || index > this.#items.length - 1)) return;
 			const offset = getDirOffset(index, this.#items.length);
 			index = getIndex(index, this.#items.length);
@@ -8721,7 +8722,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		* Focuses the first enabled dropdown item.
 		*/
 		focusFirstItem() {
-			const focusNode = $$1.findOne(".dropdown-item:not([tabindex=\"-1\"])", this.#menuNode);
+			const focusNode = $$1.findOne(".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])", this.#menuNode);
 			$$1.focus(focusNode);
 		}
 		/**
@@ -8830,10 +8831,10 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		let focusNode;
 		switch (e.code) {
 			case "ArrowDown":
-				focusNode = $$1.next(e.currentTarget, ".dropdown-item:not([tabindex=\"-1\"])").shift();
+				focusNode = $$1.nextAll(e.currentTarget, ".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])").shift();
 				break;
 			case "ArrowUp":
-				focusNode = $$1.prev(e.currentTarget, ".dropdown-item:not([tabindex=\"-1\"])").pop();
+				focusNode = $$1.prevAll(e.currentTarget, ".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])").pop();
 				break;
 			default: return;
 		}

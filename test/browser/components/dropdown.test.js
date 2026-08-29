@@ -702,6 +702,17 @@ test.describe('Dropdown', () => {
             await expect(page.locator('#dropdown-1-item-1')).toBeFocused();
         });
 
+        test('focuses the first enabled item on arrow key', async ({ page }) => {
+            await page.evaluate((_) => {
+                const item1 = $.findOne('#dropdown-1-item-1');
+                $.setAttribute(item1, { disabled: true });
+            });
+            await page.locator('#dropdown-toggle-1').focus();
+            await page.keyboard.press('ArrowDown');
+
+            await expect(page.locator('#dropdown-1-item-2')).toBeFocused();
+        });
+
         test('focuses the next item on down arrow', async ({ page }) => {
             await page.locator('#dropdown-toggle-1').click();
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
@@ -716,6 +727,27 @@ test.describe('Dropdown', () => {
             await page.locator('#dropdown-toggle-1').click();
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
             await page.locator('#dropdown-1-item-2').focus();
+
+            await page.keyboard.press('ArrowUp');
+
+            await expect(page.locator('#dropdown-1-item-1')).toBeFocused();
+        });
+
+        test('skips dividers and disabled items with arrow keys', async ({ page }) => {
+            await page.evaluate((_) => {
+                const item2 = $.findOne('#dropdown-1-item-2');
+                const divider = $.create('hr', { class: 'dropdown-divider' });
+
+                $.addClass(item2, 'disabled');
+                $.before(item2, divider);
+            });
+            await page.locator('#dropdown-toggle-1').click();
+            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+            await page.locator('#dropdown-1-item-1').focus();
+
+            await page.keyboard.press('ArrowDown');
+
+            await expect(page.locator('#dropdown-1-item-3')).toBeFocused();
 
             await page.keyboard.press('ArrowUp');
 

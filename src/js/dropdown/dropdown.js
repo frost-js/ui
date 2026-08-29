@@ -81,7 +81,7 @@ export default class Dropdown extends BaseComponent {
      * Focuses the first enabled dropdown item.
      */
     focusFirstItem() {
-        const focusNode = $.findOne('.dropdown-item:not([tabindex="-1"])', this.#menuNode);
+        const focusNode = $.findOne('.dropdown-item:not(:disabled, .disabled, [tabindex="-1"])', this.#menuNode);
         $.focus(focusNode);
     }
 

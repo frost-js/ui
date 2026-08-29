@@ -420,6 +420,10 @@ export default class Carousel extends BaseComponent {
 
         index = parseInt(index);
 
+        if (Number.isNaN(index)) {
+            return;
+        }
+
         if (!this.options.wrap &&
             (
                 index < 0 ||

@@ -266,6 +266,16 @@ test.describe('Carousel', () => {
             await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
         });
 
+        test('can be called with non-numeric item', async ({ page }) => {
+            await page.evaluate((_) => {
+                const carousel1 = $.findOne('#carousel1');
+                UI.Carousel.init(carousel1).show('invalid');
+            });
+
+            await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
+        });
+
         test('can be called multiple times', async ({ page }) => {
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
