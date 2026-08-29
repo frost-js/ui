@@ -1,6 +1,6 @@
 {
     "name": "@fr0st/ui",
-    "version": "2.6.1",
+    "version": "3.0.0",
     "private": false,
     "description": "Customizable JavaScript UI library with responsive, Bootstrap-compatible components, utilities, and opinionated Sass styling.",
     "keywords": [
@@ -66,11 +66,11 @@
         "baseline widely available"
     ],
     "dependencies": {
-        "@fr0st/query": "^4.1.0"
+        "@fr0st/query": "^4.1.1"
     },
     "devDependencies": {
-        "@fr0st/eslint-config": "^5.0.2",
-        "@fr0st/stylelint-config": "^4.0.1",
+        "@fr0st/eslint-config": "^5.0.3",
+        "@fr0st/stylelint-config": "^4.0.2",
         "@playwright/test": "^1.62.1",
         "autoprefixer": "^10.5.4",
         "clean-css-cli": "^5.6.3",

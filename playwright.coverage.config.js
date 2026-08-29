@@ -36,7 +36,14 @@ export default defineConfig({
                         'lcovonly',
                     ],
                     entryFilter: (entry) => normalizePath(entry.url).endsWith('/assets/frost-ui-bundle.js'),
-                    sourceFilter: (sourcePath) => normalizePath(sourcePath).startsWith('src/js/'),
+                    sourceFilter: (sourcePath) => {
+                        const normalizedPath = normalizePath(sourcePath);
+
+                        // The entry module only re-exports symbols. Bundling erases those
+                        // statements, so V8 cannot associate runtime ranges with this file.
+                        return normalizedPath.startsWith('src/js/') &&
+                            normalizedPath !== 'src/js/index.js';
+                    },
                     sourceMapResolver: (_url, defaultResolver) => defaultResolver(sourceMapUrl),
                     all: './src/js',
                 },

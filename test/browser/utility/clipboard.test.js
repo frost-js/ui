@@ -132,6 +132,23 @@ test.describe('Clipboard', () => {
         });
     });
 
+    test('throws for an invalid action', async ({ page }) => {
+        await page.evaluate((_) => {
+            $.setHTML(
+                document.body,
+                '<button id="button" data-ui-toggle="clipboard" data-ui-action="paste"></button>',
+            );
+        });
+
+        const errorPromise = page.waitForEvent('pageerror');
+        await page.locator('#button').click();
+
+        await expect(errorPromise).resolves.toHaveProperty(
+            'message',
+            'Invalid clipboard action',
+        );
+    });
+
     test.describe('events', () => {
         test('triggers copied event', async ({ page }) => {
             await page.evaluate((_) => {

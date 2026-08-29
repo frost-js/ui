@@ -132,5 +132,19 @@ test.describe('Button', () => {
             await expect(page.locator('#button1')).not.toHaveClass(/\bactive\b/);
             await expect(page.locator('#button1')).toHaveAttribute('aria-pressed', 'false');
         });
+
+        test('toggles the button with the Space key', async ({ page }) => {
+            await page.locator('#button1').press('Space');
+
+            await expect(page.locator('#button1')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#button1')).toHaveAttribute('aria-pressed', 'true');
+        });
+
+        test('ignores other keys', async ({ page }) => {
+            await page.locator('#button1').press('ArrowRight');
+
+            await expect(page.locator('#button1')).not.toHaveClass(/\bactive\b/);
+            await expect(page.locator('#button1')).not.toHaveAttribute('aria-pressed');
+        });
     });
 });

@@ -1,4 +1,4 @@
-import { test } from '#test';
+import { expect, test } from '#test';
 import { resetPage } from '../../setup/browser.js';
 import { expectPopperPosition } from '../../support/assertions/popper.js';
 
@@ -1288,6 +1288,68 @@ test.describe('Popper positioning', () => {
                 placement: 'top',
                 boundaryEdge: 'right',
                 minContact: 10,
+            });
+        });
+    });
+
+    test.describe('arrow option', () => {
+        test('aligns the arrow below a top/start popper', async ({ page }) => {
+            await page.evaluate((_) => {
+                $.setHTML('#popper', '<div id="arrow" style="width: 16px; height: 8px;"></div>');
+                const arrow = $.findOne('#arrow');
+
+                UI.Popper.init($.findOne('#popper'), {
+                    reference: $.findOne('#reference'),
+                    arrow,
+                    placement: 'top',
+                    position: 'start',
+                    fixed: true,
+                });
+            });
+
+            const styles = await page.locator('#arrow').evaluate((node) => ({
+                position: node.style.position,
+                top: node.style.top,
+                right: node.style.right,
+                bottom: node.style.bottom,
+                left: node.style.left,
+            }));
+            expect(styles).toEqual({
+                position: 'absolute',
+                top: '',
+                right: '',
+                bottom: '-8px',
+                left: '32px',
+            });
+        });
+
+        test('aligns the arrow above a bottom/end popper', async ({ page }) => {
+            await page.evaluate((_) => {
+                $.setHTML('#popper', '<div id="arrow" style="width: 16px; height: 8px;"></div>');
+                const arrow = $.findOne('#arrow');
+
+                UI.Popper.init($.findOne('#popper'), {
+                    reference: $.findOne('#reference'),
+                    arrow,
+                    placement: 'bottom',
+                    position: 'end',
+                    fixed: true,
+                });
+            });
+
+            const styles = await page.locator('#arrow').evaluate((node) => ({
+                position: node.style.position,
+                top: node.style.top,
+                right: node.style.right,
+                bottom: node.style.bottom,
+                left: node.style.left,
+            }));
+            expect(styles).toEqual({
+                position: 'absolute',
+                top: '-8px',
+                right: '',
+                bottom: '',
+                left: '112px',
             });
         });
     });

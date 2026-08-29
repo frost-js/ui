@@ -1128,6 +1128,35 @@ test.describe('Carousel', () => {
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
         });
 
+        test('advances across complete items during a long drag', async ({ page }) => {
+            await page.evaluate((_) => {
+                const carousel1 = $.findOne('#carousel1');
+                const width = $.width(carousel1);
+                UI.Carousel.init(carousel1);
+
+                carousel1.dispatchEvent(new MouseEvent('mousedown', {
+                    clientX: width * 1.5,
+                }));
+                window.dispatchEvent(new MouseEvent('mousemove', {
+                    clientX: width * .25,
+                }));
+            });
+
+            await expect(page.locator('#carousel1')).toHaveClass(/\bcarousel-dragging\b/);
+            await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
+            await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
+            await expectStyles(page, [
+                {
+                    selectors: [
+                        '#carousel-1-item-1',
+                        '#carousel-1-item-2',
+                        '#carousel-1-item-3',
+                    ],
+                    styles: { transform: '' },
+                },
+            ]);
+        });
+
         test('works with swipe option', async ({ page }) => {
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');

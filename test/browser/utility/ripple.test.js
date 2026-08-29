@@ -33,5 +33,18 @@ test.describe('Ripple', () => {
 
             await expect(page.locator('#button > .ripple-effect')).toHaveCount(0);
         });
+
+        test('replaces a previous ripple effect', async ({ page }) => {
+            await page.locator('#button').click();
+            await page.evaluate((_) => {
+                window.previousRipple = $.findOne('#button > .ripple-effect');
+            });
+
+            await page.locator('#button').click();
+
+            expect(await page.evaluate((_) => window.previousRipple.isConnected)).toBe(false);
+            await expect(page.locator('#button > .ripple-effect')).toHaveCount(1);
+            await expect(page.locator('#button > .ripple-effect')).toHaveClass('ripple-effect show');
+        });
     });
 });
