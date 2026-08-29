@@ -8453,9 +8453,11 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @augments {BaseComponent<PopperOptions>}
 	*/
 	var Popper = class extends BaseComponent {
+		#arrowStyles;
 		#placement;
 		#referencePlacement;
 		#rtl;
+		#styles;
 		/**
 		* Creates a Popper.
 		* @param {HTMLElement} node The input node.
@@ -8466,13 +8468,24 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			this.#rtl = $$1.css(this.options.reference, "direction") === "rtl";
 			this.#placement = $$1.getDataset(this.node, "uiPlacement");
 			this.#referencePlacement = $$1.getDataset(this.options.reference, "uiPlacement");
+			this.#styles = Object.fromEntries([
+				"position",
+				"top",
+				"right",
+				"bottom",
+				"left",
+				"transform"
+			].map((style) => [style, $$1.getStyle(this.node, style)]));
+			if (this.options.arrow) this.#arrowStyles = Object.fromEntries([
+				"position",
+				"top",
+				"right",
+				"bottom",
+				"left"
+			].map((style) => [style, $$1.getStyle(this.options.arrow, style)]));
 			$$1.setStyle(this.node, {
-				margin: 0,
 				position: "absolute",
-				top: 0,
-				right: "initial",
-				bottom: "initial",
-				left: 0
+				inset: "0 auto auto 0"
 			});
 			addPopper(this);
 			this.update();
@@ -8483,7 +8496,11 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			else $$1.removeDataset(this.node, "uiPlacement");
 			if (this.#referencePlacement) $$1.setDataset(this.options.reference, { uiPlacement: this.#referencePlacement });
 			else $$1.removeDataset(this.options.reference, "uiPlacement");
+			$$1.setStyle(this.node, this.#styles);
+			if (this.#arrowStyles) $$1.setStyle(this.options.arrow, this.#arrowStyles);
 			removePopper(this);
+			this.#arrowStyles = null;
+			this.#styles = null;
 			super.dispose();
 		}
 		/**
@@ -8612,15 +8629,12 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			const physicalPlacement = getPhysicalPlacement(placement, this.#rtl);
 			const nodeBox = $$1.rect(this.node, { offset: true });
 			const referenceBox = $$1.rect(this.options.reference, { offset: true });
-			const arrowStyles = {
+			$$1.setStyle(this.options.arrow, {
 				position: "absolute",
-				top: "",
-				right: "",
-				bottom: "",
-				left: ""
-			};
-			$$1.setStyle(this.options.arrow, arrowStyles);
+				inset: ""
+			});
 			const arrowBox = $$1.rect(this.options.arrow, { offset: true });
+			const arrowStyles = {};
 			if (["top", "bottom"].includes(physicalPlacement)) {
 				const arrowPlacement = physicalPlacement === "top" ? "bottom" : "top";
 				arrowStyles[arrowPlacement] = -Math.floor(arrowBox.height);

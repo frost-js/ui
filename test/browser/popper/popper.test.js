@@ -66,6 +66,86 @@ test.describe('Popper', () => {
                 return $.hasData('#badge', 'popper');
             })).toBe(false);
         });
+
+        test('restores positioning styles', async ({ page }) => {
+            await page.evaluate((_) => {
+                const badge = $.findOne('#badge');
+
+                $.setStyle(badge, {
+                    margin: '7px',
+                    position: 'fixed',
+                    top: '11px',
+                    right: '12px',
+                    bottom: '13px',
+                    left: '14px',
+                    transform: 'scale(.5)',
+                });
+                UI.Popper.init(badge, {
+                    reference: $.findOne('#button'),
+                });
+            });
+
+            await expectStyles(page, [
+                {
+                    selectors: ['#badge'],
+                    styles: { margin: '7px' },
+                },
+            ]);
+
+            await page.evaluate((_) => {
+                UI.Popper.init($.findOne('#badge')).dispose();
+            });
+
+            await expectStyles(page, [
+                {
+                    selectors: ['#badge'],
+                    styles: {
+                        margin: '7px',
+                        position: 'fixed',
+                        top: '11px',
+                        right: '12px',
+                        bottom: '13px',
+                        left: '14px',
+                        transform: 'scale(0.5)',
+                    },
+                },
+            ]);
+        });
+
+        test('restores arrow positioning styles', async ({ page }) => {
+            await page.evaluate((_) => {
+                const badge = $.findOne('#badge');
+                const arrow = $.create('div', {
+                    attributes: { id: 'arrow' },
+                    style: {
+                        position: 'fixed',
+                        top: '11px',
+                        right: '12px',
+                        bottom: '13px',
+                        left: '14px',
+                    },
+                });
+
+                $.append(badge, arrow);
+                UI.Popper.init(badge, {
+                    reference: $.findOne('#button'),
+                    arrow,
+                }).dispose();
+            });
+
+            await expectStyles(page, [
+                {
+                    selectors: ['#arrow'],
+                    styles: {
+                        position: 'fixed',
+                        top: '11px',
+                        right: '12px',
+                        bottom: '13px',
+                        left: '14px',
+                    },
+                },
+            ]);
+        });
     });
 
     test.describe('#update', () => {

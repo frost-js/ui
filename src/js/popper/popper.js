@@ -49,9 +49,11 @@ import {
  * @augments {BaseComponent<PopperOptions>}
  */
 export default class Popper extends BaseComponent {
+    #arrowStyles;
     #placement;
     #referencePlacement;
     #rtl;
+    #styles;
 
     /**
      * Creates a Popper.
@@ -64,14 +66,21 @@ export default class Popper extends BaseComponent {
         this.#rtl = $.css(this.options.reference, 'direction') === 'rtl';
         this.#placement = $.getDataset(this.node, 'uiPlacement');
         this.#referencePlacement = $.getDataset(this.options.reference, 'uiPlacement');
+        this.#styles = Object.fromEntries(
+            ['position', 'top', 'right', 'bottom', 'left', 'transform']
+                .map((style) => [style, $.getStyle(this.node, style)]),
+        );
+
+        if (this.options.arrow) {
+            this.#arrowStyles = Object.fromEntries(
+                ['position', 'top', 'right', 'bottom', 'left']
+                    .map((style) => [style, $.getStyle(this.options.arrow, style)]),
+            );
+        }
 
         $.setStyle(this.node, {
-            margin: 0,
             position: 'absolute',
-            top: 0,
-            right: 'initial',
-            bottom: 'initial',
-            left: 0,
+            inset: '0 auto auto 0',
         });
 
         addPopper(this);
@@ -93,7 +102,16 @@ export default class Popper extends BaseComponent {
             $.removeDataset(this.options.reference, 'uiPlacement');
         }
 
+        $.setStyle(this.node, this.#styles);
+
+        if (this.#arrowStyles) {
+            $.setStyle(this.options.arrow, this.#arrowStyles);
+        }
+
         removePopper(this);
+
+        this.#arrowStyles = null;
+        this.#styles = null;
 
         super.dispose();
     }
@@ -347,16 +365,13 @@ export default class Popper extends BaseComponent {
         const nodeBox = $.rect(this.node, { offset: true });
         const referenceBox = $.rect(this.options.reference, { offset: true });
 
-        const arrowStyles = {
+        $.setStyle(this.options.arrow, {
             position: 'absolute',
-            top: '',
-            right: '',
-            bottom: '',
-            left: '',
-        };
-        $.setStyle(this.options.arrow, arrowStyles);
+            inset: '',
+        });
 
         const arrowBox = $.rect(this.options.arrow, { offset: true });
+        const arrowStyles = {};
 
         if (['top', 'bottom'].includes(physicalPlacement)) {
             const arrowPlacement = physicalPlacement === 'top' ? 'bottom' : 'top';
