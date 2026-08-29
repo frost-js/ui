@@ -1,5 +1,6 @@
 import { $, document } from './../globals.js';
 import { initComponent } from './../helpers/component.js';
+import { getTabGroup } from './helpers.js';
 import Tab from './tab.js';
 
 initComponent('tab', Tab);
@@ -18,28 +19,36 @@ $.addEventDelegate(document, 'click.ui.tab keydown.ui.tab', '[data-ui-toggle="ta
 
 // Select and focus tab controls with navigation keys.
 $.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => {
+    const tabs = getTabGroup(e.currentTarget)
+        .filter((node) => !$.is(node, ':disabled, .disabled'));
+    const index = tabs.indexOf(e.currentTarget);
+
+    if (index < 0) {
+        return;
+    }
+
     let newTarget;
 
     switch (e.code) {
         case 'ArrowDown':
         case 'ArrowRight':
-            newTarget = $.next(e.currentTarget, '[data-ui-toggle="tab"]:not(.disabled)').shift();
+            newTarget = tabs[index + 1];
             break;
         case 'ArrowLeft':
         case 'ArrowUp':
-            newTarget = $.prev(e.currentTarget, '[data-ui-toggle="tab"]:not(.disabled)').pop();
+            newTarget = tabs[index - 1];
             break;
         case 'Home':
-            newTarget = $.prevAll(e.currentTarget, '[data-ui-toggle="tab"]:not(.disabled)').shift();
+            newTarget = tabs[0];
             break;
         case 'End':
-            newTarget = $.nextAll(e.currentTarget, '[data-ui-toggle="tab"]:not(.disabled)').pop();
+            newTarget = tabs[tabs.length - 1];
             break;
         default:
             return;
     }
 
-    if (!newTarget) {
+    if (!newTarget || $.isSame(newTarget, e.currentTarget)) {
         return;
     }
 

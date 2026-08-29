@@ -261,7 +261,6 @@ body {
   text-align: start;
   background-color: var(--ui-body-bg);
   -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
@@ -321,7 +320,6 @@ p {
 
 abbr[title],
 abbr[data-ui-original-title] {
-  -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;
   cursor: help;
   border-block-end: none;
@@ -397,7 +395,6 @@ sup {
 
 a {
   color: rgb(from var(--ui-link-color) r g b/var(--ui-link-opacity, 1));
-  -webkit-text-decoration: var(--ui-link-decoration);
   text-decoration: var(--ui-link-decoration);
 }
 a:hover {
@@ -2373,7 +2370,6 @@ fieldset:disabled .btn {
   --ui-btn-box-shadow: none;
   --ui-btn-hover-box-shadow: none;
   --ui-btn-active-box-shadow: none;
-  -webkit-text-decoration: var(--ui-link-decoration);
   text-decoration: var(--ui-link-decoration);
 }
 .btn-link:hover {
@@ -3045,7 +3041,6 @@ fieldset:disabled .btn {
   background-color: var(--ui-carousel-control-bg);
   border: var(--ui-carousel-control-border-width) var(--ui-border-style) var(--ui-carousel-control-border-color);
   box-shadow: var(--ui-carousel-control-box-shadow);
-  -webkit-backdrop-filter: var(--ui-carousel-control-backdrop-filter);
   backdrop-filter: var(--ui-carousel-control-backdrop-filter);
   transition-timing-function: var(--ui-transition-timing-function);
   transition-duration: var(--ui-transition-duration-fast);
@@ -3139,7 +3134,6 @@ fieldset:disabled .btn {
   background-color: var(--ui-carousel-caption-bg);
   border: var(--ui-carousel-caption-border-width) var(--ui-border-style) var(--ui-carousel-caption-border-color);
   box-shadow: var(--ui-carousel-caption-box-shadow);
-  -webkit-backdrop-filter: var(--ui-carousel-caption-backdrop-filter);
   backdrop-filter: var(--ui-carousel-caption-backdrop-filter);
   border-radius: var(--ui-carousel-caption-border-radius);
 }
@@ -3247,7 +3241,6 @@ fieldset:disabled .btn {
   background-color: var(--ui-dropdown-bg);
   border: var(--ui-dropdown-border-width) var(--ui-border-style) var(--ui-dropdown-border-color);
   box-shadow: var(--ui-dropdown-box-shadow);
-  -webkit-backdrop-filter: var(--ui-dropdown-backdrop-filter);
   backdrop-filter: var(--ui-dropdown-backdrop-filter);
   border-radius: var(--ui-dropdown-border-radius);
 }
@@ -3854,7 +3847,6 @@ fieldset:disabled .btn {
   background-clip: padding-box;
   border: var(--ui-modal-border-width) var(--ui-border-style) var(--ui-modal-border-color);
   box-shadow: var(--ui-modal-box-shadow);
-  -webkit-backdrop-filter: var(--ui-modal-content-backdrop-filter);
   backdrop-filter: var(--ui-modal-content-backdrop-filter);
   border-radius: var(--ui-modal-border-radius);
 }
@@ -3868,7 +3860,6 @@ fieldset:disabled .btn {
   z-index: var(--ui-backdrop-z-index);
   background-color: var(--ui-backdrop-bg);
   opacity: 0;
-  -webkit-backdrop-filter: var(--ui-backdrop-filter);
   backdrop-filter: var(--ui-backdrop-filter);
   transition: opacity var(--ui-transition-duration) var(--ui-transition-timing-function);
 }
@@ -4394,7 +4385,6 @@ fieldset:disabled .btn {
   border-inline: 0;
   box-shadow: none;
   opacity: 1;
-  -webkit-backdrop-filter: none;
   backdrop-filter: none;
   transform: none;
 }
@@ -4447,7 +4437,6 @@ fieldset:disabled .btn {
     border-inline: 0;
     box-shadow: none;
     opacity: 1;
-    -webkit-backdrop-filter: none;
     backdrop-filter: none;
     transform: none;
   }
@@ -4500,7 +4489,6 @@ fieldset:disabled .btn {
     border-inline: 0;
     box-shadow: none;
     opacity: 1;
-    -webkit-backdrop-filter: none;
     backdrop-filter: none;
     transform: none;
   }
@@ -4553,7 +4541,6 @@ fieldset:disabled .btn {
     border-inline: 0;
     box-shadow: none;
     opacity: 1;
-    -webkit-backdrop-filter: none;
     backdrop-filter: none;
     transform: none;
   }
@@ -4606,7 +4593,6 @@ fieldset:disabled .btn {
     border-inline: 0;
     box-shadow: none;
     opacity: 1;
-    -webkit-backdrop-filter: none;
     backdrop-filter: none;
     transform: none;
   }
@@ -4659,7 +4645,6 @@ fieldset:disabled .btn {
     border-inline: 0;
     box-shadow: none;
     opacity: 1;
-    -webkit-backdrop-filter: none;
     backdrop-filter: none;
     transform: none;
   }
@@ -4704,7 +4689,6 @@ fieldset:disabled .btn {
   background-clip: padding-box;
   box-shadow: var(--ui-offcanvas-box-shadow);
   opacity: 0;
-  -webkit-backdrop-filter: var(--ui-offcanvas-content-backdrop-filter);
   backdrop-filter: var(--ui-offcanvas-content-backdrop-filter);
   transition-timing-function: var(--ui-transition-timing-function);
   transition-duration: var(--ui-transition-duration);
@@ -4796,7 +4780,6 @@ fieldset:disabled .btn {
   content: "";
   background-color: var(--ui-backdrop-bg);
   opacity: 0;
-  -webkit-backdrop-filter: var(--ui-backdrop-filter);
   backdrop-filter: var(--ui-backdrop-filter);
   transition-timing-function: var(--ui-transition-timing-function);
   transition-property: opacity;
@@ -4986,7 +4969,6 @@ fieldset:disabled .btn {
   border: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);
   box-shadow: var(--ui-popover-box-shadow);
   opacity: 0;
-  -webkit-backdrop-filter: var(--ui-popover-backdrop-filter);
   backdrop-filter: var(--ui-popover-backdrop-filter);
   border-radius: var(--ui-popover-border-radius);
 }
@@ -5243,7 +5225,6 @@ fieldset:disabled .btn {
   border: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-border-color);
   box-shadow: var(--ui-toast-box-shadow);
   opacity: 0;
-  -webkit-backdrop-filter: var(--ui-toast-backdrop-filter);
   backdrop-filter: var(--ui-toast-backdrop-filter);
   border-radius: var(--ui-toast-border-radius);
 }
@@ -6314,7 +6295,6 @@ select.input-lg[multiple] option {
   --ui-glass-bg: rgb(from var(--ui-body-bg) r g b/0.88);
   --ui-glass-backdrop-filter: blur(1rem) saturate(150%);
   background-color: var(--ui-glass-bg);
-  -webkit-backdrop-filter: var(--ui-glass-backdrop-filter);
   backdrop-filter: var(--ui-glass-backdrop-filter);
 }
 

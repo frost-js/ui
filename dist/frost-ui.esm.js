@@ -2289,6 +2289,18 @@ initComponent("popover", Popover);
 var popover_default = Popover;
 
 //#endregion
+//#region src/js/tab/helpers.js
+/**
+* Gets the tab controls in the same tab list as a control.
+* @param {HTMLElement} node The tab control.
+* @returns {HTMLElement[]} The tab controls.
+*/
+function getTabGroup(node) {
+	const tabList = $.closest(node, ".nav, [role=\"tablist\"]").shift() || $.parent(node).shift();
+	return tabList ? $.find("[data-ui-toggle=\"tab\"]", tabList) : [node];
+}
+
+//#endregion
 //#region src/js/tab/tab.js
 /**
 * Controls a tab trigger and its associated panel.
@@ -2305,7 +2317,7 @@ var Tab = class extends BaseComponent {
 		super(node);
 		const selector = getTargetSelector(this.node);
 		this.#target = $.findOne(selector);
-		this.#siblings = $.siblings(this.node);
+		this.#siblings = getTabGroup(this.node).filter((node) => !$.isSame(node, this.node));
 	}
 	/** @inheritdoc */
 	dispose() {
@@ -2372,25 +2384,28 @@ $.addEventDelegate(document, "click.ui.tab keydown.ui.tab", "[data-ui-toggle=\"t
 	Tab.init(e.currentTarget).show();
 });
 $.addEventDelegate(document, "keydown.ui.tab", "[data-ui-toggle=\"tab\"]", (e) => {
+	const tabs = getTabGroup(e.currentTarget).filter((node) => !$.is(node, ":disabled, .disabled"));
+	const index = tabs.indexOf(e.currentTarget);
+	if (index < 0) return;
 	let newTarget;
 	switch (e.code) {
 		case "ArrowDown":
 		case "ArrowRight":
-			newTarget = $.next(e.currentTarget, "[data-ui-toggle=\"tab\"]:not(.disabled)").shift();
+			newTarget = tabs[index + 1];
 			break;
 		case "ArrowLeft":
 		case "ArrowUp":
-			newTarget = $.prev(e.currentTarget, "[data-ui-toggle=\"tab\"]:not(.disabled)").pop();
+			newTarget = tabs[index - 1];
 			break;
 		case "Home":
-			newTarget = $.prevAll(e.currentTarget, "[data-ui-toggle=\"tab\"]:not(.disabled)").shift();
+			newTarget = tabs[0];
 			break;
 		case "End":
-			newTarget = $.nextAll(e.currentTarget, "[data-ui-toggle=\"tab\"]:not(.disabled)").pop();
+			newTarget = tabs[tabs.length - 1];
 			break;
 		default: return;
 	}
-	if (!newTarget) return;
+	if (!newTarget || $.isSame(newTarget, e.currentTarget)) return;
 	e.preventDefault();
 	$.focus(newTarget);
 	Tab.init(newTarget).show();

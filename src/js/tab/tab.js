@@ -2,6 +2,7 @@ import BaseComponent from './../base-component.js';
 import { $ } from './../globals.js';
 import { getTargetSelector } from './../helpers/target.js';
 import { waitForTransition } from './../helpers/transition.js';
+import { getTabGroup } from './helpers.js';
 
 /**
  * Controls a tab trigger and its associated panel.
@@ -20,7 +21,8 @@ export default class Tab extends BaseComponent {
 
         const selector = getTargetSelector(this.node);
         this.#target = $.findOne(selector);
-        this.#siblings = $.siblings(this.node);
+        this.#siblings = getTabGroup(this.node)
+            .filter((node) => !$.isSame(node, this.node));
     }
 
     /** @inheritdoc */

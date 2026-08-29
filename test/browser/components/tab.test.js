@@ -581,6 +581,74 @@ test.describe('Tab', () => {
         });
     });
 
+    test.describe('nav item wrappers', () => {
+        test('shows the tab', async ({ page }) => {
+            await page.evaluate((_) => {
+                $.setHTML(
+                    document.body,
+                    `
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="wrapped-tab-toggle-1" data-ui-toggle="tab" data-ui-target="#wrapped-tab1" type="button"></button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="wrapped-tab-toggle-2" data-ui-toggle="tab" data-ui-target="#wrapped-tab2" type="button"></button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" id="wrapped-tab1"></div>
+                            <div class="tab-pane fade" id="wrapped-tab2"></div>
+                        </div>
+                    `,
+                );
+
+                UI.Tab.init($.findOne('#wrapped-tab-toggle-2')).show();
+            });
+
+            await expect(page.locator('#wrapped-tab-toggle-1')).toHaveClass('nav-link');
+            await expect(page.locator('#wrapped-tab-toggle-2')).toHaveClass('nav-link active');
+            await expect(page.locator('#wrapped-tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#wrapped-tab2')).toHaveClass('tab-pane fade active show');
+        });
+
+        test('skips disabled tabs during keyboard navigation', async ({ page }) => {
+            await page.evaluate((_) => {
+                $.setHTML(
+                    document.body,
+                    `
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="wrapped-tab-toggle-1" data-ui-toggle="tab" data-ui-target="#wrapped-tab1" type="button"></button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link disabled" id="wrapped-tab-toggle-2" data-ui-toggle="tab" data-ui-target="#wrapped-tab2" type="button"></button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="wrapped-tab-toggle-3" data-ui-toggle="tab" data-ui-target="#wrapped-tab3" type="button"></button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" id="wrapped-tab1"></div>
+                            <div class="tab-pane fade" id="wrapped-tab2"></div>
+                            <div class="tab-pane fade" id="wrapped-tab3"></div>
+                        </div>
+                    `,
+                );
+            });
+
+            await page.locator('#wrapped-tab-toggle-1').focus();
+            await page.keyboard.press('ArrowRight');
+
+            await expect(page.locator('#wrapped-tab-toggle-3')).toBeFocused();
+            await expect(page.locator('#wrapped-tab-toggle-1')).toHaveClass('nav-link');
+            await expect(page.locator('#wrapped-tab-toggle-2')).toHaveClass('nav-link disabled');
+            await expect(page.locator('#wrapped-tab-toggle-3')).toHaveClass('nav-link active');
+            await expect(page.locator('#wrapped-tab1')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#wrapped-tab2')).toHaveClass('tab-pane fade');
+            await expect(page.locator('#wrapped-tab3')).toHaveClass('tab-pane fade active show');
+        });
+    });
+
     test.describe('keyboard navigation', () => {
         test('shows and focuses the next item on right arrow', async ({ page }) => {
             await page.locator('#tab-toggle-1').focus();

@@ -9660,6 +9660,18 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	var popover_default = Popover;
 
 //#endregion
+//#region src/js/tab/helpers.js
+/**
+	* Gets the tab controls in the same tab list as a control.
+	* @param {HTMLElement} node The tab control.
+	* @returns {HTMLElement[]} The tab controls.
+	*/
+	function getTabGroup(node) {
+		const tabList = $$1.closest(node, ".nav, [role=\"tablist\"]").shift() || $$1.parent(node).shift();
+		return tabList ? $$1.find("[data-ui-toggle=\"tab\"]", tabList) : [node];
+	}
+
+//#endregion
 //#region src/js/tab/tab.js
 /**
 	* Controls a tab trigger and its associated panel.
@@ -9676,7 +9688,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			super(node);
 			const selector = getTargetSelector(this.node);
 			this.#target = $$1.findOne(selector);
-			this.#siblings = $$1.siblings(this.node);
+			this.#siblings = getTabGroup(this.node).filter((node) => !$$1.isSame(node, this.node));
 		}
 		/** @inheritdoc */
 		dispose() {
@@ -9743,25 +9755,28 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		Tab.init(e.currentTarget).show();
 	});
 	$$1.addEventDelegate(document, "keydown.ui.tab", "[data-ui-toggle=\"tab\"]", (e) => {
+		const tabs = getTabGroup(e.currentTarget).filter((node) => !$$1.is(node, ":disabled, .disabled"));
+		const index = tabs.indexOf(e.currentTarget);
+		if (index < 0) return;
 		let newTarget;
 		switch (e.code) {
 			case "ArrowDown":
 			case "ArrowRight":
-				newTarget = $$1.next(e.currentTarget, "[data-ui-toggle=\"tab\"]:not(.disabled)").shift();
+				newTarget = tabs[index + 1];
 				break;
 			case "ArrowLeft":
 			case "ArrowUp":
-				newTarget = $$1.prev(e.currentTarget, "[data-ui-toggle=\"tab\"]:not(.disabled)").pop();
+				newTarget = tabs[index - 1];
 				break;
 			case "Home":
-				newTarget = $$1.prevAll(e.currentTarget, "[data-ui-toggle=\"tab\"]:not(.disabled)").shift();
+				newTarget = tabs[0];
 				break;
 			case "End":
-				newTarget = $$1.nextAll(e.currentTarget, "[data-ui-toggle=\"tab\"]:not(.disabled)").pop();
+				newTarget = tabs[tabs.length - 1];
 				break;
 			default: return;
 		}
-		if (!newTarget) return;
+		if (!newTarget || $$1.isSame(newTarget, e.currentTarget)) return;
 		e.preventDefault();
 		$$1.focus(newTarget);
 		Tab.init(newTarget).show();
