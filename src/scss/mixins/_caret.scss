@@ -34,15 +34,13 @@
             }
             content: "";
             @if $direction == down {
-                border-top: helpers.$caret-size solid;
-                border-right: helpers.$caret-size solid transparent;
-                border-bottom: 0;
-                border-left: helpers.$caret-size solid transparent;
+                border-block-start: helpers.$caret-size solid;
+                border-block-end: 0;
+                border-inline: helpers.$caret-size solid transparent;
             } @else if $direction == up {
-                border-top: 0;
-                border-right: helpers.$caret-size solid transparent;
-                border-bottom: helpers.$caret-size solid;
-                border-left: helpers.$caret-size solid transparent;
+                border-block-start: 0;
+                border-block-end: helpers.$caret-size solid;
+                border-inline: helpers.$caret-size solid transparent;
             } @else if $direction == end {
                 border-block: helpers.$caret-size solid transparent;
                 border-inline-start: helpers.$caret-size solid;

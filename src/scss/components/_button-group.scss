@@ -59,7 +59,7 @@
 
     >.btn:not(:first-child),
     >.btn-group:not(:first-child) > .btn:first-child {
-        margin-top: calc(var(--ui-btn-border-width) * -1);
+        margin-block-start: calc(var(--ui-btn-border-width) * -1);
     }
 
     >.btn:not(:last-child):not(.dropdown-toggle),

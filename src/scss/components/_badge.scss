@@ -28,5 +28,5 @@
 
 .btn .badge {
     position: relative;
-    top: calc(var(--ui-btn-border-width) * -1);
+    inset-block-start: calc(var(--ui-btn-border-width) * -1);
 }

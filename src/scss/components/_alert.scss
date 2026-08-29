@@ -31,8 +31,8 @@
 
     >.btn-close {
         position: absolute;
+        inset-block-start: 0;
         inset-inline-end: 0;
-        top: 0;
         padding-block: var(--ui-alert-padding-y);
         padding-inline: var(--ui-alert-padding-x);
         color: inherit;

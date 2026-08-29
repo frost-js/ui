@@ -60,8 +60,8 @@
 
         &::before {
             position: absolute;
+            inset-block-end: calc(var(--ui-accordion-border-width) * -1);
             inset-inline: 0;
-            bottom: calc(var(--ui-accordion-border-width) * -1);
             height: var(--ui-accordion-border-width);
             content: "";
             background-color: var(--ui-accordion-border-color);

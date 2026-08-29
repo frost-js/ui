@@ -11,15 +11,15 @@
 
     display: flex;
     flex-wrap: wrap;
+    margin-block-start: calc(var(--ui-gutter-y) * -1);
     margin-inline: calc(var(--ui-gutter-x) / -2);
-    margin-top: calc(var(--ui-gutter-y) * -1);
 
     > * {
         flex-shrink: 0;
         width: 100%;
         max-width: 100%;
         padding-inline: calc(var(--ui-gutter-x) / 2);
-        margin-top: var(--ui-gutter-y);
+        margin-block-start: var(--ui-gutter-y);
     }
 }
 

@@ -396,7 +396,8 @@
     values: static relative absolute fixed sticky
 ));
 @include mixins.utility((
-    property: top,
+    property: inset-block-start,
+    class: top,
     values: vars.$positions
 ));
 @include mixins.utility((
@@ -405,7 +406,8 @@
     values: vars.$positions
 ));
 @include mixins.utility((
-    property: bottom,
+    property: inset-block-end,
+    class: bottom,
     values: vars.$positions
 ));
 @include mixins.utility((
@@ -555,7 +557,7 @@
     print: true
 ));
 @include mixins.utility((
-    property: padding-top,
+    property: padding-block-start,
     class: pt,
     values: vars.$paddings,
     responsive: true,
@@ -569,7 +571,7 @@
     print: true
 ));
 @include mixins.utility((
-    property: padding-bottom,
+    property: padding-block-end,
     class: pb,
     values: vars.$paddings,
     responsive: true,
@@ -605,7 +607,7 @@
     print: true
 ));
 @include mixins.utility((
-    property: margin-top,
+    property: margin-block-start,
     class: mt,
     values: vars.$margins,
     responsive: true,
@@ -619,7 +621,7 @@
     print: true
 ));
 @include mixins.utility((
-    property: margin-bottom,
+    property: margin-block-end,
     class: mb,
     values: vars.$margins,
     responsive: true,

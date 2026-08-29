@@ -6,15 +6,15 @@
 
 .fixed-top {
     position: fixed;
+    inset-block-start: 0;
     inset-inline: 0;
-    top: 0;
     z-index: vars.$fixed-z-index;
 }
 
 .fixed-bottom {
     position: fixed;
+    inset-block-end: 0;
     inset-inline: 0;
-    bottom: 0;
     z-index: vars.$fixed-z-index;
 }
 
@@ -24,7 +24,7 @@
 
         .sticky#{$infix}-top {
             position: sticky;
-            top: 0;
+            inset-block-start: 0;
             z-index: vars.$sticky-z-index;
         }
     }
