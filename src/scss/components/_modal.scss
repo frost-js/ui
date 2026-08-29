@@ -128,7 +128,7 @@
     flex-shrink: 0;
     align-items: center;
     padding: var(--ui-modal-header-padding-y) var(--ui-modal-header-padding-x);
-    border-bottom: var(--ui-modal-header-border-width) var(--ui-border-style) var(--ui-modal-header-border-color);
+    border-block-end: var(--ui-modal-header-border-width) var(--ui-border-style) var(--ui-modal-header-border-color);
     @include mixins.border-top-radius(var(--ui-modal-inner-border-radius));
 
     .btn-close {
@@ -161,7 +161,7 @@
     align-items: center;
     justify-content: flex-end;
     padding: var(--ui-modal-padding-y) var(--ui-modal-padding-x);
-    border-top: var(--ui-modal-footer-border-width) var(--ui-border-style) var(--ui-modal-footer-border-color);
+    border-block-start: var(--ui-modal-footer-border-width) var(--ui-border-style) var(--ui-modal-footer-border-color);
     @include mixins.border-bottom-radius(var(--ui-modal-inner-border-radius));
 }
 

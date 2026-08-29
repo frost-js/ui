@@ -61,7 +61,7 @@
     --ui-nav-tabs-link-active-color: #{vars.$nav-tabs-link-active-color};
     --ui-nav-tabs-link-active-border-width: #{vars.$nav-tabs-link-active-border-width};
 
-    border-bottom: var(--ui-nav-tabs-border-width) var(--ui-border-style) var(--ui-nav-tabs-border-color);
+    border-block-end: var(--ui-nav-tabs-border-width) var(--ui-border-style) var(--ui-nav-tabs-border-color);
 
     .nav-link {
         display: flex;
@@ -150,10 +150,10 @@
 
     .nav-link {
         padding-inline: 0;
-        border-bottom: var(--ui-nav-underline-border-width) solid transparent;
+        border-block-end: var(--ui-nav-underline-border-width) solid transparent;
 
         &:is(:hover, :focus-visible) {
-            border-bottom-color: currentcolor;
+            border-block-end-color: currentcolor;
         }
     }
 
@@ -161,7 +161,7 @@
     .dropdown:has(>.dropdown-menu.show) > .nav-link {
         font-weight: map.get(vars.$font-weights, bold);
         color: var(--ui-nav-underline-link-active-color);
-        border-bottom-color: currentcolor;
+        border-block-end-color: currentcolor;
     }
 }
 
@@ -200,7 +200,7 @@
 
     margin-inline: calc(var(--ui-card-cap-padding-x) * -.5);
     margin-bottom: calc(var(--ui-card-cap-padding-y) * -1);
-    border-bottom: 0;
+    border-block-end: 0;
 }
 
 .card-header-pills {

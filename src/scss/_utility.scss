@@ -32,7 +32,8 @@
     )
 ));
 @include mixins.utility((
-    property: border-top,
+    property: border-block-start,
+    class: border-top,
     values: (
         null: var(--ui-border-width) var(--ui-border-style) var(--ui-border-color),
         0: 0
@@ -47,7 +48,8 @@
     )
 ));
 @include mixins.utility((
-    property: border-bottom,
+    property: border-block-end,
+    class: border-bottom,
     values: (
         null: var(--ui-border-width) var(--ui-border-style) var(--ui-border-color),
         0: 0
@@ -101,7 +103,7 @@
     )
 ));
 @include mixins.utility((
-    property: border-top-left-radius border-top-right-radius,
+    property: border-start-start-radius border-start-end-radius,
     class: rounded-top,
     values: (
         null: var(--ui-border-radius),
@@ -131,7 +133,7 @@
     )
 ));
 @include mixins.utility((
-    property: border-bottom-left-radius border-bottom-right-radius,
+    property: border-end-start-radius border-end-end-radius,
     class: rounded-bottom,
     values: (
         null: var(--ui-border-radius),
@@ -531,14 +533,14 @@
     print: true
 ));
 @include mixins.utility((
-    property: padding-top padding-bottom,
+    property: padding-block,
     class: py,
     values: vars.$paddings,
     responsive: true,
     print: true
 ));
 @include mixins.utility((
-    property: padding-left padding-right,
+    property: padding-inline,
     class: px,
     values: vars.$paddings,
     responsive: true,
@@ -581,14 +583,14 @@
     print: true
 ));
 @include mixins.utility((
-    property: margin-top margin-bottom,
+    property: margin-block,
     class: my,
     values: vars.$margins,
     responsive: true,
     print: true
 ));
 @include mixins.utility((
-    property: margin-left margin-right,
+    property: margin-inline,
     class: mx,
     values: vars.$margins,
     responsive: true,

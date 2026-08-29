@@ -56,7 +56,7 @@
     color: var(--ui-toast-header-color);
     background-color: var(--ui-toast-header-bg);
     background-clip: padding-box;
-    border-bottom: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-header-border-color);
+    border-block-end: var(--ui-toast-border-width) var(--ui-border-style) var(--ui-toast-header-border-color);
     @include mixins.border-top-radius(calc(var(--ui-toast-border-radius) - var(--ui-toast-border-width)));
 
     .btn-close {

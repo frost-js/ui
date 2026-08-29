@@ -27,22 +27,24 @@
             color: var(--ui-table-color);
             background-color: var(--ui-table-bg);
             border-color: var(--ui-table-border-color);
-            border-bottom-width: var(--ui-table-border-width);
+            border-block-end-width: var(--ui-table-border-width);
             box-shadow: inset 0 0 0 9999px var(--ui-table-accent-bg, transparent);
         }
     }
 }
 
 .table-group-divider {
-    border-top: calc(var(--ui-border-width) * 2) solid currentcolor;
+    border-block-start: calc(var(--ui-border-width) * 2) solid currentcolor;
 }
 
 .table-bordered > :not(caption) > * {
-    border-width: var(--ui-table-border-width) 0;
+    border-block-width: var(--ui-table-border-width);
+    border-inline-width: 0;
 }
 
 .table-bordered > :not(caption) > * > * {
-    border-width: 0 var(--ui-table-border-width);
+    border-block-width: 0;
+    border-inline-width: var(--ui-table-border-width);
 }
 
 .table-borderless > :not(caption) > * > * {

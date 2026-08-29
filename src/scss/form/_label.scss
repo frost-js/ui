@@ -68,7 +68,7 @@
     }
 
     &.input-filled ~ .label-floating {
-        border-bottom: vars.$input-border-width var(--ui-border-style) transparent;
+        border-block-end: vars.$input-border-width var(--ui-border-style) transparent;
     }
 
     &.input-outline ~ .label-floating {

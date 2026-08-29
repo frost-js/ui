@@ -78,8 +78,8 @@
 
         &::after {
             position: absolute;
+            inset-block-end: 0;
             inset-inline: 0;
-            bottom: 0;
             z-index: 4;
             height: calc(vars.$input-border-width * 2);
             pointer-events: none;
@@ -95,7 +95,7 @@
         >.input-group-text {
             background-color: var(--ui-input-filled-bg, #{vars.$input-filled-bg});
             border: 0;
-            border-bottom: vars.$input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{vars.$input-filled-border-color});
+            border-block-end: vars.$input-border-width var(--ui-border-style) var(--ui-input-filled-border-color, #{vars.$input-filled-border-color});
         }
     }
 

@@ -54,16 +54,16 @@
     }
 
     >.list-group {
-        border-top: inherit;
-        border-bottom: inherit;
+        border-block-start: inherit;
+        border-block-end: inherit;
 
         &:first-child {
-            border-top-width: 0;
+            border-block-start-width: 0;
             @include mixins.border-top-radius(var(--ui-card-inner-border-radius));
         }
 
         &:last-child {
-            border-bottom-width: 0;
+            border-block-end-width: 0;
             @include mixins.border-bottom-radius(var(--ui-card-inner-border-radius));
         }
     }
@@ -88,7 +88,7 @@
 
     >.card-header + .list-group,
     >.list-group + .card-footer {
-        border-top: 0;
+        border-block-start: 0;
     }
 }
 
@@ -97,20 +97,20 @@
     margin-bottom: 0;
     font-weight: var(--ui-card-header-font-weight);
     background-color: var(--ui-card-cap-bg);
-    border-bottom: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
+    border-block-end: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
 
     &:first-child {
-        @include mixins.border-radius(var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius) 0 0);
+        @include mixins.border-top-radius(var(--ui-card-inner-border-radius));
     }
 }
 
 .card-footer {
     padding: var(--ui-card-cap-padding-y) var(--ui-card-cap-padding-x);
     background-color: var(--ui-card-cap-bg);
-    border-top: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
+    border-block-start: var(--ui-card-border-width) var(--ui-border-style) var(--ui-card-border-color);
 
     &:last-child {
-        @include mixins.border-radius(0 0 var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius));
+        @include mixins.border-bottom-radius(var(--ui-card-inner-border-radius));
     }
 }
 
@@ -151,10 +151,10 @@
 
 .card-img-top {
     @extend .card-img;
-    @include mixins.border-radius(var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius) 0 0);
+    @include mixins.border-top-radius(var(--ui-card-inner-border-radius));
 }
 
 .card-img-bottom {
     @extend .card-img;
-    @include mixins.border-radius(0 0 var(--ui-card-inner-border-radius) var(--ui-card-inner-border-radius));
+    @include mixins.border-bottom-radius(var(--ui-card-inner-border-radius));
 }

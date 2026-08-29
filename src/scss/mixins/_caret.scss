@@ -8,7 +8,7 @@
     @if $direction == start {
         &::before {
             display: inline-block;
-            margin-right: helpers.$caret-spacing;
+            margin-inline-end: helpers.$caret-spacing;
             vertical-align: helpers.$caret-vertical-align - (helpers.$caret-size * .5);
             content: "";
             border-top: helpers.$caret-size solid transparent;
@@ -17,7 +17,7 @@
         }
 
         &:empty::before {
-            margin-right: 0;
+            margin-inline-end: 0;
         }
 
         &::after {
@@ -26,7 +26,7 @@
     } @else {
         &::after {
             display: inline-block;
-            margin-left: helpers.$caret-spacing;
+            margin-inline-start: helpers.$caret-spacing;
             @if $direction == end {
                 vertical-align: helpers.$caret-vertical-align - (helpers.$caret-size * .5);
             } @else {
@@ -52,7 +52,7 @@
         }
 
         &:empty::after {
-            margin-left: 0;
+            margin-inline-start: 0;
         }
     }
 }

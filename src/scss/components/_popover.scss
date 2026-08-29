@@ -133,7 +133,7 @@
     line-height: var(--ui-popover-header-line-height);
     color: inherit;
     background-color: var(--ui-popover-header-bg);
-    border-bottom: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);
+    border-block-end: var(--ui-popover-border-width) var(--ui-border-style) var(--ui-popover-border-color);
     @include mixins.border-top-radius(var(--ui-popover-border-radius));
 
     &:empty {

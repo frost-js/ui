@@ -6,40 +6,22 @@
     border-radius: $amount;
 }
 
-/// Applies a border radius to the top corners.
+/// Applies a border radius to the block-start corners.
 ///
 /// @param {Number | String} $amount - The border-radius value.
-/// @output Top-left and top-right border-radius declarations.
+/// @output Start-start and start-end border-radius declarations.
 @mixin border-top-radius($amount) {
-    border-top-left-radius: $amount;
-    border-top-right-radius: $amount;
+    border-start-start-radius: $amount;
+    border-start-end-radius: $amount;
 }
 
-/// Applies a border radius to the right corners.
+/// Applies a border radius to the block-end corners.
 ///
 /// @param {Number | String} $amount - The border-radius value.
-/// @output Top-right and bottom-right border-radius declarations.
-@mixin border-right-radius($amount) {
-    border-top-right-radius: $amount;
-    border-bottom-right-radius: $amount;
-}
-
-/// Applies a border radius to the bottom corners.
-///
-/// @param {Number | String} $amount - The border-radius value.
-/// @output Bottom-right and bottom-left border-radius declarations.
+/// @output End-start and end-end border-radius declarations.
 @mixin border-bottom-radius($amount) {
-    border-bottom-right-radius: $amount;
-    border-bottom-left-radius: $amount;
-}
-
-/// Applies a border radius to the left corners.
-///
-/// @param {Number | String} $amount - The border-radius value.
-/// @output Top-left and bottom-left border-radius declarations.
-@mixin border-left-radius($amount) {
-    border-top-left-radius: $amount;
-    border-bottom-left-radius: $amount;
+    border-end-start-radius: $amount;
+    border-end-end-radius: $amount;
 }
 
 /// Applies a border radius to the inline-start corners.

@@ -179,7 +179,7 @@
 
             .offcanvas {
                 position: inherit;
-                bottom: 0;
+                inset-block-end: 0;
                 z-index: 1000;
                 visibility: visible !important;
                 flex-grow: 1;
@@ -192,9 +192,8 @@
             }
 
             :is(.offcanvas-top, .offcanvas-bottom) {
-                height: auto;
-                border-top: 0;
-                border-bottom: 0;
+                block-size: auto;
+                border-block: 0;
             }
 
             .offcanvas-header {

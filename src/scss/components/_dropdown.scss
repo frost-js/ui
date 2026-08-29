@@ -105,7 +105,7 @@
     height: 0;
     margin: var(--ui-dropdown-divider-margin-y) 0;
     overflow: hidden;
-    border-top: var(--ui-dropdown-divider-border-width) var(--ui-border-style) var(--ui-dropdown-divider-border-color);
+    border-block-start: var(--ui-dropdown-divider-border-width) var(--ui-border-style) var(--ui-dropdown-divider-border-color);
 }
 
 .dropdown-toggle {
