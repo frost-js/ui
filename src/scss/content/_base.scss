@@ -380,7 +380,7 @@ legend {
     line-height: inherit;
 
     +* {
-        clear: left;
+        clear: inline-start;
     }
 }
 

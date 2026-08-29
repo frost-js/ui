@@ -64,6 +64,10 @@
             background-repeat: no-repeat;
             background-position: right vars.$input-padding-x center;
             background-size: vars.$input-select-arrow-size #{vars.$input-select-arrow-size * .75};
+
+            &:dir(rtl) {
+                background-position-x: left vars.$input-padding-x;
+            }
         }
 
         &[multiple] {
@@ -139,6 +143,10 @@
         background-position: right vars.$input-padding-x center, center bottom, center bottom;
         background-origin: padding-box, border-box, border-box;
         background-size: vars.$input-select-arrow-size #{vars.$input-select-arrow-size * .75}, var(--ui-input-filled-focus-line-size), 100% vars.$input-border-width;
+
+        &:dir(rtl) {
+            background-position-x: left vars.$input-padding-x, center, center;
+        }
     }
 }
 
@@ -222,16 +230,5 @@
         &::-webkit-color-swatch {
             @include mixins.border-radius(vars.$input-outline-border-radius);
         }
-    }
-}
-
-[dir="rtl"] {
-    #{selector.append("select", ".input-filled")}:not([multiple]),
-    #{selector.append("select", ".input-outline")}:not([multiple]) {
-        background-position-x: left vars.$input-padding-x;
-    }
-
-    #{selector.append("select", ".input-filled")}:not([multiple]) {
-        background-position-x: left vars.$input-padding-x, center, center;
     }
 }

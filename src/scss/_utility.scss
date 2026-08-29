@@ -423,6 +423,14 @@
     )
 ));
 
+.translate-middle:dir(rtl) {
+    transform: translate(50%, -50%) !important;
+}
+
+.translate-middle-x:dir(rtl) {
+    transform: translateX(50%) !important;
+}
+
 // resize
 @include mixins.utility((
     property: resize,

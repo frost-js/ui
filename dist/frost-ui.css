@@ -579,7 +579,7 @@ legend {
   line-height: inherit;
 }
 legend + * {
-  clear: left;
+  clear: inline-start;
 }
 
 [type=search] {
@@ -4718,6 +4718,9 @@ fieldset:disabled .btn {
   border-inline-end: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
   transform: translateX(-100%);
 }
+.offcanvas-start:dir(rtl) {
+  transform: translateX(100%);
+}
 
 .offcanvas-end {
   inset-block-start: 0;
@@ -4725,6 +4728,9 @@ fieldset:disabled .btn {
   inline-size: var(--ui-offcanvas-width);
   border-inline-start: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
   transform: translateX(100%);
+}
+.offcanvas-end:dir(rtl) {
+  transform: translateX(-100%);
 }
 
 .offcanvas-top {
@@ -4762,13 +4768,6 @@ fieldset:disabled .btn {
 }
 .offcanvas-backdrop:has(.offcanvas.show:not(.hiding))::before {
   opacity: 1;
-}
-
-[dir=rtl] .offcanvas-start {
-  transform: translateX(100%);
-}
-[dir=rtl] .offcanvas-end {
-  transform: translateX(-100%);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -5599,6 +5598,9 @@ select.input-filled:not([multiple]), select.input-outline:not([multiple]) {
   background-position: right 0.5rem center;
   background-size: 16px 12px;
 }
+select.input-filled:not([multiple]):dir(rtl), select.input-outline:not([multiple]):dir(rtl) {
+  background-position-x: left 0.5rem;
+}
 select.input-filled[multiple], select.input-outline[multiple] {
   padding: 0;
 }
@@ -5667,6 +5669,9 @@ select.input-filled:not([multiple]) {
   background-origin: padding-box, border-box, border-box;
   background-size: 16px 12px, var(--ui-input-filled-focus-line-size), 100% var(--ui-border-width);
 }
+select.input-filled:not([multiple]):dir(rtl) {
+  background-position-x: left 0.5rem, center, center;
+}
 
 .input-outline {
   background-color: var(--ui-body-bg);
@@ -5734,14 +5739,6 @@ select.input-lg[multiple] option {
 }
 .input-color.input-outline::-webkit-color-swatch {
   border-radius: var(--ui-border-radius);
-}
-
-[dir=rtl] select.input-filled:not([multiple]),
-[dir=rtl] select.input-outline:not([multiple]) {
-  background-position-x: left 0.5rem;
-}
-[dir=rtl] select.input-filled:not([multiple]) {
-  background-position-x: left 0.5rem, center, center;
 }
 
 .input-group {
@@ -8951,6 +8948,14 @@ select.input-lg[multiple] option {
 
 .translate-middle-y {
   transform: translateY(-50%) !important;
+}
+
+.translate-middle:dir(rtl) {
+  transform: translate(50%, -50%) !important;
+}
+
+.translate-middle-x:dir(rtl) {
+  transform: translateX(50%) !important;
 }
 
 .resize-none {

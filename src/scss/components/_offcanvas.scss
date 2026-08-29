@@ -75,6 +75,10 @@
     inline-size: var(--ui-offcanvas-width);
     border-inline-end: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
     transform: translateX(-100%);
+
+    &:dir(rtl) {
+        transform: translateX(100%);
+    }
 }
 
 .offcanvas-end {
@@ -83,6 +87,10 @@
     inline-size: var(--ui-offcanvas-width);
     border-inline-start: var(--ui-offcanvas-border-width) var(--ui-border-style) var(--ui-offcanvas-border-color);
     transform: translateX(100%);
+
+    &:dir(rtl) {
+        transform: translateX(-100%);
+    }
 }
 
 .offcanvas-top {
@@ -120,16 +128,6 @@
 
     &:has(.offcanvas.show:not(.hiding))::before {
         opacity: 1;
-    }
-}
-
-[dir="rtl"] {
-    .offcanvas-start {
-        transform: translateX(100%);
-    }
-
-    .offcanvas-end {
-        transform: translateX(-100%);
     }
 }
 
