@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/%40fr0st%2Fui?style=flat-square)](https://www.npmjs.com/package/@fr0st/ui)
 [![npm downloads](https://img.shields.io/npm/dm/%40fr0st%2Fui?style=flat-square)](https://www.npmjs.com/package/@fr0st/ui)
 [![CSS gzip size](https://img.badgesize.io/elusivecodes/FrostUI/main/dist/frost-ui.min.css?compression=gzip&label=CSS%20gzip%20size&style=flat-square)](https://github.com/elusivecodes/FrostUI/blob/main/dist/frost-ui.min.css)
-[![JS gzip size](https://img.badgesize.io/elusivecodes/FrostUI/main/dist/frost-ui-bundle.min.js?compression=gzip&label=JS%20gzip%20size&style=flat-square)](https://github.com/elusivecodes/FrostUI/blob/main/dist/frost-ui-bundle.min.js)
+[![JS gzip size](https://img.badgesize.io/elusivecodes/FrostUI/main/dist/frost-ui.min.js?compression=gzip&label=JS%20gzip%20size&style=flat-square)](https://github.com/elusivecodes/FrostUI/blob/main/dist/frost-ui.min.js)
 [![license](https://img.shields.io/github/license/elusivecodes/FrostUI?style=flat-square)](./LICENSE)
 
 Customizable JavaScript UI framework with responsive components, utilities, and opinionated Sass styling.
