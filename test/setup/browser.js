@@ -33,7 +33,7 @@ export async function waitForFrame(page) {
 }
 
 /**
- * Reset the browser page and FrostUI defaults.
+ * Reset the browser page and Frost UI defaults.
  * @param {Page} page The Playwright page.
  * @returns {Promise<void>} The promise.
  */
@@ -62,7 +62,7 @@ export async function resetPage(page) {
     });
 
     if (!stateReset) {
-        throw new Error('Failed to restore FrostUI on the test page.');
+        throw new Error('Failed to restore Frost UI on the test page.');
     }
 
     await page.waitForFunction((_) => {

@@ -1,4 +1,4 @@
-# FrostUI
+# Frost UI
 
 [![CI](https://github.com/elusivecodes/FrostUI/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/elusivecodes/FrostUI/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/elusivecodes/FrostUI/branch/main/graph/badge.svg)](https://codecov.io/gh/elusivecodes/FrostUI)
@@ -31,7 +31,7 @@ Customizable JavaScript UI framework with responsive components, utilities, and 
 npm i @fr0st/ui
 ```
 
-FrostUI's package entry point is ESM-only. Import the compiled CSS and use the named component exports from the JavaScript entry point:
+Frost UI's package entry point is ESM-only. Import the compiled CSS and use the named component exports from the JavaScript entry point:
 
 ```js
 import '@fr0st/ui/dist/frost-ui.min.css';
@@ -74,7 +74,7 @@ The ESM bundle imports `@fr0st/query`, which in turn imports `@fr0st/core`. Map 
 
 ### Browser (UMD)
 
-Load the CSS, fQuery, and FrostUI scripts from your own copy or a CDN:
+Load the CSS, fQuery, and Frost UI scripts from your own copy or a CDN:
 
 ```html
 <link rel="stylesheet" href="/path/to/dist/frost-ui.min.css">
@@ -106,7 +106,7 @@ The package root resolves to the prebuilt ESM bundle. Published files under `dis
 
 ### Custom Sass builds
 
-Install Sass and create an application stylesheet when the default FrostUI build needs different colors, typography, sizing, or layout settings:
+Install Sass and create an application stylesheet when the default Frost UI build needs different colors, typography, sizing, or layout settings:
 
 ```bash
 npm i -D sass
@@ -141,11 +141,11 @@ Compile the entry point with npm package resolution enabled:
 npx sass --load-path=node_modules src/styles.scss dist/styles.css
 ```
 
-The `ui` module applies the configured values before emitting the complete framework. It also forwards FrostUI's public variables, functions, and mixins for use by application styles. Build tools that already resolve Sass modules from npm packages do not need the explicit load path.
+The `ui` module applies the configured values before emitting the complete framework. It also forwards Frost UI's public variables, functions, and mixins for use by application styles. Build tools that already resolve Sass modules from npm packages do not need the explicit load path.
 
 ## Quick Start
 
-FrostUI's data API handles common interactions without application JavaScript. This control toggles the targeted collapse element:
+Frost UI's data API handles common interactions without application JavaScript. This control toggles the targeted collapse element:
 
 ```html
 <button
@@ -281,7 +281,7 @@ Calling `init()` again for the same element returns its current instance. Dispos
 
 ### Data API
 
-FrostUI registers delegated document handlers for controls such as:
+Frost UI registers delegated document handlers for controls such as:
 
 - `data-ui-toggle="button"`
 - `data-ui-toggle="collapse"`
@@ -295,7 +295,7 @@ FrostUI registers delegated document handlers for controls such as:
 - `data-ui-dismiss="toast"`
 - `data-ui-slide` and `data-ui-slide-to`
 
-Targets are normally resolved from `data-ui-target` or `href`. Because the handlers are delegated, matching controls added after FrostUI loads work without being registered individually.
+Targets are normally resolved from `data-ui-target` or `href`. Because the handlers are delegated, matching controls added after Frost UI loads work without being registered individually.
 
 Tooltip and popover triggers are initialized explicitly so their listeners and options can be configured:
 
@@ -357,7 +357,7 @@ Clipboard controls emit `copied.ui.clipboard` with the completed action and copi
 
 ## Styling and Layout
 
-FrostUI layouts use containers, rows, a configurable twelve-column grid, breakpoint prefixes, and spacing utilities:
+Frost UI layouts use containers, rows, a configurable twelve-column grid, breakpoint prefixes, and spacing utilities:
 
 ```html
 <main class="container py-5">
@@ -376,11 +376,11 @@ FrostUI layouts use containers, rows, a configurable twelve-column grid, breakpo
 
 Breakpoint-prefixed classes apply from that breakpoint upwards. The default breakpoint map contains `xs`, `sm`, `md`, `lg`, `xl`, and `xxl`, and can be replaced through Sass configuration.
 
-CSS-only components and utilities do not require FrostUI's JavaScript. Load the JavaScript when the page needs interactive behavior, event lifecycles, positioning, or accessibility state management.
+CSS-only components and utilities do not require Frost UI's JavaScript. Load the JavaScript when the page needs interactive behavior, event lifecycles, positioning, or accessibility state management.
 
 ## Themes and Customization
 
-FrostUI follows the user's preferred color scheme by default. Set `data-ui-theme="light"` or `data-ui-theme="dark"` on the document or any container to select an explicit theme for that subtree:
+Frost UI follows the user's preferred color scheme by default. Set `data-ui-theme="light"` or `data-ui-theme="dark"` on the document or any container to select an explicit theme for that subtree:
 
 ```html
 <html lang="en" data-ui-theme="dark">
@@ -394,7 +394,7 @@ FrostUI follows the user's preferred color scheme by default. Set `data-ui-theme
 
 Theme attributes can be nested. Each boundary recalculates the theme colors and overrides the inherited color scheme for its subtree.
 
-Generated styles expose colors, typography, borders, shadows, focus rings, and component values through `--ui-*` custom properties. Override them after FrostUI for runtime theming:
+Generated styles expose colors, typography, borders, shadows, focus rings, and component values through `--ui-*` custom properties. Override them after Frost UI for runtime theming:
 
 ```css
 :root,
@@ -409,11 +409,11 @@ Generated styles expose colors, typography, borders, shadows, focus rings, and c
 }
 ```
 
-Use Sass configuration when derived colors, utility maps, breakpoints, component defaults, or generated class sets also need to change. FrostUI variables use `!default`, allowing them to be configured through the `ui` module shown in the installation section.
+Use Sass configuration when derived colors, utility maps, breakpoints, component defaults, or generated class sets also need to change. Frost UI variables use `!default`, allowing them to be configured through the `ui` module shown in the installation section.
 
 ## Behavior Notes
 
-- FrostUI's JavaScript requires a browser DOM or a compatible DOM environment configured through fQuery.
+- Frost UI's JavaScript requires a browser DOM or a compatible DOM environment configured through fQuery.
 - The package entry point registers all component data handlers, QuerySet plugins, and the clipboard, ripple, and expanding-textarea enhancements.
 - `frost-ui.js` expects a separate fQuery global; `frost-ui-bundle.js` includes it.
 - Component options are resolved once, frozen, and retained until the instance is disposed.
@@ -436,4 +436,4 @@ npm run build
 
 ## License
 
-FrostUI is released under the [MIT License](./LICENSE).
+Frost UI is released under the [MIT License](./LICENSE).

@@ -254,7 +254,7 @@ const renderNavigation = () => `
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="${root}index.html">
                 <span class="badge bg-primary bg-gradient shadow-glow fs-5" aria-hidden="true">F</span>
-                <span>FrostUI</span>
+                <span>Frost UI</span>
             </a>
             <button class="navbar-toggler" type="button" data-ui-toggle="offcanvas" data-ui-target="#demo-navigation" aria-controls="demo-navigation" aria-label="Open demo navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -266,7 +266,7 @@ const renderNavigation = () => `
             <a class="d-flex align-items-center gap-2 text-body text-decoration-none" href="${root}index.html">
                 <span class="badge bg-primary bg-gradient shadow-glow fs-5">F</span>
                 <span>
-                    <strong class="d-block" id="demo-navigation-label">FrostUI</strong>
+                    <strong class="d-block" id="demo-navigation-label">Frost UI</strong>
                     <small class="text-body-secondary">Component demos</small>
                 </span>
             </a>

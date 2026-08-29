@@ -25,10 +25,10 @@ export default defineConfig({
         [
             'monocart-reporter',
             {
-                name: 'FrostUI Coverage',
+                name: 'Frost UI Coverage',
                 outputFile: './test-results/coverage/index.html',
                 coverage: {
-                    name: 'FrostUI Source Coverage',
+                    name: 'Frost UI Source Coverage',
                     outputDir: './coverage',
                     reports: [
                         'console-summary',
