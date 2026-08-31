@@ -15,31 +15,15 @@ import { expect } from '@playwright/test';
  * @returns {Promise<void>} The promise.
  */
 export async function expectStyles(page, expectations) {
-    const expectedStates = expectations.flatMap((expectation) =>
-        expectation.selectors.map((selector) => ({
-            selector,
-            styles: expectation.styles,
-        })),
-    );
-    const actualStates = await page.evaluate((expectedStates) => {
-        return expectedStates.map(({ selector, styles }) => {
-            const nodes = $.find(selector);
-            const node = nodes[0];
+    for (const { selectors, styles } of expectations) {
+        for (const selector of selectors) {
+            const locator = page.locator(selector);
 
-            return {
-                matches: nodes.length,
-                styles: node ? Object.fromEntries(
-                    Object.keys(styles).map((property) => [property, $.getStyle(node, property)]),
-                ) : null,
-            };
-        });
-    }, expectedStates);
+            await expect(locator).toHaveCount(1);
 
-    for (const [index, expected] of expectedStates.entries()) {
-        const actual = actualStates[index];
-        const message = `Styles for ${expected.selector}`;
-
-        expect(actual.matches, `${message}: selector match count`).toBe(1);
-        expect(actual.styles, message).toEqual(expected.styles);
+            for (const [property, value] of Object.entries(styles)) {
+                await expect(locator).toHaveJSProperty(`style.${property}`, value);
+            }
+        }
     }
 }

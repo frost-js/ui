@@ -26,7 +26,6 @@ export default [
         languageOptions: {
             globals: {
                 $: 'readonly',
-                Animation: 'readonly',
                 UI: 'readonly',
             },
         },

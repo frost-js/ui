@@ -1307,20 +1307,11 @@ test.describe('Popper positioning', () => {
                 });
             });
 
-            const styles = await page.locator('#arrow').evaluate((node) => ({
-                position: node.style.position,
-                top: node.style.top,
-                right: node.style.right,
-                bottom: node.style.bottom,
-                left: node.style.left,
-            }));
-            expect(styles).toEqual({
-                position: 'absolute',
-                top: '',
-                right: '',
-                bottom: '-8px',
-                left: '32px',
-            });
+            const arrow = page.locator('#arrow');
+
+            await expect(arrow).toHaveCSS('position', 'absolute');
+            await expect(arrow).toHaveCSS('bottom', '-8px');
+            await expect(arrow).toHaveCSS('left', '32px');
         });
 
         test('aligns the arrow above a bottom/end popper', async ({ page }) => {
@@ -1337,20 +1328,11 @@ test.describe('Popper positioning', () => {
                 });
             });
 
-            const styles = await page.locator('#arrow').evaluate((node) => ({
-                position: node.style.position,
-                top: node.style.top,
-                right: node.style.right,
-                bottom: node.style.bottom,
-                left: node.style.left,
-            }));
-            expect(styles).toEqual({
-                position: 'absolute',
-                top: '-8px',
-                right: '',
-                bottom: '',
-                left: '112px',
-            });
+            const arrow = page.locator('#arrow');
+
+            await expect(arrow).toHaveCSS('position', 'absolute');
+            await expect(arrow).toHaveCSS('top', '-8px');
+            await expect(arrow).toHaveCSS('left', '112px');
         });
     });
 
