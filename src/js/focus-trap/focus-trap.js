@@ -12,6 +12,11 @@ import { addFocusTrap, removeFocusTrap } from './helpers.js';
  * @augments {BaseComponent<FocusTrapOptions>}
  */
 export default class FocusTrap extends BaseComponent {
+    /** @type {FocusTrapOptions} */
+    static defaults = {
+        autoFocus: true,
+    };
+
     #active;
 
     /**

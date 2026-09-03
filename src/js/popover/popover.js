@@ -30,6 +30,27 @@ import Popper from './../popper/index.js';
  * @augments {BaseComponent<PopoverOptions>}
  */
 export default class Popover extends BaseComponent {
+    /** @type {PopoverOptions} */
+    static defaults = {
+        template: '<div class="popover" role="tooltip">' +
+            '<div class="popover-arrow"></div>' +
+            '<h3 class="popover-header"></h3>' +
+            '<div class="popover-body"></div>' +
+            '</div>',
+        customClass: null,
+        animation: true,
+        enable: true,
+        html: false,
+        appendTo: null,
+        sanitize: (input) => $.sanitize(input),
+        trigger: 'click',
+        placement: 'auto',
+        position: 'center',
+        fixed: false,
+        spacing: 3,
+        minContact: false,
+    };
+
     #arrow;
     #enabled;
     #hideModalEvent;

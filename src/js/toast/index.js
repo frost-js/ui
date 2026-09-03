@@ -1,15 +1,7 @@
-/** @import { ToastOptions } from './toast.js'; */
-
 import { $, document } from './../globals.js';
 import { initComponent } from './../helpers/component.js';
 import { getTarget } from './../helpers/target.js';
 import Toast from './toast.js';
-
-/** @type {ToastOptions} */
-Toast.defaults = {
-    autohide: true,
-    delay: 5000,
-};
 
 initComponent('toast', Toast);
 

@@ -49,6 +49,20 @@ import {
  * @augments {BaseComponent<PopperOptions>}
  */
 export default class Popper extends BaseComponent {
+    /** @type {PopperOptions} */
+    static defaults = {
+        reference: null,
+        container: null,
+        arrow: null,
+        afterUpdate: null,
+        beforeUpdate: null,
+        placement: 'bottom',
+        position: 'center',
+        fixed: false,
+        spacing: 0,
+        minContact: null,
+    };
+
     #arrowStyles;
     #placement;
     #referencePlacement;

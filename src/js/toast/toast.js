@@ -13,6 +13,12 @@ import { waitForTransition } from './../helpers/transition.js';
  * @augments {BaseComponent<ToastOptions>}
  */
 export default class Toast extends BaseComponent {
+    /** @type {ToastOptions} */
+    static defaults = {
+        autohide: true,
+        delay: 5000,
+    };
+
     #timer;
     #transitioning;
 

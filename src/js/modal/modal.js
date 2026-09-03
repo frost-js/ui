@@ -19,6 +19,14 @@ const modalStackOffset = 20;
  * @augments {BaseComponent<ModalOptions>}
  */
 export default class Modal extends BaseComponent {
+    /** @type {ModalOptions} */
+    static defaults = {
+        backdrop: true,
+        focus: true,
+        show: false,
+        keyboard: true,
+    };
+
     #activeTarget;
     #backdrop;
     #dialog;

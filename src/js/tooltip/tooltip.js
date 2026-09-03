@@ -29,6 +29,26 @@ import Popper from './../popper/index.js';
  * @augments {BaseComponent<TooltipOptions>}
  */
 export default class Tooltip extends BaseComponent {
+    /** @type {TooltipOptions} */
+    static defaults = {
+        template: '<div class="tooltip" role="tooltip">' +
+            '<div class="tooltip-arrow"></div>' +
+            '<div class="tooltip-inner"></div>' +
+            '</div>',
+        customClass: null,
+        animation: true,
+        enable: true,
+        html: false,
+        trigger: 'hover focus',
+        appendTo: null,
+        sanitize: (input) => $.sanitize(input),
+        placement: 'auto',
+        position: 'center',
+        fixed: false,
+        spacing: 2,
+        minContact: false,
+    };
+
     #arrow;
     #enabled;
     #hideModalEvent;

@@ -1,19 +1,7 @@
-/** @import { DropdownOptions } from './dropdown.js'; */
-
 import { getClickTarget } from './../click-target/index.js';
 import { $, document } from './../globals.js';
 import { initComponent } from './../helpers/component.js';
 import Dropdown from './dropdown.js';
-
-/** @type {DropdownOptions} */
-Dropdown.defaults = {
-    display: 'dynamic',
-    placement: 'bottom',
-    position: 'start',
-    fixed: false,
-    spacing: 3,
-    minContact: false,
-};
 
 initComponent('dropdown', Dropdown);
 

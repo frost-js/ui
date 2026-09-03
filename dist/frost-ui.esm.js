@@ -344,6 +344,15 @@ function getIndex(index, totalItems) {
 * @augments {BaseComponent<CarouselOptions>}
 */
 var Carousel = class extends BaseComponent {
+	/** @type {CarouselOptions} */
+	static defaults = {
+		interval: 5e3,
+		keyboard: true,
+		ride: false,
+		pause: true,
+		wrap: true,
+		swipe: true
+	};
 	#index;
 	#items;
 	#mousePaused;
@@ -669,16 +678,6 @@ var Carousel = class extends BaseComponent {
 
 //#endregion
 //#region src/js/carousel/index.js
-/** @import { CarouselOptions } from './carousel.js'; */
-/** @type {CarouselOptions} */
-Carousel.defaults = {
-	interval: 5e3,
-	keyboard: true,
-	ride: false,
-	pause: true,
-	wrap: true,
-	swipe: true
-};
 initComponent("carousel", Carousel);
 $((_) => {
 	const nodes = $.find("[data-ui-ride=\"carousel\"]");
@@ -1082,6 +1081,19 @@ function removePopper(popper) {
 * @augments {BaseComponent<PopperOptions>}
 */
 var Popper = class extends BaseComponent {
+	/** @type {PopperOptions} */
+	static defaults = {
+		reference: null,
+		container: null,
+		arrow: null,
+		afterUpdate: null,
+		beforeUpdate: null,
+		placement: "bottom",
+		position: "center",
+		fixed: false,
+		spacing: 0,
+		minContact: null
+	};
 	#arrowStyles;
 	#placement;
 	#referencePlacement;
@@ -1323,6 +1335,15 @@ var Popper = class extends BaseComponent {
 * @augments {BaseComponent<DropdownOptions>}
 */
 var Dropdown = class extends BaseComponent {
+	/** @type {DropdownOptions} */
+	static defaults = {
+		display: "dynamic",
+		placement: "bottom",
+		position: "start",
+		fixed: false,
+		spacing: 3,
+		minContact: false
+	};
 	#display;
 	#menuNode;
 	#popper;
@@ -1441,16 +1462,6 @@ var Dropdown = class extends BaseComponent {
 
 //#endregion
 //#region src/js/dropdown/index.js
-/** @import { DropdownOptions } from './dropdown.js'; */
-/** @type {DropdownOptions} */
-Dropdown.defaults = {
-	display: "dynamic",
-	placement: "bottom",
-	position: "start",
-	fixed: false,
-	spacing: 3,
-	minContact: false
-};
 initComponent("dropdown", Dropdown);
 $.addEventDelegate(document, "click.ui.dropdown keydown.ui.dropdown", "[data-ui-toggle=\"dropdown\"]", (e) => {
 	if (e.code && e.code !== "Space") return;
@@ -1575,6 +1586,8 @@ function removeFocusTrap(focusTrap) {
 * @augments {BaseComponent<FocusTrapOptions>}
 */
 var FocusTrap = class extends BaseComponent {
+	/** @type {FocusTrapOptions} */
+	static defaults = { autoFocus: true };
 	#active;
 	/**
 	* Activates the focus trap.
@@ -1602,9 +1615,6 @@ var FocusTrap = class extends BaseComponent {
 
 //#endregion
 //#region src/js/focus-trap/index.js
-/** @import { FocusTrapOptions } from './focus-trap.js'; */
-/** @type {FocusTrapOptions} */
-FocusTrap.defaults = { autoFocus: true };
 initComponent("focustrap", FocusTrap);
 var focus_trap_default = FocusTrap;
 
@@ -1623,6 +1633,13 @@ var modalStackOffset = 20;
 * @augments {BaseComponent<ModalOptions>}
 */
 var Modal = class Modal extends BaseComponent {
+	/** @type {ModalOptions} */
+	static defaults = {
+		backdrop: true,
+		focus: true,
+		show: false,
+		keyboard: true
+	};
 	#activeTarget;
 	#backdrop;
 	#dialog;
@@ -1841,14 +1858,6 @@ function getTopModal() {
 
 //#endregion
 //#region src/js/modal/index.js
-/** @import { ModalOptions } from './modal.js'; */
-/** @type {ModalOptions} */
-Modal.defaults = {
-	backdrop: true,
-	focus: true,
-	show: false,
-	keyboard: true
-};
 initComponent("modal", Modal);
 $.addEventDelegate(document, "click.ui.modal", "[data-ui-toggle=\"modal\"]", (e) => {
 	e.preventDefault();
@@ -1888,6 +1897,12 @@ var modal_default = Modal;
 * @augments {BaseComponent<OffcanvasOptions>}
 */
 var Offcanvas = class extends BaseComponent {
+	/** @type {OffcanvasOptions} */
+	static defaults = {
+		backdrop: true,
+		keyboard: true,
+		scroll: false
+	};
 	#activeTarget;
 	#focusTrap;
 	#scrollNodes;
@@ -2001,13 +2016,6 @@ var Offcanvas = class extends BaseComponent {
 
 //#endregion
 //#region src/js/offcanvas/index.js
-/** @import { OffcanvasOptions } from './offcanvas.js'; */
-/** @type {OffcanvasOptions} */
-Offcanvas.defaults = {
-	backdrop: true,
-	keyboard: true,
-	scroll: false
-};
 initComponent("offcanvas", Offcanvas);
 $.addEventDelegate(document, "click.ui.offcanvas", "[data-ui-toggle=\"offcanvas\"]", (e) => {
 	e.preventDefault();
@@ -2036,20 +2044,6 @@ var offcanvas_default = Offcanvas;
 
 //#endregion
 //#region src/js/popper/index.js
-/** @import { PopperOptions } from './popper.js'; */
-/** @type {PopperOptions} */
-Popper.defaults = {
-	reference: null,
-	container: null,
-	arrow: null,
-	afterUpdate: null,
-	beforeUpdate: null,
-	placement: "bottom",
-	position: "center",
-	fixed: false,
-	spacing: 0,
-	minContact: null
-};
 initComponent("popper", Popper);
 var popper_default = Popper;
 
@@ -2079,6 +2073,22 @@ var popper_default = Popper;
 * @augments {BaseComponent<PopoverOptions>}
 */
 var Popover = class extends BaseComponent {
+	/** @type {PopoverOptions} */
+	static defaults = {
+		template: "<div class=\"popover\" role=\"tooltip\"><div class=\"popover-arrow\"></div><h3 class=\"popover-header\"></h3><div class=\"popover-body\"></div></div>",
+		customClass: null,
+		animation: true,
+		enable: true,
+		html: false,
+		appendTo: null,
+		sanitize: (input) => $.sanitize(input),
+		trigger: "click",
+		placement: "auto",
+		position: "center",
+		fixed: false,
+		spacing: 3,
+		minContact: false
+	};
 	#arrow;
 	#enabled;
 	#hideModalEvent;
@@ -2291,23 +2301,6 @@ var Popover = class extends BaseComponent {
 
 //#endregion
 //#region src/js/popover/index.js
-/** @import { PopoverOptions } from './popover.js'; */
-/** @type {PopoverOptions} */
-Popover.defaults = {
-	template: "<div class=\"popover\" role=\"tooltip\"><div class=\"popover-arrow\"></div><h3 class=\"popover-header\"></h3><div class=\"popover-body\"></div></div>",
-	customClass: null,
-	animation: true,
-	enable: true,
-	html: false,
-	appendTo: null,
-	sanitize: (input) => $.sanitize(input),
-	trigger: "click",
-	placement: "auto",
-	position: "center",
-	fixed: false,
-	spacing: 3,
-	minContact: false
-};
 initComponent("popover", Popover);
 var popover_default = Popover;
 
@@ -2447,6 +2440,11 @@ var tab_default = Tab;
 * @augments {BaseComponent<ToastOptions>}
 */
 var Toast = class extends BaseComponent {
+	/** @type {ToastOptions} */
+	static defaults = {
+		autohide: true,
+		delay: 5e3
+	};
 	#timer;
 	#transitioning;
 	/** @inheritdoc */
@@ -2495,12 +2493,6 @@ var Toast = class extends BaseComponent {
 
 //#endregion
 //#region src/js/toast/index.js
-/** @import { ToastOptions } from './toast.js'; */
-/** @type {ToastOptions} */
-Toast.defaults = {
-	autohide: true,
-	delay: 5e3
-};
 initComponent("toast", Toast);
 $.addEventDelegate(document, "click.ui.toast", "[data-ui-dismiss=\"toast\"]", (e) => {
 	e.preventDefault();
@@ -2534,6 +2526,22 @@ var toast_default = Toast;
 * @augments {BaseComponent<TooltipOptions>}
 */
 var Tooltip = class extends BaseComponent {
+	/** @type {TooltipOptions} */
+	static defaults = {
+		template: "<div class=\"tooltip\" role=\"tooltip\"><div class=\"tooltip-arrow\"></div><div class=\"tooltip-inner\"></div></div>",
+		customClass: null,
+		animation: true,
+		enable: true,
+		html: false,
+		trigger: "hover focus",
+		appendTo: null,
+		sanitize: (input) => $.sanitize(input),
+		placement: "auto",
+		position: "center",
+		fixed: false,
+		spacing: 2,
+		minContact: false
+	};
 	#arrow;
 	#enabled;
 	#hideModalEvent;
@@ -2738,23 +2746,6 @@ var Tooltip = class extends BaseComponent {
 
 //#endregion
 //#region src/js/tooltip/index.js
-/** @import { TooltipOptions } from './tooltip.js'; */
-/** @type {TooltipOptions} */
-Tooltip.defaults = {
-	template: "<div class=\"tooltip\" role=\"tooltip\"><div class=\"tooltip-arrow\"></div><div class=\"tooltip-inner\"></div></div>",
-	customClass: null,
-	animation: true,
-	enable: true,
-	html: false,
-	trigger: "hover focus",
-	appendTo: null,
-	sanitize: (input) => $.sanitize(input),
-	placement: "auto",
-	position: "center",
-	fixed: false,
-	spacing: 2,
-	minContact: false
-};
 initComponent("tooltip", Tooltip);
 var tooltip_default = Tooltip;
 

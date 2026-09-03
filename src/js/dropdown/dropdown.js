@@ -22,6 +22,16 @@ import Popper from './../popper/popper.js';
  * @augments {BaseComponent<DropdownOptions>}
  */
 export default class Dropdown extends BaseComponent {
+    /** @type {DropdownOptions} */
+    static defaults = {
+        display: 'dynamic',
+        placement: 'bottom',
+        position: 'start',
+        fixed: false,
+        spacing: 3,
+        minContact: false,
+    };
+
     #display;
     #menuNode;
     #popper;

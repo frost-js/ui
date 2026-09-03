@@ -28,6 +28,16 @@ import { getDirection, getDirOffset, getIndex, getPhysicalDirection, getTransiti
  * @augments {BaseComponent<CarouselOptions>}
  */
 export default class Carousel extends BaseComponent {
+    /** @type {CarouselOptions} */
+    static defaults = {
+        interval: 5000,
+        keyboard: true,
+        ride: false,
+        pause: true,
+        wrap: true,
+        swipe: true,
+    };
+
     #index;
     #items;
     #mousePaused;

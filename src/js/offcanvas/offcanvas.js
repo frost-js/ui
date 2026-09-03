@@ -16,6 +16,13 @@ import { waitForTransition } from './../helpers/transition.js';
  * @augments {BaseComponent<OffcanvasOptions>}
  */
 export default class Offcanvas extends BaseComponent {
+    /** @type {OffcanvasOptions} */
+    static defaults = {
+        backdrop: true,
+        keyboard: true,
+        scroll: false,
+    };
+
     #activeTarget;
     #focusTrap;
     #scrollNodes;

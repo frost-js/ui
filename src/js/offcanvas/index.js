@@ -1,17 +1,8 @@
-/** @import { OffcanvasOptions } from './offcanvas.js'; */
-
 import { getClickTarget } from './../click-target/index.js';
 import { $, document } from './../globals.js';
 import { initComponent } from './../helpers/component.js';
 import { getTarget } from './../helpers/target.js';
 import Offcanvas from './offcanvas.js';
-
-/** @type {OffcanvasOptions} */
-Offcanvas.defaults = {
-    backdrop: true,
-    keyboard: true,
-    scroll: false,
-};
 
 initComponent('offcanvas', Offcanvas);
 
