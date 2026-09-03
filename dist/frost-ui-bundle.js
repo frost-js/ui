@@ -7691,6 +7691,27 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (index < 0) return totalItems + index;
 		return index;
 	}
+	/**
+	* Resets the transition styles of a carousel item.
+	* @param {HTMLElement} node The carousel item.
+	*/
+	function resetStyles(node) {
+		$$1.setStyle(node, {
+			display: "",
+			transform: ""
+		});
+	}
+	/**
+	* Updates the active carousel indicator.
+	* @param {HTMLElement} carousel The carousel node.
+	* @param {number} index The active item index.
+	*/
+	function updateIndicators(carousel, index) {
+		const oldIndicator = $$1.find(".active[data-ui-slide-to]", carousel);
+		const newIndicator = $$1.find("[data-ui-slide-to=\"" + index + "\"]", carousel);
+		$$1.removeClass(oldIndicator, "active");
+		$$1.addClass(newIndicator, "active");
+	}
 
 //#endregion
 //#region src/js/carousel/carousel.js
@@ -7759,7 +7780,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		dispose() {
 			$$1.setStyle(this.node, { "--ui-carousel-transition-scale": "" });
 			if (this.#sliding) $$1.removeClass(this.node, "carousel-dragging");
-			for (const item of this.#items) this.#resetStyles(item);
+			for (const item of this.#items) resetStyles(item);
 			if (this.options.keyboard) $$1.removeEvent(this.node, "keydown.ui.carousel");
 			if (this.options.pause) {
 				$$1.removeEvent(this.node, "mouseenter.ui.carousel");
@@ -7859,8 +7880,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 						if (inlineDiffX < 0) index = this.#index + 1;
 						else if (inlineDiffX > 0) index = this.#index - 1;
 						else {
-							this.#resetStyles(this.#items[this.#index]);
-							if (lastIndex !== null) this.#resetStyles(this.#items[lastIndex]);
+							resetStyles(this.#items[this.#index]);
+							if (lastIndex !== null) resetStyles(this.#items[lastIndex]);
 							index = this.#index;
 							return;
 						}
@@ -7871,15 +7892,15 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 							startX = currentX;
 							const oldIndex = this.#setIndex(index);
 							this.#update(this.#items[this.#index], this.#items[oldIndex], progress, { direction });
-							this.#updateIndicators();
-							if (lastIndex !== null && lastIndex !== this.#index) this.#resetStyles(this.#items[lastIndex]);
+							updateIndicators(this.node, this.#index);
+							if (lastIndex !== null && lastIndex !== this.#index) resetStyles(this.#items[lastIndex]);
 							progress--;
 						} else {
 							this.#update(this.#items[index], this.#items[this.#index], progress, {
 								direction,
 								dragging: true
 							});
-							if (lastIndex !== null && lastIndex !== index) this.#resetStyles(this.#items[lastIndex]);
+							if (lastIndex !== null && lastIndex !== index) resetStyles(this.#items[lastIndex]);
 						}
 					} while (progress > 1);
 				};
@@ -7915,9 +7936,9 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 					}), waitForTransition(nodeOut, ["transform"])]).then(([{ carousel, index, node: nodeIn, transitionClass }, { node: nodeOut }]) => {
 						this.#sliding = false;
 						$$1.removeClass(nodeOut, transitionClass);
-						this.#resetStyles(nodeIn);
-						this.#resetStyles(nodeOut);
-						this.#updateIndicators(carousel, index);
+						resetStyles(nodeIn);
+						resetStyles(nodeOut);
+						updateIndicators(carousel, index);
 						if (this.node) {
 							this.#paused = false;
 							this.#setTimer();
@@ -7928,16 +7949,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				const dragEvent = $$1.mouseDragFactory(downEvent, moveEvent, upEvent);
 				$$1.addEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel", dragEvent);
 			}
-		}
-		/**
-		* Resets the transition styles of an item.
-		* @param {HTMLElement} node The carousel item.
-		*/
-		#resetStyles(node) {
-			$$1.setStyle(node, {
-				display: "",
-				transform: ""
-			});
 		}
 		/**
 		* Sets the active item index and updates item state.
@@ -7999,9 +8010,9 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			}), waitForTransition(nodeOut, ["transform"])]).then(([{ carousel, index, node: nodeIn, transitionClass }, { node: nodeOut }]) => {
 				this.#sliding = false;
 				$$1.removeClass(nodeOut, transitionClass);
-				this.#resetStyles(nodeIn);
-				this.#resetStyles(nodeOut);
-				this.#updateIndicators(carousel, index);
+				resetStyles(nodeIn);
+				resetStyles(nodeOut);
+				updateIndicators(carousel, index);
 				if (this.node) {
 					this.#paused = false;
 					this.#setTimer();
@@ -8033,17 +8044,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			}
 			$$1.setStyle(nodeIn, inStyles);
 			$$1.setStyle(nodeOut, outStyles);
-		}
-		/**
-		* Updates the active carousel indicator.
-		* @param {HTMLElement} [carousel] The carousel node.
-		* @param {number} [index] The active item index.
-		*/
-		#updateIndicators(carousel = this.node, index = this.#index) {
-			const oldIndicator = $$1.find(".active[data-ui-slide-to]", carousel);
-			const newIndicator = $$1.find("[data-ui-slide-to=\"" + index + "\"]", carousel);
-			$$1.removeClass(oldIndicator, "active");
-			$$1.addClass(newIndicator, "active");
 		}
 	};
 

@@ -1,5 +1,7 @@
 /** @import { CarouselDirection, PhysicalDirection } from './carousel.js'; */
 
+import { $ } from './../globals.js';
+
 /**
  * Gets the boundary offset for an item index.
  * @param {number} index The index.
@@ -81,4 +83,27 @@ export function getIndex(index, totalItems) {
     }
 
     return index;
+};
+
+/**
+ * Resets the transition styles of a carousel item.
+ * @param {HTMLElement} node The carousel item.
+ */
+export function resetStyles(node) {
+    $.setStyle(node, {
+        display: '',
+        transform: '',
+    });
+};
+
+/**
+ * Updates the active carousel indicator.
+ * @param {HTMLElement} carousel The carousel node.
+ * @param {number} index The active item index.
+ */
+export function updateIndicators(carousel, index) {
+    const oldIndicator = $.find('.active[data-ui-slide-to]', carousel);
+    const newIndicator = $.find('[data-ui-slide-to="' + index + '"]', carousel);
+    $.removeClass(oldIndicator, 'active');
+    $.addClass(newIndicator, 'active');
 };

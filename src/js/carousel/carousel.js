@@ -2,7 +2,15 @@ import BaseComponent from './../base-component.js';
 import { $, document } from './../globals.js';
 import { getPosition } from './../helpers/pointer.js';
 import { waitForTransition } from './../helpers/transition.js';
-import { getDirection, getDirOffset, getIndex, getPhysicalDirection, getTransitionClasses } from './helpers.js';
+import {
+    getDirection,
+    getDirOffset,
+    getIndex,
+    getPhysicalDirection,
+    getTransitionClasses,
+    resetStyles,
+    updateIndicators,
+} from './helpers.js';
 
 /** @typedef {'prev'|'next'} CarouselDirection */
 /** @typedef {'left'|'right'} PhysicalDirection */
@@ -90,7 +98,7 @@ export default class Carousel extends BaseComponent {
         }
 
         for (const item of this.#items) {
-            this.#resetStyles(item);
+            resetStyles(item);
         }
 
         if (this.options.keyboard) {
@@ -261,10 +269,10 @@ export default class Carousel extends BaseComponent {
                     } else if (inlineDiffX > 0) {
                         index = this.#index - 1;
                     } else {
-                        this.#resetStyles(this.#items[this.#index]);
+                        resetStyles(this.#items[this.#index]);
 
                         if (lastIndex !== null) {
-                            this.#resetStyles(this.#items[lastIndex]);
+                            resetStyles(this.#items[lastIndex]);
                         }
 
                         index = this.#index;
@@ -280,10 +288,10 @@ export default class Carousel extends BaseComponent {
 
                         const oldIndex = this.#setIndex(index);
                         this.#update(this.#items[this.#index], this.#items[oldIndex], progress, { direction });
-                        this.#updateIndicators();
+                        updateIndicators(this.node, this.#index);
 
                         if (lastIndex !== null && lastIndex !== this.#index) {
-                            this.#resetStyles(this.#items[lastIndex]);
+                            resetStyles(this.#items[lastIndex]);
                         }
 
                         progress--;
@@ -291,7 +299,7 @@ export default class Carousel extends BaseComponent {
                         this.#update(this.#items[index], this.#items[this.#index], progress, { direction, dragging: true });
 
                         if (lastIndex !== null && lastIndex !== index) {
-                            this.#resetStyles(this.#items[lastIndex]);
+                            resetStyles(this.#items[lastIndex]);
                         }
                     }
                 } while (progress > 1);
@@ -355,9 +363,9 @@ export default class Carousel extends BaseComponent {
                     this.#sliding = false;
 
                     $.removeClass(nodeOut, transitionClass);
-                    this.#resetStyles(nodeIn);
-                    this.#resetStyles(nodeOut);
-                    this.#updateIndicators(carousel, index);
+                    resetStyles(nodeIn);
+                    resetStyles(nodeOut);
+                    updateIndicators(carousel, index);
 
                     if (this.node) {
                         this.#paused = false;
@@ -372,17 +380,6 @@ export default class Carousel extends BaseComponent {
 
             $.addEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel', dragEvent);
         }
-    }
-
-    /**
-     * Resets the transition styles of an item.
-     * @param {HTMLElement} node The carousel item.
-     */
-    #resetStyles(node) {
-        $.setStyle(node, {
-            display: '',
-            transform: '',
-        });
     }
 
     /**
@@ -498,9 +495,9 @@ export default class Carousel extends BaseComponent {
             this.#sliding = false;
 
             $.removeClass(nodeOut, transitionClass);
-            this.#resetStyles(nodeIn);
-            this.#resetStyles(nodeOut);
-            this.#updateIndicators(carousel, index);
+            resetStyles(nodeIn);
+            resetStyles(nodeOut);
+            updateIndicators(carousel, index);
 
             if (this.node) {
                 this.#paused = false;
@@ -547,17 +544,5 @@ export default class Carousel extends BaseComponent {
 
         $.setStyle(nodeIn, inStyles);
         $.setStyle(nodeOut, outStyles);
-    }
-
-    /**
-     * Updates the active carousel indicator.
-     * @param {HTMLElement} [carousel] The carousel node.
-     * @param {number} [index] The active item index.
-     */
-    #updateIndicators(carousel = this.node, index = this.#index) {
-        const oldIndicator = $.find('.active[data-ui-slide-to]', carousel);
-        const newIndicator = $.find('[data-ui-slide-to="' + index + '"]', carousel);
-        $.removeClass(oldIndicator, 'active');
-        $.addClass(newIndicator, 'active');
     }
 }
