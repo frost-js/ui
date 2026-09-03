@@ -8327,7 +8327,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 //#endregion
 //#region src/js/popper/helpers.js
 /** @import { BoundingRect } from '../helpers/scroll.js'; */
-	/** @import Popper, { Direction, PhysicalDirection, Placement } from './popper.js'; */
+	/** @import Popper, { Direction, PhysicalDirection, Placement, Position } from './popper.js'; */
 	var poppers = /* @__PURE__ */ new Set();
 	var running$1 = false;
 	/**
@@ -8415,6 +8415,61 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		$$1.removeEvent(window$1, "resize.ui.popper");
 		$$1.removeEvent(document, "scroll.ui.popper");
 		running$1 = false;
+	}
+	/**
+	* Updates a popper arrow position.
+	* @param {Popper} popper The popper instance.
+	* @param {Direction} placement The resolved placement.
+	* @param {Position} position The resolved alignment.
+	* @param {boolean} rtl Whether the inline direction is right-to-left.
+	*/
+	function updateArrow(popper, placement, position, rtl) {
+		const physicalPlacement = getPhysicalPlacement(placement, rtl);
+		const nodeBox = $$1.rect(popper.node, { offset: true });
+		const referenceBox = $$1.rect(popper.options.reference, { offset: true });
+		$$1.setStyle(popper.options.arrow, {
+			position: "absolute",
+			inset: ""
+		});
+		const arrowBox = $$1.rect(popper.options.arrow, { offset: true });
+		const arrowStyles = {};
+		if (["top", "bottom"].includes(physicalPlacement)) {
+			const arrowPlacement = physicalPlacement === "top" ? "bottom" : "top";
+			arrowStyles[arrowPlacement] = -Math.floor(arrowBox.height);
+			const diff = (referenceBox.width - nodeBox.width) / 2;
+			const [left, right] = rtl ? ["end", "start"] : ["start", "end"];
+			let offset = nodeBox.width / 2 - arrowBox.width / 2;
+			if (position === left) offset += diff;
+			else if (position === right) offset -= diff;
+			let min = Math.max(referenceBox.left, nodeBox.left) - arrowBox.left;
+			let max = Math.min(referenceBox.right, nodeBox.right) - arrowBox.left - arrowBox.width;
+			if (referenceBox.width < arrowBox.width) {
+				min -= arrowBox.width / 2 - referenceBox.width / 2;
+				max -= arrowBox.width / 2 - referenceBox.width / 2;
+			}
+			offset = Math.round(offset);
+			min = Math.round(min);
+			max = Math.round(max);
+			arrowStyles.left = $$1._clamp(offset, min, max);
+		} else {
+			const arrowPlacement = physicalPlacement === "right" ? "left" : "right";
+			arrowStyles[arrowPlacement] = -Math.floor(arrowBox.width);
+			const diff = (referenceBox.height - nodeBox.height) / 2;
+			let offset = nodeBox.height / 2 - arrowBox.height;
+			if (position === "start") offset += diff;
+			else if (position === "end") offset -= diff;
+			let min = Math.max(referenceBox.top, nodeBox.top) - arrowBox.top;
+			let max = Math.min(referenceBox.bottom, nodeBox.bottom) - arrowBox.top - arrowBox.height;
+			if (referenceBox.height < arrowBox.height * 2) {
+				min -= arrowBox.height - referenceBox.height / 2;
+				max -= arrowBox.height - referenceBox.height / 2;
+			} else max -= arrowBox.height;
+			offset = Math.round(offset);
+			min = Math.round(min);
+			max = Math.round(max);
+			arrowStyles.top = $$1._clamp(offset, min, max);
+		}
+		$$1.setStyle(popper.options.arrow, arrowStyles);
 	}
 
 //#endregion
@@ -8633,61 +8688,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				offset.y += $$1.getScrollY(positionParent);
 			}
 			$$1.setStyle(this.node, { transform: `translate3d(${offset.x}px , ${offset.y}px , 0)` });
-			if (this.options.arrow) this.#updateArrow(placement, position);
+			if (this.options.arrow) updateArrow(this, placement, position, this.#rtl);
 			if (this.options.afterUpdate) this.options.afterUpdate(this.node, this.options.reference, placement, position);
-		}
-		/**
-		* Updates the popper arrow position.
-		* @param {Direction} placement The resolved placement.
-		* @param {Position} position The resolved alignment.
-		*/
-		#updateArrow(placement, position) {
-			const physicalPlacement = getPhysicalPlacement(placement, this.#rtl);
-			const nodeBox = $$1.rect(this.node, { offset: true });
-			const referenceBox = $$1.rect(this.options.reference, { offset: true });
-			$$1.setStyle(this.options.arrow, {
-				position: "absolute",
-				inset: ""
-			});
-			const arrowBox = $$1.rect(this.options.arrow, { offset: true });
-			const arrowStyles = {};
-			if (["top", "bottom"].includes(physicalPlacement)) {
-				const arrowPlacement = physicalPlacement === "top" ? "bottom" : "top";
-				arrowStyles[arrowPlacement] = -Math.floor(arrowBox.height);
-				const diff = (referenceBox.width - nodeBox.width) / 2;
-				const [left, right] = this.#rtl ? ["end", "start"] : ["start", "end"];
-				let offset = nodeBox.width / 2 - arrowBox.width / 2;
-				if (position === left) offset += diff;
-				else if (position === right) offset -= diff;
-				let min = Math.max(referenceBox.left, nodeBox.left) - arrowBox.left;
-				let max = Math.min(referenceBox.right, nodeBox.right) - arrowBox.left - arrowBox.width;
-				if (referenceBox.width < arrowBox.width) {
-					min -= arrowBox.width / 2 - referenceBox.width / 2;
-					max -= arrowBox.width / 2 - referenceBox.width / 2;
-				}
-				offset = Math.round(offset);
-				min = Math.round(min);
-				max = Math.round(max);
-				arrowStyles.left = $$1._clamp(offset, min, max);
-			} else {
-				const arrowPlacement = physicalPlacement === "right" ? "left" : "right";
-				arrowStyles[arrowPlacement] = -Math.floor(arrowBox.width);
-				const diff = (referenceBox.height - nodeBox.height) / 2;
-				let offset = nodeBox.height / 2 - arrowBox.height;
-				if (position === "start") offset += diff;
-				else if (position === "end") offset -= diff;
-				let min = Math.max(referenceBox.top, nodeBox.top) - arrowBox.top;
-				let max = Math.min(referenceBox.bottom, nodeBox.bottom) - arrowBox.top - arrowBox.height;
-				if (referenceBox.height < arrowBox.height * 2) {
-					min -= arrowBox.height - referenceBox.height / 2;
-					max -= arrowBox.height - referenceBox.height / 2;
-				} else max -= arrowBox.height;
-				offset = Math.round(offset);
-				min = Math.round(min);
-				max = Math.round(max);
-				arrowStyles.top = $$1._clamp(offset, min, max);
-			}
-			$$1.setStyle(this.options.arrow, arrowStyles);
 		}
 	};
 
