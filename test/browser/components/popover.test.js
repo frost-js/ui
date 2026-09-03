@@ -133,7 +133,7 @@ test.describe('Popover', () => {
             await expect(page.locator('#popover-toggle-1 + .popover')).toHaveAttribute('role', 'tooltip');
             await expect(page.locator('#popover-toggle-1 + .popover')).toHaveAttribute('data-ui-placement', 'end');
             await expect(page.locator('#popover-toggle-1 + .popover')).toHaveCSS('position', 'absolute');
-            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('aria-describedby', /^popover/);
+            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('aria-describedby', /^popover-/);
             await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-placement', 'end');
         });
 

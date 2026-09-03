@@ -134,7 +134,7 @@ test.describe('Tooltip', () => {
             await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('role', 'tooltip');
             await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('data-ui-placement', 'end');
             await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveCSS('position', 'absolute');
-            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('aria-describedby', /^tooltip/);
+            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('aria-describedby', /^tooltip-/);
             await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-placement', 'end');
         });
 

@@ -18,7 +18,7 @@ var window = $.getWindow();
 */
 function generateId(prefix) {
 	while (true) {
-		const id = `${prefix}${$._randomString(5)}`;
+		const id = `${prefix}-${$._randomString(5)}`;
 		if ($.findOneById(id)) continue;
 		return id;
 	}

@@ -7389,7 +7389,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	*/
 	function generateId(prefix) {
 		while (true) {
-			const id = `${prefix}${$$1._randomString(5)}`;
+			const id = `${prefix}-${$$1._randomString(5)}`;
 			if ($$1.findOneById(id)) continue;
 			return id;
 		}

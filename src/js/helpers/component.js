@@ -9,7 +9,7 @@ import { $ } from './../globals.js';
  */
 export function generateId(prefix) {
     while (true) {
-        const id = `${prefix}${$._randomString(5)}`;
+        const id = `${prefix}-${$._randomString(5)}`;
 
         if ($.findOneById(id)) {
             continue;
