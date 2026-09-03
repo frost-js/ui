@@ -733,27 +733,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	var carousel_default = Carousel;
 
 //#endregion
-//#region src/js/click-target/index.js
-/** @type {EventTarget|null|undefined} */
-	var clickTarget;
-	$.addEvent(window, "mousedown.ui", (e) => {
-		clickTarget = e.target;
-	}, { capture: true });
-	$.addEvent(window, "mouseup.ui", (_) => {
-		setTimeout((_) => {
-			clickTarget = null;
-		}, 0);
-	}, { capture: true });
-	/**
-	* Gets the original press target for a click event.
-	* @param {MouseEvent} e The click event.
-	* @returns {EventTarget|null} The original press target, or the click target as a fallback.
-	*/
-	function getClickTarget(e) {
-		return clickTarget || e.target;
-	}
-
-//#endregion
 //#region src/js/collapse/collapse.js
 /**
 	* @typedef {object} CollapseOptions
@@ -869,6 +848,27 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		else collapse.hide();
 	});
 	var collapse_default = Collapse;
+
+//#endregion
+//#region src/js/helpers/click-target.js
+/** @type {EventTarget|null|undefined} */
+	var clickTarget;
+	$.addEvent(window, "mousedown.ui", (e) => {
+		clickTarget = e.target;
+	}, { capture: true });
+	$.addEvent(window, "mouseup.ui", (_) => {
+		setTimeout((_) => {
+			clickTarget = null;
+		}, 0);
+	}, { capture: true });
+	/**
+	* Gets the original press target for a click event.
+	* @param {MouseEvent} e The click event.
+	* @returns {EventTarget|null} The original press target, or the click target as a fallback.
+	*/
+	function getClickTarget(e) {
+		return clickTarget || e.target;
+	}
 
 //#endregion
 //#region src/js/helpers/scroll.js

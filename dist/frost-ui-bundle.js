@@ -8071,27 +8071,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	var carousel_default = Carousel;
 
 //#endregion
-//#region src/js/click-target/index.js
-/** @type {EventTarget|null|undefined} */
-	var clickTarget;
-	$$1.addEvent(window$1, "mousedown.ui", (e) => {
-		clickTarget = e.target;
-	}, { capture: true });
-	$$1.addEvent(window$1, "mouseup.ui", (_) => {
-		setTimeout((_) => {
-			clickTarget = null;
-		}, 0);
-	}, { capture: true });
-	/**
-	* Gets the original press target for a click event.
-	* @param {MouseEvent} e The click event.
-	* @returns {EventTarget|null} The original press target, or the click target as a fallback.
-	*/
-	function getClickTarget(e) {
-		return clickTarget || e.target;
-	}
-
-//#endregion
 //#region src/js/collapse/collapse.js
 /**
 	* @typedef {object} CollapseOptions
@@ -8207,6 +8186,27 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		else collapse.hide();
 	});
 	var collapse_default = Collapse;
+
+//#endregion
+//#region src/js/helpers/click-target.js
+/** @type {EventTarget|null|undefined} */
+	var clickTarget;
+	$$1.addEvent(window$1, "mousedown.ui", (e) => {
+		clickTarget = e.target;
+	}, { capture: true });
+	$$1.addEvent(window$1, "mouseup.ui", (_) => {
+		setTimeout((_) => {
+			clickTarget = null;
+		}, 0);
+	}, { capture: true });
+	/**
+	* Gets the original press target for a click event.
+	* @param {MouseEvent} e The click event.
+	* @returns {EventTarget|null} The original press target, or the click target as a fallback.
+	*/
+	function getClickTarget(e) {
+		return clickTarget || e.target;
+	}
 
 //#endregion
 //#region src/js/helpers/scroll.js

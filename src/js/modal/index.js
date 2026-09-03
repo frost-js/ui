@@ -1,5 +1,5 @@
-import { getClickTarget } from './../click-target/index.js';
 import { $, document, window } from './../globals.js';
+import { getClickTarget } from './../helpers/click-target.js';
 import { initComponent } from './../helpers/component.js';
 import { getTarget } from './../helpers/target.js';
 import { getTopModal } from './helpers.js';

@@ -1,5 +1,5 @@
-import { getClickTarget } from './../click-target/index.js';
 import { $, document } from './../globals.js';
+import { getClickTarget } from './../helpers/click-target.js';
 import { initComponent } from './../helpers/component.js';
 import Dropdown from './dropdown.js';
 
