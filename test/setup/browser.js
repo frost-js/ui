@@ -33,7 +33,7 @@ export async function waitForFrame(page) {
 }
 
 /**
- * Reset the browser page and Frost UI defaults.
+ * Resets the browser page state for a test.
  * @param {Page} page The Playwright page.
  * @returns {Promise<void>} The promise.
  */
@@ -50,13 +50,6 @@ export async function resetPage(page) {
         window.$ = window.fQuery;
         $.setAnimationDefaults({ debug: true });
         $.useTimeout();
-
-        UI.Carousel.defaults.interval = 200;
-        UI.Carousel.defaults.transition = 100;
-        UI.Toast.defaults.delay = 200;
-        UI._clickTarget = null;
-
-        $.empty(document.body);
 
         return window.$ === window.fQuery;
     });

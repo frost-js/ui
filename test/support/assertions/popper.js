@@ -241,31 +241,6 @@ function expectBoundary(popper, boundaryEdge, contact, popperBox, referenceBox, 
 }
 
 /**
- * Get the expected coordinate for a boundary-clamped popper edge.
- * @param {PhysicalPlacement} boundaryEdge The expected clamped edge.
- * @param {number} contact The minimum reference overlap.
- * @param {BoundingBox} referenceBox The reference box.
- * @param {{top: number, right: number, bottom: number, left: number}} boundaryBox The boundary box.
- * @returns {number} The expected coordinate.
- */
-function getClampedBoundaryCoordinate(boundaryEdge, contact, referenceBox, boundaryBox) {
-    const referenceEdges = getBoxEdges(referenceBox);
-
-    switch (boundaryEdge) {
-        case 'top':
-            return Math.min(boundaryBox.top, referenceEdges.bottom - contact);
-        case 'right':
-            return Math.max(boundaryBox.right, referenceBox.x + contact);
-        case 'bottom':
-            return Math.max(boundaryBox.bottom, referenceBox.y + contact);
-        case 'left':
-            return Math.min(boundaryBox.left, referenceEdges.right - contact);
-        default:
-            throw new Error(`Unknown Popper boundary edge: ${boundaryEdge}`);
-    }
-}
-
-/**
  * Assert the minimum contact between a popper and its reference.
  * @param {string} popper The popper selector.
  * @param {PhysicalPlacement} placement The expected placement.
@@ -297,6 +272,16 @@ function expectReferenceContact(popper, placement, minContact, popperBox, refere
 }
 
 /**
+ * Assert two rendered coordinates are equal within Popper's pixel rounding.
+ * @param {number} actual The actual coordinate.
+ * @param {number} expected The expected coordinate.
+ * @param {string} message The assertion message.
+ */
+function expectCoordinate(actual, expected, message) {
+    expect(Math.abs(actual - expected), message).toBeLessThanOrEqual(1.5);
+}
+
+/**
  * Get the viewport-relative edges for a bounding box.
  * @param {BoundingBox} box The bounding box.
  * @returns {{top: number, right: number, bottom: number, left: number}} The box edges.
@@ -308,6 +293,59 @@ function getBoxEdges(box) {
         bottom: box.y + box.height,
         left: box.x,
     };
+}
+
+/**
+ * Get the expected coordinate for a boundary-clamped popper edge.
+ * @param {PhysicalPlacement} boundaryEdge The expected clamped edge.
+ * @param {number} contact The minimum reference overlap.
+ * @param {BoundingBox} referenceBox The reference box.
+ * @param {{top: number, right: number, bottom: number, left: number}} boundaryBox The boundary box.
+ * @returns {number} The expected coordinate.
+ */
+function getClampedBoundaryCoordinate(boundaryEdge, contact, referenceBox, boundaryBox) {
+    const referenceEdges = getBoxEdges(referenceBox);
+
+    switch (boundaryEdge) {
+        case 'top':
+            return Math.min(boundaryBox.top, referenceEdges.bottom - contact);
+        case 'right':
+            return Math.max(boundaryBox.right, referenceBox.x + contact);
+        case 'bottom':
+            return Math.max(boundaryBox.bottom, referenceBox.y + contact);
+        case 'left':
+            return Math.min(boundaryBox.left, referenceEdges.right - contact);
+        default:
+            throw new Error(`Unknown Popper boundary edge: ${boundaryEdge}`);
+    }
+}
+
+/**
+ * Get the viewport-relative boundary box for an element.
+ * @param {Page} page The Playwright page.
+ * @param {string} selector The boundary selector.
+ * @returns {Promise<{top: number, right: number, bottom: number, left: number}>} The box.
+ */
+async function getElementBoundaryBox(page, selector) {
+    const scrollbarSize = await measureScrollbarSize(page);
+
+    return page.evaluate(({ selector, scrollbarSize }) => {
+        const node = $.findOne(selector);
+        const rect = $.rect(node);
+        const scrollSizeX = node.scrollWidth > node.clientWidth ?
+            scrollbarSize :
+            0;
+        const scrollSizeY = node.scrollHeight > node.clientHeight ?
+            scrollbarSize :
+            0;
+
+        return {
+            top: rect.top,
+            right: rect.right - scrollSizeY,
+            bottom: rect.bottom - scrollSizeX,
+            left: rect.left,
+        };
+    }, { selector, scrollbarSize });
 }
 
 /**
@@ -355,42 +393,4 @@ async function getWindowBoundaryBox(page) {
             left: 0,
         };
     }, scrollbarSize);
-}
-
-/**
- * Get the viewport-relative boundary box for an element.
- * @param {Page} page The Playwright page.
- * @param {string} selector The boundary selector.
- * @returns {Promise<{top: number, right: number, bottom: number, left: number}>} The box.
- */
-async function getElementBoundaryBox(page, selector) {
-    const scrollbarSize = await measureScrollbarSize(page);
-
-    return page.evaluate(({ selector, scrollbarSize }) => {
-        const node = $.findOne(selector);
-        const rect = $.rect(node);
-        const scrollSizeX = node.scrollWidth > node.clientWidth ?
-            scrollbarSize :
-            0;
-        const scrollSizeY = node.scrollHeight > node.clientHeight ?
-            scrollbarSize :
-            0;
-
-        return {
-            top: rect.top,
-            right: rect.right - scrollSizeY,
-            bottom: rect.bottom - scrollSizeX,
-            left: rect.left,
-        };
-    }, { selector, scrollbarSize });
-}
-
-/**
- * Assert two rendered coordinates are equal within Popper's pixel rounding.
- * @param {number} actual The actual coordinate.
- * @param {number} expected The expected coordinate.
- * @param {string} message The assertion message.
- */
-function expectCoordinate(actual, expected, message) {
-    expect(Math.abs(actual - expected), message).toBeLessThanOrEqual(1.5);
 }

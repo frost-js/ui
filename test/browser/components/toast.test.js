@@ -506,7 +506,7 @@ test.describe('Toast', () => {
                 UI.Toast.init(toast1).show();
                 await shown;
             });
-            await advanceClock(page, 150);
+            await advanceClock(page, 4950);
 
             await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
             await expect(page.locator('#toast1')).toBeVisible();

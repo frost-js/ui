@@ -914,7 +914,7 @@ test.describe('Carousel', () => {
             await page.locator('#carousel1').dispatchEvent('mouseenter');
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
             await page.locator('#carousel1').dispatchEvent('mouseleave');
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
@@ -927,7 +927,7 @@ test.describe('Carousel', () => {
             });
             await page.locator('#carousel1').dispatchEvent('mouseenter');
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
@@ -942,7 +942,7 @@ test.describe('Carousel', () => {
             await page.locator('#carousel1').dispatchEvent('mouseenter');
             await expect(page.locator('#carousel1')).toHaveAttribute('data-ui-pause', 'false');
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
@@ -956,7 +956,7 @@ test.describe('Carousel', () => {
             });
             await page.locator('#carousel1').dispatchEvent('mouseenter');
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
@@ -1369,7 +1369,7 @@ test.describe('Carousel', () => {
                     value: 'visible',
                 });
             });
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-item-1')).not.toHaveClass(/\bactive\b/);
@@ -1383,7 +1383,7 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1).cycle();
             });
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
@@ -1395,7 +1395,7 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1).show(1);
             });
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
@@ -1407,7 +1407,7 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1).slide(1);
             });
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
@@ -1419,7 +1419,7 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1).next();
             });
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
@@ -1431,7 +1431,7 @@ test.describe('Carousel', () => {
                 UI.Carousel.init(carousel1).prev();
             });
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
@@ -1450,7 +1450,7 @@ test.describe('Carousel', () => {
                 carousel1.dispatchEvent(new MouseEvent('mouseleave'));
             });
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 200);
+            await advanceClock(page, 5000);
 
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
