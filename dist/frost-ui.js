@@ -1657,8 +1657,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 
 //#endregion
 //#region src/js/modal/modal.js
-	var modalStackOffset = 20;
-	/**
+/**
 	* @typedef {object} ModalOptions
 	* @property {boolean|'static'} [backdrop=true] Whether to show a dismissible or static backdrop.
 	* @property {boolean} [focus=true] Whether to trap focus while shown.
@@ -1669,7 +1668,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	* Controls a modal dialog and its backdrop.
 	* @augments {BaseComponent<ModalOptions>}
 	*/
-	var Modal = class Modal extends BaseComponent {
+	var Modal = class extends BaseComponent {
 		/** @type {ModalOptions} */
 		static defaults = {
 			backdrop: true,
@@ -1685,21 +1684,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		#transitioning;
 		#zooming;
 		/**
-		* Reindexes visible modals and their backdrops.
-		* @returns {Modal[]} The ordered modal instances.
-		*/
-		static #updateStack() {
-			const nodes = $.find(".modal.show");
-			nodes.sort((nodeA, nodeB) => parseInt($.css(nodeA, "zIndex")) - parseInt($.css(nodeB, "zIndex")));
-			const modals = [];
-			for (const [index, node] of nodes.entries()) {
-				const modal = Modal.init(node);
-				modal.#setStackIndex(index);
-				modals.push(modal);
-			}
-			return modals;
-		}
-		/**
 		* Creates a Modal.
 		* @param {HTMLElement} node The input node.
 		* @param {ModalOptions} [options] The modal options.
@@ -1709,6 +1693,13 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			this.#dialog = $.child(this.node, ".modal-dialog").shift();
 			if (this.options.show) this.show();
 			if (this.options.focus) this.#focusTrap = focus_trap_default.init(this.node);
+		}
+		/**
+		* Gets the modal backdrop.
+		* @returns {HTMLElement|null|undefined} The backdrop element.
+		*/
+		get backdrop() {
+			return this.#backdrop;
 		}
 		/** @inheritdoc */
 		dispose() {
@@ -1788,7 +1779,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				this.#backdrop = $.create("div", { class: "modal-backdrop" });
 				$.append(document.body, this.#backdrop);
 			}
-			this.#setStackIndex(stackSize);
+			setStackIndex(this, stackSize);
 			$.css(this.#dialog, "opacity");
 			$.addClass(this.node, "show");
 			const transitions = [waitForTransition(this.#dialog, ["opacity", "transform"], { modal: this.node })];
@@ -1828,7 +1819,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			if (dialog) resetScrollPadding([dialog]);
 			if ($.getStyle(this.node, "zIndex")) $.setStyle(this.node, { zIndex: "" });
 			if (this.#backdrop) $.remove(this.#backdrop);
-			const modals = Modal.#updateStack();
+			const modals = updateStack();
 			if (modals.length) modals[0].#scrollNodes.push(...sharedScrollNodes);
 			else {
 				resetScrollPadding(sharedScrollNodes);
@@ -1840,21 +1831,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			this.#backdrop = null;
 			this.#transitioning = false;
 			this.#zooming = false;
-		}
-		/**
-		* Sets the modal and backdrop stacking level.
-		* @param {number} index The zero-based stack index.
-		*/
-		#setStackIndex(index) {
-			$.setStyle(this.node, { zIndex: "" });
-			if (this.#backdrop) $.setStyle(this.#backdrop, { zIndex: "" });
-			if (!index) return;
-			const modalZIndex = parseInt($.css(this.node, "zIndex")) + index * modalStackOffset;
-			$.setStyle(this.node, { zIndex: modalZIndex });
-			if (this.#backdrop) {
-				const backdropZIndex = parseInt($.css(this.#backdrop, "zIndex")) + index * modalStackOffset;
-				$.setStyle(this.#backdrop, { zIndex: backdropZIndex });
-			}
 		}
 		/**
 		* Runs the static-backdrop feedback animation.
@@ -1891,6 +1867,38 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			highestZIndex = newZIndex;
 		}
 		return Modal.init(node);
+	}
+	/**
+	* Sets the stacking level for a modal and its backdrop.
+	* @param {Modal} modal The modal instance.
+	* @param {number} index The zero-based stack index.
+	*/
+	function setStackIndex(modal, index) {
+		$.setStyle(modal.node, { zIndex: "" });
+		if (modal.backdrop) $.setStyle(modal.backdrop, { zIndex: "" });
+		if (!index) return;
+		const stackOffset = index * 20;
+		const modalZIndex = parseInt($.css(modal.node, "zIndex")) + stackOffset;
+		$.setStyle(modal.node, { zIndex: modalZIndex });
+		if (modal.backdrop) {
+			const backdropZIndex = parseInt($.css(modal.backdrop, "zIndex")) + stackOffset;
+			$.setStyle(modal.backdrop, { zIndex: backdropZIndex });
+		}
+	}
+	/**
+	* Reindexes visible modals and their backdrops.
+	* @returns {Modal[]} The ordered modal instances.
+	*/
+	function updateStack() {
+		const nodes = $.find(".modal.show");
+		nodes.sort((nodeA, nodeB) => parseInt($.css(nodeA, "zIndex")) - parseInt($.css(nodeB, "zIndex")));
+		const modals = [];
+		for (const [index, node] of nodes.entries()) {
+			const modal = Modal.init(node);
+			setStackIndex(modal, index);
+			modals.push(modal);
+		}
+		return modals;
 	}
 
 //#endregion
