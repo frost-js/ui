@@ -8071,6 +8071,17 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	var carousel_default = Carousel;
 
 //#endregion
+//#region src/js/collapse/helpers.js
+/**
+	* Gets the dimension used for a collapse transition.
+	* @param {HTMLElement} node The collapse node.
+	* @returns {'height'|'width'} The dimension.
+	*/
+	function getDimension(node) {
+		return $$1.hasClass(node, "collapse-horizontal") ? "width" : "height";
+	}
+
+//#endregion
 //#region src/js/collapse/collapse.js
 /**
 	* @typedef {object} CollapseOptions
@@ -8109,7 +8120,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		hide() {
 			if (this.#transitioning || !$$1.hasClass(this.node, "show") || !$$1.triggerOne(this.node, "hide.ui.collapse")) return;
 			this.#transitioning = true;
-			const dimension = this.#getDimension();
+			const dimension = getDimension(this.node);
 			$$1.setStyle(this.node, { [dimension]: $$1.rect(this.node)[dimension] });
 			$$1.css(this.node, dimension);
 			$$1.addClass(this.node, "collapsing");
@@ -8142,7 +8153,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			if (!$$1.triggerOne(this.node, "show.ui.collapse")) return;
 			for (const collapse of collapses) collapse.hide();
 			this.#transitioning = true;
-			const dimension = this.#getDimension();
+			const dimension = getDimension(this.node);
 			$$1.removeClass(this.node, "collapse");
 			$$1.addClass(this.node, "collapsing");
 			$$1.setStyle(this.node, { [dimension]: 0 });
@@ -8164,13 +8175,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		toggle() {
 			if ($$1.hasClass(this.node, "show")) this.hide();
 			else this.show();
-		}
-		/**
-		* Gets the dimension used for the collapse transition.
-		* @returns {'height'|'width'} The dimension.
-		*/
-		#getDimension() {
-			return $$1.hasClass(this.node, "collapse-horizontal") ? "width" : "height";
 		}
 	};
 

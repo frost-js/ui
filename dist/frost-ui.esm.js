@@ -700,6 +700,17 @@ $.addEventDelegate(document, "click.ui.carousel", "[data-ui-slide-to]", (e) => {
 var carousel_default = Carousel;
 
 //#endregion
+//#region src/js/collapse/helpers.js
+/**
+* Gets the dimension used for a collapse transition.
+* @param {HTMLElement} node The collapse node.
+* @returns {'height'|'width'} The dimension.
+*/
+function getDimension(node) {
+	return $.hasClass(node, "collapse-horizontal") ? "width" : "height";
+}
+
+//#endregion
 //#region src/js/collapse/collapse.js
 /**
 * @typedef {object} CollapseOptions
@@ -738,7 +749,7 @@ var Collapse = class extends BaseComponent {
 	hide() {
 		if (this.#transitioning || !$.hasClass(this.node, "show") || !$.triggerOne(this.node, "hide.ui.collapse")) return;
 		this.#transitioning = true;
-		const dimension = this.#getDimension();
+		const dimension = getDimension(this.node);
 		$.setStyle(this.node, { [dimension]: $.rect(this.node)[dimension] });
 		$.css(this.node, dimension);
 		$.addClass(this.node, "collapsing");
@@ -771,7 +782,7 @@ var Collapse = class extends BaseComponent {
 		if (!$.triggerOne(this.node, "show.ui.collapse")) return;
 		for (const collapse of collapses) collapse.hide();
 		this.#transitioning = true;
-		const dimension = this.#getDimension();
+		const dimension = getDimension(this.node);
 		$.removeClass(this.node, "collapse");
 		$.addClass(this.node, "collapsing");
 		$.setStyle(this.node, { [dimension]: 0 });
@@ -793,13 +804,6 @@ var Collapse = class extends BaseComponent {
 	toggle() {
 		if ($.hasClass(this.node, "show")) this.hide();
 		else this.show();
-	}
-	/**
-	* Gets the dimension used for the collapse transition.
-	* @returns {'height'|'width'} The dimension.
-	*/
-	#getDimension() {
-		return $.hasClass(this.node, "collapse-horizontal") ? "width" : "height";
 	}
 };
 

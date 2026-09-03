@@ -2,6 +2,7 @@ import BaseComponent from './../base-component.js';
 import { $ } from './../globals.js';
 import { getTargetSelector } from './../helpers/target.js';
 import { waitForTransition } from './../helpers/transition.js';
+import { getDimension } from './helpers.js';
 
 /**
  * @typedef {object} CollapseOptions
@@ -58,7 +59,7 @@ export default class Collapse extends BaseComponent {
 
         this.#transitioning = true;
 
-        const dimension = this.#getDimension();
+        const dimension = getDimension(this.node);
 
         $.setStyle(this.node, { [dimension]: $.rect(this.node)[dimension] });
 
@@ -119,7 +120,7 @@ export default class Collapse extends BaseComponent {
 
         this.#transitioning = true;
 
-        const dimension = this.#getDimension();
+        const dimension = getDimension(this.node);
 
         $.removeClass(this.node, 'collapse');
         $.addClass(this.node, 'collapsing');
@@ -152,15 +153,5 @@ export default class Collapse extends BaseComponent {
         } else {
             this.show();
         }
-    }
-
-    /**
-     * Gets the dimension used for the collapse transition.
-     * @returns {'height'|'width'} The dimension.
-     */
-    #getDimension() {
-        return $.hasClass(this.node, 'collapse-horizontal') ?
-            'width' :
-            'height';
     }
 }
