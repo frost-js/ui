@@ -179,7 +179,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 
 //#endregion
 //#region src/js/helpers/transition.js
-/**
+	var FALLBACK_PADDING = 50;
+	/**
 	* Waits for an element's CSS transitions to finish or be canceled.
 	* @template {Record<string, *>} [Data=Record<string, *>]
 	* @param {HTMLElement} node The transitioning node.
@@ -189,11 +190,25 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	*/
 	function waitForTransition(node, properties = [], data = {}) {
 		const transitions = node.getAnimations().filter((animation) => animation instanceof window.CSSTransition && (!properties.length || properties.includes(animation.transitionProperty)));
-		return Promise.allSettled(transitions.map((transition) => transition.finished)).then((results) => ({
+		const result = (completed) => ({
 			...data,
-			completed: results.every((result) => result.status === "fulfilled"),
+			completed,
 			node
+		});
+		if (!transitions.length) return Promise.resolve(result(true));
+		const endTime = Math.max(...transitions.map((transition) => {
+			const transitionEndTime = transition.effect?.getComputedTiming().endTime;
+			return Number.isFinite(transitionEndTime) ? transitionEndTime : 0;
 		}));
+		let fallback;
+		const settled = Promise.allSettled(transitions.map((transition) => transition.finished)).then((results) => {
+			window.clearTimeout(fallback);
+			return results.every((transitionResult) => transitionResult.status === "fulfilled");
+		});
+		const timedOut = new Promise((resolve) => {
+			fallback = window.setTimeout((_) => resolve(false), endTime + FALLBACK_PADDING);
+		});
+		return Promise.race([settled, timedOut]).then(result);
 	}
 
 //#endregion
