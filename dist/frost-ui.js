@@ -2012,9 +2012,9 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		const nodes = $.find(".modal.show");
 		if (!nodes.length) return null;
 		let node = nodes.shift();
-		let highestZIndex = $.getStyle(node, "zIndex");
+		let highestZIndex = parseInt($.css(node, "zIndex"));
 		for (const otherNode of nodes) {
-			const newZIndex = $.getStyle(otherNode, "zIndex");
+			const newZIndex = parseInt($.css(otherNode, "zIndex"));
 			if (newZIndex <= highestZIndex) continue;
 			node = otherNode;
 			highestZIndex = newZIndex;

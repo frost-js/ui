@@ -14,10 +14,10 @@ export function getTopModal() {
 
     // Select the modal with the highest stacking order.
     let node = nodes.shift();
-    let highestZIndex = $.getStyle(node, 'zIndex');
+    let highestZIndex = parseInt($.css(node, 'zIndex'));
 
     for (const otherNode of nodes) {
-        const newZIndex = $.getStyle(otherNode, 'zIndex');
+        const newZIndex = parseInt($.css(otherNode, 'zIndex'));
 
         if (newZIndex <= highestZIndex) {
             continue;
