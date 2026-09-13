@@ -113,13 +113,17 @@ export default class Collapse extends BaseComponent {
 
         const collapses = [];
         if (this.#parent) {
-            const siblings = $.find('.collapse.show', this.#parent);
+            const siblings = $.find('.collapse.show, .collapsing', this.#parent);
 
             for (const sibling of siblings) {
                 const collapse = this.constructor.init(sibling);
 
                 if (!$.isSame(this.#parent, collapse.#parent)) {
                     continue;
+                }
+
+                if (collapse.#transitioning) {
+                    return;
                 }
 
                 collapses.push(collapse);
