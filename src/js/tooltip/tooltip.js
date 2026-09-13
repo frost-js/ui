@@ -197,7 +197,7 @@ export default class Tooltip extends BaseComponent {
             title = $.getDataset(this.node, 'uiOriginalTitle', title);
         }
 
-        const method = this.options.html ? 'setHTML' : 'setText';
+        const method = this.options.html ? 'setHtml' : 'setText';
 
         $[method](
             this.#tooltipInner,
@@ -318,7 +318,7 @@ export default class Tooltip extends BaseComponent {
      * Creates the tooltip element from its template.
      */
     #render() {
-        this.#tooltip = $.parseHTML(this.options.template).shift();
+        this.#tooltip = $.parseHtml(this.options.template).shift();
         if (this.options.animation) {
             $.addClass(this.#tooltip, 'fade');
         }

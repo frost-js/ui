@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Popover', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <button class="btn btn-secondary" id="popover-toggle-1" type="button"></button>
@@ -77,7 +77,7 @@ test.describe('Popover', () => {
 
         test('removes only its modal hide event', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <div class="modal" id="modal">

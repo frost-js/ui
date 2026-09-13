@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Carousel', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <div class="carousel" id="carousel1">

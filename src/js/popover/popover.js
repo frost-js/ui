@@ -208,7 +208,7 @@ export default class Popover extends BaseComponent {
             content = this.options.content;
         }
 
-        const method = this.options.html ? 'setHTML' : 'setText';
+        const method = this.options.html ? 'setHtml' : 'setText';
 
         $[method](
             this.#popoverHeader,
@@ -340,7 +340,7 @@ export default class Popover extends BaseComponent {
      * Creates the popover element from its template.
      */
     #render() {
-        this.#popover = $.parseHTML(this.options.template).shift();
+        this.#popover = $.parseHtml(this.options.template).shift();
         if (this.options.animation) {
             $.addClass(this.#popover, 'fade');
         }

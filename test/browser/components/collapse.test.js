@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Collapse', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <button class="btn btn-secondary collapsed" id="collapse-toggle-1" data-ui-toggle="collapse" data-ui-target="#collapse1" type="button"></button>
@@ -408,7 +408,7 @@ test.describe('Collapse', () => {
     test.describe('parent option', () => {
         test('only hides shown collapses in the same accordion', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <div class="accordion" id="outer-accordion">
@@ -437,7 +437,7 @@ test.describe('Collapse', () => {
     test.describe('trigger selectors', () => {
         test('updates an href trigger', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <a class="btn btn-secondary collapsed" id="collapse-toggle" data-ui-toggle="collapse" href="#collapse"></a>
@@ -460,7 +460,7 @@ test.describe('Collapse', () => {
 
         test('updates a class-based multi-collapse trigger', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <button class="btn btn-secondary collapsed" id="collapse-toggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button"></button>
@@ -486,7 +486,7 @@ test.describe('Collapse', () => {
 
         test('normalizes mixed multi-collapse targets', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <button class="btn btn-secondary" id="collapse-toggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button" aria-expanded="true"></button>

@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Alert', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <div class="alert alert-success fade show" id="alert1">

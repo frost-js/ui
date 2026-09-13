@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Offcanvas', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <button class="btn btn-secondary" id="offcanvas-toggle-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvas1" type="button"></button>

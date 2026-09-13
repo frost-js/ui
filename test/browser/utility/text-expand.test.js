@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Text Expand', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 '<textarea class="input-filled text-expand" id="input"></textarea>',
             );

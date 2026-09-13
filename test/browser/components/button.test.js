@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Button', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <button class="btn btn-secondary" id="button1" data-ui-toggle="button" type="button"></button>

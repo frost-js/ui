@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Ripple', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 '<button class="btn btn-secondary ripple" id="button"></button>',
             );

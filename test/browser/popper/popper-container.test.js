@@ -10,7 +10,7 @@ test.describe('Popper boundaries', () => {
     test.describe('container option', () => {
         test.beforeEach(async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <div id="container" style="position: absolute; left: 100px; top: 100px; width: 300px; height: 250px;"></div>
@@ -65,7 +65,7 @@ test.describe('Popper boundaries', () => {
     test.describe('scroll container', () => {
         test.beforeEach(async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <div id="scroll" style="position: absolute; overflow: auto; left: 200px; top: 150px; width: 400px; height: 300px;">
@@ -173,7 +173,7 @@ test.describe('Popper boundaries', () => {
 
     test('uses the viewport when it is tighter than the scroll container', async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <div id="scroll" style="position: absolute; overflow: auto; left: -200px; top: -200px; width: 1200px; height: 1000px;">

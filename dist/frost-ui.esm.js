@@ -2222,7 +2222,7 @@ var Popover = class extends BaseComponent {
 		let content = "";
 		if ($.hasDataset(this.node, "uiContent")) content = $.getDataset(this.node, "uiContent");
 		else if (this.options.content) content = this.options.content;
-		const method = this.options.html ? "setHTML" : "setText";
+		const method = this.options.html ? "setHtml" : "setText";
 		$[method](this.#popoverHeader, this.options.html && this.options.sanitize ? this.options.sanitize(title) : title);
 		if (!title) $.hide(this.#popoverHeader);
 		else $.show(this.#popoverHeader);
@@ -2297,7 +2297,7 @@ var Popover = class extends BaseComponent {
 	* Creates the popover element from its template.
 	*/
 	#render() {
-		this.#popover = $.parseHTML(this.options.template).shift();
+		this.#popover = $.parseHtml(this.options.template).shift();
 		if (this.options.animation) $.addClass(this.#popover, "fade");
 		if (this.options.customClass) $.addClass(this.#popover, this.options.customClass);
 		this.#arrow = $.findOne(".popover-arrow", this.#popover);
@@ -2670,7 +2670,7 @@ var Tooltip = class extends BaseComponent {
 		if ($.hasDataset(this.node, "uiTitle")) title = $.getDataset(this.node, "uiTitle");
 		else if (this.options.title) title = this.options.title;
 		else if ($.hasDataset(this.node, "uiOriginalTitle")) title = $.getDataset(this.node, "uiOriginalTitle", title);
-		const method = this.options.html ? "setHTML" : "setText";
+		const method = this.options.html ? "setHtml" : "setText";
 		$[method](this.#tooltipInner, this.options.html && this.options.sanitize ? this.options.sanitize(title) : title);
 		this.update();
 	}
@@ -2743,7 +2743,7 @@ var Tooltip = class extends BaseComponent {
 	* Creates the tooltip element from its template.
 	*/
 	#render() {
-		this.#tooltip = $.parseHTML(this.options.template).shift();
+		this.#tooltip = $.parseHtml(this.options.template).shift();
 		if (this.options.animation) $.addClass(this.#tooltip, "fade");
 		if (this.options.customClass) $.addClass(this.#tooltip, this.options.customClass);
 		this.#arrow = $.findOne(".tooltip-arrow", this.#tooltip);

@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Tab', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <div class="nav nav-tabs">
@@ -584,7 +584,7 @@ test.describe('Tab', () => {
     test.describe('nav item wrappers', () => {
         test('shows the tab', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <ul class="nav nav-tabs" role="tablist">
@@ -613,7 +613,7 @@ test.describe('Tab', () => {
 
         test('skips disabled tabs during keyboard navigation', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <ul class="nav nav-tabs" role="tablist">

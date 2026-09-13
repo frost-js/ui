@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Dropdown', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <div>

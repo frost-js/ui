@@ -10,7 +10,7 @@ test.describe('Popper positioning', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
             $.setStyle(document.documentElement, { overflow: 'hidden' });
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <div id="reference" style="position: absolute; left: 360px; top: 283px; width: 80px; height: 34px;"></div>
@@ -1295,7 +1295,7 @@ test.describe('Popper positioning', () => {
     test.describe('arrow option', () => {
         test('aligns the arrow below a top/start popper', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML('#popper', '<div id="arrow" style="width: 16px; height: 8px;"></div>');
+                $.setHtml('#popper', '<div id="arrow" style="width: 16px; height: 8px;"></div>');
                 const arrow = $.findOne('#arrow');
 
                 UI.Popper.init($.findOne('#popper'), {
@@ -1316,7 +1316,7 @@ test.describe('Popper positioning', () => {
 
         test('aligns the arrow above a bottom/end popper', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML('#popper', '<div id="arrow" style="width: 16px; height: 8px;"></div>');
+                $.setHtml('#popper', '<div id="arrow" style="width: 16px; height: 8px;"></div>');
                 const arrow = $.findOne('#arrow');
 
                 UI.Popper.init($.findOne('#popper'), {

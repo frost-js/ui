@@ -304,7 +304,7 @@ const renderPageHeader = () => {
         return;
     }
 
-    const pageHeader = $.parseHTML(`
+    const pageHeader = $.parseHtml(`
         <header class="pt-4 mb-5">
             <h1>${title}</h1>
             ${description ? `<p class="lead text-body-secondary mb-0">${description}</p>` : ''}
@@ -318,7 +318,7 @@ const storedTheme = localStorage.getItem('frostui-demo-theme');
 setTheme(['light', 'dark'].includes(storedTheme) ? storedTheme : 'system');
 
 $.ready(() => {
-    const navigationElements = $.parseHTML(`${example ? renderExampleNavigation() : renderNavigation()}${renderThemeToggle()}`);
+    const navigationElements = $.parseHtml(`${example ? renderExampleNavigation() : renderNavigation()}${renderThemeToggle()}`);
 
     $(document.body).prepend(navigationElements);
     $('[data-demo-theme]').addEvent('change', updateTheme);

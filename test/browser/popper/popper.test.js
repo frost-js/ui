@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Popper', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <button class="btn btn-secondary" id="button" style="width: 80px; height: 34px;" type="button">Button</button>

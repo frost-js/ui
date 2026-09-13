@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('BaseComponent', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(document.body, '<div class="alert" id="alert1"></div>');
+            $.setHtml(document.body, '<div class="alert" id="alert1"></div>');
         });
     });
 

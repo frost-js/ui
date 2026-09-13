@@ -13,7 +13,7 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (data-ui-text)', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 1"></button>',
                 );
@@ -26,7 +26,7 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (data-ui-target)', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>
@@ -42,7 +42,7 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (input)', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>
@@ -59,7 +59,7 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (textarea)', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>
@@ -82,7 +82,7 @@ test.describe('Clipboard', () => {
 
         test('works with cut action (input)', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>
@@ -99,7 +99,7 @@ test.describe('Clipboard', () => {
 
         test('works with cut action (textarea)', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>
@@ -116,7 +116,7 @@ test.describe('Clipboard', () => {
 
         test('does not remove text content for elements', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     `
                         <button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>
@@ -134,7 +134,7 @@ test.describe('Clipboard', () => {
 
     test('throws for an invalid action', async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 '<button id="button" data-ui-toggle="clipboard" data-ui-action="paste"></button>',
             );
@@ -152,7 +152,7 @@ test.describe('Clipboard', () => {
     test.describe('events', () => {
         test('triggers copied event', async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHTML(
+                $.setHtml(
                     document.body,
                     '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 8"></button>',
                 );

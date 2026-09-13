@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Modal', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHTML(
+            $.setHtml(
                 document.body,
                 `
                     <button class="btn btn-secondary" id="modal-toggle-1" data-ui-toggle="modal" data-ui-target="#modal1" type="button"></button>
