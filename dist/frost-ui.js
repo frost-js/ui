@@ -369,16 +369,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		return index;
 	}
 	/**
-	* Resets the transition styles of a carousel item.
-	* @param {HTMLElement} node The carousel item.
-	*/
-	function resetStyles(node) {
-		$.setStyle(node, {
-			display: "",
-			transform: ""
-		});
-	}
-	/**
 	* Updates the active carousel indicator.
 	* @param {HTMLElement} carousel The carousel node.
 	* @param {number} index The active item index.
@@ -426,8 +416,10 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		#items;
 		#mousePaused;
 		#paused;
+		#releaseTransitionScale;
 		#rtl;
 		#sliding;
+		#styleLocks = /* @__PURE__ */ new Map();
 		#timer;
 		/**
 		* Creates a Carousel.
@@ -455,9 +447,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		}
 		/** @inheritdoc */
 		dispose() {
-			$.setStyle(this.node, { "--ui-carousel-transition-scale": "" });
-			if (this.#sliding) $.removeClass(this.node, "carousel-dragging");
-			for (const item of this.#items) resetStyles(item);
+			this.#resetDrag();
+			$.removeClass(this.#items, "carousel-item-next carousel-item-prev");
 			if (this.options.keyboard) $.removeEvent(this.node, "keydown.ui.carousel");
 			if (this.options.pause) {
 				$.removeEvent(this.node, "mouseenter.ui.carousel");
@@ -465,8 +456,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			}
 			if (this.options.swipe) $.removeEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel");
 			clearTimeout(this.#timer);
-			this.#timer = null;
 			this.#items = null;
+			this.#timer = null;
 			super.dispose();
 		}
 		/**
@@ -545,7 +536,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 					direction = null;
 				};
 				const moveEvent = (e) => {
-					if (!this.node) return;
+					if (!this.node || !this.#sliding) return;
 					const currentX = getPosition(e).x;
 					const scrollX = $.width(this.node) / 2;
 					let inlineDiffX = currentX - startX;
@@ -557,8 +548,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 						if (inlineDiffX < 0) index = this.#index + 1;
 						else if (inlineDiffX > 0) index = this.#index - 1;
 						else {
-							resetStyles(this.#items[this.#index]);
-							if (lastIndex !== null) resetStyles(this.#items[lastIndex]);
+							this.#resetStyles(this.#items[this.#index]);
+							if (lastIndex !== null) this.#resetStyles(this.#items[lastIndex]);
 							index = this.#index;
 							return;
 						}
@@ -570,27 +561,35 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 							const oldIndex = this.#setIndex(index);
 							this.#update(this.#items[this.#index], this.#items[oldIndex], progress, { direction });
 							updateIndicators(this.node, this.#index);
-							if (lastIndex !== null && lastIndex !== this.#index) resetStyles(this.#items[lastIndex]);
+							if (lastIndex !== null && lastIndex !== this.#index) this.#resetStyles(this.#items[lastIndex]);
 							progress--;
 						} else {
 							this.#update(this.#items[index], this.#items[this.#index], progress, {
 								direction,
 								dragging: true
 							});
-							if (lastIndex !== null && lastIndex !== index) resetStyles(this.#items[lastIndex]);
+							if (lastIndex !== null && lastIndex !== index) this.#resetStyles(this.#items[lastIndex]);
 						}
 					} while (progress > 1);
 				};
 				const upEvent = (_) => {
-					if (!this.node) return;
+					if (!this.node || !this.#sliding) return;
 					if (index === null || index === this.#index) {
-						$.removeClass(this.node, "carousel-dragging");
+						this.#resetDrag();
 						this.#paused = false;
-						this.#sliding = false;
 						this.#setTimer();
 						return;
 					}
 					const completed = progress > .25;
+					const progressRemaining = completed ? 1 - progress : progress;
+					try {
+						this.#releaseTransitionScale = $.setStyleLock(this.node, "--ui-carousel-transition-scale", progressRemaining);
+					} catch (error) {
+						this.#resetDrag();
+						this.#paused = false;
+						this.#setTimer();
+						throw error;
+					}
 					let oldIndex;
 					if (completed) oldIndex = this.#setIndex(index);
 					else oldIndex = index;
@@ -598,10 +597,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 					const nodeOut = this.#items[oldIndex];
 					const { enter, exit } = getTransitionClasses(direction);
 					const transitionClass = completed ? exit : enter;
-					const progressRemaining = completed ? 1 - progress : progress;
 					index = null;
 					$.addClass(nodeOut, transitionClass);
-					$.setStyle(this.node, { "--ui-carousel-transition-scale": progressRemaining });
 					$.removeClass(this.node, "carousel-dragging");
 					$.css(nodeIn, "transform");
 					$.setStyle([nodeIn, nodeOut], { transform: "" });
@@ -610,22 +607,38 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 						index: this.#index,
 						nodeOut,
 						transitionClass
-					}), waitForTransition(nodeOut, ["transform"])]).then(([{ carousel, index, node: nodeIn, transitionClass }, { node: nodeOut }]) => {
-						this.#sliding = false;
+					}), waitForTransition(nodeOut, ["transform"])]).then(([{ carousel, index, transitionClass }, { node: nodeOut }]) => {
+						if (!this.node) return;
 						$.removeClass(nodeOut, transitionClass);
-						resetStyles(nodeIn);
-						resetStyles(nodeOut);
+						this.#resetDrag();
 						updateIndicators(carousel, index);
-						if (this.node) {
-							this.#paused = false;
-							this.#setTimer();
-							$.setStyle(this.node, { "--ui-carousel-transition-scale": "" });
-						}
+						this.#paused = false;
+						this.#setTimer();
 					});
 				};
 				const dragEvent = $.mouseDragFactory(downEvent, moveEvent, upEvent);
 				$.addEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel", dragEvent);
 			}
+		}
+		/**
+		* Releases the temporary styles and state owned by a drag.
+		*/
+		#resetDrag() {
+			for (const node of this.#styleLocks.keys()) this.#resetStyles(node);
+			this.#releaseTransitionScale?.();
+			$.removeClass(this.node, "carousel-dragging");
+			this.#releaseTransitionScale = null;
+			this.#sliding = false;
+		}
+		/**
+		* Restores the inline styles acquired for a carousel item.
+		* @param {HTMLElement} node The carousel item.
+		*/
+		#resetStyles(node) {
+			const locks = this.#styleLocks.get(node);
+			if (!locks) return;
+			for (const release of locks.values()) release();
+			this.#styleLocks.delete(node);
 		}
 		/**
 		* Sets the active item index and updates item state.
@@ -638,6 +651,27 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			$.addClass(this.#items[this.#index], "active");
 			$.removeClass(this.#items[oldIndex], "active");
 			return oldIndex;
+		}
+		/**
+		* Acquires temporary item styles on their first write and updates existing locks.
+		* @param {HTMLElement} node The carousel item.
+		* @param {Record<string, string|number>} styles The temporary styles.
+		*/
+		#setStyles(node, styles) {
+			let locks = this.#styleLocks.get(node);
+			if (!locks) {
+				locks = /* @__PURE__ */ new Map();
+				this.#styleLocks.set(node, locks);
+			}
+			try {
+				for (const [property, value] of Object.entries(styles)) if (locks.has(property)) $.setStyle(node, { [property]: value });
+				else locks.set(property, $.setStyleLock(node, property, value));
+			} catch (error) {
+				this.#resetDrag();
+				this.#paused = false;
+				this.#setTimer();
+				throw error;
+			}
 		}
 		/**
 		* Schedules the next automatic cycle.
@@ -684,16 +718,13 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				carousel: this.node,
 				index: this.#index,
 				transitionClass: exit
-			}), waitForTransition(nodeOut, ["transform"])]).then(([{ carousel, index, node: nodeIn, transitionClass }, { node: nodeOut }]) => {
-				this.#sliding = false;
+			}), waitForTransition(nodeOut, ["transform"])]).then(([{ carousel, index, transitionClass }, { node: nodeOut }]) => {
+				if (!this.node) return;
 				$.removeClass(nodeOut, transitionClass);
-				resetStyles(nodeIn);
-				resetStyles(nodeOut);
 				updateIndicators(carousel, index);
-				if (this.node) {
-					this.#paused = false;
-					this.#setTimer();
-				}
+				this.#paused = false;
+				this.#sliding = false;
+				this.#setTimer();
 				$.triggerEvent(carousel, "slid.ui.carousel", { data: eventData });
 			});
 		}
@@ -705,22 +736,20 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		* @param {CarouselUpdateOptions} [options] The update options.
 		*/
 		#update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
+			if (progress >= 1) {
+				this.#resetStyles(nodeIn);
+				this.#resetStyles(nodeOut);
+				return;
+			}
+			const inverse = getPhysicalDirection(direction, this.#rtl) === "right";
 			const inStyles = {};
 			const outStyles = {};
-			if (progress >= 1) {
-				if (dragging) inStyles.display = "";
-				else outStyles.display = "";
-				inStyles.transform = "";
-				outStyles.transform = "";
-			} else {
-				const inverse = getPhysicalDirection(direction, this.#rtl) === "right";
-				if (dragging) inStyles.display = "block";
-				else outStyles.display = "block";
-				inStyles.transform = `translateX(${Math.round((1 - progress) * 100) * (inverse ? 1 : -1)}%)`;
-				outStyles.transform = `translateX(${Math.round(progress * 100) * (inverse ? -1 : 1)}%)`;
-			}
-			$.setStyle(nodeIn, inStyles);
-			$.setStyle(nodeOut, outStyles);
+			if (dragging) inStyles.display = "block";
+			else outStyles.display = "block";
+			inStyles.transform = `translateX(${Math.round((1 - progress) * 100) * (inverse ? 1 : -1)}%)`;
+			outStyles.transform = `translateX(${Math.round(progress * 100) * (inverse ? -1 : 1)}%)`;
+			this.#setStyles(nodeIn, inStyles);
+			this.#setStyles(nodeOut, outStyles);
 		}
 	};
 
@@ -770,6 +799,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	*/
 	var Collapse = class extends BaseComponent {
 		#parent;
+		#releaseDimension;
 		#transitioning;
 		#triggers;
 		/**
@@ -787,8 +817,15 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		}
 		/** @inheritdoc */
 		dispose() {
-			this.#triggers = null;
+			if (this.#transitioning) {
+				$.removeClass(this.node, "collapsing");
+				$.addClass(this.node, "collapse");
+			}
+			this.#releaseDimension?.();
 			this.#parent = null;
+			this.#releaseDimension = null;
+			this.#transitioning = false;
+			this.#triggers = null;
 			super.dispose();
 		}
 		/**
@@ -796,20 +833,23 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		hide() {
 			if (this.#transitioning || !$.hasClass(this.node, "show") || !$.triggerOne(this.node, "hide.ui.collapse")) return;
-			this.#transitioning = true;
 			const dimension = getDimension(this.node);
-			$.setStyle(this.node, { [dimension]: $.rect(this.node)[dimension] });
+			const releaseDimension = $.setStyleLock(this.node, dimension, $.rect(this.node)[dimension]);
+			this.#releaseDimension = releaseDimension;
+			this.#transitioning = true;
 			$.css(this.node, dimension);
 			$.addClass(this.node, "collapsing");
 			$.removeClass(this.node, "collapse show");
 			$.addClass(this.#triggers, "collapsed");
 			$.setStyle(this.node, { [dimension]: 0 });
 			waitForTransition(this.node, [dimension], { triggers: this.#triggers }).then(({ node, triggers }) => {
-				this.#transitioning = false;
+				if (!this.node) return;
 				$.removeClass(node, "collapsing");
 				$.addClass(node, "collapse");
-				$.setStyle(node, { [dimension]: "" });
+				this.#releaseDimension();
 				$.setAttribute(triggers, { "aria-expanded": false });
+				this.#releaseDimension = null;
+				this.#transitioning = false;
 				$.triggerEvent(node, "hidden.ui.collapse");
 			});
 		}
@@ -829,20 +869,23 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			}
 			if (!$.triggerOne(this.node, "show.ui.collapse")) return;
 			for (const collapse of collapses) collapse.hide();
-			this.#transitioning = true;
 			const dimension = getDimension(this.node);
+			const releaseDimension = $.setStyleLock(this.node, dimension, 0);
+			this.#releaseDimension = releaseDimension;
+			this.#transitioning = true;
 			$.removeClass(this.node, "collapse");
 			$.addClass(this.node, "collapsing");
-			$.setStyle(this.node, { [dimension]: 0 });
 			$.removeClass(this.#triggers, "collapsed");
 			const size = $[dimension](this.node, { boxSize: $.SCROLL_BOX });
 			$.setStyle(this.node, { [dimension]: size });
 			waitForTransition(this.node, [dimension], { triggers: this.#triggers }).then(({ node, triggers }) => {
-				this.#transitioning = false;
+				if (!this.node) return;
 				$.removeClass(node, "collapsing");
 				$.addClass(node, "collapse show");
-				$.setStyle(node, { [dimension]: "" });
+				this.#releaseDimension();
 				$.setAttribute(triggers, { "aria-expanded": true });
+				this.#releaseDimension = null;
+				this.#transitioning = false;
 				$.triggerEvent(node, "shown.ui.collapse");
 			});
 		}
@@ -1477,6 +1520,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		#menuNode;
 		#popper;
 		#referenceNode;
+		#releaseDisplay;
 		#transitioning;
 		/**
 		* Creates a Dropdown.
@@ -1503,12 +1547,13 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		}
 		/** @inheritdoc */
 		dispose() {
-			if (this.#popper) {
-				this.#popper.dispose();
-				this.#popper = null;
-			}
+			if (this.#popper) this.#popper.dispose();
+			this.#releaseDisplay?.();
 			this.#menuNode = null;
+			this.#popper = null;
 			this.#referenceNode = null;
+			this.#releaseDisplay = null;
+			this.#transitioning = false;
 			super.dispose();
 		}
 		/**
@@ -1523,17 +1568,18 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		hide() {
 			if (this.#transitioning || !$.hasClass(this.#menuNode, "show") || !$.triggerOne(this.node, "hide.ui.dropdown")) return;
+			const releaseDisplay = $.setStyleLock(this.#menuNode, "display", "block");
+			this.#releaseDisplay = releaseDisplay;
 			this.#transitioning = true;
-			$.setStyle(this.#menuNode, { display: "block" });
 			$.removeClass(this.#menuNode, "show");
-			waitForTransition(this.#menuNode, ["opacity"], { toggle: this.node }).then(({ node, toggle }) => {
-				this.#transitioning = false;
-				if (this.#popper) {
-					this.#popper.dispose();
-					this.#popper = null;
-				}
-				$.setStyle(node, { display: "" });
+			waitForTransition(this.#menuNode, ["opacity"], { toggle: this.node }).then(({ toggle }) => {
+				if (!this.node) return;
+				if (this.#popper) this.#popper.dispose();
+				this.#releaseDisplay();
 				$.setAttribute(toggle, { "aria-expanded": false });
+				this.#popper = null;
+				this.#releaseDisplay = null;
+				this.#transitioning = false;
 				$.triggerEvent(toggle, "hidden.ui.dropdown");
 			});
 		}
@@ -1552,11 +1598,11 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		show() {
 			if (this.#transitioning || $.hasClass(this.#menuNode, "show") || !$.triggerOne(this.node, "show.ui.dropdown")) return;
-			this.#transitioning = true;
-			$.setStyle(this.#menuNode, { display: "block" });
+			const releaseDisplay = $.setStyleLock(this.#menuNode, "display", "block");
 			$.css(this.#menuNode, "opacity");
 			$.addClass(this.#menuNode, "show");
-			$.setStyle(this.#menuNode, { display: "" });
+			releaseDisplay();
+			this.#transitioning = true;
 			if (this.#display === "dynamic") this.#popper = new Popper(this.#menuNode, {
 				reference: this.#referenceNode,
 				placement: this.options.placement,
@@ -1569,8 +1615,9 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				this.update();
 			});
 			waitForTransition(this.#menuNode, ["opacity"], { toggle: this.node }).then(({ toggle }) => {
-				this.#transitioning = false;
+				if (!this.node) return;
 				$.setAttribute(toggle, { "aria-expanded": true });
+				this.#transitioning = false;
 				$.triggerEvent(toggle, "shown.ui.dropdown");
 			});
 		}

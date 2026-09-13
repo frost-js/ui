@@ -15,6 +15,7 @@ import { getDimension } from './helpers.js';
  */
 export default class Collapse extends BaseComponent {
     #parent;
+    #releaseDimension;
     #transitioning;
     #triggers;
 
@@ -39,8 +40,17 @@ export default class Collapse extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
-        this.#triggers = null;
+        if (this.#transitioning) {
+            $.removeClass(this.node, 'collapsing');
+            $.addClass(this.node, 'collapse');
+        }
+
+        this.#releaseDimension?.();
+
         this.#parent = null;
+        this.#releaseDimension = null;
+        this.#transitioning = false;
+        this.#triggers = null;
 
         super.dispose();
     }
@@ -57,11 +67,11 @@ export default class Collapse extends BaseComponent {
             return;
         }
 
-        this.#transitioning = true;
-
         const dimension = getDimension(this.node);
+        const releaseDimension = $.setStyleLock(this.node, dimension, $.rect(this.node)[dimension]);
 
-        $.setStyle(this.node, { [dimension]: $.rect(this.node)[dimension] });
+        this.#releaseDimension = releaseDimension;
+        this.#transitioning = true;
 
         // Commit the expanded starting dimension before collapsing the node.
         $.css(this.node, dimension);
@@ -74,12 +84,18 @@ export default class Collapse extends BaseComponent {
         waitForTransition(this.node, [dimension], {
             triggers: this.#triggers,
         }).then(({ node, triggers }) => {
-            this.#transitioning = false;
+            if (!this.node) {
+                return;
+            }
 
             $.removeClass(node, 'collapsing');
             $.addClass(node, 'collapse');
-            $.setStyle(node, { [dimension]: '' });
+            this.#releaseDimension();
             $.setAttribute(triggers, { 'aria-expanded': false });
+
+            this.#releaseDimension = null;
+            this.#transitioning = false;
+
             $.triggerEvent(node, 'hidden.ui.collapse');
         });
     }
@@ -118,13 +134,14 @@ export default class Collapse extends BaseComponent {
             collapse.hide();
         }
 
-        this.#transitioning = true;
-
         const dimension = getDimension(this.node);
+        const releaseDimension = $.setStyleLock(this.node, dimension, 0);
+
+        this.#releaseDimension = releaseDimension;
+        this.#transitioning = true;
 
         $.removeClass(this.node, 'collapse');
         $.addClass(this.node, 'collapsing');
-        $.setStyle(this.node, { [dimension]: 0 });
         $.removeClass(this.#triggers, 'collapsed');
 
         // Reading the full size commits the collapsed starting dimension.
@@ -134,12 +151,18 @@ export default class Collapse extends BaseComponent {
         waitForTransition(this.node, [dimension], {
             triggers: this.#triggers,
         }).then(({ node, triggers }) => {
-            this.#transitioning = false;
+            if (!this.node) {
+                return;
+            }
 
             $.removeClass(node, 'collapsing');
             $.addClass(node, 'collapse show');
-            $.setStyle(node, { [dimension]: '' });
+            this.#releaseDimension();
             $.setAttribute(triggers, { 'aria-expanded': true });
+
+            this.#releaseDimension = null;
+            this.#transitioning = false;
+
             $.triggerEvent(node, 'shown.ui.collapse');
         });
     }

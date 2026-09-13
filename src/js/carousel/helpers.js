@@ -86,17 +86,6 @@ export function getIndex(index, totalItems) {
 };
 
 /**
- * Resets the transition styles of a carousel item.
- * @param {HTMLElement} node The carousel item.
- */
-export function resetStyles(node) {
-    $.setStyle(node, {
-        display: '',
-        transform: '',
-    });
-};
-
-/**
  * Updates the active carousel indicator.
  * @param {HTMLElement} carousel The carousel node.
  * @param {number} index The active item index.

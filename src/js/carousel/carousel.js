@@ -8,7 +8,6 @@ import {
     getIndex,
     getPhysicalDirection,
     getTransitionClasses,
-    resetStyles,
     updateIndicators,
 } from './helpers.js';
 
@@ -50,8 +49,10 @@ export default class Carousel extends BaseComponent {
     #items;
     #mousePaused;
     #paused;
+    #releaseTransitionScale;
     #rtl;
     #sliding;
+    #styleLocks = new Map();
     #timer;
 
     /**
@@ -91,15 +92,9 @@ export default class Carousel extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
-        $.setStyle(this.node, { '--ui-carousel-transition-scale': '' });
+        this.#resetDrag();
 
-        if (this.#sliding) {
-            $.removeClass(this.node, 'carousel-dragging');
-        }
-
-        for (const item of this.#items) {
-            resetStyles(item);
-        }
+        $.removeClass(this.#items, 'carousel-item-next carousel-item-prev');
 
         if (this.options.keyboard) {
             $.removeEvent(this.node, 'keydown.ui.carousel');
@@ -115,9 +110,9 @@ export default class Carousel extends BaseComponent {
         }
 
         clearTimeout(this.#timer);
-        this.#timer = null;
 
         this.#items = null;
+        this.#timer = null;
 
         super.dispose();
     }
@@ -237,7 +232,7 @@ export default class Carousel extends BaseComponent {
             };
 
             const moveEvent = (e) => {
-                if (!this.node) {
+                if (!this.node || !this.#sliding) {
                     return;
                 }
 
@@ -269,10 +264,10 @@ export default class Carousel extends BaseComponent {
                     } else if (inlineDiffX > 0) {
                         index = this.#index - 1;
                     } else {
-                        resetStyles(this.#items[this.#index]);
+                        this.#resetStyles(this.#items[this.#index]);
 
                         if (lastIndex !== null) {
-                            resetStyles(this.#items[lastIndex]);
+                            this.#resetStyles(this.#items[lastIndex]);
                         }
 
                         index = this.#index;
@@ -291,7 +286,7 @@ export default class Carousel extends BaseComponent {
                         updateIndicators(this.node, this.#index);
 
                         if (lastIndex !== null && lastIndex !== this.#index) {
-                            resetStyles(this.#items[lastIndex]);
+                            this.#resetStyles(this.#items[lastIndex]);
                         }
 
                         progress--;
@@ -299,26 +294,37 @@ export default class Carousel extends BaseComponent {
                         this.#update(this.#items[index], this.#items[this.#index], progress, { direction, dragging: true });
 
                         if (lastIndex !== null && lastIndex !== index) {
-                            resetStyles(this.#items[lastIndex]);
+                            this.#resetStyles(this.#items[lastIndex]);
                         }
                     }
                 } while (progress > 1);
             };
 
             const upEvent = (_) => {
-                if (!this.node) {
+                if (!this.node || !this.#sliding) {
                     return;
                 }
 
                 if (index === null || index === this.#index) {
-                    $.removeClass(this.node, 'carousel-dragging');
+                    this.#resetDrag();
                     this.#paused = false;
-                    this.#sliding = false;
                     this.#setTimer();
                     return;
                 }
 
                 const completed = progress > .25;
+                const progressRemaining = completed ? 1 - progress : progress;
+
+                // Shorten the transition to match the distance left after dragging.
+                try {
+                    this.#releaseTransitionScale = $.setStyleLock(this.node, '--ui-carousel-transition-scale', progressRemaining);
+                } catch (error) {
+                    this.#resetDrag();
+                    this.#paused = false;
+                    this.#setTimer();
+                    throw error;
+                }
+
                 let oldIndex;
                 if (completed) {
                     oldIndex = this.#setIndex(index);
@@ -330,14 +336,10 @@ export default class Carousel extends BaseComponent {
                 const nodeOut = this.#items[oldIndex];
                 const { enter, exit } = getTransitionClasses(direction);
                 const transitionClass = completed ? exit : enter;
-                const progressRemaining = completed ? 1 - progress : progress;
 
                 index = null;
 
                 $.addClass(nodeOut, transitionClass);
-
-                // Shorten the transition to match the distance left after dragging.
-                $.setStyle(this.node, { '--ui-carousel-transition-scale': progressRemaining });
                 $.removeClass(this.node, 'carousel-dragging');
 
                 // Commit the dragged position with transitions enabled before removing it.
@@ -355,24 +357,20 @@ export default class Carousel extends BaseComponent {
                 ]).then(([{
                     carousel,
                     index,
-                    node: nodeIn,
                     transitionClass,
                 }, {
                     node: nodeOut,
                 }]) => {
-                    this.#sliding = false;
+                    if (!this.node) {
+                        return;
+                    }
 
                     $.removeClass(nodeOut, transitionClass);
-                    resetStyles(nodeIn);
-                    resetStyles(nodeOut);
+                    this.#resetDrag();
                     updateIndicators(carousel, index);
 
-                    if (this.node) {
-                        this.#paused = false;
-                        this.#setTimer();
-
-                        $.setStyle(this.node, { '--ui-carousel-transition-scale': '' });
-                    }
+                    this.#paused = false;
+                    this.#setTimer();
                 });
             };
 
@@ -380,6 +378,39 @@ export default class Carousel extends BaseComponent {
 
             $.addEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel', dragEvent);
         }
+    }
+
+    /**
+     * Releases the temporary styles and state owned by a drag.
+     */
+    #resetDrag() {
+        for (const node of this.#styleLocks.keys()) {
+            this.#resetStyles(node);
+        }
+
+        this.#releaseTransitionScale?.();
+        $.removeClass(this.node, 'carousel-dragging');
+
+        this.#releaseTransitionScale = null;
+        this.#sliding = false;
+    }
+
+    /**
+     * Restores the inline styles acquired for a carousel item.
+     * @param {HTMLElement} node The carousel item.
+     */
+    #resetStyles(node) {
+        const locks = this.#styleLocks.get(node);
+
+        if (!locks) {
+            return;
+        }
+
+        for (const release of locks.values()) {
+            release();
+        }
+
+        this.#styleLocks.delete(node);
     }
 
     /**
@@ -395,6 +426,35 @@ export default class Carousel extends BaseComponent {
         $.removeClass(this.#items[oldIndex], 'active');
 
         return oldIndex;
+    }
+
+    /**
+     * Acquires temporary item styles on their first write and updates existing locks.
+     * @param {HTMLElement} node The carousel item.
+     * @param {Record<string, string|number>} styles The temporary styles.
+     */
+    #setStyles(node, styles) {
+        let locks = this.#styleLocks.get(node);
+
+        if (!locks) {
+            locks = new Map();
+            this.#styleLocks.set(node, locks);
+        }
+
+        try {
+            for (const [property, value] of Object.entries(styles)) {
+                if (locks.has(property)) {
+                    $.setStyle(node, { [property]: value });
+                } else {
+                    locks.set(property, $.setStyleLock(node, property, value));
+                }
+            }
+        } catch (error) {
+            this.#resetDrag();
+            this.#paused = false;
+            this.#setTimer();
+            throw error;
+        }
     }
 
     /**
@@ -487,22 +547,21 @@ export default class Carousel extends BaseComponent {
         ]).then(([{
             carousel,
             index,
-            node: nodeIn,
             transitionClass,
         }, {
             node: nodeOut,
         }]) => {
-            this.#sliding = false;
+            if (!this.node) {
+                return;
+            }
 
             $.removeClass(nodeOut, transitionClass);
-            resetStyles(nodeIn);
-            resetStyles(nodeOut);
             updateIndicators(carousel, index);
 
-            if (this.node) {
-                this.#paused = false;
-                this.#setTimer();
-            }
+            this.#paused = false;
+            this.#sliding = false;
+
+            this.#setTimer();
 
             $.triggerEvent(carousel, 'slid.ui.carousel', { data: eventData });
         });
@@ -516,33 +575,27 @@ export default class Carousel extends BaseComponent {
      * @param {CarouselUpdateOptions} [options] The update options.
      */
     #update(nodeIn, nodeOut, progress, { direction, dragging = false } = {}) {
+        if (progress >= 1) {
+            this.#resetStyles(nodeIn);
+            this.#resetStyles(nodeOut);
+            return;
+        }
+
+        const physicalDirection = getPhysicalDirection(direction, this.#rtl);
+        const inverse = physicalDirection === 'right';
         const inStyles = {};
         const outStyles = {};
 
-        if (progress >= 1) {
-            if (dragging) {
-                inStyles.display = '';
-            } else {
-                outStyles.display = '';
-            }
-
-            inStyles.transform = '';
-            outStyles.transform = '';
+        if (dragging) {
+            inStyles.display = 'block';
         } else {
-            const physicalDirection = getPhysicalDirection(direction, this.#rtl);
-            const inverse = physicalDirection === 'right';
-
-            if (dragging) {
-                inStyles.display = 'block';
-            } else {
-                outStyles.display = 'block';
-            }
-
-            inStyles.transform = `translateX(${Math.round((1 - progress) * 100) * (inverse ? 1 : -1)}%)`;
-            outStyles.transform = `translateX(${Math.round(progress * 100) * (inverse ? -1 : 1)}%)`;
+            outStyles.display = 'block';
         }
 
-        $.setStyle(nodeIn, inStyles);
-        $.setStyle(nodeOut, outStyles);
+        inStyles.transform = `translateX(${Math.round((1 - progress) * 100) * (inverse ? 1 : -1)}%)`;
+        outStyles.transform = `translateX(${Math.round(progress * 100) * (inverse ? -1 : 1)}%)`;
+
+        this.#setStyles(nodeIn, inStyles);
+        this.#setStyles(nodeOut, outStyles);
     }
 }

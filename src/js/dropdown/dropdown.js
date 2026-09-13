@@ -36,6 +36,7 @@ export default class Dropdown extends BaseComponent {
     #menuNode;
     #popper;
     #referenceNode;
+    #releaseDisplay;
     #transitioning;
 
     /**
@@ -78,11 +79,15 @@ export default class Dropdown extends BaseComponent {
     dispose() {
         if (this.#popper) {
             this.#popper.dispose();
-            this.#popper = null;
         }
 
+        this.#releaseDisplay?.();
+
         this.#menuNode = null;
+        this.#popper = null;
         this.#referenceNode = null;
+        this.#releaseDisplay = null;
+        this.#transitioning = false;
 
         super.dispose();
     }
@@ -107,24 +112,32 @@ export default class Dropdown extends BaseComponent {
             return;
         }
 
+        // Keep the menu rendered until the opacity transition finishes.
+        const releaseDisplay = $.setStyleLock(this.#menuNode, 'display', 'block');
+
+        this.#releaseDisplay = releaseDisplay;
         this.#transitioning = true;
 
-        // Keep the menu rendered until the opacity transition finishes.
-        $.setStyle(this.#menuNode, { display: 'block' });
         $.removeClass(this.#menuNode, 'show');
 
         waitForTransition(this.#menuNode, ['opacity'], {
             toggle: this.node,
-        }).then(({ node, toggle }) => {
-            this.#transitioning = false;
+        }).then(({ toggle }) => {
+            if (!this.node) {
+                return;
+            }
 
             if (this.#popper) {
                 this.#popper.dispose();
-                this.#popper = null;
             }
 
-            $.setStyle(node, { display: '' });
+            this.#releaseDisplay();
             $.setAttribute(toggle, { 'aria-expanded': false });
+
+            this.#popper = null;
+            this.#releaseDisplay = null;
+            this.#transitioning = false;
+
             $.triggerEvent(toggle, 'hidden.ui.dropdown');
         });
     }
@@ -171,15 +184,15 @@ export default class Dropdown extends BaseComponent {
             return;
         }
 
-        this.#transitioning = true;
-
         // Render and commit the hidden menu before starting the transition.
-        $.setStyle(this.#menuNode, { display: 'block' });
+        const releaseDisplay = $.setStyleLock(this.#menuNode, 'display', 'block');
         $.css(this.#menuNode, 'opacity');
         $.addClass(this.#menuNode, 'show');
 
-        // The show class now owns the menu's display state.
-        $.setStyle(this.#menuNode, { display: '' });
+        // Restore the menu's display declaration once the show class is applied.
+        releaseDisplay();
+
+        this.#transitioning = true;
 
         if (this.#display === 'dynamic') {
             this.#popper = new Popper(this.#menuNode, {
@@ -199,9 +212,14 @@ export default class Dropdown extends BaseComponent {
         waitForTransition(this.#menuNode, ['opacity'], {
             toggle: this.node,
         }).then(({ toggle }) => {
-            this.#transitioning = false;
+            if (!this.node) {
+                return;
+            }
 
             $.setAttribute(toggle, { 'aria-expanded': true });
+
+            this.#transitioning = false;
+
             $.triggerEvent(toggle, 'shown.ui.dropdown');
         });
     }
