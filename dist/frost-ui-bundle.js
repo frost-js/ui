@@ -8343,6 +8343,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			if (this.#transitioning) {
 				$.removeClass(this.node, "collapsing");
 				$.addClass(this.node, "collapse");
+				$.addClass(this.#triggers, "collapsed");
+				$.setAttribute(this.#triggers, { "aria-expanded": false });
 			}
 			this.#releaseDimension?.();
 			this.#parent = null;

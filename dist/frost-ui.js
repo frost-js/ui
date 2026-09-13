@@ -817,6 +817,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			if (this.#transitioning) {
 				$.removeClass(this.node, "collapsing");
 				$.addClass(this.node, "collapse");
+				$.addClass(this.#triggers, "collapsed");
+				$.setAttribute(this.#triggers, { "aria-expanded": false });
 			}
 			this.#releaseDimension?.();
 			this.#parent = null;
