@@ -194,7 +194,10 @@ export function updateArrow(popper, placement, position, rtl) {
 
     $.setStyle(popper.options.arrow, {
         position: 'absolute',
-        inset: '',
+        top: '',
+        right: '',
+        bottom: '',
+        left: '',
     });
 
     const arrowBox = $.rect(popper.options.arrow, { offset: true });

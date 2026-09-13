@@ -872,16 +872,32 @@ function getClickTarget(e) {
 */
 /** @type {number|undefined} */
 var scrollbarSize;
+var scrollPaddingLocks = /* @__PURE__ */ new WeakMap();
 /**
-* Adds scrollbar compensation to a collection of elements.
+* Acquires scrollbar compensation for each distinct element, sharing existing locks.
 * @param {Iterable<HTMLElement>} nodes The elements to update.
+* @throws {Error} If a padding lock cannot be acquired. Earlier acquisitions are rolled back.
 */
 function addScrollPadding(nodes) {
+	nodes = $._unique(nodes);
 	const scrollSizeY = getScrollbarSize(window, document, "y");
-	if (!scrollSizeY) return;
-	for (const node of nodes) {
-		$.setDataset(node, { uiPaddingRight: $.getStyle(node, "paddingRight") });
-		$.setStyle(node, { paddingRight: `${scrollSizeY + parseInt($.css(node, "paddingRight"))}px` });
+	const acquired = [];
+	try {
+		for (const node of nodes) {
+			const lock = scrollPaddingLocks.get(node);
+			if (lock) lock.count++;
+			else if (scrollSizeY) {
+				const release = $.setStyleLock(node, "padding-right", `${scrollSizeY + parseInt($.css(node, "paddingRight"))}px`);
+				scrollPaddingLocks.set(node, {
+					release,
+					count: 1
+				});
+			} else continue;
+			acquired.push(node);
+		}
+	} catch (error) {
+		resetScrollPadding(acquired);
+		throw error;
 	}
 }
 /**
@@ -958,13 +974,16 @@ function getWindowContainer(node) {
 	};
 }
 /**
-* Restores scrollbar compensation on a collection of elements.
+* Releases one acquisition per distinct element, restoring padding after the last user.
 * @param {Iterable<HTMLElement>} nodes The elements to restore.
 */
 function resetScrollPadding(nodes) {
+	nodes = $._unique(nodes);
 	for (const node of nodes) {
-		$.setStyle(node, { paddingRight: $.getDataset(node, "uiPaddingRight") });
-		$.removeDataset(node, "uiPaddingRight");
+		const lock = scrollPaddingLocks.get(node);
+		if (!lock || --lock.count) continue;
+		lock.release();
+		scrollPaddingLocks.delete(node);
 	}
 }
 
@@ -1073,7 +1092,10 @@ function updateArrow(popper, placement, position, rtl) {
 	const referenceBox = $.rect(popper.options.reference, { offset: true });
 	$.setStyle(popper.options.arrow, {
 		position: "absolute",
-		inset: ""
+		top: "",
+		right: "",
+		bottom: "",
+		left: ""
 	});
 	const arrowBox = $.rect(popper.options.arrow, { offset: true });
 	const arrowStyles = {};
@@ -1168,11 +1190,10 @@ var Popper = class extends BaseComponent {
 		spacing: 0,
 		minContact: null
 	};
-	#arrowStyles;
 	#placement;
 	#referencePlacement;
 	#rtl;
-	#styles;
+	#styleLocks = [];
 	/**
 	* Creates a Popper.
 	* @param {HTMLElement} node The input node.
@@ -1183,39 +1204,39 @@ var Popper = class extends BaseComponent {
 		this.#rtl = $.css(this.options.reference, "direction") === "rtl";
 		this.#placement = $.getDataset(this.node, "uiPlacement");
 		this.#referencePlacement = $.getDataset(this.options.reference, "uiPlacement");
-		this.#styles = Object.fromEntries([
-			"position",
-			"top",
-			"right",
-			"bottom",
-			"left",
-			"transform"
-		].map((style) => [style, $.getStyle(this.node, style)]));
-		if (this.options.arrow) this.#arrowStyles = Object.fromEntries([
-			"position",
-			"top",
-			"right",
-			"bottom",
-			"left"
-		].map((style) => [style, $.getStyle(this.options.arrow, style)]));
-		$.setStyle(this.node, {
-			position: "absolute",
-			inset: "0 auto auto 0"
-		});
-		addPopper(this);
-		this.update();
+		try {
+			for (const [property, value] of Object.entries({
+				position: "absolute",
+				top: 0,
+				right: "auto",
+				bottom: "auto",
+				left: 0,
+				transform: ""
+			})) this.#styleLocks.push($.setStyleLock(this.node, property, value));
+			if (this.options.arrow) for (const [property, value] of Object.entries({
+				position: "absolute",
+				top: "",
+				right: "",
+				bottom: "",
+				left: ""
+			})) this.#styleLocks.push($.setStyleLock(this.options.arrow, property, value));
+			addPopper(this);
+			this.update();
+		} catch (error) {
+			this.dispose();
+			throw error;
+		}
 	}
 	/** @inheritdoc */
 	dispose() {
+		if (!this.node) return;
 		if (this.#placement) $.setDataset(this.node, { uiPlacement: this.#placement });
 		else $.removeDataset(this.node, "uiPlacement");
 		if (this.#referencePlacement) $.setDataset(this.options.reference, { uiPlacement: this.#referencePlacement });
 		else $.removeDataset(this.options.reference, "uiPlacement");
-		$.setStyle(this.node, this.#styles);
-		if (this.#arrowStyles) $.setStyle(this.options.arrow, this.#arrowStyles);
+		for (const release of this.#styleLocks.reverse()) release();
 		removePopper(this);
-		this.#arrowStyles = null;
-		this.#styles = null;
+		this.#styleLocks = [];
 		super.dispose();
 	}
 	/**

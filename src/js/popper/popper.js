@@ -64,11 +64,10 @@ export default class Popper extends BaseComponent {
         minContact: null,
     };
 
-    #arrowStyles;
     #placement;
     #referencePlacement;
     #rtl;
-    #styles;
+    #styleLocks = [];
 
     /**
      * Creates a Popper.
@@ -81,30 +80,50 @@ export default class Popper extends BaseComponent {
         this.#rtl = $.css(this.options.reference, 'direction') === 'rtl';
         this.#placement = $.getDataset(this.node, 'uiPlacement');
         this.#referencePlacement = $.getDataset(this.options.reference, 'uiPlacement');
-        this.#styles = Object.fromEntries(
-            ['position', 'top', 'right', 'bottom', 'left', 'transform']
-                .map((style) => [style, $.getStyle(this.node, style)]),
-        );
 
-        if (this.options.arrow) {
-            this.#arrowStyles = Object.fromEntries(
-                ['position', 'top', 'right', 'bottom', 'left']
-                    .map((style) => [style, $.getStyle(this.options.arrow, style)]),
-            );
+        try {
+            const styles = {
+                position: 'absolute',
+                top: 0,
+                right: 'auto',
+                bottom: 'auto',
+                left: 0,
+                transform: '',
+            };
+
+            for (const [property, value] of Object.entries(styles)) {
+                this.#styleLocks.push($.setStyleLock(this.node, property, value));
+            }
+
+            if (this.options.arrow) {
+                const arrowStyles = {
+                    position: 'absolute',
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                };
+
+                for (const [property, value] of Object.entries(arrowStyles)) {
+                    this.#styleLocks.push($.setStyleLock(this.options.arrow, property, value));
+                }
+            }
+
+            addPopper(this);
+
+            this.update();
+        } catch (error) {
+            this.dispose();
+            throw error;
         }
-
-        $.setStyle(this.node, {
-            position: 'absolute',
-            inset: '0 auto auto 0',
-        });
-
-        addPopper(this);
-
-        this.update();
     }
 
     /** @inheritdoc */
     dispose() {
+        if (!this.node) {
+            return;
+        }
+
         if (this.#placement) {
             $.setDataset(this.node, { uiPlacement: this.#placement });
         } else {
@@ -117,16 +136,13 @@ export default class Popper extends BaseComponent {
             $.removeDataset(this.options.reference, 'uiPlacement');
         }
 
-        $.setStyle(this.node, this.#styles);
-
-        if (this.#arrowStyles) {
-            $.setStyle(this.options.arrow, this.#arrowStyles);
+        for (const release of this.#styleLocks.reverse()) {
+            release();
         }
 
         removePopper(this);
 
-        this.#arrowStyles = null;
-        this.#styles = null;
+        this.#styleLocks = [];
 
         super.dispose();
     }
