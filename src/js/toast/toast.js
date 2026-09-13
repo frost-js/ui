@@ -19,13 +19,18 @@ export default class Toast extends BaseComponent {
         delay: 5000,
     };
 
+    #releaseDisplay;
     #timer;
     #transitioning;
 
     /** @inheritdoc */
     dispose() {
         clearTimeout(this.#timer);
+        this.#releaseDisplay?.();
+
+        this.#releaseDisplay = null;
         this.#timer = null;
+        this.#transitioning = false;
 
         super.dispose();
     }
@@ -43,8 +48,8 @@ export default class Toast extends BaseComponent {
         }
 
         clearTimeout(this.#timer);
-        this.#timer = null;
 
+        this.#timer = null;
         this.#transitioning = true;
 
         // Commit the rendered visible state before starting the transition.
@@ -53,9 +58,16 @@ export default class Toast extends BaseComponent {
         $.removeClass(this.node, 'show');
 
         waitForTransition(this.node, ['opacity']).then(({ node }) => {
-            this.#transitioning = false;
+            if (!this.node) {
+                return;
+            }
 
-            $.setStyle(node, { display: 'none' }, null, { important: true });
+            try {
+                this.#releaseDisplay = $.setStyleLock(node, 'display', 'none', { important: true });
+            } finally {
+                this.#transitioning = false;
+            }
+
             $.triggerEvent(node, 'hidden.ui.toast');
         });
     }
@@ -73,20 +85,22 @@ export default class Toast extends BaseComponent {
         }
 
         clearTimeout(this.#timer);
+        this.#releaseDisplay?.();
+
+        this.#releaseDisplay = null;
         this.#timer = null;
-
         this.#transitioning = true;
-
-        $.setStyle(this.node, { display: '' });
 
         // Commit the rendered hidden state before starting the transition.
         $.css(this.node, 'opacity');
         $.addClass(this.node, 'show');
 
         waitForTransition(this.node, ['opacity']).then(({ node }) => {
-            this.#transitioning = false;
+            if (!this.node) {
+                return;
+            }
 
-            if (this.options?.autohide) {
+            if (this.options.autohide) {
                 this.#timer = setTimeout(
                     (_) => {
                         this.#timer = null;
@@ -95,6 +109,8 @@ export default class Toast extends BaseComponent {
                     this.options.delay,
                 );
             }
+
+            this.#transitioning = false;
 
             $.triggerEvent(node, 'shown.ui.toast');
         });

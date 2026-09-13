@@ -32,6 +32,7 @@ export default class Modal extends BaseComponent {
     #focusTrap;
     #releaseScroll;
     #releaseScrollPadding;
+    #releaseZIndex;
     #shown = false;
     #transitioning;
     #zooming;
@@ -186,15 +187,21 @@ export default class Modal extends BaseComponent {
         const scrollNodes = [this.#dialog, document.body, ...$.find('.fixed-top, .fixed-bottom')];
 
         const releaseScrollPadding = lockScrollPadding(scrollNodes);
+        let releaseScroll;
+        let releaseZIndex;
 
         try {
-            this.#releaseScroll = lockBodyScroll();
+            releaseScroll = lockBodyScroll();
+            releaseZIndex = $.setStyleLock(this.node, 'z-index', '');
         } catch (error) {
+            releaseScroll?.();
             releaseScrollPadding();
             throw error;
         }
 
+        this.#releaseScroll = releaseScroll;
         this.#releaseScrollPadding = releaseScrollPadding;
+        this.#releaseZIndex = releaseZIndex;
         this.#shown = true;
         this.#transitioning = true;
 
@@ -268,10 +275,7 @@ export default class Modal extends BaseComponent {
         });
 
         this.#releaseScrollPadding?.();
-
-        if ($.getStyle(this.node, 'zIndex')) {
-            $.setStyle(this.node, { zIndex: '' });
-        }
+        this.#releaseZIndex?.();
 
         if (this.#backdrop) {
             $.remove(this.#backdrop);
@@ -293,6 +297,7 @@ export default class Modal extends BaseComponent {
         this.#backdrop = null;
         this.#releaseScrollPadding = null;
         this.#releaseScroll = null;
+        this.#releaseZIndex = null;
         this.#shown = false;
         this.#transitioning = false;
         this.#zooming = false;

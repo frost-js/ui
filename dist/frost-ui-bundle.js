@@ -9347,6 +9347,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		#focusTrap;
 		#releaseScroll;
 		#releaseScrollPadding;
+		#releaseZIndex;
 		#shown = false;
 		#transitioning;
 		#zooming;
@@ -9438,13 +9439,19 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				...$.find(".fixed-top, .fixed-bottom")
 			];
 			const releaseScrollPadding = lockScrollPadding(scrollNodes);
+			let releaseScroll;
+			let releaseZIndex;
 			try {
-				this.#releaseScroll = lockBodyScroll();
+				releaseScroll = lockBodyScroll();
+				releaseZIndex = $.setStyleLock(this.node, "z-index", "");
 			} catch (error) {
+				releaseScroll?.();
 				releaseScrollPadding();
 				throw error;
 			}
+			this.#releaseScroll = releaseScroll;
 			this.#releaseScrollPadding = releaseScrollPadding;
+			this.#releaseZIndex = releaseZIndex;
 			this.#shown = true;
 			this.#transitioning = true;
 			$.addClass(document.body, "modal-open");
@@ -9489,7 +9496,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				"aria-modal": false
 			});
 			this.#releaseScrollPadding?.();
-			if ($.getStyle(this.node, "zIndex")) $.setStyle(this.node, { zIndex: "" });
+			this.#releaseZIndex?.();
 			if (this.#backdrop) $.remove(this.#backdrop);
 			if (!updateStack().length) $.removeClass(document.body, "modal-open");
 			this.#releaseScroll?.();
@@ -9498,6 +9505,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			this.#backdrop = null;
 			this.#releaseScrollPadding = null;
 			this.#releaseScroll = null;
+			this.#releaseZIndex = null;
 			this.#shown = false;
 			this.#transitioning = false;
 			this.#zooming = false;
@@ -10164,12 +10172,16 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			autohide: true,
 			delay: 5e3
 		};
+		#releaseDisplay;
 		#timer;
 		#transitioning;
 		/** @inheritdoc */
 		dispose() {
 			clearTimeout(this.#timer);
+			this.#releaseDisplay?.();
+			this.#releaseDisplay = null;
 			this.#timer = null;
+			this.#transitioning = false;
 			super.dispose();
 		}
 		/**
@@ -10183,8 +10195,12 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			$.css(this.node, "opacity");
 			$.removeClass(this.node, "show");
 			waitForTransition(this.node, ["opacity"]).then(({ node }) => {
-				this.#transitioning = false;
-				$.setStyle(node, { display: "none" }, null, { important: true });
+				if (!this.node) return;
+				try {
+					this.#releaseDisplay = $.setStyleLock(node, "display", "none", { important: true });
+				} finally {
+					this.#transitioning = false;
+				}
 				$.triggerEvent(node, "hidden.ui.toast");
 			});
 		}
@@ -10194,17 +10210,19 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		show() {
 			if (this.#transitioning || $.hasClass(this.node, "show") || !$.triggerOne(this.node, "show.ui.toast")) return;
 			clearTimeout(this.#timer);
+			this.#releaseDisplay?.();
+			this.#releaseDisplay = null;
 			this.#timer = null;
 			this.#transitioning = true;
-			$.setStyle(this.node, { display: "" });
 			$.css(this.node, "opacity");
 			$.addClass(this.node, "show");
 			waitForTransition(this.node, ["opacity"]).then(({ node }) => {
-				this.#transitioning = false;
-				if (this.options?.autohide) this.#timer = setTimeout((_) => {
+				if (!this.node) return;
+				if (this.options.autohide) this.#timer = setTimeout((_) => {
 					this.#timer = null;
 					this.hide();
 				}, this.options.delay);
+				this.#transitioning = false;
 				$.triggerEvent(node, "shown.ui.toast");
 			});
 		}
