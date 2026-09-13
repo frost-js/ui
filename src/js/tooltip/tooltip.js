@@ -122,6 +122,7 @@ export default class Tooltip extends BaseComponent {
         }
 
         this.#modal = null;
+        this.#transition = null;
         this.#triggers = null;
         this.#tooltip = null;
         this.#tooltipInner = null;

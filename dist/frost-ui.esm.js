@@ -2311,6 +2311,7 @@ var Popover = class extends BaseComponent {
 		if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.popover");
 		if (this.#modal) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
 		this.#modal = null;
+		this.#transition = null;
 		this.#triggers = null;
 		this.#popover = null;
 		this.#popoverHeader = null;
@@ -2773,6 +2774,7 @@ var Tooltip = class extends BaseComponent {
 		if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.tooltip");
 		if (this.#modal) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
 		this.#modal = null;
+		this.#transition = null;
 		this.#triggers = null;
 		this.#tooltip = null;
 		this.#tooltipInner = null;

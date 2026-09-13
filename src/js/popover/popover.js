@@ -125,6 +125,7 @@ export default class Popover extends BaseComponent {
         }
 
         this.#modal = null;
+        this.#transition = null;
         this.#triggers = null;
         this.#popover = null;
         this.#popoverHeader = null;
