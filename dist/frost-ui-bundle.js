@@ -9129,14 +9129,20 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			$.addClass(this.#menuNode, "show");
 			releaseDisplay();
 			this.#transitioning = true;
-			if (this.#display === "dynamic") this.#popper = new Popper(this.#menuNode, {
-				reference: this.#referenceNode,
-				placement: this.options.placement,
-				position: this.options.position,
-				fixed: this.options.fixed,
-				spacing: this.options.spacing,
-				minContact: this.options.minContact
-			});
+			if (this.#display === "dynamic") try {
+				this.#popper = new Popper(this.#menuNode, {
+					reference: this.#referenceNode,
+					placement: this.options.placement,
+					position: this.options.position,
+					fixed: this.options.fixed,
+					spacing: this.options.spacing,
+					minContact: this.options.minContact
+				});
+			} catch (error) {
+				$.removeClass(this.#menuNode, "show");
+				this.#transitioning = false;
+				throw error;
+			}
 			window$1.requestAnimationFrame((_) => {
 				this.update();
 			});
