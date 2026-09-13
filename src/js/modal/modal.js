@@ -1,7 +1,7 @@
 import BaseComponent from './../base-component.js';
 import FocusTrap from './../focus-trap/index.js';
 import { $, document } from './../globals.js';
-import { addScrollPadding, resetScrollPadding } from './../helpers/scroll.js';
+import { lockBodyScroll, lockScrollPadding } from './../helpers/scroll.js';
 import { waitForTransition } from './../helpers/transition.js';
 import { setStackIndex, updateStack } from './helpers.js';
 
@@ -30,7 +30,9 @@ export default class Modal extends BaseComponent {
     #backdrop;
     #dialog;
     #focusTrap;
-    #scrollNodes;
+    #releaseScroll;
+    #releaseScrollPadding;
+    #shown = false;
     #transitioning;
     #zooming;
 
@@ -63,7 +65,7 @@ export default class Modal extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
-        if (this.#scrollNodes) {
+        if (this.#shown) {
             this.#cleanup(false);
         }
 
@@ -75,7 +77,6 @@ export default class Modal extends BaseComponent {
         this.#dialog = null;
         this.#activeTarget = null;
         this.#backdrop = null;
-        this.#scrollNodes = null;
 
         super.dispose();
     }
@@ -181,20 +182,21 @@ export default class Modal extends BaseComponent {
             return;
         }
 
-        this.#transitioning = true;
-
         const stackSize = $.find('.modal:is(.show, .hiding)').length;
+        const scrollNodes = [this.#dialog, document.body, ...$.find('.fixed-top, .fixed-bottom')];
 
-        $.removeClass(document.body, 'modal-open');
+        const releaseScrollPadding = lockScrollPadding(scrollNodes);
 
-        this.#scrollNodes = [this.#dialog];
-
-        if (!stackSize && !$.findOne('.offcanvas.show')) {
-            this.#scrollNodes.push(document.body);
-            this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom'));
+        try {
+            this.#releaseScroll = lockBodyScroll();
+        } catch (error) {
+            releaseScrollPadding();
+            throw error;
         }
 
-        addScrollPadding(this.#scrollNodes);
+        this.#releaseScrollPadding = releaseScrollPadding;
+        this.#shown = true;
+        this.#transitioning = true;
 
         $.addClass(document.body, 'modal-open');
 
@@ -259,17 +261,13 @@ export default class Modal extends BaseComponent {
      * @param {boolean} [restoreFocus=true] Whether to restore focus to the active target.
      */
     #cleanup(restoreFocus = true) {
-        const [dialog, ...sharedScrollNodes] = this.#scrollNodes;
-
         $.removeClass(this.node, 'hiding modal-static show');
         $.setAttribute(this.node, {
             'aria-hidden': true,
             'aria-modal': false,
         });
 
-        if (dialog) {
-            resetScrollPadding([dialog]);
-        }
+        this.#releaseScrollPadding?.();
 
         if ($.getStyle(this.node, 'zIndex')) {
             $.setStyle(this.node, { zIndex: '' });
@@ -281,20 +279,21 @@ export default class Modal extends BaseComponent {
 
         const modals = updateStack();
 
-        if (modals.length) {
-            modals[0].#scrollNodes.push(...sharedScrollNodes);
-        } else {
-            resetScrollPadding(sharedScrollNodes);
+        if (!modals.length) {
             $.removeClass(document.body, 'modal-open');
         }
+
+        this.#releaseScroll?.();
 
         if (restoreFocus && this.#activeTarget) {
             $.focus(this.#activeTarget);
         }
 
         this.#activeTarget = null;
-        this.#scrollNodes = null;
         this.#backdrop = null;
+        this.#releaseScrollPadding = null;
+        this.#releaseScroll = null;
+        this.#shown = false;
         this.#transitioning = false;
         this.#zooming = false;
     }

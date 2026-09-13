@@ -8416,6 +8416,74 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	}
 
 //#endregion
+//#region src/js/helpers/styles.js
+/**
+	* @callback CountedStyleLock
+	* @param {HTMLElement|Iterable<HTMLElement>|string} nodes The elements to update.
+	* @param {Record<string, string|number>|((node: HTMLElement) => Record<string, string|number>)} styles The styles, or a factory evaluated on each element's first acquisition.
+	* @returns {() => void} An idempotent function that releases this acquisition.
+	* @throws {Error} If a style lock cannot be acquired. Earlier acquisitions are rolled back.
+	*/
+	/**
+	* Applies temporary styles, rolling back all acquired locks if any property fails.
+	* @param {HTMLElement|Iterable<HTMLElement>|string} nodes The elements to update.
+	* @param {Record<string, string|number>} styles The longhand or custom properties to lock.
+	* @returns {() => void} An idempotent function that releases the locks and restores the styles.
+	* @throws {Error} If a style lock cannot be acquired.
+	*/
+	function lockStyles(nodes, styles) {
+		nodes = $(nodes).get();
+		const releases = [];
+		const release = () => {
+			while (releases.length) releases.pop()();
+		};
+		try {
+			for (const [property, value] of Object.entries(styles)) releases.push($.setStyleLock(nodes, property, value));
+		} catch (error) {
+			release();
+			throw error;
+		}
+		return release;
+	}
+	/**
+	* Creates an independent style-lock counter, restoring styles after the last release.
+	* @returns {CountedStyleLock} The counted locker. Existing locks retain their initial styles.
+	*/
+	function lockStylesCounterFactory() {
+		const locks = /* @__PURE__ */ new WeakMap();
+		return (nodes, styles) => {
+			nodes = $._unique($(nodes).get());
+			const acquired = [];
+			const release = () => {
+				while (acquired.length) {
+					const [node, lock] = acquired.pop();
+					if (--lock.count) continue;
+					lock.release();
+					locks.delete(node);
+				}
+			};
+			try {
+				for (const node of nodes) {
+					let lock = locks.get(node);
+					if (!lock) {
+						lock = {
+							release: lockStyles(node, $._isFunction(styles) ? styles(node) : styles),
+							count: 0
+						};
+						locks.set(node, lock);
+					}
+					lock.count++;
+					acquired.push([node, lock]);
+				}
+			} catch (error) {
+				release();
+				throw error;
+			}
+			return release;
+		};
+	}
+
+//#endregion
 //#region src/js/helpers/scroll.js
 /** @typedef {'x'|'y'} Axis */
 	/**
@@ -8431,34 +8499,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	*/
 	/** @type {number|undefined} */
 	var scrollbarSize;
-	var scrollPaddingLocks = /* @__PURE__ */ new WeakMap();
-	/**
-	* Acquires scrollbar compensation for each distinct element, sharing existing locks.
-	* @param {Iterable<HTMLElement>} nodes The elements to update.
-	* @throws {Error} If a padding lock cannot be acquired. Earlier acquisitions are rolled back.
-	*/
-	function addScrollPadding(nodes) {
-		nodes = $._unique(nodes);
-		const scrollSizeY = getScrollbarSize(window$1, document, "y");
-		const acquired = [];
-		try {
-			for (const node of nodes) {
-				const lock = scrollPaddingLocks.get(node);
-				if (lock) lock.count++;
-				else if (scrollSizeY) {
-					const release = $.setStyleLock(node, "padding-right", `${scrollSizeY + parseInt($.css(node, "paddingRight"))}px`);
-					scrollPaddingLocks.set(node, {
-						release,
-						count: 1
-					});
-				} else continue;
-				acquired.push(node);
-			}
-		} catch (error) {
-			resetScrollPadding(acquired);
-			throw error;
-		}
-	}
+	var bodyScrollCounter = lockStylesCounterFactory();
+	var scrollPaddingCounter = lockStylesCounterFactory();
 	/**
 	* Calculates the browser scrollbar size.
 	* @returns {number} The scrollbar size.
@@ -8533,17 +8575,26 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		};
 	}
 	/**
-	* Releases one acquisition per distinct element, restoring padding after the last user.
-	* @param {Iterable<HTMLElement>} nodes The elements to restore.
+	* Prevents body scrolling until every acquisition has been released.
+	* @returns {() => void} An idempotent function that releases this acquisition.
+	* @throws {Error} If an overflow lock cannot be acquired. Earlier locks are released.
 	*/
-	function resetScrollPadding(nodes) {
+	function lockBodyScroll() {
+		return bodyScrollCounter(document.body, {
+			"overflow-x": "hidden",
+			"overflow-y": "hidden"
+		});
+	}
+	/**
+	* Acquires scrollbar compensation for each distinct element, sharing existing locks.
+	* @param {Iterable<HTMLElement>} nodes The elements to update.
+	* @returns {() => void} An idempotent function that releases this acquisition.
+	* @throws {Error} If a padding lock cannot be acquired. Earlier acquisitions are rolled back.
+	*/
+	function lockScrollPadding(nodes) {
 		nodes = $._unique(nodes);
-		for (const node of nodes) {
-			const lock = scrollPaddingLocks.get(node);
-			if (!lock || --lock.count) continue;
-			lock.release();
-			scrollPaddingLocks.delete(node);
-		}
+		const scrollSizeY = nodes.length ? getScrollbarSize(window$1, document, "y") : 0;
+		return scrollPaddingCounter(nodes, (node) => scrollSizeY ? { "padding-right": `${scrollSizeY + parseInt($.css(node, "paddingRight"))}px` } : {});
 	}
 
 //#endregion
@@ -8751,8 +8802,9 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		};
 		#placement;
 		#referencePlacement;
+		#releaseArrowStyles;
+		#releaseStyles;
 		#rtl;
-		#styleLocks = [];
 		/**
 		* Creates a Popper.
 		* @param {HTMLElement} node The input node.
@@ -8764,21 +8816,21 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			this.#placement = $.getDataset(this.node, "uiPlacement");
 			this.#referencePlacement = $.getDataset(this.options.reference, "uiPlacement");
 			try {
-				for (const [property, value] of Object.entries({
+				this.#releaseStyles = lockStyles(this.node, {
 					position: "absolute",
 					top: 0,
 					right: "auto",
 					bottom: "auto",
 					left: 0,
 					transform: ""
-				})) this.#styleLocks.push($.setStyleLock(this.node, property, value));
-				if (this.options.arrow) for (const [property, value] of Object.entries({
+				});
+				if (this.options.arrow) this.#releaseArrowStyles = lockStyles(this.options.arrow, {
 					position: "absolute",
 					top: "",
 					right: "",
 					bottom: "",
 					left: ""
-				})) this.#styleLocks.push($.setStyleLock(this.options.arrow, property, value));
+				});
 				addPopper(this);
 				this.update();
 			} catch (error) {
@@ -8793,9 +8845,11 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			else $.removeDataset(this.node, "uiPlacement");
 			if (this.#referencePlacement) $.setDataset(this.options.reference, { uiPlacement: this.#referencePlacement });
 			else $.removeDataset(this.options.reference, "uiPlacement");
-			for (const release of this.#styleLocks.reverse()) release();
+			this.#releaseArrowStyles?.();
+			this.#releaseStyles?.();
 			removePopper(this);
-			this.#styleLocks = [];
+			this.#releaseArrowStyles = null;
+			this.#releaseStyles = null;
 			super.dispose();
 		}
 		/**
@@ -9244,7 +9298,9 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		#backdrop;
 		#dialog;
 		#focusTrap;
-		#scrollNodes;
+		#releaseScroll;
+		#releaseScrollPadding;
+		#shown = false;
 		#transitioning;
 		#zooming;
 		/**
@@ -9267,7 +9323,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		/** @inheritdoc */
 		dispose() {
-			if (this.#scrollNodes) this.#cleanup(false);
+			if (this.#shown) this.#cleanup(false);
 			if (this.#focusTrap) {
 				this.#focusTrap.dispose();
 				this.#focusTrap = null;
@@ -9275,7 +9331,6 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			this.#dialog = null;
 			this.#activeTarget = null;
 			this.#backdrop = null;
-			this.#scrollNodes = null;
 			super.dispose();
 		}
 		/**
@@ -9329,15 +9384,22 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		show(relatedTarget) {
 			if (relatedTarget) this.#activeTarget = relatedTarget;
 			if (this.#transitioning || $.hasClass(this.node, "show") || !$.triggerOne(this.node, "show.ui.modal", { data: { relatedTarget: this.#activeTarget } })) return;
-			this.#transitioning = true;
 			const stackSize = $.find(".modal:is(.show, .hiding)").length;
-			$.removeClass(document.body, "modal-open");
-			this.#scrollNodes = [this.#dialog];
-			if (!stackSize && !$.findOne(".offcanvas.show")) {
-				this.#scrollNodes.push(document.body);
-				this.#scrollNodes.push(...$.find(".fixed-top, .fixed-bottom"));
+			const scrollNodes = [
+				this.#dialog,
+				document.body,
+				...$.find(".fixed-top, .fixed-bottom")
+			];
+			const releaseScrollPadding = lockScrollPadding(scrollNodes);
+			try {
+				this.#releaseScroll = lockBodyScroll();
+			} catch (error) {
+				releaseScrollPadding();
+				throw error;
 			}
-			addScrollPadding(this.#scrollNodes);
+			this.#releaseScrollPadding = releaseScrollPadding;
+			this.#shown = true;
+			this.#transitioning = true;
 			$.addClass(document.body, "modal-open");
 			if (this.options.backdrop) {
 				this.#backdrop = $.create("div", { class: "modal-backdrop" });
@@ -9374,25 +9436,22 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		* @param {boolean} [restoreFocus=true] Whether to restore focus to the active target.
 		*/
 		#cleanup(restoreFocus = true) {
-			const [dialog, ...sharedScrollNodes] = this.#scrollNodes;
 			$.removeClass(this.node, "hiding modal-static show");
 			$.setAttribute(this.node, {
 				"aria-hidden": true,
 				"aria-modal": false
 			});
-			if (dialog) resetScrollPadding([dialog]);
+			this.#releaseScrollPadding?.();
 			if ($.getStyle(this.node, "zIndex")) $.setStyle(this.node, { zIndex: "" });
 			if (this.#backdrop) $.remove(this.#backdrop);
-			const modals = updateStack();
-			if (modals.length) modals[0].#scrollNodes.push(...sharedScrollNodes);
-			else {
-				resetScrollPadding(sharedScrollNodes);
-				$.removeClass(document.body, "modal-open");
-			}
+			if (!updateStack().length) $.removeClass(document.body, "modal-open");
+			this.#releaseScroll?.();
 			if (restoreFocus && this.#activeTarget) $.focus(this.#activeTarget);
 			this.#activeTarget = null;
-			this.#scrollNodes = null;
 			this.#backdrop = null;
+			this.#releaseScrollPadding = null;
+			this.#releaseScroll = null;
+			this.#shown = false;
 			this.#transitioning = false;
 			this.#zooming = false;
 		}
@@ -9514,7 +9573,9 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		};
 		#activeTarget;
 		#focusTrap;
-		#scrollNodes;
+		#releaseScroll;
+		#releaseScrollPadding;
+		#shown = false;
 		#transitioning;
 		/**
 		* Creates an Offcanvas.
@@ -9527,13 +9588,12 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		/** @inheritdoc */
 		dispose() {
-			if (this.#scrollNodes) this.#cleanup(false);
+			if (this.#shown) this.#cleanup(false);
 			if (this.#focusTrap) {
 				this.#focusTrap.dispose();
 				this.#focusTrap = null;
 			}
 			this.#activeTarget = null;
-			this.#scrollNodes = null;
 			super.dispose();
 		}
 		/**
@@ -9572,15 +9632,18 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		show(relatedTarget) {
 			if (relatedTarget) this.#activeTarget = relatedTarget;
 			if (this.#transitioning || $.hasClass(this.node, "show") || $.findOne(".offcanvas.show") || !$.triggerOne(this.node, "show.ui.offcanvas")) return;
+			const scrollNodes = this.options.scroll ? [] : [document.body, ...$.find(".fixed-top, .fixed-bottom")];
+			const releaseScrollPadding = lockScrollPadding(scrollNodes);
+			if (!this.options.scroll) try {
+				this.#releaseScroll = lockBodyScroll();
+			} catch (error) {
+				releaseScrollPadding();
+				throw error;
+			}
+			this.#releaseScrollPadding = releaseScrollPadding;
+			this.#shown = true;
 			this.#transitioning = true;
 			if (this.options.backdrop) $.addClass(document.body, "offcanvas-backdrop");
-			this.#scrollNodes = [];
-			if (!this.options.scroll) {
-				this.#scrollNodes.push(document.body);
-				this.#scrollNodes.push(...$.find(".fixed-top, .fixed-bottom"));
-				addScrollPadding(this.#scrollNodes);
-				$.setStyle(document.body, { overflow: "hidden" });
-			}
 			$.css(this.node, "opacity");
 			$.addClass(this.node, "show");
 			waitForTransition(this.node, ["opacity", "transform"]).then(({ node }) => {
@@ -9612,13 +9675,13 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				"aria-modal": false
 			});
 			if (this.options.backdrop) $.removeClass(document.body, "offcanvas-backdrop");
-			if (!this.options.scroll) {
-				resetScrollPadding(this.#scrollNodes);
-				$.setStyle(document.body, { overflow: "" });
-			}
+			this.#releaseScrollPadding?.();
+			this.#releaseScroll?.();
 			if (restoreFocus && this.#activeTarget) $.focus(this.#activeTarget);
 			this.#activeTarget = null;
-			this.#scrollNodes = null;
+			this.#releaseScrollPadding = null;
+			this.#releaseScroll = null;
+			this.#shown = false;
 			this.#transitioning = false;
 		}
 	};
@@ -10445,7 +10508,6 @@ exports.Popper = popper_default;
 exports.Tab = tab_default;
 exports.Toast = toast_default;
 exports.Tooltip = tooltip_default;
-exports.addScrollPadding = addScrollPadding;
 exports.generateId = generateId;
 exports.getClickTarget = getClickTarget;
 exports.getDataset = getDataset;
@@ -10456,7 +10518,9 @@ exports.getTarget = getTarget;
 exports.getTargetSelector = getTargetSelector;
 exports.getTouchPositions = getTouchPositions;
 exports.initComponent = initComponent;
-exports.resetScrollPadding = resetScrollPadding;
+exports.lockScrollPadding = lockScrollPadding;
+exports.lockStyles = lockStyles;
+exports.lockStylesCounterFactory = lockStylesCounterFactory;
 exports.waitForTransition = waitForTransition;
 });
 //# sourceMappingURL=frost-ui-bundle.js.map

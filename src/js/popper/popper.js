@@ -1,6 +1,7 @@
 import BaseComponent from './../base-component.js';
 import { $, document, window } from './../globals.js';
 import { getScrollContainer } from './../helpers/scroll.js';
+import { lockStyles } from './../helpers/styles.js';
 import {
     addPopper,
     getPhysicalPlacement,
@@ -66,8 +67,9 @@ export default class Popper extends BaseComponent {
 
     #placement;
     #referencePlacement;
+    #releaseArrowStyles;
+    #releaseStyles;
     #rtl;
-    #styleLocks = [];
 
     /**
      * Creates a Popper.
@@ -82,31 +84,23 @@ export default class Popper extends BaseComponent {
         this.#referencePlacement = $.getDataset(this.options.reference, 'uiPlacement');
 
         try {
-            const styles = {
+            this.#releaseStyles = lockStyles(this.node, {
                 position: 'absolute',
                 top: 0,
                 right: 'auto',
                 bottom: 'auto',
                 left: 0,
                 transform: '',
-            };
-
-            for (const [property, value] of Object.entries(styles)) {
-                this.#styleLocks.push($.setStyleLock(this.node, property, value));
-            }
+            });
 
             if (this.options.arrow) {
-                const arrowStyles = {
+                this.#releaseArrowStyles = lockStyles(this.options.arrow, {
                     position: 'absolute',
                     top: '',
                     right: '',
                     bottom: '',
                     left: '',
-                };
-
-                for (const [property, value] of Object.entries(arrowStyles)) {
-                    this.#styleLocks.push($.setStyleLock(this.options.arrow, property, value));
-                }
+                });
             }
 
             addPopper(this);
@@ -136,13 +130,13 @@ export default class Popper extends BaseComponent {
             $.removeDataset(this.options.reference, 'uiPlacement');
         }
 
-        for (const release of this.#styleLocks.reverse()) {
-            release();
-        }
+        this.#releaseArrowStyles?.();
+        this.#releaseStyles?.();
 
         removePopper(this);
 
-        this.#styleLocks = [];
+        this.#releaseArrowStyles = null;
+        this.#releaseStyles = null;
 
         super.dispose();
     }

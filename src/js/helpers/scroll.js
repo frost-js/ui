@@ -1,4 +1,5 @@
 import { $, document, window } from './../globals.js';
+import { lockStylesCounterFactory } from './styles.js';
 
 /** @typedef {'x'|'y'} Axis */
 
@@ -17,42 +18,8 @@ import { $, document, window } from './../globals.js';
 /** @type {number|undefined} */
 let scrollbarSize;
 
-const scrollPaddingLocks = new WeakMap();
-
-/**
- * Acquires scrollbar compensation for each distinct element, sharing existing locks.
- * @param {Iterable<HTMLElement>} nodes The elements to update.
- * @throws {Error} If a padding lock cannot be acquired. Earlier acquisitions are rolled back.
- */
-export function addScrollPadding(nodes) {
-    nodes = $._unique(nodes);
-    const scrollSizeY = getScrollbarSize(window, document, 'y');
-    const acquired = [];
-
-    try {
-        for (const node of nodes) {
-            const lock = scrollPaddingLocks.get(node);
-
-            if (lock) {
-                lock.count++;
-            } else if (scrollSizeY) {
-                const release = $.setStyleLock(
-                    node,
-                    'padding-right',
-                    `${scrollSizeY + parseInt($.css(node, 'paddingRight'))}px`,
-                );
-                scrollPaddingLocks.set(node, { release, count: 1 });
-            } else {
-                continue;
-            }
-
-            acquired.push(node);
-        }
-    } catch (error) {
-        resetScrollPadding(acquired);
-        throw error;
-    }
-};
+const bodyScrollCounter = lockStylesCounterFactory();
+const scrollPaddingCounter = lockStylesCounterFactory();
 
 /**
  * Calculates the browser scrollbar size.
@@ -158,20 +125,30 @@ function getWindowContainer(node) {
 };
 
 /**
- * Releases one acquisition per distinct element, restoring padding after the last user.
- * @param {Iterable<HTMLElement>} nodes The elements to restore.
+ * Prevents body scrolling until every acquisition has been released.
+ * @returns {() => void} An idempotent function that releases this acquisition.
+ * @throws {Error} If an overflow lock cannot be acquired. Earlier locks are released.
  */
-export function resetScrollPadding(nodes) {
+export function lockBodyScroll() {
+    return bodyScrollCounter(document.body, {
+        'overflow-x': 'hidden',
+        'overflow-y': 'hidden',
+    });
+};
+
+/**
+ * Acquires scrollbar compensation for each distinct element, sharing existing locks.
+ * @param {Iterable<HTMLElement>} nodes The elements to update.
+ * @returns {() => void} An idempotent function that releases this acquisition.
+ * @throws {Error} If a padding lock cannot be acquired. Earlier acquisitions are rolled back.
+ */
+export function lockScrollPadding(nodes) {
     nodes = $._unique(nodes);
+    const scrollSizeY = nodes.length ? getScrollbarSize(window, document, 'y') : 0;
 
-    for (const node of nodes) {
-        const lock = scrollPaddingLocks.get(node);
-
-        if (!lock || --lock.count) {
-            continue;
-        }
-
-        lock.release();
-        scrollPaddingLocks.delete(node);
-    }
+    // Share the initial state even when no compensation is needed.
+    return scrollPaddingCounter(nodes, (node) => scrollSizeY ?
+        { 'padding-right': `${scrollSizeY + parseInt($.css(node, 'paddingRight'))}px` } :
+        {},
+    );
 };

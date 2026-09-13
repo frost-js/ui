@@ -1,7 +1,7 @@
 import BaseComponent from './../base-component.js';
 import FocusTrap from './../focus-trap/index.js';
 import { $, document } from './../globals.js';
-import { addScrollPadding, resetScrollPadding } from './../helpers/scroll.js';
+import { lockBodyScroll, lockScrollPadding } from './../helpers/scroll.js';
 import { waitForTransition } from './../helpers/transition.js';
 
 /**
@@ -25,7 +25,9 @@ export default class Offcanvas extends BaseComponent {
 
     #activeTarget;
     #focusTrap;
-    #scrollNodes;
+    #releaseScroll;
+    #releaseScrollPadding;
+    #shown = false;
     #transitioning;
 
     /**
@@ -43,7 +45,7 @@ export default class Offcanvas extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
-        if (this.#scrollNodes) {
+        if (this.#shown) {
             this.#cleanup(false);
         }
 
@@ -53,7 +55,6 @@ export default class Offcanvas extends BaseComponent {
         }
 
         this.#activeTarget = null;
-        this.#scrollNodes = null;
 
         super.dispose();
     }
@@ -134,21 +135,26 @@ export default class Offcanvas extends BaseComponent {
             return;
         }
 
+        const scrollNodes = this.options.scroll ?
+            [] :
+            [document.body, ...$.find('.fixed-top, .fixed-bottom')];
+        const releaseScrollPadding = lockScrollPadding(scrollNodes);
+
+        if (!this.options.scroll) {
+            try {
+                this.#releaseScroll = lockBodyScroll();
+            } catch (error) {
+                releaseScrollPadding();
+                throw error;
+            }
+        }
+
+        this.#releaseScrollPadding = releaseScrollPadding;
+        this.#shown = true;
         this.#transitioning = true;
 
         if (this.options.backdrop) {
             $.addClass(document.body, 'offcanvas-backdrop');
-        }
-
-        this.#scrollNodes = [];
-
-        if (!this.options.scroll) {
-            this.#scrollNodes.push(document.body);
-            this.#scrollNodes.push(...$.find('.fixed-top, .fixed-bottom'));
-
-            addScrollPadding(this.#scrollNodes);
-
-            $.setStyle(document.body, { overflow: 'hidden' });
         }
 
         // Commit the rendered hidden state before starting the transition.
@@ -201,18 +207,17 @@ export default class Offcanvas extends BaseComponent {
             $.removeClass(document.body, 'offcanvas-backdrop');
         }
 
-        if (!this.options.scroll) {
-            resetScrollPadding(this.#scrollNodes);
-
-            $.setStyle(document.body, { overflow: '' });
-        }
+        this.#releaseScrollPadding?.();
+        this.#releaseScroll?.();
 
         if (restoreFocus && this.#activeTarget) {
             $.focus(this.#activeTarget);
         }
 
         this.#activeTarget = null;
-        this.#scrollNodes = null;
+        this.#releaseScrollPadding = null;
+        this.#releaseScroll = null;
+        this.#shown = false;
         this.#transitioning = false;
     }
 }

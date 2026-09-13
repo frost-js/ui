@@ -8,7 +8,8 @@ import FocusTrap from './focus-trap/index.js';
 import { getClickTarget } from './helpers/click-target.js';
 import { generateId, getDataset, initComponent } from './helpers/component.js';
 import { getPosition, getTouchPositions } from './helpers/pointer.js';
-import { addScrollPadding, getScrollbarSize, getScrollContainer, resetScrollPadding } from './helpers/scroll.js';
+import { getScrollbarSize, getScrollContainer, lockScrollPadding } from './helpers/scroll.js';
+import { lockStyles, lockStylesCounterFactory } from './helpers/styles.js';
 import { getTarget, getTargetSelector } from './helpers/target.js';
 import { waitForTransition } from './helpers/transition.js';
 import Modal from './modal/index.js';
@@ -37,7 +38,6 @@ export {
     Tab,
     Toast,
     Tooltip,
-    addScrollPadding,
     generateId,
     getClickTarget,
     getDataset,
@@ -48,6 +48,8 @@ export {
     getTargetSelector,
     getTouchPositions,
     initComponent,
-    resetScrollPadding,
+    lockScrollPadding,
+    lockStyles,
+    lockStylesCounterFactory,
     waitForTransition,
 };
