@@ -54,7 +54,9 @@ export default class Dropdown extends BaseComponent {
             if (this.options.reference === 'parent') {
                 this.#referenceNode = $.parent(this.node).shift();
             } else {
-                this.#referenceNode = $.findOne(this.options.reference);
+                this.#referenceNode = $._isString(this.options.reference) ?
+                    $.findOne(this.options.reference) :
+                    this.options.reference;
             }
         } else {
             this.#referenceNode = this.node;

@@ -9059,7 +9059,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			this.#menuNode = $.next(this.node, ".dropdown-menu").shift();
 			if (this.options.reference) {
 				if (this.options.reference === "parent") this.#referenceNode = $.parent(this.node).shift();
-				else this.#referenceNode = $.findOne(this.options.reference);
+				else this.#referenceNode = $._isString(this.options.reference) ? $.findOne(this.options.reference) : this.options.reference;
 			} else this.#referenceNode = this.node;
 			if (this.#display !== "static" && $.closest(this.node, ".navbar-nav").length) this.#display = "static";
 		}
