@@ -436,14 +436,12 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			if (this.options.ride === "carousel") this.#setTimer();
 		}
 		/**
-		* Advances the carousel automatically when the document is visible.
+		* Resumes automatic cycling and advances when the document is visible.
 		*/
 		cycle() {
+			this.#paused = false;
 			if (!$.isHidden(document)) this.slide(1);
-			else {
-				this.#paused = false;
-				this.#setTimer();
-			}
+			else this.#setTimer();
 		}
 		/** @inheritdoc */
 		dispose() {
@@ -455,9 +453,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				$.removeEvent(this.node, "mouseleave.ui.carousel");
 			}
 			if (this.options.swipe) $.removeEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel");
-			clearTimeout(this.#timer);
+			this.#clearTimer();
 			this.#items = null;
-			this.#timer = null;
 			super.dispose();
 		}
 		/**
@@ -470,8 +467,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		* Stops automatic carousel cycling.
 		*/
 		pause() {
-			clearTimeout(this.#timer);
-			this.#timer = null;
+			this.#clearTimer();
 			this.#paused = true;
 		}
 		/**
@@ -495,6 +491,13 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			this.show(this.#index + direction);
 		}
 		/**
+		* Clears the cycle timer without changing the explicit pause state.
+		*/
+		#clearTimer() {
+			clearTimeout(this.#timer);
+			this.#timer = null;
+		}
+		/**
 		* Attaches carousel interaction handlers.
 		*/
 		#events() {
@@ -511,13 +514,12 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			}
 			if (this.options.pause) {
 				$.addEvent(this.node, "mouseenter.ui.carousel", (_) => {
+					this.#clearTimer();
 					this.#mousePaused = true;
-					this.pause();
 				});
 				$.addEvent(this.node, "mouseleave.ui.carousel", (_) => {
 					this.#mousePaused = false;
-					this.#paused = false;
-					if (!this.#sliding) this.#setTimer();
+					this.#setTimer();
 				});
 			}
 			if (this.options.swipe) {
@@ -527,7 +529,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				let direction;
 				const downEvent = (e) => {
 					if (e.button || this.#sliding || !$.is(e.target, ":disabled, .disabled") && ($.is(e.target, "[data-ui-slide-to], [data-ui-slide], a, button, input, textarea, select") || $.closest(e.target, "[data-ui-slide], a, button", (parent) => $.isSame(parent, this.node) || $.is(parent, ":disabled, .disabled")).length)) return false;
-					this.pause();
+					this.#clearTimer();
 					this.#sliding = true;
 					$.addClass(this.node, "carousel-dragging");
 					startX = getPosition(e).x;
@@ -576,7 +578,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 					if (!this.node || !this.#sliding) return;
 					if (index === null || index === this.#index) {
 						this.#resetDrag();
-						this.#paused = false;
 						this.#setTimer();
 						return;
 					}
@@ -586,7 +587,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 						this.#releaseTransitionScale = $.setStyleLock(this.node, "--ui-carousel-transition-scale", progressRemaining);
 					} catch (error) {
 						this.#resetDrag();
-						this.#paused = false;
 						this.#setTimer();
 						throw error;
 					}
@@ -612,7 +612,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 						$.removeClass(nodeOut, transitionClass);
 						this.#resetDrag();
 						updateIndicators(carousel, index);
-						this.#paused = false;
 						this.#setTimer();
 					});
 				};
@@ -668,7 +667,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				else locks.set(property, $.setStyleLock(node, property, value));
 			} catch (error) {
 				this.#resetDrag();
-				this.#paused = false;
 				this.#setTimer();
 				throw error;
 			}
@@ -677,7 +675,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		* Schedules the next automatic cycle.
 		*/
 		#setTimer() {
-			if (this.#timer || this.#paused || this.#mousePaused) return;
+			if (this.#timer || this.#paused || this.#mousePaused || this.#sliding) return;
 			const interval = $.getDataset(this.#items[this.#index], "uiInterval");
 			this.#timer = setTimeout((_) => {
 				this.#timer = null;
@@ -704,8 +702,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				to: index
 			};
 			if (!$.triggerOne(this.node, "slide.ui.carousel", { data: eventData })) return;
+			this.#clearTimer();
 			this.#sliding = true;
-			this.pause();
 			const nodeIn = this.#items[index];
 			const nodeOut = this.#items[this.#index];
 			const { enter, exit } = getTransitionClasses(direction);
@@ -722,7 +720,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				if (!this.node) return;
 				$.removeClass(nodeOut, transitionClass);
 				updateIndicators(carousel, index);
-				this.#paused = false;
 				this.#sliding = false;
 				this.#setTimer();
 				$.triggerEvent(carousel, "slid.ui.carousel", { data: eventData });

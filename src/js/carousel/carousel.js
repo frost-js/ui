@@ -79,13 +79,14 @@ export default class Carousel extends BaseComponent {
     }
 
     /**
-     * Advances the carousel automatically when the document is visible.
+     * Resumes automatic cycling and advances when the document is visible.
      */
     cycle() {
+        this.#paused = false;
+
         if (!$.isHidden(document)) {
             this.slide(1);
         } else {
-            this.#paused = false;
             this.#setTimer();
         }
     }
@@ -109,10 +110,9 @@ export default class Carousel extends BaseComponent {
             $.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
         }
 
-        clearTimeout(this.#timer);
+        this.#clearTimer();
 
         this.#items = null;
-        this.#timer = null;
 
         super.dispose();
     }
@@ -128,8 +128,8 @@ export default class Carousel extends BaseComponent {
      * Stops automatic carousel cycling.
      */
     pause() {
-        clearTimeout(this.#timer);
-        this.#timer = null;
+        this.#clearTimer();
+
         this.#paused = true;
     }
 
@@ -154,6 +154,14 @@ export default class Carousel extends BaseComponent {
      */
     slide(direction = 1) {
         this.show(this.#index + direction);
+    }
+
+    /**
+     * Clears the cycle timer without changing the explicit pause state.
+     */
+    #clearTimer() {
+        clearTimeout(this.#timer);
+        this.#timer = null;
     }
 
     /**
@@ -185,17 +193,15 @@ export default class Carousel extends BaseComponent {
 
         if (this.options.pause) {
             $.addEvent(this.node, 'mouseenter.ui.carousel', (_) => {
+                this.#clearTimer();
+
                 this.#mousePaused = true;
-                this.pause();
             });
 
             $.addEvent(this.node, 'mouseleave.ui.carousel', (_) => {
                 this.#mousePaused = false;
-                this.#paused = false;
 
-                if (!this.#sliding) {
-                    this.#setTimer();
-                }
+                this.#setTimer();
             });
         }
 
@@ -220,8 +226,10 @@ export default class Carousel extends BaseComponent {
                     return false;
                 }
 
-                this.pause();
+                this.#clearTimer();
+
                 this.#sliding = true;
+
                 $.addClass(this.node, 'carousel-dragging');
 
                 const pos = getPosition(e);
@@ -307,7 +315,6 @@ export default class Carousel extends BaseComponent {
 
                 if (index === null || index === this.#index) {
                     this.#resetDrag();
-                    this.#paused = false;
                     this.#setTimer();
                     return;
                 }
@@ -320,7 +327,6 @@ export default class Carousel extends BaseComponent {
                     this.#releaseTransitionScale = $.setStyleLock(this.node, '--ui-carousel-transition-scale', progressRemaining);
                 } catch (error) {
                     this.#resetDrag();
-                    this.#paused = false;
                     this.#setTimer();
                     throw error;
                 }
@@ -369,7 +375,6 @@ export default class Carousel extends BaseComponent {
                     this.#resetDrag();
                     updateIndicators(carousel, index);
 
-                    this.#paused = false;
                     this.#setTimer();
                 });
             };
@@ -451,7 +456,6 @@ export default class Carousel extends BaseComponent {
             }
         } catch (error) {
             this.#resetDrag();
-            this.#paused = false;
             this.#setTimer();
             throw error;
         }
@@ -461,7 +465,7 @@ export default class Carousel extends BaseComponent {
      * Schedules the next automatic cycle.
      */
     #setTimer() {
-        if (this.#timer || this.#paused || this.#mousePaused) {
+        if (this.#timer || this.#paused || this.#mousePaused || this.#sliding) {
             return;
         }
 
@@ -520,8 +524,9 @@ export default class Carousel extends BaseComponent {
             return;
         }
 
+        this.#clearTimer();
+
         this.#sliding = true;
-        this.pause();
 
         const nodeIn = this.#items[index];
         const nodeOut = this.#items[this.#index];
@@ -558,7 +563,6 @@ export default class Carousel extends BaseComponent {
             $.removeClass(nodeOut, transitionClass);
             updateIndicators(carousel, index);
 
-            this.#paused = false;
             this.#sliding = false;
 
             this.#setTimer();
