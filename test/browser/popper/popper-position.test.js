@@ -208,357 +208,43 @@ test.describe('Popper positioning', () => {
     });
 
     test.describe('position clamp', () => {
-        test('clamps top/start to the right edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '700px',
-                    top: '283px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'top',
-                    position: 'start',
-                    fixed: true,
-                });
-            });
+        for (const { name, left, top, placement, position, boundaryEdge } of [
+            { name: 'clamps top/start to the right edge', left: '700px', top: '283px', placement: 'top', position: 'start', boundaryEdge: 'right' },
+            { name: 'clamps top/center to the right edge', left: '700px', top: '283px', placement: 'top', position: 'center', boundaryEdge: 'right' },
+            { name: 'clamps top/center to the left edge', left: '0px', top: '283px', placement: 'top', position: 'center', boundaryEdge: 'left' },
+            { name: 'clamps top/end to the left edge', left: '0px', top: '283px', placement: 'top', position: 'end', boundaryEdge: 'left' },
+            { name: 'clamps inline-end/start to the bottom edge', left: '360px', top: '540px', placement: 'end', position: 'start', boundaryEdge: 'bottom' },
+            { name: 'clamps inline-end/center to the bottom edge', left: '360px', top: '550px', placement: 'end', position: 'center', boundaryEdge: 'bottom' },
+            { name: 'clamps inline-end/center to the top edge', left: '360px', top: '0px', placement: 'end', position: 'center', boundaryEdge: 'top' },
+            { name: 'clamps inline-end/end to the top edge', left: '360px', top: '0px', placement: 'end', position: 'end', boundaryEdge: 'top' },
+            { name: 'clamps bottom/start to the right edge', left: '700px', top: '283px', placement: 'bottom', position: 'start', boundaryEdge: 'right' },
+            { name: 'clamps bottom/center to the right edge', left: '700px', top: '283px', placement: 'bottom', position: 'center', boundaryEdge: 'right' },
+            { name: 'clamps bottom/center to the left edge', left: '0px', top: '283px', placement: 'bottom', position: 'center', boundaryEdge: 'left' },
+            { name: 'clamps bottom/end to the left edge', left: '0px', top: '283px', placement: 'bottom', position: 'end', boundaryEdge: 'left' },
+            { name: 'clamps inline-start/start to the bottom edge', left: '360px', top: '540px', placement: 'start', position: 'start', boundaryEdge: 'bottom' },
+            { name: 'clamps inline-start/center to the bottom edge', left: '360px', top: '550px', placement: 'start', position: 'center', boundaryEdge: 'bottom' },
+            { name: 'clamps inline-start/center to the top edge', left: '360px', top: '0px', placement: 'start', position: 'center', boundaryEdge: 'top' },
+            { name: 'clamps inline-start/end to the top edge', left: '360px', top: '0px', placement: 'start', position: 'end', boundaryEdge: 'top' },
+        ]) {
+            test(name, async ({ page }) => {
+                await page.evaluate(({ left, top, placement, position }) => {
+                    $.setStyle('#reference', { left, top });
+                    UI.Popper.init($.findOne('#popper'), {
+                        reference: $.findOne('#reference'),
+                        placement,
+                        position,
+                        fixed: true,
+                    });
+                }, { left, top, placement, position });
 
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'top',
-                boundaryEdge: 'right',
-            });
-        });
-
-        test('clamps top/center to the right edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '700px',
-                    top: '283px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'top',
-                    position: 'center',
-                    fixed: true,
+                await expectPopperPosition(page, {
+                    popper: '#popper',
+                    reference: '#reference',
+                    placement,
+                    boundaryEdge,
                 });
             });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'top',
-                boundaryEdge: 'right',
-            });
-        });
-
-        test('clamps top/center to the left edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '0px',
-                    top: '283px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'top',
-                    position: 'center',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'top',
-                boundaryEdge: 'left',
-            });
-        });
-
-        test('clamps top/end to the left edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '0px',
-                    top: '283px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'top',
-                    position: 'end',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'top',
-                boundaryEdge: 'left',
-            });
-        });
-
-        test('clamps inline-end/start to the bottom edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '360px',
-                    top: '540px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'end',
-                    position: 'start',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'end',
-                boundaryEdge: 'bottom',
-            });
-        });
-
-        test('clamps inline-end/center to the bottom edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '360px',
-                    top: '550px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'end',
-                    position: 'center',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'end',
-                boundaryEdge: 'bottom',
-            });
-        });
-
-        test('clamps inline-end/center to the top edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '360px',
-                    top: '0px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'end',
-                    position: 'center',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'end',
-                boundaryEdge: 'top',
-            });
-        });
-
-        test('clamps inline-end/end to the top edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '360px',
-                    top: '0px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'end',
-                    position: 'end',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'end',
-                boundaryEdge: 'top',
-            });
-        });
-
-        test('clamps bottom/start to the right edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '700px',
-                    top: '283px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'bottom',
-                    position: 'start',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'bottom',
-                boundaryEdge: 'right',
-            });
-        });
-
-        test('clamps bottom/center to the right edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '700px',
-                    top: '283px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'bottom',
-                    position: 'center',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'bottom',
-                boundaryEdge: 'right',
-            });
-        });
-
-        test('clamps bottom/center to the left edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '0px',
-                    top: '283px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'bottom',
-                    position: 'center',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'bottom',
-                boundaryEdge: 'left',
-            });
-        });
-
-        test('clamps bottom/end to the left edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '0px',
-                    top: '283px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'bottom',
-                    position: 'end',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'bottom',
-                boundaryEdge: 'left',
-            });
-        });
-
-        test('clamps inline-start/start to the bottom edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '360px',
-                    top: '540px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'start',
-                    position: 'start',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'start',
-                boundaryEdge: 'bottom',
-            });
-        });
-
-        test('clamps inline-start/center to the bottom edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '360px',
-                    top: '550px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'start',
-                    position: 'center',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'start',
-                boundaryEdge: 'bottom',
-            });
-        });
-
-        test('clamps inline-start/center to the top edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '360px',
-                    top: '0px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'start',
-                    position: 'center',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'start',
-                boundaryEdge: 'top',
-            });
-        });
-
-        test('clamps inline-start/end to the top edge', async ({ page }) => {
-            await page.evaluate((_) => {
-                $.setStyle('#reference', {
-                    left: '360px',
-                    top: '0px',
-                });
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    placement: 'start',
-                    position: 'end',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'start',
-                boundaryEdge: 'top',
-            });
-        });
+        }
     });
 
     test.describe('fixed option', () => {

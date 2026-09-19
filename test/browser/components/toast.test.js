@@ -1,32 +1,22 @@
+import {
+    setup,
+    setupAutohide,
+    setupHidden,
+    toastDisposeTests,
+    toastHideTests,
+    toastInitTests,
+    toastShowTests,
+} from '#cases/components/toast.js';
 import { expect, test } from '#test';
-import { advanceClock, waitForFrame } from '../../setup/browser.js';
+import { advanceClock } from '../../setup/browser.js';
 
 test.use({ reducedMotion: 'no-preference' });
 
 test.describe('Toast', () => {
-    test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
-            $.setHtml(
-                document.body,
-                `
-                    <div class="toast fade show" id="toast1">
-                        <button class="btn-close" id="button1" data-ui-dismiss="toast" type="button"></button>
-                    </div>
-                    <div class="toast fade show" id="toast2">
-                        <button class="btn-close" id="button2" data-ui-dismiss="toast" type="button"></button>
-                    </div>
-                `,
-            );
-        });
-    });
+    test.beforeEach(setup);
 
     test.describe('#init', () => {
-        test('creates a toast', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                return UI.Toast.init(toast1) instanceof UI.Toast;
-            })).toBe(true);
-        });
+        toastInitTests((selector) => UI.Toast.init(document.querySelector(selector)));
 
         test('creates a toast (data-ui-toggle)', async ({ page }) => {
             await page.locator('#button1').click();
@@ -34,54 +24,13 @@ test.describe('Toast', () => {
             expect(await page.evaluate((_) =>
                 $.getData('#toast1', 'toast') instanceof UI.Toast)).toBe(true);
         });
-
-        test('creates a toast (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('#toast1').toast();
-                return $.getData('#toast1', 'toast') instanceof UI.Toast;
-            })).toBe(true);
-        });
-
-        test('creates multiple toasts (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('.toast').toast();
-                return $.find('.toast').every((node) =>
-                    $.getData(node, 'toast') instanceof UI.Toast,
-                );
-            })).toBe(true);
-        });
-
-        test('returns the toast (query)', async ({ page }) => {
-            expect(await page.evaluate((_) =>
-                $('#toast1').toast() instanceof UI.Toast)).toBe(true);
-        });
     });
 
     test.describe('#dispose', () => {
         test.use({ mockClock: true });
 
-        test('removes the toast', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                UI.Toast.init(toast1).dispose();
-                return $.hasData(toast1, 'toast');
-            })).toBe(false);
-        });
-
-        test('removes the toast (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('#toast1').toast('dispose');
-                return $.hasData('#toast1', 'toast');
-            })).toBe(false);
-        });
-
-        test('removes multiple toasts (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('.toast').toast('dispose');
-                return $.find('.toast').some((node) =>
-                    $.hasData(node, 'toast'),
-                );
-            })).toBe(false);
+        toastDisposeTests((selector) => {
+            UI.Toast.init(document.querySelector(selector)).dispose();
         });
 
         test('clears the autohide timer', async ({ page }) => {
@@ -194,43 +143,8 @@ test.describe('Toast', () => {
     });
 
     test.describe('#hide', () => {
-        test('hides the toast', async ({ page }) => {
-            await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                UI.Toast.init(toast1).hide();
-            });
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-            await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast2')).toBeVisible();
-        });
-
-        test('hides the toast (data-ui-dismiss)', async ({ page }) => {
-            await page.locator('#button1').click();
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-        });
-
-        test('hides the toast (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#toast1').toast('hide');
-            });
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-        });
-
-        test('hides multiple toasts (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('.toast').toast('hide');
-            });
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-            await expect(page.locator('#toast2')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast2')).toBeHidden();
+        toastHideTests((selector) => {
+            UI.Toast.init(document.querySelector(selector)).hide();
         });
 
         test('does not remove the toast after hiding', async ({ page }) => {
@@ -297,56 +211,20 @@ test.describe('Toast', () => {
             await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#toast1')).toBeHidden();
         });
+
+        test('hides the toast (data-ui-dismiss)', async ({ page }) => {
+            await page.locator('#button1').click();
+
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
+        });
     });
 
     test.describe('#show', () => {
-        test.beforeEach(async ({ page }) => {
-            await page.locator('.toast').evaluateAll((toasts) => {
-                for (const toast of toasts) {
-                    $.removeClass(toast, 'show');
-                    $.setStyle(toast, { display: 'none' }, null, { important: true });
-                }
-            });
-            await waitForFrame(page);
-        });
+        test.beforeEach(setupHidden);
 
-        test('shows the toast', async ({ page }) => {
-            await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                UI.Toast.init(toast1, { autohide: false }).show();
-            });
-
-            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeVisible();
-            await expect(page.locator('#toast1')).toHaveAttribute('style', '');
-            await expect(page.locator('#toast2')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast2')).toBeHidden();
-        });
-
-        test('shows the toast (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#toast1')
-                    .toast({ autohide: false })
-                    .show();
-            });
-
-            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeVisible();
-            await expect(page.locator('#toast1')).toHaveAttribute('style', '');
-        });
-
-        test('shows multiple toasts (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('.toast').toast({ autohide: false });
-                $('.toast').toast('show');
-            });
-
-            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeVisible();
-            await expect(page.locator('#toast1')).toHaveAttribute('style', '');
-            await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast2')).toBeVisible();
-            await expect(page.locator('#toast2')).toHaveAttribute('style', '');
+        toastShowTests((selector) => {
+            UI.Toast.init(document.querySelector(selector), { autohide: false }).show();
         });
 
         test('can be called multiple times', async ({ page }) => {
@@ -527,12 +405,7 @@ test.describe('Toast', () => {
     test.describe('autohide option', () => {
         test.use({ mockClock: true });
 
-        test.beforeEach(async ({ page }) => {
-            await page.locator('#toast1').evaluate((toast) => {
-                $.removeClass(toast, 'fade', 'show');
-                $.setStyle(toast, { display: 'none' }, null, { important: true });
-            });
-        });
+        test.beforeEach(setupAutohide);
 
         test('autohides by default', async ({ page }) => {
             await page.evaluate(async (_) => {
@@ -620,34 +493,12 @@ test.describe('Toast', () => {
             await expect(page.locator('#toast1')).toHaveAttribute('data-ui-autohide', 'false');
             await expect(page.locator('#toast1')).toBeVisible();
         });
-
-        test('works with autohide option (query)', async ({ page }) => {
-            await page.evaluate(async (_) => {
-                const toast1 = $.findOne('#toast1');
-                const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
-                });
-                $('#toast1')
-                    .toast({ autohide: false })
-                    .show();
-                await shown;
-            });
-            await advanceClock(page, 300);
-
-            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeVisible();
-        });
     });
 
     test.describe('delay option', () => {
         test.use({ mockClock: true });
 
-        test.beforeEach(async ({ page }) => {
-            await page.locator('#toast1').evaluate((toast) => {
-                $.removeClass(toast, 'fade', 'show');
-                $.setStyle(toast, { display: 'none' }, null, { important: true });
-            });
-        });
+        test.beforeEach(setupAutohide);
 
         test('works with delay option', async ({ page }) => {
             await page.evaluate(async (_) => {
@@ -690,27 +541,145 @@ test.describe('Toast', () => {
             await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#toast1')).toBeHidden();
         });
+    });
 
-        test('works with delay option (query)', async ({ page }) => {
-            await page.evaluate(async (_) => {
-                const toast1 = $.findOne('#toast1');
-                const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
-                });
-                $('#toast1')
-                    .toast({ delay: 300 })
-                    .show();
-                await shown;
+    test.describe('QuerySet', () => {
+        test.describe('#init', () => {
+            toastInitTests((selector) => $(selector).toast());
+
+            test('creates multiple toasts', async ({ page }) => {
+                expect(await page.evaluate((_) => {
+                    $('.toast').toast();
+                    return $.find('.toast').every((node) =>
+                        $.getData(node, 'toast') instanceof UI.Toast,
+                    );
+                })).toBe(true);
             });
-            await advanceClock(page, 250);
 
-            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeVisible();
+            test('returns the toast', async ({ page }) => {
+                expect(await page.evaluate((_) =>
+                    $('#toast1').toast() instanceof UI.Toast)).toBe(true);
+            });
+        });
 
-            await advanceClock(page, 100);
+        test.describe('#dispose', () => {
+            test.use({ mockClock: true });
 
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
+            toastDisposeTests((selector) => {
+                $(selector).toast('dispose');
+            });
+
+            test('removes multiple toasts', async ({ page }) => {
+                expect(await page.evaluate((_) => {
+                    $('.toast').toast('dispose');
+                    return $.find('.toast').some((node) =>
+                        $.hasData(node, 'toast'),
+                    );
+                })).toBe(false);
+            });
+        });
+
+        test.describe('#hide', () => {
+            toastHideTests((selector) => {
+                $(selector).toast('hide');
+            });
+
+            test('hides multiple toasts', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('.toast').toast('hide');
+                });
+
+                await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeHidden();
+                await expect(page.locator('#toast2')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast2')).toBeHidden();
+            });
+        });
+
+        test.describe('#show', () => {
+            test.beforeEach(setupHidden);
+
+            toastShowTests((selector) => {
+                $(selector).toast({ autohide: false });
+                $(selector).toast('show');
+            });
+
+            test('shows the toast through the returned instance', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('#toast1')
+                        .toast({ autohide: false })
+                        .show();
+                });
+
+                await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeVisible();
+                await expect(page.locator('#toast1')).toHaveAttribute('style', '');
+            });
+
+            test('shows multiple toasts', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('.toast').toast({ autohide: false });
+                    $('.toast').toast('show');
+                });
+
+                await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeVisible();
+                await expect(page.locator('#toast1')).toHaveAttribute('style', '');
+                await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast2')).toBeVisible();
+                await expect(page.locator('#toast2')).toHaveAttribute('style', '');
+            });
+        });
+
+        test.describe('autohide option', () => {
+            test.use({ mockClock: true });
+
+            test.beforeEach(setupAutohide);
+
+            test('works with autohide option', async ({ page }) => {
+                await page.evaluate(async (_) => {
+                    const toast1 = $.findOne('#toast1');
+                    const shown = new Promise((resolve) => {
+                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    });
+                    $('#toast1')
+                        .toast({ autohide: false })
+                        .show();
+                    await shown;
+                });
+                await advanceClock(page, 300);
+
+                await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeVisible();
+            });
+        });
+
+        test.describe('delay option', () => {
+            test.use({ mockClock: true });
+
+            test.beforeEach(setupAutohide);
+
+            test('works with delay option', async ({ page }) => {
+                await page.evaluate(async (_) => {
+                    const toast1 = $.findOne('#toast1');
+                    const shown = new Promise((resolve) => {
+                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    });
+                    $('#toast1')
+                        .toast({ delay: 300 })
+                        .show();
+                    await shown;
+                });
+                await advanceClock(page, 250);
+
+                await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeVisible();
+
+                await advanceClock(page, 100);
+
+                await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeHidden();
+            });
         });
     });
 });
