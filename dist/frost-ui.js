@@ -445,6 +445,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (this.#sliding) updateIndicators(this.node, this.#index);
 			this.#resetDrag();
 			$.removeClass(this.#items, "carousel-item-next carousel-item-prev");
 			if (this.options.keyboard) $.removeEvent(this.node, "keydown.ui.carousel");
@@ -1549,6 +1550,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		dispose() {
 			if (this.#popper) this.#popper.dispose();
 			this.#releaseDisplay?.();
+			if (this.#transitioning) $.setAttribute(this.node, { "aria-expanded": $.hasClass(this.#menuNode, "show") });
 			this.#menuNode = null;
 			this.#popper = null;
 			this.#referenceNode = null;
@@ -2678,7 +2680,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			waitForTransition(this.node, ["opacity"]).then(({ node }) => {
 				if (!this.node) return;
 				try {
-					this.#releaseDisplay = $.setStyleLock(node, "display", "none", { important: true });
+					this.#setDisplay("none");
 				} finally {
 					this.#transitioning = false;
 				}
@@ -2691,8 +2693,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		show() {
 			if (this.#transitioning || $.hasClass(this.node, "show") || !$.triggerOne(this.node, "show.ui.toast")) return;
 			clearTimeout(this.#timer);
-			this.#releaseDisplay?.();
-			this.#releaseDisplay = null;
+			this.#setDisplay("");
 			this.#timer = null;
 			this.#transitioning = true;
 			$.css(this.node, "opacity");
@@ -2706,6 +2707,14 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				this.#transitioning = false;
 				$.triggerEvent(node, "shown.ui.toast");
 			});
+		}
+		/**
+		* Updates visibility while preserving the original display declaration until disposal.
+		* @param {string} display The temporary display value.
+		*/
+		#setDisplay(display) {
+			if (this.#releaseDisplay) $.setStyle(this.node, { display }, null, { important: true });
+			else this.#releaseDisplay = $.setStyleLock(this.node, "display", display, { important: true });
 		}
 	};
 

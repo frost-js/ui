@@ -85,6 +85,10 @@ export default class Dropdown extends BaseComponent {
 
         this.#releaseDisplay?.();
 
+        if (this.#transitioning) {
+            $.setAttribute(this.node, { 'aria-expanded': $.hasClass(this.#menuNode, 'show') });
+        }
+
         this.#menuNode = null;
         this.#popper = null;
         this.#referenceNode = null;

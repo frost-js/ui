@@ -63,7 +63,7 @@ export default class Toast extends BaseComponent {
             }
 
             try {
-                this.#releaseDisplay = $.setStyleLock(node, 'display', 'none', { important: true });
+                this.#setDisplay('none');
             } finally {
                 this.#transitioning = false;
             }
@@ -85,9 +85,8 @@ export default class Toast extends BaseComponent {
         }
 
         clearTimeout(this.#timer);
-        this.#releaseDisplay?.();
+        this.#setDisplay('');
 
-        this.#releaseDisplay = null;
         this.#timer = null;
         this.#transitioning = true;
 
@@ -114,5 +113,17 @@ export default class Toast extends BaseComponent {
 
             $.triggerEvent(node, 'shown.ui.toast');
         });
+    }
+
+    /**
+     * Updates visibility while preserving the original display declaration until disposal.
+     * @param {string} display The temporary display value.
+     */
+    #setDisplay(display) {
+        if (this.#releaseDisplay) {
+            $.setStyle(this.node, { display }, null, { important: true });
+        } else {
+            this.#releaseDisplay = $.setStyleLock(this.node, 'display', display, { important: true });
+        }
     }
 }

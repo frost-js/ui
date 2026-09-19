@@ -1,5 +1,5 @@
 import { expect, test } from '#test';
-import { resetPage } from '../../setup/browser.js';
+import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
 
 test.use({ reducedMotion: 'no-preference' });
 
@@ -96,7 +96,8 @@ test.describe('Dropdown', () => {
             })).toBe(false);
         });
 
-        test('completes showing after disposal', async ({ page }) => {
+        test('settles showing on disposal without a late event', async ({ page }) => {
+            await setupClock(page);
             await page.evaluate((_) => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 window.dropdownShownEventTriggered = false;
@@ -109,15 +110,17 @@ test.describe('Dropdown', () => {
                 dropdown.show();
                 dropdown.dispose();
             });
+            await advanceClock(page, 1000);
 
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#dropdown1')).toHaveClass(/\bshow\b/);
             await expect(page.locator('#dropdown1')).toBeVisible();
-            expect(await page.evaluate((_) => window.dropdownShownEventTriggered)).toBe(true);
+            expect(await page.evaluate((_) => window.dropdownShownEventTriggered)).toBe(false);
             expect(await page.evaluate((_) => $.hasData('#dropdown-toggle-1', 'dropdown'))).toBe(false);
         });
 
-        test('completes hiding after disposal', async ({ page }) => {
+        test('settles hiding on disposal without a late event', async ({ page }) => {
+            await setupClock(page);
             await page.evaluate((_) => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
@@ -136,11 +139,12 @@ test.describe('Dropdown', () => {
                 dropdown.hide();
                 dropdown.dispose();
             });
+            await advanceClock(page, 1000);
 
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
             await expect(page.locator('#dropdown1')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#dropdown1')).toBeHidden();
-            expect(await page.evaluate((_) => window.dropdownHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate((_) => window.dropdownHiddenEventTriggered)).toBe(false);
             expect(await page.evaluate((_) => $.hasData('#dropdown-toggle-1', 'dropdown'))).toBe(false);
         });
     });

@@ -119,25 +119,32 @@ test.describe('Toast', () => {
             })).toBe(true);
         });
 
-        test('completes showing after disposal', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => new Promise((resolve) => {
+        test('restores display on disposal while showing without a late event', async ({ page }) => {
+            await setupClock(page);
+            await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'show');
                 $.setStyle(toast1, { display: 'none' }, null, { important: true });
+                window.toastShownEventTriggered = false;
 
-                $.addEventOnce(toast1, 'shown.ui.toast', (_) => resolve(true));
+                $.addEvent(toast1, 'shown.ui.toast', (_) => {
+                    window.toastShownEventTriggered = true;
+                });
 
                 const toast = UI.Toast.init(toast1);
                 toast.show();
                 toast.dispose();
-            }));
+            });
+            await advanceClock(page, 1000);
 
-            expect(eventTriggered).toBe(true);
-            await expect(page.locator('#toast1')).toHaveCSS('opacity', '1');
+            await expect(page.locator('#toast1')).toBeHidden();
+            expect(await page.locator('#toast1').evaluate((node) => node.style.getPropertyPriority('display'))).toBe('important');
+            expect(await page.evaluate((_) => window.toastShownEventTriggered)).toBe(false);
             expect(await page.evaluate((_) => $.hasData('#toast1', 'toast'))).toBe(false);
         });
 
-        test('completes hiding after disposal', async ({ page }) => {
+        test('does not apply hidden styles or emit an event after disposal', async ({ page }) => {
+            await setupClock(page);
             await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
                 window.toastHiddenEventTriggered = false;
@@ -150,11 +157,45 @@ test.describe('Toast', () => {
                 toast.hide();
                 toast.dispose();
             });
+            await advanceClock(page, 1000);
 
-            await expect(page.locator('#toast1')).toBeHidden();
-            expect(await page.evaluate((_) => window.toastHiddenEventTriggered)).toBe(true);
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toHaveCSS('opacity', '0');
+            expect(await page.locator('#toast1').evaluate((node) => node.style.display)).toBe('');
+            expect(await page.evaluate((_) => window.toastHiddenEventTriggered)).toBe(false);
             expect(await page.evaluate((_) => $.hasData('#toast1', 'toast'))).toBe(false);
         });
+
+        for (const display of ['none', 'grid']) {
+            test(`restores original display: ${display} !important after repeated visibility changes`, async ({ page }) => {
+                const states = await page.evaluate(async (display) => {
+                    const node = $.findOne('#toast1');
+                    $.removeClass(node, 'fade show');
+                    $.setStyle(node, { display }, null, { important: true });
+                    const toast = UI.Toast.init(node, { autohide: false });
+                    const states = [];
+
+                    for (let index = 0; index < 2; index++) {
+                        const shown = new Promise((resolve) => $.addEventOnce(node, 'shown.ui.toast', resolve));
+                        toast.show();
+                        await shown;
+                        states.push($.css(node, 'display'));
+
+                        const hidden = new Promise((resolve) => $.addEventOnce(node, 'hidden.ui.toast', resolve));
+                        toast.hide();
+                        await hidden;
+                        states.push($.css(node, 'display'));
+                    }
+
+                    toast.dispose();
+                    return { states, display: node.style.display, priority: node.style.getPropertyPriority('display') };
+                }, display);
+
+                expect(states.states).toEqual(['block', 'none', 'block', 'none']);
+                expect(states.display).toBe(display);
+                expect(states.priority).toBe('important');
+            });
+        }
     });
 
     test.describe('#hide', () => {

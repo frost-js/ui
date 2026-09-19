@@ -93,6 +93,10 @@ export default class Carousel extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
+        if (this.#sliding) {
+            updateIndicators(this.node, this.#index);
+        }
+
         this.#resetDrag();
 
         $.removeClass(this.#items, 'carousel-item-next carousel-item-prev');

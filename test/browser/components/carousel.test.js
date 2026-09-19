@@ -121,7 +121,7 @@ test.describe('Carousel', () => {
             expect(defaultPrevented).toBe(false);
         });
 
-        test('completes sliding after disposal', async ({ page }) => {
+        test('settles the active slide on disposal without a late event', async ({ page }) => {
             await page.evaluate((_) => {
                 const carousel1 = $.findOne('#carousel1');
                 window.carouselSlidEventTriggered = false;
@@ -134,10 +134,11 @@ test.describe('Carousel', () => {
                 carousel.show(1);
                 carousel.dispose();
             });
+            await advanceClock(page, 1000);
 
             await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
+            expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(false);
             expect(await page.evaluate((_) => $.hasData('#carousel1', 'carousel'))).toBe(false);
         });
     });
