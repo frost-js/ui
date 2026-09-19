@@ -1,11 +1,6 @@
 import { expect, test } from '#test';
-import { resetPage } from '../../setup/browser.js';
 
 test.use({ reducedMotion: 'no-preference' });
-
-test.beforeEach(async ({ page }) => {
-    await resetPage(page);
-});
 
 test.describe('Tab', () => {
     test.beforeEach(async ({ page }) => {

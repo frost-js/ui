@@ -31,38 +31,3 @@ export async function waitForFrame(page) {
         window.requestAnimationFrame(resolve);
     }));
 }
-
-/**
- * Resets the browser page state for a test.
- * @param {Page} page The Playwright page.
- * @returns {Promise<void>} The promise.
- */
-export async function resetPage(page) {
-    await page.goto('/', {
-        waitUntil: 'domcontentloaded',
-    });
-
-    const stateReset = await page.evaluate((_) => {
-        if (!window.fQuery || !window.UI) {
-            return false;
-        }
-
-        window.$ = window.fQuery;
-        $.setAnimationDefaults({ debug: true });
-        $.useTimeout();
-
-        return window.$ === window.fQuery;
-    });
-
-    if (!stateReset) {
-        throw new Error('Failed to restore Frost UI on the test page.');
-    }
-
-    await page.waitForFunction((_) => {
-        const test = $.create('div', { class: 'text-center' });
-        $.append(document.body, test);
-        const ready = $.css(test, 'text-align') === 'center';
-        $.remove(test);
-        return ready;
-    });
-}

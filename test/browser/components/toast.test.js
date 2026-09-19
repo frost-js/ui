@@ -1,11 +1,7 @@
 import { expect, test } from '#test';
-import { advanceClock, resetPage, setupClock, waitForFrame } from '../../setup/browser.js';
+import { advanceClock, waitForFrame } from '../../setup/browser.js';
 
 test.use({ reducedMotion: 'no-preference' });
-
-test.beforeEach(async ({ page }) => {
-    await resetPage(page);
-});
 
 test.describe('Toast', () => {
     test.beforeEach(async ({ page }) => {
@@ -62,6 +58,8 @@ test.describe('Toast', () => {
     });
 
     test.describe('#dispose', () => {
+        test.use({ mockClock: true });
+
         test('removes the toast', async ({ page }) => {
             expect(await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
@@ -87,7 +85,6 @@ test.describe('Toast', () => {
         });
 
         test('clears the autohide timer', async ({ page }) => {
-            await setupClock(page);
             await page.evaluate(async (_) => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'fade show');
@@ -120,7 +117,6 @@ test.describe('Toast', () => {
         });
 
         test('restores display on disposal while showing without a late event', async ({ page }) => {
-            await setupClock(page);
             await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'show');
@@ -144,7 +140,6 @@ test.describe('Toast', () => {
         });
 
         test('does not apply hidden styles or emit an event after disposal', async ({ page }) => {
-            await setupClock(page);
             await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
                 window.toastHiddenEventTriggered = false;
@@ -530,8 +525,9 @@ test.describe('Toast', () => {
     });
 
     test.describe('autohide option', () => {
+        test.use({ mockClock: true });
+
         test.beforeEach(async ({ page }) => {
-            await setupClock(page);
             await page.locator('#toast1').evaluate((toast) => {
                 $.removeClass(toast, 'fade', 'show');
                 $.setStyle(toast, { display: 'none' }, null, { important: true });
@@ -644,8 +640,9 @@ test.describe('Toast', () => {
     });
 
     test.describe('delay option', () => {
+        test.use({ mockClock: true });
+
         test.beforeEach(async ({ page }) => {
-            await setupClock(page);
             await page.locator('#toast1').evaluate((toast) => {
                 $.removeClass(toast, 'fade', 'show');
                 $.setStyle(toast, { display: 'none' }, null, { important: true });

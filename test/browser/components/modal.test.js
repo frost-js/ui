@@ -1,13 +1,9 @@
 import { expect, test } from '#test';
-import { resetPage } from '../../setup/browser.js';
+import { advanceClock } from '../../setup/browser.js';
 import { expectStyles } from '../../support/assertions/styles.js';
 import { measureScrollbarSize } from '../../support/measurements/scrollbar.js';
 
 test.use({ reducedMotion: 'no-preference' });
-
-test.beforeEach(async ({ page }) => {
-    await resetPage(page);
-});
 
 test.describe('Modal', () => {
     test.beforeEach(async ({ page }) => {
@@ -61,6 +57,8 @@ test.describe('Modal', () => {
     });
 
     test.describe('#dispose', () => {
+        test.use({ mockClock: true });
+
         test('removes the modal', async ({ page }) => {
             expect(await page.evaluate((_) => {
                 const modal1 = $.findOne('#modal1');
@@ -141,7 +139,7 @@ test.describe('Modal', () => {
                 modal.dispose();
             });
 
-            await page.waitForTimeout(400);
+            await advanceClock(page, 1000);
 
             await expect(page.locator('#modal1')).toHaveClass('modal');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');

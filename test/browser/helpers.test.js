@@ -1,9 +1,5 @@
 import { expect, test } from '#test';
-import { advanceClock, resetPage, setupClock } from '../setup/browser.js';
-
-test.beforeEach(async ({ page }) => {
-    await resetPage(page);
-});
+import { advanceClock } from '../setup/browser.js';
 
 test.describe('initComponent', () => {
     test('defines the query method as non-enumerable', async ({ page }) => {
@@ -39,6 +35,8 @@ test.describe('getTouchPositions', () => {
 });
 
 test.describe('waitForTransition', () => {
+    test.use({ mockClock: true });
+
     test('returns completed results with the node and additional data', async ({ page }) => {
         expect(await page.evaluate(async (_) => {
             const node = $.create('div');
@@ -90,7 +88,6 @@ test.describe('waitForTransition', () => {
     });
 
     test('falls back after the transition timing when the finished promise stalls', async ({ page }) => {
-        await setupClock(page);
         await page.evaluate((_) => {
             const node = $.create('div');
             const transition = Object.create(CSSTransition.prototype);
@@ -122,7 +119,6 @@ test.describe('waitForTransition', () => {
 
     test('falls back for stalled zero-duration transitions with reduced motion', async ({ page }) => {
         await page.emulateMedia({ reducedMotion: 'reduce' });
-        await setupClock(page);
 
         expect(await page.evaluate((_) => {
             const styleNode = $.create('div', { class: 'fade' });

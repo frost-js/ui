@@ -1,31 +1,55 @@
 import process from 'node:process';
 import { test as base, expect } from '@playwright/test';
 import { addCoverageReport } from 'monocart-reporter';
+import { setupClock } from '../setup/browser.js';
 
-let test = base;
+const collectCoverage = process.env.FROST_UI_COVERAGE === 'true';
 
-if (process.env.FROST_UI_COVERAGE === 'true') {
-    test = base.extend({
-        coverage: [
-            async ({ page }, use, testInfo) => {
+const test = base.extend({
+    mockClock: [false, { option: true }],
+    uiPage: [
+        async ({ page, mockClock }, use, testInfo) => {
+            if (collectCoverage) {
                 await page.coverage.startJSCoverage({
                     resetOnNavigation: false,
                 });
+            }
 
-                await use();
+            if (mockClock) {
+                await setupClock(page);
+            }
 
-                const coverage = await page.coverage.stopJSCoverage();
+            await page.goto('/', {
+                waitUntil: 'domcontentloaded',
+            });
 
-                if (coverage.length) {
-                    await addCoverageReport(coverage, testInfo);
+            await page.evaluate((_) => {
+                if (!window.fQuery || !window.UI) {
+                    throw new Error('Failed to load Frost UI on the test page.');
                 }
-            },
-            {
-                auto: true,
-                scope: 'test',
-            },
-        ],
-    });
-}
+
+                // Keep the stylesheet in the head for component layout and transitions.
+                document.body.replaceChildren();
+            });
+
+            await page.waitForFunction((_) => {
+                const node = document.createElement('div');
+                node.className = 'text-center';
+                document.body.append(node);
+                const ready = getComputedStyle(node).textAlign === 'center';
+                node.remove();
+                return ready;
+            });
+
+            await use();
+
+            if (collectCoverage) {
+                const coverage = await page.coverage.stopJSCoverage();
+                await addCoverageReport(coverage, testInfo);
+            }
+        },
+        { auto: true },
+    ],
+});
 
 export { expect, test };

@@ -1,10 +1,5 @@
 import { test } from '#test';
-import { resetPage } from '../../setup/browser.js';
 import { expectPopperPosition } from '../../support/assertions/popper.js';
-
-test.beforeEach(async ({ page }) => {
-    await resetPage(page);
-});
 
 test.describe('Popper boundaries', () => {
     test.describe('container option', () => {

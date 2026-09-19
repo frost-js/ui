@@ -1,13 +1,9 @@
 import { expect, test } from '#test';
-import { resetPage } from '../../setup/browser.js';
+import { advanceClock } from '../../setup/browser.js';
 import { expectStyles } from '../../support/assertions/styles.js';
 import { measureScrollbarSize } from '../../support/measurements/scrollbar.js';
 
 test.use({ reducedMotion: 'no-preference' });
-
-test.beforeEach(async ({ page }) => {
-    await resetPage(page);
-});
 
 test.describe('Offcanvas', () => {
     test.beforeEach(async ({ page }) => {
@@ -57,6 +53,8 @@ test.describe('Offcanvas', () => {
     });
 
     test.describe('#dispose', () => {
+        test.use({ mockClock: true });
+
         test('removes the offcanvas', async ({ page }) => {
             expect(await page.evaluate((_) => {
                 const offcanvas1 = $.findOne('#offcanvas1');
@@ -135,7 +133,7 @@ test.describe('Offcanvas', () => {
                 offcanvas.dispose();
             });
 
-            await page.waitForTimeout(400);
+            await advanceClock(page, 1000);
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');

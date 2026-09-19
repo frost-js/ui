@@ -1,12 +1,9 @@
 import { expect, test } from '#test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
+import { advanceClock } from '../../setup/browser.js';
 
 test.use({ reducedMotion: 'no-preference' });
 
-test.beforeEach(async ({ page }) => {
-    await setupClock(page);
-    await resetPage(page);
-});
+test.use({ mockClock: true });
 
 test.describe('Ripple', () => {
     test.beforeEach(async ({ page }) => {

@@ -1,10 +1,5 @@
 import { expect, test } from '#test';
-import { resetPage } from '../../setup/browser.js';
 import { expectStyles } from '../../support/assertions/styles.js';
-
-test.beforeEach(async ({ page }) => {
-    await resetPage(page);
-});
 
 test.describe('Popper', () => {
     test.beforeEach(async ({ page }) => {

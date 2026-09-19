@@ -1,11 +1,7 @@
 import { expect, test } from '#test';
-import { advanceClock, resetPage, setupClock } from '../../setup/browser.js';
+import { advanceClock } from '../../setup/browser.js';
 
 test.use({ reducedMotion: 'no-preference' });
-
-test.beforeEach(async ({ page }) => {
-    await resetPage(page);
-});
 
 test.describe('Dropdown', () => {
     test.beforeEach(async ({ page }) => {
@@ -72,6 +68,8 @@ test.describe('Dropdown', () => {
     });
 
     test.describe('#dispose', () => {
+        test.use({ mockClock: true });
+
         test('removes the dropdown', async ({ page }) => {
             expect(await page.evaluate((_) => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
@@ -97,7 +95,6 @@ test.describe('Dropdown', () => {
         });
 
         test('settles showing on disposal without a late event', async ({ page }) => {
-            await setupClock(page);
             await page.evaluate((_) => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 window.dropdownShownEventTriggered = false;
@@ -120,7 +117,6 @@ test.describe('Dropdown', () => {
         });
 
         test('settles hiding on disposal without a late event', async ({ page }) => {
-            await setupClock(page);
             await page.evaluate((_) => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
