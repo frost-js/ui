@@ -35,7 +35,7 @@ Frost UI's package entry point is ESM-only. Import the compiled CSS and use the 
 
 ```js
 import '@fr0st/ui/dist/frost-ui.min.css';
-import { Modal, Toast } from '@fr0st/ui';
+import { Modal } from '@fr0st/ui';
 
 const modal = Modal.init(document.querySelector('#settings-modal'));
 modal.show();
@@ -82,11 +82,13 @@ Load the CSS, fQuery, and Frost UI scripts from your own copy or a CDN:
 <script src="/path/to/dist/fquery.min.js"></script>
 <script src="/path/to/dist/frost-ui.min.js"></script>
 <!-- or -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.min.css">
+
 <script src="https://cdn.jsdelivr.net/npm/@fr0st/query@latest/dist/fquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.min.js"></script>
 ```
 
-The JavaScript bundle exposes the component exports as `globalThis.UI` and expects fQuery to be available as `globalThis.fQuery`.
+The UMD bundle exposes the component exports as `globalThis.UI` and expects fQuery to be available as `globalThis.fQuery`.
 
 An all-in-one build containing fQuery is also available:
 
@@ -223,7 +225,16 @@ See the [`demo/`](./demo/) folder for theme-aware examples with a System, Light,
 | `Popper` | Positions floating content relative to a reference element |
 | `BaseComponent` | Provides shared initialization, options, element data, and disposal |
 
-The package also exports helpers for component registration, target resolution, pointer positions, scroll containers, scrollbar compensation, CSS transition waiting, and generated IDs.
+The package also exports helpers for component registration, target resolution, pointer positions, scroll containers, temporary style locks, scrollbar compensation, CSS transition waiting, and generated IDs.
+
+| Style and transition helper | Purpose |
+| --- | --- |
+| `lockStyles(nodes, styles)` | Locks longhand or custom CSS properties and returns a release function that restores the original inline declarations |
+| `lockStylesCounterFactory()` | Creates a shared locker that retains each element's initial styles until its last acquisition is released |
+| `lockScrollPadding(nodes)` | Shares scrollbar compensation across overlapping components and returns a release function |
+| `waitForTransition(node, properties, data)` | Waits for matching CSS transitions to settle and resolves with the supplied data, `node`, and a `completed` flag |
+
+Style-lock release functions can be called repeatedly; only the first call releases that acquisition. Failed acquisitions roll back any locks already acquired by that call. `waitForTransition()` resolves with `completed: false` when a transition is canceled or its fallback timer expires.
 
 ## Component Model
 
@@ -330,7 +341,7 @@ Plugins are registered for alerts, buttons, carousels, collapses, dropdowns, foc
 
 ### Events and lifecycle
 
-Interactive components emit namespaced fQuery events around state changes. Before-events can be cancelled with `preventDefault()`; completion events run after the transition finishes.
+Interactive components emit namespaced fQuery events around state changes. Before-events can be cancelled with `preventDefault()`. Methods that start transitions return before completion; listen for the corresponding completion event to act after the transition settles. Tab hiding is immediate and emits `hidden.ui.tab` synchronously.
 
 ```js
 import $ from '@fr0st/query';
@@ -354,6 +365,19 @@ $.addEvent('#settings-modal', 'shown.ui.modal', (_) => {
 | Carousel | `slide.ui.carousel` | `slid.ui.carousel` |
 
 Clipboard controls emit `copied.ui.clipboard` with the completed action and copied text.
+
+### Disposal and interrupted transitions
+
+Disposing a carousel, collapse, dropdown, modal, offcanvas, tab, toast, tooltip, or popover suppresses its pending transition completion events. Tooltip and popover transitions can also reverse direction; completion events from the superseded transition are skipped.
+
+Cleanup restores temporary inline styles, including their original `!important` priority. When disposal interrupts a transition:
+
+- Carousels keep the selected slide and synchronize its indicator.
+- Collapses settle closed and update their controls' collapsed and `aria-expanded` state.
+- Dropdowns synchronize `aria-expanded` with the menu's current `show` class.
+- Toasts restore the original inline `display` declaration, even after repeated show/hide cycles.
+
+Use `hide()` and wait for `hidden.ui.*` before disposing when the application needs a completed hide lifecycle.
 
 ## Styling and Layout
 
@@ -417,22 +441,32 @@ Use Sass configuration when derived colors, utility maps, breakpoints, component
 - The package entry point registers all component data handlers, QuerySet plugins, and the clipboard, ripple, and expanding-textarea enhancements.
 - `frost-ui.js` expects a separate fQuery global; `frost-ui-bundle.js` includes it.
 - Component options are resolved once, frozen, and retained until the instance is disposed.
+- Calling `carousel.pause()` keeps automatic cycling paused across slide transitions and hover changes until `carousel.cycle()` resumes it.
+- Accordion panels ignore show requests while another panel in the same accordion is transitioning; call `show()` again after that transition settles.
+- Stacked modals use numeric computed z-index values. Modal and offcanvas scroll locks remain active until all components sharing them release their locks.
 - Tooltip and popover HTML is sanitized by default when HTML content is enabled.
 - Event namespaces are managed by fQuery; the underlying native event types are `show`, `shown`, `hide`, `hidden`, and so on.
 - Motion styles are enabled under `prefers-reduced-motion: no-preference`, with component transition timing controlled through CSS custom properties.
-- Compiled CSS targets browsers in the Baseline Widely Available Browserslist range.
+- CSS prefixing uses the `baseline newly available` Browserslist target. JavaScript builds use Vite's `baseline-widely-available` target.
 - Component markup and accessibility attributes remain the application's responsibility; interactive components update the state they own.
 
 ## Development
 
+Install dependencies with `npm ci`, then install Playwright browsers with `npx playwright install --with-deps`.
+
 ```bash
 npm test
 npm run lint
-npm run lint:sass:unused
 npm run build
 ```
 
-`npm test` runs the Playwright suite in Chromium, Firefox, and WebKit.
+`npm test` rebuilds JavaScript and CSS, then runs the Playwright suite in Chromium, Firefox, and WebKit. `npm run test:browser` runs the suite against the existing bundles, so rebuild after changing source files.
+
+After building, `npm run test:coverage` runs Chromium tests and writes coverage reports to `coverage/`.
+
+`npm run test:headed` and `npm run test:ui` also use the existing bundles and open headed browsers or the Playwright UI.
+
+`npm run lint:sass:unused` checks for unused Sass variables.
 
 ## License
 
