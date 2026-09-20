@@ -43,12 +43,6 @@ test.describe('Modal FocusTrap', () => {
             });
 
             await expect(page.locator('#button2')).toBeFocused();
-
-            await page.evaluate((_) => {
-                document.dispatchEvent(new KeyboardEvent('keydown', {
-                    key: 'Tab',
-                }));
-            });
         });
 
         test('allows focus outside the modal with no focus', async ({ page }) => {

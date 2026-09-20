@@ -194,104 +194,6 @@ test.describe('Toast', () => {
         }
     });
 
-    test.describe('#hide', () => {
-        for (const { name, hide } of [
-            {
-                name: 'class',
-                hide: (selector) => {
-                    UI.Toast.init(document.querySelector(selector)).hide();
-                },
-            },
-            {
-                name: 'QuerySet',
-                hide: (selector) => {
-                    $(selector).toast('hide');
-                },
-            },
-        ]) {
-            test(`hides the toast (${name})`, async ({ page }) => {
-                await page.evaluate(hide, '#toast1');
-
-                await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-                await expect(page.locator('#toast1')).toBeHidden();
-                await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
-                await expect(page.locator('#toast2')).toBeVisible();
-            });
-        }
-
-        test('does not remove the toast after hiding', async ({ page }) => {
-            await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                UI.Toast.init(toast1).hide();
-            });
-
-            await expect(page.locator('#toast1')).toBeHidden();
-            expect(await page.evaluate((_) =>
-                $.getData('#toast1', 'toast') instanceof UI.Toast)).toBe(true);
-        });
-
-        test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                const toast = UI.Toast.init(toast1);
-                toast.hide();
-                toast.hide();
-                toast.hide();
-            });
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-            await expect(page.locator('#toast2')).toBeVisible();
-        });
-
-        test('can be called on a hidden toast', async ({ page }) => {
-            await page.evaluate(async (_) => {
-                const toast1 = $.findOne('#toast1');
-                const toast = UI.Toast.init(toast1);
-                const hidden = new Promise((resolve) => {
-                    $.addEvent(toast1, 'hidden.ui.toast', (_) => resolve());
-                });
-                toast.hide();
-                await hidden;
-                toast.hide();
-            });
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-        });
-
-        test('hides without a transition class', async ({ page }) => {
-            await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                $.removeClass(toast1, 'fade');
-                UI.Toast.init(toast1).hide();
-            });
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-        });
-
-        test('hides when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                UI.Toast.init(toast1).hide();
-                const transition = toast1.getAnimations()
-                    .find((animation) => animation instanceof CSSTransition);
-                transition.cancel();
-            });
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-        });
-
-        test('hides the toast (data-ui-dismiss)', async ({ page }) => {
-            await page.locator('#button1').click();
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-        });
-    });
-
     test.describe('#show', () => {
         test.beforeEach(setupHidden);
 
@@ -375,38 +277,105 @@ test.describe('Toast', () => {
         });
     });
 
-    test.describe('events', () => {
-        test('triggers hide event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
-                const toast1 = $.findOne('#toast1');
-                let triggered = false;
+    test.describe('#hide', () => {
+        for (const { name, hide } of [
+            {
+                name: 'class',
+                hide: (selector) => {
+                    UI.Toast.init(document.querySelector(selector)).hide();
+                },
+            },
+            {
+                name: 'QuerySet',
+                hide: (selector) => {
+                    $(selector).toast('hide');
+                },
+            },
+        ]) {
+            test(`hides the toast (${name})`, async ({ page }) => {
+                await page.evaluate(hide, '#toast1');
 
-                $.addEvent(toast1, 'hide.ui.toast', (_) => {
-                    triggered = true;
-                });
-                UI.Toast.init(toast1).hide();
-
-                return triggered;
+                await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeHidden();
+                await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast2')).toBeVisible();
             });
+        }
 
-            expect(eventTriggered).toBe(true);
+        test('hides the toast (data-ui-dismiss)', async ({ page }) => {
+            await page.locator('#button1').click();
+
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
         });
 
-        test('triggers hidden event', async ({ page }) => {
+        test('does not remove the toast after hiding', async ({ page }) => {
             await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
-                window.toastHiddenEventTriggered = false;
-
-                $.addEvent(toast1, 'hidden.ui.toast', (_) => {
-                    window.toastHiddenEventTriggered = true;
-                });
                 UI.Toast.init(toast1).hide();
             });
 
             await expect(page.locator('#toast1')).toBeHidden();
-            expect(await page.evaluate((_) => window.toastHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate((_) =>
+                $.getData('#toast1', 'toast') instanceof UI.Toast)).toBe(true);
         });
 
+        test('can be called multiple times', async ({ page }) => {
+            await page.evaluate((_) => {
+                const toast1 = $.findOne('#toast1');
+                const toast = UI.Toast.init(toast1);
+                toast.hide();
+                toast.hide();
+                toast.hide();
+            });
+
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
+            await expect(page.locator('#toast2')).toBeVisible();
+        });
+
+        test('can be called on a hidden toast', async ({ page }) => {
+            await page.evaluate(async (_) => {
+                const toast1 = $.findOne('#toast1');
+                const toast = UI.Toast.init(toast1);
+                const hidden = new Promise((resolve) => {
+                    $.addEvent(toast1, 'hidden.ui.toast', (_) => resolve());
+                });
+                toast.hide();
+                await hidden;
+                toast.hide();
+            });
+
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
+        });
+
+        test('hides without a transition class', async ({ page }) => {
+            await page.evaluate((_) => {
+                const toast1 = $.findOne('#toast1');
+                $.removeClass(toast1, 'fade');
+                UI.Toast.init(toast1).hide();
+            });
+
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
+        });
+
+        test('hides when the transition is canceled', async ({ page }) => {
+            await page.evaluate((_) => {
+                const toast1 = $.findOne('#toast1');
+                UI.Toast.init(toast1).hide();
+                const transition = toast1.getAnimations()
+                    .find((animation) => animation instanceof CSSTransition);
+                transition.cancel();
+            });
+
+            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeHidden();
+        });
+    });
+
+    test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
             const eventTriggered = await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
@@ -443,28 +412,35 @@ test.describe('Toast', () => {
             await expect(page.locator('#toast1')).toBeVisible();
         });
 
-        test('can be prevented from hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+        test('triggers hide event', async ({ page }) => {
+            const eventTriggered = await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
-                $.addEvent(toast1, 'hide.ui.toast', (_) => false);
+                let triggered = false;
+
+                $.addEvent(toast1, 'hide.ui.toast', (_) => {
+                    triggered = true;
+                });
                 UI.Toast.init(toast1).hide();
+
+                return triggered;
             });
 
-            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeVisible();
+            expect(eventTriggered).toBe(true);
         });
 
-        test('can be prevented from hiding (prevent default)', async ({ page }) => {
+        test('triggers hidden event', async ({ page }) => {
             await page.evaluate((_) => {
                 const toast1 = $.findOne('#toast1');
-                $.addEvent(toast1, 'hide.ui.toast', (event) => {
-                    event.preventDefault();
+                window.toastHiddenEventTriggered = false;
+
+                $.addEvent(toast1, 'hidden.ui.toast', (_) => {
+                    window.toastHiddenEventTriggered = true;
                 });
                 UI.Toast.init(toast1).hide();
             });
 
-            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeVisible();
+            await expect(page.locator('#toast1')).toBeHidden();
+            expect(await page.evaluate((_) => window.toastHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
@@ -493,6 +469,30 @@ test.describe('Toast', () => {
 
             await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#toast1')).toBeHidden();
+        });
+
+        test('can be prevented from hiding', async ({ page }) => {
+            await page.evaluate((_) => {
+                const toast1 = $.findOne('#toast1');
+                $.addEvent(toast1, 'hide.ui.toast', (_) => false);
+                UI.Toast.init(toast1).hide();
+            });
+
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
+        });
+
+        test('can be prevented from hiding (prevent default)', async ({ page }) => {
+            await page.evaluate((_) => {
+                const toast1 = $.findOne('#toast1');
+                $.addEvent(toast1, 'hide.ui.toast', (event) => {
+                    event.preventDefault();
+                });
+                UI.Toast.init(toast1).hide();
+            });
+
+            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+            await expect(page.locator('#toast1')).toBeVisible();
         });
     });
 
@@ -702,19 +702,6 @@ test.describe('Toast', () => {
             });
         });
 
-        test.describe('#hide', () => {
-            test('hides multiple toasts', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('.toast').toast('hide');
-                });
-
-                await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-                await expect(page.locator('#toast1')).toBeHidden();
-                await expect(page.locator('#toast2')).not.toHaveClass(/\bshow\b/);
-                await expect(page.locator('#toast2')).toBeHidden();
-            });
-        });
-
         test.describe('#show', () => {
             test.beforeEach(setupHidden);
 
@@ -742,6 +729,19 @@ test.describe('Toast', () => {
                 await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
                 await expect(page.locator('#toast2')).toBeVisible();
                 await expect(page.locator('#toast2')).toHaveAttribute('style', '');
+            });
+        });
+
+        test.describe('#hide', () => {
+            test('hides multiple toasts', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('.toast').toast('hide');
+                });
+
+                await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeHidden();
+                await expect(page.locator('#toast2')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast2')).toBeHidden();
             });
         });
     });

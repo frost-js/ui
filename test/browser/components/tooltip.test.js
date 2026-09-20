@@ -39,20 +39,6 @@ test.describe('Tooltip', () => {
             });
         }
 
-        test('shows the tooltip on inline-start in RTL', async ({ page }) => {
-            await page.evaluate((_) => {
-                document.documentElement.dir = 'rtl';
-                UI.Tooltip.init($.findOne('#tooltip-toggle-1'), {
-                    fixed: true,
-                    placement: 'start',
-                }).show();
-            });
-
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toBeVisible();
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('data-ui-placement', 'start');
-            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-placement', 'start');
-        });
-
         test('shows multiple tooltips (QuerySet)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('button').tooltip('show');
@@ -90,6 +76,20 @@ test.describe('Tooltip', () => {
 
             await expect(page.locator('.tooltip')).toHaveCount(1);
             await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
+        });
+
+        test('shows the tooltip on inline-start in RTL', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.documentElement.dir = 'rtl';
+                UI.Tooltip.init($.findOne('#tooltip-toggle-1'), {
+                    fixed: true,
+                    placement: 'start',
+                }).show();
+            });
+
+            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toBeVisible();
+            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('data-ui-placement', 'start');
+            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-placement', 'start');
         });
 
         test('shows when the transition is canceled', async ({ page }) => {
@@ -345,6 +345,68 @@ test.describe('Tooltip', () => {
         });
     });
 
+    test.describe('sanitize option', () => {
+        test('sanitizes html tags', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                UI.Tooltip.init(tooltipToggle1, {
+                    title: '<b data-test="Test">Test</b>',
+                    html: true,
+                }).show();
+            });
+
+            await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
+            await expect(page.locator('.tooltip-inner > b')).not.toHaveAttribute('data-test');
+        });
+
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                    UI.Tooltip.init(tooltipToggle1, {
+                        title: '<b data-test="Test">Test</b>',
+                        html: true,
+                        sanitize: false,
+                    }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#tooltip-toggle-1')
+                        .tooltip({
+                            title: '<b data-test="Test">Test</b>',
+                            html: true,
+                            sanitize: false,
+                        })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with sanitize option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+
+                await expect(page.locator('.tooltip-inner > b')).toHaveAttribute('data-test', 'Test');
+                await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
+            });
+        }
+
+        test('works with sanitize option (data-ui-sanitize)', async ({ page }) => {
+            await page.evaluate((_) => {
+                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                $.setDataset(tooltipToggle1, { uiSanitize: false });
+                UI.Tooltip.init(tooltipToggle1, {
+                    title: '<b data-test="Test">Test</b>',
+                    html: true,
+                }).show();
+            });
+
+            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-sanitize', 'false');
+            await expect(page.locator('.tooltip-inner > b')).toHaveAttribute('data-test', 'Test');
+        });
+    });
+
     test.describe('trigger option', () => {
         test('shows on mouseover with hover trigger option', async ({ page }) => {
             await page.evaluate((_) => {
@@ -510,68 +572,6 @@ test.describe('Tooltip', () => {
             await page.locator('#tooltip-toggle-1').dispatchEvent('blur');
 
             await expect(page.locator('.tooltip')).toHaveCount(0);
-        });
-    });
-
-    test.describe('sanitize option', () => {
-        test('sanitizes html tags', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                UI.Tooltip.init(tooltipToggle1, {
-                    title: '<b data-test="Test">Test</b>',
-                    html: true,
-                }).show();
-            });
-
-            await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
-            await expect(page.locator('.tooltip-inner > b')).not.toHaveAttribute('data-test');
-        });
-
-        for (const { name, run } of [
-            {
-                name: 'class',
-                run: (_) => {
-                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                    UI.Tooltip.init(tooltipToggle1, {
-                        title: '<b data-test="Test">Test</b>',
-                        html: true,
-                        sanitize: false,
-                    }).show();
-                },
-            },
-            {
-                name: 'QuerySet',
-                run: (_) => {
-                    $('#tooltip-toggle-1')
-                        .tooltip({
-                            title: '<b data-test="Test">Test</b>',
-                            html: true,
-                            sanitize: false,
-                        })
-                        .show();
-                },
-            },
-        ]) {
-            test(`works with sanitize option (${name})`, async ({ page }) => {
-                await page.evaluate(run);
-
-                await expect(page.locator('.tooltip-inner > b')).toHaveAttribute('data-test', 'Test');
-                await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
-            });
-        }
-
-        test('works with sanitize option (data-ui-sanitize)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                $.setDataset(tooltipToggle1, { uiSanitize: false });
-                UI.Tooltip.init(tooltipToggle1, {
-                    title: '<b data-test="Test">Test</b>',
-                    html: true,
-                }).show();
-            });
-
-            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-sanitize', 'false');
-            await expect(page.locator('.tooltip-inner > b')).toHaveAttribute('data-test', 'Test');
         });
     });
 });

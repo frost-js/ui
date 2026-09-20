@@ -316,31 +316,6 @@ test.describe('Collapse', () => {
         });
     });
 
-    test.describe('parent option', () => {
-        test('only hides shown collapses in the same accordion', async ({ page }) => {
-            await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<div class="accordion" id="outer-accordion">' +
-                    '<div class="collapse show" id="outer-collapse-1">' +
-                    '<div class="accordion" id="inner-accordion">' +
-                    '<div class="collapse show" id="inner-collapse"></div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="collapse" id="outer-collapse-2"></div>' +
-                    '</div>';
-
-                const options = { parent: '.accordion' };
-                UI.Collapse.init($.findOne('#outer-collapse-1'), options);
-                UI.Collapse.init($.findOne('#inner-collapse'), options);
-                UI.Collapse.init($.findOne('#outer-collapse-2'), options).show();
-            });
-
-            await expect(page.locator('#outer-collapse-1')).toHaveClass('collapse');
-            await expect(page.locator('#outer-collapse-2')).toHaveClass('collapse show');
-            await expect(page.locator('#inner-collapse')).toHaveClass('collapse show');
-        });
-    });
-
     test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
             const eventTriggered = await page.evaluate((_) => {
@@ -560,6 +535,31 @@ test.describe('Collapse', () => {
             await expect(page.locator('#collapse-toggle-1')).toHaveClass('btn btn-secondary');
             await expect(page.locator('#collapse-toggle-1')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#collapse1')).toHaveClass('collapse show');
+        });
+    });
+
+    test.describe('parent option', () => {
+        test('only hides shown collapses in the same accordion', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.body.innerHTML =
+                    '<div class="accordion" id="outer-accordion">' +
+                    '<div class="collapse show" id="outer-collapse-1">' +
+                    '<div class="accordion" id="inner-accordion">' +
+                    '<div class="collapse show" id="inner-collapse"></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="collapse" id="outer-collapse-2"></div>' +
+                    '</div>';
+
+                const options = { parent: '.accordion' };
+                UI.Collapse.init($.findOne('#outer-collapse-1'), options);
+                UI.Collapse.init($.findOne('#inner-collapse'), options);
+                UI.Collapse.init($.findOne('#outer-collapse-2'), options).show();
+            });
+
+            await expect(page.locator('#outer-collapse-1')).toHaveClass('collapse');
+            await expect(page.locator('#outer-collapse-2')).toHaveClass('collapse show');
+            await expect(page.locator('#inner-collapse')).toHaveClass('collapse show');
         });
     });
 

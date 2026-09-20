@@ -41,12 +41,6 @@ test.describe('Offcanvas FocusTrap', () => {
             });
 
             await expect(page.locator('#button2')).toBeFocused();
-
-            await page.evaluate((_) => {
-                document.dispatchEvent(new KeyboardEvent('keydown', {
-                    key: 'Tab',
-                }));
-            });
         });
 
         test('allows focus outside the offcanvas with scroll and no backdrop', async ({ page }) => {

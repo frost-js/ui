@@ -38,20 +38,6 @@ test.describe('Popover', () => {
             });
         }
 
-        test('shows the popover on inline-start in RTL', async ({ page }) => {
-            await page.evaluate((_) => {
-                document.documentElement.dir = 'rtl';
-                UI.Popover.init($.findOne('#popover-toggle-1'), {
-                    fixed: true,
-                    placement: 'start',
-                }).show();
-            });
-
-            await expect(page.locator('#popover-toggle-1 + .popover')).toBeVisible();
-            await expect(page.locator('#popover-toggle-1 + .popover')).toHaveAttribute('data-ui-placement', 'start');
-            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-placement', 'start');
-        });
-
         test('shows multiple popovers (QuerySet)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('button').popover('show');
@@ -72,6 +58,35 @@ test.describe('Popover', () => {
             });
 
             await expect(page.locator('.popover')).toHaveCount(1);
+        });
+
+        test('can be called on shown popover', async ({ page }) => {
+            await page.evaluate((_) => new Promise((resolve) => {
+                const popoverToggle1 = $.findOne('#popover-toggle-1');
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
+                UI.Popover.init(popoverToggle1).show();
+            }));
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popover-toggle-1');
+                UI.Popover.init(popoverToggle1).show();
+            });
+
+            await expect(page.locator('.popover')).toHaveCount(1);
+            await expect(page.locator('.popover')).toHaveClass(/\bshow\b/);
+        });
+
+        test('shows the popover on inline-start in RTL', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.documentElement.dir = 'rtl';
+                UI.Popover.init($.findOne('#popover-toggle-1'), {
+                    fixed: true,
+                    placement: 'start',
+                }).show();
+            });
+
+            await expect(page.locator('#popover-toggle-1 + .popover')).toBeVisible();
+            await expect(page.locator('#popover-toggle-1 + .popover')).toHaveAttribute('data-ui-placement', 'start');
+            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-placement', 'start');
         });
 
         test('shows when the transition is canceled', async ({ page }) => {
@@ -108,21 +123,6 @@ test.describe('Popover', () => {
             await expect(page.locator('.popover')).toHaveCount(0);
             expect(await page.evaluate((_) => window.popoverShownEventTriggered)).toBe(false);
             expect(await page.evaluate((_) => window.popoverHiddenEventTriggered)).toBe(true);
-        });
-
-        test('can be called on shown popover', async ({ page }) => {
-            await page.evaluate((_) => new Promise((resolve) => {
-                const popoverToggle1 = $.findOne('#popover-toggle-1');
-                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
-                UI.Popover.init(popoverToggle1).show();
-            }));
-            await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popover-toggle-1');
-                UI.Popover.init(popoverToggle1).show();
-            });
-
-            await expect(page.locator('.popover')).toHaveCount(1);
-            await expect(page.locator('.popover')).toHaveClass(/\bshow\b/);
         });
     });
 
@@ -481,6 +481,128 @@ test.describe('Popover', () => {
         });
     });
 
+    test.describe('sanitize option', () => {
+        test('sanitizes html tags in title', async ({ page }) => {
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popover-toggle-1');
+                UI.Popover.init(popoverToggle1, {
+                    title: '<b data-test="test">Test</b>',
+                    html: true,
+                }).show();
+            });
+
+            await expect(page.locator('.popover-header > b')).toHaveText('Test');
+            await expect(page.locator('.popover-header > b')).not.toHaveAttribute('data-test');
+        });
+
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const popoverToggle1 = $.findOne('#popover-toggle-1');
+                    UI.Popover.init(popoverToggle1, {
+                        title: '<b data-test="test">Test</b>',
+                        html: true,
+                        sanitize: false,
+                    }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#popover-toggle-1')
+                        .popover({
+                            title: '<b data-test="test">Test</b>',
+                            html: true,
+                            sanitize: false,
+                        })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with sanitize option for title (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+
+                await expect(page.locator('.popover-header > b')).toHaveAttribute('data-test', 'test');
+                await expect(page.locator('.popover-header > b')).toHaveText('Test');
+            });
+        }
+
+        test('works with sanitize option for title (data-ui-sanitize)', async ({ page }) => {
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popover-toggle-1');
+                $.setDataset(popoverToggle1, { uiSanitize: false });
+                UI.Popover.init(popoverToggle1, {
+                    title: '<b data-test="test">Test</b>',
+                    html: true,
+                }).show();
+            });
+
+            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-sanitize', 'false');
+            await expect(page.locator('.popover-header > b')).toHaveAttribute('data-test', 'test');
+        });
+
+        test('sanitizes html tags in content', async ({ page }) => {
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popover-toggle-1');
+                UI.Popover.init(popoverToggle1, {
+                    content: '<b data-test="test">Test</b>',
+                    html: true,
+                }).show();
+            });
+
+            await expect(page.locator('.popover-body > b')).toHaveText('Test');
+            await expect(page.locator('.popover-body > b')).not.toHaveAttribute('data-test');
+        });
+
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const popoverToggle1 = $.findOne('#popover-toggle-1');
+                    UI.Popover.init(popoverToggle1, {
+                        content: '<b data-test="test">Test</b>',
+                        html: true,
+                        sanitize: false,
+                    }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#popover-toggle-1')
+                        .popover({
+                            content: '<b data-test="test">Test</b>',
+                            html: true,
+                            sanitize: false,
+                        })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with sanitize option for content (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+
+                await expect(page.locator('.popover-body > b')).toHaveAttribute('data-test', 'test');
+                await expect(page.locator('.popover-body > b')).toHaveText('Test');
+            });
+        }
+
+        test('works with sanitize option for content (data-ui-sanitize)', async ({ page }) => {
+            await page.evaluate((_) => {
+                const popoverToggle1 = $.findOne('#popover-toggle-1');
+                $.setDataset(popoverToggle1, { uiSanitize: false });
+                UI.Popover.init(popoverToggle1, {
+                    content: '<b data-test="test">Test</b>',
+                    html: true,
+                }).show();
+            });
+
+            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-sanitize', 'false');
+            await expect(page.locator('.popover-body > b')).toHaveAttribute('data-test', 'test');
+        });
+    });
+
     test.describe('trigger option', () => {
         test('shows on mouseover with hover trigger option', async ({ page }) => {
             await page.evaluate((_) => {
@@ -647,128 +769,6 @@ test.describe('Popover', () => {
             await page.locator('#popover-toggle-1').dispatchEvent('blur');
 
             await expect(page.locator('.popover')).toHaveCount(0);
-        });
-    });
-
-    test.describe('sanitize option', () => {
-        test('sanitizes html tags in title', async ({ page }) => {
-            await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popover-toggle-1');
-                UI.Popover.init(popoverToggle1, {
-                    title: '<b data-test="test">Test</b>',
-                    html: true,
-                }).show();
-            });
-
-            await expect(page.locator('.popover-header > b')).toHaveText('Test');
-            await expect(page.locator('.popover-header > b')).not.toHaveAttribute('data-test');
-        });
-
-        for (const { name, run } of [
-            {
-                name: 'class',
-                run: (_) => {
-                    const popoverToggle1 = $.findOne('#popover-toggle-1');
-                    UI.Popover.init(popoverToggle1, {
-                        title: '<b data-test="test">Test</b>',
-                        html: true,
-                        sanitize: false,
-                    }).show();
-                },
-            },
-            {
-                name: 'QuerySet',
-                run: (_) => {
-                    $('#popover-toggle-1')
-                        .popover({
-                            title: '<b data-test="test">Test</b>',
-                            html: true,
-                            sanitize: false,
-                        })
-                        .show();
-                },
-            },
-        ]) {
-            test(`works with sanitize option for title (${name})`, async ({ page }) => {
-                await page.evaluate(run);
-
-                await expect(page.locator('.popover-header > b')).toHaveAttribute('data-test', 'test');
-                await expect(page.locator('.popover-header > b')).toHaveText('Test');
-            });
-        }
-
-        test('works with sanitize option for title (data-ui-sanitize)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popover-toggle-1');
-                $.setDataset(popoverToggle1, { uiSanitize: false });
-                UI.Popover.init(popoverToggle1, {
-                    title: '<b data-test="test">Test</b>',
-                    html: true,
-                }).show();
-            });
-
-            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-sanitize', 'false');
-            await expect(page.locator('.popover-header > b')).toHaveAttribute('data-test', 'test');
-        });
-
-        test('sanitizes html tags in content', async ({ page }) => {
-            await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popover-toggle-1');
-                UI.Popover.init(popoverToggle1, {
-                    content: '<b data-test="test">Test</b>',
-                    html: true,
-                }).show();
-            });
-
-            await expect(page.locator('.popover-body > b')).toHaveText('Test');
-            await expect(page.locator('.popover-body > b')).not.toHaveAttribute('data-test');
-        });
-
-        for (const { name, run } of [
-            {
-                name: 'class',
-                run: (_) => {
-                    const popoverToggle1 = $.findOne('#popover-toggle-1');
-                    UI.Popover.init(popoverToggle1, {
-                        content: '<b data-test="test">Test</b>',
-                        html: true,
-                        sanitize: false,
-                    }).show();
-                },
-            },
-            {
-                name: 'QuerySet',
-                run: (_) => {
-                    $('#popover-toggle-1')
-                        .popover({
-                            content: '<b data-test="test">Test</b>',
-                            html: true,
-                            sanitize: false,
-                        })
-                        .show();
-                },
-            },
-        ]) {
-            test(`works with sanitize option for content (${name})`, async ({ page }) => {
-                await page.evaluate(run);
-
-                await expect(page.locator('.popover-body > b')).toHaveAttribute('data-test', 'test');
-                await expect(page.locator('.popover-body > b')).toHaveText('Test');
-            });
-        }
-
-        test('works with sanitize option for content (data-ui-sanitize)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const popoverToggle1 = $.findOne('#popover-toggle-1');
-                $.setDataset(popoverToggle1, { uiSanitize: false });
-                UI.Popover.init(popoverToggle1, {
-                    content: '<b data-test="test">Test</b>',
-                    html: true,
-                }).show();
-            });
-
-            await expect(page.locator('#popover-toggle-1')).toHaveAttribute('data-ui-sanitize', 'false');
-            await expect(page.locator('.popover-body > b')).toHaveAttribute('data-test', 'test');
         });
     });
 });

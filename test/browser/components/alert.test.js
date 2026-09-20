@@ -86,25 +86,43 @@ test.describe('Alert', () => {
     });
 
     test.describe('#close', () => {
-        test('closes the alert', async ({ page }) => {
-            const alert = await page.evaluateHandle(() => document.querySelector('#alert1'));
-            const state = await alert.evaluate((node) => {
-                UI.Alert.init(node).close();
+        for (const { name, close } of [
+            {
+                name: 'class',
+                close: (node) => {
+                    UI.Alert.init(node).close();
 
-                return {
-                    connected: $.isConnected(node),
-                    shown: $.hasClass(node, 'show'),
-                };
-            });
+                    return {
+                        connected: $.isConnected(node),
+                        shown: $.hasClass(node, 'show'),
+                    };
+                },
+            },
+            {
+                name: 'QuerySet',
+                close: (node) => {
+                    $(node).alert('close');
 
-            expect(state).toEqual({
-                connected: true,
-                shown: false,
+                    return {
+                        connected: $.isConnected(node),
+                        shown: $.hasClass(node, 'show'),
+                    };
+                },
+            },
+        ]) {
+            test(`closes the alert (${name})`, async ({ page }) => {
+                const alert = await page.evaluateHandle(() => document.querySelector('#alert1'));
+                const state = await alert.evaluate(close);
+
+                expect(state).toEqual({
+                    connected: true,
+                    shown: false,
+                });
+                await expect(page.locator('#alert1')).toHaveCount(0);
+                await expect(page.locator('#alert2')).toHaveCount(1);
+                expect(await alert.evaluate((node) => $.hasData(node, 'alert'))).toBe(false);
             });
-            await expect(page.locator('#alert1')).toHaveCount(0);
-            await expect(page.locator('#alert2')).toHaveCount(1);
-            expect(await alert.evaluate((node) => $.hasData(node, 'alert'))).toBe(false);
-        });
+        }
 
         test('closes the alert (data-ui-dismiss)', async ({ page }) => {
             await page.locator('#button1').click();
@@ -249,15 +267,6 @@ test.describe('Alert', () => {
         });
 
         test.describe('#close', () => {
-            test('closes the alert', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#alert1').alert('close');
-                });
-
-                await expect(page.locator('#alert1')).toHaveCount(0);
-                await expect(page.locator('#alert2')).toHaveCount(1);
-            });
-
             test('closes multiple alerts', async ({ page }) => {
                 await page.evaluate((_) => {
                     $('.alert').alert('close');
