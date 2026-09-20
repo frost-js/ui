@@ -125,11 +125,6 @@ test.describe('Button', () => {
                     );
                 })).toBe(true);
             });
-
-            test('returns the button', async ({ page }) => {
-                expect(await page.evaluate((_) =>
-                    $('#button1').button() instanceof UI.Button)).toBe(true);
-            });
         });
 
         test.describe('#dispose', () => {

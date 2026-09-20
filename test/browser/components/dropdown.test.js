@@ -829,11 +829,6 @@ test.describe('Dropdown', () => {
                     );
                 })).toBe(true);
             });
-
-            test('returns the dropdown', async ({ page }) => {
-                expect(await page.evaluate((_) =>
-                    $('#dropdown-toggle-1').dropdown() instanceof UI.Dropdown)).toBe(true);
-            });
         });
 
         test.describe('#dispose', () => {

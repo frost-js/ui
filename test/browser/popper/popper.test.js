@@ -11,52 +11,52 @@ test.describe('Popper', () => {
     });
 
     test.describe('#init', () => {
-        test('creates a popper', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const badge = $.findOne('#badge');
-                return UI.Popper.init(badge, {
-                    reference: $.findOne('#button'),
-                }) instanceof UI.Popper;
-            })).toBe(true);
-        });
+        for (const { name, init } of [
+            {
+                name: 'class',
+                init: () => UI.Popper.init(document.querySelector('#badge'), { reference: document.querySelector('#button') }),
+            },
+            {
+                name: 'QuerySet',
+                init: () => $('#badge').popper({ reference: document.querySelector('#button') }),
+            },
+        ]) {
+            test(`creates a popper (${name})`, async ({ page }) => {
+                const instance = await page.evaluateHandle(init);
 
-        test('creates a popper (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('#badge').popper({
-                    reference: $.findOne('#button'),
-                });
-                return $.getData('#badge', 'popper') instanceof UI.Popper;
-            })).toBe(true);
-        });
-
-        test('returns the popper (query)', async ({ page }) => {
-            expect(await page.evaluate((_) =>
-                $('#badge').popper({
-                    reference: $.findOne('#button'),
-                }) instanceof UI.Popper)).toBe(true);
-        });
+                expect(await instance.evaluate((value) => value instanceof UI.Popper)).toBe(true);
+                expect(await page.evaluate(() => $.getData('#badge', 'popper') instanceof UI.Popper)).toBe(true);
+            });
+        }
     });
 
     test.describe('#dispose', () => {
-        test('removes the popper', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const badge = $.findOne('#badge');
-                UI.Popper.init(badge, {
-                    reference: $.findOne('#button'),
-                }).dispose();
-                return $.hasData(badge, 'popper');
-            })).toBe(false);
-        });
-
-        test('removes the popper (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('#badge').popper({
-                    reference: $.findOne('#button'),
-                });
-                $('#badge').popper('dispose');
-                return $.hasData('#badge', 'popper');
-            })).toBe(false);
-        });
+        for (const { name, dispose } of [
+            {
+                name: 'class',
+                dispose: (_) => {
+                    const badge = $.findOne('#badge');
+                    UI.Popper.init(badge, {
+                        reference: $.findOne('#button'),
+                    }).dispose();
+                    return $.hasData(badge, 'popper');
+                },
+            },
+            {
+                name: 'QuerySet',
+                dispose: (_) => {
+                    $('#badge').popper({
+                        reference: $.findOne('#button'),
+                    });
+                    $('#badge').popper('dispose');
+                    return $.hasData('#badge', 'popper');
+                },
+            },
+        ]) {
+            test(`removes the popper (${name})`, async ({ page }) => {
+                expect(await page.evaluate(dispose)).toBe(false);
+            });
+        }
 
         test('restores positioning styles', async ({ page }) => {
             await page.evaluate((_) => {
@@ -140,43 +140,43 @@ test.describe('Popper', () => {
     });
 
     test.describe('#update', () => {
-        test('updates the popper', async ({ page }) => {
-            await page.evaluate((_) => {
-                const badge = $.findOne('#badge');
-                const button = $.findOne('#button');
-                const popper = UI.Popper.init(badge, {
-                    reference: button,
-                });
+        for (const { name, update } of [
+            {
+                name: 'class',
+                update: (_) => {
+                    const badge = $.findOne('#badge');
+                    const button = $.findOne('#button');
+                    const popper = UI.Popper.init(badge, {
+                        reference: button,
+                    });
 
-                $.setStyle(button, { marginTop: '50px' });
-                popper.update();
-            });
-
-            await expectStyles(page, [
-                {
-                    selectors: ['#badge'],
-                    styles: { transform: 'translate3d(10px, 84px, 0px)' },
+                    $.setStyle(button, { marginTop: '50px' });
+                    popper.update();
                 },
-            ]);
-        });
-
-        test('updates the popper (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                const button = $.findOne('#button');
-                $('#badge').popper({
-                    reference: button,
-                });
-                $.setStyle(button, { marginTop: '50px' });
-                $('#badge').popper('update');
-            });
-
-            await expectStyles(page, [
-                {
-                    selectors: ['#badge'],
-                    styles: { transform: 'translate3d(10px, 84px, 0px)' },
+            },
+            {
+                name: 'QuerySet',
+                update: (_) => {
+                    const button = $.findOne('#button');
+                    $('#badge').popper({
+                        reference: button,
+                    });
+                    $.setStyle(button, { marginTop: '50px' });
+                    $('#badge').popper('update');
                 },
-            ]);
-        });
+            },
+        ]) {
+            test(`updates the popper (${name})`, async ({ page }) => {
+                await page.evaluate(update);
+
+                await expectStyles(page, [
+                    {
+                        selectors: ['#badge'],
+                        styles: { transform: 'translate3d(10px, 84px, 0px)' },
+                    },
+                ]);
+            });
+        }
     });
 
     test.describe('scroll updates', () => {
@@ -259,36 +259,41 @@ test.describe('Popper', () => {
     });
 
     test.describe('beforeUpdate option', () => {
-        test('executes a callback before updating the popper', async ({ page }) => {
-            const callbackTransform = await page.evaluate((_) => {
-                let result;
-                const badge = $.findOne('#badge');
-                UI.Popper.init(badge, {
-                    reference: $.findOne('#button'),
-                    beforeUpdate: (_) => {
-                        result = $.getStyle(badge, 'transform');
-                    },
-                });
-                return result;
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    let result;
+                    const badge = $.findOne('#badge');
+                    UI.Popper.init(badge, {
+                        reference: $.findOne('#button'),
+                        beforeUpdate: (_) => {
+                            result = $.getStyle(badge, 'transform');
+                        },
+                    });
+                    return result;
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    let result;
+                    $('#badge').popper({
+                        reference: $.findOne('#button'),
+                        beforeUpdate: (_) => {
+                            result = $.getStyle('#badge', 'transform');
+                        },
+                    });
+                    return result;
+                },
+            },
+        ]) {
+            test(`executes a callback before updating the popper (${name})`, async ({ page }) => {
+                const callbackTransform = await page.evaluate(run);
+
+                expect(callbackTransform).toBe('');
             });
-
-            expect(callbackTransform).toBe('');
-        });
-
-        test('executes a callback before updating the popper (query)', async ({ page }) => {
-            const callbackTransform = await page.evaluate((_) => {
-                let result;
-                $('#badge').popper({
-                    reference: $.findOne('#button'),
-                    beforeUpdate: (_) => {
-                        result = $.getStyle('#badge', 'transform');
-                    },
-                });
-                return result;
-            });
-
-            expect(callbackTransform).toBe('');
-        });
+        }
 
         test('uses the node as the first argument', async ({ page }) => {
             expect(await page.evaluate((_) => {
@@ -336,36 +341,41 @@ test.describe('Popper', () => {
     });
 
     test.describe('afterUpdate option', () => {
-        test('executes a callback after updating the popper', async ({ page }) => {
-            const callbackTransform = await page.evaluate((_) => {
-                let result;
-                const badge = $.findOne('#badge');
-                UI.Popper.init(badge, {
-                    reference: $.findOne('#button'),
-                    afterUpdate: (_) => {
-                        result = $.getStyle(badge, 'transform');
-                    },
-                });
-                return result;
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    let result;
+                    const badge = $.findOne('#badge');
+                    UI.Popper.init(badge, {
+                        reference: $.findOne('#button'),
+                        afterUpdate: (_) => {
+                            result = $.getStyle(badge, 'transform');
+                        },
+                    });
+                    return result;
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    let result;
+                    $('#badge').popper({
+                        reference: $.findOne('#button'),
+                        afterUpdate: (_) => {
+                            result = $.getStyle('#badge', 'transform');
+                        },
+                    });
+                    return result;
+                },
+            },
+        ]) {
+            test(`executes a callback after updating the popper (${name})`, async ({ page }) => {
+                const callbackTransform = await page.evaluate(run);
+
+                expect(callbackTransform).toBe('translate3d(10px, 34px, 0px)');
             });
-
-            expect(callbackTransform).toBe('translate3d(10px, 34px, 0px)');
-        });
-
-        test('executes a callback after updating the popper (query)', async ({ page }) => {
-            const callbackTransform = await page.evaluate((_) => {
-                let result;
-                $('#badge').popper({
-                    reference: $.findOne('#button'),
-                    afterUpdate: (_) => {
-                        result = $.getStyle('#badge', 'transform');
-                    },
-                });
-                return result;
-            });
-
-            expect(callbackTransform).toBe('translate3d(10px, 34px, 0px)');
-        });
+        }
 
         test('uses the node as the first argument', async ({ page }) => {
             expect(await page.evaluate((_) => {

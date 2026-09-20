@@ -25,21 +25,26 @@ export function setup(key) {
  */
 export function floatingContentTests({ key, component }) {
     test.describe('#init', () => {
-        test(`creates a ${key}`, async ({ page }) => {
-            expect(await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                return UI[component].init(toggle1) instanceof UI[component];
-            }, { key, component })).toBe(true);
-        });
+        for (const { name, init } of [
+            {
+                name: 'class',
+                init: ({ key, component }) => UI[component].init(document.querySelector('#' + key + '-toggle-1')),
+            },
+            {
+                name: 'QuerySet',
+                init: ({ key }) => $('#' + key + '-toggle-1')[key](),
+            },
+        ]) {
+            test(`creates a ${key} (${name})`, async ({ page }) => {
+                const instance = await page.evaluateHandle(init, { key, component });
 
-        test(`creates a ${key} (query)`, async ({ page }) => {
-            expect(await page.evaluate(({ key, component }) => {
-                $(`#${key}-toggle-1`)[key]();
-                return $.getData(`#${key}-toggle-1`, key) instanceof UI[component];
-            }, { key, component })).toBe(true);
-        });
+                expect(await instance.evaluate((value, component) => value instanceof UI[component], component)).toBe(true);
+                expect(await page.evaluate(({ key, component }) =>
+                    $.getData('#' + key + '-toggle-1', key) instanceof UI[component], { key, component })).toBe(true);
+            });
+        }
 
-        test(`creates multiple ${key}s (query)`, async ({ page }) => {
+        test(`creates multiple ${key}s (QuerySet)`, async ({ page }) => {
             expect(await page.evaluate(({ key, component }) => {
                 $('button')[key]();
                 return $.find('button').every((node) =>
@@ -47,30 +52,32 @@ export function floatingContentTests({ key, component }) {
                 );
             }, { key, component })).toBe(true);
         });
-
-        test(`returns the ${key} (query)`, async ({ page }) => {
-            expect(await page.evaluate(({ key, component }) =>
-                $(`#${key}-toggle-1`)[key]() instanceof UI[component], { key, component })).toBe(true);
-        });
     });
 
     test.describe('#dispose', () => {
-        test(`removes the ${key}`, async ({ page }) => {
-            expect(await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                UI[component].init(toggle1).dispose();
-                return $.hasData(toggle1, key);
-            }, { key, component })).toBe(false);
-        });
+        for (const { name, dispose } of [
+            {
+                name: 'class',
+                dispose: ({ key, component }) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    UI[component].init(toggle1).dispose();
+                    return $.hasData(toggle1, key);
+                },
+            },
+            {
+                name: 'QuerySet',
+                dispose: ({ key }) => {
+                    $(`#${key}-toggle-1`)[key]('dispose');
+                    return $.hasData(`#${key}-toggle-1`, key);
+                },
+            },
+        ]) {
+            test(`removes the ${key} (${name})`, async ({ page }) => {
+                expect(await page.evaluate(dispose, { key, component })).toBe(false);
+            });
+        }
 
-        test(`removes the ${key} (query)`, async ({ page }) => {
-            expect(await page.evaluate(({ key }) => {
-                $(`#${key}-toggle-1`)[key]('dispose');
-                return $.hasData(`#${key}-toggle-1`, key);
-            }, { key })).toBe(false);
-        });
-
-        test(`removes multiple ${key}s (query)`, async ({ page }) => {
+        test(`removes multiple ${key}s (QuerySet)`, async ({ page }) => {
             expect(await page.evaluate(({ key, component }) => {
                 $('button')[key]('dispose');
                 return $.find('button').some((node) =>
@@ -121,38 +128,43 @@ export function floatingContentTests({ key, component }) {
     });
 
     test.describe('#hide', () => {
-        test(`hides the ${key}`, async ({ page }) => {
-            await page.evaluate(({ key, component }) => new Promise((resolve) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
-                UI[component].init(toggle1).show();
-            }), { key, component });
+        for (const { name, prepare, hide } of [
+            {
+                name: 'class',
+                prepare: ({ key, component }) => new Promise((resolve) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    UI[component].init(toggle1).show();
+                }),
+                hide: ({ key, component }) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    UI[component].init(toggle1).hide();
+                },
+            },
+            {
+                name: 'QuerySet',
+                prepare: ({ key }) => new Promise((resolve) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    $(`#${key}-toggle-1`)[key]('show');
+                }),
+                hide: ({ key }) => {
+                    $(`#${key}-toggle-1`)[key]('hide');
+                },
+            },
+        ]) {
+            test(`hides the ${key} (${name})`, async ({ page }) => {
+                await page.evaluate(prepare, { key, component });
 
-            await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                UI[component].init(toggle1).hide();
-            }, { key, component });
+                await page.evaluate(hide, { key, component });
 
-            await expect(page.locator(`.${key}`)).toHaveCount(0);
-            await expect(page.locator(`#${key}-toggle-1`)).not.toHaveAttribute('aria-describedby');
-            await expect(page.locator(`#${key}-toggle-1`)).not.toHaveAttribute('data-ui-placement');
-        });
+                await expect(page.locator(`.${key}`)).toHaveCount(0);
+                await expect(page.locator(`#${key}-toggle-1`)).not.toHaveAttribute('aria-describedby');
+                await expect(page.locator(`#${key}-toggle-1`)).not.toHaveAttribute('data-ui-placement');
+            });
+        }
 
-        test(`hides the ${key} (query)`, async ({ page }) => {
-            await page.evaluate(({ key }) => new Promise((resolve) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
-                $(`#${key}-toggle-1`)[key]('show');
-            }), { key });
-
-            await page.evaluate(({ key }) => {
-                $(`#${key}-toggle-1`)[key]('hide');
-            }, { key });
-
-            await expect(page.locator(`.${key}`)).toHaveCount(0);
-        });
-
-        test(`hides multiple ${key}s (query)`, async ({ page }) => {
+        test(`hides multiple ${key}s (QuerySet)`, async ({ page }) => {
             await page.evaluate(async ({ key }) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
                 const toggle2 = $.findOne(`#${key}-toggle-2`);
@@ -281,26 +293,30 @@ export function floatingContentTests({ key, component }) {
     });
 
     test.describe('#toggle (show)', () => {
-        test(`shows the ${key}`, async ({ page }) => {
-            await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                UI[component].init(toggle1).toggle();
-            }, { key, component });
+        for (const { name, toggle } of [
+            {
+                name: 'class',
+                toggle: ({ key, component }) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    UI[component].init(toggle1).toggle();
+                },
+            },
+            {
+                name: 'QuerySet',
+                toggle: ({ key }) => {
+                    $(`#${key}-toggle-1`)[key]('toggle');
+                },
+            },
+        ]) {
+            test(`shows the ${key} (${name})`, async ({ page }) => {
+                await page.evaluate(toggle, { key, component });
 
-            await expect(page.locator(`#${key}-toggle-1 + .${key}`)).toHaveClass(/\bshow\b/);
-            await expect(page.locator(`#${key}-toggle-1 + .${key}`)).toBeVisible();
-        });
+                await expect(page.locator(`#${key}-toggle-1 + .${key}`)).toHaveClass(/\bshow\b/);
+                await expect(page.locator(`#${key}-toggle-1 + .${key}`)).toBeVisible();
+            });
+        }
 
-        test(`shows the ${key} (query)`, async ({ page }) => {
-            await page.evaluate(({ key }) => {
-                $(`#${key}-toggle-1`)[key]('toggle');
-            }, { key });
-
-            await expect(page.locator(`#${key}-toggle-1 + .${key}`)).toHaveClass(/\bshow\b/);
-            await expect(page.locator(`#${key}-toggle-1 + .${key}`)).toBeVisible();
-        });
-
-        test(`shows multiple ${key}s (query)`, async ({ page }) => {
+        test(`shows multiple ${key}s (QuerySet)`, async ({ page }) => {
             await page.evaluate(({ key }) => {
                 $('button')[key]('toggle');
             }, { key });
@@ -324,36 +340,41 @@ export function floatingContentTests({ key, component }) {
     });
 
     test.describe('#toggle (hide)', () => {
-        test(`hides the ${key}`, async ({ page }) => {
-            await page.evaluate(({ key, component }) => new Promise((resolve) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
-                UI[component].init(toggle1).show();
-            }), { key, component });
+        for (const { name, prepare, toggle } of [
+            {
+                name: 'class',
+                prepare: ({ key, component }) => new Promise((resolve) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    UI[component].init(toggle1).show();
+                }),
+                toggle: ({ key, component }) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    UI[component].init(toggle1).toggle();
+                },
+            },
+            {
+                name: 'QuerySet',
+                prepare: ({ key }) => new Promise((resolve) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    $(`#${key}-toggle-1`)[key]('show');
+                }),
+                toggle: ({ key }) => {
+                    $(`#${key}-toggle-1`)[key]('toggle');
+                },
+            },
+        ]) {
+            test(`hides the ${key} (${name})`, async ({ page }) => {
+                await page.evaluate(prepare, { key, component });
 
-            await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                UI[component].init(toggle1).toggle();
-            }, { key, component });
+                await page.evaluate(toggle, { key, component });
 
-            await expect(page.locator(`.${key}`)).toHaveCount(0);
-        });
+                await expect(page.locator(`.${key}`)).toHaveCount(0);
+            });
+        }
 
-        test(`hides the ${key} (query)`, async ({ page }) => {
-            await page.evaluate(({ key }) => new Promise((resolve) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
-                $(`#${key}-toggle-1`)[key]('show');
-            }), { key });
-
-            await page.evaluate(({ key }) => {
-                $(`#${key}-toggle-1`)[key]('toggle');
-            }, { key });
-
-            await expect(page.locator(`.${key}`)).toHaveCount(0);
-        });
-
-        test(`hide multiple ${key}s (query)`, async ({ page }) => {
+        test(`hides multiple ${key}s (QuerySet)`, async ({ page }) => {
             await page.evaluate(async ({ key }) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
                 const toggle2 = $.findOne(`#${key}-toggle-2`);
@@ -396,27 +417,32 @@ export function floatingContentTests({ key, component }) {
     });
 
     test.describe('#disable', () => {
-        test(`disables the ${key}`, async ({ page }) => {
-            await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                const instance = UI[component].init(toggle1);
-                instance.disable();
-                instance.show();
-            }, { key, component });
+        for (const { name, disable } of [
+            {
+                name: 'class',
+                disable: ({ key, component }) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    const instance = UI[component].init(toggle1);
+                    instance.disable();
+                    instance.show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                disable: ({ key }) => {
+                    $(`#${key}-toggle-1`)[key]('disable');
+                    $(`#${key}-toggle-1`)[key]('show');
+                },
+            },
+        ]) {
+            test(`disables the ${key} (${name})`, async ({ page }) => {
+                await page.evaluate(disable, { key, component });
 
-            await expect(page.locator(`.${key}`)).toHaveCount(0);
-        });
+                await expect(page.locator(`.${key}`)).toHaveCount(0);
+            });
+        }
 
-        test(`disables the ${key} (query)`, async ({ page }) => {
-            await page.evaluate(({ key }) => {
-                $(`#${key}-toggle-1`)[key]('disable');
-                $(`#${key}-toggle-1`)[key]('show');
-            }, { key });
-
-            await expect(page.locator(`.${key}`)).toHaveCount(0);
-        });
-
-        test(`disables multiple ${key}s (query)`, async ({ page }) => {
+        test(`disables multiple ${key}s (QuerySet)`, async ({ page }) => {
             await page.evaluate(({ key }) => {
                 $('button')[key]('disable');
                 $('button')[key]('show');
@@ -474,32 +500,37 @@ export function floatingContentTests({ key, component }) {
     });
 
     test.describe('#enable', () => {
-        test(`enables the ${key}`, async ({ page }) => {
-            await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                const instance = UI[component].init(toggle1);
-                instance.disable();
-                instance.enable();
-                instance.show();
-            }, { key, component });
+        for (const { name, enable } of [
+            {
+                name: 'class',
+                enable: ({ key, component }) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    const instance = UI[component].init(toggle1);
+                    instance.disable();
+                    instance.enable();
+                    instance.show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                enable: ({ key }) => {
+                    $(`#${key}-toggle-1`)[key]('disable');
+                    $(`#${key}-toggle-1`)[key]('enable');
+                    $(`#${key}-toggle-1`)[key]('show');
+                },
+            },
+        ]) {
+            test(`enables the ${key} (${name})`, async ({ page }) => {
+                await page.evaluate(enable, { key, component });
 
-            await expect(page.locator(`.${key}`)).toHaveCount(1);
-            await expect(page.locator(`.${key}`)).toHaveClass(/\bshow\b/);
-        });
+                await expect(page.locator(`.${key}`)).toHaveCount(1);
+                await expect(page.locator(`.${key}`)).toHaveClass(/\bshow\b/);
 
-        test(`enables the ${key} (query)`, async ({ page }) => {
-            await page.evaluate(({ key }) => {
-                $(`#${key}-toggle-1`)[key]('disable');
-                $(`#${key}-toggle-1`)[key]('enable');
-                $(`#${key}-toggle-1`)[key]('show');
-            }, { key });
+                await expect(page.locator(`.${key}`)).toBeVisible();
+            });
+        }
 
-            await expect(page.locator(`.${key}`)).toHaveCount(1);
-            await expect(page.locator(`.${key}`)).toHaveClass(/\bshow\b/);
-            await expect(page.locator(`.${key}`)).toBeVisible();
-        });
-
-        test(`enables multiple ${key}s (query)`, async ({ page }) => {
+        test(`enables multiple ${key}s (QuerySet)`, async ({ page }) => {
             await page.evaluate(({ key }) => {
                 $('button')[key]('disable');
                 $('button')[key]('enable');
@@ -654,15 +685,29 @@ export function floatingContentTests({ key, component }) {
     });
 
     test.describe('customClass option', () => {
-        test('works with customClass option', async ({ page }) => {
-            await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                UI[component].init(toggle1, { customClass: 'test' }).show();
-            }, { key, component });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: ({ key, component }) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    UI[component].init(toggle1, { customClass: 'test' }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: ({ key }) => {
+                    $(`#${key}-toggle-1`)[key]({ customClass: 'test' })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with customClass option (${name})`, async ({ page }) => {
+                await page.evaluate(run, { key, component });
 
-            await expect(page.locator(`.${key}`)).toHaveClass(/\btest\b/);
-            await expect(page.locator(`.${key}`)).toHaveClass(/\bshow\b/);
-        });
+                await expect(page.locator(`.${key}`)).toHaveClass(/\btest\b/);
+                await expect(page.locator(`.${key}`)).toHaveClass(/\bshow\b/);
+            });
+        }
 
         test('works with customClass option (data-ui-custom-class)', async ({ page }) => {
             await page.evaluate(({ key, component }) => {
@@ -674,28 +719,32 @@ export function floatingContentTests({ key, component }) {
             await expect(page.locator(`#${key}-toggle-1`)).toHaveAttribute('data-ui-custom-class', 'test');
             await expect(page.locator(`.${key}`)).toHaveClass(/\btest\b/);
         });
-
-        test('works with customClass option (query)', async ({ page }) => {
-            await page.evaluate(({ key }) => {
-                $(`#${key}-toggle-1`)[key]({ customClass: 'test' })
-                    .show();
-            }, { key });
-
-            await expect(page.locator(`.${key}`)).toHaveClass(/\btest\b/);
-            await expect(page.locator(`.${key}`)).toHaveClass(/\bshow\b/);
-        });
     });
 
     test.describe('animation option', () => {
-        test('works with animation option', async ({ page }) => {
-            await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                UI[component].init(toggle1, { animation: false }).show();
-            }, { key, component });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: ({ key, component }) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    UI[component].init(toggle1, { animation: false }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: ({ key }) => {
+                    $(`#${key}-toggle-1`)[key]({ animation: false })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with animation option (${name})`, async ({ page }) => {
+                await page.evaluate(run, { key, component });
 
-            await expect(page.locator(`.${key}`)).not.toHaveClass(/\bfade\b/);
-            await expect(page.locator(`.${key}`)).toHaveCSS('opacity', '1');
-        });
+                await expect(page.locator(`.${key}`)).not.toHaveClass(/\bfade\b/);
+                await expect(page.locator(`.${key}`)).toHaveCSS('opacity', '1');
+            });
+        }
 
         test('works with animation option (data-ui-animation)', async ({ page }) => {
             await page.evaluate(({ key, component }) => {
@@ -707,31 +756,39 @@ export function floatingContentTests({ key, component }) {
             await expect(page.locator(`#${key}-toggle-1`)).toHaveAttribute('data-ui-animation', 'false');
             await expect(page.locator(`.${key}`)).not.toHaveClass(/\bfade\b/);
         });
-
-        test('works with animation option (query)', async ({ page }) => {
-            await page.evaluate(({ key }) => {
-                $(`#${key}-toggle-1`)[key]({ animation: false })
-                    .show();
-            }, { key });
-
-            await expect(page.locator(`.${key}`)).not.toHaveClass(/\bfade\b/);
-            await expect(page.locator(`.${key}`)).toHaveCSS('opacity', '1');
-        });
     });
 
     test.describe('appendTo option', () => {
-        test('works with appendTo option', async ({ page }) => {
-            await page.evaluate(({ key, component }) => {
-                const testContainer = $.create('div', { class: 'test' });
-                $.append(document.body, testContainer);
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                UI[component].init(toggle1, { appendTo: '.test' }).show();
-            }, { key, component });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: ({ key, component }) => {
+                    const testContainer = $.create('div', { class: 'test' });
+                    $.append(document.body, testContainer);
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    UI[component].init(toggle1, { appendTo: '.test' }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: ({ key }) => {
+                    const testContainer = $.create('div', { class: 'test' });
+                    $.append(document.body, testContainer);
+                    $(`#${key}-toggle-1`)[key]({ appendTo: '.test' })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with appendTo option (${name})`, async ({ page }) => {
+                await page.evaluate(run, { key, component });
 
-            await expect(page.locator(`.test > .${key}`)).toHaveCount(1);
-            await expect(page.locator(`.test > .${key}`)).toHaveClass(/\bshow\b/);
-            await expect(page.locator(`#${key}-toggle-1 + .${key}`)).toHaveCount(0);
-        });
+                await expect(page.locator(`.test > .${key}`)).toHaveCount(1);
+                await expect(page.locator(`.test > .${key}`)).toHaveClass(/\bshow\b/);
+                await expect(page.locator(`#${key}-toggle-1 + .${key}`)).toHaveCount(0);
+
+                await expect(page.locator(`.test > .${key}`)).toBeVisible();
+            });
+        }
 
         test('works with appendTo option (data-ui-append-to)', async ({ page }) => {
             await page.evaluate(({ key, component }) => {
@@ -745,18 +802,6 @@ export function floatingContentTests({ key, component }) {
             await expect(page.locator(`#${key}-toggle-1`)).toHaveAttribute('data-ui-append-to', '.test');
             await expect(page.locator(`.test > .${key}`)).toHaveCount(1);
             await expect(page.locator(`.test > .${key}`)).toHaveClass(/\bshow\b/);
-        });
-
-        test('works with appendTo option (query)', async ({ page }) => {
-            await page.evaluate(({ key }) => {
-                const testContainer = $.create('div', { class: 'test' });
-                $.append(document.body, testContainer);
-                $(`#${key}-toggle-1`)[key]({ appendTo: '.test' })
-                    .show();
-            }, { key });
-
-            await expect(page.locator(`.test > .${key}`)).toHaveCount(1);
-            await expect(page.locator(`.test > .${key}`)).toBeVisible();
         });
     });
 }

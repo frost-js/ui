@@ -12,45 +12,44 @@ test.describe('Popper boundaries', () => {
             });
         });
 
-        test('clamps to an element boundary', async ({ page }) => {
-            await page.evaluate((_) => {
-                UI.Popper.init($.findOne('#popper'), {
-                    reference: $.findOne('#reference'),
-                    container: $.findOne('#container'),
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    UI.Popper.init($.findOne('#popper'), {
+                        reference: $.findOne('#reference'),
+                        container: $.findOne('#container'),
+                        placement: 'top',
+                        position: 'start',
+                        fixed: true,
+                    });
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#popper').popper({
+                        reference: $.findOne('#reference'),
+                        container: $.findOne('#container'),
+                        placement: 'top',
+                        position: 'start',
+                        fixed: true,
+                    });
+                },
+            },
+        ]) {
+            test(`clamps to an element boundary (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+
+                await expectPopperPosition(page, {
+                    popper: '#popper',
+                    reference: '#reference',
                     placement: 'top',
-                    position: 'start',
-                    fixed: true,
+                    boundary: '#container',
+                    boundaryEdge: 'right',
                 });
             });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'top',
-                boundary: '#container',
-                boundaryEdge: 'right',
-            });
-        });
-
-        test('clamps to an element boundary (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#popper').popper({
-                    reference: $.findOne('#reference'),
-                    container: $.findOne('#container'),
-                    placement: 'top',
-                    position: 'start',
-                    fixed: true,
-                });
-            });
-
-            await expectPopperPosition(page, {
-                popper: '#popper',
-                reference: '#reference',
-                placement: 'top',
-                boundary: '#container',
-                boundaryEdge: 'right',
-            });
-        });
+        }
     });
 
     test.describe('scroll container', () => {

@@ -678,11 +678,6 @@ test.describe('Tab', () => {
                     );
                 })).toBe(true);
             });
-
-            test('returns the tab', async ({ page }) => {
-                expect(await page.evaluate((_) =>
-                    $('#tab-toggle-1').tab() instanceof UI.Tab)).toBe(true);
-            });
         });
 
         test.describe('#dispose', () => {

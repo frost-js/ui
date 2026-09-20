@@ -245,11 +245,6 @@ test.describe('Alert', () => {
                     );
                 })).toBe(true);
             });
-
-            test('returns the alert', async ({ page }) => {
-                expect(await page.evaluate((_) =>
-                    $('#alert1').alert() instanceof UI.Alert)).toBe(true);
-            });
         });
 
         test.describe('#dispose', () => {

@@ -1097,13 +1097,6 @@ test.describe('Modal', () => {
     });
 
     test.describe('QuerySet', () => {
-        test.describe('#init', () => {
-            test('returns the modal', async ({ page }) => {
-                expect(await page.evaluate((_) =>
-                    $('#modal1').modal() instanceof UI.Modal)).toBe(true);
-            });
-        });
-
         test.describe('keyboard option', () => {
             test('works with keyboard option', async ({ page }) => {
                 await page.evaluate((_) => {

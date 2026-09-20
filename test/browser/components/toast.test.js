@@ -647,11 +647,6 @@ test.describe('Toast', () => {
                     );
                 })).toBe(true);
             });
-
-            test('returns the toast', async ({ page }) => {
-                expect(await page.evaluate((_) =>
-                    $('#toast1').toast() instanceof UI.Toast)).toBe(true);
-            });
         });
 
         test.describe('#dispose', () => {

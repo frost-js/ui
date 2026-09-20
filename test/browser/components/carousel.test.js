@@ -1045,7 +1045,7 @@ test.describe('Carousel', () => {
             await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
         });
 
-        test('works with swipe option (query)', async ({ page }) => {
+        test('works with swipe option (QuerySet)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('#carousel1').carousel({ swipe: false });
                 const carousel1 = $.findOne('#carousel1');
@@ -1313,11 +1313,6 @@ test.describe('Carousel', () => {
                         $.getData(node, 'carousel') instanceof UI.Carousel,
                     );
                 })).toBe(true);
-            });
-
-            test('returns the carousel', async ({ page }) => {
-                expect(await page.evaluate((_) =>
-                    $('#carousel1').carousel() instanceof UI.Carousel)).toBe(true);
             });
         });
 

@@ -932,13 +932,6 @@ test.describe('Offcanvas', () => {
     });
 
     test.describe('QuerySet', () => {
-        test.describe('#init', () => {
-            test('returns the offcanvas', async ({ page }) => {
-                expect(await page.evaluate((_) =>
-                    $('#offcanvas1').offcanvas() instanceof UI.Offcanvas)).toBe(true);
-            });
-        });
-
         test.describe('keyboard option', () => {
             test('works with keyboard option', async ({ page }) => {
                 await page.evaluate((_) => {

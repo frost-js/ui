@@ -28,31 +28,22 @@ test.describe('Clipboard', () => {
                 navigator.clipboard.readText())).toBe('Test 2');
         });
 
-        test('works with copy action (input)', async ({ page }) => {
-            await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>' +
-                    '<input class="input-filled" id="test" value="Test 3">';
+        for (const { name, text, markup } of [
+            { name: 'input', text: 'Test 3', markup: '<input class="input-filled" id="test" value="Test 3">' },
+            { name: 'textarea', text: 'Test 4', markup: '<textarea class="input-filled" id="test">Test 4</textarea>' },
+        ]) {
+            test(`works with copy action (${name})`, async ({ page }) => {
+                await page.evaluate((markup) => {
+                    document.body.innerHTML =
+                        '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>' +
+                        markup;
+                }, markup);
+                await page.locator('#button').click();
+
+                expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(text);
+                await expect(page.locator('#test')).toHaveValue(text);
             });
-            await page.locator('#button').click();
-
-            expect(await page.evaluate((_) =>
-                navigator.clipboard.readText())).toBe('Test 3');
-            await expect(page.locator('#test')).toHaveValue('Test 3');
-        });
-
-        test('works with copy action (textarea)', async ({ page }) => {
-            await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>' +
-                    '<textarea class="input-filled" id="test">Test 4</textarea>';
-            });
-            await page.locator('#button').click();
-
-            expect(await page.evaluate((_) =>
-                navigator.clipboard.readText())).toBe('Test 4');
-            await expect(page.locator('#test')).toHaveValue('Test 4');
-        });
+        }
     });
 
     test.describe('cut action', () => {
@@ -60,31 +51,22 @@ test.describe('Clipboard', () => {
             test.skip(browserName === 'webkit', 'WebKit does not support reading clipboard contents.');
         });
 
-        test('works with cut action (input)', async ({ page }) => {
-            await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>' +
-                    '<input class="input-filled" id="test" value="Test 5">';
+        for (const { name, text, markup } of [
+            { name: 'input', text: 'Test 5', markup: '<input class="input-filled" id="test" value="Test 5">' },
+            { name: 'textarea', text: 'Test 6', markup: '<textarea class="input-filled" id="test">Test 6</textarea>' },
+        ]) {
+            test(`works with cut action (${name})`, async ({ page }) => {
+                await page.evaluate((markup) => {
+                    document.body.innerHTML =
+                        '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>' +
+                        markup;
+                }, markup);
+                await page.locator('#button').click();
+
+                expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(text);
+                await expect(page.locator('#test')).toHaveValue('');
             });
-            await page.locator('#button').click();
-
-            expect(await page.evaluate((_) =>
-                navigator.clipboard.readText())).toBe('Test 5');
-            await expect(page.locator('#test')).toHaveValue('');
-        });
-
-        test('works with cut action (textarea)', async ({ page }) => {
-            await page.evaluate((_) => {
-                document.body.innerHTML =
-                    '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>' +
-                    '<textarea class="input-filled" id="test">Test 6</textarea>';
-            });
-            await page.locator('#button').click();
-
-            expect(await page.evaluate((_) =>
-                navigator.clipboard.readText())).toBe('Test 6');
-            await expect(page.locator('#test')).toHaveValue('');
-        });
+        }
 
         test('does not remove text content for elements', async ({ page }) => {
             await page.evaluate((_) => {

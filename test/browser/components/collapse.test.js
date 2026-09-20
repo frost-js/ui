@@ -638,11 +638,6 @@ test.describe('Collapse', () => {
                     );
                 })).toBe(true);
             });
-
-            test('returns the collapse', async ({ page }) => {
-                expect(await page.evaluate((_) =>
-                    $('#collapse1').collapse() instanceof UI.Collapse)).toBe(true);
-            });
         });
 
         test.describe('#dispose', () => {

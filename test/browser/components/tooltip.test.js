@@ -9,22 +9,35 @@ test.describe('Tooltip', () => {
     floatingContentTests({ key: 'tooltip', component: 'Tooltip' });
 
     test.describe('#show', () => {
-        test('shows the tooltip', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                UI.Tooltip.init(tooltipToggle1).show();
-            });
+        for (const { name, show } of [
+            {
+                name: 'class',
+                show: (_) => {
+                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                    UI.Tooltip.init(tooltipToggle1).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                show: (_) => {
+                    $('#tooltip-toggle-1').tooltip('show');
+                },
+            },
+        ]) {
+            test(`shows the tooltip (${name})`, async ({ page }) => {
+                await page.evaluate(show);
 
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveClass(/\bfade\b/);
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveCSS('opacity', '1');
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toBeVisible();
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('role', 'tooltip');
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('data-ui-placement', 'end');
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveCSS('position', 'absolute');
-            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('aria-describedby', /^tooltip-/);
-            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-placement', 'end');
-        });
+                await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveClass(/\bfade\b/);
+                await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveCSS('opacity', '1');
+                await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toBeVisible();
+                await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('role', 'tooltip');
+                await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('data-ui-placement', 'end');
+                await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveCSS('position', 'absolute');
+                await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('aria-describedby', /^tooltip-/);
+                await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-placement', 'end');
+            });
+        }
 
         test('shows the tooltip on inline-start in RTL', async ({ page }) => {
             await page.evaluate((_) => {
@@ -40,18 +53,7 @@ test.describe('Tooltip', () => {
             await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-placement', 'start');
         });
 
-        test('shows the tooltip (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#tooltip-toggle-1').tooltip('show');
-            });
-
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveCSS('opacity', '1');
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toBeVisible();
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip')).toHaveAttribute('role', 'tooltip');
-        });
-
-        test('shows multiple tooltips (query)', async ({ page }) => {
+        test('shows multiple tooltips (QuerySet)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('button').tooltip('show');
             });
@@ -128,35 +130,41 @@ test.describe('Tooltip', () => {
     });
 
     test.describe('#refresh', () => {
-        test('refreshes the tooltip title', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                UI.Tooltip.init(tooltipToggle1).show();
-            });
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                $.setDataset(tooltipToggle1, { uiTitle: 'Test' });
-                UI.Tooltip.init(tooltipToggle1).refresh();
-            });
+        for (const { name, prepare, refresh } of [
+            {
+                name: 'class',
+                prepare: (_) => {
+                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                    UI.Tooltip.init(tooltipToggle1).show();
+                },
+                refresh: (_) => {
+                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                    $.setDataset(tooltipToggle1, { uiTitle: 'Test' });
+                    UI.Tooltip.init(tooltipToggle1).refresh();
+                },
+            },
+            {
+                name: 'QuerySet',
+                prepare: (_) => {
+                    $('#tooltip-toggle-1').tooltip('show');
+                },
+                refresh: (_) => {
+                    $('#tooltip-toggle-1')
+                        .setDataset({ uiTitle: 'Test' })
+                        .tooltip('refresh');
+                },
+            },
+        ]) {
+            test(`refreshes the tooltip title (${name})`, async ({ page }) => {
+                await page.evaluate(prepare);
+                await page.evaluate(refresh);
 
-            await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-title', 'Test');
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip .tooltip-inner')).toHaveText('Test');
-        });
-
-        test('refreshes the tooltip title (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#tooltip-toggle-1').tooltip('show');
+                await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-title', 'Test');
+                await expect(page.locator('#tooltip-toggle-1 + .tooltip .tooltip-inner')).toHaveText('Test');
             });
-            await page.evaluate((_) => {
-                $('#tooltip-toggle-1')
-                    .setDataset({ uiTitle: 'Test' })
-                    .tooltip('refresh');
-            });
+        }
 
-            await expect(page.locator('#tooltip-toggle-1 + .tooltip .tooltip-inner')).toHaveText('Test');
-        });
-
-        test('refreshes multiple tooltips titles (query)', async ({ page }) => {
+        test('refreshes multiple tooltips titles (QuerySet)', async ({ page }) => {
             await page.evaluate((_) => {
                 $('button').tooltip('show');
             });
@@ -171,15 +179,30 @@ test.describe('Tooltip', () => {
     });
 
     test.describe('title option', () => {
-        test('works with title option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                UI.Tooltip.init(tooltipToggle1, { title: 'Test' }).show();
-            });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                    UI.Tooltip.init(tooltipToggle1, { title: 'Test' }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#tooltip-toggle-1')
+                        .tooltip({ title: 'Test' })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with title option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
 
-            await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('.tooltip-inner')).toHaveText('Test');
-        });
+                await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('.tooltip-inner')).toHaveText('Test');
+            });
+        }
 
         test('works with title option (data-ui-title)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -201,16 +224,6 @@ test.describe('Tooltip', () => {
 
             await expect(page.locator('#tooltip-toggle-1')).not.toHaveAttribute('title');
             await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-original-title', 'Test');
-            await expect(page.locator('.tooltip-inner')).toHaveText('Test');
-        });
-
-        test('works with title option (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#tooltip-toggle-1')
-                    .tooltip({ title: 'Test' })
-                    .show();
-            });
-
             await expect(page.locator('.tooltip-inner')).toHaveText('Test');
         });
 
@@ -238,18 +251,35 @@ test.describe('Tooltip', () => {
     });
 
     test.describe('template option', () => {
-        test('works with template option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                UI.Tooltip.init(tooltipToggle1, {
-                    template: '<div class="tooltip" role="tooltip" data-test="Test"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-                }).show();
-            });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                    UI.Tooltip.init(tooltipToggle1, {
+                        template: '<div class="tooltip" role="tooltip" data-test="Test"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+                    }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#tooltip-toggle-1').tooltip({
+                        template: '<div class="tooltip" role="tooltip" data-test="Test"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+                    }).show();
+                },
+            },
+        ]) {
+            test(`works with template option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
 
-            await expect(page.locator('.tooltip')).toHaveAttribute('data-test', 'Test');
-            await expect(page.locator('.tooltip > .tooltip-arrow')).toHaveCount(1);
-            await expect(page.locator('.tooltip > .tooltip-inner')).toHaveCount(1);
-        });
+                await expect(page.locator('.tooltip')).toHaveAttribute('data-test', 'Test');
+                await expect(page.locator('.tooltip > .tooltip-arrow')).toHaveCount(1);
+                await expect(page.locator('.tooltip > .tooltip-inner')).toHaveCount(1);
+
+                await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
+            });
+        }
 
         test('works with template option (data-ui-template)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -266,17 +296,6 @@ test.describe('Tooltip', () => {
             );
             await expect(page.locator('.tooltip')).toHaveAttribute('data-test', 'Test');
         });
-
-        test('works with template option (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#tooltip-toggle-1').tooltip({
-                    template: '<div class="tooltip" role="tooltip" data-test="Test"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-                }).show();
-            });
-
-            await expect(page.locator('.tooltip')).toHaveAttribute('data-test', 'Test');
-            await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
-        });
     });
 
     test.describe('html option', () => {
@@ -290,14 +309,29 @@ test.describe('Tooltip', () => {
             await expect(page.locator('.tooltip-inner b')).toHaveCount(0);
         });
 
-        test('works with html option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                UI.Tooltip.init(tooltipToggle1, { title: '<b>Test</b>', html: true }).show();
-            });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                    UI.Tooltip.init(tooltipToggle1, { title: '<b>Test</b>', html: true }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#tooltip-toggle-1')
+                        .tooltip({ title: '<b>Test</b>', html: true })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with html option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
 
-            await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
-        });
+                await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
+            });
+        }
 
         test('works with html option (data-ui-html)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -307,16 +341,6 @@ test.describe('Tooltip', () => {
             });
 
             await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-html', 'true');
-            await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
-        });
-
-        test('works with html option (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#tooltip-toggle-1')
-                    .tooltip({ title: '<b>Test</b>', html: true })
-                    .show();
-            });
-
             await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
         });
     });
@@ -342,15 +366,30 @@ test.describe('Tooltip', () => {
             await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
         });
 
-        test('shows on click with click trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                UI.Tooltip.init(tooltipToggle1, { trigger: 'click' });
-            });
-            await page.locator('#tooltip-toggle-1').click();
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                    UI.Tooltip.init(tooltipToggle1, { trigger: 'click' });
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#tooltip-toggle-1').tooltip({ trigger: 'click' });
+                },
+            },
+        ]) {
+            test(`shows on click with click trigger option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await page.locator('#tooltip-toggle-1').click();
 
-            await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
-        });
+                await expect(page.locator('.tooltip')).toHaveClass(/\bshow\b/);
+
+                await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
+            });
+        }
 
         test('hides on mouseout with hover trigger option', async ({ page }) => {
             await page.evaluate((_) => {
@@ -462,15 +501,6 @@ test.describe('Tooltip', () => {
             await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-trigger', 'click');
         });
 
-        test('works with trigger option (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#tooltip-toggle-1').tooltip({ trigger: 'click' });
-            });
-            await page.locator('#tooltip-toggle-1').click();
-
-            await expect(page.locator('.tooltip')).toHaveCSS('opacity', '1');
-        });
-
         test('works with multiple trigger options', async ({ page }) => {
             await page.evaluate((_) => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
@@ -497,19 +527,38 @@ test.describe('Tooltip', () => {
             await expect(page.locator('.tooltip-inner > b')).not.toHaveAttribute('data-test');
         });
 
-        test('works with sanitize option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                UI.Tooltip.init(tooltipToggle1, {
-                    title: '<b data-test="Test">Test</b>',
-                    html: true,
-                    sanitize: false,
-                }).show();
-            });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
+                    UI.Tooltip.init(tooltipToggle1, {
+                        title: '<b data-test="Test">Test</b>',
+                        html: true,
+                        sanitize: false,
+                    }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#tooltip-toggle-1')
+                        .tooltip({
+                            title: '<b data-test="Test">Test</b>',
+                            html: true,
+                            sanitize: false,
+                        })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with sanitize option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
 
-            await expect(page.locator('.tooltip-inner > b')).toHaveAttribute('data-test', 'Test');
-            await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
-        });
+                await expect(page.locator('.tooltip-inner > b')).toHaveAttribute('data-test', 'Test');
+                await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
+            });
+        }
 
         test('works with sanitize option (data-ui-sanitize)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -523,21 +572,6 @@ test.describe('Tooltip', () => {
 
             await expect(page.locator('#tooltip-toggle-1')).toHaveAttribute('data-ui-sanitize', 'false');
             await expect(page.locator('.tooltip-inner > b')).toHaveAttribute('data-test', 'Test');
-        });
-
-        test('works with sanitize option (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#tooltip-toggle-1')
-                    .tooltip({
-                        title: '<b data-test="Test">Test</b>',
-                        html: true,
-                        sanitize: false,
-                    })
-                    .show();
-            });
-
-            await expect(page.locator('.tooltip-inner > b')).toHaveAttribute('data-test', 'Test');
-            await expect(page.locator('.tooltip-inner > b')).toHaveText('Test');
         });
     });
 });
