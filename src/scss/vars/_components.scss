@@ -153,8 +153,8 @@ $carousel-caption-backdrop-filter: blur(1.25rem) saturate(160%) !default;
 $carousel-caption-border-width: var(--ui-border-width) !default;
 $carousel-caption-border-color: helpers.color-alpha(border-color, .1) !default;
 $carousel-caption-border-radius: var(--ui-border-radius-xl) !default;
-$carousel-caption-box-shadow: inset 0 1px 0 helpers.color-alpha("white", .16),
-    var(--ui-shadow-lg),
+$carousel-caption-box-shadow: 0 4px 12px light-dark(helpers.color-alpha("black", .12), helpers.color-alpha("black", .35)),
+    0 16px 48px light-dark(helpers.color-alpha("black", .2), helpers.color-alpha("black", .6)),
     0 0 2rem helpers.color-alpha(primary, .12) !default;
 
 // close button
