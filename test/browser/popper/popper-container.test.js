@@ -5,14 +5,10 @@ test.describe('Popper boundaries', () => {
     test.describe('container option', () => {
         test.beforeEach(async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHtml(
-                    document.body,
-                    `
-                        <div id="container" style="position: absolute; left: 100px; top: 100px; width: 300px; height: 250px;"></div>
-                        <div id="reference" style="position: absolute; left: 320px; top: 200px; width: 80px; height: 34px;"></div>
-                        <div id="popper" style="width: 160px; height: 80px;"></div>
-                    `,
-                );
+                document.body.innerHTML =
+                    '<div id="container" style="position: absolute; left: 100px; top: 100px; width: 300px; height: 250px;"></div>' +
+                    '<div id="reference" style="position: absolute; left: 320px; top: 200px; width: 80px; height: 34px;"></div>' +
+                    '<div id="popper" style="width: 160px; height: 80px;"></div>';
             });
         });
 
@@ -60,17 +56,13 @@ test.describe('Popper boundaries', () => {
     test.describe('scroll container', () => {
         test.beforeEach(async ({ page }) => {
             await page.evaluate((_) => {
-                $.setHtml(
-                    document.body,
-                    `
-                        <div id="scroll" style="position: absolute; overflow: auto; left: 200px; top: 150px; width: 400px; height: 300px;">
-                            <div id="content" style="width: 1000px; height: 800px;">
-                                <div id="reference" style="position: absolute; left: 450px; top: 255px; width: 80px; height: 34px;"></div>
-                                <div id="popper" style="width: 160px; height: 80px;"></div>
-                            </div>
-                        </div>
-                    `,
-                );
+                document.body.innerHTML =
+                    '<div id="scroll" style="position: absolute; overflow: auto; left: 200px; top: 150px; width: 400px; height: 300px;">' +
+                    '<div id="content" style="width: 1000px; height: 800px;">' +
+                    '<div id="reference" style="position: absolute; left: 450px; top: 255px; width: 80px; height: 34px;"></div>' +
+                    '<div id="popper" style="width: 160px; height: 80px;"></div>' +
+                    '</div>' +
+                    '</div>';
 
                 const scroll = $.findOne('#scroll');
                 $.setScroll(scroll, 300, 250);
@@ -168,17 +160,13 @@ test.describe('Popper boundaries', () => {
 
     test('uses the viewport when it is tighter than the scroll container', async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHtml(
-                document.body,
-                `
-                    <div id="scroll" style="position: absolute; overflow: auto; left: -200px; top: -200px; width: 1200px; height: 1000px;">
-                        <div style="position: relative; width: 1600px; height: 1400px;">
-                            <div id="reference" style="position: absolute; left: 560px; top: 210px; width: 80px; height: 34px;"></div>
-                            <div id="popper" style="width: 160px; height: 80px;"></div>
-                        </div>
-                    </div>
-                `,
-            );
+            document.body.innerHTML =
+                '<div id="scroll" style="position: absolute; overflow: auto; left: -200px; top: -200px; width: 1200px; height: 1000px;">' +
+                '<div style="position: relative; width: 1600px; height: 1400px;">' +
+                '<div id="reference" style="position: absolute; left: 560px; top: 210px; width: 80px; height: 34px;"></div>' +
+                '<div id="popper" style="width: 160px; height: 80px;"></div>' +
+                '</div>' +
+                '</div>';
 
             UI.Popper.init($.findOne('#popper'), {
                 reference: $.findOne('#reference'),

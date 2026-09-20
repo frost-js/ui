@@ -5,13 +5,9 @@ test.describe('Popper positioning', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
             $.setStyle(document.documentElement, { overflow: 'hidden' });
-            $.setHtml(
-                document.body,
-                `
-                    <div id="reference" style="position: absolute; left: 360px; top: 283px; width: 80px; height: 34px;"></div>
-                    <div id="popper" style="width: 160px; height: 80px;"></div>
-                `,
-            );
+            document.body.innerHTML =
+                '<div id="reference" style="position: absolute; left: 360px; top: 283px; width: 80px; height: 34px;"></div>' +
+                '<div id="popper" style="width: 160px; height: 80px;"></div>';
         });
     });
 

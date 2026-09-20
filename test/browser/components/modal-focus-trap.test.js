@@ -3,18 +3,14 @@ import { expect, test } from '#test';
 test.describe('Modal FocusTrap', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHtml(
-                document.body,
-                `
-                    <button class="btn btn-secondary" id="modal-toggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>
-                    <div class="modal" id="modal">
-                        <div class="modal-dialog" id="modal-dialog">
-                            <button class="btn-close" id="button1" data-ui-dismiss="modal" type="button"></button>
-                            <button id="button2" type="button"></button>
-                        </div>
-                    </div>
-                `,
-            );
+            document.body.innerHTML =
+                '<button class="btn btn-secondary" id="modal-toggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>' +
+                '<div class="modal" id="modal">' +
+                '<div class="modal-dialog" id="modal-dialog">' +
+                '<button class="btn-close" id="button1" data-ui-dismiss="modal" type="button"></button>' +
+                '<button id="button2" type="button"></button>' +
+                '</div>' +
+                '</div>';
         });
     });
 

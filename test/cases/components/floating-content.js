@@ -10,8 +10,9 @@ import { expect, test } from '#test';
 export function setup(key) {
     return async ({ page }) => {
         await page.evaluate((key) => {
-            document.body.innerHTML = `<button class="btn btn-secondary" id="${key}-toggle-1" type="button"></button>
-                <button class="btn btn-secondary" id="${key}-toggle-2" type="button"></button>`;
+            document.body.innerHTML =
+                '<button class="btn btn-secondary" id="' + key + '-toggle-1" type="button"></button>' +
+                '<button class="btn btn-secondary" id="' + key + '-toggle-2" type="button"></button>';
         }, key);
     };
 }
@@ -80,15 +81,11 @@ export function floatingContentTests({ key, component }) {
 
         test('removes only its modal hide event', async ({ page }) => {
             await page.evaluate(({ key, component }) => {
-                $.setHtml(
-                    document.body,
-                    `
-                        <div class="modal" id="modal">
-                            <button id="${key}-toggle-1" type="button"></button>
-                            <button id="${key}-toggle-2" type="button"></button>
-                        </div>
-                    `,
-                );
+                document.body.innerHTML =
+                    '<div class="modal" id="modal">' +
+                    '<button id="' + key + '-toggle-1" type="button"></button>' +
+                    '<button id="' + key + '-toggle-2" type="button"></button>' +
+                    '</div>';
 
                 const modal = $.findOne('#modal');
                 const toggle1 = $.findOne(`#${key}-toggle-1`);

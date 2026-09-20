@@ -3,23 +3,19 @@ import { expect, test } from '#test';
 test.describe('Offcanvas/Dropdown', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHtml(
-                document.body,
-                `
-                    <button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>
-                    <div class="offcanvas offcanvas-start" id="offcanvas">
-                        <button class="btn-close" id="button" data-ui-dismiss="offcanvas" type="button"></button>
-                        <div>
-                            <button class="btn btn-secondary" id="dropdown-toggle" data-ui-toggle="dropdown" type="button"></button>
-                            <div class="dropdown-menu" id="dropdown">
-                                <button class="dropdown-item" id="dropdown-item-1"></button>
-                                <button class="dropdown-item" id="dropdown-item-2"></button>
-                                <button class="dropdown-item" id="dropdown-item-3"></button>
-                            </div>
-                        </div>
-                    </div>
-                `,
-            );
+            document.body.innerHTML =
+                '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
+                '<div class="offcanvas offcanvas-start" id="offcanvas">' +
+                '<button class="btn-close" id="button" data-ui-dismiss="offcanvas" type="button"></button>' +
+                '<div>' +
+                '<button class="btn btn-secondary" id="dropdown-toggle" data-ui-toggle="dropdown" type="button"></button>' +
+                '<div class="dropdown-menu" id="dropdown">' +
+                '<button class="dropdown-item" id="dropdown-item-1"></button>' +
+                '<button class="dropdown-item" id="dropdown-item-2"></button>' +
+                '<button class="dropdown-item" id="dropdown-item-3"></button>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
         });
     });
 

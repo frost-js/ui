@@ -4,13 +4,9 @@ import { expectStyles } from '../../support/assertions/styles.js';
 test.describe('Popper', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHtml(
-                document.body,
-                `
-                    <button class="btn btn-secondary" id="button" style="width: 80px; height: 34px;" type="button">Button</button>
-                    <div class="badge" id="badge" style="width: 60px; height: 21px;">Badge</div>
-                `,
-            );
+            document.body.innerHTML =
+                '<button class="btn btn-secondary" id="button" style="width: 80px; height: 34px;" type="button">Button</button>' +
+                '<div class="badge" id="badge" style="width: 60px; height: 21px;">Badge</div>';
         });
     });
 

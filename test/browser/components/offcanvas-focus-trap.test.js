@@ -3,16 +3,12 @@ import { expect, test } from '#test';
 test.describe('Offcanvas FocusTrap', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHtml(
-                document.body,
-                `
-                    <button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>
-                    <div class="offcanvas offcanvas-start" id="offcanvas">
-                        <button class="btn-close" id="button1" data-ui-dismiss="offcanvas" type="button"></button>
-                        <button id="button2" type="button"></button>
-                    </div>
-                `,
-            );
+            document.body.innerHTML =
+                '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
+                '<div class="offcanvas offcanvas-start" id="offcanvas">' +
+                '<button class="btn-close" id="button1" data-ui-dismiss="offcanvas" type="button"></button>' +
+                '<button id="button2" type="button"></button>' +
+                '</div>';
         });
     });
 

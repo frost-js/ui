@@ -6,37 +6,45 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Dropdown', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHtml(
-                document.body,
-                `
-                    <div>
-                        <button class="btn btn-secondary" id="dropdown-toggle-1" data-ui-toggle="dropdown" type="button"></button>
-                        <div class="dropdown-menu fade" id="dropdown1">
-                            <button class="dropdown-item" id="dropdown-1-item-1"></button>
-                            <button class="dropdown-item" id="dropdown-1-item-2"></button>
-                            <button class="dropdown-item" id="dropdown-1-item-3"></button>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn btn-secondary" id="dropdown-toggle-2" data-ui-toggle="dropdown" type="button"></button>
-                        <div class="dropdown-menu fade" id="dropdown2">
-                            <button class="dropdown-item" id="dropdown-2-item-1"></button>
-                            <button class="dropdown-item" id="dropdown-2-item-2"></button>
-                            <button class="dropdown-item" id="dropdown-2-item-3"></button>
-                        </div>
-                    </div>
-                `,
-            );
+            document.body.innerHTML =
+                '<div>' +
+                '<button class="btn btn-secondary" id="dropdown-toggle-1" data-ui-toggle="dropdown" type="button"></button>' +
+                '<div class="dropdown-menu fade" id="dropdown1">' +
+                '<button class="dropdown-item" id="dropdown-1-item-1"></button>' +
+                '<button class="dropdown-item" id="dropdown-1-item-2"></button>' +
+                '<button class="dropdown-item" id="dropdown-1-item-3"></button>' +
+                '</div>' +
+                '</div>' +
+                '<div>' +
+                '<button class="btn btn-secondary" id="dropdown-toggle-2" data-ui-toggle="dropdown" type="button"></button>' +
+                '<div class="dropdown-menu fade" id="dropdown2">' +
+                '<button class="dropdown-item" id="dropdown-2-item-1"></button>' +
+                '<button class="dropdown-item" id="dropdown-2-item-2"></button>' +
+                '<button class="dropdown-item" id="dropdown-2-item-3"></button>' +
+                '</div>' +
+                '</div>';
         });
     });
 
     test.describe('#init', () => {
-        test('creates a dropdown', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
-                return UI.Dropdown.init(dropdownToggle1) instanceof UI.Dropdown;
-            })).toBe(true);
-        });
+        for (const { name, init } of [
+            {
+                name: 'class',
+                init: (selector) => UI.Dropdown.init(document.querySelector(selector)),
+            },
+            {
+                name: 'QuerySet',
+                init: (selector) => $(selector).dropdown(),
+            },
+        ]) {
+            test(`creates a dropdown (${name})`, async ({ page }) => {
+                const instance = await page.evaluateHandle(init, '#dropdown-toggle-1');
+
+                expect(await instance.evaluate((value) => value instanceof UI.Dropdown)).toBe(true);
+                expect(await page.evaluate(() =>
+                    $.getData('#dropdown-toggle-1', 'dropdown') instanceof UI.Dropdown)).toBe(true);
+            });
+        }
 
         test('creates a dropdown (data-ui-toggle)', async ({ page }) => {
             await page.locator('#dropdown-toggle-1').click();
@@ -44,55 +52,31 @@ test.describe('Dropdown', () => {
             expect(await page.evaluate((_) =>
                 $.getData('#dropdown-toggle-1', 'dropdown') instanceof UI.Dropdown)).toBe(true);
         });
-
-        test('creates a dropdown (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('#dropdown-toggle-1').dropdown();
-                return $.getData('#dropdown-toggle-1', 'dropdown') instanceof UI.Dropdown;
-            })).toBe(true);
-        });
-
-        test('creates multiple dropdowns (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('[data-ui-toggle="dropdown"]').dropdown();
-                return $.find('[data-ui-toggle="dropdown"]').every((node) =>
-                    $.getData(node, 'dropdown') instanceof UI.Dropdown,
-                );
-            })).toBe(true);
-        });
-
-        test('returns the dropdown (query)', async ({ page }) => {
-            expect(await page.evaluate((_) =>
-                $('#dropdown-toggle-1').dropdown() instanceof UI.Dropdown)).toBe(true);
-        });
     });
 
     test.describe('#dispose', () => {
         test.use({ mockClock: true });
 
-        test('removes the dropdown', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
-                UI.Dropdown.init(dropdownToggle1).dispose();
-                return $.hasData(dropdownToggle1, 'dropdown');
-            })).toBe(false);
-        });
+        for (const { name, dispose } of [
+            {
+                name: 'class',
+                dispose: (selector) => {
+                    UI.Dropdown.init(document.querySelector(selector)).dispose();
+                },
+            },
+            {
+                name: 'QuerySet',
+                dispose: (selector) => {
+                    $(selector).dropdown('dispose');
+                },
+            },
+        ]) {
+            test(`removes the dropdown (${name})`, async ({ page }) => {
+                await page.evaluate(dispose, '#dropdown-toggle-1');
 
-        test('removes the dropdown (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('#dropdown-toggle-1').dropdown('dispose');
-                return $.hasData('#dropdown-toggle-1', 'dropdown');
-            })).toBe(false);
-        });
-
-        test('removes multiple dropdowns (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('[data-ui-toggle="dropdown"]').dropdown('dispose');
-                return $.find('[data-ui-toggle="dropdown"]').some((node) =>
-                    $.hasData(node, 'dropdown'),
-                );
-            })).toBe(false);
-        });
+                expect(await page.evaluate(() => $.hasData('#dropdown-toggle-1', 'dropdown'))).toBe(false);
+            });
+        }
 
         test('settles showing on disposal without a late event', async ({ page }) => {
             await page.evaluate((_) => {
@@ -146,41 +130,32 @@ test.describe('Dropdown', () => {
     });
 
     test.describe('#show', () => {
-        test('shows the dropdown', async ({ page }) => {
-            await page.evaluate((_) => {
-                const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
-                UI.Dropdown.init(dropdownToggle1).show();
+        for (const { name, show } of [
+            {
+                name: 'class',
+                show: (selector) => {
+                    UI.Dropdown.init(document.querySelector(selector)).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                show: (selector) => {
+                    $(selector).dropdown('show');
+                },
+            },
+        ]) {
+            test(`shows the dropdown (${name})`, async ({ page }) => {
+                await page.evaluate(show, '#dropdown-toggle-1');
+
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('data-ui-placement', 'bottom');
+                await expect(page.locator('#dropdown1')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#dropdown1')).toBeVisible();
+                await expect(page.locator('#dropdown1')).toHaveAttribute('data-ui-placement', 'bottom');
+                await expect(page.locator('#dropdown1')).toHaveCSS('position', 'absolute');
+                await expect(page.locator('#dropdown2')).toBeHidden();
             });
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('data-ui-placement', 'bottom');
-            await expect(page.locator('#dropdown1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#dropdown1')).toBeVisible();
-            await expect(page.locator('#dropdown1')).toHaveAttribute('data-ui-placement', 'bottom');
-            await expect(page.locator('#dropdown1')).toHaveCSS('position', 'absolute');
-            await expect(page.locator('#dropdown2')).toBeHidden();
-        });
-
-        test('shows the dropdown (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#dropdown-toggle-1').dropdown('show');
-            });
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#dropdown1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#dropdown1')).toBeVisible();
-        });
-
-        test('shows multiple dropdowns (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('[data-ui-toggle="dropdown"]').dropdown('show');
-            });
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#dropdown1')).toBeVisible();
-            await expect(page.locator('#dropdown2')).toBeVisible();
-        });
+        }
 
         test('can be called multiple times', async ({ page }) => {
             await page.evaluate((_) => {
@@ -229,7 +204,7 @@ test.describe('Dropdown', () => {
                 const dropdown1 = $.findOne('#dropdown1');
                 UI.Dropdown.init(dropdownToggle1).show();
                 const transition = dropdown1.getAnimations()
-                    .find((animation) => animation instanceof CSSTransition);
+                .find((animation) => animation instanceof CSSTransition);
                 transition.cancel();
             });
 
@@ -239,52 +214,41 @@ test.describe('Dropdown', () => {
         });
     });
 
+    const setupHide = async ({ page }) => {
+        await page.evaluate((_) => {
+            const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
+            UI.Dropdown.init(dropdownToggle1).show();
+        });
+        await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+    };
+
     test.describe('#hide', () => {
-        test.beforeEach(async ({ page }) => {
-            await page.evaluate((_) => {
-                const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
-                UI.Dropdown.init(dropdownToggle1).show();
+        test.beforeEach(setupHide);
+
+        for (const { name, hide } of [
+            {
+                name: 'class',
+                hide: (selector) => {
+                    UI.Dropdown.init(document.querySelector(selector)).hide();
+                },
+            },
+            {
+                name: 'QuerySet',
+                hide: (selector) => {
+                    $(selector).dropdown('hide');
+                },
+            },
+        ]) {
+            test(`hides the dropdown (${name})`, async ({ page }) => {
+                await page.evaluate(hide, '#dropdown-toggle-1');
+
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
+                await expect(page.locator('#dropdown-toggle-1')).not.toHaveAttribute('data-ui-placement');
+                await expect(page.locator('#dropdown1')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('#dropdown1')).toBeHidden();
+                await expect(page.locator('#dropdown1')).not.toHaveAttribute('data-ui-placement');
             });
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-        });
-
-        test('hides the dropdown', async ({ page }) => {
-            await page.evaluate((_) => {
-                const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
-                UI.Dropdown.init(dropdownToggle1).hide();
-            });
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#dropdown-toggle-1')).not.toHaveAttribute('data-ui-placement');
-            await expect(page.locator('#dropdown1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#dropdown1')).toBeHidden();
-            await expect(page.locator('#dropdown1')).not.toHaveAttribute('data-ui-placement');
-        });
-
-        test('hides the dropdown (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#dropdown-toggle-1').dropdown('hide');
-            });
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#dropdown1')).toBeHidden();
-        });
-
-        test('hides multiple dropdowns (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#dropdown-toggle-2').dropdown('show');
-            });
-            await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'true');
-
-            await page.evaluate((_) => {
-                $('[data-ui-toggle="dropdown"]').dropdown('hide');
-            });
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#dropdown1')).toBeHidden();
-            await expect(page.locator('#dropdown2')).toBeHidden();
-        });
+        }
 
         test('does not remove the dropdown after hiding', async ({ page }) => {
             await page.evaluate((_) => {
@@ -344,7 +308,7 @@ test.describe('Dropdown', () => {
                 const dropdown1 = $.findOne('#dropdown1');
                 UI.Dropdown.init(dropdownToggle1).hide();
                 const transition = dropdown1.getAnimations()
-                    .find((animation) => animation instanceof CSSTransition);
+                .find((animation) => animation instanceof CSSTransition);
                 transition.cancel();
             });
 
@@ -373,37 +337,6 @@ test.describe('Dropdown', () => {
 
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
             await expect(page.locator('#dropdown1')).toBeHidden();
-        });
-
-        test('shows and hides the dropdown (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#dropdown-toggle-1').dropdown('toggle');
-            });
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-
-            await page.evaluate((_) => {
-                $('#dropdown-toggle-1').dropdown('toggle');
-            });
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#dropdown1')).toBeHidden();
-        });
-
-        test('shows and hides multiple dropdowns (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('[data-ui-toggle="dropdown"]').dropdown('toggle');
-            });
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'true');
-
-            await page.evaluate((_) => {
-                $('[data-ui-toggle="dropdown"]').dropdown('toggle');
-            });
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'false');
-            await expect(page.locator('#dropdown1')).toBeHidden();
-            await expect(page.locator('#dropdown2')).toBeHidden();
         });
 
         test('ignores repeated calls while showing', async ({ page }) => {
@@ -803,20 +736,6 @@ test.describe('Dropdown', () => {
             await expect(page.locator('#dropdown1')).toBeVisible();
         });
 
-        test('works with auto close option (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#dropdown-toggle-1')
-                    .dropdown({ autoClose: false })
-                    .show();
-            });
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-
-            await page.locator('body').dispatchEvent('click');
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#dropdown1')).toBeVisible();
-        });
-
         test('hides on document click with auto close outside', async ({ page }) => {
             await page.evaluate((_) => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
@@ -898,19 +817,134 @@ test.describe('Dropdown', () => {
             await expect(page.locator('#dropdown1')).not.toHaveAttribute('data-ui-placement');
             await expect(page.locator('#dropdown1')).toHaveAttribute('style', '');
         });
+    });
 
-        test('works with static display option (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#dropdown-toggle-1')
-                    .dropdown({ display: 'static' })
-                    .show();
+    test.describe('QuerySet', () => {
+        test.describe('#init', () => {
+            test('creates multiple dropdowns', async ({ page }) => {
+                expect(await page.evaluate((_) => {
+                    $('[data-ui-toggle="dropdown"]').dropdown();
+                    return $.find('[data-ui-toggle="dropdown"]').every((node) =>
+                        $.getData(node, 'dropdown') instanceof UI.Dropdown,
+                    );
+                })).toBe(true);
             });
 
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#dropdown-toggle-1')).not.toHaveAttribute('data-ui-placement');
-            await expect(page.locator('#dropdown1')).toBeVisible();
-            await expect(page.locator('#dropdown1')).not.toHaveAttribute('data-ui-placement');
-            await expect(page.locator('#dropdown1')).toHaveAttribute('style', '');
+            test('returns the dropdown', async ({ page }) => {
+                expect(await page.evaluate((_) =>
+                    $('#dropdown-toggle-1').dropdown() instanceof UI.Dropdown)).toBe(true);
+            });
+        });
+
+        test.describe('#dispose', () => {
+            test.use({ mockClock: true });
+
+            test('removes multiple dropdowns', async ({ page }) => {
+                expect(await page.evaluate((_) => {
+                    $('[data-ui-toggle="dropdown"]').dropdown('dispose');
+                    return $.find('[data-ui-toggle="dropdown"]').some((node) =>
+                        $.hasData(node, 'dropdown'),
+                    );
+                })).toBe(false);
+            });
+        });
+
+        test.describe('#show', () => {
+            test('shows multiple dropdowns', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('[data-ui-toggle="dropdown"]').dropdown('show');
+                });
+
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+                await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'true');
+                await expect(page.locator('#dropdown1')).toBeVisible();
+                await expect(page.locator('#dropdown2')).toBeVisible();
+            });
+        });
+
+        test.describe('#hide', () => {
+            test.beforeEach(setupHide);
+
+            test('hides multiple dropdowns', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('#dropdown-toggle-2').dropdown('show');
+                });
+                await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'true');
+
+                await page.evaluate((_) => {
+                    $('[data-ui-toggle="dropdown"]').dropdown('hide');
+                });
+
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
+                await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'false');
+                await expect(page.locator('#dropdown1')).toBeHidden();
+                await expect(page.locator('#dropdown2')).toBeHidden();
+            });
+        });
+
+        test.describe('#toggle', () => {
+            test('shows and hides the dropdown', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('#dropdown-toggle-1').dropdown('toggle');
+                });
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+
+                await page.evaluate((_) => {
+                    $('#dropdown-toggle-1').dropdown('toggle');
+                });
+
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
+                await expect(page.locator('#dropdown1')).toBeHidden();
+            });
+
+            test('shows and hides multiple dropdowns', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('[data-ui-toggle="dropdown"]').dropdown('toggle');
+                });
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+                await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'true');
+
+                await page.evaluate((_) => {
+                    $('[data-ui-toggle="dropdown"]').dropdown('toggle');
+                });
+
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
+                await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'false');
+                await expect(page.locator('#dropdown1')).toBeHidden();
+                await expect(page.locator('#dropdown2')).toBeHidden();
+            });
+        });
+
+        test.describe('autoClose option', () => {
+            test('works with auto close option', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('#dropdown-toggle-1')
+                        .dropdown({ autoClose: false })
+                        .show();
+                });
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+
+                await page.locator('body').dispatchEvent('click');
+
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+                await expect(page.locator('#dropdown1')).toBeVisible();
+            });
+        });
+
+        test.describe('display option', () => {
+            test('works with static display option', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('#dropdown-toggle-1')
+                        .dropdown({ display: 'static' })
+                        .show();
+                });
+
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+                await expect(page.locator('#dropdown-toggle-1')).not.toHaveAttribute('data-ui-placement');
+                await expect(page.locator('#dropdown1')).toBeVisible();
+                await expect(page.locator('#dropdown1')).not.toHaveAttribute('data-ui-placement');
+                await expect(page.locator('#dropdown1')).toHaveAttribute('style', '');
+            });
         });
     });
 });

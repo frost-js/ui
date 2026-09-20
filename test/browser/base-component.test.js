@@ -3,7 +3,7 @@ import { expect, test } from '#test';
 test.describe('BaseComponent', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHtml(document.body, '<div class="alert" id="alert1"></div>');
+            document.body.innerHTML = '<div class="alert" id="alert1"></div>';
         });
     });
 

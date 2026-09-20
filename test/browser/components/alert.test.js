@@ -5,81 +5,65 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Alert', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate((_) => {
-            $.setHtml(
-                document.body,
-                `
-                    <div class="alert alert-success fade show" id="alert1">
-                        <button class="btn-close" id="button1" data-ui-dismiss="alert" type="button"></button>
-                    </div>
-                    <div class="alert alert-success fade show" id="alert2">
-                        <button class="btn-close" id="button2" data-ui-dismiss="alert" type="button"></button>
-                    </div>
-                `,
-            );
+            document.body.innerHTML =
+                '<div class="alert alert-success fade show" id="alert1">' +
+                '<button class="btn-close" id="button1" data-ui-dismiss="alert" type="button"></button>' +
+                '</div>' +
+                '<div class="alert alert-success fade show" id="alert2">' +
+                '<button class="btn-close" id="button2" data-ui-dismiss="alert" type="button"></button>' +
+                '</div>';
         });
     });
 
     test.describe('#init', () => {
-        test('creates an alert', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const alert1 = $.findOne('#alert1');
-                return UI.Alert.init(alert1) instanceof UI.Alert;
-            })).toBe(true);
-        });
+        for (const { name, init } of [
+            {
+                name: 'class',
+                init: (selector) => UI.Alert.init(document.querySelector(selector)),
+            },
+            {
+                name: 'QuerySet',
+                init: (selector) => $(selector).alert(),
+            },
+        ]) {
+            test(`creates an alert (${name})`, async ({ page }) => {
+                const instance = await page.evaluateHandle(init, '#alert1');
 
-        test('creates an alert (data-ui-toggle)', async ({ page }) => {
+                expect(await instance.evaluate((value) => value instanceof UI.Alert)).toBe(true);
+                expect(await page.evaluate(() =>
+                    $.getData('#alert1', 'alert') instanceof UI.Alert)).toBe(true);
+            });
+        }
+
+        test('creates an alert (data-ui-dismiss)', async ({ page }) => {
             await page.locator('#button1').click();
 
             expect(await page.evaluate((_) =>
                 $.getData('#alert1', 'alert') instanceof UI.Alert)).toBe(true);
         });
-
-        test('creates an alert (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('#alert1').alert();
-                return $.getData('#alert1', 'alert') instanceof UI.Alert;
-            })).toBe(true);
-        });
-
-        test('creates multiple alerts (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('.alert').alert();
-                return $.find('.alert').every((node) =>
-                    $.getData(node, 'alert') instanceof UI.Alert,
-                );
-            })).toBe(true);
-        });
-
-        test('returns the alert (query)', async ({ page }) => {
-            expect(await page.evaluate((_) =>
-                $('#alert1').alert() instanceof UI.Alert)).toBe(true);
-        });
     });
 
     test.describe('#dispose', () => {
-        test('removes the alert', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                const alert1 = $.findOne('#alert1');
-                UI.Alert.init(alert1).dispose();
-                return $.hasData(alert1, 'alert');
-            })).toBe(false);
-        });
+        for (const { name, dispose } of [
+            {
+                name: 'class',
+                dispose: (selector) => {
+                    UI.Alert.init(document.querySelector(selector)).dispose();
+                },
+            },
+            {
+                name: 'QuerySet',
+                dispose: (selector) => {
+                    $(selector).alert('dispose');
+                },
+            },
+        ]) {
+            test(`removes the alert (${name})`, async ({ page }) => {
+                await page.evaluate(dispose, '#alert1');
 
-        test('removes the alert (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('#alert1').alert('dispose');
-                return $.hasData('#alert1', 'alert');
-            })).toBe(false);
-        });
-
-        test('removes multiple alerts (query)', async ({ page }) => {
-            expect(await page.evaluate((_) => {
-                $('.alert').alert('dispose');
-                return $.find('.alert').some((node) =>
-                    $.hasData(node, 'alert'),
-                );
-            })).toBe(false);
-        });
+                expect(await page.evaluate(() => $.hasData('#alert1', 'alert'))).toBe(false);
+            });
+        }
 
         test('completes closing after disposal', async ({ page }) => {
             await page.evaluate((_) => {
@@ -128,23 +112,6 @@ test.describe('Alert', () => {
             await expect(page.locator('#alert2')).toHaveCount(1);
         });
 
-        test('closes the alert (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('#alert1').alert('close');
-            });
-
-            await expect(page.locator('#alert1')).toHaveCount(0);
-            await expect(page.locator('#alert2')).toHaveCount(1);
-        });
-
-        test('closes multiple alerts (query)', async ({ page }) => {
-            await page.evaluate((_) => {
-                $('.alert').alert('close');
-            });
-
-            await expect(page.locator('.alert')).toHaveCount(0);
-        });
-
         test('removes the alert after closing', async ({ page }) => {
             await page.evaluate((_) => {
                 const alert1 = $.findOne('#alert1');
@@ -185,7 +152,7 @@ test.describe('Alert', () => {
                 const alert1 = $.findOne('#alert1');
                 UI.Alert.init(alert1).close();
                 const transition = alert1.getAnimations()
-                    .find((animation) => animation instanceof CSSTransition);
+                .find((animation) => animation instanceof CSSTransition);
                 transition.cancel();
             });
 
@@ -265,6 +232,54 @@ test.describe('Alert', () => {
 
             await expect(page.locator('.alert')).toHaveCount(2);
             await expect(page.locator('#alert1')).toHaveClass(/\bshow\b/);
+        });
+    });
+
+    test.describe('QuerySet', () => {
+        test.describe('#init', () => {
+            test('creates multiple alerts', async ({ page }) => {
+                expect(await page.evaluate((_) => {
+                    $('.alert').alert();
+                    return $.find('.alert').every((node) =>
+                        $.getData(node, 'alert') instanceof UI.Alert,
+                    );
+                })).toBe(true);
+            });
+
+            test('returns the alert', async ({ page }) => {
+                expect(await page.evaluate((_) =>
+                    $('#alert1').alert() instanceof UI.Alert)).toBe(true);
+            });
+        });
+
+        test.describe('#dispose', () => {
+            test('removes multiple alerts', async ({ page }) => {
+                expect(await page.evaluate((_) => {
+                    $('.alert').alert('dispose');
+                    return $.find('.alert').some((node) =>
+                        $.hasData(node, 'alert'),
+                    );
+                })).toBe(false);
+            });
+        });
+
+        test.describe('#close', () => {
+            test('closes the alert', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('#alert1').alert('close');
+                });
+
+                await expect(page.locator('#alert1')).toHaveCount(0);
+                await expect(page.locator('#alert2')).toHaveCount(1);
+            });
+
+            test('closes multiple alerts', async ({ page }) => {
+                await page.evaluate((_) => {
+                    $('.alert').alert('close');
+                });
+
+                await expect(page.locator('.alert')).toHaveCount(0);
+            });
         });
     });
 });
