@@ -124,6 +124,42 @@ test.describe('Carousel', () => {
             expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(false);
             expect(await page.evaluate((_) => $.hasData('#carousel1', 'carousel'))).toBe(false);
         });
+
+        test('restores drag styles when disposed during swipe completion', async ({ page }) => {
+            await page.evaluate(async () => {
+                const node = document.querySelector('#carousel1');
+                node.style.setProperty('--ui-carousel-transition-scale', '.75', 'important');
+
+                const carousel = UI.Carousel.init(node);
+                const width = $.width(node);
+
+                node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));
+                window.dispatchEvent(new MouseEvent('mousemove', { clientX: width * .3 }));
+                await Promise.resolve();
+
+                window.dispatchEvent(new MouseEvent('mouseup'));
+                await Promise.resolve();
+
+                carousel.dispose();
+            });
+            await advanceClock(page, 1000);
+
+            await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
+            await expect(page.locator('#carousel-1-item-2')).toHaveClass('carousel-item active');
+            await expect(page.locator('#carousel-1-slide-1')).toHaveClass('active');
+            await expectStyles(page, [
+                {
+                    selectors: ['#carousel-1-item-1', '#carousel-1-item-2', '#carousel-1-item-3'],
+                    styles: {
+                        transform: '',
+                        display: '',
+                    },
+                },
+            ]);
+            expect(await page.evaluate(() => $.hasData('#carousel1', 'carousel'))).toBe(false);
+            expect(await page.locator('#carousel1').evaluate((node) => node.style.getPropertyValue('--ui-carousel-transition-scale'))).toBe('.75');
+            expect(await page.locator('#carousel1').evaluate((node) => node.style.getPropertyPriority('--ui-carousel-transition-scale'))).toBe('important');
+        });
     });
 
     test.describe('#cycle', () => {
@@ -180,6 +216,52 @@ test.describe('Carousel', () => {
             await expect(page.locator('#carousel-1-item-3')).not.toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
         });
+    });
+
+    test.describe('#pause', () => {
+        for (const { name, pause, cycle } of [
+            {
+                name: 'class',
+                pause: (selector) => UI.Carousel.init(document.querySelector(selector)).pause(),
+                cycle: (selector) => UI.Carousel.init(document.querySelector(selector)).cycle(),
+            },
+            {
+                name: 'QuerySet',
+                pause: (selector) => $(selector).carousel('pause'),
+                cycle: (selector) => $(selector).carousel('cycle'),
+            },
+        ]) {
+            test(`stays paused through transitions and hover until resumed (${name})`, async ({ page }) => {
+                await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1'), {
+                    interval: 200,
+                    ride: 'carousel',
+                }));
+                await page.evaluate(pause, '#carousel1');
+                await advanceClock(page, 1000);
+
+                await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
+
+                await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1')).next());
+
+                await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
+
+                await page.locator('#carousel1').dispatchEvent('mouseenter');
+                await page.locator('#carousel1').dispatchEvent('mouseleave');
+                await advanceClock(page, 1000);
+
+                await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
+                await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
+
+                await page.evaluate(cycle, '#carousel1');
+
+                await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
+
+                await advanceClock(page, 200);
+
+                await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
+                await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
+            });
+        }
     });
 
     test.describe('#show', () => {
@@ -1365,6 +1447,105 @@ test.describe('Carousel', () => {
                 },
             ]);
         });
+
+        for (const { name, offsets, active } of [
+            { name: 'no movement', offsets: [], active: 1 },
+            { name: 'returning to the start', offsets: [-.2, 0], active: 1 },
+            { name: 'reversing direction', offsets: [-.1, -.2, .2], active: 3 },
+            { name: 'a short drag', offsets: [-.05], active: 1 },
+        ]) {
+            test(`restores temporary styles after ${name}`, async ({ page }) => {
+                await page.evaluate(async (offsets) => {
+                    const node = document.querySelector('#carousel1');
+                    UI.Carousel.init(node);
+                    const width = $.width(node);
+
+                    node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));
+
+                    for (const offset of offsets) {
+                        window.dispatchEvent(new MouseEvent('mousemove', { clientX: width * (.5 + offset) }));
+                        await Promise.resolve();
+                    }
+
+                    window.dispatchEvent(new MouseEvent('mouseup'));
+                }, offsets);
+                await advanceClock(page, 1000);
+
+                await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
+                await expect(page.locator('#carousel1 .carousel-item.active')).toHaveAttribute('id', `carousel-1-item-${active}`);
+                await expect(page.locator('#carousel1 .carousel-indicators .active')).toHaveAttribute('data-ui-slide-to', String(active - 1));
+                await expectStyles(page, [
+                    {
+                        selectors: ['#carousel-1-item-1', '#carousel-1-item-2', '#carousel-1-item-3'],
+                        styles: {
+                            transform: '',
+                            display: '',
+                        },
+                    },
+                ]);
+                expect(await page.locator('#carousel1').evaluate((node) => node.style.getPropertyValue('--ui-carousel-transition-scale'))).toBe('');
+
+                await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1')).next());
+
+                await expect(page.locator('#carousel1 .carousel-indicators .active')).toHaveAttribute('data-ui-slide-to', String(active % 3));
+            });
+        }
+
+        for (const { selector, property, value } of [
+            { selector: '#carousel-1-item-2', property: 'transform', value: 'scale(1)' },
+            { selector: '#carousel1', property: '--ui-carousel-transition-scale', value: '.75' },
+        ]) {
+            test(`recovers from a failed ${property} lock while dragging`, async ({ page }) => {
+                await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1')));
+
+                const held = await page.evaluateHandle(({ selector, property, value }) =>
+                    $.setStyleLock(selector, property, value), { selector, property, value });
+                const errorPromise = page.waitForEvent('pageerror');
+
+                await page.evaluate(() => {
+                    const node = document.querySelector('#carousel1');
+                    const width = $.width(node);
+
+                    node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));
+                    window.dispatchEvent(new MouseEvent('mousemove', { clientX: width * .3 }));
+                });
+                await page.evaluate(() => window.dispatchEvent(new MouseEvent('mouseup')));
+
+                expect((await errorPromise).message).toContain(`CSS property "${property}" is already locked.`);
+
+                await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
+                await expect(page.locator('#carousel-1-item-1')).toHaveClass('carousel-item active');
+                expect(await page.locator(selector).evaluate((node, property) => node.style.getPropertyValue(property), property)).toBe(value);
+
+                await held.evaluate((release) => release());
+
+                await expectStyles(page, [
+                    {
+                        selectors: ['#carousel-1-item-1', '#carousel-1-item-2', '#carousel-1-item-3'],
+                        styles: {
+                            transform: '',
+                            display: '',
+                        },
+                    },
+                ]);
+
+                await advanceClock(page, 5000);
+
+                await expect(page.locator('#carousel-1-slide-1')).toHaveClass('active');
+
+                await page.evaluate(() => {
+                    const node = document.querySelector('#carousel1');
+                    const width = $.width(node);
+
+                    node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));
+                    window.dispatchEvent(new MouseEvent('mousemove', { clientX: width * .3 }));
+                });
+                await page.evaluate(() => window.dispatchEvent(new MouseEvent('mouseup')));
+
+                await expect(page.locator('#carousel-1-slide-2')).toHaveClass('active');
+                await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
+            });
+        }
     });
 
     test.describe('transition duration', () => {

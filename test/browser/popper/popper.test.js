@@ -28,6 +28,75 @@ test.describe('Popper', () => {
                 expect(await page.evaluate(() => $.getData('#badge', 'popper') instanceof UI.Popper)).toBe(true);
             });
         }
+
+        for (const callback of ['beforeUpdate', 'afterUpdate']) {
+            test(`restores state when ${callback} throws during initialization`, async ({ page }) => {
+                await page.evaluate(() => {
+                    const node = document.querySelector('#badge');
+                    node.innerHTML = '<span id="arrow" style="position: relative; top: 3px !important;"></span>';
+                    node.style.setProperty('position', 'fixed', 'important');
+                    node.style.setProperty('transform', 'scale(.5)', 'important');
+                    node.dataset.uiPlacement = 'original-popper';
+                    document.querySelector('#button').dataset.uiPlacement = 'original-reference';
+                });
+
+                await expect(page.evaluate((callback) => UI.Popper.init(document.querySelector('#badge'), {
+                    reference: document.querySelector('#button'),
+                    arrow: document.querySelector('#arrow'),
+                    [callback]: () => {
+                        throw new Error('Cannot position popper');
+                    },
+                }), callback)).rejects.toThrow('Cannot position popper');
+
+                await expectStyles(page, [
+                    {
+                        selectors: ['#badge'],
+                        styles: {
+                            position: 'fixed',
+                            transform: 'scale(0.5)',
+                        },
+                    },
+                    {
+                        selectors: ['#arrow'],
+                        styles: {
+                            position: 'relative',
+                            top: '3px',
+                        },
+                    },
+                ]);
+                await expect(page.locator('#badge')).toHaveAttribute('data-ui-placement', 'original-popper');
+                await expect(page.locator('#button')).toHaveAttribute('data-ui-placement', 'original-reference');
+                expect(await page.evaluate(() => $.hasData('#badge', 'popper'))).toBe(false);
+
+                await page.evaluate(() => UI.Popper.init(document.querySelector('#badge'), {
+                    reference: document.querySelector('#button'),
+                    arrow: document.querySelector('#arrow'),
+                }));
+
+                expect(await page.evaluate(() => $.getData('#badge', 'popper') instanceof UI.Popper)).toBe(true);
+
+                await page.evaluate(() => UI.Popper.init(document.querySelector('#badge')).dispose());
+
+                await expectStyles(page, [
+                    {
+                        selectors: ['#badge'],
+                        styles: {
+                            position: 'fixed',
+                            transform: 'scale(0.5)',
+                        },
+                    },
+                    {
+                        selectors: ['#arrow'],
+                        styles: {
+                            position: 'relative',
+                            top: '3px',
+                        },
+                    },
+                ]);
+                expect(await page.locator('#badge').evaluate((node) => node.style.getPropertyPriority('position'))).toBe('important');
+                expect(await page.locator('#arrow').evaluate((node) => node.style.getPropertyPriority('top'))).toBe('important');
+            });
+        }
     });
 
     test.describe('#dispose', () => {
@@ -136,6 +205,21 @@ test.describe('Popper', () => {
                     },
                 },
             ]);
+        });
+
+        test('can be disposed more than once', async ({ page }) => {
+            await page.evaluate(() => {
+                const node = document.querySelector('#badge');
+                node.style.setProperty('position', 'relative', 'important');
+
+                const popper = UI.Popper.init(node, { reference: document.querySelector('#button') });
+                popper.dispose();
+                popper.dispose();
+            });
+
+            expect(await page.evaluate(() => $.hasData('#badge', 'popper'))).toBe(false);
+            await expect(page.locator('#badge')).toHaveJSProperty('style.position', 'relative');
+            expect(await page.locator('#badge').evaluate((node) => node.style.getPropertyPriority('position'))).toBe('important');
         });
     });
 

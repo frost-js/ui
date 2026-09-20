@@ -212,6 +212,38 @@ test.describe('Dropdown', () => {
             await expect(page.locator('#dropdown1')).toHaveClass(/\bshow\b/);
             await expect(page.locator('#dropdown1')).toBeVisible();
         });
+
+        test('rolls back a failed Popper initialization and allows showing again', async ({ page }) => {
+            await page.evaluate(() => {
+                document.querySelector('#dropdown1').style.setProperty('position', 'relative', 'important');
+                UI.Dropdown.init(document.querySelector('#dropdown-toggle-1'));
+            });
+
+            const held = await page.evaluateHandle(() => $.setStyleLock('#dropdown1', 'position', 'fixed'));
+
+            await expect(page.evaluate(() => UI.Dropdown.init(document.querySelector('#dropdown-toggle-1')).show()))
+                .rejects.toThrow('CSS property "position" is already locked.');
+
+            await expect(page.locator('#dropdown1')).not.toHaveClass(/\bshow\b/);
+            await expect(page.locator('#dropdown1')).toHaveJSProperty('style.position', 'fixed');
+            expect(await page.evaluate(() => $.hasData('#dropdown1', 'popper'))).toBe(false);
+
+            await held.evaluate((release) => release());
+
+            await expect(page.locator('#dropdown1')).toHaveJSProperty('style.position', 'relative');
+
+            await page.evaluate(() => UI.Dropdown.init(document.querySelector('#dropdown-toggle-1')).show());
+
+            await expect(page.locator('#dropdown1')).toBeVisible();
+            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+
+            await page.evaluate(() => UI.Dropdown.init(document.querySelector('#dropdown-toggle-1')).hide());
+
+            await expect(page.locator('#dropdown1')).toBeHidden();
+            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
+            await expect(page.locator('#dropdown1')).toHaveJSProperty('style.position', 'relative');
+            expect(await page.locator('#dropdown1').evaluate((node) => node.style.getPropertyPriority('position'))).toBe('important');
+        });
     });
 
     const setupHide = async ({ page }) => {

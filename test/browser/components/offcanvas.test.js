@@ -223,6 +223,74 @@ test.describe('Offcanvas', () => {
 
             await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
         });
+
+        for (const property of ['overflow-x', 'overflow-y']) {
+            test(`rolls back a failed ${property} lock and allows showing again`, async ({ page }) => {
+                await page.evaluate(() => {
+                    document.body.style.setProperty('overflow-x', 'clip', 'important');
+                    document.body.style.setProperty('overflow-y', 'scroll', 'important');
+                    document.body.style.setProperty('padding-right', '7px', 'important');
+                    document.body.style.minHeight = '2000px';
+                    document.querySelector('#offcanvas1').style.setProperty('z-index', '13', 'important');
+                    UI.Offcanvas.init(document.querySelector('#offcanvas1'));
+                });
+
+                const held = await page.evaluateHandle((property) => $.setStyleLock(document.body, property, 'auto'), property);
+
+                await expect(page.evaluate(() => UI.Offcanvas.init(document.querySelector('#offcanvas1')).show()))
+                    .rejects.toThrow(`CSS property "${property}" is already locked.`);
+
+                await expect(page.locator('#offcanvas1')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
+                expect(await page.evaluate(() => $.hasData('#offcanvas1', 'offcanvas'))).toBe(true);
+
+                await held.evaluate((release) => release());
+
+                await expectStyles(page, [
+                    {
+                        selectors: ['body'],
+                        styles: {
+                            overflowX: 'clip',
+                            overflowY: 'scroll',
+                            paddingRight: '7px',
+                        },
+                    },
+                    {
+                        selectors: ['#offcanvas1'],
+                        styles: { zIndex: '13' },
+                    },
+                ]);
+
+                await page.evaluate(() => UI.Offcanvas.init(document.querySelector('#offcanvas1')).show());
+
+                await expect(page.locator('#offcanvas1')).toBeVisible();
+                await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
+                await page.evaluate(() => UI.Offcanvas.init(document.querySelector('#offcanvas1')).hide());
+
+                await expect(page.locator('#offcanvas1')).toBeHidden();
+                await expectStyles(page, [
+                    {
+                        selectors: ['body'],
+                        styles: {
+                            overflowX: 'clip',
+                            overflowY: 'scroll',
+                            paddingRight: '7px',
+                        },
+                    },
+                    {
+                        selectors: ['#offcanvas1'],
+                        styles: { zIndex: '13' },
+                    },
+                ]);
+
+                for (const name of ['overflow-x', 'overflow-y', 'padding-right']) {
+                    expect(await page.locator('body').evaluate((node, name) => node.style.getPropertyPriority(name), name)).toBe('important');
+                }
+
+                expect(await page.locator('#offcanvas1').evaluate((node) => node.style.getPropertyPriority('z-index'))).toBe('important');
+            });
+        }
     });
 
     test.describe('#hide', () => {

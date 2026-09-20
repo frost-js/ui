@@ -1,4 +1,5 @@
 import { expect, test } from '#test';
+import { advanceClock } from '../../setup/browser.js';
 
 test.use({ reducedMotion: 'no-preference' });
 
@@ -42,6 +43,8 @@ test.describe('Collapse', () => {
     });
 
     test.describe('#dispose', () => {
+        test.use({ mockClock: true });
+
         for (const { name, dispose } of [
             {
                 name: 'class',
@@ -60,6 +63,54 @@ test.describe('Collapse', () => {
                 await page.evaluate(dispose, '#collapse1');
 
                 expect(await page.evaluate(() => $.hasData('#collapse1', 'collapse'))).toBe(false);
+            });
+        }
+
+        for (const { action, dimension } of [
+            { action: 'show', dimension: 'height' },
+            { action: 'hide', dimension: 'height' },
+            { action: 'show', dimension: 'width' },
+            { action: 'hide', dimension: 'width' },
+        ]) {
+            test(`restores styles and trigger state when disposed during ${action} (${dimension})`, async ({ page }) => {
+                const transitioning = await page.evaluate(({ action, dimension }) => {
+                    const node = document.querySelector('#collapse1');
+                    const trigger = document.querySelector('#collapse-toggle-1');
+
+                    node.classList.toggle('collapse-horizontal', dimension === 'width');
+                    node.classList.toggle('show', action === 'hide');
+                    trigger.classList.toggle('collapsed', action !== 'hide');
+                    trigger.setAttribute('aria-expanded', String(action === 'hide'));
+                    node.style.setProperty(dimension, '93px', 'important');
+
+                    window.collapseCompletedEvents = 0;
+                    $.addEvent(node, 'shown.ui.collapse hidden.ui.collapse', () => {
+                        window.collapseCompletedEvents++;
+                    });
+
+                    const collapse = UI.Collapse.init(node);
+                    collapse[action]();
+                    const transitioning = node.classList.contains('collapsing');
+                    collapse.dispose();
+
+                    return transitioning;
+                }, { action, dimension });
+                await advanceClock(page, 1000);
+
+                expect(transitioning).toBe(true);
+                await expect(page.locator('#collapse1')).toHaveClass(dimension === 'width' ? 'collapse-horizontal collapse' : 'collapse');
+                await expect(page.locator('#collapse1')).toBeHidden();
+                await expect(page.locator('#collapse-toggle-1')).toHaveClass(/\bcollapsed\b/);
+                await expect(page.locator('#collapse-toggle-1')).toHaveAttribute('aria-expanded', 'false');
+                await expect(page.locator('#collapse1')).toHaveJSProperty('style.' + dimension, '93px');
+                expect(await page.locator('#collapse1').evaluate((node, dimension) => node.style.getPropertyPriority(dimension), dimension)).toBe('important');
+                expect(await page.evaluate(() => $.hasData('#collapse1', 'collapse'))).toBe(false);
+                expect(await page.evaluate(() => window.collapseCompletedEvents)).toBe(0);
+
+                await page.evaluate(() => UI.Collapse.init(document.querySelector('#collapse1')).show());
+
+                await expect(page.locator('#collapse1')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#collapse-toggle-1')).toHaveAttribute('aria-expanded', 'true');
             });
         }
     });
@@ -539,6 +590,8 @@ test.describe('Collapse', () => {
     });
 
     test.describe('parent option', () => {
+        test.use({ mockClock: true });
+
         test('only hides shown collapses in the same accordion', async ({ page }) => {
             await page.evaluate((_) => {
                 document.body.innerHTML =
@@ -561,6 +614,36 @@ test.describe('Collapse', () => {
             await expect(page.locator('#outer-collapse-2')).toHaveClass('collapse show');
             await expect(page.locator('#inner-collapse')).toHaveClass('collapse show');
         });
+
+        for (const action of ['show', 'hide']) {
+            test(`waits for a sibling to finish ${action} before opening`, async ({ page }) => {
+                await page.evaluate((action) => {
+                    document.body.innerHTML =
+                        '<div id="accordion">' +
+                        '<div class="collapse" id="first" data-ui-parent="#accordion"><div style="height: 80px;"></div></div>' +
+                        '<div class="collapse" id="second" data-ui-parent="#accordion"><div style="height: 80px;"></div></div>' +
+                        '</div>';
+
+                    const first = document.querySelector('#first');
+                    first.classList.toggle('show', action === 'hide');
+                    UI.Collapse.init(first)[action]();
+                    UI.Collapse.init(document.querySelector('#second')).show();
+                }, action);
+
+                await expect(page.locator('#first')).toHaveClass('collapsing');
+                await expect(page.locator('#second')).toHaveClass('collapse');
+                await expect(page.locator('#second')).toBeHidden();
+
+                await advanceClock(page, 1000);
+
+                await expect(page.locator('#first')).not.toHaveClass(/\bcollapsing\b/);
+
+                await page.evaluate(() => UI.Collapse.init(document.querySelector('#second')).show());
+
+                await expect(page.locator('#second')).toHaveClass('collapse show');
+                await expect(page.locator('#first')).toHaveClass('collapse');
+            });
+        }
     });
 
     test.describe('trigger selectors', () => {

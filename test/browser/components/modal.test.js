@@ -247,6 +247,78 @@ test.describe('Modal', () => {
             await expect(page.locator('.modal-backdrop').nth(0)).not.toHaveAttribute('style');
             await expect(page.locator('.modal-backdrop').nth(1)).toHaveAttribute('style', 'z-index: 1070;');
         });
+
+        for (const property of ['overflow-y', 'z-index']) {
+            test(`rolls back a failed ${property} lock and allows showing again`, async ({ page }) => {
+                await page.evaluate(() => {
+                    document.body.style.setProperty('overflow-x', 'clip', 'important');
+                    document.body.style.setProperty('overflow-y', 'scroll', 'important');
+                    document.body.style.setProperty('padding-right', '7px', 'important');
+                    document.body.style.minHeight = '2000px';
+                    document.querySelector('#modal1').style.setProperty('z-index', '13', 'important');
+                    UI.Modal.init(document.querySelector('#modal1'));
+                });
+
+                const held = await page.evaluateHandle((property) => $.setStyleLock(
+                    property === 'z-index' ? '#modal1' : document.body,
+                    property,
+                    property === 'z-index' ? '27' : 'auto',
+                ), property);
+
+                await expect(page.evaluate(() => UI.Modal.init(document.querySelector('#modal1')).show()))
+                    .rejects.toThrow(`CSS property "${property}" is already locked.`);
+
+                await expect(page.locator('#modal1')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('.modal-backdrop')).toHaveCount(0);
+                expect(await page.evaluate(() => $.hasData('#modal1', 'modal'))).toBe(true);
+
+                await held.evaluate((release) => release());
+
+                await expectStyles(page, [
+                    {
+                        selectors: ['body'],
+                        styles: {
+                            overflowX: 'clip',
+                            overflowY: 'scroll',
+                            paddingRight: '7px',
+                        },
+                    },
+                    {
+                        selectors: ['#modal1'],
+                        styles: { zIndex: '13' },
+                    },
+                ]);
+
+                await page.evaluate(() => UI.Modal.init(document.querySelector('#modal1')).show());
+
+                await expect(page.locator('#modal1')).toBeVisible();
+                await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
+                await page.evaluate(() => UI.Modal.init(document.querySelector('#modal1')).hide());
+
+                await expect(page.locator('#modal1')).toBeHidden();
+                await expectStyles(page, [
+                    {
+                        selectors: ['body'],
+                        styles: {
+                            overflowX: 'clip',
+                            overflowY: 'scroll',
+                            paddingRight: '7px',
+                        },
+                    },
+                    {
+                        selectors: ['#modal1'],
+                        styles: { zIndex: '13' },
+                    },
+                ]);
+
+                for (const name of ['overflow-x', 'overflow-y', 'padding-right']) {
+                    expect(await page.locator('body').evaluate((node, name) => node.style.getPropertyPriority(name), name)).toBe('important');
+                }
+
+                expect(await page.locator('#modal1').evaluate((node) => node.style.getPropertyPriority('z-index'))).toBe('important');
+            });
+        }
     });
 
     test.describe('#hide', () => {
