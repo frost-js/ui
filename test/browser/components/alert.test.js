@@ -66,8 +66,8 @@ test.describe('Alert', () => {
         }
 
         test('completes closing after disposal', async ({ page }) => {
-            await page.evaluate((_) => {
-                const alert1 = $.findOne('#alert1');
+            const node = await page.evaluateHandle(() => document.querySelector('#alert1'));
+            await node.evaluate((alert1) => {
                 window.alertClosedEventTriggered = false;
 
                 $.addEvent(alert1, 'closed.ui.alert', (_) => {
@@ -81,19 +81,19 @@ test.describe('Alert', () => {
 
             await expect(page.locator('#alert1')).toHaveCount(0);
             expect(await page.evaluate((_) => window.alertClosedEventTriggered)).toBe(true);
-            expect(await page.evaluate((_) => $.hasData('#alert1', 'alert'))).toBe(false);
+            expect(await node.evaluate((alert1) => $.hasData(alert1, 'alert'))).toBe(false);
         });
     });
 
     test.describe('#close', () => {
         test('closes the alert', async ({ page }) => {
-            const state = await page.evaluate((_) => {
-                const alert1 = $.findOne('#alert1');
-                UI.Alert.init(alert1).close();
+            const alert = await page.evaluateHandle(() => document.querySelector('#alert1'));
+            const state = await alert.evaluate((node) => {
+                UI.Alert.init(node).close();
 
                 return {
-                    connected: $.isConnected(alert1),
-                    shown: $.hasClass(alert1, 'show'),
+                    connected: $.isConnected(node),
+                    shown: $.hasClass(node, 'show'),
                 };
             });
 
@@ -103,6 +103,7 @@ test.describe('Alert', () => {
             });
             await expect(page.locator('#alert1')).toHaveCount(0);
             await expect(page.locator('#alert2')).toHaveCount(1);
+            expect(await alert.evaluate((node) => $.hasData(node, 'alert'))).toBe(false);
         });
 
         test('closes the alert (data-ui-dismiss)', async ({ page }) => {
@@ -110,17 +111,6 @@ test.describe('Alert', () => {
 
             await expect(page.locator('#alert1')).toHaveCount(0);
             await expect(page.locator('#alert2')).toHaveCount(1);
-        });
-
-        test('removes the alert after closing', async ({ page }) => {
-            await page.evaluate((_) => {
-                const alert1 = $.findOne('#alert1');
-                UI.Alert.init(alert1).close();
-            });
-
-            await expect(page.locator('#alert1')).toHaveCount(0);
-            expect(await page.evaluate((_) =>
-                $.hasData('#alert1', 'alert'))).toBe(false);
         });
 
         test('can be called multiple times', async ({ page }) => {

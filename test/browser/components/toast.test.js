@@ -556,22 +556,42 @@ test.describe('Toast', () => {
             await expect(page.locator('#toast1')).toBeHidden();
         });
 
-        test('works with autohide option', async ({ page }) => {
-            await page.evaluate(async (_) => {
-                const toast1 = $.findOne('#toast1');
-                const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
-                });
-                UI.Toast.init(toast1, { autohide: false }).show();
-                await shown;
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: async (_) => {
+                    const toast1 = $.findOne('#toast1');
+                    const shown = new Promise((resolve) => {
+                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    });
+                    UI.Toast.init(toast1, { autohide: false }).show();
+                    await shown;
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: async (_) => {
+                    const toast1 = $.findOne('#toast1');
+                    const shown = new Promise((resolve) => {
+                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    });
+                    $('#toast1')
+                        .toast({ autohide: false })
+                        .show();
+                    await shown;
+                },
+            },
+        ]) {
+            test(`stays visible with autohide disabled (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await advanceClock(page, 5100);
+
+                await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeVisible();
             });
-            await advanceClock(page, 300);
+        }
 
-            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeVisible();
-        });
-
-        test('works with autohide option (data-ui-autohide)', async ({ page }) => {
+        test('stays visible with autohide disabled (data-ui-autohide)', async ({ page }) => {
             await page.evaluate(async (_) => {
                 const toast1 = $.findOne('#toast1');
                 $.setDataset(toast1, { uiAutohide: false });
@@ -581,7 +601,7 @@ test.describe('Toast', () => {
                 UI.Toast.init(toast1).show();
                 await shown;
             });
-            await advanceClock(page, 300);
+            await advanceClock(page, 5100);
 
             await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
             await expect(page.locator('#toast1')).toHaveAttribute('data-ui-autohide', 'false');
@@ -594,25 +614,45 @@ test.describe('Toast', () => {
 
         test.beforeEach(setupAutohide);
 
-        test('works with delay option', async ({ page }) => {
-            await page.evaluate(async (_) => {
-                const toast1 = $.findOne('#toast1');
-                const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
-                });
-                UI.Toast.init(toast1, { delay: 300 }).show();
-                await shown;
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: async (_) => {
+                    const toast1 = $.findOne('#toast1');
+                    const shown = new Promise((resolve) => {
+                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    });
+                    UI.Toast.init(toast1, { delay: 300 }).show();
+                    await shown;
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: async (_) => {
+                    const toast1 = $.findOne('#toast1');
+                    const shown = new Promise((resolve) => {
+                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    });
+                    $('#toast1')
+                        .toast({ delay: 300 })
+                        .show();
+                    await shown;
+                },
+            },
+        ]) {
+            test(`works with delay option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await advanceClock(page, 250);
+
+                await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeVisible();
+
+                await advanceClock(page, 100);
+
+                await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
+                await expect(page.locator('#toast1')).toBeHidden();
             });
-            await advanceClock(page, 250);
-
-            await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeVisible();
-
-            await advanceClock(page, 100);
-
-            await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-            await expect(page.locator('#toast1')).toBeHidden();
-        });
+        }
 
         test('works with delay option (data-ui-delay)', async ({ page }) => {
             await page.evaluate(async (_) => {
@@ -702,57 +742,6 @@ test.describe('Toast', () => {
                 await expect(page.locator('#toast2')).toHaveClass(/\bshow\b/);
                 await expect(page.locator('#toast2')).toBeVisible();
                 await expect(page.locator('#toast2')).toHaveAttribute('style', '');
-            });
-        });
-
-        test.describe('autohide option', () => {
-            test.use({ mockClock: true });
-
-            test.beforeEach(setupAutohide);
-
-            test('works with autohide option', async ({ page }) => {
-                await page.evaluate(async (_) => {
-                    const toast1 = $.findOne('#toast1');
-                    const shown = new Promise((resolve) => {
-                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
-                    });
-                    $('#toast1')
-                        .toast({ autohide: false })
-                        .show();
-                    await shown;
-                });
-                await advanceClock(page, 300);
-
-                await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-                await expect(page.locator('#toast1')).toBeVisible();
-            });
-        });
-
-        test.describe('delay option', () => {
-            test.use({ mockClock: true });
-
-            test.beforeEach(setupAutohide);
-
-            test('works with delay option', async ({ page }) => {
-                await page.evaluate(async (_) => {
-                    const toast1 = $.findOne('#toast1');
-                    const shown = new Promise((resolve) => {
-                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
-                    });
-                    $('#toast1')
-                        .toast({ delay: 300 })
-                        .show();
-                    await shown;
-                });
-                await advanceClock(page, 250);
-
-                await expect(page.locator('#toast1')).toHaveClass(/\bshow\b/);
-                await expect(page.locator('#toast1')).toBeVisible();
-
-                await advanceClock(page, 100);
-
-                await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
-                await expect(page.locator('#toast1')).toBeHidden();
             });
         });
     });

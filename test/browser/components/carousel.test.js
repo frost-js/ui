@@ -647,17 +647,32 @@ test.describe('Carousel', () => {
     });
 
     test.describe('interval option', () => {
-        test('works with interval option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                UI.Carousel.init(carousel1, { interval: 300 }).cycle();
-            });
-            await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 300);
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const carousel1 = $.findOne('#carousel1');
+                    UI.Carousel.init(carousel1, { interval: 300 }).cycle();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#carousel1')
+                        .carousel({ interval: 300 })
+                        .cycle();
+                },
+            },
+        ]) {
+            test(`works with interval option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
+                await advanceClock(page, 300);
 
-            await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
-            await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
-        });
+                await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
+                await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
+            });
+        }
 
         test('works with interval option (data-ui-interval)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -734,27 +749,37 @@ test.describe('Carousel', () => {
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
         });
 
-        test('works with keyboard option and next', async ({ page }) => {
-            await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                UI.Carousel.init(carousel1, { keyboard: false });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const carousel1 = $.findOne('#carousel1');
+                    UI.Carousel.init(carousel1, { keyboard: false });
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#carousel1').carousel({ keyboard: false });
+                },
+            },
+        ]) {
+            test(`works with keyboard option and next (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowRight' });
+
+                await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
+                await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
             });
-            await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowRight' });
 
-            await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
-            await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
-        });
+            test(`works with keyboard option and prev (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowLeft' });
 
-        test('works with keyboard option and prev', async ({ page }) => {
-            await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                UI.Carousel.init(carousel1, { keyboard: false });
+                await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
+                await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
             });
-            await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowLeft' });
-
-            await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
-            await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
-        });
+        }
 
         test('works with keyboard option and next (data-ui-keyboard)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -808,18 +833,33 @@ test.describe('Carousel', () => {
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
         });
 
-        test('works with pause option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                UI.Carousel.init(carousel1, { pause: false }).cycle();
-            });
-            await page.locator('#carousel1').dispatchEvent('mouseenter');
-            await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            await advanceClock(page, 5000);
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const carousel1 = $.findOne('#carousel1');
+                    UI.Carousel.init(carousel1, { pause: false }).cycle();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#carousel1')
+                        .carousel({ pause: false })
+                        .cycle();
+                },
+            },
+        ]) {
+            test(`works with pause option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await page.locator('#carousel1').dispatchEvent('mouseenter');
+                await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
+                await advanceClock(page, 5000);
 
-            await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
-            await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
-        });
+                await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
+                await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
+            });
+        }
 
         test('works with pause option (data-ui-pause)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -864,31 +904,65 @@ test.describe('Carousel', () => {
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
         });
 
-        test('works with wrap option and next', async ({ page }) => {
-            await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                UI.Carousel.init(carousel1, { wrap: false }).show(2);
+        for (const { name, prepare, run } of [
+            {
+                name: 'class',
+                prepare: (_) => {
+                    const carousel1 = $.findOne('#carousel1');
+                    UI.Carousel.init(carousel1, { wrap: false }).show(2);
+                },
+                run: (_) => {
+                    const carousel1 = $.findOne('#carousel1');
+                    UI.Carousel.init(carousel1).next();
+                },
+            },
+            {
+                name: 'QuerySet',
+                prepare: (_) => {
+                    $('#carousel1')
+                        .carousel({ wrap: false })
+                        .show(2);
+                },
+                run: (_) => {
+                    $('#carousel1').carousel('next');
+                },
+            },
+        ]) {
+            test(`works with wrap option and next (${name})`, async ({ page }) => {
+                await page.evaluate(prepare);
+                await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
+
+                await page.evaluate(run);
+
+                await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
+                await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
             });
-            await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
+        }
 
-            await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                UI.Carousel.init(carousel1).next();
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const carousel1 = $.findOne('#carousel1');
+                    UI.Carousel.init(carousel1, { wrap: false }).prev();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#carousel1')
+                        .carousel({ wrap: false })
+                        .prev();
+                },
+            },
+        ]) {
+            test(`works with wrap option and prev (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+
+                await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
+                await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
             });
-
-            await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
-            await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
-        });
-
-        test('works with wrap option and prev', async ({ page }) => {
-            await page.evaluate((_) => {
-                const carousel1 = $.findOne('#carousel1');
-                UI.Carousel.init(carousel1, { wrap: false }).prev();
-            });
-
-            await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
-            await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
-        });
+        }
 
         test('works with wrap option and next (data-ui-wrap)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -1398,88 +1472,6 @@ test.describe('Carousel', () => {
                 await expect(page.locator('#carousel-2-item-3')).toHaveClass(/\bactive\b/);
                 await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
                 await expect(page.locator('#carousel-2-slide-2')).toHaveClass(/\bactive\b/);
-            });
-        });
-
-        test.describe('interval option', () => {
-            test('works with interval option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#carousel1')
-                        .carousel({ interval: 300 })
-                        .cycle();
-                });
-                await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-                await advanceClock(page, 300);
-
-                await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
-                await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
-            });
-        });
-
-        test.describe('keyboard option', () => {
-            test('works with keyboard option and next', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#carousel1').carousel({ keyboard: false });
-                });
-                await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowRight' });
-
-                await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
-                await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
-            });
-
-            test('works with keyboard option and prev', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#carousel1').carousel({ keyboard: false });
-                });
-                await page.locator('#carousel1').dispatchEvent('keydown', { code: 'ArrowLeft' });
-
-                await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
-                await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
-            });
-        });
-
-        test.describe('pause option', () => {
-            test('works with pause option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#carousel1')
-                        .carousel({ pause: false })
-                        .cycle();
-                });
-                await page.locator('#carousel1').dispatchEvent('mouseenter');
-                await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-                await advanceClock(page, 5000);
-
-                await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
-                await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
-            });
-        });
-
-        test.describe('wrap option', () => {
-            test('works with wrap option and next', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#carousel1')
-                        .carousel({ wrap: false })
-                        .show(2);
-                });
-                await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
-
-                await page.evaluate((_) => {
-                    $('#carousel1').carousel('next');
-                });
-
-                await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
-                await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
-            });
-
-            test('works with wrap option and prev', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#carousel1')
-                        .carousel({ wrap: false })
-                        .prev();
-                });
-
-                await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
-                await expect(page.locator('#carousel-1-slide-0')).toHaveClass(/\bactive\b/);
             });
         });
     });

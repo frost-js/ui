@@ -709,18 +709,33 @@ test.describe('Dropdown', () => {
     });
 
     test.describe('autoClose option', () => {
-        test('works with auto close option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
-                UI.Dropdown.init(dropdownToggle1, { autoClose: false }).show();
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
+                    UI.Dropdown.init(dropdownToggle1, { autoClose: false }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#dropdown-toggle-1')
+                        .dropdown({ autoClose: false })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with auto close option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+
+                await page.locator('body').dispatchEvent('click');
+
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+                await expect(page.locator('#dropdown1')).toBeVisible();
             });
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-
-            await page.locator('body').dispatchEvent('click');
-
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#dropdown1')).toBeVisible();
-        });
+        }
 
         test('works with auto close option (data-ui-auto-close)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -790,18 +805,33 @@ test.describe('Dropdown', () => {
     });
 
     test.describe('display option', () => {
-        test('works with static display option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
-                UI.Dropdown.init(dropdownToggle1, { display: 'static' }).show();
-            });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
+                    UI.Dropdown.init(dropdownToggle1, { display: 'static' }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#dropdown-toggle-1')
+                        .dropdown({ display: 'static' })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with static display option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
 
-            await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            await expect(page.locator('#dropdown-toggle-1')).not.toHaveAttribute('data-ui-placement');
-            await expect(page.locator('#dropdown1')).toBeVisible();
-            await expect(page.locator('#dropdown1')).not.toHaveAttribute('data-ui-placement');
-            await expect(page.locator('#dropdown1')).toHaveAttribute('style', '');
-        });
+                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
+                await expect(page.locator('#dropdown-toggle-1')).not.toHaveAttribute('data-ui-placement');
+                await expect(page.locator('#dropdown1')).toBeVisible();
+                await expect(page.locator('#dropdown1')).not.toHaveAttribute('data-ui-placement');
+                await expect(page.locator('#dropdown1')).toHaveAttribute('style', '');
+            });
+        }
 
         test('works with static display option (data-ui-display)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -907,38 +937,6 @@ test.describe('Dropdown', () => {
                 await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'false');
                 await expect(page.locator('#dropdown1')).toBeHidden();
                 await expect(page.locator('#dropdown2')).toBeHidden();
-            });
-        });
-
-        test.describe('autoClose option', () => {
-            test('works with auto close option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#dropdown-toggle-1')
-                        .dropdown({ autoClose: false })
-                        .show();
-                });
-                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-
-                await page.locator('body').dispatchEvent('click');
-
-                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-                await expect(page.locator('#dropdown1')).toBeVisible();
-            });
-        });
-
-        test.describe('display option', () => {
-            test('works with static display option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#dropdown-toggle-1')
-                        .dropdown({ display: 'static' })
-                        .show();
-                });
-
-                await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-                await expect(page.locator('#dropdown-toggle-1')).not.toHaveAttribute('data-ui-placement');
-                await expect(page.locator('#dropdown1')).toBeVisible();
-                await expect(page.locator('#dropdown1')).not.toHaveAttribute('data-ui-placement');
-                await expect(page.locator('#dropdown1')).toHaveAttribute('style', '');
             });
         });
     });

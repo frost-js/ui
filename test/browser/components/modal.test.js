@@ -750,21 +750,36 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal2')).toHaveClass('modal');
         });
 
-        test('works with keyboard option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                UI.Modal.init(modal1, { keyboard: false }).show();
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const modal1 = $.findOne('#modal1');
+                    UI.Modal.init(modal1, { keyboard: false }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#modal1')
+                        .modal({ keyboard: false })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with keyboard option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+
+                await page.keyboard.press('Escape');
+
+                await expect(page.locator('#modal1')).toHaveClass('modal show');
+                await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+                await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
+                await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
+                await expect(page.locator('#modal2')).toHaveClass('modal');
             });
-            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
-
-            await page.keyboard.press('Escape');
-
-            await expect(page.locator('#modal1')).toHaveClass('modal show');
-            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
-            await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
-            await expect(page.locator('#modal2')).toHaveClass('modal');
-        });
+        }
 
         test('works with keyboard option (data-ui-keyboard)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -786,18 +801,31 @@ test.describe('Modal', () => {
     });
 
     test.describe('show option', () => {
-        test('works with show option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                UI.Modal.init(modal1, { show: true });
-            });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const modal1 = $.findOne('#modal1');
+                    UI.Modal.init(modal1, { show: true });
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#modal1').modal({ show: true });
+                },
+            },
+        ]) {
+            test(`works with show option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
 
-            await expect(page.locator('#modal1')).toHaveClass('modal show');
-            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
-            await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
-            await expect(page.locator('.modal-backdrop')).toHaveCount(1);
-        });
+                await expect(page.locator('#modal1')).toHaveClass('modal show');
+                await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+                await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
+                await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
+                await expect(page.locator('.modal-backdrop')).toHaveCount(1);
+            });
+        }
 
         test('works with show option (data-ui-show)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -828,18 +856,33 @@ test.describe('Modal', () => {
     });
 
     test.describe('backdrop option', () => {
-        test('works with backdrop option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const modal1 = $.findOne('#modal1');
-                UI.Modal.init(modal1, { backdrop: false }).show();
-            });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const modal1 = $.findOne('#modal1');
+                    UI.Modal.init(modal1, { backdrop: false }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#modal1')
+                        .modal({ backdrop: false })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with backdrop option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
 
-            await expect(page.locator('#modal1')).toHaveClass('modal show');
-            await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
-            await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
-            await expect(page.locator('.modal-backdrop')).toHaveCount(0);
-        });
+                await expect(page.locator('#modal1')).toHaveClass('modal show');
+                await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
+                await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
+                await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
+                await expect(page.locator('.modal-backdrop')).toHaveCount(0);
+            });
+        }
 
         test('works with backdrop option (data-ui-backdrop)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -1093,57 +1136,6 @@ test.describe('Modal', () => {
                     styles: { paddingRight: `${scrollbarSize + 10}px` },
                 },
             ]);
-        });
-    });
-
-    test.describe('QuerySet', () => {
-        test.describe('keyboard option', () => {
-            test('works with keyboard option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#modal1')
-                        .modal({ keyboard: false })
-                        .show();
-                });
-                await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
-
-                await page.keyboard.press('Escape');
-
-                await expect(page.locator('#modal1')).toHaveClass('modal show');
-                await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
-                await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-                await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
-                await expect(page.locator('#modal2')).toHaveClass('modal');
-            });
-        });
-
-        test.describe('show option', () => {
-            test('works with show option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#modal1').modal({ show: true });
-                });
-
-                await expect(page.locator('#modal1')).toHaveClass('modal show');
-                await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
-                await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-                await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
-                await expect(page.locator('.modal-backdrop')).toHaveCount(1);
-            });
-        });
-
-        test.describe('backdrop option', () => {
-            test('works with backdrop option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#modal1')
-                        .modal({ backdrop: false })
-                        .show();
-                });
-
-                await expect(page.locator('#modal1')).toHaveClass('modal show');
-                await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
-                await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-                await expect(page.locator('#modal-dialog-1')).not.toHaveAttribute('style');
-                await expect(page.locator('.modal-backdrop')).toHaveCount(0);
-            });
         });
     });
 });

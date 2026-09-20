@@ -640,21 +640,36 @@ test.describe('Offcanvas', () => {
             await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
         });
 
-        test('works with keyboard option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                UI.Offcanvas.init(offcanvas1, { keyboard: false }).show();
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const offcanvas1 = $.findOne('#offcanvas1');
+                    UI.Offcanvas.init(offcanvas1, { keyboard: false }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#offcanvas1')
+                        .offcanvas({ keyboard: false })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with keyboard option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+                await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+
+                await page.keyboard.press('Escape');
+
+                await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
+                await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
+                await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
+                await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
+                await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
             });
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
-
-            await page.keyboard.press('Escape');
-
-            await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
-            await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
-            await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
-        });
+        }
 
         test('works with keyboard option (data-ui-keyboard)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -685,14 +700,29 @@ test.describe('Offcanvas', () => {
             await expect(page.locator('body')).toHaveClass('offcanvas-backdrop');
         });
 
-        test('works with backdrop option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                UI.Offcanvas.init(offcanvas1, { backdrop: false }).show();
-            });
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const offcanvas1 = $.findOne('#offcanvas1');
+                    UI.Offcanvas.init(offcanvas1, { backdrop: false }).show();
+                },
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#offcanvas1')
+                        .offcanvas({ backdrop: false })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with backdrop option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
 
-            await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
-        });
+                await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
+            });
+        }
 
         test('works with backdrop option (data-ui-backdrop)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -797,19 +827,34 @@ test.describe('Offcanvas', () => {
             ]);
         });
 
-        test('works with scroll option', async ({ page }) => {
-            await page.evaluate((_) => {
-                const offcanvas1 = $.findOne('#offcanvas1');
-                UI.Offcanvas.init(offcanvas1, { scroll: true }).show();
-            });
-
-            await expectStyles(page, [
-                {
-                    selectors: ['body'],
-                    styles: { overflow: '' },
+        for (const { name, run } of [
+            {
+                name: 'class',
+                run: (_) => {
+                    const offcanvas1 = $.findOne('#offcanvas1');
+                    UI.Offcanvas.init(offcanvas1, { scroll: true }).show();
                 },
-            ]);
-        });
+            },
+            {
+                name: 'QuerySet',
+                run: (_) => {
+                    $('#offcanvas1')
+                        .offcanvas({ scroll: true })
+                        .show();
+                },
+            },
+        ]) {
+            test(`works with scroll option (${name})`, async ({ page }) => {
+                await page.evaluate(run);
+
+                await expectStyles(page, [
+                    {
+                        selectors: ['body'],
+                        styles: { overflow: '' },
+                    },
+                ]);
+            });
+        }
 
         test('works with scroll option (data-ui-scroll)', async ({ page }) => {
             await page.evaluate((_) => {
@@ -928,56 +973,6 @@ test.describe('Offcanvas', () => {
                     styles: { paddingRight: '10px' },
                 },
             ]);
-        });
-    });
-
-    test.describe('QuerySet', () => {
-        test.describe('keyboard option', () => {
-            test('works with keyboard option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#offcanvas1')
-                        .offcanvas({ keyboard: false })
-                        .show();
-                });
-                await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
-
-                await page.keyboard.press('Escape');
-
-                await expect(page.locator('#offcanvas1')).toHaveClass('offcanvas offcanvas-start show');
-                await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
-                await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-                await expect(page.locator('#offcanvas1')).not.toHaveAttribute('style');
-                await expect(page.locator('#offcanvas2')).toHaveClass('offcanvas offcanvas-start');
-            });
-        });
-
-        test.describe('backdrop option', () => {
-            test('works with backdrop option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#offcanvas1')
-                        .offcanvas({ backdrop: false })
-                        .show();
-                });
-
-                await expect(page.locator('body')).not.toHaveClass('offcanvas-backdrop');
-            });
-        });
-
-        test.describe('scroll option', () => {
-            test('works with scroll option', async ({ page }) => {
-                await page.evaluate((_) => {
-                    $('#offcanvas1')
-                        .offcanvas({ scroll: true })
-                        .show();
-                });
-
-                await expectStyles(page, [
-                    {
-                        selectors: ['body'],
-                        styles: { overflow: '' },
-                    },
-                ]);
-            });
         });
     });
 });
