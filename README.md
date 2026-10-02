@@ -4,8 +4,8 @@
 [![codecov](https://codecov.io/gh/frost-js/ui/branch/main/graph/badge.svg)](https://codecov.io/gh/frost-js/ui)
 [![npm version](https://img.shields.io/npm/v/%40fr0st%2Fui?style=flat-square)](https://www.npmjs.com/package/@fr0st/ui)
 [![npm downloads](https://img.shields.io/npm/dm/%40fr0st%2Fui?style=flat-square)](https://www.npmjs.com/package/@fr0st/ui)
-[![CSS gzip size](https://img.badgesize.io/frost-js/ui/main/dist/frost-ui.min.css?compression=gzip&label=CSS%20gzip%20size&style=flat-square)](https://github.com/frost-js/ui/blob/main/dist/frost-ui.min.css)
 [![JS gzip size](https://img.badgesize.io/frost-js/ui/main/dist/frost-ui.min.js?compression=gzip&label=JS%20gzip%20size&style=flat-square)](https://github.com/frost-js/ui/blob/main/dist/frost-ui.min.js)
+[![CSS gzip size](https://img.badgesize.io/frost-js/ui/main/dist/frost-ui.min.css?compression=gzip&label=CSS%20gzip%20size&style=flat-square)](https://github.com/frost-js/ui/blob/main/dist/frost-ui.min.css)
 [![license](https://img.shields.io/github/license/frost-js/ui?style=flat-square)](./LICENSE)
 
 Customizable JavaScript UI framework with responsive components, utilities, and opinionated Sass styling.
@@ -23,6 +23,8 @@ Customizable JavaScript UI framework with responsive components, utilities, and 
 - Prebuilt ESM and UMD bundles, with external or bundled [`fQuery`](https://www.npmjs.com/package/@fr0st/query)
 - JSDoc-powered IntelliSense
 
+Explore [the demo](./demo/index.html) for interactive examples.
+
 ## Installation
 
 ### Browser projects / bundlers
@@ -31,31 +33,27 @@ Customizable JavaScript UI framework with responsive components, utilities, and 
 npm i @fr0st/ui
 ```
 
-Frost UI's package entry point is ESM-only. Import the compiled CSS and use the named component exports from the JavaScript entry point:
+Frost UI's package entry point is ESM-only and requires a browser DOM. Import the named exports and the stylesheets in browser projects and bundlers.
 
 ```js
 import '@fr0st/ui/dist/frost-ui.min.css';
 import { Modal } from '@fr0st/ui';
-
-const modal = Modal.init(document.querySelector('#settings-modal'));
-modal.show();
 ```
 
-The package entry point registers the complete component suite, its data APIs, and its fQuery plugins. A component can instead be imported directly when a project only needs part of the JavaScript:
+`@fr0st/query` is installed as a dependency. The package entry point registers the component suite, data APIs, and fQuery plugins. Import a component directly when a project only needs part of the JavaScript:
 
 ```js
 import Modal from '@fr0st/ui/src/js/modal/index.js';
 ```
 
-[`@fr0st/query`](https://www.npmjs.com/package/@fr0st/query) is installed as a dependency.
-
 ### Browser (ESM)
 
-The ESM bundle imports `@fr0st/query`, which in turn imports `@fr0st/core`. Map both dependencies when loading the bundle directly in a browser:
+The ESM bundle imports `@fr0st/query`. fQuery also imports `@fr0st/core`, so map both dependencies when loading the bundle directly in a browser:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.min.css">
-
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.min.css">
 <script type="importmap">
 {
     "imports": {
@@ -66,86 +64,33 @@ The ESM bundle imports `@fr0st/query`, which in turn imports `@fr0st/core`. Map 
 </script>
 <script type="module">
     import { Modal } from 'https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.esm.min.js';
-
-    const modal = Modal.init(document.querySelector('#settings-modal'));
-    modal.show();
 </script>
 ```
 
 ### Browser (UMD)
 
-Load the CSS, fQuery, and Frost UI scripts from your own copy or a CDN:
+Load the bundles from your own copy or a CDN:
 
 ```html
-<link rel="stylesheet" href="/path/to/dist/frost-ui.min.css">
-
-<script src="/path/to/dist/fquery.min.js"></script>
-<script src="/path/to/dist/frost-ui.min.js"></script>
+<link
+    rel="stylesheet"
+    href="/path/to/dist/frost-ui.min.css">
+<script src="/path/to/dist/frost-ui-bundle.min.js"></script>
 <!-- or -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.min.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@fr0st/query@latest/dist/fquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.min.js"></script>
-```
-
-The UMD bundle exposes the component exports as `globalThis.UI` and expects fQuery to be available as `globalThis.fQuery`.
-
-An all-in-one build containing fQuery is also available:
-
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.min.css">
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@fr0st/ui@latest/dist/frost-ui-bundle.min.js"></script>
-
 <script>
-    const modal = UI.Modal.init(document.querySelector('#settings-modal'));
-    modal.show();
+    const { Modal } = globalThis.UI;
 </script>
 ```
 
-Do not load the separate fQuery script when using `frost-ui-bundle.js` or `frost-ui-bundle.min.js`.
+The all-in-one UMD bundle includes fQuery and its dependencies and exposes `globalThis.UI` and `globalThis.fQuery`. When using `frost-ui.min.js` instead, load fQuery first.
 
 The package root resolves to the prebuilt ESM bundle. Published files under `dist/` and `src/` are also available through matching package subpaths.
 
-### Custom Sass builds
-
-Install Sass and create an application stylesheet when the default Frost UI build needs different colors, typography, sizing, or layout settings:
-
-```bash
-npm i -D sass
-```
-
-`src/styles.scss`
-
-```scss
-@use "@fr0st/ui/src/scss/ui" as ui with (
-    $primary: #6750a4,
-    $accent: #db2777,
-    $secondary: #546e7a,
-    $body-bg: #f8fafc,
-    $body-color: #172033,
-    $body-bg-dark: #111318,
-    $body-color-dark: #e4e7ee,
-    $font-sans-serif: ("Inter", system-ui, sans-serif),
-    $border-radius: .75rem,
-    $grid-size: 16
-);
-
-.app-shell {
-    @include ui.media-breakpoint-up(lg) {
-        max-width: 90rem;
-    }
-}
-```
-
-Compile the entry point with npm package resolution enabled:
-
-```bash
-npx sass --load-path=node_modules src/styles.scss dist/styles.css
-```
-
-The `ui` module applies the configured values before emitting the complete framework. It also forwards Frost UI's public variables, functions, and mixins for use by application styles. Build tools that already resolve Sass modules from npm packages do not need the explicit load path.
-
-## Quick Start
+## Quick start
 
 Frost UI's data API handles common interactions without application JavaScript. This control toggles the targeted collapse element:
 
@@ -194,7 +139,7 @@ toast.show();
 
 See the [`demo/`](./demo/) folder for theme-aware examples with a System, Light, and Dark switcher covering components, forms, layout, helpers, and utilities.
 
-## What's Included
+## What's included
 
 | Area | Included features |
 | --- | --- |
@@ -236,7 +181,7 @@ The package also exports helpers for component registration, target resolution, 
 
 Style-lock release functions can be called repeatedly; only the first call releases that acquisition. Failed acquisitions roll back any locks already acquired by that call. `waitForTransition()` resolves with `completed: false` when a transition is canceled or its fallback timer expires.
 
-## Component Model
+## Component model
 
 ### Instances and options
 
@@ -285,7 +230,7 @@ Toast.defaults.autohide = true;
 Each instance exposes:
 
 - `component.node`: the associated element, or `null` after disposal
-- `component.options`: the frozen resolved options, or `null` after disposal
+- `component.options`: the shallow-frozen resolved options, or `null` after disposal
 - `component.dispose()`: remove registered state and release resources owned by the instance
 
 Calling `init()` again for the same element returns its current instance. Dispose it before initializing that element with a new set of options.
@@ -379,7 +324,15 @@ Cleanup restores temporary inline styles, including their original `!important` 
 
 Use `hide()` and wait for `hidden.ui.*` before disposing when the application needs a completed hide lifecycle.
 
-## Styling and Layout
+Repeated disposal is safe and does not affect a new instance initialized on the same element. Use a new instance before calling other methods after disposal.
+
+## Accessibility
+
+Frost UI provides keyboard handling, focus management, and ARIA state for interactive components. Follow each component's required markup and give controls meaningful accessible names.
+
+Applications remain responsible for labels, instructions, validation feedback, and sufficient contrast when customizing styles. Component-specific keyboard and focus behavior is described in each component's documentation.
+
+## Styling and layout
 
 Frost UI layouts use containers, rows, a configurable twelve-column grid, breakpoint prefixes, and spacing utilities:
 
@@ -402,9 +355,50 @@ Breakpoint-prefixed classes apply from that breakpoint upwards. The default brea
 
 CSS-only components and utilities do not require Frost UI's JavaScript. Load the JavaScript when the page needs interactive behavior, event lifecycles, positioning, or accessibility state management.
 
-## Themes and Customization
+### Custom Sass builds
 
-Frost UI follows the user's preferred color scheme by default. Set `data-ui-theme="light"` or `data-ui-theme="dark"` on the document or any container to select an explicit theme for that subtree:
+Install Sass and create an application stylesheet when the default Frost UI build needs different colors, typography, sizing, or layout settings:
+
+```bash
+npm i -D sass
+```
+
+`src/styles.scss`
+
+```scss
+@use "@fr0st/ui/src/scss/ui" as ui with (
+    $primary: #6750a4,
+    $accent: #db2777,
+    $secondary: #546e7a,
+    $body-bg: #f8fafc,
+    $body-color: #172033,
+    $body-bg-dark: #111318,
+    $body-color-dark: #e4e7ee,
+    $font-sans-serif: ("Inter", system-ui, sans-serif),
+    $border-radius: .75rem,
+    $grid-size: 16
+);
+
+.app-shell {
+    @include ui.media-breakpoint-up(lg) {
+        max-width: 90rem;
+    }
+}
+```
+
+Compile the entry point with npm package resolution enabled:
+
+```bash
+npx sass --load-path=node_modules src/styles.scss dist/styles.css
+```
+
+The `ui` module applies the configured values before emitting the complete framework. It also forwards Frost UI's public variables, functions, and mixins for use by application styles. Build tools that already resolve Sass modules from npm packages do not need the explicit load path.
+
+## Themes and RTL
+
+Frost UI follows the user's preferred color scheme by default. Set `data-ui-theme="light"` or `data-ui-theme="dark"` on the document or an ancestor to select a theme explicitly.
+
+Theme attributes can be applied to a document or an individual region:
 
 ```html
 <html lang="en" data-ui-theme="dark">
@@ -433,9 +427,11 @@ Generated styles expose colors, typography, borders, shadows, focus rings, and c
 }
 ```
 
-Use Sass configuration when derived colors, utility maps, breakpoints, component defaults, or generated class sets also need to change. Frost UI variables use `!default`, allowing them to be configured through the `ui` module shown in the installation section.
+Use Sass configuration when derived colors, utility maps, breakpoints, component defaults, or generated class sets also need to change. Frost UI variables use `!default`, allowing them to be configured through the `ui` module shown in the [custom Sass build](#custom-sass-builds).
 
-## Behavior Notes
+Set `dir="rtl"` on the document or a containing region for RTL layouts. Frost UI uses logical spacing and alignment utilities; component-specific direction behavior is described in each component's documentation.
+
+## Behavior notes
 
 - Frost UI's JavaScript requires a browser DOM or a compatible DOM environment configured through fQuery.
 - The package entry point registers all component data handlers, QuerySet plugins, and the clipboard, ripple, and expanding-textarea enhancements.
@@ -460,13 +456,13 @@ npm run lint
 npm run build
 ```
 
-`npm test` rebuilds JavaScript and CSS, then runs the Playwright suite in Chromium, Firefox, and WebKit. `npm run test:browser` runs the suite against the existing bundles, so rebuild after changing source files.
+`npm test` rebuilds the bundles, then runs the Playwright suite in Chromium, Firefox, and WebKit. `npm run test:browser` runs the suite against the existing bundles, so rebuild after changing source files.
 
 After building, `npm run test:coverage` runs Chromium tests and writes coverage reports to `coverage/`.
 
 `npm run test:headed` and `npm run test:ui` also use the existing bundles and open headed browsers or the Playwright UI.
 
-`npm run lint:sass:unused` checks for unused Sass variables.
+To view the demo, open `demo/index.html` in your browser after building.
 
 ## License
 
