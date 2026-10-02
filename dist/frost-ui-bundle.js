@@ -7971,6 +7971,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (!this.node) return;
 			if (this.#sliding) updateIndicators(this.node, this.#index);
 			this.#resetDrag();
 			$.removeClass(this.#items, "carousel-item-next carousel-item-prev");
@@ -9833,7 +9834,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		#popoverHeader;
 		#popper;
 		#transition;
-		#triggers;
+		#triggers = [];
 		/**
 		* Creates a Popover.
 		* @param {HTMLElement} node The input node.
@@ -9841,12 +9842,17 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		*/
 		constructor(node, options) {
 			super(node, options);
-			this.#modal = $.closest(this.node, ".modal").shift();
-			this.#triggers = this.options.trigger.split(" ");
-			this.#render();
-			this.#events();
-			if (this.options.enable) this.enable();
-			this.refresh();
+			try {
+				this.#modal = $.closest(this.node, ".modal").shift();
+				this.#triggers = this.options.trigger.split(" ");
+				this.#render();
+				this.#events();
+				if (this.options.enable) this.enable();
+				this.refresh();
+			} catch (error) {
+				this.dispose();
+				throw error;
+			}
 		}
 		/**
 		* Disables interaction-triggered popover changes.
@@ -9856,6 +9862,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (!this.node) return;
 			if ($.hasDataset(this.node, "uiOriginalTitle")) {
 				const title = $.getDataset(this.node, "uiOriginalTitle");
 				$.setAttribute(this.node, { title });
@@ -9875,7 +9882,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				$.removeEvent(this.node, "blur.ui.popover");
 			}
 			if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.popover");
-			if (this.#modal) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+			if (this.#modal && this.#hideModalEvent) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
 			this.#modal = null;
 			this.#transition = null;
 			this.#triggers = null;
@@ -10303,7 +10310,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		#tooltip;
 		#tooltipInner;
 		#transition;
-		#triggers;
+		#triggers = [];
 		/**
 		* Creates a Tooltip.
 		* @param {HTMLElement} node The input node.
@@ -10311,12 +10318,17 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		*/
 		constructor(node, options) {
 			super(node, options);
-			this.#modal = $.closest(this.node, ".modal").shift();
-			this.#triggers = this.options.trigger.split(" ");
-			this.#render();
-			this.#events();
-			if (this.options.enable) this.enable();
-			this.refresh();
+			try {
+				this.#modal = $.closest(this.node, ".modal").shift();
+				this.#triggers = this.options.trigger.split(" ");
+				this.#render();
+				this.#events();
+				if (this.options.enable) this.enable();
+				this.refresh();
+			} catch (error) {
+				this.dispose();
+				throw error;
+			}
 		}
 		/**
 		* Disables interaction-triggered tooltip changes.
@@ -10326,6 +10338,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (!this.node) return;
 			if ($.hasDataset(this.node, "uiOriginalTitle")) {
 				const title = $.getDataset(this.node, "uiOriginalTitle");
 				$.setAttribute(this.node, { title });
@@ -10345,7 +10358,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				$.removeEvent(this.node, "blur.ui.tooltip");
 			}
 			if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.tooltip");
-			if (this.#modal) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+			if (this.#modal && this.#hideModalEvent) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
 			this.#modal = null;
 			this.#transition = null;
 			this.#triggers = null;

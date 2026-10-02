@@ -93,6 +93,10 @@ export default class Carousel extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
+        if (!this.node) {
+            return;
+        }
+
         if (this.#sliding) {
             updateIndicators(this.node, this.#index);
         }

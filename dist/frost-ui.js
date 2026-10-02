@@ -445,6 +445,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (!this.node) return;
 			if (this.#sliding) updateIndicators(this.node, this.#index);
 			this.#resetDrag();
 			$.removeClass(this.#items, "carousel-item-next carousel-item-prev");
@@ -2307,7 +2308,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		#popoverHeader;
 		#popper;
 		#transition;
-		#triggers;
+		#triggers = [];
 		/**
 		* Creates a Popover.
 		* @param {HTMLElement} node The input node.
@@ -2315,12 +2316,17 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		constructor(node, options) {
 			super(node, options);
-			this.#modal = $.closest(this.node, ".modal").shift();
-			this.#triggers = this.options.trigger.split(" ");
-			this.#render();
-			this.#events();
-			if (this.options.enable) this.enable();
-			this.refresh();
+			try {
+				this.#modal = $.closest(this.node, ".modal").shift();
+				this.#triggers = this.options.trigger.split(" ");
+				this.#render();
+				this.#events();
+				if (this.options.enable) this.enable();
+				this.refresh();
+			} catch (error) {
+				this.dispose();
+				throw error;
+			}
 		}
 		/**
 		* Disables interaction-triggered popover changes.
@@ -2330,6 +2336,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (!this.node) return;
 			if ($.hasDataset(this.node, "uiOriginalTitle")) {
 				const title = $.getDataset(this.node, "uiOriginalTitle");
 				$.setAttribute(this.node, { title });
@@ -2349,7 +2356,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				$.removeEvent(this.node, "blur.ui.popover");
 			}
 			if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.popover");
-			if (this.#modal) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+			if (this.#modal && this.#hideModalEvent) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
 			this.#modal = null;
 			this.#transition = null;
 			this.#triggers = null;
@@ -2777,7 +2784,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		#tooltip;
 		#tooltipInner;
 		#transition;
-		#triggers;
+		#triggers = [];
 		/**
 		* Creates a Tooltip.
 		* @param {HTMLElement} node The input node.
@@ -2785,12 +2792,17 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		constructor(node, options) {
 			super(node, options);
-			this.#modal = $.closest(this.node, ".modal").shift();
-			this.#triggers = this.options.trigger.split(" ");
-			this.#render();
-			this.#events();
-			if (this.options.enable) this.enable();
-			this.refresh();
+			try {
+				this.#modal = $.closest(this.node, ".modal").shift();
+				this.#triggers = this.options.trigger.split(" ");
+				this.#render();
+				this.#events();
+				if (this.options.enable) this.enable();
+				this.refresh();
+			} catch (error) {
+				this.dispose();
+				throw error;
+			}
 		}
 		/**
 		* Disables interaction-triggered tooltip changes.
@@ -2800,6 +2812,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		}
 		/** @inheritdoc */
 		dispose() {
+			if (!this.node) return;
 			if ($.hasDataset(this.node, "uiOriginalTitle")) {
 				const title = $.getDataset(this.node, "uiOriginalTitle");
 				$.setAttribute(this.node, { title });
@@ -2819,7 +2832,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				$.removeEvent(this.node, "blur.ui.tooltip");
 			}
 			if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.tooltip");
-			if (this.#modal) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+			if (this.#modal && this.#hideModalEvent) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
 			this.#modal = null;
 			this.#transition = null;
 			this.#triggers = null;

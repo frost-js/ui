@@ -57,7 +57,7 @@ export default class Tooltip extends BaseComponent {
     #tooltip;
     #tooltipInner;
     #transition;
-    #triggers;
+    #triggers = [];
 
     /**
      * Creates a Tooltip.
@@ -67,18 +67,23 @@ export default class Tooltip extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this.#modal = $.closest(this.node, '.modal').shift();
+        try {
+            this.#modal = $.closest(this.node, '.modal').shift();
 
-        this.#triggers = this.options.trigger.split(' ');
+            this.#triggers = this.options.trigger.split(' ');
 
-        this.#render();
-        this.#events();
+            this.#render();
+            this.#events();
 
-        if (this.options.enable) {
-            this.enable();
+            if (this.options.enable) {
+                this.enable();
+            }
+
+            this.refresh();
+        } catch (error) {
+            this.dispose();
+            throw error;
         }
-
-        this.refresh();
     }
 
     /**
@@ -90,6 +95,10 @@ export default class Tooltip extends BaseComponent {
 
     /** @inheritdoc */
     dispose() {
+        if (!this.node) {
+            return;
+        }
+
         if ($.hasDataset(this.node, 'uiOriginalTitle')) {
             const title = $.getDataset(this.node, 'uiOriginalTitle');
             $.setAttribute(this.node, { title });
@@ -117,7 +126,7 @@ export default class Tooltip extends BaseComponent {
             $.removeEvent(this.node, 'click.ui.tooltip');
         }
 
-        if (this.#modal) {
+        if (this.#modal && this.#hideModalEvent) {
             $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
         }
 

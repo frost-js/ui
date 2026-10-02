@@ -67,6 +67,7 @@ export default class BaseComponent {
     dispose() {
         $.removeEvent(this.#node, this.constructor.REMOVE_EVENT);
         $.removeData(this.#node, this.constructor.DATA_KEY);
+
         this.#node = null;
         this.#options = null;
     }

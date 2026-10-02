@@ -52,6 +52,76 @@ export function floatingContentTests({ key, component }) {
                 );
             }, { key, component })).toBe(true);
         });
+
+        test.describe('failed initialization', () => {
+            test.beforeEach(async ({ page }) => {
+                await page.evaluate((key) => {
+                    document.body.innerHTML =
+                        '<div class="modal" id="modal">' +
+                        '<button id="' + key + '-toggle-1" title="Original title" type="button"></button>' +
+                        '</div>';
+
+                    window.modalHideCalls = 0;
+                    $.addEvent('#modal', 'hide.ui.modal', (_) => window.modalHideCalls++);
+                }, key);
+            });
+
+            test('cleans up after an invalid trigger option', async ({ page }) => {
+                await expect(page.evaluate(({ key, component }) =>
+                    UI[component].init($.findOne(`#${key}-toggle-1`), { trigger: null }),
+                { key, component })).rejects.toThrow();
+
+                expect(await page.evaluate((key) => $.hasData(`#${key}-toggle-1`, key), key)).toBe(false);
+                await expect(page.locator(`#${key}-toggle-1`)).toHaveAttribute('title', 'Original title');
+
+                await page.evaluate((_) => $.triggerEvent('#modal', 'hide.ui.modal'));
+
+                expect(await page.evaluate((_) => window.modalHideCalls)).toBe(1);
+
+                await page.evaluate(({ key, component }) =>
+                    UI[component].init($.findOne(`#${key}-toggle-1`)).show(), { key, component });
+
+                await expect(page.locator(`.${key}`)).toHaveClass(/\bshow\b/);
+            });
+
+            test('cleans up after a sanitizer failure', async ({ page }) => {
+                await expect(page.evaluate(({ key, component }) => {
+                    const toggle1 = $.findOne(`#${key}-toggle-1`);
+                    UI[component].init(toggle1, {
+                        html: true,
+                        trigger: 'hover focus click',
+                        sanitize: (_) => {
+                            window.failedComponent = $.getData(toggle1, key);
+                            throw new Error('Sanitizer failed');
+                        },
+                    });
+                }, { key, component })).rejects.toThrow('Sanitizer failed');
+
+                expect(await page.evaluate((key) => $.hasData(`#${key}-toggle-1`, key), key)).toBe(false);
+                await expect(page.locator(`#${key}-toggle-1`)).toHaveAttribute('title', 'Original title');
+                await expect(page.locator(`#${key}-toggle-1`)).not.toHaveAttribute('data-ui-original-title');
+
+                await page.evaluate((key) => {
+                    window.staleHandlerCalls = 0;
+                    for (const method of ['show', 'hide', 'toggle']) {
+                        window.failedComponent[method] = (_) => window.staleHandlerCalls++;
+                    }
+
+                    for (const event of ['mouseover', 'mouseout', 'focus', 'blur', 'click']) {
+                        $.triggerEvent(`#${key}-toggle-1`, `${event}.ui.${key}`);
+                    }
+                    $.triggerEvent('#modal', 'hide.ui.modal');
+                }, key);
+
+                expect(await page.evaluate((_) => window.staleHandlerCalls)).toBe(0);
+                expect(await page.evaluate((_) => window.modalHideCalls)).toBe(1);
+
+                await page.evaluate(({ key, component }) =>
+                    UI[component].init($.findOne(`#${key}-toggle-1`)).show(), { key, component });
+
+                await expect(page.locator(`.${key}`)).toHaveClass(/\bshow\b/);
+            });
+        });
     });
 
     test.describe('#dispose', () => {

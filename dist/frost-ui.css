@@ -261,6 +261,7 @@ body {
   text-align: start;
   background-color: var(--ui-body-bg);
   -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
