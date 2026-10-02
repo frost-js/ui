@@ -82,18 +82,24 @@ test.describe('Clipboard', () => {
         });
     });
 
-    test('throws for an invalid action', async ({ page }) => {
-        await page.evaluate((_) => {
-            document.body.innerHTML = '<button id="button" data-ui-toggle="clipboard" data-ui-action="paste"></button>';
+    test.describe('invalid action', () => {
+        test.use({
+            expectedBrowserErrors: ['Invalid clipboard action'],
         });
 
-        const errorPromise = page.waitForEvent('pageerror');
-        await page.locator('#button').click();
+        test('throws for an invalid action', async ({ page }) => {
+            await page.evaluate((_) => {
+                document.body.innerHTML = '<button id="button" data-ui-toggle="clipboard" data-ui-action="paste"></button>';
+            });
 
-        await expect(errorPromise).resolves.toHaveProperty(
-            'message',
-            'Invalid clipboard action',
-        );
+            const errorPromise = page.waitForEvent('pageerror');
+            await page.locator('#button').click();
+
+            await expect(errorPromise).resolves.toHaveProperty(
+                'message',
+                'Invalid clipboard action',
+            );
+        });
     });
 
     test.describe('events', () => {

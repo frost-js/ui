@@ -6,9 +6,13 @@ import { setupClock } from '../setup/browser.js';
 const collectCoverage = process.env.FROST_UI_COVERAGE === 'true';
 
 const test = base.extend({
+    expectedBrowserErrors: [[], { option: true }],
     mockClock: [false, { option: true }],
     uiPage: [
-        async ({ page, mockClock }, use, testInfo) => {
+        async ({ page, mockClock, expectedBrowserErrors }, use, testInfo) => {
+            const errors = [];
+            page.on('pageerror', (error) => errors.push(error.message));
+
             if (collectCoverage) {
                 await page.coverage.startJSCoverage({
                     resetOnNavigation: false,
@@ -24,7 +28,10 @@ const test = base.extend({
             });
 
             await page.evaluate((_) => {
-                if (!window.fQuery || !window.UI) {
+                if (
+                    !window.fQuery ||
+                    !window.UI
+                ) {
                     throw new Error('Failed to load Frost UI on the test page.');
                 }
 
@@ -36,7 +43,10 @@ const test = base.extend({
                 const node = document.createElement('div');
                 node.className = 'text-center';
                 document.body.append(node);
-                const ready = getComputedStyle(node).textAlign === 'center';
+
+                const style = getComputedStyle(node);
+                const ready = style.textAlign === 'center';
+
                 node.remove();
                 return ready;
             });
@@ -47,6 +57,8 @@ const test = base.extend({
                 const coverage = await page.coverage.stopJSCoverage();
                 await addCoverageReport(coverage, testInfo);
             }
+
+            expect(errors, 'Uncaught browser errors').toEqual(expectedBrowserErrors);
         },
         { auto: true },
     ],

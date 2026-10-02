@@ -1495,55 +1495,61 @@ test.describe('Carousel', () => {
             { selector: '#carousel-1-item-2', property: 'transform', value: 'scale(1)' },
             { selector: '#carousel1', property: '--ui-carousel-transition-scale', value: '.75' },
         ]) {
-            test(`recovers from a failed ${property} lock while dragging`, async ({ page }) => {
-                await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1')));
-
-                const held = await page.evaluateHandle(({ selector, property, value }) =>
-                    $.setStyleLock(selector, property, value), { selector, property, value });
-                const errorPromise = page.waitForEvent('pageerror');
-
-                await page.evaluate(() => {
-                    const node = document.querySelector('#carousel1');
-                    const width = $.width(node);
-
-                    node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));
-                    window.dispatchEvent(new MouseEvent('mousemove', { clientX: width * .3 }));
+            test.describe(`failed ${property} lock`, () => {
+                test.use({
+                    expectedBrowserErrors: [expect.stringContaining(`CSS property "${property}" is already locked.`)],
                 });
-                await page.evaluate(() => window.dispatchEvent(new MouseEvent('mouseup')));
 
-                expect((await errorPromise).message).toContain(`CSS property "${property}" is already locked.`);
+                test(`recovers from a failed ${property} lock while dragging`, async ({ page }) => {
+                    await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1')));
 
-                await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
-                await expect(page.locator('#carousel-1-item-1')).toHaveClass('carousel-item active');
-                expect(await page.locator(selector).evaluate((node, property) => node.style.getPropertyValue(property), property)).toBe(value);
+                    const held = await page.evaluateHandle(({ selector, property, value }) =>
+                        $.setStyleLock(selector, property, value), { selector, property, value });
+                    const errorPromise = page.waitForEvent('pageerror');
 
-                await held.evaluate((release) => release());
+                    await page.evaluate(() => {
+                        const node = document.querySelector('#carousel1');
+                        const width = $.width(node);
 
-                await expectStyles(page, [
-                    {
-                        selectors: ['#carousel-1-item-1', '#carousel-1-item-2', '#carousel-1-item-3'],
-                        styles: {
-                            transform: '',
-                            display: '',
+                        node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));
+                        window.dispatchEvent(new MouseEvent('mousemove', { clientX: width * .3 }));
+                    });
+                    await page.evaluate(() => window.dispatchEvent(new MouseEvent('mouseup')));
+
+                    expect((await errorPromise).message).toContain(`CSS property "${property}" is already locked.`);
+
+                    await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
+                    await expect(page.locator('#carousel-1-item-1')).toHaveClass('carousel-item active');
+                    expect(await page.locator(selector).evaluate((node, property) => node.style.getPropertyValue(property), property)).toBe(value);
+
+                    await held.evaluate((release) => release());
+
+                    await expectStyles(page, [
+                        {
+                            selectors: ['#carousel-1-item-1', '#carousel-1-item-2', '#carousel-1-item-3'],
+                            styles: {
+                                transform: '',
+                                display: '',
+                            },
                         },
-                    },
-                ]);
+                    ]);
 
-                await advanceClock(page, 5000);
+                    await advanceClock(page, 5000);
 
-                await expect(page.locator('#carousel-1-slide-1')).toHaveClass('active');
+                    await expect(page.locator('#carousel-1-slide-1')).toHaveClass('active');
 
-                await page.evaluate(() => {
-                    const node = document.querySelector('#carousel1');
-                    const width = $.width(node);
+                    await page.evaluate(() => {
+                        const node = document.querySelector('#carousel1');
+                        const width = $.width(node);
 
-                    node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));
-                    window.dispatchEvent(new MouseEvent('mousemove', { clientX: width * .3 }));
+                        node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));
+                        window.dispatchEvent(new MouseEvent('mousemove', { clientX: width * .3 }));
+                    });
+                    await page.evaluate(() => window.dispatchEvent(new MouseEvent('mouseup')));
+
+                    await expect(page.locator('#carousel-1-slide-2')).toHaveClass('active');
+                    await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
                 });
-                await page.evaluate(() => window.dispatchEvent(new MouseEvent('mouseup')));
-
-                await expect(page.locator('#carousel-1-slide-2')).toHaveClass('active');
-                await expect(page.locator('#carousel1')).not.toHaveClass(/\bcarousel-dragging\b/);
             });
         }
     });
