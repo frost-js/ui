@@ -290,8 +290,8 @@ export default class Popper extends BaseComponent {
         }
 
         // Compensate for element margins.
-        offset.x -= parseInt($.css(this.node, 'marginLeft'));
-        offset.y -= parseInt($.css(this.node, 'marginTop'));
+        offset.x -= Number.parseInt($.css(this.node, 'marginLeft'));
+        offset.y -= Number.parseInt($.css(this.node, 'marginTop'));
 
         // Keep enough of the element in contact with its reference.
         if (['left', 'right'].includes(physicalPlacement)) {

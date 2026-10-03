@@ -14,10 +14,10 @@ export function getTopModal() {
 
     // Select the modal with the highest stacking order.
     let node = nodes.shift();
-    let highestZIndex = parseInt($.css(node, 'zIndex'));
+    let highestZIndex = Number($.css(node, 'zIndex'));
 
     for (const otherNode of nodes) {
-        const newZIndex = parseInt($.css(otherNode, 'zIndex'));
+        const newZIndex = Number($.css(otherNode, 'zIndex'));
 
         if (newZIndex <= highestZIndex) {
             continue;
@@ -47,12 +47,12 @@ export function setStackIndex(modal, index) {
     }
 
     const stackOffset = index * 20;
-    const modalZIndex = parseInt($.css(modal.node, 'zIndex')) + stackOffset;
+    const modalZIndex = Number($.css(modal.node, 'zIndex')) + stackOffset;
 
     $.setStyle(modal.node, { zIndex: modalZIndex });
 
     if (modal.backdrop) {
-        const backdropZIndex = parseInt($.css(modal.backdrop, 'zIndex')) + stackOffset;
+        const backdropZIndex = Number($.css(modal.backdrop, 'zIndex')) + stackOffset;
 
         $.setStyle(modal.backdrop, { zIndex: backdropZIndex });
     }
@@ -66,7 +66,7 @@ export function updateStack() {
     const nodes = $.find('.modal.show');
 
     nodes.sort((nodeA, nodeB) =>
-        parseInt($.css(nodeA, 'zIndex')) - parseInt($.css(nodeB, 'zIndex')),
+        Number($.css(nodeA, 'zIndex')) - Number($.css(nodeB, 'zIndex')),
     );
 
     const modals = [];

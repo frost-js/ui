@@ -287,6 +287,19 @@ test.describe('Carousel', () => {
                 await expect(page.locator('#carousel-1-slide-0')).not.toHaveClass(/\bactive\b/);
                 await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
             });
+
+            for (const { label, index } of [
+                { label: 'numeric suffix', index: '1slide' },
+                { label: 'fractional index', index: '1.9' },
+                { label: 'hexadecimal index', index: '0x1' },
+            ]) {
+                test(`parses string indices (${name}, ${label})`, async ({ page }) => {
+                    await page.evaluate(show, ['#carousel1', index]);
+
+                    await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
+                    await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
+                });
+            }
         }
 
         test('shows a specified item (data-ui-slide-to)', async ({ page }) => {

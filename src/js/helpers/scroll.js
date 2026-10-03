@@ -148,7 +148,7 @@ export function lockScrollPadding(nodes) {
 
     // Share the initial state even when no compensation is needed.
     return scrollPaddingCounter(nodes, (node) => scrollSizeY ?
-        { 'padding-right': `${scrollSizeY + parseInt($.css(node, 'paddingRight'))}px` } :
+        { 'padding-right': `${scrollSizeY + Number.parseInt($.css(node, 'paddingRight'))}px` } :
         {},
     );
 }

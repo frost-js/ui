@@ -7,8 +7,8 @@ $.addEventDelegate(document, 'change.ui.expand input.ui.expand', '.text-expand',
     $.setStyle(textArea, { height: 'inherit' });
 
     let newHeight = $.height(textArea, { boxSize: $.SCROLL_BOX });
-    newHeight += parseInt($.css(textArea, 'borderTop'));
-    newHeight += parseInt($.css(textArea, 'borderBottom'));
+    newHeight += Number.parseInt($.css(textArea, 'borderTop'));
+    newHeight += Number.parseInt($.css(textArea, 'borderBottom'));
 
     $.setStyle(textArea, { height: `${newHeight}px` });
 });

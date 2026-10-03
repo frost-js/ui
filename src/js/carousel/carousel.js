@@ -497,7 +497,7 @@ export default class Carousel extends BaseComponent {
             return;
         }
 
-        index = parseInt(index);
+        index = Number.parseInt(index);
 
         if (Number.isNaN(index)) {
             return;

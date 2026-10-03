@@ -690,7 +690,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		#show(index) {
 			if (this.#sliding) return;
-			index = parseInt(index);
+			index = Number.parseInt(index);
 			if (Number.isNaN(index)) return;
 			if (!this.options.wrap && (index < 0 || index > this.#items.length - 1)) return;
 			const offset = getDirOffset(index, this.#items.length);
@@ -1113,7 +1113,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	function lockScrollPadding(nodes) {
 		nodes = $._unique(nodes);
 		const scrollSizeY = nodes.length ? getScrollbarSize(window, document, "y") : 0;
-		return scrollPaddingCounter(nodes, (node) => scrollSizeY ? { "padding-right": `${scrollSizeY + parseInt($.css(node, "paddingRight"))}px` } : {});
+		return scrollPaddingCounter(nodes, (node) => scrollSizeY ? { "padding-right": `${scrollSizeY + Number.parseInt($.css(node, "paddingRight"))}px` } : {});
 	}
 
 //#endregion
@@ -1443,8 +1443,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				if (position === "center") offset.y -= Math.round(deltaY / 2);
 				else if (position === "end") offset.y -= deltaY;
 			}
-			offset.x -= parseInt($.css(this.node, "marginLeft"));
-			offset.y -= parseInt($.css(this.node, "marginTop"));
+			offset.x -= Number.parseInt($.css(this.node, "marginLeft"));
+			offset.y -= Number.parseInt($.css(this.node, "marginTop"));
 			if (["left", "right"].includes(physicalPlacement)) {
 				let offsetY = offset.y;
 				let refTop = referenceBox.top;
@@ -2020,9 +2020,9 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		const nodes = $.find(".modal.show");
 		if (!nodes.length) return null;
 		let node = nodes.shift();
-		let highestZIndex = parseInt($.css(node, "zIndex"));
+		let highestZIndex = Number($.css(node, "zIndex"));
 		for (const otherNode of nodes) {
-			const newZIndex = parseInt($.css(otherNode, "zIndex"));
+			const newZIndex = Number($.css(otherNode, "zIndex"));
 			if (newZIndex <= highestZIndex) continue;
 			node = otherNode;
 			highestZIndex = newZIndex;
@@ -2039,10 +2039,10 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		if (modal.backdrop) $.setStyle(modal.backdrop, { zIndex: "" });
 		if (!index) return;
 		const stackOffset = index * 20;
-		const modalZIndex = parseInt($.css(modal.node, "zIndex")) + stackOffset;
+		const modalZIndex = Number($.css(modal.node, "zIndex")) + stackOffset;
 		$.setStyle(modal.node, { zIndex: modalZIndex });
 		if (modal.backdrop) {
-			const backdropZIndex = parseInt($.css(modal.backdrop, "zIndex")) + stackOffset;
+			const backdropZIndex = Number($.css(modal.backdrop, "zIndex")) + stackOffset;
 			$.setStyle(modal.backdrop, { zIndex: backdropZIndex });
 		}
 	}
@@ -2052,7 +2052,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	*/
 	function updateStack() {
 		const nodes = $.find(".modal.show");
-		nodes.sort((nodeA, nodeB) => parseInt($.css(nodeA, "zIndex")) - parseInt($.css(nodeB, "zIndex")));
+		nodes.sort((nodeA, nodeB) => Number($.css(nodeA, "zIndex")) - Number($.css(nodeB, "zIndex")));
 		const modals = [];
 		for (const [index, node] of nodes.entries()) {
 			const modal = Modal.init(node);
@@ -3057,8 +3057,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		const textArea = event.currentTarget;
 		$.setStyle(textArea, { height: "inherit" });
 		let newHeight = $.height(textArea, { boxSize: $.SCROLL_BOX });
-		newHeight += parseInt($.css(textArea, "borderTop"));
-		newHeight += parseInt($.css(textArea, "borderBottom"));
+		newHeight += Number.parseInt($.css(textArea, "borderTop"));
+		newHeight += Number.parseInt($.css(textArea, "borderBottom"));
 		$.setStyle(textArea, { height: `${newHeight}px` });
 	});
 
