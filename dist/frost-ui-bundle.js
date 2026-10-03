@@ -199,7 +199,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	*/
 	var isNumeric = (value) => {
 		try {
-			return !isNaN(parseFloat(value)) && isFinite(value);
+			return !isNaN(Number.parseFloat(value)) && isFinite(value);
 		} catch {
 			return false;
 		}
@@ -209,7 +209,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {*} value The value to test.
 	* @returns {boolean} Whether the value is an object-like reference.
 	*/
-	var isObject = (value) => !!value && value === Object(value);
+	var isObject = (value) => Boolean(value) && value === Object(value);
 	/**
 	* Checks whether a value is a plain object.
 	* @param {*} value The value to test.
@@ -225,7 +225,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {*} value The value to test.
 	* @returns {boolean} Whether the value is a ShadowRoot.
 	*/
-	var isShadow = (value) => getNodeType(value) === DOCUMENT_FRAGMENT_NODE && !!value.host;
+	var isShadow = (value) => getNodeType(value) === DOCUMENT_FRAGMENT_NODE && Boolean(value.host);
 	/**
 	* Checks whether a value is a string.
 	* @param {*} value The value to test.
@@ -249,7 +249,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @param {*} value The value to test.
 	* @returns {boolean} Whether the value is a Window.
 	*/
-	var isWindow = (value) => !!value && !!value.document && getDomProperty(value.document, "defaultView") === value;
+	var isWindow = (value) => Boolean(value) && Boolean(value.document) && getDomProperty(value.document, "defaultView") === value;
 	/**
 	* Math methods
 	*/
@@ -351,7 +351,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		const result = Math.round(value / step) * step;
 		const precision = getDecimalPlaces(step);
 		if (precision > 100) return result;
-		return parseFloat(result.toFixed(precision));
+		return Number(result.toFixed(precision));
 	};
 	/**
 	* Array methods
@@ -471,7 +471,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		let newArgs;
 		let newThis;
 		let running = false;
-		const cancel = (_) => {
+		const cancel = () => {
 			if (animationReference !== null) {
 				if (isBrowser) window.cancelAnimationFrame(animationReference);
 				else clearTimeout(animationReference);
@@ -486,7 +486,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			newThis = this;
 			if (running) return;
 			running = true;
-			animationReference = _requestAnimationFrame((_) => {
+			animationReference = _requestAnimationFrame(() => {
 				const args = newArgs;
 				const thisArg = newThis;
 				animationReference = null;
@@ -546,7 +546,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		let newArgs;
 		let newThis;
 		let trailingPending = false;
-		const cancel = (_) => {
+		const cancel = () => {
 			if (debounceReference !== null) clearTimeout(debounceReference);
 			debounceReference = null;
 			newArgs = null;
@@ -562,7 +562,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			} else trailingPending = false;
 			newArgs = args;
 			newThis = this;
-			debounceReference = setTimeout((_) => {
+			debounceReference = setTimeout(() => {
 				const args = newArgs;
 				const thisArg = newThis;
 				const callTrailing = trailing && (!leading || trailingPending);
@@ -647,14 +647,14 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		let lastRan;
 		let newArgs;
 		let newThis;
-		const cancel = (_) => {
+		const cancel = () => {
 			if (throttleReference !== null) clearTimeout(throttleReference);
 			throttleReference = null;
 			lastRan = void 0;
 			newArgs = null;
 			newThis = null;
 		};
-		const runTrailing = (_) => {
+		const runTrailing = () => {
 			const args = newArgs;
 			const thisArg = newThis;
 			throttleReference = null;
@@ -944,7 +944,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	var randomString = (length = 16, chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") => {
 		const characters = Array.from(chars);
 		if (!characters.length) throw new TypeError("chars must not be empty");
-		return new Array(length).fill().map((_) => characters[randomInt(characters.length)]).join("");
+		return new Array(length).fill().map(() => characters[randomInt(characters.length)]).join("");
 	};
 	/**
 	* Converts a string to snake_case.
@@ -1068,7 +1068,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		rejectOnCancel: true,
 		responseType: null,
 		url: null,
-		xhr: (_) => {
+		xhr: () => {
 			const { XMLHttpRequest } = getWindow();
 			return new XMLHttpRequest();
 		}
@@ -1270,19 +1270,19 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				xhr: this.xhr,
 				event
 			});
-			this.xhr.onload = (e) => {
-				if (this.xhr.status >= 400) rejectRequest(e);
+			this.xhr.onload = (event) => {
+				if (this.xhr.status >= 400) rejectRequest(event);
 				else this.#resolve({
 					response: this.xhr.response,
 					xhr: this.xhr,
-					event: e
+					event
 				});
 			};
 			this.xhr.onabort = () => this.cancel();
 			this.xhr.onerror = rejectRequest;
 			this.xhr.ontimeout = rejectRequest;
-			if (this.#options.onProgress) this.xhr.onprogress = (e) => this.#options.onProgress(e.loaded / e.total, this.xhr, e);
-			if (this.#options.onUploadProgress) this.xhr.upload.onprogress = (e) => this.#options.onUploadProgress(e.loaded / e.total, this.xhr, e);
+			if (this.#options.onProgress) this.xhr.onprogress = (event) => this.#options.onProgress(event.loaded / event.total, this.xhr, event);
+			if (this.#options.onUploadProgress) this.xhr.upload.onprogress = (event) => this.#options.onUploadProgress(event.loaded / event.total, this.xhr, event);
 			if (this.#options.beforeSend) this.#options.beforeSend(this.xhr);
 			this.xhr.send(this.#options.data);
 			if (this.#options.afterSend) this.#options.afterSend(this.xhr);
@@ -1510,7 +1510,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		return (...args) => {
 			if (running) return;
 			running = true;
-			Promise.resolve().then((_) => {
+			Promise.resolve().then(() => {
 				try {
 					callback(...args);
 				} finally {
@@ -1570,7 +1570,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {string[]} The parsed classes.
 	*/
 	function parseClasses(classList) {
-		return classList.flat().flatMap((val) => val.split(" ")).filter((val) => !!val);
+		return classList.flat().flatMap((val) => val.split(" ")).filter((val) => Boolean(val));
 	}
 	/**
 	* Normalizes a key and value, or an existing data object, into a data object.
@@ -1595,7 +1595,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (["true", "on"].includes(lower)) return true;
 		if (["false", "off"].includes(lower)) return false;
 		if (lower === "null") return null;
-		if (isNumeric(lower)) return parseFloat(lower);
+		if (isNumeric(lower)) return Number(lower);
 		if (["{", "["].includes(lower.charAt(0))) try {
 			return JSON.parse(value);
 		} catch {}
@@ -1863,7 +1863,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {NodeFilterCallback} The node filter callback.
 	*/
 	function parseFilter(filter, defaultValue = true) {
-		if (!filter) return (_) => defaultValue;
+		if (!filter) return () => defaultValue;
 		if (isFunction(filter)) return filter;
 		if (isString(filter)) return (node) => isElement(node) && callDomMethod(node, "matches", filter);
 		if (isNode(filter) || isFragment(filter) || isShadow(filter)) return (node) => node === filter;
@@ -1873,7 +1873,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			shadow: true
 		});
 		if (filter.length) return (node) => filter.includes(node);
-		return (_) => !defaultValue;
+		return () => !defaultValue;
 	}
 	/**
 	* Returns a node-containment filter callback.
@@ -1882,9 +1882,9 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {NodeFilterCallback} The node contains filter callback.
 	*/
 	function parseFilterContains(filter, defaultValue = true) {
-		if (!filter) return (node) => defaultValue && !!getDomProperty(node, "firstElementChild");
+		if (!filter) return (node) => defaultValue && Boolean(getDomProperty(node, "firstElementChild"));
 		if (isFunction(filter)) return (node) => merge([], callDomMethod(node, "querySelectorAll", "*")).some(filter);
-		if (isString(filter)) return (node) => !!findOne$1(filter, node);
+		if (isString(filter)) return (node) => Boolean(findOne$1(filter, node));
 		if (isNode(filter) || isFragment(filter) || isShadow(filter)) return (node) => node !== filter && callDomMethod(node, "contains", filter);
 		filter = parseNodes(filter, {
 			node: true,
@@ -1892,7 +1892,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			shadow: true
 		});
 		if (filter.length) return (node) => filter.some((other) => node !== other && callDomMethod(node, "contains", other));
-		return (_) => !defaultValue;
+		return () => !defaultValue;
 	}
 	/**
 	* Returns the first node matching a filter.
@@ -2755,11 +2755,11 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			let sizeStyle;
 			let axis;
 			if (["top", "bottom"].includes(dir)) {
-				size = parseFloat(css$1(node, "height")) || 0;
+				size = Number.parseFloat(css$1(node, "height")) || 0;
 				sizeStyle = "height";
 				if (dir === "top") axis = "Y";
 			} else {
-				size = parseFloat(css$1(node, "width")) || 0;
+				size = Number.parseFloat(css$1(node, "width")) || 0;
 				sizeStyle = "width";
 				if (dir === "left") axis = "X";
 			}
@@ -2913,7 +2913,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				if (!events.has(node)) events.set(node, Object.create(null));
 				const nodeEvents = events.get(node);
 				let realCallback = callback;
-				if (selfDestruct) realCallback = selfDestructCallbackFactory(realCallback, (_) => removeEvent$1(node, eventName, realCallback, {
+				if (selfDestruct) realCallback = selfDestructCallbackFactory(realCallback, () => removeEvent$1(node, eventName, realCallback, {
 					capture,
 					delegate
 				}));
@@ -3651,8 +3651,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		const nodes = parseNodes(selector);
 		const documentElement = getDomProperty(getContext(), "documentElement");
 		const window = getWindow();
-		const getScrollX = (_) => getDomProperty(documentElement, "scrollHeight") > window.outerHeight;
-		const getScrollY = (_) => getDomProperty(documentElement, "scrollWidth") > window.outerWidth;
+		const getScrollX = () => getDomProperty(documentElement, "scrollHeight") > window.outerHeight;
+		const getScrollY = () => getDomProperty(documentElement, "scrollWidth") > window.outerWidth;
 		const preScrollX = getScrollX();
 		const preScrollY = getScrollY();
 		for (const node of nodes) {
@@ -3662,10 +3662,10 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			if (nodeBox.height > containerBox.height) {
 				let height = containerBox.height;
 				if (contentBox) {
-					height -= parseFloat(css$1(node, "padding-top"));
-					height -= parseFloat(css$1(node, "padding-bottom"));
-					height -= parseFloat(css$1(node, "border-top-width"));
-					height -= parseFloat(css$1(node, "border-bottom-width"));
+					height -= Number.parseFloat(css$1(node, "padding-top"));
+					height -= Number.parseFloat(css$1(node, "padding-bottom"));
+					height -= Number.parseFloat(css$1(node, "border-top-width"));
+					height -= Number.parseFloat(css$1(node, "border-bottom-width"));
 				}
 				getDomProperty(node, "style").setProperty("height", `${Math.max(0, height)}px`);
 				resized = true;
@@ -3673,10 +3673,10 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			if (nodeBox.width > containerBox.width) {
 				let width = containerBox.width;
 				if (contentBox) {
-					width -= parseFloat(css$1(node, "padding-left"));
-					width -= parseFloat(css$1(node, "padding-right"));
-					width -= parseFloat(css$1(node, "border-left-width"));
-					width -= parseFloat(css$1(node, "border-right-width"));
+					width -= Number.parseFloat(css$1(node, "padding-left"));
+					width -= Number.parseFloat(css$1(node, "padding-right"));
+					width -= Number.parseFloat(css$1(node, "border-left-width"));
+					width -= Number.parseFloat(css$1(node, "border-right-width"));
 				}
 				getDomProperty(node, "style").setProperty("width", `${Math.max(0, width)}px`);
 				resized = true;
@@ -3687,7 +3687,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			else if (nodeBox.right - containerBox.right > 0) leftOffset = nodeBox.right - containerBox.right;
 			if (leftOffset) {
 				const oldLeft = css$1(node, "left");
-				const trueLeft = oldLeft && oldLeft !== "auto" ? parseFloat(oldLeft) : 0;
+				const trueLeft = oldLeft && oldLeft !== "auto" ? Number.parseFloat(oldLeft) : 0;
 				getDomProperty(node, "style").setProperty("left", `${trueLeft - leftOffset}px`);
 			}
 			let topOffset;
@@ -3695,7 +3695,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			else if (nodeBox.bottom - containerBox.bottom > 0) topOffset = nodeBox.bottom - containerBox.bottom;
 			if (topOffset) {
 				const oldTop = css$1(node, "top");
-				const trueTop = oldTop && oldTop !== "auto" ? parseFloat(oldTop) : 0;
+				const trueTop = oldTop && oldTop !== "auto" ? Number.parseFloat(oldTop) : 0;
 				getDomProperty(node, "style").setProperty("top", `${trueTop - topOffset}px`);
 			}
 			if (css$1(node, "position") === "static") getDomProperty(node, "style").setProperty("position", "relative");
@@ -3948,14 +3948,14 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (boxSize >= 4) return getDomProperty(node, "scrollHeight");
 		let result = getDomProperty(node, "clientHeight");
 		if (boxSize <= 0) {
-			result -= parseInt(css$1(node, "padding-top"));
-			result -= parseInt(css$1(node, "padding-bottom"));
+			result -= Number.parseInt(css$1(node, "padding-top"));
+			result -= Number.parseInt(css$1(node, "padding-bottom"));
 			result = Math.max(0, result);
 		}
-		if (boxSize >= 2) result = getDomProperty(node, "offsetHeight") ?? result + parseInt(css$1(node, "border-top-width")) + parseInt(css$1(node, "border-bottom-width"));
+		if (boxSize >= 2) result = getDomProperty(node, "offsetHeight") ?? result + Number.parseInt(css$1(node, "border-top-width")) + Number.parseInt(css$1(node, "border-bottom-width"));
 		if (boxSize >= 3) {
-			result += parseInt(css$1(node, "margin-top"));
-			result += parseInt(css$1(node, "margin-bottom"));
+			result += Number.parseInt(css$1(node, "margin-top"));
+			result += Number.parseInt(css$1(node, "margin-bottom"));
 		}
 		return result;
 	}
@@ -3976,14 +3976,14 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (boxSize >= 4) return getDomProperty(node, "scrollWidth");
 		let result = getDomProperty(node, "clientWidth");
 		if (boxSize <= 0) {
-			result -= parseInt(css$1(node, "padding-left"));
-			result -= parseInt(css$1(node, "padding-right"));
+			result -= Number.parseInt(css$1(node, "padding-left"));
+			result -= Number.parseInt(css$1(node, "padding-right"));
 			result = Math.max(0, result);
 		}
-		if (boxSize >= 2) result = getDomProperty(node, "offsetWidth") ?? result + parseInt(css$1(node, "border-left-width")) + parseInt(css$1(node, "border-right-width"));
+		if (boxSize >= 2) result = getDomProperty(node, "offsetWidth") ?? result + Number.parseInt(css$1(node, "border-left-width")) + Number.parseInt(css$1(node, "border-right-width"));
 		if (boxSize >= 3) {
-			result += parseInt(css$1(node, "margin-left"));
-			result += parseInt(css$1(node, "margin-right"));
+			result += Number.parseInt(css$1(node, "margin-left"));
+			result += Number.parseInt(css$1(node, "margin-right"));
 		}
 		return result;
 	}
@@ -5283,9 +5283,9 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			if (!queue.size && queues.get(node) === queue) queues.delete(node);
 			return;
 		}
-		Promise.resolve(next(node)).then((_) => {
+		Promise.resolve(next(node)).then(() => {
 			if (queues.get(node) === queue && queue.get(queueName) === callbacks) dequeue(node, { queueName });
-		}).catch((_) => {
+		}).catch(() => {
 			if (queues.get(node) === queue && queue.get(queueName) === callbacks) {
 				queue.delete(queueName);
 				if (!queue.size) queues.delete(node);
@@ -5305,7 +5305,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			if (!queues.has(node)) queues.set(node, /* @__PURE__ */ new Map());
 			const queue = queues.get(node);
 			const runningQueue = queue.has(queueName);
-			if (!runningQueue) queue.set(queueName, [(_) => new Promise((resolve) => {
+			if (!runningQueue) queue.set(queueName, [() => new Promise((resolve) => {
 				setTimeout(resolve, 1);
 			})]);
 			queue.get(queueName).push(callback);
@@ -5332,7 +5332,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	*/
 	function delay(duration, { queueName = "default" } = {}) {
 		const { setTimeout } = getWindow();
-		return this.queue((_) => new Promise((resolve) => setTimeout(resolve, duration)), { queueName });
+		return this.queue(() => new Promise((resolve) => setTimeout(resolve, duration)), { queueName });
 	}
 	/**
 	* Queues a callback on each node.
@@ -5771,7 +5771,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			fragment: true,
 			shadow: true,
 			document: true
-		}).filter((node) => !!getDomProperty(node, "childElementCount"));
+		}).filter((node) => Boolean(getDomProperty(node, "childElementCount")));
 	}
 	/**
 	* Returns all nodes with any of the specified classes.
@@ -5789,7 +5789,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {Node[]} The filtered nodes.
 	*/
 	function withCssAnimation$1(selector) {
-		return parseNodes(selector).filter((node) => css$1(node, "animation-duration").split(",").some((duration) => parseFloat(duration)));
+		return parseNodes(selector).filter((node) => css$1(node, "animation-duration").split(",").some((duration) => Number.parseFloat(duration)));
 	}
 	/**
 	* Returns all nodes with a CSS transition.
@@ -5797,7 +5797,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {Node[]} The filtered nodes.
 	*/
 	function withCssTransition$1(selector) {
-		return parseNodes(selector).filter((node) => css$1(node, "transition-duration").split(",").some((duration) => parseFloat(duration)));
+		return parseNodes(selector).filter((node) => css$1(node, "transition-duration").split(",").some((duration) => Number.parseFloat(duration)));
 	}
 	/**
 	* Returns all nodes with custom data.
@@ -6419,7 +6419,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		if (selection.rangeCount) selection.removeAllRanges();
 		if (!nodes.length) return;
 		const range = createRange();
-		if (nodes.length == 1) range.selectNode(nodes.shift());
+		if (nodes.length === 1) range.selectNode(nodes.shift());
 		else {
 			range.setStartBefore(nodes.shift());
 			range.setEndAfter(nodes.pop());
@@ -6534,7 +6534,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {boolean} Whether any of the nodes has a CSS animation.
 	*/
 	function hasCssAnimation$1(selector) {
-		return parseNodes(selector).some((node) => css$1(node, "animation-duration").split(",").some((duration) => parseFloat(duration)));
+		return parseNodes(selector).some((node) => css$1(node, "animation-duration").split(",").some((duration) => Number.parseFloat(duration)));
 	}
 	/**
 	* Checks whether any of the nodes has a CSS transition.
@@ -6542,7 +6542,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @returns {boolean} Whether any of the nodes has a CSS transition.
 	*/
 	function hasCssTransition$1(selector) {
-		return parseNodes(selector).some((node) => css$1(node, "transition-duration").split(",").some((duration) => parseFloat(duration)));
+		return parseNodes(selector).some((node) => css$1(node, "transition-duration").split(",").some((duration) => Number.parseFloat(duration)));
 	}
 	/**
 	* Checks whether any of the nodes has custom data.
@@ -7222,7 +7222,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		for (const [key, value] of Object.entries(attributes)) setScriptAttribute(script, key, value);
 		getDomProperty(context, "head").appendChild(script);
 		return new Promise((resolve, reject) => {
-			script.onload = (_) => resolve();
+			script.onload = () => resolve();
 			script.onerror = (error) => reject(error);
 		});
 	}
@@ -7266,7 +7266,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		for (const [key, value] of Object.entries(attributes)) link.setAttribute(key, value);
 		getDomProperty(context, "head").appendChild(link);
 		return new Promise((resolve, reject) => {
-			link.onload = (_) => resolve();
+			link.onload = () => resolve();
 			link.onerror = (error) => reject(error);
 		});
 	}
