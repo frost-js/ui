@@ -1,4 +1,4 @@
-import { $, document, window } from './../globals.js';
+import { $, document, window } from '../globals.js';
 import { lockStylesCounterFactory } from './styles.js';
 
 /** @typedef {'x'|'y'} Axis */
@@ -46,7 +46,7 @@ function calculateScrollbarSize() {
     $.detach(div);
 
     return scrollbarSize;
-};
+}
 
 /**
  * Gets the scrollbar size for an element and axis.
@@ -65,7 +65,7 @@ export function getScrollbarSize(node = window, scrollNode = document, axis) {
     }
 
     return 0;
-};
+}
 
 /**
  * Gets the visible bounding rectangle of an element or window, excluding scrollbars.
@@ -99,7 +99,7 @@ export function getScrollContainer(node, scrollNode) {
     }
 
     return rect;
-};
+}
 
 /**
  * Calculates the bounding rectangle of a window.
@@ -122,7 +122,7 @@ function getWindowContainer(node) {
         bottom: scrollY + height,
         left: scrollX,
     };
-};
+}
 
 /**
  * Prevents body scrolling until every acquisition has been released.
@@ -134,7 +134,7 @@ export function lockBodyScroll() {
         'overflow-x': 'hidden',
         'overflow-y': 'hidden',
     });
-};
+}
 
 /**
  * Acquires scrollbar compensation for each distinct element, sharing existing locks.
@@ -151,4 +151,4 @@ export function lockScrollPadding(nodes) {
         { 'padding-right': `${scrollSizeY + parseInt($.css(node, 'paddingRight'))}px` } :
         {},
     );
-};
+}

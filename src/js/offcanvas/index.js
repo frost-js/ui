@@ -1,32 +1,32 @@
-import { $, document } from './../globals.js';
-import { getClickTarget } from './../helpers/click-target.js';
-import { initComponent } from './../helpers/component.js';
-import { getTarget } from './../helpers/target.js';
+import { $, document } from '../globals.js';
+import { getClickTarget } from '../helpers/click-target.js';
+import { initComponent } from '../helpers/component.js';
+import { getTarget } from '../helpers/target.js';
 import Offcanvas from './offcanvas.js';
 
 initComponent('offcanvas', Offcanvas);
 
 // Show the offcanvas panel targeted by a toggle control.
-$.addEventDelegate(document, 'click.ui.offcanvas', '[data-ui-toggle="offcanvas"]', (e) => {
-    e.preventDefault();
+$.addEventDelegate(document, 'click.ui.offcanvas', '[data-ui-toggle="offcanvas"]', (event) => {
+    event.preventDefault();
 
-    const target = getTarget(e.currentTarget, '.offcanvas');
+    const target = getTarget(event.currentTarget, '.offcanvas');
     const offcanvas = Offcanvas.init(target);
-    offcanvas.show(e.currentTarget);
+    offcanvas.show(event.currentTarget);
 });
 
 // Hide the offcanvas panel containing a dismiss control.
-$.addEventDelegate(document, 'click.ui.offcanvas', '[data-ui-dismiss="offcanvas"]', (e) => {
-    e.preventDefault();
+$.addEventDelegate(document, 'click.ui.offcanvas', '[data-ui-dismiss="offcanvas"]', (event) => {
+    event.preventDefault();
 
-    const target = getTarget(e.currentTarget, '.offcanvas');
+    const target = getTarget(event.currentTarget, '.offcanvas');
     const offcanvas = Offcanvas.init(target);
     offcanvas.hide();
 });
 
 // Handle backdrop clicks when no modal is covering the offcanvas panel.
-$.addEvent(document, 'click.ui.offcanvas', (e) => {
-    const target = getClickTarget(e);
+$.addEvent(document, 'click.ui.offcanvas', (event) => {
+    const target = getClickTarget(event);
 
     if ($.is(target, '[data-ui-dismiss]') || $.findOne('.modal.show')) {
         return;
@@ -45,8 +45,8 @@ $.addEvent(document, 'click.ui.offcanvas', (e) => {
 });
 
 // Send Escape to visible offcanvas panels when no modal is shown.
-$.addEvent(document, 'keydown.ui.offcanvas', (e) => {
-    if (e.code !== 'Escape' || $.findOne('.modal.show')) {
+$.addEvent(document, 'keydown.ui.offcanvas', (event) => {
+    if (event.code !== 'Escape' || $.findOne('.modal.show')) {
         return;
     }
 

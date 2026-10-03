@@ -1,7 +1,7 @@
-import BaseComponent from './../base-component.js';
-import { $, document } from './../globals.js';
-import { getPosition } from './../helpers/pointer.js';
-import { waitForTransition } from './../helpers/transition.js';
+import BaseComponent from '../base-component.js';
+import { $, document } from '../globals.js';
+import { getPosition } from '../helpers/pointer.js';
+import { waitForTransition } from '../helpers/transition.js';
 import {
     getDirection,
     getDirOffset,
@@ -179,19 +179,19 @@ export default class Carousel extends BaseComponent {
         if (this.options.keyboard) {
             const previousKey = this.#rtl ? 'ArrowRight' : 'ArrowLeft';
 
-            $.addEvent(this.node, 'keydown.ui.carousel', (e) => {
-                const target = e.target;
+            $.addEvent(this.node, 'keydown.ui.carousel', (event) => {
+                const target = event.target;
                 if ($.is(target, 'input, select')) {
                     return;
                 }
 
-                if (!['ArrowLeft', 'ArrowRight'].includes(e.code)) {
+                if (!['ArrowLeft', 'ArrowRight'].includes(event.code)) {
                     return;
                 }
 
-                e.preventDefault();
+                event.preventDefault();
 
-                if (e.code === previousKey) {
+                if (event.code === previousKey) {
                     this.prev();
                 } else {
                     this.next();
@@ -200,13 +200,13 @@ export default class Carousel extends BaseComponent {
         }
 
         if (this.options.pause) {
-            $.addEvent(this.node, 'mouseenter.ui.carousel', (_) => {
+            $.addEvent(this.node, 'mouseenter.ui.carousel', () => {
                 this.#clearTimer();
 
                 this.#mousePaused = true;
             });
 
-            $.addEvent(this.node, 'mouseleave.ui.carousel', (_) => {
+            $.addEvent(this.node, 'mouseleave.ui.carousel', () => {
                 this.#mousePaused = false;
 
                 this.#setTimer();
@@ -219,15 +219,15 @@ export default class Carousel extends BaseComponent {
             let progress;
             let direction;
 
-            const downEvent = (e) => {
+            const downEvent = (event) => {
                 if (
-                    e.button ||
+                    event.button ||
                     this.#sliding ||
                     (
-                        !$.is(e.target, ':disabled, .disabled') &&
+                        !$.is(event.target, ':disabled, .disabled') &&
                         (
-                            $.is(e.target, '[data-ui-slide-to], [data-ui-slide], a, button, input, textarea, select') ||
-                            $.closest(e.target, '[data-ui-slide], a, button', (parent) => $.isSame(parent, this.node) || $.is(parent, ':disabled, .disabled')).length
+                            $.is(event.target, '[data-ui-slide-to], [data-ui-slide], a, button, input, textarea, select') ||
+                            $.closest(event.target, '[data-ui-slide], a, button', (parent) => $.isSame(parent, this.node) || $.is(parent, ':disabled, .disabled')).length
                         )
                     )
                 ) {
@@ -240,19 +240,19 @@ export default class Carousel extends BaseComponent {
 
                 $.addClass(this.node, 'carousel-dragging');
 
-                const pos = getPosition(e);
+                const pos = getPosition(event);
                 startX = pos.x;
                 index = null;
                 progress = 0;
                 direction = null;
             };
 
-            const moveEvent = (e) => {
+            const moveEvent = (event) => {
                 if (!this.node || !this.#sliding) {
                     return;
                 }
 
-                const pos = getPosition(e);
+                const pos = getPosition(event);
                 const currentX = pos.x;
                 const width = $.width(this.node);
                 const scrollX = width / 2;
@@ -316,7 +316,7 @@ export default class Carousel extends BaseComponent {
                 } while (progress > 1);
             };
 
-            const upEvent = (_) => {
+            const upEvent = () => {
                 if (!this.node || !this.#sliding) {
                     return;
                 }
@@ -480,7 +480,7 @@ export default class Carousel extends BaseComponent {
         const interval = $.getDataset(this.#items[this.#index], 'uiInterval');
 
         this.#timer = setTimeout(
-            (_) => {
+            () => {
                 this.#timer = null;
                 this.cycle();
             },
@@ -503,7 +503,8 @@ export default class Carousel extends BaseComponent {
             return;
         }
 
-        if (!this.options.wrap &&
+        if (
+            !this.options.wrap &&
             (
                 index < 0 ||
                 index > this.#items.length - 1

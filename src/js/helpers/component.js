@@ -1,6 +1,6 @@
 /** @import BaseComponent from '../base-component.js'; */
 
-import { $ } from './../globals.js';
+import { $ } from '../globals.js';
 
 /**
  * Generates a unique component element ID.
@@ -17,7 +17,7 @@ export function generateId(prefix) {
 
         return id;
     }
-};
+}
 
 /**
  * Gets normalized UI data attributes from an element.
@@ -31,7 +31,7 @@ export function getDataset(node) {
         Object.entries(dataset)
             .map(([key, value]) => [key.slice(2, 3).toLowerCase() + key.slice(3), value]),
     );
-};
+}
 
 /**
  * Registers a UI component and its QuerySet method.
@@ -74,4 +74,4 @@ export function initComponent(key, component) {
         },
         writable: true,
     });
-};
+}

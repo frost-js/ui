@@ -1,5 +1,5 @@
-import BaseComponent from './../base-component.js';
-import { $ } from './../globals.js';
+import BaseComponent from '../base-component.js';
+import { $ } from '../globals.js';
 import { addFocusTrap, removeFocusTrap } from './helpers.js';
 
 /**

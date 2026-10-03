@@ -1,4 +1,4 @@
-import { $ } from './../globals.js';
+import { $ } from '../globals.js';
 import Modal from './modal.js';
 
 /**
@@ -28,7 +28,7 @@ export function getTopModal() {
     }
 
     return Modal.init(node);
-};
+}
 
 /**
  * Sets the stacking level for a modal and its backdrop.
@@ -56,7 +56,7 @@ export function setStackIndex(modal, index) {
 
         $.setStyle(modal.backdrop, { zIndex: backdropZIndex });
     }
-};
+}
 
 /**
  * Reindexes visible modals and their backdrops.
@@ -79,4 +79,4 @@ export function updateStack() {
     }
 
     return modals;
-};
+}

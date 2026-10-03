@@ -1,6 +1,6 @@
 /** @import FocusTrap from './focus-trap.js'; */
 
-import { $, document } from './../globals.js';
+import { $, document } from '../globals.js';
 
 const focusTraps = new Set();
 
@@ -18,13 +18,13 @@ export function addFocusTrap(focusTrap) {
         return;
     }
 
-    $.addEvent(document, 'focusin.ui.focustrap', (e) => {
+    $.addEvent(document, 'focusin.ui.focustrap', (event) => {
         const activeTarget = [...focusTraps].pop().node;
 
         if (
-            $._isDocument(e.target) ||
-            $.isSame(activeTarget, e.target) ||
-            $.hasDescendent(activeTarget, e.target)
+            $._isDocument(event.target) ||
+            $.isSame(activeTarget, event.target) ||
+            $.hasDescendent(activeTarget, event.target)
         ) {
             return;
         }
@@ -41,19 +41,19 @@ export function addFocusTrap(focusTrap) {
         capture: true,
     });
 
-    $.addEvent(document, 'keydown.ui.focustrap', (e) => {
-        if (e.key !== 'Tab') {
+    $.addEvent(document, 'keydown.ui.focustrap', (event) => {
+        if (event.key !== 'Tab') {
             return;
         }
 
-        reverse = e.shiftKey;
+        reverse = event.shiftKey;
     }, {
         capture: true,
     });
 
     running = true;
     reverse = false;
-};
+}
 
 /**
  * Unregisters a focus trap and removes shared handlers when none remain.
@@ -70,4 +70,4 @@ export function removeFocusTrap(focusTrap) {
     $.removeEvent(document, 'keydown.ui.focustrap');
 
     running = false;
-};
+}

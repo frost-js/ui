@@ -1,4 +1,4 @@
-import { $ } from './../globals.js';
+import { $ } from '../globals.js';
 
 /**
  * Gets the dimension used for a collapse transition.
@@ -9,4 +9,4 @@ export function getDimension(node) {
     return $.hasClass(node, 'collapse-horizontal') ?
         'width' :
         'height';
-};
+}

@@ -1,4 +1,4 @@
-import { $ } from './../globals.js';
+import { $ } from '../globals.js';
 
 /**
  * Gets the tab controls in the same tab list as a control.
@@ -12,4 +12,4 @@ export function getTabGroup(node) {
     return tabList ?
         $.find('[data-ui-toggle="tab"]', tabList) :
         [node];
-};
+}

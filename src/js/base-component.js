@@ -38,7 +38,7 @@ export default class BaseComponent {
             options,
         ));
 
-        $.addEvent(this.#node, this.constructor.REMOVE_EVENT, (_) => {
+        $.addEvent(this.#node, this.constructor.REMOVE_EVENT, () => {
             this.dispose();
         });
 

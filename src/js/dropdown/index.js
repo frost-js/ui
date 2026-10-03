@@ -1,30 +1,30 @@
-import { $, document } from './../globals.js';
-import { getClickTarget } from './../helpers/click-target.js';
-import { initComponent } from './../helpers/component.js';
+import { $, document } from '../globals.js';
+import { getClickTarget } from '../helpers/click-target.js';
+import { initComponent } from '../helpers/component.js';
 import Dropdown from './dropdown.js';
 
 initComponent('dropdown', Dropdown);
 
 // Toggle a dropdown from pointer or Space-key activation.
-$.addEventDelegate(document, 'click.ui.dropdown keydown.ui.dropdown', '[data-ui-toggle="dropdown"]', (e) => {
-    if (e.code && e.code !== 'Space') {
+$.addEventDelegate(document, 'click.ui.dropdown keydown.ui.dropdown', '[data-ui-toggle="dropdown"]', (event) => {
+    if (event.code && event.code !== 'Space') {
         return;
     }
 
-    e.preventDefault();
+    event.preventDefault();
 
-    const dropdown = Dropdown.init(e.currentTarget);
+    const dropdown = Dropdown.init(event.currentTarget);
     dropdown.toggle();
 });
 
 // Open a dropdown and focus its first item with an arrow key.
-$.addEventDelegate(document, 'keydown.ui.dropdown', '[data-ui-toggle="dropdown"]', (e) => {
-    switch (e.code) {
+$.addEventDelegate(document, 'keydown.ui.dropdown', '[data-ui-toggle="dropdown"]', (event) => {
+    switch (event.code) {
         case 'ArrowDown':
         case 'ArrowUp': {
-            e.preventDefault();
+            event.preventDefault();
 
-            const node = e.currentTarget;
+            const node = event.currentTarget;
             const dropdown = Dropdown.init(node);
 
             dropdown.show();
@@ -35,28 +35,28 @@ $.addEventDelegate(document, 'keydown.ui.dropdown', '[data-ui-toggle="dropdown"]
 });
 
 // Move focus between dropdown items with the arrow keys.
-$.addEventDelegate(document, 'keydown.ui.dropdown', '.dropdown-menu.show .dropdown-item', (e) => {
+$.addEventDelegate(document, 'keydown.ui.dropdown', '.dropdown-menu.show .dropdown-item', (event) => {
     let focusNode;
 
-    switch (e.code) {
+    switch (event.code) {
         case 'ArrowDown':
-            focusNode = $.nextAll(e.currentTarget, '.dropdown-item:not(:disabled, .disabled, [tabindex="-1"])').shift();
+            focusNode = $.nextAll(event.currentTarget, '.dropdown-item:not(:disabled, .disabled, [tabindex="-1"])').shift();
             break;
         case 'ArrowUp':
-            focusNode = $.prevAll(e.currentTarget, '.dropdown-item:not(:disabled, .disabled, [tabindex="-1"])').pop();
+            focusNode = $.prevAll(event.currentTarget, '.dropdown-item:not(:disabled, .disabled, [tabindex="-1"])').pop();
             break;
         default:
             return;
     }
 
-    e.preventDefault();
+    event.preventDefault();
 
     $.focus(focusNode);
 });
 
 // Close open dropdowns when an eligible target is clicked.
-$.addEvent(document, 'click.ui.dropdown', (e) => {
-    const target = getClickTarget(e);
+$.addEvent(document, 'click.ui.dropdown', (event) => {
+    const target = getClickTarget(event);
     const nodes = $.find('.dropdown-menu.show');
 
     for (const node of nodes) {
@@ -72,8 +72,8 @@ $.addEvent(document, 'click.ui.dropdown', (e) => {
 }, { capture: true });
 
 // Close open dropdowns when Escape is pressed.
-$.addEvent(document, 'keydown.ui.dropdown', (e) => {
-    if (e.code !== 'Escape') {
+$.addEvent(document, 'keydown.ui.dropdown', (event) => {
+    if (event.code !== 'Escape') {
         return;
     }
 
@@ -86,7 +86,7 @@ $.addEvent(document, 'keydown.ui.dropdown', (e) => {
 
         if (!stopped) {
             stopped = true;
-            e.stopPropagation();
+            event.stopPropagation();
         }
 
         dropdown.hide();
@@ -94,8 +94,8 @@ $.addEvent(document, 'keydown.ui.dropdown', (e) => {
 }, { capture: true });
 
 // Close a dropdown after focus leaves its menu with Tab.
-$.addEvent(document, 'keyup.ui.dropdown', (e) => {
-    if (e.code !== 'Tab') {
+$.addEvent(document, 'keyup.ui.dropdown', (event) => {
+    if (event.code !== 'Tab') {
         return;
     }
 
@@ -106,13 +106,13 @@ $.addEvent(document, 'keyup.ui.dropdown', (e) => {
         const toggle = $.siblings(node, '[data-ui-toggle="dropdown"]').shift();
         const dropdown = Dropdown.init(toggle);
 
-        if (dropdown.containsMenuTarget(e.target)) {
+        if (dropdown.containsMenuTarget(event.target)) {
             continue;
         }
 
         if (!stopped) {
             stopped = true;
-            e.stopPropagation();
+            event.stopPropagation();
         }
 
         dropdown.hide();

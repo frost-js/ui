@@ -1,4 +1,4 @@
-import { $ } from './../globals.js';
+import { $ } from '../globals.js';
 
 /**
  * @callback CountedStyleLock
@@ -37,7 +37,7 @@ export function lockStyles(nodes, styles) {
     }
 
     return release;
-};
+}
 
 /**
  * Creates an independent style-lock counter, restoring styles after the last release.
@@ -83,4 +83,4 @@ export function lockStylesCounterFactory() {
 
         return release;
     };
-};
+}

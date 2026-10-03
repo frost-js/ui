@@ -1,4 +1,4 @@
-import { window } from './../globals.js';
+import { window } from '../globals.js';
 
 const FALLBACK_PADDING = 50;
 
@@ -43,8 +43,8 @@ export function waitForTransition(node, properties = [], data = {}) {
 
     const timedOut = new Promise((resolve) => {
         // WebKit can leave finished pending, particularly for zero-duration transitions.
-        fallback = window.setTimeout((_) => resolve(false), endTime + FALLBACK_PADDING);
+        fallback = window.setTimeout(() => resolve(false), endTime + FALLBACK_PADDING);
     });
 
     return Promise.race([settled, timedOut]).then(result);
-};
+}

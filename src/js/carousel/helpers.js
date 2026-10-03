@@ -1,6 +1,6 @@
 /** @import { CarouselDirection, PhysicalDirection } from './carousel.js'; */
 
-import { $ } from './../globals.js';
+import { $ } from '../globals.js';
 
 /**
  * Gets the boundary offset for an item index.
@@ -18,7 +18,7 @@ export function getDirOffset(index, totalItems) {
     }
 
     return 0;
-};
+}
 
 /**
  * Gets the transition direction for an item change.
@@ -28,12 +28,12 @@ export function getDirOffset(index, totalItems) {
  * @returns {CarouselDirection} The transition direction.
  */
 export function getDirection(offset, oldIndex, newIndex) {
-    if (offset == -1 || (offset == 0 && newIndex < oldIndex)) {
+    if (offset === -1 || (offset === 0 && newIndex < oldIndex)) {
         return 'prev';
     }
 
     return 'next';
-};
+}
 
 /**
  * Resolves a carousel direction to a physical direction.
@@ -47,7 +47,7 @@ export function getPhysicalDirection(direction, rtl) {
     }
 
     return rtl ? 'left' : 'right';
-};
+}
 
 /**
  * Gets the entering and exiting classes for a slide direction.
@@ -67,7 +67,7 @@ export function getTransitionClasses(direction) {
                 exit: 'carousel-item-prev',
             };
     }
-};
+}
 
 /**
  * Normalizes an item index to the available range.
@@ -83,7 +83,7 @@ export function getIndex(index, totalItems) {
     }
 
     return index;
-};
+}
 
 /**
  * Updates the active carousel indicator.
@@ -95,4 +95,4 @@ export function updateIndicators(carousel, index) {
     const newIndicator = $.find('[data-ui-slide-to="' + index + '"]', carousel);
     $.removeClass(oldIndicator, 'active');
     $.addClass(newIndicator, 'active');
-};
+}

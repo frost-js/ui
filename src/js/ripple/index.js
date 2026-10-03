@@ -1,13 +1,13 @@
-import { $, document } from './../globals.js';
-import { waitForTransition } from './../helpers/transition.js';
+import { $, document } from '../globals.js';
+import { waitForTransition } from '../helpers/transition.js';
 
 // Render a click-centered ripple animation.
-$.addEventDelegate(document, 'click.ui.ripple', '.ripple', (e) => {
-    if (e.button !== 0) {
+$.addEventDelegate(document, 'click.ui.ripple', '.ripple', (event) => {
+    if (event.button !== 0) {
         return;
     }
 
-    const target = e.currentTarget;
+    const target = event.currentTarget;
     const pos = $.position(target, { offset: true });
 
     const width = $.width(target);
@@ -15,8 +15,8 @@ $.addEventDelegate(document, 'click.ui.ripple', '.ripple', (e) => {
     const scaleMultiple = Math.max(width, height);
 
     const isFixed = $.isFixed(target);
-    const mouseX = isFixed ? e.clientX : e.pageX;
-    const mouseY = isFixed ? e.clientY : e.pageY;
+    const mouseX = isFixed ? event.clientX : event.pageX;
+    const mouseY = isFixed ? event.clientY : event.pageY;
 
     const prevRipple = $.findOne(':scope > .ripple-effect', target);
 

@@ -1,8 +1,8 @@
-import BaseComponent from './../base-component.js';
-import FocusTrap from './../focus-trap/index.js';
-import { $, document } from './../globals.js';
-import { lockBodyScroll, lockScrollPadding } from './../helpers/scroll.js';
-import { waitForTransition } from './../helpers/transition.js';
+import BaseComponent from '../base-component.js';
+import FocusTrap from '../focus-trap/index.js';
+import { $, document } from '../globals.js';
+import { lockBodyScroll, lockScrollPadding } from '../helpers/scroll.js';
+import { waitForTransition } from '../helpers/transition.js';
 
 /**
  * @typedef {object} OffcanvasOptions
@@ -105,7 +105,7 @@ export default class Offcanvas extends BaseComponent {
 
         $.addClass(this.node, 'hiding');
 
-        waitForTransition(this.node, ['opacity', 'transform']).then((_) => {
+        waitForTransition(this.node, ['opacity', 'transform']).then(() => {
             if (!this.node) {
                 return;
             }

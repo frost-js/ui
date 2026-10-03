@@ -1,18 +1,18 @@
-import { $, document } from './../globals.js';
-import { initComponent } from './../helpers/component.js';
+import { $, document } from '../globals.js';
+import { initComponent } from '../helpers/component.js';
 import Button from './button.js';
 
 initComponent('button', Button);
 
 // Toggle a button from pointer or Space-key activation.
-$.addEventDelegate(document, 'click.ui.button keydown.ui.button', '[data-ui-toggle="button"]', (e) => {
-    if (e.code && e.code !== 'Space') {
+$.addEventDelegate(document, 'click.ui.button keydown.ui.button', '[data-ui-toggle="button"]', (event) => {
+    if (event.code && event.code !== 'Space') {
         return;
     }
 
-    e.preventDefault();
+    event.preventDefault();
 
-    const button = Button.init(e.currentTarget);
+    const button = Button.init(event.currentTarget);
     button.toggle();
 });
 

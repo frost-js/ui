@@ -1,4 +1,4 @@
-import { $ } from './../globals.js';
+import { $ } from '../globals.js';
 
 /**
  * Resolves a target element from a control.
@@ -23,7 +23,7 @@ export function getTarget(node, closestSelector) {
     }
 
     return target;
-};
+}
 
 /**
  * Gets the target selector declared by a control.
@@ -32,4 +32,4 @@ export function getTarget(node, closestSelector) {
  */
 export function getTargetSelector(node) {
     return $.getDataset(node, 'uiTarget') || $.getAttribute(node, 'href');
-};
+}

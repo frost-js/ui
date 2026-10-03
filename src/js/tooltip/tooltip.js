@@ -1,10 +1,10 @@
 /** @import { Placement, Position } from '../popper/popper.js'; */
 
-import BaseComponent from './../base-component.js';
-import { $, window } from './../globals.js';
-import { generateId } from './../helpers/component.js';
-import { waitForTransition } from './../helpers/transition.js';
-import Popper from './../popper/index.js';
+import BaseComponent from '../base-component.js';
+import { $, window } from '../globals.js';
+import { generateId } from '../helpers/component.js';
+import { waitForTransition } from '../helpers/transition.js';
+import Popper from '../popper/index.js';
 
 /**
  * @typedef {object} TooltipOptions
@@ -289,35 +289,35 @@ export default class Tooltip extends BaseComponent {
      */
     #events() {
         if (this.#triggers.includes('hover')) {
-            $.addEvent(this.node, 'mouseover.ui.tooltip', (_) => {
+            $.addEvent(this.node, 'mouseover.ui.tooltip', () => {
                 this.show();
             });
 
-            $.addEvent(this.node, 'mouseout.ui.tooltip', (_) => {
+            $.addEvent(this.node, 'mouseout.ui.tooltip', () => {
                 this.hide({ force: false });
             });
         }
 
         if (this.#triggers.includes('focus')) {
-            $.addEvent(this.node, 'focus.ui.tooltip', (_) => {
+            $.addEvent(this.node, 'focus.ui.tooltip', () => {
                 this.show();
             });
 
-            $.addEvent(this.node, 'blur.ui.tooltip', (_) => {
+            $.addEvent(this.node, 'blur.ui.tooltip', () => {
                 this.hide({ force: false });
             });
         }
 
         if (this.#triggers.includes('click')) {
-            $.addEvent(this.node, 'click.ui.tooltip', (e) => {
-                e.preventDefault();
+            $.addEvent(this.node, 'click.ui.tooltip', (event) => {
+                event.preventDefault();
 
                 this.toggle({ force: false });
             });
         }
 
         if (this.#modal) {
-            this.#hideModalEvent = (_) => {
+            this.#hideModalEvent = () => {
                 this.hide();
             };
             $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
@@ -366,7 +366,7 @@ export default class Tooltip extends BaseComponent {
             },
         );
 
-        window.requestAnimationFrame((_) => {
+        window.requestAnimationFrame(() => {
             this.update();
         });
     }

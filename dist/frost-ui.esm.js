@@ -114,7 +114,7 @@ var BaseComponent = class {
 	constructor(node, options) {
 		this.#node = node;
 		this.#options = Object.freeze($._extend({}, this.constructor.defaults, getDataset(this.#node), options));
-		$.addEvent(this.#node, this.constructor.REMOVE_EVENT, (_) => {
+		$.addEvent(this.#node, this.constructor.REMOVE_EVENT, () => {
 			this.dispose();
 		});
 		$.setData(this.#node, { [this.constructor.DATA_KEY]: this });
@@ -173,7 +173,7 @@ function waitForTransition(node, properties = [], data = {}) {
 		return results.every((transitionResult) => transitionResult.status === "fulfilled");
 	});
 	const timedOut = new Promise((resolve) => {
-		fallback = window.setTimeout((_) => resolve(false), endTime + FALLBACK_PADDING);
+		fallback = window.setTimeout(() => resolve(false), endTime + FALLBACK_PADDING);
 	});
 	return Promise.race([settled, timedOut]).then(result);
 }
@@ -205,9 +205,9 @@ var Alert = class extends BaseComponent {
 //#endregion
 //#region src/js/alert/index.js
 initComponent("alert", Alert);
-$.addEventDelegate(document, "click.ui.alert", "[data-ui-dismiss=\"alert\"]", (e) => {
-	e.preventDefault();
-	const target = getTarget(e.currentTarget, ".alert");
+$.addEventDelegate(document, "click.ui.alert", "[data-ui-dismiss=\"alert\"]", (event) => {
+	event.preventDefault();
+	const target = getTarget(event.currentTarget, ".alert");
 	Alert.init(target).close();
 });
 var alert_default = Alert;
@@ -231,10 +231,10 @@ var Button = class extends BaseComponent {
 //#endregion
 //#region src/js/button/index.js
 initComponent("button", Button);
-$.addEventDelegate(document, "click.ui.button keydown.ui.button", "[data-ui-toggle=\"button\"]", (e) => {
-	if (e.code && e.code !== "Space") return;
-	e.preventDefault();
-	Button.init(e.currentTarget).toggle();
+$.addEventDelegate(document, "click.ui.button keydown.ui.button", "[data-ui-toggle=\"button\"]", (event) => {
+	if (event.code && event.code !== "Space") return;
+	event.preventDefault();
+	Button.init(event.currentTarget).toggle();
 });
 var button_default = Button;
 
@@ -247,26 +247,26 @@ var button_default = Button;
 */
 /**
 * Gets page coordinates from a mouse or touch event.
-* @param {MouseEvent|TouchEvent} e The input event.
+* @param {MouseEvent|TouchEvent} event The input event.
 * @returns {Coordinates} The page coordinates.
 */
-function getPosition(e) {
-	if ("touches" in e && e.touches.length) return {
-		x: e.touches[0].pageX,
-		y: e.touches[0].pageY
+function getPosition(event) {
+	if ("touches" in event && event.touches.length) return {
+		x: event.touches[0].pageX,
+		y: event.touches[0].pageY
 	};
 	return {
-		x: e.pageX,
-		y: e.pageY
+		x: event.pageX,
+		y: event.pageY
 	};
 }
 /**
 * Gets page coordinates for every active touch.
-* @param {TouchEvent} e The touch event.
+* @param {TouchEvent} event The touch event.
 * @returns {Coordinates[]} The active touch coordinates.
 */
-function getTouchPositions(e) {
-	return Array.from(e.touches).map((touch) => ({
+function getTouchPositions(event) {
+	return Array.from(event.touches).map((touch) => ({
 		x: touch.pageX,
 		y: touch.pageY
 	}));
@@ -294,7 +294,7 @@ function getDirOffset(index, totalItems) {
 * @returns {CarouselDirection} The transition direction.
 */
 function getDirection(offset, oldIndex, newIndex) {
-	if (offset == -1 || offset == 0 && newIndex < oldIndex) return "prev";
+	if (offset === -1 || offset === 0 && newIndex < oldIndex) return "prev";
 	return "next";
 }
 /**
@@ -472,21 +472,21 @@ var Carousel = class extends BaseComponent {
 	#events() {
 		if (this.options.keyboard) {
 			const previousKey = this.#rtl ? "ArrowRight" : "ArrowLeft";
-			$.addEvent(this.node, "keydown.ui.carousel", (e) => {
-				const target = e.target;
+			$.addEvent(this.node, "keydown.ui.carousel", (event) => {
+				const target = event.target;
 				if ($.is(target, "input, select")) return;
-				if (!["ArrowLeft", "ArrowRight"].includes(e.code)) return;
-				e.preventDefault();
-				if (e.code === previousKey) this.prev();
+				if (!["ArrowLeft", "ArrowRight"].includes(event.code)) return;
+				event.preventDefault();
+				if (event.code === previousKey) this.prev();
 				else this.next();
 			});
 		}
 		if (this.options.pause) {
-			$.addEvent(this.node, "mouseenter.ui.carousel", (_) => {
+			$.addEvent(this.node, "mouseenter.ui.carousel", () => {
 				this.#clearTimer();
 				this.#mousePaused = true;
 			});
-			$.addEvent(this.node, "mouseleave.ui.carousel", (_) => {
+			$.addEvent(this.node, "mouseleave.ui.carousel", () => {
 				this.#mousePaused = false;
 				this.#setTimer();
 			});
@@ -496,19 +496,19 @@ var Carousel = class extends BaseComponent {
 			let index = null;
 			let progress;
 			let direction;
-			const downEvent = (e) => {
-				if (e.button || this.#sliding || !$.is(e.target, ":disabled, .disabled") && ($.is(e.target, "[data-ui-slide-to], [data-ui-slide], a, button, input, textarea, select") || $.closest(e.target, "[data-ui-slide], a, button", (parent) => $.isSame(parent, this.node) || $.is(parent, ":disabled, .disabled")).length)) return false;
+			const downEvent = (event) => {
+				if (event.button || this.#sliding || !$.is(event.target, ":disabled, .disabled") && ($.is(event.target, "[data-ui-slide-to], [data-ui-slide], a, button, input, textarea, select") || $.closest(event.target, "[data-ui-slide], a, button", (parent) => $.isSame(parent, this.node) || $.is(parent, ":disabled, .disabled")).length)) return false;
 				this.#clearTimer();
 				this.#sliding = true;
 				$.addClass(this.node, "carousel-dragging");
-				startX = getPosition(e).x;
+				startX = getPosition(event).x;
 				index = null;
 				progress = 0;
 				direction = null;
 			};
-			const moveEvent = (e) => {
+			const moveEvent = (event) => {
 				if (!this.node || !this.#sliding) return;
-				const currentX = getPosition(e).x;
+				const currentX = getPosition(event).x;
 				const scrollX = $.width(this.node) / 2;
 				let inlineDiffX = currentX - startX;
 				if (this.#rtl) inlineDiffX *= -1;
@@ -543,7 +543,7 @@ var Carousel = class extends BaseComponent {
 					}
 				} while (progress > 1);
 			};
-			const upEvent = (_) => {
+			const upEvent = () => {
 				if (!this.node || !this.#sliding) return;
 				if (index === null || index === this.#index) {
 					this.#resetDrag();
@@ -646,7 +646,7 @@ var Carousel = class extends BaseComponent {
 	#setTimer() {
 		if (this.#timer || this.#paused || this.#mousePaused || this.#sliding) return;
 		const interval = $.getDataset(this.#items[this.#index], "uiInterval");
-		this.#timer = setTimeout((_) => {
+		this.#timer = setTimeout(() => {
 			this.#timer = null;
 			this.cycle();
 		}, interval || this.options.interval);
@@ -722,22 +722,22 @@ var Carousel = class extends BaseComponent {
 //#endregion
 //#region src/js/carousel/index.js
 initComponent("carousel", Carousel);
-$((_) => {
+$(() => {
 	const nodes = $.find("[data-ui-ride=\"carousel\"]");
 	for (const node of nodes) Carousel.init(node);
 });
-$.addEventDelegate(document, "click.ui.carousel", "[data-ui-slide]", (e) => {
-	e.preventDefault();
-	const target = getTarget(e.currentTarget, ".carousel");
+$.addEventDelegate(document, "click.ui.carousel", "[data-ui-slide]", (event) => {
+	event.preventDefault();
+	const target = getTarget(event.currentTarget, ".carousel");
 	const carousel = Carousel.init(target);
-	if ($.getDataset(e.currentTarget, "uiSlide") === "prev") carousel.prev();
+	if ($.getDataset(event.currentTarget, "uiSlide") === "prev") carousel.prev();
 	else carousel.next();
 });
-$.addEventDelegate(document, "click.ui.carousel", "[data-ui-slide-to]", (e) => {
-	e.preventDefault();
-	const target = getTarget(e.currentTarget, ".carousel");
+$.addEventDelegate(document, "click.ui.carousel", "[data-ui-slide-to]", (event) => {
+	event.preventDefault();
+	const target = getTarget(event.currentTarget, ".carousel");
 	const carousel = Carousel.init(target);
-	const slideTo = $.getDataset(e.currentTarget, "uiSlideTo");
+	const slideTo = $.getDataset(event.currentTarget, "uiSlideTo");
 	carousel.show(slideTo);
 });
 var carousel_default = Carousel;
@@ -870,9 +870,9 @@ var Collapse = class extends BaseComponent {
 //#endregion
 //#region src/js/collapse/index.js
 initComponent("collapse", Collapse);
-$.addEventDelegate(document, "click.ui.collapse", "[data-ui-toggle=\"collapse\"]", (e) => {
-	e.preventDefault();
-	const selector = getTargetSelector(e.currentTarget);
+$.addEventDelegate(document, "click.ui.collapse", "[data-ui-toggle=\"collapse\"]", (event) => {
+	event.preventDefault();
+	const selector = getTargetSelector(event.currentTarget);
 	const collapses = $.find(selector).map((target) => Collapse.init(target));
 	const show = !collapses.some((collapse) => $.hasClass(collapse.node, "show"));
 	for (const collapse of collapses) if (show) collapse.show();
@@ -884,21 +884,21 @@ var collapse_default = Collapse;
 //#region src/js/helpers/click-target.js
 /** @type {EventTarget|null|undefined} */
 var clickTarget;
-$.addEvent(window, "mousedown.ui", (e) => {
-	clickTarget = e.target;
+$.addEvent(window, "mousedown.ui", (event) => {
+	clickTarget = event.target;
 }, { capture: true });
-$.addEvent(window, "mouseup.ui", (_) => {
-	setTimeout((_) => {
+$.addEvent(window, "mouseup.ui", () => {
+	setTimeout(() => {
 		clickTarget = null;
 	}, 0);
 }, { capture: true });
 /**
 * Gets the original press target for a click event.
-* @param {MouseEvent} e The click event.
+* @param {MouseEvent} event The click event.
 * @returns {EventTarget|null} The original press target, or the click target as a fallback.
 */
-function getClickTarget(e) {
-	return clickTarget || e.target;
+function getClickTarget(event) {
+	return clickTarget || event.target;
 }
 
 //#endregion
@@ -1096,12 +1096,12 @@ var running$1 = false;
 function addPopper(popper) {
 	poppers.add(popper);
 	if (running$1) return;
-	$.addEvent(window, "resize.ui.popper", $.debounce((_) => {
+	$.addEvent(window, "resize.ui.popper", $.debounce(() => {
 		for (const popper of poppers) popper.update();
 	}));
-	$.addEvent(document, "scroll.ui.popper", $.debounce((e) => {
+	$.addEvent(document, "scroll.ui.popper", $.debounce((event) => {
 		for (const popper of poppers) {
-			if (!popper.shouldUpdateForScroll(e.target)) continue;
+			if (!popper.shouldUpdateForScroll(event.target)) continue;
 			popper.update();
 		}
 	}), {
@@ -1587,7 +1587,7 @@ var Dropdown = class extends BaseComponent {
 			this.#transitioning = false;
 			throw error;
 		}
-		window.requestAnimationFrame((_) => {
+		window.requestAnimationFrame(() => {
 			this.update();
 		});
 		waitForTransition(this.#menuNode, ["opacity"], { toggle: this.node }).then(({ toggle }) => {
@@ -1615,17 +1615,17 @@ var Dropdown = class extends BaseComponent {
 //#endregion
 //#region src/js/dropdown/index.js
 initComponent("dropdown", Dropdown);
-$.addEventDelegate(document, "click.ui.dropdown keydown.ui.dropdown", "[data-ui-toggle=\"dropdown\"]", (e) => {
-	if (e.code && e.code !== "Space") return;
-	e.preventDefault();
-	Dropdown.init(e.currentTarget).toggle();
+$.addEventDelegate(document, "click.ui.dropdown keydown.ui.dropdown", "[data-ui-toggle=\"dropdown\"]", (event) => {
+	if (event.code && event.code !== "Space") return;
+	event.preventDefault();
+	Dropdown.init(event.currentTarget).toggle();
 });
-$.addEventDelegate(document, "keydown.ui.dropdown", "[data-ui-toggle=\"dropdown\"]", (e) => {
-	switch (e.code) {
+$.addEventDelegate(document, "keydown.ui.dropdown", "[data-ui-toggle=\"dropdown\"]", (event) => {
+	switch (event.code) {
 		case "ArrowDown":
 		case "ArrowUp": {
-			e.preventDefault();
-			const node = e.currentTarget;
+			event.preventDefault();
+			const node = event.currentTarget;
 			const dropdown = Dropdown.init(node);
 			dropdown.show();
 			dropdown.focusFirstItem();
@@ -1633,22 +1633,22 @@ $.addEventDelegate(document, "keydown.ui.dropdown", "[data-ui-toggle=\"dropdown\
 		}
 	}
 });
-$.addEventDelegate(document, "keydown.ui.dropdown", ".dropdown-menu.show .dropdown-item", (e) => {
+$.addEventDelegate(document, "keydown.ui.dropdown", ".dropdown-menu.show .dropdown-item", (event) => {
 	let focusNode;
-	switch (e.code) {
+	switch (event.code) {
 		case "ArrowDown":
-			focusNode = $.nextAll(e.currentTarget, ".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])").shift();
+			focusNode = $.nextAll(event.currentTarget, ".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])").shift();
 			break;
 		case "ArrowUp":
-			focusNode = $.prevAll(e.currentTarget, ".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])").pop();
+			focusNode = $.prevAll(event.currentTarget, ".dropdown-item:not(:disabled, .disabled, [tabindex=\"-1\"])").pop();
 			break;
 		default: return;
 	}
-	e.preventDefault();
+	event.preventDefault();
 	$.focus(focusNode);
 });
-$.addEvent(document, "click.ui.dropdown", (e) => {
-	const target = getClickTarget(e);
+$.addEvent(document, "click.ui.dropdown", (event) => {
+	const target = getClickTarget(event);
 	const nodes = $.find(".dropdown-menu.show");
 	for (const node of nodes) {
 		const toggle = $.siblings(node, "[data-ui-toggle=\"dropdown\"]").shift();
@@ -1657,8 +1657,8 @@ $.addEvent(document, "click.ui.dropdown", (e) => {
 		dropdown.hide();
 	}
 }, { capture: true });
-$.addEvent(document, "keydown.ui.dropdown", (e) => {
-	if (e.code !== "Escape") return;
+$.addEvent(document, "keydown.ui.dropdown", (event) => {
+	if (event.code !== "Escape") return;
 	let stopped = false;
 	const nodes = $.find(".dropdown-menu.show");
 	for (const node of nodes) {
@@ -1666,22 +1666,22 @@ $.addEvent(document, "keydown.ui.dropdown", (e) => {
 		const dropdown = Dropdown.init(toggle);
 		if (!stopped) {
 			stopped = true;
-			e.stopPropagation();
+			event.stopPropagation();
 		}
 		dropdown.hide();
 	}
 }, { capture: true });
-$.addEvent(document, "keyup.ui.dropdown", (e) => {
-	if (e.code !== "Tab") return;
+$.addEvent(document, "keyup.ui.dropdown", (event) => {
+	if (event.code !== "Tab") return;
 	let stopped = false;
 	const nodes = $.find(".dropdown-menu.show");
 	for (const node of nodes) {
 		const toggle = $.siblings(node, "[data-ui-toggle=\"dropdown\"]").shift();
 		const dropdown = Dropdown.init(toggle);
-		if (dropdown.containsMenuTarget(e.target)) continue;
+		if (dropdown.containsMenuTarget(event.target)) continue;
 		if (!stopped) {
 			stopped = true;
-			e.stopPropagation();
+			event.stopPropagation();
 		}
 		dropdown.hide();
 	}
@@ -1701,16 +1701,16 @@ var reverse = false;
 function addFocusTrap(focusTrap) {
 	focusTraps.add(focusTrap);
 	if (running) return;
-	$.addEvent(document, "focusin.ui.focustrap", (e) => {
+	$.addEvent(document, "focusin.ui.focustrap", (event) => {
 		const activeTarget = [...focusTraps].pop().node;
-		if ($._isDocument(e.target) || $.isSame(activeTarget, e.target) || $.hasDescendent(activeTarget, e.target)) return;
+		if ($._isDocument(event.target) || $.isSame(activeTarget, event.target) || $.hasDescendent(activeTarget, event.target)) return;
 		const focusable = $.find("a, button, input, textarea, select, details, [tabindex], [contenteditable=\"true\"]", activeTarget).filter((node) => $.is(node, ":not(:disabled, .disabled)") && $.getAttribute(node, "tabindex") >= 0 && $.isVisible(node));
 		const focusTarget = reverse ? focusable.pop() : focusable.shift();
 		$.focus(focusTarget || activeTarget);
 	}, { capture: true });
-	$.addEvent(document, "keydown.ui.focustrap", (e) => {
-		if (e.key !== "Tab") return;
-		reverse = e.shiftKey;
+	$.addEvent(document, "keydown.ui.focustrap", (event) => {
+		if (event.key !== "Tab") return;
+		reverse = event.shiftKey;
 	}, { capture: true });
 	running = true;
 	reverse = false;
@@ -1868,7 +1868,7 @@ var Modal = class extends BaseComponent {
 		if (this.#backdrop) $.removeClass(this.#backdrop, "show");
 		const transitions = [waitForTransition(this.#dialog, ["opacity", "transform"])];
 		if (this.#backdrop) transitions.push(waitForTransition(this.#backdrop, ["opacity"]));
-		Promise.all(transitions).then((_) => {
+		Promise.all(transitions).then(() => {
 			if (!this.node) return;
 			const modal = this.node;
 			this.#cleanup();
@@ -1971,7 +1971,7 @@ var Modal = class extends BaseComponent {
 			if (!this.node) return;
 			$.removeClass(modal, "modal-static");
 			return waitForTransition(node, ["transform"]);
-		}).then((_) => {
+		}).then(() => {
 			if (this.node) this.#zooming = false;
 		});
 	}
@@ -2032,25 +2032,25 @@ function updateStack() {
 //#endregion
 //#region src/js/modal/index.js
 initComponent("modal", Modal);
-$.addEventDelegate(document, "click.ui.modal", "[data-ui-toggle=\"modal\"]", (e) => {
-	e.preventDefault();
-	const target = getTarget(e.currentTarget, ".modal");
-	Modal.init(target).show(e.currentTarget);
+$.addEventDelegate(document, "click.ui.modal", "[data-ui-toggle=\"modal\"]", (event) => {
+	event.preventDefault();
+	const target = getTarget(event.currentTarget, ".modal");
+	Modal.init(target).show(event.currentTarget);
 });
-$.addEventDelegate(document, "click.ui.modal", "[data-ui-dismiss=\"modal\"]", (e) => {
-	e.preventDefault();
-	const target = getTarget(e.currentTarget, ".modal");
+$.addEventDelegate(document, "click.ui.modal", "[data-ui-dismiss=\"modal\"]", (event) => {
+	event.preventDefault();
+	const target = getTarget(event.currentTarget, ".modal");
 	Modal.init(target).hide();
 });
-$.addEvent(window, "click.ui.modal", (e) => {
-	const target = getClickTarget(e);
+$.addEvent(window, "click.ui.modal", (event) => {
+	const target = getClickTarget(event);
 	if ($.is(target, "[data-ui-dismiss]")) return;
 	const modal = getTopModal();
 	if (!modal) return;
 	modal.handleBackdrop(target);
 });
-$.addEvent(window, "keydown.ui.modal", (e) => {
-	if (e.code !== "Escape") return;
+$.addEvent(window, "keydown.ui.modal", (event) => {
+	if (event.code !== "Escape") return;
 	const modal = getTopModal();
 	if (!modal) return;
 	modal.handleEscape();
@@ -2123,7 +2123,7 @@ var Offcanvas = class extends BaseComponent {
 		this.#transitioning = true;
 		if (this.#focusTrap) this.#focusTrap.deactivate();
 		$.addClass(this.node, "hiding");
-		waitForTransition(this.node, ["opacity", "transform"]).then((_) => {
+		waitForTransition(this.node, ["opacity", "transform"]).then(() => {
 			if (!this.node) return;
 			const offcanvas = this.node;
 			this.#cleanup();
@@ -2194,25 +2194,25 @@ var Offcanvas = class extends BaseComponent {
 //#endregion
 //#region src/js/offcanvas/index.js
 initComponent("offcanvas", Offcanvas);
-$.addEventDelegate(document, "click.ui.offcanvas", "[data-ui-toggle=\"offcanvas\"]", (e) => {
-	e.preventDefault();
-	const target = getTarget(e.currentTarget, ".offcanvas");
-	Offcanvas.init(target).show(e.currentTarget);
+$.addEventDelegate(document, "click.ui.offcanvas", "[data-ui-toggle=\"offcanvas\"]", (event) => {
+	event.preventDefault();
+	const target = getTarget(event.currentTarget, ".offcanvas");
+	Offcanvas.init(target).show(event.currentTarget);
 });
-$.addEventDelegate(document, "click.ui.offcanvas", "[data-ui-dismiss=\"offcanvas\"]", (e) => {
-	e.preventDefault();
-	const target = getTarget(e.currentTarget, ".offcanvas");
+$.addEventDelegate(document, "click.ui.offcanvas", "[data-ui-dismiss=\"offcanvas\"]", (event) => {
+	event.preventDefault();
+	const target = getTarget(event.currentTarget, ".offcanvas");
 	Offcanvas.init(target).hide();
 });
-$.addEvent(document, "click.ui.offcanvas", (e) => {
-	const target = getClickTarget(e);
+$.addEvent(document, "click.ui.offcanvas", (event) => {
+	const target = getClickTarget(event);
 	if ($.is(target, "[data-ui-dismiss]") || $.findOne(".modal.show")) return;
 	const nodes = $.find(".offcanvas.show");
 	if (!nodes.length) return;
 	for (const node of nodes) Offcanvas.init(node).handleBackdrop(target);
 });
-$.addEvent(document, "keydown.ui.offcanvas", (e) => {
-	if (e.code !== "Escape" || $.findOne(".modal.show")) return;
+$.addEvent(document, "keydown.ui.offcanvas", (event) => {
+	if (event.code !== "Escape" || $.findOne(".modal.show")) return;
 	const nodes = $.find(".offcanvas.show");
 	if (!nodes.length) return;
 	for (const node of nodes) Offcanvas.init(node).handleEscape();
@@ -2422,27 +2422,27 @@ var Popover = class extends BaseComponent {
 	*/
 	#events() {
 		if (this.#triggers.includes("hover")) {
-			$.addEvent(this.node, "mouseover.ui.popover", (_) => {
+			$.addEvent(this.node, "mouseover.ui.popover", () => {
 				this.show();
 			});
-			$.addEvent(this.node, "mouseout.ui.popover", (_) => {
+			$.addEvent(this.node, "mouseout.ui.popover", () => {
 				this.hide({ force: false });
 			});
 		}
 		if (this.#triggers.includes("focus")) {
-			$.addEvent(this.node, "focus.ui.popover", (_) => {
+			$.addEvent(this.node, "focus.ui.popover", () => {
 				this.show();
 			});
-			$.addEvent(this.node, "blur.ui.popover", (_) => {
+			$.addEvent(this.node, "blur.ui.popover", () => {
 				this.hide({ force: false });
 			});
 		}
-		if (this.#triggers.includes("click")) $.addEvent(this.node, "click.ui.popover", (e) => {
-			e.preventDefault();
+		if (this.#triggers.includes("click")) $.addEvent(this.node, "click.ui.popover", (event) => {
+			event.preventDefault();
 			this.toggle({ force: false });
 		});
 		if (this.#modal) {
-			this.#hideModalEvent = (_) => {
+			this.#hideModalEvent = () => {
 				this.hide();
 			};
 			$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
@@ -2477,7 +2477,7 @@ var Popover = class extends BaseComponent {
 			spacing: this.options.spacing,
 			minContact: this.options.minContact
 		});
-		window.requestAnimationFrame((_) => {
+		window.requestAnimationFrame(() => {
 			this.update();
 		});
 	}
@@ -2578,17 +2578,17 @@ var Tab = class extends BaseComponent {
 //#endregion
 //#region src/js/tab/index.js
 initComponent("tab", Tab);
-$.addEventDelegate(document, "click.ui.tab keydown.ui.tab", "[data-ui-toggle=\"tab\"]", (e) => {
-	if (e.code && e.code !== "Space") return;
-	e.preventDefault();
-	Tab.init(e.currentTarget).show();
+$.addEventDelegate(document, "click.ui.tab keydown.ui.tab", "[data-ui-toggle=\"tab\"]", (event) => {
+	if (event.code && event.code !== "Space") return;
+	event.preventDefault();
+	Tab.init(event.currentTarget).show();
 });
-$.addEventDelegate(document, "keydown.ui.tab", "[data-ui-toggle=\"tab\"]", (e) => {
-	const tabs = getTabGroup(e.currentTarget).filter((node) => !$.is(node, ":disabled, .disabled"));
-	const index = tabs.indexOf(e.currentTarget);
+$.addEventDelegate(document, "keydown.ui.tab", "[data-ui-toggle=\"tab\"]", (event) => {
+	const tabs = getTabGroup(event.currentTarget).filter((node) => !$.is(node, ":disabled, .disabled"));
+	const index = tabs.indexOf(event.currentTarget);
 	if (index < 0) return;
 	let newTarget;
-	switch (e.code) {
+	switch (event.code) {
 		case "ArrowDown":
 		case "ArrowRight":
 			newTarget = tabs[index + 1];
@@ -2605,8 +2605,8 @@ $.addEventDelegate(document, "keydown.ui.tab", "[data-ui-toggle=\"tab\"]", (e) =
 			break;
 		default: return;
 	}
-	if (!newTarget || $.isSame(newTarget, e.currentTarget)) return;
-	e.preventDefault();
+	if (!newTarget || $.isSame(newTarget, event.currentTarget)) return;
+	event.preventDefault();
 	$.focus(newTarget);
 	Tab.init(newTarget).show();
 });
@@ -2674,7 +2674,7 @@ var Toast = class extends BaseComponent {
 		$.addClass(this.node, "show");
 		waitForTransition(this.node, ["opacity"]).then(({ node }) => {
 			if (!this.node) return;
-			if (this.options.autohide) this.#timer = setTimeout((_) => {
+			if (this.options.autohide) this.#timer = setTimeout(() => {
 				this.#timer = null;
 				this.hide();
 			}, this.options.delay);
@@ -2695,9 +2695,9 @@ var Toast = class extends BaseComponent {
 //#endregion
 //#region src/js/toast/index.js
 initComponent("toast", Toast);
-$.addEventDelegate(document, "click.ui.toast", "[data-ui-dismiss=\"toast\"]", (e) => {
-	e.preventDefault();
-	const target = getTarget(e.currentTarget, ".toast");
+$.addEventDelegate(document, "click.ui.toast", "[data-ui-dismiss=\"toast\"]", (event) => {
+	event.preventDefault();
+	const target = getTarget(event.currentTarget, ".toast");
 	Toast.init(target, { autohide: false }).hide();
 });
 var toast_default = Toast;
@@ -2892,27 +2892,27 @@ var Tooltip = class extends BaseComponent {
 	*/
 	#events() {
 		if (this.#triggers.includes("hover")) {
-			$.addEvent(this.node, "mouseover.ui.tooltip", (_) => {
+			$.addEvent(this.node, "mouseover.ui.tooltip", () => {
 				this.show();
 			});
-			$.addEvent(this.node, "mouseout.ui.tooltip", (_) => {
+			$.addEvent(this.node, "mouseout.ui.tooltip", () => {
 				this.hide({ force: false });
 			});
 		}
 		if (this.#triggers.includes("focus")) {
-			$.addEvent(this.node, "focus.ui.tooltip", (_) => {
+			$.addEvent(this.node, "focus.ui.tooltip", () => {
 				this.show();
 			});
-			$.addEvent(this.node, "blur.ui.tooltip", (_) => {
+			$.addEvent(this.node, "blur.ui.tooltip", () => {
 				this.hide({ force: false });
 			});
 		}
-		if (this.#triggers.includes("click")) $.addEvent(this.node, "click.ui.tooltip", (e) => {
-			e.preventDefault();
+		if (this.#triggers.includes("click")) $.addEvent(this.node, "click.ui.tooltip", (event) => {
+			event.preventDefault();
 			this.toggle({ force: false });
 		});
 		if (this.#modal) {
-			this.#hideModalEvent = (_) => {
+			this.#hideModalEvent = () => {
 				this.hide();
 			};
 			$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
@@ -2946,7 +2946,7 @@ var Tooltip = class extends BaseComponent {
 			spacing: this.options.spacing,
 			minContact: this.options.minContact
 		});
-		window.requestAnimationFrame((_) => {
+		window.requestAnimationFrame(() => {
 			this.update();
 		});
 	}
@@ -2959,9 +2959,9 @@ var tooltip_default = Tooltip;
 
 //#endregion
 //#region src/js/clipboard/index.js
-$.addEventDelegate(document, "click", "[data-ui-toggle=\"clipboard\"]", (e) => {
-	e.preventDefault();
-	const node = e.currentTarget;
+$.addEventDelegate(document, "click", "[data-ui-toggle=\"clipboard\"]", (event) => {
+	event.preventDefault();
+	const node = event.currentTarget;
 	let { action = "copy", text = null } = getDataset(node);
 	if (!["copy", "cut"].includes(action)) throw new Error("Invalid clipboard action");
 	let input;
@@ -2990,16 +2990,16 @@ $.addEventDelegate(document, "click", "[data-ui-toggle=\"clipboard\"]", (e) => {
 
 //#endregion
 //#region src/js/ripple/index.js
-$.addEventDelegate(document, "click.ui.ripple", ".ripple", (e) => {
-	if (e.button !== 0) return;
-	const target = e.currentTarget;
+$.addEventDelegate(document, "click.ui.ripple", ".ripple", (event) => {
+	if (event.button !== 0) return;
+	const target = event.currentTarget;
 	const pos = $.position(target, { offset: true });
 	const width = $.width(target);
 	const height = $.height(target);
 	const scaleMultiple = Math.max(width, height);
 	const isFixed = $.isFixed(target);
-	const mouseX = isFixed ? e.clientX : e.pageX;
-	const mouseY = isFixed ? e.clientY : e.pageY;
+	const mouseX = isFixed ? event.clientX : event.pageX;
+	const mouseY = isFixed ? event.clientY : event.pageY;
 	const prevRipple = $.findOne(":scope > .ripple-effect", target);
 	if (prevRipple) $.remove(prevRipple);
 	const ripple = $.create("span", {
@@ -3020,8 +3020,8 @@ $.addEventDelegate(document, "click.ui.ripple", ".ripple", (e) => {
 
 //#endregion
 //#region src/js/text-expand/index.js
-$.addEventDelegate(document, "change.ui.expand input.ui.expand", ".text-expand", (e) => {
-	const textArea = e.currentTarget;
+$.addEventDelegate(document, "change.ui.expand input.ui.expand", ".text-expand", (event) => {
+	const textArea = event.currentTarget;
 	$.setStyle(textArea, { height: "inherit" });
 	let newHeight = $.height(textArea, { boxSize: $.SCROLL_BOX });
 	newHeight += parseInt($.css(textArea, "borderTop"));

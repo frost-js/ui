@@ -1,27 +1,27 @@
-import { $, document } from './../globals.js';
-import { initComponent } from './../helpers/component.js';
+import { $, document } from '../globals.js';
+import { initComponent } from '../helpers/component.js';
 import { getTabGroup } from './helpers.js';
 import Tab from './tab.js';
 
 initComponent('tab', Tab);
 
 // Select a tab from pointer or Space-key activation.
-$.addEventDelegate(document, 'click.ui.tab keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => {
-    if (e.code && e.code !== 'Space') {
+$.addEventDelegate(document, 'click.ui.tab keydown.ui.tab', '[data-ui-toggle="tab"]', (event) => {
+    if (event.code && event.code !== 'Space') {
         return;
     }
 
-    e.preventDefault();
+    event.preventDefault();
 
-    const tab = Tab.init(e.currentTarget);
+    const tab = Tab.init(event.currentTarget);
     tab.show();
 });
 
 // Select and focus tab controls with navigation keys.
-$.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => {
-    const tabs = getTabGroup(e.currentTarget)
+$.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (event) => {
+    const tabs = getTabGroup(event.currentTarget)
         .filter((node) => !$.is(node, ':disabled, .disabled'));
-    const index = tabs.indexOf(e.currentTarget);
+    const index = tabs.indexOf(event.currentTarget);
 
     if (index < 0) {
         return;
@@ -29,7 +29,7 @@ $.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => 
 
     let newTarget;
 
-    switch (e.code) {
+    switch (event.code) {
         case 'ArrowDown':
         case 'ArrowRight':
             newTarget = tabs[index + 1];
@@ -48,11 +48,11 @@ $.addEventDelegate(document, 'keydown.ui.tab', '[data-ui-toggle="tab"]', (e) => 
             return;
     }
 
-    if (!newTarget || $.isSame(newTarget, e.currentTarget)) {
+    if (!newTarget || $.isSame(newTarget, event.currentTarget)) {
         return;
     }
 
-    e.preventDefault();
+    event.preventDefault();
 
     $.focus(newTarget);
     Tab.init(newTarget).show();

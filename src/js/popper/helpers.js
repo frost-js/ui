@@ -1,7 +1,7 @@
 /** @import { BoundingRect } from '../helpers/scroll.js'; */
 /** @import Popper, { Direction, PhysicalDirection, Placement, Position } from './popper.js'; */
 
-import { $, document, window } from './../globals.js';
+import { $, document, window } from '../globals.js';
 
 const poppers = new Set();
 
@@ -21,7 +21,7 @@ export function addPopper(popper) {
     $.addEvent(
         window,
         'resize.ui.popper',
-        $.debounce((_) => {
+        $.debounce(() => {
             for (const popper of poppers) {
                 popper.update();
             }
@@ -31,9 +31,9 @@ export function addPopper(popper) {
     $.addEvent(
         document,
         'scroll.ui.popper',
-        $.debounce((e) => {
+        $.debounce((event) => {
             for (const popper of poppers) {
-                if (!popper.shouldUpdateForScroll(e.target)) {
+                if (!popper.shouldUpdateForScroll(event.target)) {
                     continue;
                 }
 
@@ -47,7 +47,7 @@ export function addPopper(popper) {
     );
 
     running = true;
-};
+}
 
 /**
  * Resolves a logical placement to a physical direction.
@@ -91,26 +91,34 @@ export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement,
 
     if (placement === 'top') {
         // Flip below when it offers more vertical space.
-        if (spaceTop < nodeBox.height + spacing &&
-            spaceBottom > spaceTop) {
+        if (
+            spaceTop < nodeBox.height + spacing &&
+            spaceBottom > spaceTop
+        ) {
             return 'bottom';
         }
     } else if (placement === 'end') {
         // Flip to inline-start when it offers more horizontal space.
-        if (spaceEnd < nodeBox.width + spacing &&
-            spaceStart > spaceEnd) {
+        if (
+            spaceEnd < nodeBox.width + spacing &&
+            spaceStart > spaceEnd
+        ) {
             return 'start';
         }
     } else if (placement === 'bottom') {
         // Flip above when it offers more vertical space.
-        if (spaceBottom < nodeBox.height + spacing &&
-            spaceTop > spaceBottom) {
+        if (
+            spaceBottom < nodeBox.height + spacing &&
+            spaceTop > spaceBottom
+        ) {
             return 'top';
         }
     } else if (placement === 'start') {
         // Flip to inline-end when it offers more horizontal space.
-        if (spaceStart < nodeBox.width + spacing &&
-            spaceEnd > spaceStart) {
+        if (
+            spaceStart < nodeBox.width + spacing &&
+            spaceEnd > spaceStart
+        ) {
             return 'end';
         }
     } else if (placement === 'auto') {
@@ -161,7 +169,7 @@ export function getPopperPlacement(nodeBox, referenceBox, minimumBox, placement,
     }
 
     return placement;
-};
+}
 
 /**
  * Unregisters a popper and removes shared listeners when no poppers remain.
@@ -178,7 +186,7 @@ export function removePopper(popper) {
     $.removeEvent(document, 'scroll.ui.popper');
 
     running = false;
-};
+}
 
 /**
  * Updates a popper arrow position.
@@ -259,4 +267,4 @@ export function updateArrow(popper, placement, position, rtl) {
     }
 
     $.setStyle(popper.options.arrow, arrowStyles);
-};
+}

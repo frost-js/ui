@@ -1,6 +1,6 @@
-import BaseComponent from './../base-component.js';
-import { $ } from './../globals.js';
-import { waitForTransition } from './../helpers/transition.js';
+import BaseComponent from '../base-component.js';
+import { $ } from '../globals.js';
+import { waitForTransition } from '../helpers/transition.js';
 
 /**
  * Controls a dismissible alert element.

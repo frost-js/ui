@@ -1,7 +1,7 @@
-import BaseComponent from './../base-component.js';
-import { $, document, window } from './../globals.js';
-import { getScrollContainer } from './../helpers/scroll.js';
-import { lockStyles } from './../helpers/styles.js';
+import BaseComponent from '../base-component.js';
+import { $, document, window } from '../globals.js';
+import { getScrollContainer } from '../helpers/scroll.js';
+import { lockStyles } from '../helpers/styles.js';
 import {
     addPopper,
     getPhysicalPlacement,

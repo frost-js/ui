@@ -1,6 +1,6 @@
-import BaseComponent from './../base-component.js';
-import { $ } from './../globals.js';
-import { waitForTransition } from './../helpers/transition.js';
+import BaseComponent from '../base-component.js';
+import { $ } from '../globals.js';
+import { waitForTransition } from '../helpers/transition.js';
 
 /**
  * @typedef {object} ToastOptions
@@ -101,7 +101,7 @@ export default class Toast extends BaseComponent {
 
             if (this.options.autohide) {
                 this.#timer = setTimeout(
-                    (_) => {
+                    () => {
                         this.#timer = null;
                         this.hide();
                     },

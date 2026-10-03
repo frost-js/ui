@@ -1,7 +1,7 @@
-import BaseComponent from './../base-component.js';
-import { $ } from './../globals.js';
-import { getTargetSelector } from './../helpers/target.js';
-import { waitForTransition } from './../helpers/transition.js';
+import BaseComponent from '../base-component.js';
+import { $ } from '../globals.js';
+import { getTargetSelector } from '../helpers/target.js';
+import { waitForTransition } from '../helpers/transition.js';
 import { getDimension } from './helpers.js';
 
 /**

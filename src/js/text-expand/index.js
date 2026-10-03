@@ -1,8 +1,8 @@
-import { $, document } from './../globals.js';
+import { $, document } from '../globals.js';
 
 // Resize expanding text areas as their content changes.
-$.addEventDelegate(document, 'change.ui.expand input.ui.expand', '.text-expand', (e) => {
-    const textArea = e.currentTarget;
+$.addEventDelegate(document, 'change.ui.expand input.ui.expand', '.text-expand', (event) => {
+    const textArea = event.currentTarget;
 
     $.setStyle(textArea, { height: 'inherit' });
 

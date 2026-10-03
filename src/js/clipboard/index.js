@@ -1,12 +1,12 @@
-import { $, document } from './../globals.js';
-import { getDataset } from './../helpers/component.js';
-import { getTarget } from './../helpers/target.js';
+import { $, document } from '../globals.js';
+import { getDataset } from '../helpers/component.js';
+import { getTarget } from '../helpers/target.js';
 
 // Copy or cut text requested by a clipboard control.
-$.addEventDelegate(document, 'click', '[data-ui-toggle="clipboard"]', (e) => {
-    e.preventDefault();
+$.addEventDelegate(document, 'click', '[data-ui-toggle="clipboard"]', (event) => {
+    event.preventDefault();
 
-    const node = e.currentTarget;
+    const node = event.currentTarget;
     let { action = 'copy', text = null } = getDataset(node);
 
     if (!['copy', 'cut'].includes(action)) {
@@ -42,7 +42,7 @@ $.addEventDelegate(document, 'click', '[data-ui-toggle="clipboard"]', (e) => {
     if ($.exec(action)) {
         $.triggerEvent(node, 'copied.ui.clipboard', {
             data: {
-                action: action,
+                action,
                 text,
             },
         });

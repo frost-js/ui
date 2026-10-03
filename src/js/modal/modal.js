@@ -1,8 +1,8 @@
-import BaseComponent from './../base-component.js';
-import FocusTrap from './../focus-trap/index.js';
-import { $, document } from './../globals.js';
-import { lockBodyScroll, lockScrollPadding } from './../helpers/scroll.js';
-import { waitForTransition } from './../helpers/transition.js';
+import BaseComponent from '../base-component.js';
+import FocusTrap from '../focus-trap/index.js';
+import { $, document } from '../globals.js';
+import { lockBodyScroll, lockScrollPadding } from '../helpers/scroll.js';
+import { waitForTransition } from '../helpers/transition.js';
 import { setStackIndex, updateStack } from './helpers.js';
 
 /**
@@ -154,7 +154,7 @@ export default class Modal extends BaseComponent {
             transitions.push(waitForTransition(this.#backdrop, ['opacity']));
         }
 
-        Promise.all(transitions).then((_) => {
+        Promise.all(transitions).then(() => {
             if (!this.node) {
                 return;
             }
@@ -325,7 +325,7 @@ export default class Modal extends BaseComponent {
             $.removeClass(modal, 'modal-static');
 
             return waitForTransition(node, ['transform']);
-        }).then((_) => {
+        }).then(() => {
             if (this.node) {
                 this.#zooming = false;
             }
