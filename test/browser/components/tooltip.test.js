@@ -12,14 +12,14 @@ test.describe('Tooltip', () => {
         for (const { name, show } of [
             {
                 name: 'class',
-                show: (_) => {
+                show: () => {
                     const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                     UI.Tooltip.init(tooltipToggle1).show();
                 },
             },
             {
                 name: 'QuerySet',
-                show: (_) => {
+                show: () => {
                     $('#tooltip-toggle-1').tooltip('show');
                 },
             },
@@ -40,7 +40,7 @@ test.describe('Tooltip', () => {
         }
 
         test('shows multiple tooltips (QuerySet)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('button').tooltip('show');
             });
 
@@ -52,7 +52,7 @@ test.describe('Tooltip', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 const tooltip = UI.Tooltip.init(tooltipToggle1);
                 tooltip.show();
@@ -64,12 +64,12 @@ test.describe('Tooltip', () => {
         });
 
         test('can be called on shown tooltip', async ({ page }) => {
-            await page.evaluate((_) => new Promise((resolve) => {
+            await page.evaluate(() => new Promise((resolve) => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
-                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', (_) => resolve());
+                $.addEventOnce(tooltipToggle1, 'shown.ui.tooltip', () => resolve());
                 UI.Tooltip.init(tooltipToggle1).show();
             }));
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1).show();
             });
@@ -79,7 +79,7 @@ test.describe('Tooltip', () => {
         });
 
         test('shows the tooltip on inline-start in RTL', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.documentElement.dir = 'rtl';
                 UI.Tooltip.init($.findOne('#tooltip-toggle-1'), {
                     fixed: true,
@@ -93,7 +93,7 @@ test.describe('Tooltip', () => {
         });
 
         test('shows when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1).show();
                 const transition = $.findOne('.tooltip').getAnimations()
@@ -106,15 +106,15 @@ test.describe('Tooltip', () => {
         });
 
         test('can be interrupted by hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 window.tooltipShownEventTriggered = false;
                 window.tooltipHiddenEventTriggered = false;
 
-                $.addEvent(tooltipToggle1, 'shown.ui.tooltip', (_) => {
+                $.addEvent(tooltipToggle1, 'shown.ui.tooltip', () => {
                     window.tooltipShownEventTriggered = true;
                 });
-                $.addEvent(tooltipToggle1, 'hidden.ui.tooltip', (_) => {
+                $.addEvent(tooltipToggle1, 'hidden.ui.tooltip', () => {
                     window.tooltipHiddenEventTriggered = true;
                 });
 
@@ -124,8 +124,8 @@ test.describe('Tooltip', () => {
             });
 
             await expect(page.locator('.tooltip')).toHaveCount(0);
-            expect(await page.evaluate((_) => window.tooltipShownEventTriggered)).toBe(false);
-            expect(await page.evaluate((_) => window.tooltipHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.tooltipShownEventTriggered)).toBe(false);
+            expect(await page.evaluate(() => window.tooltipHiddenEventTriggered)).toBe(true);
         });
     });
 
@@ -133,11 +133,11 @@ test.describe('Tooltip', () => {
         for (const { name, prepare, refresh } of [
             {
                 name: 'class',
-                prepare: (_) => {
+                prepare: () => {
                     const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                     UI.Tooltip.init(tooltipToggle1).show();
                 },
-                refresh: (_) => {
+                refresh: () => {
                     const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                     $.setDataset(tooltipToggle1, { uiTitle: 'Test' });
                     UI.Tooltip.init(tooltipToggle1).refresh();
@@ -145,10 +145,10 @@ test.describe('Tooltip', () => {
             },
             {
                 name: 'QuerySet',
-                prepare: (_) => {
+                prepare: () => {
                     $('#tooltip-toggle-1').tooltip('show');
                 },
-                refresh: (_) => {
+                refresh: () => {
                     $('#tooltip-toggle-1')
                         .setDataset({ uiTitle: 'Test' })
                         .tooltip('refresh');
@@ -165,10 +165,10 @@ test.describe('Tooltip', () => {
         }
 
         test('refreshes multiple tooltips titles (QuerySet)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('button').tooltip('show');
             });
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('button')
                     .setDataset({ uiTitle: 'Test' })
                     .tooltip('refresh');
@@ -182,14 +182,14 @@ test.describe('Tooltip', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                     UI.Tooltip.init(tooltipToggle1, { title: 'Test' }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#tooltip-toggle-1')
                         .tooltip({ title: 'Test' })
                         .show();
@@ -205,7 +205,7 @@ test.describe('Tooltip', () => {
         }
 
         test('works with title option (data-ui-title)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 $.setDataset(tooltipToggle1, { uiTitle: 'Test' });
                 UI.Tooltip.init(tooltipToggle1).show();
@@ -216,7 +216,7 @@ test.describe('Tooltip', () => {
         });
 
         test('works with title option (title)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 $.setAttribute(tooltipToggle1, { title: 'Test' });
                 UI.Tooltip.init(tooltipToggle1).show();
@@ -228,7 +228,7 @@ test.describe('Tooltip', () => {
         });
 
         test('prioritizes dataset over setting', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 $.setDataset(tooltipToggle1, { uiTitle: 'Test' });
                 UI.Tooltip.init(tooltipToggle1, { title: 'Test 2' }).show();
@@ -239,7 +239,7 @@ test.describe('Tooltip', () => {
         });
 
         test('prioritizes setting over attribute', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 $.setAttribute(tooltipToggle1, { title: 'Test 2' });
                 UI.Tooltip.init(tooltipToggle1, { title: 'Test' }).show();
@@ -254,7 +254,7 @@ test.describe('Tooltip', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                     UI.Tooltip.init(tooltipToggle1, {
                         template: '<div class="tooltip" role="tooltip" data-test="Test"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
@@ -263,7 +263,7 @@ test.describe('Tooltip', () => {
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#tooltip-toggle-1').tooltip({
                         template: '<div class="tooltip" role="tooltip" data-test="Test"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
                     }).show();
@@ -282,7 +282,7 @@ test.describe('Tooltip', () => {
         }
 
         test('works with template option (data-ui-template)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 $.setDataset(tooltipToggle1, {
                     uiTemplate: '<div class="tooltip" role="tooltip" data-test="Test"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
@@ -300,7 +300,7 @@ test.describe('Tooltip', () => {
 
     test.describe('html option', () => {
         test('escapes html tags', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { title: '<b>Test</b>' }).show();
             });
@@ -312,14 +312,14 @@ test.describe('Tooltip', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                     UI.Tooltip.init(tooltipToggle1, { title: '<b>Test</b>', html: true }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#tooltip-toggle-1')
                         .tooltip({ title: '<b>Test</b>', html: true })
                         .show();
@@ -334,7 +334,7 @@ test.describe('Tooltip', () => {
         }
 
         test('works with html option (data-ui-html)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 $.setDataset(tooltipToggle1, { uiHtml: true });
                 UI.Tooltip.init(tooltipToggle1, { title: '<b>Test</b>' }).show();
@@ -347,7 +347,7 @@ test.describe('Tooltip', () => {
 
     test.describe('sanitize option', () => {
         test('sanitizes html tags', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, {
                     title: '<b data-test="Test">Test</b>',
@@ -362,7 +362,7 @@ test.describe('Tooltip', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                     UI.Tooltip.init(tooltipToggle1, {
                         title: '<b data-test="Test">Test</b>',
@@ -373,7 +373,7 @@ test.describe('Tooltip', () => {
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#tooltip-toggle-1')
                         .tooltip({
                             title: '<b data-test="Test">Test</b>',
@@ -393,7 +393,7 @@ test.describe('Tooltip', () => {
         }
 
         test('works with sanitize option (data-ui-sanitize)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 $.setDataset(tooltipToggle1, { uiSanitize: false });
                 UI.Tooltip.init(tooltipToggle1, {
@@ -409,7 +409,7 @@ test.describe('Tooltip', () => {
 
     test.describe('trigger option', () => {
         test('shows on mouseover with hover trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: 'hover' });
             });
@@ -419,7 +419,7 @@ test.describe('Tooltip', () => {
         });
 
         test('shows on focus with focus trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: 'focus' });
             });
@@ -431,14 +431,14 @@ test.describe('Tooltip', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                     UI.Tooltip.init(tooltipToggle1, { trigger: 'click' });
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#tooltip-toggle-1').tooltip({ trigger: 'click' });
                 },
             },
@@ -454,7 +454,7 @@ test.describe('Tooltip', () => {
         }
 
         test('hides on mouseout with hover trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: 'hover' }).show();
             });
@@ -467,7 +467,7 @@ test.describe('Tooltip', () => {
         });
 
         test('hides on blur with focus trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: 'focus' }).show();
             });
@@ -480,7 +480,7 @@ test.describe('Tooltip', () => {
         });
 
         test('hides on click with click trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: 'click' }).show();
             });
@@ -493,7 +493,7 @@ test.describe('Tooltip', () => {
         });
 
         test('does not show on mouseover without hover trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: '' });
             });
@@ -503,7 +503,7 @@ test.describe('Tooltip', () => {
         });
 
         test('does not show on focus without focus trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: '' });
             });
@@ -513,7 +513,7 @@ test.describe('Tooltip', () => {
         });
 
         test('does not show on click without click trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: '' });
             });
@@ -523,7 +523,7 @@ test.describe('Tooltip', () => {
         });
 
         test('does not hide on mouseout without hover trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: '' }).show();
             });
@@ -533,7 +533,7 @@ test.describe('Tooltip', () => {
         });
 
         test('does not hide on blur without focus trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: '' }).show();
             });
@@ -543,7 +543,7 @@ test.describe('Tooltip', () => {
         });
 
         test('does not hide on click without click trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: '' }).show();
             });
@@ -553,7 +553,7 @@ test.describe('Tooltip', () => {
         });
 
         test('works with trigger option (data-ui-trigger)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 $.setDataset(tooltipToggle1, { uiTrigger: 'click' });
                 UI.Tooltip.init(tooltipToggle1);
@@ -564,7 +564,7 @@ test.describe('Tooltip', () => {
         });
 
         test('works with multiple trigger options', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tooltipToggle1 = $.findOne('#tooltip-toggle-1');
                 UI.Tooltip.init(tooltipToggle1, { trigger: 'hover focus' });
             });

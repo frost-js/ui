@@ -6,7 +6,7 @@
  * @returns {Promise<number>} The scrollbar size in pixels.
  */
 export async function measureScrollbarSize(page) {
-    return page.evaluate((_) => {
+    return page.evaluate(() => {
         const node = $.create('div', {
             style: {
                 height: '100px',

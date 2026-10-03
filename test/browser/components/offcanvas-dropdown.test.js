@@ -2,7 +2,7 @@ import { expect, test } from '#test';
 
 test.describe('Offcanvas/Dropdown', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML =
                 '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas">' +
@@ -21,25 +21,25 @@ test.describe('Offcanvas/Dropdown', () => {
 
     test.describe('user events', () => {
         test.beforeEach(async ({ page }) => {
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const offcanvas = $.findOne('#offcanvas');
 
                 await new Promise((resolve) => {
-                    $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
+                    $.addEventOnce(offcanvas, 'shown.ui.offcanvas', () => resolve());
                     UI.Offcanvas.init(offcanvas).show();
                 });
 
                 const dropdownToggle = $.findOne('#dropdown-toggle');
 
                 await new Promise((resolve) => {
-                    $.addEventOnce(dropdownToggle, 'shown.ui.dropdown', (_) => resolve());
+                    $.addEventOnce(dropdownToggle, 'shown.ui.dropdown', () => resolve());
                     UI.Dropdown.init(dropdownToggle).show();
                 });
             });
         });
 
         test('hides the offcanvas and dropdown on document click when dropdown is open', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.click(document.body);
             });
 
@@ -51,7 +51,7 @@ test.describe('Offcanvas/Dropdown', () => {
         });
 
         test('does not hide the offcanvas on escape when dropdown is open', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.body.dispatchEvent(new KeyboardEvent('keydown', {
                     bubbles: true,
                     code: 'Escape',

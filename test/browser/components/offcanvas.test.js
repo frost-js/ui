@@ -7,7 +7,7 @@ test.use({ reducedMotion: 'no-preference' });
 
 test.describe('Offcanvas', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML =
                 '<button class="btn btn-secondary" id="offcanvas-toggle-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvas1" type="button"></button>' +
                 '<button class="btn btn-secondary" id="offcanvas-toggle-2" data-ui-toggle="offcanvas" data-ui-target="#offcanvas2" type="button"></button>' +
@@ -43,7 +43,7 @@ test.describe('Offcanvas', () => {
         test('creates an offcanvas (data-ui-toggle)', async ({ page }) => {
             await page.locator('#offcanvas-toggle-1').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#offcanvas1', 'offcanvas') instanceof UI.Offcanvas)).toBe(true);
         });
     });
@@ -73,7 +73,7 @@ test.describe('Offcanvas', () => {
         }
 
         test('cleans up a shown offcanvas', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, {
                     height: '2000px',
                     paddingRight: '10px',
@@ -85,11 +85,11 @@ test.describe('Offcanvas', () => {
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            const hiddenEventTriggered = await page.evaluate((_) => {
+            const hiddenEventTriggered = await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 let triggered = false;
 
-                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', () => {
                     triggered = true;
                 });
                 UI.Offcanvas.init(offcanvas1).dispose();
@@ -111,21 +111,21 @@ test.describe('Offcanvas', () => {
                     },
                 },
             ]);
-            expect(await page.evaluate((_) => $.hasData('#offcanvas1', 'offcanvas'))).toBe(false);
+            expect(await page.evaluate(() => $.hasData('#offcanvas1', 'offcanvas'))).toBe(false);
         });
 
         test('cleans up while showing', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
 
                 window.offcanvasDisposeEvents = {
                     hidden: false,
                     shown: false,
                 };
-                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', () => {
                     window.offcanvasDisposeEvents.hidden = true;
                 });
-                $.addEvent(offcanvas1, 'shown.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'shown.ui.offcanvas', () => {
                     window.offcanvasDisposeEvents.shown = true;
                 });
 
@@ -147,7 +147,7 @@ test.describe('Offcanvas', () => {
                     styles: { overflow: '' },
                 },
             ]);
-            expect(await page.evaluate((_) => window.offcanvasDisposeEvents)).toEqual({
+            expect(await page.evaluate(() => window.offcanvasDisposeEvents)).toEqual({
                 hidden: false,
                 shown: false,
             });
@@ -198,7 +198,7 @@ test.describe('Offcanvas', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 const offcanvas = UI.Offcanvas.init(offcanvas1);
                 offcanvas.show();
@@ -210,13 +210,13 @@ test.describe('Offcanvas', () => {
         });
 
         test('can be called on shown offcanvas', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
@@ -336,7 +336,7 @@ test.describe('Offcanvas', () => {
         }
 
         test('hides the offcanvas (data-ui-dismiss)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
@@ -352,30 +352,30 @@ test.describe('Offcanvas', () => {
         });
 
         test('does not remove the offcanvas after hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).hide();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#offcanvas1', 'offcanvas') instanceof UI.Offcanvas)).toBe(true);
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 const offcanvas = UI.Offcanvas.init(offcanvas1);
                 offcanvas.hide();
@@ -387,7 +387,7 @@ test.describe('Offcanvas', () => {
         });
 
         test('can be called on hidden offcanvas', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).hide();
             });
@@ -424,7 +424,7 @@ test.describe('Offcanvas', () => {
         }
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 const offcanvas = UI.Offcanvas.init(offcanvas1);
                 offcanvas.toggle();
@@ -472,13 +472,13 @@ test.describe('Offcanvas', () => {
         }
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 const offcanvas = UI.Offcanvas.init(offcanvas1);
                 offcanvas.toggle();
@@ -492,11 +492,11 @@ test.describe('Offcanvas', () => {
 
     test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 let triggered = false;
 
-                $.addEvent(offcanvas1, 'show.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'show.ui.offcanvas', () => {
                     triggered = true;
                 });
                 UI.Offcanvas.init(offcanvas1).show();
@@ -508,11 +508,11 @@ test.describe('Offcanvas', () => {
         });
 
         test('triggers shown event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 window.offcanvasShownEventTriggered = false;
 
-                $.addEvent(offcanvas1, 'shown.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'shown.ui.offcanvas', () => {
                     window.offcanvasShownEventTriggered = true;
                 });
                 UI.Offcanvas.init(offcanvas1).show();
@@ -520,21 +520,21 @@ test.describe('Offcanvas', () => {
 
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            expect(await page.evaluate((_) => window.offcanvasShownEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.offcanvasShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 let triggered = false;
 
-                $.addEvent(offcanvas1, 'hide.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'hide.ui.offcanvas', () => {
                     triggered = true;
                 });
                 UI.Offcanvas.init(offcanvas1).hide();
@@ -546,17 +546,17 @@ test.describe('Offcanvas', () => {
         });
 
         test('triggers hidden event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 window.offcanvasHiddenEventTriggered = false;
 
-                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', () => {
                     window.offcanvasHiddenEventTriggered = true;
                 });
                 UI.Offcanvas.init(offcanvas1).hide();
@@ -564,15 +564,15 @@ test.describe('Offcanvas', () => {
 
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            expect(await page.evaluate((_) => window.offcanvasHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.offcanvasHiddenEventTriggered)).toBe(true);
         });
 
         test('triggers show event (toggle)', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 let triggered = false;
 
-                $.addEvent(offcanvas1, 'show.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'show.ui.offcanvas', () => {
                     triggered = true;
                 });
                 UI.Offcanvas.init(offcanvas1).toggle();
@@ -584,11 +584,11 @@ test.describe('Offcanvas', () => {
         });
 
         test('triggers shown event (toggle)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 window.offcanvasShownEventTriggered = false;
 
-                $.addEvent(offcanvas1, 'shown.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'shown.ui.offcanvas', () => {
                     window.offcanvasShownEventTriggered = true;
                 });
                 UI.Offcanvas.init(offcanvas1).toggle();
@@ -596,21 +596,21 @@ test.describe('Offcanvas', () => {
 
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'true');
-            expect(await page.evaluate((_) => window.offcanvasShownEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.offcanvasShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event (toggle)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 let triggered = false;
 
-                $.addEvent(offcanvas1, 'hide.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'hide.ui.offcanvas', () => {
                     triggered = true;
                 });
                 UI.Offcanvas.init(offcanvas1).toggle();
@@ -622,17 +622,17 @@ test.describe('Offcanvas', () => {
         });
 
         test('triggers hidden event (toggle)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 window.offcanvasHiddenEventTriggered = false;
 
-                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', (_) => {
+                $.addEvent(offcanvas1, 'hidden.ui.offcanvas', () => {
                     window.offcanvasHiddenEventTriggered = true;
                 });
                 UI.Offcanvas.init(offcanvas1).toggle();
@@ -640,13 +640,13 @@ test.describe('Offcanvas', () => {
 
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-modal', 'false');
-            expect(await page.evaluate((_) => window.offcanvasHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.offcanvasHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
-                $.addEvent(offcanvas1, 'show.ui.offcanvas', (_) => false);
+                $.addEvent(offcanvas1, 'show.ui.offcanvas', () => false);
                 UI.Offcanvas.init(offcanvas1).show();
             });
 
@@ -657,7 +657,7 @@ test.describe('Offcanvas', () => {
         });
 
         test('can be prevented from showing (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 $.addEvent(offcanvas1, 'show.ui.offcanvas', (event) => {
                     event.preventDefault();
@@ -672,15 +672,15 @@ test.describe('Offcanvas', () => {
         });
 
         test('can be prevented from hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
-                $.addEvent(offcanvas1, 'hide.ui.offcanvas', (_) => false);
+                $.addEvent(offcanvas1, 'hide.ui.offcanvas', () => false);
                 UI.Offcanvas.init(offcanvas1).hide();
             });
 
@@ -693,7 +693,7 @@ test.describe('Offcanvas', () => {
 
     test.describe('keyboard option', () => {
         test('hides the offcanvas on escape', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
@@ -711,14 +711,14 @@ test.describe('Offcanvas', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const offcanvas1 = $.findOne('#offcanvas1');
                     UI.Offcanvas.init(offcanvas1, { keyboard: false }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#offcanvas1')
                         .offcanvas({ keyboard: false })
                         .show();
@@ -740,7 +740,7 @@ test.describe('Offcanvas', () => {
         }
 
         test('works with keyboard option (data-ui-keyboard)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 $.setDataset(offcanvas1, { uiKeyboard: false });
                 UI.Offcanvas.init(offcanvas1).show();
@@ -760,7 +760,7 @@ test.describe('Offcanvas', () => {
 
     test.describe('backdrop option', () => {
         test('adds backdrop to document body', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
@@ -771,14 +771,14 @@ test.describe('Offcanvas', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const offcanvas1 = $.findOne('#offcanvas1');
                     UI.Offcanvas.init(offcanvas1, { backdrop: false }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#offcanvas1')
                         .offcanvas({ backdrop: false })
                         .show();
@@ -793,7 +793,7 @@ test.describe('Offcanvas', () => {
         }
 
         test('works with backdrop option (data-ui-backdrop)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 $.setDataset(offcanvas1, { uiBackdrop: false });
                 UI.Offcanvas.init(offcanvas1).show();
@@ -804,13 +804,13 @@ test.describe('Offcanvas', () => {
         });
 
         test('hides the offcanvas on document click (with backdrop)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.click(document.body);
             });
 
@@ -822,13 +822,13 @@ test.describe('Offcanvas', () => {
         });
 
         test('does not hide the offcanvas on document click (without backdrop)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1, { backdrop: false }).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.click(document.body);
             });
 
@@ -840,13 +840,13 @@ test.describe('Offcanvas', () => {
         });
 
         test('does not hide the offcanvas on document click (mousedown on offcanvas)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.triggerEvent('#offcanvas1', 'mousedown');
                 $.click(document.body);
             });
@@ -859,16 +859,16 @@ test.describe('Offcanvas', () => {
         });
 
         test('hides the offcanvas on offcanvas click (mousedown on backdrop)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.triggerEvent(document.body, 'mousedown');
             });
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.click('#offcanvas1');
             });
 
@@ -882,7 +882,7 @@ test.describe('Offcanvas', () => {
 
     test.describe('scroll option', () => {
         test('prevents scroll on document body', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
@@ -898,14 +898,14 @@ test.describe('Offcanvas', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const offcanvas1 = $.findOne('#offcanvas1');
                     UI.Offcanvas.init(offcanvas1, { scroll: true }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#offcanvas1')
                         .offcanvas({ scroll: true })
                         .show();
@@ -925,7 +925,7 @@ test.describe('Offcanvas', () => {
         }
 
         test('works with scroll option (data-ui-scroll)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 $.setDataset(offcanvas1, { uiScroll: true });
                 UI.Offcanvas.init(offcanvas1).show();
@@ -948,7 +948,7 @@ test.describe('Offcanvas', () => {
                 `${scrollbarSize}px` :
                 '';
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, { height: '2000px' });
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
@@ -963,7 +963,7 @@ test.describe('Offcanvas', () => {
         });
 
         test('does not add padding if scrollbars are hidden', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
@@ -979,7 +979,7 @@ test.describe('Offcanvas', () => {
         test('works with existing padding', async ({ page }) => {
             const scrollbarSize = await measureScrollbarSize(page);
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, {
                     height: '2000px',
                     paddingRight: '10px',
@@ -997,14 +997,14 @@ test.describe('Offcanvas', () => {
         });
 
         test('restores scroll padding to document body', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, { height: '2000px' });
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).show();
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).hide();
             });
@@ -1019,7 +1019,7 @@ test.describe('Offcanvas', () => {
         });
 
         test('restores existing scroll padding to document body', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, {
                     height: '2000px',
                     paddingRight: '10px',
@@ -1029,7 +1029,7 @@ test.describe('Offcanvas', () => {
             });
             await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const offcanvas1 = $.findOne('#offcanvas1');
                 UI.Offcanvas.init(offcanvas1).hide();
             });

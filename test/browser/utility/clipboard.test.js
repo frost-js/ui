@@ -7,24 +7,24 @@ test.describe('Clipboard', () => {
         });
 
         test('works with copy action (data-ui-text)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.body.innerHTML = '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 1"></button>';
             });
             await page.locator('#button').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 navigator.clipboard.readText())).toBe('Test 1');
         });
 
         test('works with copy action (data-ui-target)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.body.innerHTML =
                     '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>' +
                     '<div id="test">Test 2</div>';
             });
             await page.locator('#button').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 navigator.clipboard.readText())).toBe('Test 2');
         });
 
@@ -69,14 +69,14 @@ test.describe('Clipboard', () => {
         }
 
         test('does not remove text content for elements', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.body.innerHTML =
                     '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>' +
                     '<div id="test">Test 7</div>';
             });
             await page.locator('#button').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 navigator.clipboard.readText())).toBe('Test 7');
             await expect(page.locator('#test')).toHaveText('Test 7');
         });
@@ -88,7 +88,7 @@ test.describe('Clipboard', () => {
         });
 
         test('throws for an invalid action', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.body.innerHTML = '<button id="button" data-ui-toggle="clipboard" data-ui-action="paste"></button>';
             });
 
@@ -104,17 +104,17 @@ test.describe('Clipboard', () => {
 
     test.describe('events', () => {
         test('triggers copied event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.body.innerHTML = '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 8"></button>';
                 window.clipboardCopiedEventTriggered = false;
 
-                $.addEvent('#button', 'copied.ui.clipboard', (_) => {
+                $.addEvent('#button', 'copied.ui.clipboard', () => {
                     window.clipboardCopiedEventTriggered = true;
                 });
             });
             await page.locator('#button').click();
 
-            expect(await page.evaluate((_) => window.clipboardCopiedEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.clipboardCopiedEventTriggered)).toBe(true);
         });
     });
 });

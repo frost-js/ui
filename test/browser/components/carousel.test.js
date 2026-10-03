@@ -85,7 +85,7 @@ test.describe('Carousel', () => {
         }
 
         test('removes the touch swipe event', async ({ page }) => {
-            const defaultPrevented = await page.evaluate((_) => {
+            const defaultPrevented = await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).dispose();
 
@@ -105,11 +105,11 @@ test.describe('Carousel', () => {
         });
 
         test('settles the active slide on disposal without a late event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 window.carouselSlidEventTriggered = false;
 
-                $.addEvent(carousel1, 'slid.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slid.ui.carousel', () => {
                     window.carouselSlidEventTriggered = true;
                 });
 
@@ -121,8 +121,8 @@ test.describe('Carousel', () => {
 
             await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(false);
-            expect(await page.evaluate((_) => $.hasData('#carousel1', 'carousel'))).toBe(false);
+            expect(await page.evaluate(() => window.carouselSlidEventTriggered)).toBe(false);
+            expect(await page.evaluate(() => $.hasData('#carousel1', 'carousel'))).toBe(false);
         });
 
         test('restores drag styles when disposed during swipe completion', async ({ page }) => {
@@ -188,7 +188,7 @@ test.describe('Carousel', () => {
         }
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 const carousel = UI.Carousel.init(carousel1);
                 carousel.cycle();
@@ -201,13 +201,13 @@ test.describe('Carousel', () => {
         });
 
         test('wraps around to first item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(2);
             });
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
@@ -297,7 +297,7 @@ test.describe('Carousel', () => {
         });
 
         test('can be called on current item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(0);
             });
@@ -307,7 +307,7 @@ test.describe('Carousel', () => {
         });
 
         test('can be called with invalid item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(3);
             });
@@ -317,7 +317,7 @@ test.describe('Carousel', () => {
         });
 
         test('can be called with non-numeric item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show('invalid');
             });
@@ -327,7 +327,7 @@ test.describe('Carousel', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 const carousel = UI.Carousel.init(carousel1);
                 carousel.show(1);
@@ -371,7 +371,7 @@ test.describe('Carousel', () => {
         }
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 const carousel = UI.Carousel.init(carousel1);
                 carousel.slide(1);
@@ -384,13 +384,13 @@ test.describe('Carousel', () => {
         });
 
         test('wraps around to first item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(2);
             });
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).slide(1);
             });
@@ -400,7 +400,7 @@ test.describe('Carousel', () => {
         });
 
         test('wraps around to last item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).slide(-1);
             });
@@ -441,7 +441,7 @@ test.describe('Carousel', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 const carousel = UI.Carousel.init(carousel1);
                 carousel.next();
@@ -485,7 +485,7 @@ test.describe('Carousel', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 const carousel = UI.Carousel.init(carousel1);
                 carousel.prev();
@@ -500,7 +500,7 @@ test.describe('Carousel', () => {
 
     test.describe('cycle', () => {
         test('starts cycling (cycle)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
@@ -512,7 +512,7 @@ test.describe('Carousel', () => {
         });
 
         test('starts cycling (show)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(1);
             });
@@ -524,7 +524,7 @@ test.describe('Carousel', () => {
         });
 
         test('starts cycling (slide)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).slide(1);
             });
@@ -536,7 +536,7 @@ test.describe('Carousel', () => {
         });
 
         test('starts cycling (next)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).next();
             });
@@ -548,7 +548,7 @@ test.describe('Carousel', () => {
         });
 
         test('starts cycling (prev)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).prev();
             });
@@ -560,13 +560,13 @@ test.describe('Carousel', () => {
         });
 
         test('starts cycling (swipe)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1);
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 250 }));
             });
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 window.dispatchEvent(new MouseEvent('mouseup'));
                 const carousel1 = $.findOne('#carousel1');
                 carousel1.dispatchEvent(new MouseEvent('mouseleave'));
@@ -579,7 +579,7 @@ test.describe('Carousel', () => {
         });
 
         test('continues cycling after the document becomes visible', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 Object.defineProperty(document, 'visibilityState', {
                     configurable: true,
                     value: 'hidden',
@@ -588,7 +588,7 @@ test.describe('Carousel', () => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 Object.defineProperty(document, 'visibilityState', {
                     configurable: true,
                     value: 'visible',
@@ -605,11 +605,11 @@ test.describe('Carousel', () => {
 
     test.describe('events', () => {
         test('triggers slide event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 let triggered = false;
 
-                $.addEvent(carousel1, 'slide.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slide.ui.carousel', () => {
                     triggered = true;
                 });
                 UI.Carousel.init(carousel1).cycle();
@@ -621,27 +621,27 @@ test.describe('Carousel', () => {
         });
 
         test('triggers slid event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 window.carouselSlidEventTriggered = false;
 
-                $.addEvent(carousel1, 'slid.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slid.ui.carousel', () => {
                     window.carouselSlidEventTriggered = true;
                 });
                 UI.Carousel.init(carousel1).cycle();
             });
 
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
         });
 
         test('triggers slide event (show)', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 let triggered = false;
 
-                $.addEvent(carousel1, 'slide.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slide.ui.carousel', () => {
                     triggered = true;
                 });
                 UI.Carousel.init(carousel1).show(1);
@@ -653,27 +653,27 @@ test.describe('Carousel', () => {
         });
 
         test('triggers slid event (show)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 window.carouselSlidEventTriggered = false;
 
-                $.addEvent(carousel1, 'slid.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slid.ui.carousel', () => {
                     window.carouselSlidEventTriggered = true;
                 });
                 UI.Carousel.init(carousel1).show(1);
             });
 
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
         });
 
         test('triggers slide event (slide)', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 let triggered = false;
 
-                $.addEvent(carousel1, 'slide.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slide.ui.carousel', () => {
                     triggered = true;
                 });
                 UI.Carousel.init(carousel1).slide(1);
@@ -685,27 +685,27 @@ test.describe('Carousel', () => {
         });
 
         test('triggers slid event (slide)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 window.carouselSlidEventTriggered = false;
 
-                $.addEvent(carousel1, 'slid.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slid.ui.carousel', () => {
                     window.carouselSlidEventTriggered = true;
                 });
                 UI.Carousel.init(carousel1).slide(1);
             });
 
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
         });
 
         test('triggers slide event (next)', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 let triggered = false;
 
-                $.addEvent(carousel1, 'slide.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slide.ui.carousel', () => {
                     triggered = true;
                 });
                 UI.Carousel.init(carousel1).next();
@@ -717,27 +717,27 @@ test.describe('Carousel', () => {
         });
 
         test('triggers slid event (next)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 window.carouselSlidEventTriggered = false;
 
-                $.addEvent(carousel1, 'slid.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slid.ui.carousel', () => {
                     window.carouselSlidEventTriggered = true;
                 });
                 UI.Carousel.init(carousel1).next();
             });
 
             await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
-            expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
         });
 
         test('triggers slide event (prev)', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 let triggered = false;
 
-                $.addEvent(carousel1, 'slide.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slide.ui.carousel', () => {
                     triggered = true;
                 });
                 UI.Carousel.init(carousel1).prev();
@@ -749,29 +749,29 @@ test.describe('Carousel', () => {
         });
 
         test('triggers slid event (prev)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 window.carouselSlidEventTriggered = false;
 
-                $.addEvent(carousel1, 'slid.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slid.ui.carousel', () => {
                     window.carouselSlidEventTriggered = true;
                 });
                 UI.Carousel.init(carousel1).prev();
             });
 
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
-            expect(await page.evaluate((_) => window.carouselSlidEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.carouselSlidEventTriggered)).toBe(true);
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
         });
 
         test('uses the physical direction for slide events in RTL', async ({ page }) => {
-            const direction = await page.evaluate((_) => {
+            const direction = await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 carousel1.dir = 'rtl';
                 let direction;
 
-                $.addEvent(carousel1, 'slide.ui.carousel', (e) => {
-                    direction = e.direction;
+                $.addEvent(carousel1, 'slide.ui.carousel', (event) => {
+                    direction = event.direction;
                 });
                 UI.Carousel.init(carousel1).next();
 
@@ -782,14 +782,14 @@ test.describe('Carousel', () => {
         });
 
         test('can start another slide from the slid event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 const carousel = UI.Carousel.init(carousel1);
                 let firstSlide = true;
 
                 window.carouselSecondSlidEventTriggered = false;
 
-                $.addEvent(carousel1, 'slid.ui.carousel', (_) => {
+                $.addEvent(carousel1, 'slid.ui.carousel', () => {
                     if (firstSlide) {
                         firstSlide = false;
                         carousel.next();
@@ -801,15 +801,15 @@ test.describe('Carousel', () => {
                 carousel.next();
             });
 
-            await page.waitForFunction((_) => window.carouselSecondSlidEventTriggered);
+            await page.waitForFunction(() => window.carouselSecondSlidEventTriggered);
             await expect(page.locator('#carousel-1-item-3')).toHaveClass(/\bactive\b/);
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
         });
 
         test('can be prevented from sliding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
-                $.addEvent(carousel1, 'slide.ui.carousel', (_) => false);
+                $.addEvent(carousel1, 'slide.ui.carousel', () => false);
                 UI.Carousel.init(carousel1).next();
             });
 
@@ -819,7 +819,7 @@ test.describe('Carousel', () => {
         });
 
         test('can be prevented from sliding (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 $.addEvent(carousel1, 'slide.ui.carousel', (event) => {
                     event.preventDefault();
@@ -837,14 +837,14 @@ test.describe('Carousel', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const carousel1 = $.findOne('#carousel1');
                     UI.Carousel.init(carousel1, { interval: 300 }).cycle();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#carousel1')
                         .carousel({ interval: 300 })
                         .cycle();
@@ -862,7 +862,7 @@ test.describe('Carousel', () => {
         }
 
         test('works with interval option (data-ui-interval)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 $.setDataset(carousel1, { uiInterval: 300 });
                 UI.Carousel.init(carousel1).cycle();
@@ -878,7 +878,7 @@ test.describe('Carousel', () => {
 
     test.describe('keyboard option', () => {
         test('shows the next item on right arrow', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1);
             });
@@ -889,7 +889,7 @@ test.describe('Carousel', () => {
         });
 
         test('shows the previous item on left arrow', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(2);
             });
@@ -902,7 +902,7 @@ test.describe('Carousel', () => {
         });
 
         test('shows the next item on left arrow in RTL', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 carousel1.dir = 'rtl';
                 UI.Carousel.init(carousel1);
@@ -914,7 +914,7 @@ test.describe('Carousel', () => {
         });
 
         test('shows the previous item on right arrow in RTL', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 carousel1.dir = 'rtl';
                 UI.Carousel.init(carousel1);
@@ -928,14 +928,14 @@ test.describe('Carousel', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const carousel1 = $.findOne('#carousel1');
                     UI.Carousel.init(carousel1, { keyboard: false });
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#carousel1').carousel({ keyboard: false });
                 },
             },
@@ -958,7 +958,7 @@ test.describe('Carousel', () => {
         }
 
         test('works with keyboard option and next (data-ui-keyboard)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 $.setDataset(carousel1, { uiKeyboard: false });
                 UI.Carousel.init(carousel1);
@@ -970,7 +970,7 @@ test.describe('Carousel', () => {
         });
 
         test('works with keyboard option and prev (data-ui-keyboard)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 $.setDataset(carousel1, { uiKeyboard: false });
                 UI.Carousel.init(carousel1);
@@ -984,7 +984,7 @@ test.describe('Carousel', () => {
 
     test.describe('pause option', () => {
         test('pauses on mouseenter', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
@@ -996,7 +996,7 @@ test.describe('Carousel', () => {
         });
 
         test('resumes on mouseleave', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).cycle();
             });
@@ -1012,14 +1012,14 @@ test.describe('Carousel', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const carousel1 = $.findOne('#carousel1');
                     UI.Carousel.init(carousel1, { pause: false }).cycle();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#carousel1')
                         .carousel({ pause: false })
                         .cycle();
@@ -1038,7 +1038,7 @@ test.describe('Carousel', () => {
         }
 
         test('works with pause option (data-ui-pause)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 $.setDataset(carousel1, { uiPause: false });
                 UI.Carousel.init(carousel1).cycle();
@@ -1055,13 +1055,13 @@ test.describe('Carousel', () => {
 
     test.describe('wrap option', () => {
         test('wraps around to first item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).show(2);
             });
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).next();
             });
@@ -1071,7 +1071,7 @@ test.describe('Carousel', () => {
         });
 
         test('wraps around to last item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).prev();
             });
@@ -1083,23 +1083,23 @@ test.describe('Carousel', () => {
         for (const { name, prepare, run } of [
             {
                 name: 'class',
-                prepare: (_) => {
+                prepare: () => {
                     const carousel1 = $.findOne('#carousel1');
                     UI.Carousel.init(carousel1, { wrap: false }).show(2);
                 },
-                run: (_) => {
+                run: () => {
                     const carousel1 = $.findOne('#carousel1');
                     UI.Carousel.init(carousel1).next();
                 },
             },
             {
                 name: 'QuerySet',
-                prepare: (_) => {
+                prepare: () => {
                     $('#carousel1')
                         .carousel({ wrap: false })
                         .show(2);
                 },
-                run: (_) => {
+                run: () => {
                     $('#carousel1').carousel('next');
                 },
             },
@@ -1118,14 +1118,14 @@ test.describe('Carousel', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const carousel1 = $.findOne('#carousel1');
                     UI.Carousel.init(carousel1, { wrap: false }).prev();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#carousel1')
                         .carousel({ wrap: false })
                         .prev();
@@ -1141,14 +1141,14 @@ test.describe('Carousel', () => {
         }
 
         test('works with wrap option and next (data-ui-wrap)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 $.setDataset(carousel1, { uiWrap: false });
                 UI.Carousel.init(carousel1).show(2);
             });
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1).next();
             });
@@ -1159,7 +1159,7 @@ test.describe('Carousel', () => {
         });
 
         test('works with wrap option and prev (data-ui-wrap)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 $.setDataset(carousel1, { uiWrap: false });
                 UI.Carousel.init(carousel1).prev();
@@ -1172,7 +1172,7 @@ test.describe('Carousel', () => {
 
     test.describe('swipe option', () => {
         test('swipes to next item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1);
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
@@ -1197,7 +1197,7 @@ test.describe('Carousel', () => {
         });
 
         test('swipes to previous item', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1);
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
@@ -1222,7 +1222,7 @@ test.describe('Carousel', () => {
         });
 
         test('swipes with touch events', async ({ page }) => {
-            const hasTouch = await page.evaluate((_) => {
+            const hasTouch = await page.evaluate(() => {
                 if (typeof Touch !== 'function' || typeof TouchEvent !== 'function') {
                     return false;
                 }
@@ -1245,7 +1245,7 @@ test.describe('Carousel', () => {
 
             test.skip(!hasTouch, 'Touch constructors are not usable in this browser.');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1);
                 carousel1.dispatchEvent(new TouchEvent('touchstart', {
@@ -1281,7 +1281,7 @@ test.describe('Carousel', () => {
         });
 
         test('swipes to next item in RTL', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 carousel1.dir = 'rtl';
                 UI.Carousel.init(carousel1);
@@ -1295,7 +1295,7 @@ test.describe('Carousel', () => {
         });
 
         test('advances across complete items during a long drag', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 const width = $.width(carousel1);
                 UI.Carousel.init(carousel1);
@@ -1324,13 +1324,13 @@ test.describe('Carousel', () => {
         });
 
         test('animates to next item after swiping', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1);
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 250 }));
             });
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 window.dispatchEvent(new MouseEvent('mouseup'));
             });
             await expect(page.locator('#carousel-1-item-2')).toHaveClass(/\bactive\b/);
@@ -1338,7 +1338,7 @@ test.describe('Carousel', () => {
         });
 
         test('works with swipe option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1, { swipe: false });
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
@@ -1355,7 +1355,7 @@ test.describe('Carousel', () => {
         });
 
         test('works with swipe option (QuerySet)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('#carousel1').carousel({ swipe: false });
                 const carousel1 = $.findOne('#carousel1');
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
@@ -1366,7 +1366,7 @@ test.describe('Carousel', () => {
         });
 
         test('works with swipe option (data-ui-swipe)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 $.setDataset(carousel1, { uiSwipe: false });
                 UI.Carousel.init(carousel1);
@@ -1380,13 +1380,13 @@ test.describe('Carousel', () => {
         });
 
         test('does not swipe to next item with wrap option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1, { wrap: false }).show(2);
             });
             await expect(page.locator('#carousel-1-slide-2')).toHaveClass(/\bactive\b/);
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
                 window.dispatchEvent(new MouseEvent('mousemove', { clientX: 300 }));
@@ -1404,7 +1404,7 @@ test.describe('Carousel', () => {
         });
 
         test('does not swipe to previous item with wrap option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1, { wrap: false });
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
@@ -1423,7 +1423,7 @@ test.describe('Carousel', () => {
         });
 
         test('pauses while swiping', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
                 UI.Carousel.init(carousel1);
                 carousel1.dispatchEvent(new MouseEvent('mousedown', { clientX: 400 }));
@@ -1568,7 +1568,7 @@ test.describe('Carousel', () => {
     test.describe('QuerySet', () => {
         test.describe('#init', () => {
             test('creates multiple carousels', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('.carousel').carousel();
                     return $.find('.carousel').every((node) =>
                         $.getData(node, 'carousel') instanceof UI.Carousel,
@@ -1579,7 +1579,7 @@ test.describe('Carousel', () => {
 
         test.describe('#dispose', () => {
             test('removes multiple carousels', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('.carousel').carousel('dispose');
                     return $.find('.carousel').some((node) => $.hasData(node, 'carousel'));
                 })).toBe(false);
@@ -1588,7 +1588,7 @@ test.describe('Carousel', () => {
 
         test.describe('#cycle', () => {
             test('shows the next item for multiple carousels', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('.carousel').carousel('cycle');
                 });
 
@@ -1601,7 +1601,7 @@ test.describe('Carousel', () => {
 
         test.describe('#show', () => {
             test('shows a specified item for multiple carousels', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('.carousel').carousel('show', 2);
                 });
 
@@ -1614,7 +1614,7 @@ test.describe('Carousel', () => {
 
         test.describe('#slide', () => {
             test('slides forwards for multiple carousels', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('.carousel').carousel('slide', 1);
                 });
 
@@ -1625,7 +1625,7 @@ test.describe('Carousel', () => {
             });
 
             test('slides backwards for multiple carousels', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('.carousel').carousel('slide', -1);
                 });
 
@@ -1638,7 +1638,7 @@ test.describe('Carousel', () => {
 
         test.describe('#next', () => {
             test('shows the next item for multiple carousels', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('.carousel').carousel('next');
                 });
 
@@ -1651,7 +1651,7 @@ test.describe('Carousel', () => {
 
         test.describe('#prev', () => {
             test('shows the previous item for multiple carousels', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('.carousel').carousel('prev');
                 });
 

@@ -90,7 +90,7 @@ The all-in-one UMD bundle includes fQuery and its dependencies and exposes `glob
 
 The package root resolves to the prebuilt ESM bundle. Published files under `dist/` and `src/` are also available through matching package subpaths.
 
-## Quick start
+## Usage
 
 Frost UI's data API handles common interactions without application JavaScript. This control toggles the targeted collapse element:
 

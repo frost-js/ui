@@ -56,7 +56,7 @@ test.describe('Toast', () => {
         test('creates a toast (data-ui-dismiss)', async ({ page }) => {
             await page.locator('#button1').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#toast1', 'toast') instanceof UI.Toast)).toBe(true);
         });
     });
@@ -86,19 +86,19 @@ test.describe('Toast', () => {
         }
 
         test('clears the autohide timer', async ({ page }) => {
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'fade show');
                 $.setStyle(toast1, { display: 'none' }, null, { important: true });
 
                 const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                 });
                 UI.Toast.init(toast1).show();
                 await shown;
             });
 
-            expect(await page.evaluate((_) => {
+            expect(await page.evaluate(() => {
                 const toast = UI.Toast.init($.findOne('#toast1'));
                 const originalClearTimeout = window.clearTimeout;
                 let timerCleared = false;
@@ -118,13 +118,13 @@ test.describe('Toast', () => {
         });
 
         test('restores display on disposal while showing without a late event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'show');
                 $.setStyle(toast1, { display: 'none' }, null, { important: true });
                 window.toastShownEventTriggered = false;
 
-                $.addEvent(toast1, 'shown.ui.toast', (_) => {
+                $.addEvent(toast1, 'shown.ui.toast', () => {
                     window.toastShownEventTriggered = true;
                 });
 
@@ -136,16 +136,16 @@ test.describe('Toast', () => {
 
             await expect(page.locator('#toast1')).toBeHidden();
             expect(await page.locator('#toast1').evaluate((node) => node.style.getPropertyPriority('display'))).toBe('important');
-            expect(await page.evaluate((_) => window.toastShownEventTriggered)).toBe(false);
-            expect(await page.evaluate((_) => $.hasData('#toast1', 'toast'))).toBe(false);
+            expect(await page.evaluate(() => window.toastShownEventTriggered)).toBe(false);
+            expect(await page.evaluate(() => $.hasData('#toast1', 'toast'))).toBe(false);
         });
 
         test('does not apply hidden styles or emit an event after disposal', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 window.toastHiddenEventTriggered = false;
 
-                $.addEvent(toast1, 'hidden.ui.toast', (_) => {
+                $.addEvent(toast1, 'hidden.ui.toast', () => {
                     window.toastHiddenEventTriggered = true;
                 });
 
@@ -158,8 +158,8 @@ test.describe('Toast', () => {
             await expect(page.locator('#toast1')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#toast1')).toHaveCSS('opacity', '0');
             expect(await page.locator('#toast1').evaluate((node) => node.style.display)).toBe('');
-            expect(await page.evaluate((_) => window.toastHiddenEventTriggered)).toBe(false);
-            expect(await page.evaluate((_) => $.hasData('#toast1', 'toast'))).toBe(false);
+            expect(await page.evaluate(() => window.toastHiddenEventTriggered)).toBe(false);
+            expect(await page.evaluate(() => $.hasData('#toast1', 'toast'))).toBe(false);
         });
 
         for (const display of ['none', 'grid']) {
@@ -224,7 +224,7 @@ test.describe('Toast', () => {
         }
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 const toast = UI.Toast.init(toast1, { autohide: false });
                 toast.show();
@@ -237,11 +237,11 @@ test.describe('Toast', () => {
         });
 
         test('can be called on a shown toast', async ({ page }) => {
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const toast1 = $.findOne('#toast1');
                 const toast = UI.Toast.init(toast1, { autohide: false });
                 const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                 });
                 toast.show();
                 await shown;
@@ -253,7 +253,7 @@ test.describe('Toast', () => {
         });
 
         test('shows without a transition class', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'fade');
                 UI.Toast.init(toast1, { autohide: false }).show();
@@ -264,7 +264,7 @@ test.describe('Toast', () => {
         });
 
         test('shows when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 UI.Toast.init(toast1, { autohide: false }).show();
                 const transition = toast1.getAnimations()
@@ -310,18 +310,18 @@ test.describe('Toast', () => {
         });
 
         test('does not remove the toast after hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 UI.Toast.init(toast1).hide();
             });
 
             await expect(page.locator('#toast1')).toBeHidden();
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#toast1', 'toast') instanceof UI.Toast)).toBe(true);
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 const toast = UI.Toast.init(toast1);
                 toast.hide();
@@ -335,11 +335,11 @@ test.describe('Toast', () => {
         });
 
         test('can be called on a hidden toast', async ({ page }) => {
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const toast1 = $.findOne('#toast1');
                 const toast = UI.Toast.init(toast1);
                 const hidden = new Promise((resolve) => {
-                    $.addEvent(toast1, 'hidden.ui.toast', (_) => resolve());
+                    $.addEvent(toast1, 'hidden.ui.toast', () => resolve());
                 });
                 toast.hide();
                 await hidden;
@@ -351,7 +351,7 @@ test.describe('Toast', () => {
         });
 
         test('hides without a transition class', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'fade');
                 UI.Toast.init(toast1).hide();
@@ -362,7 +362,7 @@ test.describe('Toast', () => {
         });
 
         test('hides when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 UI.Toast.init(toast1).hide();
                 const transition = toast1.getAnimations()
@@ -377,13 +377,13 @@ test.describe('Toast', () => {
 
     test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'show');
                 $.setStyle(toast1, { display: 'none' }, null, { important: true });
                 let triggered = false;
 
-                $.addEvent(toast1, 'show.ui.toast', (_) => {
+                $.addEvent(toast1, 'show.ui.toast', () => {
                     triggered = true;
                 });
                 UI.Toast.init(toast1, { autohide: false }).show();
@@ -395,29 +395,29 @@ test.describe('Toast', () => {
         });
 
         test('triggers shown event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'show');
                 $.setStyle(toast1, { display: 'none' }, null, { important: true });
                 window.toastShownEventTriggered = false;
 
-                $.addEvent(toast1, 'shown.ui.toast', (_) => {
+                $.addEvent(toast1, 'shown.ui.toast', () => {
                     window.toastShownEventTriggered = true;
                 });
                 UI.Toast.init(toast1, { autohide: false }).show();
             });
 
-            await page.waitForFunction((_) => window.toastShownEventTriggered);
-            expect(await page.evaluate((_) => window.toastShownEventTriggered)).toBe(true);
+            await page.waitForFunction(() => window.toastShownEventTriggered);
+            expect(await page.evaluate(() => window.toastShownEventTriggered)).toBe(true);
             await expect(page.locator('#toast1')).toBeVisible();
         });
 
         test('triggers hide event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 let triggered = false;
 
-                $.addEvent(toast1, 'hide.ui.toast', (_) => {
+                $.addEvent(toast1, 'hide.ui.toast', () => {
                     triggered = true;
                 });
                 UI.Toast.init(toast1).hide();
@@ -429,26 +429,26 @@ test.describe('Toast', () => {
         });
 
         test('triggers hidden event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 window.toastHiddenEventTriggered = false;
 
-                $.addEvent(toast1, 'hidden.ui.toast', (_) => {
+                $.addEvent(toast1, 'hidden.ui.toast', () => {
                     window.toastHiddenEventTriggered = true;
                 });
                 UI.Toast.init(toast1).hide();
             });
 
             await expect(page.locator('#toast1')).toBeHidden();
-            expect(await page.evaluate((_) => window.toastHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.toastHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'show');
                 $.setStyle(toast1, { display: 'none' }, null, { important: true });
-                $.addEvent(toast1, 'show.ui.toast', (_) => false);
+                $.addEvent(toast1, 'show.ui.toast', () => false);
                 UI.Toast.init(toast1, { autohide: false }).show();
             });
 
@@ -457,7 +457,7 @@ test.describe('Toast', () => {
         });
 
         test('can be prevented from showing (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 $.removeClass(toast1, 'show');
                 $.setStyle(toast1, { display: 'none' }, null, { important: true });
@@ -472,9 +472,9 @@ test.describe('Toast', () => {
         });
 
         test('can be prevented from hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
-                $.addEvent(toast1, 'hide.ui.toast', (_) => false);
+                $.addEvent(toast1, 'hide.ui.toast', () => false);
                 UI.Toast.init(toast1).hide();
             });
 
@@ -483,7 +483,7 @@ test.describe('Toast', () => {
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const toast1 = $.findOne('#toast1');
                 $.addEvent(toast1, 'hide.ui.toast', (event) => {
                     event.preventDefault();
@@ -502,10 +502,10 @@ test.describe('Toast', () => {
         test.beforeEach(setupAutohide);
 
         test('autohides by default', async ({ page }) => {
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const toast1 = $.findOne('#toast1');
                 const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                 });
                 UI.Toast.init(toast1).show();
                 await shown;
@@ -522,25 +522,25 @@ test.describe('Toast', () => {
         });
 
         test('restarts the delay when shown again', async ({ page }) => {
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const toast1 = $.findOne('#toast1');
                 const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                 });
                 UI.Toast.init(toast1, { delay: 500 }).show();
                 await shown;
             });
             await advanceClock(page, 300);
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const toast = UI.Toast.init($.findOne('#toast1'));
                 const hidden = new Promise((resolve) => {
-                    $.addEvent(toast.node, 'hidden.ui.toast', (_) => resolve());
+                    $.addEvent(toast.node, 'hidden.ui.toast', () => resolve());
                 });
                 toast.hide();
                 await hidden;
 
                 const shown = new Promise((resolve) => {
-                    $.addEvent(toast.node, 'shown.ui.toast', (_) => resolve());
+                    $.addEvent(toast.node, 'shown.ui.toast', () => resolve());
                 });
                 toast.show();
                 await shown;
@@ -559,10 +559,10 @@ test.describe('Toast', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: async (_) => {
+                run: async () => {
                     const toast1 = $.findOne('#toast1');
                     const shown = new Promise((resolve) => {
-                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                        $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                     });
                     UI.Toast.init(toast1, { autohide: false }).show();
                     await shown;
@@ -570,10 +570,10 @@ test.describe('Toast', () => {
             },
             {
                 name: 'QuerySet',
-                run: async (_) => {
+                run: async () => {
                     const toast1 = $.findOne('#toast1');
                     const shown = new Promise((resolve) => {
-                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                        $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                     });
                     $('#toast1')
                         .toast({ autohide: false })
@@ -592,11 +592,11 @@ test.describe('Toast', () => {
         }
 
         test('stays visible with autohide disabled (data-ui-autohide)', async ({ page }) => {
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const toast1 = $.findOne('#toast1');
                 $.setDataset(toast1, { uiAutohide: false });
                 const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                 });
                 UI.Toast.init(toast1).show();
                 await shown;
@@ -617,10 +617,10 @@ test.describe('Toast', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: async (_) => {
+                run: async () => {
                     const toast1 = $.findOne('#toast1');
                     const shown = new Promise((resolve) => {
-                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                        $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                     });
                     UI.Toast.init(toast1, { delay: 300 }).show();
                     await shown;
@@ -628,10 +628,10 @@ test.describe('Toast', () => {
             },
             {
                 name: 'QuerySet',
-                run: async (_) => {
+                run: async () => {
                     const toast1 = $.findOne('#toast1');
                     const shown = new Promise((resolve) => {
-                        $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                        $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                     });
                     $('#toast1')
                         .toast({ delay: 300 })
@@ -655,11 +655,11 @@ test.describe('Toast', () => {
         }
 
         test('works with delay option (data-ui-delay)', async ({ page }) => {
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const toast1 = $.findOne('#toast1');
                 $.setDataset(toast1, { uiDelay: 300 });
                 const shown = new Promise((resolve) => {
-                    $.addEvent(toast1, 'shown.ui.toast', (_) => resolve());
+                    $.addEvent(toast1, 'shown.ui.toast', () => resolve());
                 });
                 UI.Toast.init(toast1).show();
                 await shown;
@@ -680,7 +680,7 @@ test.describe('Toast', () => {
     test.describe('QuerySet', () => {
         test.describe('#init', () => {
             test('creates multiple toasts', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('.toast').toast();
                     return $.find('.toast').every((node) =>
                         $.getData(node, 'toast') instanceof UI.Toast,
@@ -693,7 +693,7 @@ test.describe('Toast', () => {
             test.use({ mockClock: true });
 
             test('removes multiple toasts', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('.toast').toast('dispose');
                     return $.find('.toast').some((node) =>
                         $.hasData(node, 'toast'),
@@ -706,7 +706,7 @@ test.describe('Toast', () => {
             test.beforeEach(setupHidden);
 
             test('shows the toast through the returned instance', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('#toast1')
                         .toast({ autohide: false })
                         .show();
@@ -718,7 +718,7 @@ test.describe('Toast', () => {
             });
 
             test('shows multiple toasts', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('.toast').toast({ autohide: false });
                     $('.toast').toast('show');
                 });
@@ -734,7 +734,7 @@ test.describe('Toast', () => {
 
         test.describe('#hide', () => {
             test('hides multiple toasts', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('.toast').toast('hide');
                 });
 

@@ -2,7 +2,7 @@ import { expect, test } from '#test';
 
 test.describe('Modal FocusTrap', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML =
                 '<button class="btn btn-secondary" id="modal-toggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>' +
                 '<div class="modal" id="modal">' +
@@ -16,10 +16,10 @@ test.describe('Modal FocusTrap', () => {
 
     test.describe('focus trap', () => {
         test('prevents focus outside the modal', async ({ page }) => {
-            await page.evaluate((_) => new Promise((resolve) => {
+            await page.evaluate(() => new Promise((resolve) => {
                 const modal = $.findOne('#modal');
 
-                $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
+                $.addEventOnce(modal, 'shown.ui.modal', () => resolve());
                 UI.Modal.init(modal).show();
             }));
             await page.locator('#modal-toggle').focus();
@@ -28,13 +28,13 @@ test.describe('Modal FocusTrap', () => {
         });
 
         test('reverses focus if shift/tab key is pressed', async ({ page }) => {
-            await page.evaluate((_) => new Promise((resolve) => {
+            await page.evaluate(() => new Promise((resolve) => {
                 const modal = $.findOne('#modal');
 
-                $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
+                $.addEventOnce(modal, 'shown.ui.modal', () => resolve());
                 UI.Modal.init(modal).show();
             }));
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.dispatchEvent(new KeyboardEvent('keydown', {
                     key: 'Tab',
                     shiftKey: true,
@@ -46,10 +46,10 @@ test.describe('Modal FocusTrap', () => {
         });
 
         test('allows focus outside the modal with no focus', async ({ page }) => {
-            await page.evaluate((_) => new Promise((resolve) => {
+            await page.evaluate(() => new Promise((resolve) => {
                 const modal = $.findOne('#modal');
 
-                $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
+                $.addEventOnce(modal, 'shown.ui.modal', () => resolve());
                 UI.Modal.init(modal, { focus: false }).show();
             }));
             await page.locator('#modal-toggle').focus();

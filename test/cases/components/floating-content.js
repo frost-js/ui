@@ -62,7 +62,7 @@ export function floatingContentTests({ key, component }) {
                         '</div>';
 
                     window.modalHideCalls = 0;
-                    $.addEvent('#modal', 'hide.ui.modal', (_) => window.modalHideCalls++);
+                    $.addEvent('#modal', 'hide.ui.modal', () => window.modalHideCalls++);
                 }, key);
             });
 
@@ -74,9 +74,9 @@ export function floatingContentTests({ key, component }) {
                 expect(await page.evaluate((key) => $.hasData(`#${key}-toggle-1`, key), key)).toBe(false);
                 await expect(page.locator(`#${key}-toggle-1`)).toHaveAttribute('title', 'Original title');
 
-                await page.evaluate((_) => $.triggerEvent('#modal', 'hide.ui.modal'));
+                await page.evaluate(() => $.triggerEvent('#modal', 'hide.ui.modal'));
 
-                expect(await page.evaluate((_) => window.modalHideCalls)).toBe(1);
+                expect(await page.evaluate(() => window.modalHideCalls)).toBe(1);
 
                 await page.evaluate(({ key, component }) =>
                     UI[component].init($.findOne(`#${key}-toggle-1`)).show(), { key, component });
@@ -90,7 +90,7 @@ export function floatingContentTests({ key, component }) {
                     UI[component].init(toggle1, {
                         html: true,
                         trigger: 'hover focus click',
-                        sanitize: (_) => {
+                        sanitize: () => {
                             window.failedComponent = $.getData(toggle1, key);
                             throw new Error('Sanitizer failed');
                         },
@@ -104,7 +104,7 @@ export function floatingContentTests({ key, component }) {
                 await page.evaluate((key) => {
                     window.staleHandlerCalls = 0;
                     for (const method of ['show', 'hide', 'toggle']) {
-                        window.failedComponent[method] = (_) => window.staleHandlerCalls++;
+                        window.failedComponent[method] = () => window.staleHandlerCalls++;
                     }
 
                     for (const event of ['mouseover', 'mouseout', 'focus', 'blur', 'click']) {
@@ -113,8 +113,8 @@ export function floatingContentTests({ key, component }) {
                     $.triggerEvent('#modal', 'hide.ui.modal');
                 }, key);
 
-                expect(await page.evaluate((_) => window.staleHandlerCalls)).toBe(0);
-                expect(await page.evaluate((_) => window.modalHideCalls)).toBe(1);
+                expect(await page.evaluate(() => window.staleHandlerCalls)).toBe(0);
+                expect(await page.evaluate(() => window.modalHideCalls)).toBe(1);
 
                 await page.evaluate(({ key, component }) =>
                     UI[component].init($.findOne(`#${key}-toggle-1`)).show(), { key, component });
@@ -169,7 +169,7 @@ export function floatingContentTests({ key, component }) {
                 const toggle2 = $.findOne(`#${key}-toggle-2`);
                 window.modalHideEventTriggered = false;
 
-                $.addEvent(modal, 'hide.ui.modal', (_) => {
+                $.addEvent(modal, 'hide.ui.modal', () => {
                     window.modalHideEventTriggered = true;
                 });
                 UI[component].init(toggle1);
@@ -181,7 +181,7 @@ export function floatingContentTests({ key, component }) {
                 $.triggerEvent('#modal', 'hide.ui.modal');
             }, { key, component });
 
-            expect(await page.evaluate((_) => window.modalHideEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.modalHideEventTriggered)).toBe(true);
             await expect(page.locator(`.${key}`)).toHaveCount(0);
         });
 
@@ -203,7 +203,7 @@ export function floatingContentTests({ key, component }) {
                 name: 'class',
                 prepare: ({ key, component }) => new Promise((resolve) => {
                     const toggle1 = $.findOne(`#${key}-toggle-1`);
-                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                     UI[component].init(toggle1).show();
                 }),
                 hide: ({ key, component }) => {
@@ -215,7 +215,7 @@ export function floatingContentTests({ key, component }) {
                 name: 'QuerySet',
                 prepare: ({ key }) => new Promise((resolve) => {
                     const toggle1 = $.findOne(`#${key}-toggle-1`);
-                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                     $(`#${key}-toggle-1`)[key]('show');
                 }),
                 hide: ({ key }) => {
@@ -239,10 +239,10 @@ export function floatingContentTests({ key, component }) {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
                 const toggle2 = $.findOne(`#${key}-toggle-2`);
                 const shown1 = new Promise((resolve) => {
-                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 });
                 const shown2 = new Promise((resolve) => {
-                    $.addEventOnce(toggle2, `shown.ui.${key}`, (_) => resolve());
+                    $.addEventOnce(toggle2, `shown.ui.${key}`, () => resolve());
                 });
 
                 $('button')[key]('show');
@@ -260,7 +260,7 @@ export function floatingContentTests({ key, component }) {
         test(`does not remove the ${key} after hiding`, async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
 
@@ -276,7 +276,7 @@ export function floatingContentTests({ key, component }) {
         test('can be called multiple times', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
 
@@ -303,7 +303,7 @@ export function floatingContentTests({ key, component }) {
         test('hides without animation', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1, {
                     animation: false,
                 }).show();
@@ -319,7 +319,7 @@ export function floatingContentTests({ key, component }) {
         test('hides when the transition is canceled', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
 
@@ -336,7 +336,7 @@ export function floatingContentTests({ key, component }) {
         test('can be interrupted by showing', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
 
@@ -344,10 +344,10 @@ export function floatingContentTests({ key, component }) {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
                 let hidden = false;
 
-                $.addEvent(toggle1, `hidden.ui.${key}`, (_) => {
+                $.addEvent(toggle1, `hidden.ui.${key}`, () => {
                     hidden = true;
                 });
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => {
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => {
                     resolve({ hidden, shown: true });
                 });
 
@@ -415,7 +415,7 @@ export function floatingContentTests({ key, component }) {
                 name: 'class',
                 prepare: ({ key, component }) => new Promise((resolve) => {
                     const toggle1 = $.findOne(`#${key}-toggle-1`);
-                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                     UI[component].init(toggle1).show();
                 }),
                 toggle: ({ key, component }) => {
@@ -427,7 +427,7 @@ export function floatingContentTests({ key, component }) {
                 name: 'QuerySet',
                 prepare: ({ key }) => new Promise((resolve) => {
                     const toggle1 = $.findOne(`#${key}-toggle-1`);
-                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                     $(`#${key}-toggle-1`)[key]('show');
                 }),
                 toggle: ({ key }) => {
@@ -449,10 +449,10 @@ export function floatingContentTests({ key, component }) {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
                 const toggle2 = $.findOne(`#${key}-toggle-2`);
                 const shown1 = new Promise((resolve) => {
-                    $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                    $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 });
                 const shown2 = new Promise((resolve) => {
-                    $.addEventOnce(toggle2, `shown.ui.${key}`, (_) => resolve());
+                    $.addEventOnce(toggle2, `shown.ui.${key}`, () => resolve());
                 });
 
                 $('button')[key]('show');
@@ -470,7 +470,7 @@ export function floatingContentTests({ key, component }) {
         test('can be called multiple times', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
 
@@ -536,7 +536,7 @@ export function floatingContentTests({ key, component }) {
         test(`allows a visible ${key} to be hidden programmatically`, async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
 
@@ -552,7 +552,7 @@ export function floatingContentTests({ key, component }) {
         test('ignores hide trigger events when disabled', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1, { trigger: 'hover focus click' }).show();
             }), { key, component });
 
@@ -632,7 +632,7 @@ export function floatingContentTests({ key, component }) {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
                 let triggered = false;
 
-                $.addEvent(toggle1, `show.ui.${key}`, (_) => {
+                $.addEvent(toggle1, `show.ui.${key}`, () => {
                     triggered = true;
                 });
                 UI[component].init(toggle1).show();
@@ -647,7 +647,7 @@ export function floatingContentTests({ key, component }) {
             const eventTriggered = await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
 
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve(true));
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve(true));
                 UI[component].init(toggle1).show();
             }), { key, component });
 
@@ -660,14 +660,14 @@ export function floatingContentTests({ key, component }) {
         test('triggers hide event', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
             const eventTriggered = await page.evaluate(({ key, component }) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
                 let triggered = false;
 
-                $.addEvent(toggle1, `hide.ui.${key}`, (_) => {
+                $.addEvent(toggle1, `hide.ui.${key}`, () => {
                     triggered = true;
                 });
                 UI[component].init(toggle1).hide();
@@ -681,13 +681,13 @@ export function floatingContentTests({ key, component }) {
         test('triggers hidden event', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
             const eventTriggered = await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
 
-                $.addEventOnce(toggle1, `hidden.ui.${key}`, (_) => resolve(true));
+                $.addEventOnce(toggle1, `hidden.ui.${key}`, () => resolve(true));
                 UI[component].init(toggle1).hide();
             }), { key, component });
 
@@ -698,7 +698,7 @@ export function floatingContentTests({ key, component }) {
         test('can be prevented from showing', async ({ page }) => {
             await page.evaluate(({ key, component }) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEvent(toggle1, `show.ui.${key}`, (_) => false);
+                $.addEvent(toggle1, `show.ui.${key}`, () => false);
                 UI[component].init(toggle1).show();
             }, { key, component });
 
@@ -720,12 +720,12 @@ export function floatingContentTests({ key, component }) {
         test('can be prevented from hiding', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
             await page.evaluate(({ key, component }) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEvent(toggle1, `hide.ui.${key}`, (_) => false);
+                $.addEvent(toggle1, `hide.ui.${key}`, () => false);
                 UI[component].init(toggle1).hide();
             }, { key, component });
 
@@ -737,7 +737,7 @@ export function floatingContentTests({ key, component }) {
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
             await page.evaluate(({ key, component }) => new Promise((resolve) => {
                 const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.addEventOnce(toggle1, `shown.ui.${key}`, (_) => resolve());
+                $.addEventOnce(toggle1, `shown.ui.${key}`, () => resolve());
                 UI[component].init(toggle1).show();
             }), { key, component });
             await page.evaluate(({ key, component }) => {

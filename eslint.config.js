@@ -14,6 +14,7 @@ export default [
     {
         files: [
             'src/**/*.js',
+            'test/**/*.js',
         ],
         rules: {
             '@stylistic/indent': [
@@ -28,8 +29,9 @@ export default [
             '@stylistic/new-parens': 'error',
             '@stylistic/no-extra-semi': 'error',
             '@stylistic/space-infix-ops': 'error',
-            'eqeqeq': 'error',
+            'eqeqeq': ['error', 'always', { null: 'ignore' }],
             'object-shorthand': 'error',
+            'prefer-arrow-callback': 'error',
         },
     },
     {

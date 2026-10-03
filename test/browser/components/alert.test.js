@@ -4,7 +4,7 @@ test.use({ reducedMotion: 'no-preference' });
 
 test.describe('Alert', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML =
                 '<div class="alert alert-success fade show" id="alert1">' +
                 '<button class="btn-close" id="button1" data-ui-dismiss="alert" type="button"></button>' +
@@ -38,7 +38,7 @@ test.describe('Alert', () => {
         test('creates an alert (data-ui-dismiss)', async ({ page }) => {
             await page.locator('#button1').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#alert1', 'alert') instanceof UI.Alert)).toBe(true);
         });
     });
@@ -70,7 +70,7 @@ test.describe('Alert', () => {
             await node.evaluate((alert1) => {
                 window.alertClosedEventTriggered = false;
 
-                $.addEvent(alert1, 'closed.ui.alert', (_) => {
+                $.addEvent(alert1, 'closed.ui.alert', () => {
                     window.alertClosedEventTriggered = true;
                 });
 
@@ -80,7 +80,7 @@ test.describe('Alert', () => {
             });
 
             await expect(page.locator('#alert1')).toHaveCount(0);
-            expect(await page.evaluate((_) => window.alertClosedEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.alertClosedEventTriggered)).toBe(true);
             expect(await node.evaluate((alert1) => $.hasData(alert1, 'alert'))).toBe(false);
         });
     });
@@ -132,7 +132,7 @@ test.describe('Alert', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const alert1 = $.findOne('#alert1');
                 const alert = UI.Alert.init(alert1);
                 alert.close();
@@ -145,7 +145,7 @@ test.describe('Alert', () => {
         });
 
         test('closes without a transition class', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const alert1 = $.findOne('#alert1');
                 $.removeClass(alert1, 'fade show');
                 UI.Alert.init(alert1).close();
@@ -156,7 +156,7 @@ test.describe('Alert', () => {
         });
 
         test('closes when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const alert1 = $.findOne('#alert1');
                 UI.Alert.init(alert1).close();
                 const transition = alert1.getAnimations()
@@ -169,7 +169,7 @@ test.describe('Alert', () => {
         });
 
         test('closes when no transition is generated', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const alert1 = $.findOne('#alert1');
                 $.setStyle(alert1, {
                     transitionDuration: '1ms',
@@ -185,11 +185,11 @@ test.describe('Alert', () => {
 
     test.describe('events', () => {
         test('triggers close event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const alert1 = $.findOne('#alert1');
                 let triggered = false;
 
-                $.addEvent(alert1, 'close.ui.alert', (_) => {
+                $.addEvent(alert1, 'close.ui.alert', () => {
                     triggered = true;
                 });
                 UI.Alert.init(alert1).close();
@@ -203,25 +203,25 @@ test.describe('Alert', () => {
         });
 
         test('triggers closed event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const alert1 = $.findOne('#alert1');
                 window.alertClosedEventTriggered = false;
 
-                $.addEvent(alert1, 'closed.ui.alert', (_) => {
+                $.addEvent(alert1, 'closed.ui.alert', () => {
                     window.alertClosedEventTriggered = true;
                 });
                 UI.Alert.init(alert1).close();
             });
 
             await expect(page.locator('#alert1')).toHaveCount(0);
-            expect(await page.evaluate((_) => window.alertClosedEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.alertClosedEventTriggered)).toBe(true);
             await expect(page.locator('#alert2')).toHaveCount(1);
         });
 
         test('can be prevented from closing', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const alert1 = $.findOne('#alert1');
-                $.addEvent(alert1, 'close.ui.alert', (_) => false);
+                $.addEvent(alert1, 'close.ui.alert', () => false);
                 UI.Alert.init(alert1).close();
             });
 
@@ -230,7 +230,7 @@ test.describe('Alert', () => {
         });
 
         test('can be prevented from closing (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const alert1 = $.findOne('#alert1');
                 $.addEvent(alert1, 'close.ui.alert', (event) => {
                     event.preventDefault();
@@ -246,7 +246,7 @@ test.describe('Alert', () => {
     test.describe('QuerySet', () => {
         test.describe('#init', () => {
             test('creates multiple alerts', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('.alert').alert();
                     return $.find('.alert').every((node) =>
                         $.getData(node, 'alert') instanceof UI.Alert,
@@ -257,7 +257,7 @@ test.describe('Alert', () => {
 
         test.describe('#dispose', () => {
             test('removes multiple alerts', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('.alert').alert('dispose');
                     return $.find('.alert').some((node) =>
                         $.hasData(node, 'alert'),
@@ -268,7 +268,7 @@ test.describe('Alert', () => {
 
         test.describe('#close', () => {
             test('closes multiple alerts', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('.alert').alert('close');
                 });
 

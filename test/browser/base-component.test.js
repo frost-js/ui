@@ -2,13 +2,13 @@ import { expect, test } from '#test';
 
 test.describe('BaseComponent', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML = '<div class="alert" id="alert1"></div>';
         });
     });
 
     test('exposes the component node', async ({ page }) => {
-        expect(await page.evaluate((_) => {
+        expect(await page.evaluate(() => {
             const node = $.findOne('#alert1');
             const alert = UI.Alert.init(node);
             return alert.node === node;
@@ -16,7 +16,7 @@ test.describe('BaseComponent', () => {
     });
 
     test('exposes frozen merged options', async ({ page }) => {
-        expect(await page.evaluate((_) => {
+        expect(await page.evaluate(() => {
             const node = $.findOne('#alert1');
             const toast = UI.Toast.init(node, { autohide: false });
             return {
@@ -30,7 +30,7 @@ test.describe('BaseComponent', () => {
     });
 
     test('clears the node and options when disposed', async ({ page }) => {
-        expect(await page.evaluate((_) => {
+        expect(await page.evaluate(() => {
             const node = $.findOne('#alert1');
             const alert = UI.Alert.init(node);
             alert.dispose();
@@ -45,7 +45,7 @@ test.describe('BaseComponent', () => {
     });
 
     test('clears the node and options when removed', async ({ page }) => {
-        expect(await page.evaluate((_) => {
+        expect(await page.evaluate(() => {
             const node = $.findOne('#alert1');
             const alert = UI.Alert.init(node);
             $.remove(node);

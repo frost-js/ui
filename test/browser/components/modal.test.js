@@ -47,7 +47,7 @@ test.describe('Modal', () => {
         test('creates a modal (data-ui-toggle)', async ({ page }) => {
             await page.locator('#modal-toggle-1').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#modal1', 'modal') instanceof UI.Modal)).toBe(true);
         });
     });
@@ -77,7 +77,7 @@ test.describe('Modal', () => {
         }
 
         test('cleans up a shown modal', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, {
                     height: '2000px',
                     paddingRight: '10px',
@@ -89,11 +89,11 @@ test.describe('Modal', () => {
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            const hiddenEventTriggered = await page.evaluate((_) => {
+            const hiddenEventTriggered = await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 let triggered = false;
 
-                $.addEvent(modal1, 'hidden.ui.modal', (_) => {
+                $.addEvent(modal1, 'hidden.ui.modal', () => {
                     triggered = true;
                 });
                 UI.Modal.init(modal1).dispose();
@@ -117,21 +117,21 @@ test.describe('Modal', () => {
                     styles: { paddingRight: '' },
                 },
             ]);
-            expect(await page.evaluate((_) => $.hasData('#modal1', 'modal'))).toBe(false);
+            expect(await page.evaluate(() => $.hasData('#modal1', 'modal'))).toBe(false);
         });
 
         test('cleans up while showing', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
 
                 window.modalDisposeEvents = {
                     hidden: false,
                     shown: false,
                 };
-                $.addEvent(modal1, 'hidden.ui.modal', (_) => {
+                $.addEvent(modal1, 'hidden.ui.modal', () => {
                     window.modalDisposeEvents.hidden = true;
                 });
-                $.addEvent(modal1, 'shown.ui.modal', (_) => {
+                $.addEvent(modal1, 'shown.ui.modal', () => {
                     window.modalDisposeEvents.shown = true;
                 });
 
@@ -148,7 +148,7 @@ test.describe('Modal', () => {
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
             await expect(page.locator('.modal-backdrop')).toHaveCount(0);
             await expect(page.locator('body')).not.toHaveClass(/\bmodal-open\b/);
-            expect(await page.evaluate((_) => window.modalDisposeEvents)).toEqual({
+            expect(await page.evaluate(() => window.modalDisposeEvents)).toEqual({
                 hidden: false,
                 shown: false,
             });
@@ -195,7 +195,7 @@ test.describe('Modal', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 const modal = UI.Modal.init(modal1);
                 modal.show();
@@ -208,13 +208,13 @@ test.describe('Modal', () => {
         });
 
         test('can be called on shown modal', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
@@ -223,13 +223,13 @@ test.describe('Modal', () => {
         });
 
         test('allows modals to stack', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal2 = $.findOne('#modal2');
                 UI.Modal.init(modal2).show();
             });
@@ -359,7 +359,7 @@ test.describe('Modal', () => {
         }
 
         test('hides the modal (data-ui-dismiss)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
@@ -375,30 +375,30 @@ test.describe('Modal', () => {
         });
 
         test('does not remove the modal after hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#modal1', 'modal') instanceof UI.Modal)).toBe(true);
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 const modal = UI.Modal.init(modal1);
                 modal.hide();
@@ -411,7 +411,7 @@ test.describe('Modal', () => {
         });
 
         test('can be called on hidden modal', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });
@@ -421,19 +421,19 @@ test.describe('Modal', () => {
         });
 
         test('reindexes remaining modals when an older modal is hidden', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal2 = $.findOne('#modal2');
                 UI.Modal.init(modal2).show();
             });
             await expect(page.locator('#modal2')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });
@@ -443,7 +443,7 @@ test.describe('Modal', () => {
             await expect(page.locator('.modal-backdrop')).toHaveCount(1);
             await expect(page.locator('.modal-backdrop')).toHaveAttribute('style', '');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
@@ -459,13 +459,13 @@ test.describe('Modal', () => {
         });
 
         test('does not close stacked modals (data-ui-dismiss)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal2 = $.findOne('#modal2');
                 UI.Modal.init(modal2).show();
             });
@@ -511,7 +511,7 @@ test.describe('Modal', () => {
         }
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 const modal = UI.Modal.init(modal1);
                 modal.toggle();
@@ -560,13 +560,13 @@ test.describe('Modal', () => {
         }
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 const modal = UI.Modal.init(modal1);
                 modal.toggle();
@@ -581,11 +581,11 @@ test.describe('Modal', () => {
 
     test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 let triggered = false;
 
-                $.addEvent(modal1, 'show.ui.modal', (_) => {
+                $.addEvent(modal1, 'show.ui.modal', () => {
                     triggered = true;
                 });
                 UI.Modal.init(modal1).show();
@@ -597,11 +597,11 @@ test.describe('Modal', () => {
         });
 
         test('triggers shown event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 window.modalShownEventTriggered = false;
 
-                $.addEvent(modal1, 'shown.ui.modal', (_) => {
+                $.addEvent(modal1, 'shown.ui.modal', () => {
                     window.modalShownEventTriggered = true;
                 });
                 UI.Modal.init(modal1).show();
@@ -609,21 +609,21 @@ test.describe('Modal', () => {
 
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            expect(await page.evaluate((_) => window.modalShownEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.modalShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 let triggered = false;
 
-                $.addEvent(modal1, 'hide.ui.modal', (_) => {
+                $.addEvent(modal1, 'hide.ui.modal', () => {
                     triggered = true;
                 });
                 UI.Modal.init(modal1).hide();
@@ -635,17 +635,17 @@ test.describe('Modal', () => {
         });
 
         test('triggers hidden event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 window.modalHiddenEventTriggered = false;
 
-                $.addEvent(modal1, 'hidden.ui.modal', (_) => {
+                $.addEvent(modal1, 'hidden.ui.modal', () => {
                     window.modalHiddenEventTriggered = true;
                 });
                 UI.Modal.init(modal1).hide();
@@ -653,15 +653,15 @@ test.describe('Modal', () => {
 
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            expect(await page.evaluate((_) => window.modalHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.modalHiddenEventTriggered)).toBe(true);
         });
 
         test('triggers show event (toggle)', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 let triggered = false;
 
-                $.addEvent(modal1, 'show.ui.modal', (_) => {
+                $.addEvent(modal1, 'show.ui.modal', () => {
                     triggered = true;
                 });
                 UI.Modal.init(modal1).toggle();
@@ -673,11 +673,11 @@ test.describe('Modal', () => {
         });
 
         test('triggers shown event (toggle)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 window.modalShownEventTriggered = false;
 
-                $.addEvent(modal1, 'shown.ui.modal', (_) => {
+                $.addEvent(modal1, 'shown.ui.modal', () => {
                     window.modalShownEventTriggered = true;
                 });
                 UI.Modal.init(modal1).toggle();
@@ -685,21 +685,21 @@ test.describe('Modal', () => {
 
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'true');
-            expect(await page.evaluate((_) => window.modalShownEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.modalShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event (toggle)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 let triggered = false;
 
-                $.addEvent(modal1, 'hide.ui.modal', (_) => {
+                $.addEvent(modal1, 'hide.ui.modal', () => {
                     triggered = true;
                 });
                 UI.Modal.init(modal1).toggle();
@@ -711,17 +711,17 @@ test.describe('Modal', () => {
         });
 
         test('triggers hidden event (toggle)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 window.modalHiddenEventTriggered = false;
 
-                $.addEvent(modal1, 'hidden.ui.modal', (_) => {
+                $.addEvent(modal1, 'hidden.ui.modal', () => {
                     window.modalHiddenEventTriggered = true;
                 });
                 UI.Modal.init(modal1).toggle();
@@ -729,13 +729,13 @@ test.describe('Modal', () => {
 
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'true');
             await expect(page.locator('#modal1')).toHaveAttribute('aria-modal', 'false');
-            expect(await page.evaluate((_) => window.modalHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.modalHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
-                $.addEvent(modal1, 'show.ui.modal', (_) => false);
+                $.addEvent(modal1, 'show.ui.modal', () => false);
                 UI.Modal.init(modal1).show();
             });
 
@@ -747,7 +747,7 @@ test.describe('Modal', () => {
         });
 
         test('can be prevented from showing (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 $.addEvent(modal1, 'show.ui.modal', (event) => {
                     event.preventDefault();
@@ -763,15 +763,15 @@ test.describe('Modal', () => {
         });
 
         test('can be prevented from hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
-                $.addEvent(modal1, 'hide.ui.modal', (_) => false);
+                $.addEvent(modal1, 'hide.ui.modal', () => false);
                 UI.Modal.init(modal1).hide();
             });
 
@@ -783,13 +783,13 @@ test.describe('Modal', () => {
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 $.addEvent(modal1, 'hide.ui.modal', (event) => {
                     event.preventDefault();
@@ -807,7 +807,7 @@ test.describe('Modal', () => {
 
     test.describe('keyboard option', () => {
         test('hides the modal on escape', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
@@ -825,14 +825,14 @@ test.describe('Modal', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const modal1 = $.findOne('#modal1');
                     UI.Modal.init(modal1, { keyboard: false }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#modal1')
                         .modal({ keyboard: false })
                         .show();
@@ -854,7 +854,7 @@ test.describe('Modal', () => {
         }
 
         test('works with keyboard option (data-ui-keyboard)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 $.setDataset(modal1, { uiKeyboard: false });
                 UI.Modal.init(modal1).show();
@@ -876,14 +876,14 @@ test.describe('Modal', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const modal1 = $.findOne('#modal1');
                     UI.Modal.init(modal1, { show: true });
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#modal1').modal({ show: true });
                 },
             },
@@ -900,7 +900,7 @@ test.describe('Modal', () => {
         }
 
         test('works with show option (data-ui-show)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 $.setDataset(modal1, { uiShow: true });
                 UI.Modal.init(modal1);
@@ -915,7 +915,7 @@ test.describe('Modal', () => {
         });
 
         test('works without show option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1);
             });
@@ -931,14 +931,14 @@ test.describe('Modal', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const modal1 = $.findOne('#modal1');
                     UI.Modal.init(modal1, { backdrop: false }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#modal1')
                         .modal({ backdrop: false })
                         .show();
@@ -957,7 +957,7 @@ test.describe('Modal', () => {
         }
 
         test('works with backdrop option (data-ui-backdrop)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 $.setDataset(modal1, { uiBackdrop: false });
                 UI.Modal.init(modal1).show();
@@ -972,7 +972,7 @@ test.describe('Modal', () => {
         });
 
         test('hides the modal on document click (with backdrop)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
@@ -988,7 +988,7 @@ test.describe('Modal', () => {
         });
 
         test('does not hide the modal on document click (without backdrop)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1, { backdrop: false }).show();
             });
@@ -1003,7 +1003,7 @@ test.describe('Modal', () => {
         });
 
         test('does not hide the modal on document click (static backdrop)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1, { backdrop: 'static' }).show();
             });
@@ -1018,7 +1018,7 @@ test.describe('Modal', () => {
         });
 
         test('does not hide the modal on document click (mousedown on dialog)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
@@ -1034,7 +1034,7 @@ test.describe('Modal', () => {
         });
 
         test('hides the modal on dialog click (mousedown on backdrop)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
@@ -1050,13 +1050,13 @@ test.describe('Modal', () => {
         });
 
         test('does not close stacked modals on document click', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal2 = $.findOne('#modal2');
                 UI.Modal.init(modal2).show();
             });
@@ -1082,7 +1082,7 @@ test.describe('Modal', () => {
                 `${scrollbarSize}px` :
                 '';
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, { height: '2000px' });
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
@@ -1097,7 +1097,7 @@ test.describe('Modal', () => {
         });
 
         test('does not add padding if scrollbars are hidden (vertical)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
@@ -1113,7 +1113,7 @@ test.describe('Modal', () => {
         test('works with existing padding (vertical)', async ({ page }) => {
             const scrollbarSize = await measureScrollbarSize(page);
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, {
                     height: '2000px',
                     paddingRight: '10px',
@@ -1131,14 +1131,14 @@ test.describe('Modal', () => {
         });
 
         test('restores scroll padding (vertical)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, { height: '2000px' });
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).show();
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });
@@ -1153,7 +1153,7 @@ test.describe('Modal', () => {
         });
 
         test('restores existing scroll padding to document body (vertical)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, {
                     height: '2000px',
                     paddingRight: '10px',
@@ -1163,7 +1163,7 @@ test.describe('Modal', () => {
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });
@@ -1180,7 +1180,7 @@ test.describe('Modal', () => {
         test('retains scroll padding when an older modal is hidden', async ({ page }) => {
             const scrollbarSize = await measureScrollbarSize(page);
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, {
                     height: '2000px',
                     paddingRight: '10px',
@@ -1190,13 +1190,13 @@ test.describe('Modal', () => {
             });
             await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal2 = $.findOne('#modal2');
                 UI.Modal.init(modal2).show();
             });
             await expect(page.locator('#modal2')).toHaveAttribute('aria-hidden', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const modal1 = $.findOne('#modal1');
                 UI.Modal.init(modal1).hide();
             });

@@ -4,7 +4,7 @@ test.use({ reducedMotion: 'no-preference' });
 
 test.describe('Tab', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML =
                 '<div class="nav nav-tabs">' +
                 '<a class="nav-link active" id="tab-toggle-1" href="#tab1" data-ui-toggle="tab"></a>' +
@@ -48,7 +48,7 @@ test.describe('Tab', () => {
         test('creates a tab (data-ui-toggle)', async ({ page }) => {
             await page.locator('#tab-toggle-1').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#tab-toggle-1', 'tab') instanceof UI.Tab)).toBe(true);
         });
     });
@@ -118,13 +118,13 @@ test.describe('Tab', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            const shownEvents = await page.evaluate(async (_) => {
+            const shownEvents = await page.evaluate(async () => {
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 const tab = UI.Tab.init(tabToggle2);
                 let shownEvents = 0;
 
                 const shown = new Promise((resolve) => {
-                    $.addEvent(tabToggle2, 'shown.ui.tab', (_) => {
+                    $.addEvent(tabToggle2, 'shown.ui.tab', () => {
                         shownEvents++;
                         resolve();
                     });
@@ -149,7 +149,7 @@ test.describe('Tab', () => {
         });
 
         test('can be called on shown tab', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 UI.Tab.init(tabToggle1).show();
             });
@@ -159,7 +159,7 @@ test.describe('Tab', () => {
         });
 
         test('shows without transition classes', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('#tab1, #tab2').removeClass('fade');
                 UI.Tab.init($.findOne('#tab-toggle-2')).show();
             });
@@ -171,7 +171,7 @@ test.describe('Tab', () => {
         });
 
         test('shows when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 UI.Tab.init(tabToggle2).show();
                 $.findOne('#tab2').getAnimations()
@@ -184,7 +184,7 @@ test.describe('Tab', () => {
         });
 
         test('uses the latest tab during rapid navigation', async ({ page }) => {
-            const shownEvents = await page.evaluate(async (_) => {
+            const shownEvents = await page.evaluate(async () => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 const tab1 = UI.Tab.init(tabToggle1);
@@ -192,11 +192,11 @@ test.describe('Tab', () => {
                 let tab1Events = 0;
                 let tab2Events = 0;
 
-                $.addEvent(tabToggle1, 'shown.ui.tab', (_) => {
+                $.addEvent(tabToggle1, 'shown.ui.tab', () => {
                     tab1Events++;
                 });
                 const shown = new Promise((resolve) => {
-                    $.addEvent(tabToggle2, 'shown.ui.tab', (_) => {
+                    $.addEvent(tabToggle2, 'shown.ui.tab', () => {
                         tab2Events++;
                         resolve();
                     });
@@ -248,23 +248,23 @@ test.describe('Tab', () => {
         }
 
         test('does not remove the tab after hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 UI.Tab.init(tabToggle1).hide();
             });
             await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#tab-toggle-1', 'tab') instanceof UI.Tab)).toBe(true);
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 const tab = UI.Tab.init(tabToggle1);
                 window.tabHiddenEvents = 0;
 
-                $.addEvent(tabToggle1, 'hidden.ui.tab', (_) => {
+                $.addEvent(tabToggle1, 'hidden.ui.tab', () => {
                     window.tabHiddenEvents++;
                 });
                 tab.hide();
@@ -273,11 +273,11 @@ test.describe('Tab', () => {
             });
 
             await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
-            expect(await page.evaluate((_) => window.tabHiddenEvents)).toBe(1);
+            expect(await page.evaluate(() => window.tabHiddenEvents)).toBe(1);
         });
 
         test('can be called on hidden tab', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 UI.Tab.init(tabToggle2).hide();
             });
@@ -287,7 +287,7 @@ test.describe('Tab', () => {
         });
 
         test('hides without a transition class', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tab1 = $.findOne('#tab1');
                 $.removeClass(tab1, 'fade');
                 UI.Tab.init($.findOne('#tab-toggle-1')).hide();
@@ -298,7 +298,7 @@ test.describe('Tab', () => {
         });
 
         test('hides while transitioning in', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 const tab = UI.Tab.init(tabToggle2);
                 tab.show();
@@ -313,11 +313,11 @@ test.describe('Tab', () => {
 
     test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 let triggered = false;
 
-                $.addEvent(tabToggle2, 'show.ui.tab', (_) => {
+                $.addEvent(tabToggle2, 'show.ui.tab', () => {
                     triggered = true;
                 });
                 UI.Tab.init(tabToggle2).show();
@@ -329,10 +329,10 @@ test.describe('Tab', () => {
         });
 
         test('triggers shown event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => new Promise((resolve) => {
+            const eventTriggered = await page.evaluate(() => new Promise((resolve) => {
                 const tabToggle2 = $.findOne('#tab-toggle-2');
 
-                $.addEventOnce(tabToggle2, 'shown.ui.tab', (_) => resolve(true));
+                $.addEventOnce(tabToggle2, 'shown.ui.tab', () => resolve(true));
                 UI.Tab.init(tabToggle2).show();
             }));
 
@@ -347,11 +347,11 @@ test.describe('Tab', () => {
         });
 
         test('triggers hide event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 let triggered = false;
 
-                $.addEvent(tabToggle1, 'hide.ui.tab', (_) => {
+                $.addEvent(tabToggle1, 'hide.ui.tab', () => {
                     triggered = true;
                 });
                 UI.Tab.init(tabToggle1).hide();
@@ -363,29 +363,29 @@ test.describe('Tab', () => {
         });
 
         test('triggers hidden event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 window.tabHiddenEventTriggered = false;
 
-                $.addEvent(tabToggle1, 'hidden.ui.tab', (_) => {
+                $.addEvent(tabToggle1, 'hidden.ui.tab', () => {
                     window.tabHiddenEventTriggered = true;
                 });
                 UI.Tab.init(tabToggle1).hide();
             });
 
             await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
-            expect(await page.evaluate((_) => window.tabHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.tabHiddenEventTriggered)).toBe(true);
             await expect(page.locator('#tab-toggle-1')).toHaveClass('nav-link');
             await expect(page.locator('#tab-toggle-1')).toHaveAttribute('aria-selected', 'false');
         });
 
         test('triggers hide event on active tab', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 let triggered = false;
 
-                $.addEvent(tabToggle1, 'hide.ui.tab', (_) => {
+                $.addEvent(tabToggle1, 'hide.ui.tab', () => {
                     triggered = true;
                 });
                 UI.Tab.init(tabToggle2).show();
@@ -397,27 +397,27 @@ test.describe('Tab', () => {
         });
 
         test('triggers hidden event on active tab', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 window.activeTabHiddenEventTriggered = false;
 
-                $.addEvent(tabToggle1, 'hidden.ui.tab', (_) => {
+                $.addEvent(tabToggle1, 'hidden.ui.tab', () => {
                     window.activeTabHiddenEventTriggered = true;
                 });
                 UI.Tab.init(tabToggle2).show();
             });
 
             await expect(page.locator('#tab1')).toHaveClass('tab-pane fade');
-            expect(await page.evaluate((_) => window.activeTabHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.activeTabHiddenEventTriggered)).toBe(true);
         });
 
         test('can show from the hidden event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 const tab = UI.Tab.init(tabToggle1);
 
-                $.addEventOnce(tabToggle1, 'hidden.ui.tab', (_) => {
+                $.addEventOnce(tabToggle1, 'hidden.ui.tab', () => {
                     tab.show();
                 });
                 tab.hide();
@@ -429,11 +429,11 @@ test.describe('Tab', () => {
         });
 
         test('can hide from the shown event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 const tab = UI.Tab.init(tabToggle2);
 
-                $.addEventOnce(tabToggle2, 'shown.ui.tab', (_) => {
+                $.addEventOnce(tabToggle2, 'shown.ui.tab', () => {
                     tab.hide();
                 });
                 tab.show();
@@ -444,9 +444,9 @@ test.describe('Tab', () => {
         });
 
         test('can be prevented from showing', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle2 = $.findOne('#tab-toggle-2');
-                $.addEvent(tabToggle2, 'show.ui.tab', (_) => false);
+                $.addEvent(tabToggle2, 'show.ui.tab', () => false);
                 UI.Tab.init(tabToggle2).show();
             });
 
@@ -457,7 +457,7 @@ test.describe('Tab', () => {
         });
 
         test('can be prevented from showing (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 $.addEvent(tabToggle2, 'show.ui.tab', (event) => {
                     event.preventDefault();
@@ -472,9 +472,9 @@ test.describe('Tab', () => {
         });
 
         test('can be prevented from hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
-                $.addEvent(tabToggle1, 'hide.ui.tab', (_) => false);
+                $.addEvent(tabToggle1, 'hide.ui.tab', () => false);
                 UI.Tab.init(tabToggle1).hide();
             });
 
@@ -484,7 +484,7 @@ test.describe('Tab', () => {
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 $.addEvent(tabToggle1, 'hide.ui.tab', (event) => {
                     event.preventDefault();
@@ -498,10 +498,10 @@ test.describe('Tab', () => {
         });
 
         test('can be prevented from hiding active tab', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 const tabToggle2 = $.findOne('#tab-toggle-2');
-                $.addEvent(tabToggle1, 'hide.ui.tab', (_) => false);
+                $.addEvent(tabToggle1, 'hide.ui.tab', () => false);
                 UI.Tab.init(tabToggle2).show();
             });
 
@@ -512,7 +512,7 @@ test.describe('Tab', () => {
         });
 
         test('can be prevented from hiding active tab (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const tabToggle1 = $.findOne('#tab-toggle-1');
                 const tabToggle2 = $.findOne('#tab-toggle-2');
                 $.addEvent(tabToggle1, 'hide.ui.tab', (event) => {
@@ -610,7 +610,7 @@ test.describe('Tab', () => {
 
     test.describe('nav item wrappers', () => {
         test('shows the tab', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.body.innerHTML =
                     '<ul class="nav nav-tabs" role="tablist">' +
                     '<li class="nav-item">' +
@@ -635,7 +635,7 @@ test.describe('Tab', () => {
         });
 
         test('skips disabled tabs during keyboard navigation', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.body.innerHTML =
                     '<ul class="nav nav-tabs" role="tablist">' +
                     '<li class="nav-item">' +
@@ -671,7 +671,7 @@ test.describe('Tab', () => {
     test.describe('QuerySet', () => {
         test.describe('#init', () => {
             test('creates multiple tabs', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('a').tab();
                     return $.find('a').every((node) =>
                         $.getData(node, 'tab') instanceof UI.Tab,
@@ -682,7 +682,7 @@ test.describe('Tab', () => {
 
         test.describe('#dispose', () => {
             test('removes multiple tabs', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('a').tab('dispose');
                     return $.find('a').some((node) =>
                         $.hasData(node, 'tab'),
@@ -693,7 +693,7 @@ test.describe('Tab', () => {
 
         test.describe('#show', () => {
             test('shows multiple tabs', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('#tab-toggle-2, #tab-toggle-4').tab('show');
                 });
 
@@ -714,7 +714,7 @@ test.describe('Tab', () => {
 
         test.describe('#hide', () => {
             test('hides multiple tabs', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('#tab-toggle-1, #tab-toggle-3').tab('hide');
                 });
 

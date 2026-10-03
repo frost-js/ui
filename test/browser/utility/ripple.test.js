@@ -7,7 +7,7 @@ test.use({ mockClock: true });
 
 test.describe('Ripple', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML = '<button class="btn btn-secondary ripple" id="button"></button>';
         });
     });
@@ -30,13 +30,13 @@ test.describe('Ripple', () => {
 
         test('replaces a previous ripple effect', async ({ page }) => {
             await page.locator('#button').click();
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 window.previousRipple = $.findOne('#button > .ripple-effect');
             });
 
             await page.locator('#button').click();
 
-            expect(await page.evaluate((_) => window.previousRipple.isConnected)).toBe(false);
+            expect(await page.evaluate(() => window.previousRipple.isConnected)).toBe(false);
             await expect(page.locator('#button > .ripple-effect')).toHaveCount(1);
             await expect(page.locator('#button > .ripple-effect')).toHaveClass('ripple-effect show');
         });

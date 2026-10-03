@@ -3,7 +3,7 @@ import { expectStyles } from '../../support/assertions/styles.js';
 
 test.describe('Popper', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML =
                 '<button class="btn btn-secondary" id="button" style="width: 80px; height: 34px;" type="button">Button</button>' +
                 '<div class="badge" id="badge" style="width: 60px; height: 21px;">Badge</div>';
@@ -103,7 +103,7 @@ test.describe('Popper', () => {
         for (const { name, dispose } of [
             {
                 name: 'class',
-                dispose: (_) => {
+                dispose: () => {
                     const badge = $.findOne('#badge');
                     UI.Popper.init(badge, {
                         reference: $.findOne('#button'),
@@ -113,7 +113,7 @@ test.describe('Popper', () => {
             },
             {
                 name: 'QuerySet',
-                dispose: (_) => {
+                dispose: () => {
                     $('#badge').popper({
                         reference: $.findOne('#button'),
                     });
@@ -128,7 +128,7 @@ test.describe('Popper', () => {
         }
 
         test('restores positioning styles', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const badge = $.findOne('#badge');
 
                 $.setStyle(badge, {
@@ -152,7 +152,7 @@ test.describe('Popper', () => {
                 },
             ]);
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 UI.Popper.init($.findOne('#badge')).dispose();
             });
 
@@ -173,7 +173,7 @@ test.describe('Popper', () => {
         });
 
         test('restores arrow positioning styles', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const badge = $.findOne('#badge');
                 const arrow = $.create('div', {
                     attributes: { id: 'arrow' },
@@ -227,7 +227,7 @@ test.describe('Popper', () => {
         for (const { name, update } of [
             {
                 name: 'class',
-                update: (_) => {
+                update: () => {
                     const badge = $.findOne('#badge');
                     const button = $.findOne('#button');
                     const popper = UI.Popper.init(badge, {
@@ -240,7 +240,7 @@ test.describe('Popper', () => {
             },
             {
                 name: 'QuerySet',
-                update: (_) => {
+                update: () => {
                     const button = $.findOne('#button');
                     $('#badge').popper({
                         reference: button,
@@ -265,7 +265,7 @@ test.describe('Popper', () => {
 
     test.describe('scroll updates', () => {
         test('updates when an ancestor of the popper scrolls', async ({ page }) => {
-            expect(await page.evaluate(async (_) => {
+            expect(await page.evaluate(async () => {
                 const badge = $.findOne('#badge');
                 const scroll = $.create('div');
                 $.before(badge, scroll);
@@ -275,7 +275,7 @@ test.describe('Popper', () => {
                 let updated = false;
                 UI.Popper.init(badge, {
                     reference: $.findOne('#button'),
-                    afterUpdate: (_) => {
+                    afterUpdate: () => {
                         if (initialized) {
                             updated = true;
                         }
@@ -291,7 +291,7 @@ test.describe('Popper', () => {
         });
 
         test('updates when an ancestor of the reference scrolls', async ({ page }) => {
-            expect(await page.evaluate(async (_) => {
+            expect(await page.evaluate(async () => {
                 const badge = $.findOne('#badge');
                 const button = $.findOne('#button');
                 const scroll = $.create('div');
@@ -302,7 +302,7 @@ test.describe('Popper', () => {
                 let updated = false;
                 UI.Popper.init(badge, {
                     reference: button,
-                    afterUpdate: (_) => {
+                    afterUpdate: () => {
                         if (initialized) {
                             updated = true;
                         }
@@ -318,13 +318,13 @@ test.describe('Popper', () => {
         });
 
         test('does not update when an unrelated element scrolls', async ({ page }) => {
-            expect(await page.evaluate(async (_) => {
+            expect(await page.evaluate(async () => {
                 const badge = $.findOne('#badge');
                 let initialized = false;
                 let updated = false;
                 UI.Popper.init(badge, {
                     reference: $.findOne('#button'),
-                    afterUpdate: (_) => {
+                    afterUpdate: () => {
                         if (initialized) {
                             updated = true;
                         }
@@ -346,12 +346,12 @@ test.describe('Popper', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     let result;
                     const badge = $.findOne('#badge');
                     UI.Popper.init(badge, {
                         reference: $.findOne('#button'),
-                        beforeUpdate: (_) => {
+                        beforeUpdate: () => {
                             result = $.getStyle(badge, 'transform');
                         },
                     });
@@ -360,11 +360,11 @@ test.describe('Popper', () => {
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     let result;
                     $('#badge').popper({
                         reference: $.findOne('#button'),
-                        beforeUpdate: (_) => {
+                        beforeUpdate: () => {
                             result = $.getStyle('#badge', 'transform');
                         },
                     });
@@ -380,7 +380,7 @@ test.describe('Popper', () => {
         }
 
         test('uses the node as the first argument', async ({ page }) => {
-            expect(await page.evaluate((_) => {
+            expect(await page.evaluate(() => {
                 let isBadge;
                 const badge = $.findOne('#badge');
                 UI.Popper.init(badge, {
@@ -394,7 +394,7 @@ test.describe('Popper', () => {
         });
 
         test('uses the reference as the second argument', async ({ page }) => {
-            expect(await page.evaluate((_) => {
+            expect(await page.evaluate(() => {
                 let isButton;
                 const badge = $.findOne('#badge');
                 const button = $.findOne('#button');
@@ -409,12 +409,12 @@ test.describe('Popper', () => {
         });
 
         test('executes every time the popper is updated', async ({ page }) => {
-            expect(await page.evaluate((_) => {
+            expect(await page.evaluate(() => {
                 let count = 0;
                 const badge = $.findOne('#badge');
                 const popper = UI.Popper.init(badge, {
                     reference: $.findOne('#button'),
-                    beforeUpdate: (_) => count++,
+                    beforeUpdate: () => count++,
                 });
                 popper.update();
                 popper.update();
@@ -428,12 +428,12 @@ test.describe('Popper', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     let result;
                     const badge = $.findOne('#badge');
                     UI.Popper.init(badge, {
                         reference: $.findOne('#button'),
-                        afterUpdate: (_) => {
+                        afterUpdate: () => {
                             result = $.getStyle(badge, 'transform');
                         },
                     });
@@ -442,11 +442,11 @@ test.describe('Popper', () => {
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     let result;
                     $('#badge').popper({
                         reference: $.findOne('#button'),
-                        afterUpdate: (_) => {
+                        afterUpdate: () => {
                             result = $.getStyle('#badge', 'transform');
                         },
                     });
@@ -462,7 +462,7 @@ test.describe('Popper', () => {
         }
 
         test('uses the node as the first argument', async ({ page }) => {
-            expect(await page.evaluate((_) => {
+            expect(await page.evaluate(() => {
                 let isBadge;
                 const badge = $.findOne('#badge');
                 UI.Popper.init(badge, {
@@ -476,7 +476,7 @@ test.describe('Popper', () => {
         });
 
         test('uses the reference as the second argument', async ({ page }) => {
-            expect(await page.evaluate((_) => {
+            expect(await page.evaluate(() => {
                 let isButton;
                 const badge = $.findOne('#badge');
                 const button = $.findOne('#button');
@@ -491,7 +491,7 @@ test.describe('Popper', () => {
         });
 
         test('uses the placement as the third argument', async ({ page }) => {
-            expect(await page.evaluate((_) => {
+            expect(await page.evaluate(() => {
                 let callbackPlacement;
                 const badge = $.findOne('#badge');
                 UI.Popper.init(badge, {
@@ -505,7 +505,7 @@ test.describe('Popper', () => {
         });
 
         test('uses the position as the fourth argument', async ({ page }) => {
-            expect(await page.evaluate((_) => {
+            expect(await page.evaluate(() => {
                 let callbackPosition;
                 const badge = $.findOne('#badge');
                 UI.Popper.init(badge, {
@@ -519,12 +519,12 @@ test.describe('Popper', () => {
         });
 
         test('executes every time the popper is updated', async ({ page }) => {
-            expect(await page.evaluate((_) => {
+            expect(await page.evaluate(() => {
                 let count = 0;
                 const badge = $.findOne('#badge');
                 const popper = UI.Popper.init(badge, {
                     reference: $.findOne('#button'),
-                    afterUpdate: (_) => count++,
+                    afterUpdate: () => count++,
                 });
                 popper.update();
                 popper.update();

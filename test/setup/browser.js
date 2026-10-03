@@ -22,12 +22,12 @@ export async function advanceClock(page, milliseconds) {
 }
 
 /**
- * Wait for callbacks queued for the next animation frame.
+ * Waits for callbacks queued for the next animation frame.
  * @param {Page} page The Playwright page.
  * @returns {Promise<void>} The promise.
  */
 export async function waitForFrame(page) {
-    await page.evaluate((_) => new Promise((resolve) => {
+    await page.evaluate(() => new Promise((resolve) => {
         window.requestAnimationFrame(resolve);
     }));
 }

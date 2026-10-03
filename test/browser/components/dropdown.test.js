@@ -5,7 +5,7 @@ test.use({ reducedMotion: 'no-preference' });
 
 test.describe('Dropdown', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML =
                 '<div>' +
                 '<button class="btn btn-secondary" id="dropdown-toggle-1" data-ui-toggle="dropdown" type="button"></button>' +
@@ -49,7 +49,7 @@ test.describe('Dropdown', () => {
         test('creates a dropdown (data-ui-toggle)', async ({ page }) => {
             await page.locator('#dropdown-toggle-1').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#dropdown-toggle-1', 'dropdown') instanceof UI.Dropdown)).toBe(true);
         });
     });
@@ -79,11 +79,11 @@ test.describe('Dropdown', () => {
         }
 
         test('settles showing on disposal without a late event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 window.dropdownShownEventTriggered = false;
 
-                $.addEvent(dropdownToggle1, 'shown.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'shown.ui.dropdown', () => {
                     window.dropdownShownEventTriggered = true;
                 });
 
@@ -96,22 +96,22 @@ test.describe('Dropdown', () => {
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
             await expect(page.locator('#dropdown1')).toHaveClass(/\bshow\b/);
             await expect(page.locator('#dropdown1')).toBeVisible();
-            expect(await page.evaluate((_) => window.dropdownShownEventTriggered)).toBe(false);
-            expect(await page.evaluate((_) => $.hasData('#dropdown-toggle-1', 'dropdown'))).toBe(false);
+            expect(await page.evaluate(() => window.dropdownShownEventTriggered)).toBe(false);
+            expect(await page.evaluate(() => $.hasData('#dropdown-toggle-1', 'dropdown'))).toBe(false);
         });
 
         test('settles hiding on disposal without a late event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
             });
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 window.dropdownHiddenEventTriggered = false;
 
-                $.addEvent(dropdownToggle1, 'hidden.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'hidden.ui.dropdown', () => {
                     window.dropdownHiddenEventTriggered = true;
                 });
 
@@ -124,8 +124,8 @@ test.describe('Dropdown', () => {
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
             await expect(page.locator('#dropdown1')).not.toHaveClass(/\bshow\b/);
             await expect(page.locator('#dropdown1')).toBeHidden();
-            expect(await page.evaluate((_) => window.dropdownHiddenEventTriggered)).toBe(false);
-            expect(await page.evaluate((_) => $.hasData('#dropdown-toggle-1', 'dropdown'))).toBe(false);
+            expect(await page.evaluate(() => window.dropdownHiddenEventTriggered)).toBe(false);
+            expect(await page.evaluate(() => $.hasData('#dropdown-toggle-1', 'dropdown'))).toBe(false);
         });
     });
 
@@ -158,7 +158,7 @@ test.describe('Dropdown', () => {
         }
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 const dropdown = UI.Dropdown.init(dropdownToggle1);
                 dropdown.show();
@@ -171,13 +171,13 @@ test.describe('Dropdown', () => {
         });
 
         test('can be called on a shown dropdown', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
             });
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
             });
@@ -187,7 +187,7 @@ test.describe('Dropdown', () => {
         });
 
         test('shows without a transition class', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdown1 = $.findOne('#dropdown1');
                 $.removeClass(dropdown1, 'fade');
                 UI.Dropdown.init($.findOne('#dropdown-toggle-1')).show();
@@ -199,7 +199,7 @@ test.describe('Dropdown', () => {
         });
 
         test('shows when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 const dropdown1 = $.findOne('#dropdown1');
                 UI.Dropdown.init(dropdownToggle1).show();
@@ -247,7 +247,7 @@ test.describe('Dropdown', () => {
     });
 
     const setupHide = async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
             UI.Dropdown.init(dropdownToggle1).show();
         });
@@ -283,18 +283,18 @@ test.describe('Dropdown', () => {
         }
 
         test('does not remove the dropdown after hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).hide();
             });
             await expect(page.locator('#dropdown1')).toBeHidden();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#dropdown-toggle-1', 'dropdown') instanceof UI.Dropdown)).toBe(true);
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 const dropdown = UI.Dropdown.init(dropdownToggle1);
                 dropdown.hide();
@@ -307,13 +307,13 @@ test.describe('Dropdown', () => {
         });
 
         test('can be called on a hidden dropdown', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).hide();
             });
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).hide();
             });
@@ -323,7 +323,7 @@ test.describe('Dropdown', () => {
         });
 
         test('hides without a transition class', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdown1 = $.findOne('#dropdown1');
                 $.removeClass(dropdown1, 'fade');
                 UI.Dropdown.init($.findOne('#dropdown-toggle-1')).hide();
@@ -335,7 +335,7 @@ test.describe('Dropdown', () => {
         });
 
         test('hides when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 const dropdown1 = $.findOne('#dropdown1');
                 UI.Dropdown.init(dropdownToggle1).hide();
@@ -352,7 +352,7 @@ test.describe('Dropdown', () => {
 
     test.describe('#toggle', () => {
         test('shows the dropdown', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).toggle();
             });
@@ -372,7 +372,7 @@ test.describe('Dropdown', () => {
         });
 
         test('ignores repeated calls while showing', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 const dropdown = UI.Dropdown.init(dropdownToggle1);
                 dropdown.toggle();
@@ -385,13 +385,13 @@ test.describe('Dropdown', () => {
         });
 
         test('ignores repeated calls while hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
             });
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 const dropdown = UI.Dropdown.init(dropdownToggle1);
                 dropdown.toggle();
@@ -406,11 +406,11 @@ test.describe('Dropdown', () => {
 
     test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 let triggered = false;
 
-                $.addEvent(dropdownToggle1, 'show.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'show.ui.dropdown', () => {
                     triggered = true;
                 });
                 UI.Dropdown.init(dropdownToggle1).show();
@@ -422,32 +422,32 @@ test.describe('Dropdown', () => {
         });
 
         test('triggers shown event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 window.dropdownShownEventTriggered = false;
 
-                $.addEvent(dropdownToggle1, 'shown.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'shown.ui.dropdown', () => {
                     window.dropdownShownEventTriggered = true;
                 });
                 UI.Dropdown.init(dropdownToggle1).show();
             });
 
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            expect(await page.evaluate((_) => window.dropdownShownEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.dropdownShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
             });
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-            const eventTriggered = await page.evaluate((_) => {
+            const eventTriggered = await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 let triggered = false;
 
-                $.addEvent(dropdownToggle1, 'hide.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'hide.ui.dropdown', () => {
                     triggered = true;
                 });
                 UI.Dropdown.init(dropdownToggle1).hide();
@@ -459,76 +459,76 @@ test.describe('Dropdown', () => {
         });
 
         test('triggers hidden event', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
             });
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 window.dropdownHiddenEventTriggered = false;
 
-                $.addEvent(dropdownToggle1, 'hidden.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'hidden.ui.dropdown', () => {
                     window.dropdownHiddenEventTriggered = true;
                 });
                 UI.Dropdown.init(dropdownToggle1).hide();
             });
 
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
-            expect(await page.evaluate((_) => window.dropdownHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.dropdownHiddenEventTriggered)).toBe(true);
         });
 
         test('triggers show events when toggled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 window.dropdownShowEventTriggered = false;
                 window.dropdownShownEventTriggered = false;
 
-                $.addEvent(dropdownToggle1, 'show.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'show.ui.dropdown', () => {
                     window.dropdownShowEventTriggered = true;
                 });
-                $.addEvent(dropdownToggle1, 'shown.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'shown.ui.dropdown', () => {
                     window.dropdownShownEventTriggered = true;
                 });
                 UI.Dropdown.init(dropdownToggle1).toggle();
             });
 
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
-            expect(await page.evaluate((_) => window.dropdownShowEventTriggered)).toBe(true);
-            expect(await page.evaluate((_) => window.dropdownShownEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.dropdownShowEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.dropdownShownEventTriggered)).toBe(true);
         });
 
         test('triggers hide events when toggled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
             });
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 window.dropdownHideEventTriggered = false;
                 window.dropdownHiddenEventTriggered = false;
 
-                $.addEvent(dropdownToggle1, 'hide.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'hide.ui.dropdown', () => {
                     window.dropdownHideEventTriggered = true;
                 });
-                $.addEvent(dropdownToggle1, 'hidden.ui.dropdown', (_) => {
+                $.addEvent(dropdownToggle1, 'hidden.ui.dropdown', () => {
                     window.dropdownHiddenEventTriggered = true;
                 });
                 UI.Dropdown.init(dropdownToggle1).toggle();
             });
 
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
-            expect(await page.evaluate((_) => window.dropdownHideEventTriggered)).toBe(true);
-            expect(await page.evaluate((_) => window.dropdownHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.dropdownHideEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.dropdownHiddenEventTriggered)).toBe(true);
         });
 
         test('can be prevented from showing', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
-                $.addEvent(dropdownToggle1, 'show.ui.dropdown', (_) => false);
+                $.addEvent(dropdownToggle1, 'show.ui.dropdown', () => false);
                 UI.Dropdown.init(dropdownToggle1).show();
             });
 
@@ -538,7 +538,7 @@ test.describe('Dropdown', () => {
         });
 
         test('can be prevented from showing (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 $.addEvent(dropdownToggle1, 'show.ui.dropdown', (event) => {
                     event.preventDefault();
@@ -552,15 +552,15 @@ test.describe('Dropdown', () => {
         });
 
         test('can be prevented from hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
             });
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
-                $.addEvent(dropdownToggle1, 'hide.ui.dropdown', (_) => false);
+                $.addEvent(dropdownToggle1, 'hide.ui.dropdown', () => false);
                 UI.Dropdown.init(dropdownToggle1).hide();
             });
 
@@ -569,13 +569,13 @@ test.describe('Dropdown', () => {
         });
 
         test('can be prevented from hiding (prevent default)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1).show();
             });
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 $.addEvent(dropdownToggle1, 'hide.ui.dropdown', (event) => {
                     event.preventDefault();
@@ -616,7 +616,7 @@ test.describe('Dropdown', () => {
         });
 
         test('does not hide the dropdown on child form click', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const form = $.create('form', {
                     attributes: {
                         id: 'form1',
@@ -668,7 +668,7 @@ test.describe('Dropdown', () => {
         });
 
         test('focuses the first enabled item on arrow key', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const item1 = $.findOne('#dropdown-1-item-1');
                 $.setAttribute(item1, { disabled: true });
             });
@@ -699,7 +699,7 @@ test.describe('Dropdown', () => {
         });
 
         test('skips dividers and disabled items with arrow keys', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const item2 = $.findOne('#dropdown-1-item-2');
                 const divider = $.create('hr', { class: 'dropdown-divider' });
 
@@ -744,14 +744,14 @@ test.describe('Dropdown', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                     UI.Dropdown.init(dropdownToggle1, { autoClose: false }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#dropdown-toggle-1')
                         .dropdown({ autoClose: false })
                         .show();
@@ -770,7 +770,7 @@ test.describe('Dropdown', () => {
         }
 
         test('works with auto close option (data-ui-auto-close)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 $.setDataset(dropdownToggle1, { uiAutoClose: false });
                 UI.Dropdown.init(dropdownToggle1).show();
@@ -784,7 +784,7 @@ test.describe('Dropdown', () => {
         });
 
         test('hides on document click with auto close outside', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1, { autoClose: 'outside' }).show();
             });
@@ -797,7 +797,7 @@ test.describe('Dropdown', () => {
         });
 
         test('does not hide on document click with auto close inside', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1, { autoClose: 'inside' }).show();
             });
@@ -810,7 +810,7 @@ test.describe('Dropdown', () => {
         });
 
         test('hides on menu click with auto close inside', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1, { autoClose: 'inside' }).show();
             });
@@ -823,7 +823,7 @@ test.describe('Dropdown', () => {
         });
 
         test('does not hide on menu click with auto close outside', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 UI.Dropdown.init(dropdownToggle1, { autoClose: 'outside' }).show();
             });
@@ -840,14 +840,14 @@ test.describe('Dropdown', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                     UI.Dropdown.init(dropdownToggle1, { display: 'static' }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#dropdown-toggle-1')
                         .dropdown({ display: 'static' })
                         .show();
@@ -866,7 +866,7 @@ test.describe('Dropdown', () => {
         }
 
         test('works with static display option (data-ui-display)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const dropdownToggle1 = $.findOne('#dropdown-toggle-1');
                 $.setDataset(dropdownToggle1, { uiDisplay: 'static' });
                 UI.Dropdown.init(dropdownToggle1).show();
@@ -884,7 +884,7 @@ test.describe('Dropdown', () => {
     test.describe('QuerySet', () => {
         test.describe('#init', () => {
             test('creates multiple dropdowns', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('[data-ui-toggle="dropdown"]').dropdown();
                     return $.find('[data-ui-toggle="dropdown"]').every((node) =>
                         $.getData(node, 'dropdown') instanceof UI.Dropdown,
@@ -897,7 +897,7 @@ test.describe('Dropdown', () => {
             test.use({ mockClock: true });
 
             test('removes multiple dropdowns', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('[data-ui-toggle="dropdown"]').dropdown('dispose');
                     return $.find('[data-ui-toggle="dropdown"]').some((node) =>
                         $.hasData(node, 'dropdown'),
@@ -908,7 +908,7 @@ test.describe('Dropdown', () => {
 
         test.describe('#show', () => {
             test('shows multiple dropdowns', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('[data-ui-toggle="dropdown"]').dropdown('show');
                 });
 
@@ -923,12 +923,12 @@ test.describe('Dropdown', () => {
             test.beforeEach(setupHide);
 
             test('hides multiple dropdowns', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('#dropdown-toggle-2').dropdown('show');
                 });
                 await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'true');
 
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('[data-ui-toggle="dropdown"]').dropdown('hide');
                 });
 
@@ -941,12 +941,12 @@ test.describe('Dropdown', () => {
 
         test.describe('#toggle', () => {
             test('shows and hides the dropdown', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('#dropdown-toggle-1').dropdown('toggle');
                 });
                 await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('#dropdown-toggle-1').dropdown('toggle');
                 });
 
@@ -955,13 +955,13 @@ test.describe('Dropdown', () => {
             });
 
             test('shows and hides multiple dropdowns', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('[data-ui-toggle="dropdown"]').dropdown('toggle');
                 });
                 await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
                 await expect(page.locator('#dropdown-toggle-2')).toHaveAttribute('aria-expanded', 'true');
 
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('[data-ui-toggle="dropdown"]').dropdown('toggle');
                 });
 

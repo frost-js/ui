@@ -32,7 +32,7 @@ test.describe('Button', () => {
         test('creates a button (data-ui-toggle)', async ({ page }) => {
             await page.locator('#button1').click();
 
-            expect(await page.evaluate((_) =>
+            expect(await page.evaluate(() =>
                 $.getData('#button1', 'button') instanceof UI.Button)).toBe(true);
         });
     });
@@ -118,7 +118,7 @@ test.describe('Button', () => {
     test.describe('QuerySet', () => {
         test.describe('#init', () => {
             test('creates multiple buttons', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('button').button();
                     return $.find('button').every((node) =>
                         $.getData(node, 'button') instanceof UI.Button,
@@ -129,7 +129,7 @@ test.describe('Button', () => {
 
         test.describe('#dispose', () => {
             test('removes multiple buttons', async ({ page }) => {
-                expect(await page.evaluate((_) => {
+                expect(await page.evaluate(() => {
                     $('button').button('dispose');
                     return $.find('button').some((node) =>
                         $.hasData(node, 'button'),
@@ -140,7 +140,7 @@ test.describe('Button', () => {
 
         test.describe('#toggle', () => {
             test('toggles multiple buttons', async ({ page }) => {
-                await page.evaluate((_) => {
+                await page.evaluate(() => {
                     $('button').button('toggle');
                 });
 

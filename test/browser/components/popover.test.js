@@ -12,14 +12,14 @@ test.describe('Popover', () => {
         for (const { name, show } of [
             {
                 name: 'class',
-                show: (_) => {
+                show: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1).show();
                 },
             },
             {
                 name: 'QuerySet',
-                show: (_) => {
+                show: () => {
                     $('#popover-toggle-1').popover('show');
                 },
             },
@@ -39,7 +39,7 @@ test.describe('Popover', () => {
         }
 
         test('shows multiple popovers (QuerySet)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('button').popover('show');
             });
 
@@ -49,7 +49,7 @@ test.describe('Popover', () => {
         });
 
         test('can be called multiple times', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 const popover = UI.Popover.init(popoverToggle1);
                 popover.show();
@@ -61,12 +61,12 @@ test.describe('Popover', () => {
         });
 
         test('can be called on shown popover', async ({ page }) => {
-            await page.evaluate((_) => new Promise((resolve) => {
+            await page.evaluate(() => new Promise((resolve) => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
-                $.addEventOnce(popoverToggle1, 'shown.ui.popover', (_) => resolve());
+                $.addEventOnce(popoverToggle1, 'shown.ui.popover', () => resolve());
                 UI.Popover.init(popoverToggle1).show();
             }));
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1).show();
             });
@@ -76,7 +76,7 @@ test.describe('Popover', () => {
         });
 
         test('shows the popover on inline-start in RTL', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.documentElement.dir = 'rtl';
                 UI.Popover.init($.findOne('#popover-toggle-1'), {
                     fixed: true,
@@ -90,7 +90,7 @@ test.describe('Popover', () => {
         });
 
         test('shows when the transition is canceled', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1).show();
                 const transition = $.findOne('.popover').getAnimations()
@@ -103,15 +103,15 @@ test.describe('Popover', () => {
         });
 
         test('can be interrupted by hiding', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 window.popoverShownEventTriggered = false;
                 window.popoverHiddenEventTriggered = false;
 
-                $.addEvent(popoverToggle1, 'shown.ui.popover', (_) => {
+                $.addEvent(popoverToggle1, 'shown.ui.popover', () => {
                     window.popoverShownEventTriggered = true;
                 });
-                $.addEvent(popoverToggle1, 'hidden.ui.popover', (_) => {
+                $.addEvent(popoverToggle1, 'hidden.ui.popover', () => {
                     window.popoverHiddenEventTriggered = true;
                 });
 
@@ -121,8 +121,8 @@ test.describe('Popover', () => {
             });
 
             await expect(page.locator('.popover')).toHaveCount(0);
-            expect(await page.evaluate((_) => window.popoverShownEventTriggered)).toBe(false);
-            expect(await page.evaluate((_) => window.popoverHiddenEventTriggered)).toBe(true);
+            expect(await page.evaluate(() => window.popoverShownEventTriggered)).toBe(false);
+            expect(await page.evaluate(() => window.popoverHiddenEventTriggered)).toBe(true);
         });
     });
 
@@ -130,11 +130,11 @@ test.describe('Popover', () => {
         for (const { name, prepare, refresh } of [
             {
                 name: 'class',
-                prepare: (_) => {
+                prepare: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1).show();
                 },
-                refresh: (_) => {
+                refresh: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     $.setDataset(popoverToggle1, { uiTitle: 'Test' });
                     UI.Popover.init(popoverToggle1).refresh();
@@ -142,10 +142,10 @@ test.describe('Popover', () => {
             },
             {
                 name: 'QuerySet',
-                prepare: (_) => {
+                prepare: () => {
                     $('#popover-toggle-1').popover('show');
                 },
-                refresh: (_) => {
+                refresh: () => {
                     $('#popover-toggle-1')
                         .setDataset({ uiTitle: 'Test' })
                         .popover('refresh');
@@ -162,10 +162,10 @@ test.describe('Popover', () => {
         }
 
         test('refreshes multiple popovers titles (QuerySet)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('button').popover('show');
             });
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('button')
                     .setDataset({ uiTitle: 'Test' })
                     .popover('refresh');
@@ -177,11 +177,11 @@ test.describe('Popover', () => {
         for (const { name, prepare, refresh } of [
             {
                 name: 'class',
-                prepare: (_) => {
+                prepare: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1).show();
                 },
-                refresh: (_) => {
+                refresh: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     $.setDataset(popoverToggle1, { uiContent: 'Test' });
                     UI.Popover.init(popoverToggle1).refresh();
@@ -189,10 +189,10 @@ test.describe('Popover', () => {
             },
             {
                 name: 'QuerySet',
-                prepare: (_) => {
+                prepare: () => {
                     $('#popover-toggle-1').popover('show');
                 },
-                refresh: (_) => {
+                refresh: () => {
                     $('#popover-toggle-1')
                         .setDataset({ uiContent: 'Test' })
                         .popover('refresh');
@@ -209,10 +209,10 @@ test.describe('Popover', () => {
         }
 
         test('refreshes multiple popovers content (QuerySet)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('button').popover('show');
             });
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $('button')
                     .setDataset({ uiContent: 'Test' })
                     .popover('refresh');
@@ -226,14 +226,14 @@ test.describe('Popover', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1, { title: 'Test' }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#popover-toggle-1')
                         .popover({ title: 'Test' })
                         .show();
@@ -248,7 +248,7 @@ test.describe('Popover', () => {
         }
 
         test('works with title option (data-ui-title)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, { uiTitle: 'Test' });
                 UI.Popover.init(popoverToggle1).show();
@@ -259,7 +259,7 @@ test.describe('Popover', () => {
         });
 
         test('works with title option (title)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setAttribute(popoverToggle1, { title: 'Test' });
                 UI.Popover.init(popoverToggle1).show();
@@ -271,7 +271,7 @@ test.describe('Popover', () => {
         });
 
         test('prioritizes dataset over setting', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, { uiTitle: 'Test' });
                 UI.Popover.init(popoverToggle1, { title: 'Test 2' }).show();
@@ -282,7 +282,7 @@ test.describe('Popover', () => {
         });
 
         test('prioritizes setting over attribute', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setAttribute(popoverToggle1, { title: 'Test 2' });
                 UI.Popover.init(popoverToggle1, { title: 'Test' }).show();
@@ -297,14 +297,14 @@ test.describe('Popover', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1, { content: 'Test' }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#popover-toggle-1')
                         .popover({ content: 'Test' })
                         .show();
@@ -320,7 +320,7 @@ test.describe('Popover', () => {
         }
 
         test('works with content option (data-ui-content)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, { uiContent: 'Test' });
                 UI.Popover.init(popoverToggle1).show();
@@ -331,7 +331,7 @@ test.describe('Popover', () => {
         });
 
         test('prioritizes dataset over setting', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, { uiContent: 'Test' });
                 UI.Popover.init(popoverToggle1, { content: 'Test 2' }).show();
@@ -346,7 +346,7 @@ test.describe('Popover', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1, {
                         template: '<div class="popover" role="tooltip" data-test="Test"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
@@ -355,7 +355,7 @@ test.describe('Popover', () => {
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#popover-toggle-1').popover({
                         template: '<div class="popover" role="tooltip" data-test="Test"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
                     }).show();
@@ -373,7 +373,7 @@ test.describe('Popover', () => {
         }
 
         test('works with template option (data-ui-template)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, {
                     uiTemplate: '<div class="popover" role="tooltip" data-test="Test"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
@@ -391,7 +391,7 @@ test.describe('Popover', () => {
 
     test.describe('html option', () => {
         test('escapes html tags in title', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { title: '<b>Test</b>' }).show();
             });
@@ -403,14 +403,14 @@ test.describe('Popover', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1, { title: '<b>Test</b>', html: true }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#popover-toggle-1')
                         .popover({ title: '<b>Test</b>', html: true })
                         .show();
@@ -425,7 +425,7 @@ test.describe('Popover', () => {
         }
 
         test('works with html option for title (data-ui-html)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, { uiHtml: true });
                 UI.Popover.init(popoverToggle1, { title: '<b>Test</b>' }).show();
@@ -436,7 +436,7 @@ test.describe('Popover', () => {
         });
 
         test('escapes html tags in content', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { content: '<b>Test</b>' }).show();
             });
@@ -448,14 +448,14 @@ test.describe('Popover', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1, { content: '<b>Test</b>', html: true }).show();
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#popover-toggle-1')
                         .popover({ content: '<b>Test</b>', html: true })
                         .show();
@@ -470,7 +470,7 @@ test.describe('Popover', () => {
         }
 
         test('works with html option for content (data-ui-html)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, { uiHtml: true });
                 UI.Popover.init(popoverToggle1, { content: '<b>Test</b>' }).show();
@@ -483,7 +483,7 @@ test.describe('Popover', () => {
 
     test.describe('sanitize option', () => {
         test('sanitizes html tags in title', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, {
                     title: '<b data-test="test">Test</b>',
@@ -498,7 +498,7 @@ test.describe('Popover', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1, {
                         title: '<b data-test="test">Test</b>',
@@ -509,7 +509,7 @@ test.describe('Popover', () => {
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#popover-toggle-1')
                         .popover({
                             title: '<b data-test="test">Test</b>',
@@ -529,7 +529,7 @@ test.describe('Popover', () => {
         }
 
         test('works with sanitize option for title (data-ui-sanitize)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, { uiSanitize: false });
                 UI.Popover.init(popoverToggle1, {
@@ -543,7 +543,7 @@ test.describe('Popover', () => {
         });
 
         test('sanitizes html tags in content', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, {
                     content: '<b data-test="test">Test</b>',
@@ -558,7 +558,7 @@ test.describe('Popover', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1, {
                         content: '<b data-test="test">Test</b>',
@@ -569,7 +569,7 @@ test.describe('Popover', () => {
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#popover-toggle-1')
                         .popover({
                             content: '<b data-test="test">Test</b>',
@@ -589,7 +589,7 @@ test.describe('Popover', () => {
         }
 
         test('works with sanitize option for content (data-ui-sanitize)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, { uiSanitize: false });
                 UI.Popover.init(popoverToggle1, {
@@ -605,7 +605,7 @@ test.describe('Popover', () => {
 
     test.describe('trigger option', () => {
         test('shows on mouseover with hover trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: 'hover' });
             });
@@ -615,7 +615,7 @@ test.describe('Popover', () => {
         });
 
         test('shows on focus with focus trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: 'focus' });
             });
@@ -627,14 +627,14 @@ test.describe('Popover', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     const popoverToggle1 = $.findOne('#popover-toggle-1');
                     UI.Popover.init(popoverToggle1, { trigger: 'click' });
                 },
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $('#popover-toggle-1').popover({ trigger: 'click' });
                 },
             },
@@ -648,7 +648,7 @@ test.describe('Popover', () => {
         }
 
         test('hides on mouseout with hover trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: 'hover' }).show();
             });
@@ -661,7 +661,7 @@ test.describe('Popover', () => {
         });
 
         test('hides on blur with focus trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: 'focus' }).show();
             });
@@ -674,7 +674,7 @@ test.describe('Popover', () => {
         });
 
         test('hides on click with click trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: 'click' }).show();
             });
@@ -687,7 +687,7 @@ test.describe('Popover', () => {
         });
 
         test('does not on mouseover without hover trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: '' });
             });
@@ -697,7 +697,7 @@ test.describe('Popover', () => {
         });
 
         test('does not on focus without focus trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: '' });
             });
@@ -707,7 +707,7 @@ test.describe('Popover', () => {
         });
 
         test('does not on click without click trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: '' });
             });
@@ -717,7 +717,7 @@ test.describe('Popover', () => {
         });
 
         test('does not hide on mouseout without hover trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: '' }).show();
             });
@@ -728,7 +728,7 @@ test.describe('Popover', () => {
         });
 
         test('does not hide on blur without focus trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: '' }).show();
             });
@@ -739,7 +739,7 @@ test.describe('Popover', () => {
         });
 
         test('does not hide on click without click trigger option', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: '' }).show();
             });
@@ -750,7 +750,7 @@ test.describe('Popover', () => {
         });
 
         test('works with trigger option (data-ui-trigger)', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 $.setDataset(popoverToggle1, { uiTrigger: 'click' });
                 UI.Popover.init(popoverToggle1);
@@ -761,7 +761,7 @@ test.describe('Popover', () => {
         });
 
         test('works with multiple trigger options', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 const popoverToggle1 = $.findOne('#popover-toggle-1');
                 UI.Popover.init(popoverToggle1, { trigger: 'hover focus' });
             });

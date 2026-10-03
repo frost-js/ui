@@ -3,7 +3,7 @@ import { expectPopperPosition } from '../../support/assertions/popper.js';
 
 test.describe('Popper positioning', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             $.setStyle(document.documentElement, { overflow: 'hidden' });
             document.body.innerHTML =
                 '<div id="reference" style="position: absolute; left: 360px; top: 283px; width: 80px; height: 34px;"></div>' +
@@ -66,7 +66,7 @@ test.describe('Popper positioning', () => {
         }
 
         test('reads placement and position from data attributes', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setAttribute('#popper', {
                     'data-ui-placement': 'top',
                     'data-ui-position': 'end',
@@ -87,7 +87,7 @@ test.describe('Popper positioning', () => {
 
     test.describe('RTL placement/position options', () => {
         test.beforeEach(async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.documentElement.dir = 'rtl';
             });
         });
@@ -117,7 +117,7 @@ test.describe('Popper positioning', () => {
         }
 
         test('selects inline-start automatically', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', { left: '40px' });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
@@ -135,7 +135,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('flips inline-start to inline-end', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', { left: '720px' });
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
@@ -251,7 +251,7 @@ test.describe('Popper positioning', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     $.setStyle('#reference', {
                         left: '360px',
                         top: '10px',
@@ -266,7 +266,7 @@ test.describe('Popper positioning', () => {
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $.setStyle('#reference', { top: '10px' });
                     $('#popper').popper({
                         reference: $.findOne('#reference'),
@@ -289,7 +289,7 @@ test.describe('Popper positioning', () => {
         }
 
         test('preserves inline-end at the viewport edge', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', {
                     left: '720px',
                     top: '283px',
@@ -311,7 +311,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('preserves bottom at the viewport edge', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', {
                     left: '360px',
                     top: '556px',
@@ -333,7 +333,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('preserves inline-start at the viewport edge', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', {
                     left: '10px',
                     top: '283px',
@@ -355,7 +355,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('reads fixed from data attributes', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', { top: '10px' });
                 $.setAttribute('#popper', {
                     'data-ui-fixed': true,
@@ -427,7 +427,7 @@ test.describe('Popper positioning', () => {
         }
 
         test('reads spacing from data attributes', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setAttribute('#popper', {
                     'data-ui-fixed': true,
                     'data-ui-placement': 'end',
@@ -450,7 +450,7 @@ test.describe('Popper positioning', () => {
 
     test.describe('minContact option', () => {
         test('preserves contact at the top edge', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', {
                     left: '360px',
                     top: '-29px',
@@ -476,7 +476,7 @@ test.describe('Popper positioning', () => {
         for (const { name, run } of [
             {
                 name: 'class',
-                run: (_) => {
+                run: () => {
                     $.setStyle('#reference', {
                         left: '795px',
                         top: '283px',
@@ -492,7 +492,7 @@ test.describe('Popper positioning', () => {
             },
             {
                 name: 'QuerySet',
-                run: (_) => {
+                run: () => {
                     $.setStyle('#reference', { left: '795px' });
                     $('#popper').popper({
                         reference: $.findOne('#reference'),
@@ -518,7 +518,7 @@ test.describe('Popper positioning', () => {
         }
 
         test('preserves contact at the bottom edge', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', {
                     left: '360px',
                     top: '595px',
@@ -542,7 +542,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('preserves contact at the left edge', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', {
                     left: '-75px',
                     top: '283px',
@@ -566,7 +566,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('reads minContact from data attributes', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', { left: '795px' });
                 $.setAttribute('#popper', {
                     'data-ui-fixed': true,
@@ -590,7 +590,7 @@ test.describe('Popper positioning', () => {
 
     test.describe('arrow option', () => {
         test('aligns the arrow below a top/start popper', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.querySelector('#popper').innerHTML = '<div id="arrow" style="width: 16px; height: 8px;"></div>';
                 const arrow = $.findOne('#arrow');
 
@@ -611,7 +611,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('aligns the arrow above a bottom/end popper', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.querySelector('#popper').innerHTML = '<div id="arrow" style="width: 16px; height: 8px;"></div>';
                 const arrow = $.findOne('#arrow');
 
@@ -634,13 +634,13 @@ test.describe('Popper positioning', () => {
 
     test.describe('fixed reference', () => {
         test.beforeEach(async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle('#reference', { position: 'fixed' });
             });
         });
 
         test('positions top', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
                     placement: 'top',
@@ -658,7 +658,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('positions inline-end', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
                     placement: 'end',
@@ -676,7 +676,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('positions bottom', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
                     placement: 'bottom',
@@ -694,7 +694,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('positions inline-start', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 UI.Popper.init($.findOne('#popper'), {
                     reference: $.findOne('#reference'),
                     placement: 'start',
@@ -712,7 +712,7 @@ test.describe('Popper positioning', () => {
         });
 
         test('remains attached after document scroll', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.setStyle(document.body, { minHeight: '2000px' });
                 $.setStyle(document.documentElement, { overflow: '' });
                 $.setStyle('#reference', { position: 'fixed' });

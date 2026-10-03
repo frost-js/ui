@@ -282,7 +282,7 @@ function expectCoordinate(actual, expected, message) {
 }
 
 /**
- * Get the viewport-relative edges for a bounding box.
+ * Gets the viewport-relative edges for a bounding box.
  * @param {BoundingBox} box The bounding box.
  * @returns {{top: number, right: number, bottom: number, left: number}} The box edges.
  */
@@ -296,7 +296,7 @@ function getBoxEdges(box) {
 }
 
 /**
- * Get the expected coordinate for a boundary-clamped popper edge.
+ * Gets the expected coordinate for a boundary-clamped popper edge.
  * @param {PhysicalPlacement} boundaryEdge The expected clamped edge.
  * @param {number} contact The minimum reference overlap.
  * @param {BoundingBox} referenceBox The reference box.
@@ -321,7 +321,7 @@ function getClampedBoundaryCoordinate(boundaryEdge, contact, referenceBox, bound
 }
 
 /**
- * Get the viewport-relative boundary box for an element.
+ * Gets the viewport-relative boundary box for an element.
  * @param {Page} page The Playwright page.
  * @param {string} selector The boundary selector.
  * @returns {Promise<{top: number, right: number, bottom: number, left: number}>} The box.
@@ -370,7 +370,7 @@ function getPhysicalPlacement(placement, rtl) {
 }
 
 /**
- * Get the viewport-relative window boundary box.
+ * Gets the viewport-relative window boundary box.
  * @param {Page} page The Playwright page.
  * @returns {Promise<{top: number, right: number, bottom: number, left: number}>} The box.
  */

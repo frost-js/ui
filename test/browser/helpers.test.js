@@ -4,7 +4,7 @@ import { expectStyles } from '../support/assertions/styles.js';
 
 test.describe('initComponent', () => {
     test('defines the query method as non-enumerable', async ({ page }) => {
-        expect(await page.evaluate((_) => {
+        expect(await page.evaluate(() => {
             class TestComponent {}
 
             UI.initComponent('testComponent', TestComponent);
@@ -23,7 +23,7 @@ test.describe('initComponent', () => {
 
 test.describe('getTouchPositions', () => {
     test('returns the page position of each active touch', async ({ page }) => {
-        expect(await page.evaluate((_) => UI.getTouchPositions({
+        expect(await page.evaluate(() => UI.getTouchPositions({
             touches: [
                 { pageX: 12, pageY: 34 },
                 { pageX: 56, pageY: 78 },
@@ -160,20 +160,20 @@ test.describe('waitForTransition', () => {
     test.use({ mockClock: true });
 
     test('returns completed results with the node and additional data', async ({ page }) => {
-        expect(await page.evaluate(async (_) => {
+        expect(await page.evaluate(async () => {
             const node = $.create('div');
             const transition = Object.create(CSSTransition.prototype);
 
             Object.defineProperties(transition, {
                 effect: {
                     value: {
-                        getComputedTiming: (_) => ({ endTime: 1000 }),
+                        getComputedTiming: () => ({ endTime: 1000 }),
                     },
                 },
                 finished: { value: Promise.resolve() },
                 transitionProperty: { value: 'opacity' },
             });
-            node.getAnimations = (_) => [transition];
+            node.getAnimations = () => [transition];
 
             const result = await UI.waitForTransition(node, ['opacity'], { value: 'test' });
 
@@ -190,40 +190,40 @@ test.describe('waitForTransition', () => {
     });
 
     test('reports canceled transitions as incomplete', async ({ page }) => {
-        expect(await page.evaluate(async (_) => {
+        expect(await page.evaluate(async () => {
             const node = $.create('div');
             const transition = Object.create(CSSTransition.prototype);
 
             Object.defineProperties(transition, {
                 effect: {
                     value: {
-                        getComputedTiming: (_) => ({ endTime: 1000 }),
+                        getComputedTiming: () => ({ endTime: 1000 }),
                     },
                 },
                 finished: { value: Promise.reject(new DOMException('Canceled', 'AbortError')) },
                 transitionProperty: { value: 'opacity' },
             });
-            node.getAnimations = (_) => [transition];
+            node.getAnimations = () => [transition];
 
             return (await UI.waitForTransition(node, ['opacity'])).completed;
         })).toBe(false);
     });
 
     test('falls back after the transition timing when the finished promise stalls', async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             const node = $.create('div');
             const transition = Object.create(CSSTransition.prototype);
 
             Object.defineProperties(transition, {
                 effect: {
                     value: {
-                        getComputedTiming: (_) => ({ endTime: 20 }),
+                        getComputedTiming: () => ({ endTime: 20 }),
                     },
                 },
-                finished: { value: new Promise((_) => {}) },
+                finished: { value: new Promise(() => {}) },
                 transitionProperty: { value: 'opacity' },
             });
-            node.getAnimations = (_) => [transition];
+            node.getAnimations = () => [transition];
 
             window.transitionResult = null;
             UI.waitForTransition(node, ['opacity']).then((result) => {
@@ -232,17 +232,17 @@ test.describe('waitForTransition', () => {
         });
         await advanceClock(page, 20);
 
-        expect(await page.evaluate((_) => window.transitionResult)).toBeNull();
+        expect(await page.evaluate(() => window.transitionResult)).toBeNull();
 
         await advanceClock(page, 50);
 
-        expect(await page.evaluate((_) => window.transitionResult.completed)).toBe(false);
+        expect(await page.evaluate(() => window.transitionResult.completed)).toBe(false);
     });
 
     test('falls back for stalled zero-duration transitions with reduced motion', async ({ page }) => {
         await page.emulateMedia({ reducedMotion: 'reduce' });
 
-        expect(await page.evaluate((_) => {
+        expect(await page.evaluate(() => {
             const styleNode = $.create('div', { class: 'fade' });
             $.append(document.body, styleNode);
 
@@ -252,13 +252,13 @@ test.describe('waitForTransition', () => {
             Object.defineProperties(transition, {
                 effect: {
                     value: {
-                        getComputedTiming: (_) => ({ endTime: 0 }),
+                        getComputedTiming: () => ({ endTime: 0 }),
                     },
                 },
-                finished: { value: new Promise((_) => {}) },
+                finished: { value: new Promise(() => {}) },
                 transitionProperty: { value: 'opacity' },
             });
-            node.getAnimations = (_) => [transition];
+            node.getAnimations = () => [transition];
 
             window.transitionResult = null;
             UI.waitForTransition(node, ['opacity']).then((result) => {
@@ -276,6 +276,6 @@ test.describe('waitForTransition', () => {
 
         await advanceClock(page, 50);
 
-        expect(await page.evaluate((_) => window.transitionResult.completed)).toBe(false);
+        expect(await page.evaluate(() => window.transitionResult.completed)).toBe(false);
     });
 });

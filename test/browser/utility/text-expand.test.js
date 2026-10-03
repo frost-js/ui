@@ -2,7 +2,7 @@ import { expect, test } from '#test';
 
 test.describe('Text Expand', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML = '<textarea class="input-filled text-expand" id="input"></textarea>';
         });
     });
@@ -18,7 +18,7 @@ test.describe('Text Expand', () => {
                     $.triggerEvent('#input', event);
                 }, event);
 
-                expect(await page.evaluate((_) =>
+                expect(await page.evaluate(() =>
                     $.height('#input'))).toBe(136);
             });
 
@@ -30,7 +30,7 @@ test.describe('Text Expand', () => {
                     $.triggerEvent('#input', event);
                 }, event);
 
-                expect(await page.evaluate((_) =>
+                expect(await page.evaluate(() =>
                     $.height('#input'))).toBe(64);
             });
         }

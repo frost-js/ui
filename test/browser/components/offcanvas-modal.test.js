@@ -2,7 +2,7 @@ import { expect, test } from '#test';
 
 test.describe('Offcanvas/Modal', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML =
                 '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas">' +
@@ -19,25 +19,25 @@ test.describe('Offcanvas/Modal', () => {
 
     test.describe('user events', () => {
         test.beforeEach(async ({ page }) => {
-            await page.evaluate(async (_) => {
+            await page.evaluate(async () => {
                 const offcanvas = $.findOne('#offcanvas');
 
                 await new Promise((resolve) => {
-                    $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
+                    $.addEventOnce(offcanvas, 'shown.ui.offcanvas', () => resolve());
                     UI.Offcanvas.init(offcanvas).show();
                 });
 
                 const modal = $.findOne('#modal');
 
                 await new Promise((resolve) => {
-                    $.addEventOnce(modal, 'shown.ui.modal', (_) => resolve());
+                    $.addEventOnce(modal, 'shown.ui.modal', () => resolve());
                     UI.Modal.init(modal).show();
                 });
             });
         });
 
         test('does not hide the offcanvas on document click when modal is open', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 $.click(document.body);
             });
 
@@ -49,7 +49,7 @@ test.describe('Offcanvas/Modal', () => {
         });
 
         test('does not hide the offcanvas on escape when modal is open', async ({ page }) => {
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.body.dispatchEvent(new KeyboardEvent('keydown', {
                     bubbles: true,
                     code: 'Escape',

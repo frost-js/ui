@@ -2,7 +2,7 @@ import { expect, test } from '#test';
 
 test.describe('Offcanvas FocusTrap', () => {
     test.beforeEach(async ({ page }) => {
-        await page.evaluate((_) => {
+        await page.evaluate(() => {
             document.body.innerHTML =
                 '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas">' +
@@ -14,10 +14,10 @@ test.describe('Offcanvas FocusTrap', () => {
 
     test.describe('focus trap', () => {
         test('prevents focus outside the offcanvas', async ({ page }) => {
-            await page.evaluate((_) => new Promise((resolve) => {
+            await page.evaluate(() => new Promise((resolve) => {
                 const offcanvas = $.findOne('#offcanvas');
 
-                $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
+                $.addEventOnce(offcanvas, 'shown.ui.offcanvas', () => resolve());
                 UI.Offcanvas.init(offcanvas).show();
             }));
             await page.locator('#offcanvas-toggle').focus();
@@ -26,13 +26,13 @@ test.describe('Offcanvas FocusTrap', () => {
         });
 
         test('reverses focus if shift/tab key is pressed', async ({ page }) => {
-            await page.evaluate((_) => new Promise((resolve) => {
+            await page.evaluate(() => new Promise((resolve) => {
                 const offcanvas = $.findOne('#offcanvas');
 
-                $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
+                $.addEventOnce(offcanvas, 'shown.ui.offcanvas', () => resolve());
                 UI.Offcanvas.init(offcanvas).show();
             }));
-            await page.evaluate((_) => {
+            await page.evaluate(() => {
                 document.dispatchEvent(new KeyboardEvent('keydown', {
                     key: 'Tab',
                     shiftKey: true,
@@ -44,10 +44,10 @@ test.describe('Offcanvas FocusTrap', () => {
         });
 
         test('allows focus outside the offcanvas with scroll and no backdrop', async ({ page }) => {
-            await page.evaluate((_) => new Promise((resolve) => {
+            await page.evaluate(() => new Promise((resolve) => {
                 const offcanvas = $.findOne('#offcanvas');
 
-                $.addEventOnce(offcanvas, 'shown.ui.offcanvas', (_) => resolve());
+                $.addEventOnce(offcanvas, 'shown.ui.offcanvas', () => resolve());
                 UI.Offcanvas.init(offcanvas, {
                     backdrop: false,
                     scroll: true,
