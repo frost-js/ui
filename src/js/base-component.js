@@ -1,3 +1,5 @@
+/** @import { EventCallback, EventOptions, EventTargetInput } from '@fr0st/query/src/events/event-handlers.js'; */
+
 import { $ } from './globals.js';
 import { getDataset } from './helpers/component.js';
 
@@ -38,6 +40,7 @@ function mergeOptions(...sources) {
  * @template {ComponentOptions} [Options=ComponentOptions]
  */
 export default class BaseComponent {
+    #eventCleanups = [];
     #node = null;
     #options = null;
 
@@ -71,7 +74,7 @@ export default class BaseComponent {
             options,
         ));
 
-        $.addEvent(this.#node, this.constructor.REMOVE_EVENT, () => {
+        this.listen(this.#node, this.constructor.REMOVE_EVENT, () => {
             this.dispose();
         });
 
@@ -98,10 +101,43 @@ export default class BaseComponent {
      * Releases the resources owned by the component.
      */
     dispose() {
-        $.removeEvent(this.#node, this.constructor.REMOVE_EVENT);
+        if (!this.#node) {
+            return;
+        }
+
+        for (const cleanup of this.#eventCleanups) {
+            cleanup();
+        }
+
+        this.#eventCleanups = [];
+
         $.removeData(this.#node, this.constructor.DATA_KEY);
 
         this.#node = null;
         this.#options = null;
+    }
+
+    /**
+     * Adds listeners owned by the component and removed during disposal.
+     * @param {EventTargetInput} selector The input node(s), or a query selector string.
+     * @param {string} events The event names.
+     * @param {EventCallback} callback The callback to execute.
+     * @param {EventOptions} [options] The event options.
+     */
+    listen(selector, events, callback, options = {}) {
+        if (!this.#node) {
+            return;
+        }
+
+        const nodes = [...$(selector).get()];
+        // Give each registration its own identity when callbacks are reused.
+        const listener = (event) => callback(event);
+        const { capture = false, delegate = null } = options;
+
+        this.#eventCleanups.push(() => {
+            $.removeEvent(nodes, events, listener, { capture, delegate });
+        });
+
+        $.addEvent(nodes, events, listener, options);
     }
 }

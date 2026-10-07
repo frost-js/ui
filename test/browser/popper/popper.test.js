@@ -160,6 +160,43 @@ test.describe('Popper', () => {
             });
         }
 
+        test('preserves another popper and consumer viewport listeners', async ({ page }) => {
+            const state = await page.evaluate(async () => {
+                const node = document.createElement('div');
+                document.body.append(node);
+                const reference = $.findOne('#button');
+                let updates = 0;
+                const events = [];
+                $.addEvent(window, 'resize.ui.popper', () => events.push('resize'));
+                $.addEvent(document, 'scroll.ui.popper', () => events.push('scroll'));
+
+                const first = UI.Popper.init($.findOne('#badge'), { reference });
+                const second = UI.Popper.init(node, {
+                    reference,
+                    afterUpdate: () => updates++,
+                });
+
+                updates = 0;
+                first.dispose();
+                $.triggerEvent(window, 'resize.ui.popper');
+                await Promise.resolve();
+                const remainingUpdates = updates;
+
+                second.dispose();
+                $.triggerEvent(window, 'resize.ui.popper');
+                $.triggerEvent(document, 'scroll.ui.popper');
+                await Promise.resolve();
+
+                return { events, remainingUpdates, updates };
+            });
+
+            expect(state).toEqual({
+                events: ['resize', 'resize', 'scroll'],
+                remainingUpdates: 1,
+                updates: 1,
+            });
+        });
+
         for (const value of ['', 'false', '0']) {
             test(`preserves the original placement attribute ${JSON.stringify(value)}`, async ({ page }) => {
                 await page.evaluate((value) => {

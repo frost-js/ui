@@ -5,7 +5,9 @@ import { $, document, window } from '../globals.js';
 
 const poppers = new Set();
 
+let resizeHandler = null;
 let running = false;
+let scrollHandler = null;
 
 /**
  * Registers a popper for viewport and ancestor-scroll updates.
@@ -18,33 +20,28 @@ export function addPopper(popper) {
         return;
     }
 
-    $.addEvent(
-        window,
-        'resize.ui.popper',
-        $.debounce(() => {
-            for (const popper of poppers) {
-                popper.update();
-            }
-        }),
-    );
+    resizeHandler = $.debounce(() => {
+        for (const popper of poppers) {
+            popper.update();
+        }
+    });
 
-    $.addEvent(
-        document,
-        'scroll.ui.popper',
-        $.debounce((event) => {
-            for (const popper of poppers) {
-                if (!popper.shouldUpdateForScroll(event.target)) {
-                    continue;
-                }
+    $.addEvent(window, 'resize.ui.popper', resizeHandler);
 
-                popper.update();
+    scrollHandler = $.debounce((event) => {
+        for (const popper of poppers) {
+            if (!popper.shouldUpdateForScroll(event.target)) {
+                continue;
             }
-        }),
-        {
-            capture: true,
-            passive: true,
-        },
-    );
+
+            popper.update();
+        }
+    });
+
+    $.addEvent(document, 'scroll.ui.popper', scrollHandler, {
+        capture: true,
+        passive: true,
+    });
 
     running = true;
 }
@@ -182,10 +179,17 @@ export function removePopper(popper) {
         return;
     }
 
-    $.removeEvent(window, 'resize.ui.popper');
-    $.removeEvent(document, 'scroll.ui.popper');
+    if (resizeHandler) {
+        $.removeEvent(window, 'resize.ui.popper', resizeHandler);
+    }
 
+    if (scrollHandler) {
+        $.removeEvent(document, 'scroll.ui.popper', scrollHandler);
+    }
+
+    resizeHandler = null;
     running = false;
+    scrollHandler = null;
 }
 
 /**

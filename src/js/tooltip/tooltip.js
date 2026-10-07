@@ -51,7 +51,6 @@ export default class Tooltip extends BaseComponent {
 
     #arrow = null;
     #enabled;
-    #hideModalHandler = null;
     #modal = null;
     #popper = null;
     #tooltip = null;
@@ -112,31 +111,12 @@ export default class Tooltip extends BaseComponent {
 
         $.remove(this.#tooltip);
 
-        if (this.#triggers.includes('hover')) {
-            $.removeEvent(this.node, 'mouseover.ui.tooltip');
-            $.removeEvent(this.node, 'mouseout.ui.tooltip');
-        }
-
-        if (this.#triggers.includes('focus')) {
-            $.removeEvent(this.node, 'focus.ui.tooltip');
-            $.removeEvent(this.node, 'blur.ui.tooltip');
-        }
-
-        if (this.#triggers.includes('click')) {
-            $.removeEvent(this.node, 'click.ui.tooltip');
-        }
-
-        if (this.#modal && this.#hideModalHandler) {
-            $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalHandler);
-        }
-
         this.#modal = null;
         this.#transition = null;
         this.#triggers = null;
         this.#tooltip = null;
         this.#tooltipInner = null;
         this.#arrow = null;
-        this.#hideModalHandler = null;
 
         super.dispose();
     }
@@ -289,27 +269,27 @@ export default class Tooltip extends BaseComponent {
      */
     #events() {
         if (this.#triggers.includes('hover')) {
-            $.addEvent(this.node, 'mouseover.ui.tooltip', () => {
+            this.listen(this.node, 'mouseover.ui.tooltip', () => {
                 this.show();
             });
 
-            $.addEvent(this.node, 'mouseout.ui.tooltip', () => {
+            this.listen(this.node, 'mouseout.ui.tooltip', () => {
                 this.hide({ force: false });
             });
         }
 
         if (this.#triggers.includes('focus')) {
-            $.addEvent(this.node, 'focus.ui.tooltip', () => {
+            this.listen(this.node, 'focus.ui.tooltip', () => {
                 this.show();
             });
 
-            $.addEvent(this.node, 'blur.ui.tooltip', () => {
+            this.listen(this.node, 'blur.ui.tooltip', () => {
                 this.hide({ force: false });
             });
         }
 
         if (this.#triggers.includes('click')) {
-            $.addEvent(this.node, 'click.ui.tooltip', (event) => {
+            this.listen(this.node, 'click.ui.tooltip', (event) => {
                 event.preventDefault();
 
                 this.toggle({ force: false });
@@ -317,10 +297,9 @@ export default class Tooltip extends BaseComponent {
         }
 
         if (this.#modal) {
-            this.#hideModalHandler = () => {
+            this.listen(this.#modal, 'hide.ui.modal', () => {
                 this.hide();
-            };
-            $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalHandler);
+            });
         }
     }
 

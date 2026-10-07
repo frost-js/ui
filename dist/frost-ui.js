@@ -122,7 +122,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 
 //#endregion
 //#region src/js/base-component.js
-/** @typedef {Record<string, *>} ComponentOptions */
+/** @import { EventCallback, EventOptions, EventTargetInput } from '@fr0st/query/src/events/event-handlers.js'; */
+	/** @typedef {Record<string, *>} ComponentOptions */
 	/**
 	* Merges component options, cloning arrays instead of merging their entries.
 	* @param {...ComponentOptions} sources The option sources in precedence order.
@@ -148,6 +149,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	* @template {ComponentOptions} [Options=ComponentOptions]
 	*/
 	var BaseComponent = class {
+		#eventCleanups = [];
 		#node = null;
 		#options = null;
 		/**
@@ -168,7 +170,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			if (!$._isElement(node)) throw new TypeError("Component must be created on an element.");
 			this.#node = node;
 			this.#options = Object.freeze(mergeOptions(this.constructor.defaults, getDataset(this.#node), options));
-			$.addEvent(this.#node, this.constructor.REMOVE_EVENT, () => {
+			this.listen(this.#node, this.constructor.REMOVE_EVENT, () => {
 				this.dispose();
 			});
 			$.setData(this.#node, { [this.constructor.DATA_KEY]: this });
@@ -191,10 +193,32 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		* Releases the resources owned by the component.
 		*/
 		dispose() {
-			$.removeEvent(this.#node, this.constructor.REMOVE_EVENT);
+			if (!this.#node) return;
+			for (const cleanup of this.#eventCleanups) cleanup();
+			this.#eventCleanups = [];
 			$.removeData(this.#node, this.constructor.DATA_KEY);
 			this.#node = null;
 			this.#options = null;
+		}
+		/**
+		* Adds listeners owned by the component and removed during disposal.
+		* @param {EventTargetInput} selector The input node(s), or a query selector string.
+		* @param {string} events The event names.
+		* @param {EventCallback} callback The callback to execute.
+		* @param {EventOptions} [options] The event options.
+		*/
+		listen(selector, events, callback, options = {}) {
+			if (!this.#node) return;
+			const nodes = [...$(selector).get()];
+			const listener = (event) => callback(event);
+			const { capture = false, delegate = null } = options;
+			this.#eventCleanups.push(() => {
+				$.removeEvent(nodes, events, listener, {
+					capture,
+					delegate
+				});
+			});
+			$.addEvent(nodes, events, listener, options);
 		}
 	};
 
@@ -475,12 +499,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			if (this.#sliding) updateIndicators(this.node, this.#index);
 			this.#resetDrag();
 			$.removeClass(this.#items, "carousel-item-next carousel-item-prev");
-			if (this.options.keyboard) $.removeEvent(this.node, "keydown.ui.carousel");
-			if (this.options.pause) {
-				$.removeEvent(this.node, "mouseenter.ui.carousel");
-				$.removeEvent(this.node, "mouseleave.ui.carousel");
-			}
-			if (this.options.swipe) $.removeEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel");
 			this.#clearTimer();
 			this.#items = null;
 			super.dispose();
@@ -531,7 +549,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		#events() {
 			if (this.options.keyboard) {
 				const previousKey = this.#rtl ? "ArrowRight" : "ArrowLeft";
-				$.addEvent(this.node, "keydown.ui.carousel", (event) => {
+				this.listen(this.node, "keydown.ui.carousel", (event) => {
 					const target = event.target;
 					if ($.is(target, "input, select")) return;
 					if (!["ArrowLeft", "ArrowRight"].includes(event.code)) return;
@@ -541,11 +559,11 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				});
 			}
 			if (this.options.pause) {
-				$.addEvent(this.node, "mouseenter.ui.carousel", () => {
+				this.listen(this.node, "mouseenter.ui.carousel", () => {
 					this.#clearTimer();
 					this.#mousePaused = true;
 				});
-				$.addEvent(this.node, "mouseleave.ui.carousel", () => {
+				this.listen(this.node, "mouseleave.ui.carousel", () => {
 					this.#mousePaused = false;
 					this.#setTimer();
 				});
@@ -644,7 +662,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 					});
 				};
 				const dragHandler = $.mouseDragFactory(downHandler, moveHandler, upHandler);
-				$.addEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel", dragHandler);
+				this.listen(this.node, "mousedown.ui.carousel touchstart.ui.carousel", dragHandler);
 			}
 		}
 		/**
@@ -1152,7 +1170,9 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 /** @import { BoundingRect } from '../helpers/scroll.js'; */
 	/** @import Popper, { Direction, PhysicalDirection, Placement, Position } from './popper.js'; */
 	var poppers = /* @__PURE__ */ new Set();
+	var resizeHandler = null;
 	var running$1 = false;
+	var scrollHandler = null;
 	/**
 	* Registers a popper for viewport and ancestor-scroll updates.
 	* @param {Popper} popper The popper to register.
@@ -1160,15 +1180,17 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	function addPopper(popper) {
 		poppers.add(popper);
 		if (running$1) return;
-		$.addEvent(window, "resize.ui.popper", $.debounce(() => {
+		resizeHandler = $.debounce(() => {
 			for (const popper of poppers) popper.update();
-		}));
-		$.addEvent(document, "scroll.ui.popper", $.debounce((event) => {
+		});
+		$.addEvent(window, "resize.ui.popper", resizeHandler);
+		scrollHandler = $.debounce((event) => {
 			for (const popper of poppers) {
 				if (!popper.shouldUpdateForScroll(event.target)) continue;
 				popper.update();
 			}
-		}), {
+		});
+		$.addEvent(document, "scroll.ui.popper", scrollHandler, {
 			capture: true,
 			passive: true
 		});
@@ -1235,9 +1257,11 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	function removePopper(popper) {
 		poppers.delete(popper);
 		if (poppers.size) return;
-		$.removeEvent(window, "resize.ui.popper");
-		$.removeEvent(document, "scroll.ui.popper");
+		if (resizeHandler) $.removeEvent(window, "resize.ui.popper", resizeHandler);
+		if (scrollHandler) $.removeEvent(document, "scroll.ui.popper", scrollHandler);
+		resizeHandler = null;
 		running$1 = false;
+		scrollHandler = null;
 	}
 	/**
 	* Updates a popper arrow position.
@@ -1758,6 +1782,8 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 //#region src/js/focus-trap/helpers.js
 /** @import FocusTrap from './focus-trap.js'; */
 	var focusTraps = /* @__PURE__ */ new Set();
+	var focusinHandler = null;
+	var keydownHandler = null;
 	var running = false;
 	var reverse = false;
 	/**
@@ -1767,17 +1793,19 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	function addFocusTrap(focusTrap) {
 		focusTraps.add(focusTrap);
 		if (running) return;
-		$.addEvent(document, "focusin.ui.focustrap", (event) => {
+		focusinHandler = (event) => {
 			const activeTarget = [...focusTraps].pop().node;
 			if ($._isDocument(event.target) || $.isSame(activeTarget, event.target) || $.hasDescendent(activeTarget, event.target)) return;
 			const focusable = $.find("a, button, input, textarea, select, details, [tabindex], [contenteditable=\"true\"]", activeTarget).filter((node) => $.is(node, ":not(:disabled, .disabled)") && $.getAttribute(node, "tabindex") >= 0 && $.isVisible(node));
 			const focusTarget = reverse ? focusable.pop() : focusable.shift();
 			$.focus(focusTarget || activeTarget);
-		}, { capture: true });
-		$.addEvent(document, "keydown.ui.focustrap", (event) => {
+		};
+		$.addEvent(document, "focusin.ui.focustrap", focusinHandler, { capture: true });
+		keydownHandler = (event) => {
 			if (event.key !== "Tab") return;
 			reverse = event.shiftKey;
-		}, { capture: true });
+		};
+		$.addEvent(document, "keydown.ui.focustrap", keydownHandler, { capture: true });
 		running = true;
 		reverse = false;
 	}
@@ -1788,8 +1816,10 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	function removeFocusTrap(focusTrap) {
 		focusTraps.delete(focusTrap);
 		if (focusTraps.size) return;
-		$.removeEvent(document, "focusin.ui.focustrap");
-		$.removeEvent(document, "keydown.ui.focustrap");
+		if (focusinHandler) $.removeEvent(document, "focusin.ui.focustrap", focusinHandler);
+		if (keydownHandler) $.removeEvent(document, "keydown.ui.focustrap", keydownHandler);
+		focusinHandler = null;
+		keydownHandler = null;
 		running = false;
 	}
 
@@ -2344,7 +2374,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		};
 		#arrow = null;
 		#enabled;
-		#hideModalHandler = null;
 		#modal = null;
 		#popover = null;
 		#popoverBody = null;
@@ -2390,16 +2419,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				this.#popper = null;
 			}
 			$.remove(this.#popover);
-			if (this.#triggers.includes("hover")) {
-				$.removeEvent(this.node, "mouseover.ui.popover");
-				$.removeEvent(this.node, "mouseout.ui.popover");
-			}
-			if (this.#triggers.includes("focus")) {
-				$.removeEvent(this.node, "focus.ui.popover");
-				$.removeEvent(this.node, "blur.ui.popover");
-			}
-			if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.popover");
-			if (this.#modal && this.#hideModalHandler) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 			this.#modal = null;
 			this.#transition = null;
 			this.#triggers = null;
@@ -2407,7 +2426,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 			this.#popoverHeader = null;
 			this.#popoverBody = null;
 			this.#arrow = null;
-			this.#hideModalHandler = null;
 			super.dispose();
 		}
 		/**
@@ -2498,31 +2516,28 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		#events() {
 			if (this.#triggers.includes("hover")) {
-				$.addEvent(this.node, "mouseover.ui.popover", () => {
+				this.listen(this.node, "mouseover.ui.popover", () => {
 					this.show();
 				});
-				$.addEvent(this.node, "mouseout.ui.popover", () => {
+				this.listen(this.node, "mouseout.ui.popover", () => {
 					this.hide({ force: false });
 				});
 			}
 			if (this.#triggers.includes("focus")) {
-				$.addEvent(this.node, "focus.ui.popover", () => {
+				this.listen(this.node, "focus.ui.popover", () => {
 					this.show();
 				});
-				$.addEvent(this.node, "blur.ui.popover", () => {
+				this.listen(this.node, "blur.ui.popover", () => {
 					this.hide({ force: false });
 				});
 			}
-			if (this.#triggers.includes("click")) $.addEvent(this.node, "click.ui.popover", (event) => {
+			if (this.#triggers.includes("click")) this.listen(this.node, "click.ui.popover", (event) => {
 				event.preventDefault();
 				this.toggle({ force: false });
 			});
-			if (this.#modal) {
-				this.#hideModalHandler = () => {
-					this.hide();
-				};
-				$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
-			}
+			if (this.#modal) this.listen(this.#modal, "hide.ui.modal", () => {
+				this.hide();
+			});
 		}
 		/**
 		* Creates the popover element from its template.
@@ -2826,7 +2841,6 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		};
 		#arrow = null;
 		#enabled;
-		#hideModalHandler = null;
 		#modal = null;
 		#popper = null;
 		#tooltip = null;
@@ -2871,23 +2885,12 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 				this.#popper = null;
 			}
 			$.remove(this.#tooltip);
-			if (this.#triggers.includes("hover")) {
-				$.removeEvent(this.node, "mouseover.ui.tooltip");
-				$.removeEvent(this.node, "mouseout.ui.tooltip");
-			}
-			if (this.#triggers.includes("focus")) {
-				$.removeEvent(this.node, "focus.ui.tooltip");
-				$.removeEvent(this.node, "blur.ui.tooltip");
-			}
-			if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.tooltip");
-			if (this.#modal && this.#hideModalHandler) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 			this.#modal = null;
 			this.#transition = null;
 			this.#triggers = null;
 			this.#tooltip = null;
 			this.#tooltipInner = null;
 			this.#arrow = null;
-			this.#hideModalHandler = null;
 			super.dispose();
 		}
 		/**
@@ -2973,31 +2976,28 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		#events() {
 			if (this.#triggers.includes("hover")) {
-				$.addEvent(this.node, "mouseover.ui.tooltip", () => {
+				this.listen(this.node, "mouseover.ui.tooltip", () => {
 					this.show();
 				});
-				$.addEvent(this.node, "mouseout.ui.tooltip", () => {
+				this.listen(this.node, "mouseout.ui.tooltip", () => {
 					this.hide({ force: false });
 				});
 			}
 			if (this.#triggers.includes("focus")) {
-				$.addEvent(this.node, "focus.ui.tooltip", () => {
+				this.listen(this.node, "focus.ui.tooltip", () => {
 					this.show();
 				});
-				$.addEvent(this.node, "blur.ui.tooltip", () => {
+				this.listen(this.node, "blur.ui.tooltip", () => {
 					this.hide({ force: false });
 				});
 			}
-			if (this.#triggers.includes("click")) $.addEvent(this.node, "click.ui.tooltip", (event) => {
+			if (this.#triggers.includes("click")) this.listen(this.node, "click.ui.tooltip", (event) => {
 				event.preventDefault();
 				this.toggle({ force: false });
 			});
-			if (this.#modal) {
-				this.#hideModalHandler = () => {
-					this.hide();
-				};
-				$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
-			}
+			if (this.#modal) this.listen(this.#modal, "hide.ui.modal", () => {
+				this.hide();
+			});
 		}
 		/**
 		* Creates the tooltip element from its template.

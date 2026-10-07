@@ -313,6 +313,8 @@ $.addEvent('#settings-modal', 'shown.ui.modal', (_) => {
 
 Clipboard controls emit `copied.ui.clipboard` with the completed action and copied text.
 
+Use the documented namespace when subscribing through fQuery. A plain fQuery subscription such as `$.addEvent(node, 'shown', callback)` does not receive `shown.ui.modal`. Native `addEventListener('shown', callback)` receives the underlying event; check `event.namespace` when needed. For native input interactions, application handlers can use their own namespace, such as `input.app`, independently of the component's internal bindings.
+
 ### Disposal and interrupted transitions
 
 Disposing a carousel, collapse, dropdown, modal, offcanvas, tab, toast, tooltip, or popover suppresses its pending transition completion events. Tooltip and popover transitions can also reverse direction; completion events from the superseded transition are skipped.
@@ -459,6 +461,10 @@ npm run build
 ```
 
 `npm test` rebuilds the bundles, then runs the Playwright suite in Chromium, Firefox, and WebKit. `npm run test:browser` runs the suite against the existing bundles, so rebuild after changing source files.
+
+Use `this.listen(target, events, callback, options)` for handlers on the component's original element or shared targets such as a form, document, or window. `BaseComponent.dispose()` removes those registrations individually, preserving application subscriptions and other instances even when they use the same namespace or callback. The helper accepts fQuery event options, including `delegate`, `capture`, and `passive`, and resolves selectors when registering so cleanup uses the original targets.
+
+Keep callbacks inline unless the component needs to reuse or cancel them. Use ordinary fQuery bindings on generated elements; fQuery cleans those handlers up when removing the elements, without retaining discarded controls until component disposal. Module-level shared handlers such as the popper and focus trap managers retain their own callback references.
 
 After building, `npm run test:coverage` runs Chromium tests and writes coverage reports to `coverage/`.
 

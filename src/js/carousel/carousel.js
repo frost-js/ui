@@ -110,19 +110,6 @@ export default class Carousel extends BaseComponent {
 
         $.removeClass(this.#items, 'carousel-item-next carousel-item-prev');
 
-        if (this.options.keyboard) {
-            $.removeEvent(this.node, 'keydown.ui.carousel');
-        }
-
-        if (this.options.pause) {
-            $.removeEvent(this.node, 'mouseenter.ui.carousel');
-            $.removeEvent(this.node, 'mouseleave.ui.carousel');
-        }
-
-        if (this.options.swipe) {
-            $.removeEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel');
-        }
-
         this.#clearTimer();
 
         this.#items = null;
@@ -184,7 +171,7 @@ export default class Carousel extends BaseComponent {
         if (this.options.keyboard) {
             const previousKey = this.#rtl ? 'ArrowRight' : 'ArrowLeft';
 
-            $.addEvent(this.node, 'keydown.ui.carousel', (event) => {
+            this.listen(this.node, 'keydown.ui.carousel', (event) => {
                 const target = event.target;
                 if ($.is(target, 'input, select')) {
                     return;
@@ -205,13 +192,13 @@ export default class Carousel extends BaseComponent {
         }
 
         if (this.options.pause) {
-            $.addEvent(this.node, 'mouseenter.ui.carousel', () => {
+            this.listen(this.node, 'mouseenter.ui.carousel', () => {
                 this.#clearTimer();
 
                 this.#mousePaused = true;
             });
 
-            $.addEvent(this.node, 'mouseleave.ui.carousel', () => {
+            this.listen(this.node, 'mouseleave.ui.carousel', () => {
                 this.#mousePaused = false;
 
                 this.#setTimer();
@@ -394,7 +381,7 @@ export default class Carousel extends BaseComponent {
 
             const dragHandler = $.mouseDragFactory(downHandler, moveHandler, upHandler);
 
-            $.addEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel', dragHandler);
+            this.listen(this.node, 'mousedown.ui.carousel touchstart.ui.carousel', dragHandler);
         }
     }
 

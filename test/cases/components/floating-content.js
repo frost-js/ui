@@ -158,6 +158,26 @@ export function floatingContentTests({ key, component }) {
             }, { key, component })).toBe(false);
         });
 
+        test('preserves consumer trigger and removal listeners', async ({ page }) => {
+            const events = await page.evaluate(({ key, component }) => {
+                const node = $.findOne(`#${key}-toggle-1`);
+                const types = ['mouseover', 'mouseout', 'focus', 'blur', 'click', 'remove'];
+                const names = types.map((type) => `${type}.ui.${key}`).join(' ');
+                const events = [];
+                $.addEvent(node, names, (event) => events.push(`before:${event.type}`));
+
+                const instance = UI[component].init(node, { trigger: 'hover focus click' });
+                $.addEvent(node, names, (event) => events.push(`after:${event.type}`));
+                instance.dispose();
+                instance.dispose();
+                $.triggerEvent(node, names);
+                return events;
+            }, { key, component });
+
+            expect(events).toEqual(['mouseover', 'mouseout', 'focus', 'blur', 'click', 'remove']
+                .flatMap((type) => [`before:${type}`, `after:${type}`]));
+        });
+
         test('removes only its modal hide event', async ({ page }) => {
             await page.evaluate(({ key, component }) => {
                 $.setHtml(document.body,

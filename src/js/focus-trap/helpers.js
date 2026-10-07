@@ -4,6 +4,8 @@ import { $, document } from '../globals.js';
 
 const focusTraps = new Set();
 
+let focusinHandler = null;
+let keydownHandler = null;
 let running = false;
 let reverse = false;
 
@@ -18,7 +20,7 @@ export function addFocusTrap(focusTrap) {
         return;
     }
 
-    $.addEvent(document, 'focusin.ui.focustrap', (event) => {
+    focusinHandler = (event) => {
         const activeTarget = [...focusTraps].pop().node;
 
         if (
@@ -37,17 +39,21 @@ export function addFocusTrap(focusTrap) {
             focusable.shift();
 
         $.focus(focusTarget || activeTarget);
-    }, {
+    };
+
+    $.addEvent(document, 'focusin.ui.focustrap', focusinHandler, {
         capture: true,
     });
 
-    $.addEvent(document, 'keydown.ui.focustrap', (event) => {
+    keydownHandler = (event) => {
         if (event.key !== 'Tab') {
             return;
         }
 
         reverse = event.shiftKey;
-    }, {
+    };
+
+    $.addEvent(document, 'keydown.ui.focustrap', keydownHandler, {
         capture: true,
     });
 
@@ -66,8 +72,15 @@ export function removeFocusTrap(focusTrap) {
         return;
     }
 
-    $.removeEvent(document, 'focusin.ui.focustrap');
-    $.removeEvent(document, 'keydown.ui.focustrap');
+    if (focusinHandler) {
+        $.removeEvent(document, 'focusin.ui.focustrap', focusinHandler);
+    }
 
+    if (keydownHandler) {
+        $.removeEvent(document, 'keydown.ui.focustrap', keydownHandler);
+    }
+
+    focusinHandler = null;
+    keydownHandler = null;
     running = false;
 }

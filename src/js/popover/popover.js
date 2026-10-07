@@ -53,7 +53,6 @@ export default class Popover extends BaseComponent {
 
     #arrow = null;
     #enabled;
-    #hideModalHandler = null;
     #modal = null;
     #popover = null;
     #popoverBody = null;
@@ -115,24 +114,6 @@ export default class Popover extends BaseComponent {
 
         $.remove(this.#popover);
 
-        if (this.#triggers.includes('hover')) {
-            $.removeEvent(this.node, 'mouseover.ui.popover');
-            $.removeEvent(this.node, 'mouseout.ui.popover');
-        }
-
-        if (this.#triggers.includes('focus')) {
-            $.removeEvent(this.node, 'focus.ui.popover');
-            $.removeEvent(this.node, 'blur.ui.popover');
-        }
-
-        if (this.#triggers.includes('click')) {
-            $.removeEvent(this.node, 'click.ui.popover');
-        }
-
-        if (this.#modal && this.#hideModalHandler) {
-            $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalHandler);
-        }
-
         this.#modal = null;
         this.#transition = null;
         this.#triggers = null;
@@ -140,7 +121,6 @@ export default class Popover extends BaseComponent {
         this.#popoverHeader = null;
         this.#popoverBody = null;
         this.#arrow = null;
-        this.#hideModalHandler = null;
 
         super.dispose();
     }
@@ -311,27 +291,27 @@ export default class Popover extends BaseComponent {
      */
     #events() {
         if (this.#triggers.includes('hover')) {
-            $.addEvent(this.node, 'mouseover.ui.popover', () => {
+            this.listen(this.node, 'mouseover.ui.popover', () => {
                 this.show();
             });
 
-            $.addEvent(this.node, 'mouseout.ui.popover', () => {
+            this.listen(this.node, 'mouseout.ui.popover', () => {
                 this.hide({ force: false });
             });
         }
 
         if (this.#triggers.includes('focus')) {
-            $.addEvent(this.node, 'focus.ui.popover', () => {
+            this.listen(this.node, 'focus.ui.popover', () => {
                 this.show();
             });
 
-            $.addEvent(this.node, 'blur.ui.popover', () => {
+            this.listen(this.node, 'blur.ui.popover', () => {
                 this.hide({ force: false });
             });
         }
 
         if (this.#triggers.includes('click')) {
-            $.addEvent(this.node, 'click.ui.popover', (event) => {
+            this.listen(this.node, 'click.ui.popover', (event) => {
                 event.preventDefault();
 
                 this.toggle({ force: false });
@@ -339,10 +319,9 @@ export default class Popover extends BaseComponent {
         }
 
         if (this.#modal) {
-            this.#hideModalHandler = () => {
+            this.listen(this.#modal, 'hide.ui.modal', () => {
                 this.hide();
-            };
-            $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalHandler);
+            });
         }
     }
 
