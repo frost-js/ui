@@ -3,7 +3,7 @@ import { expect, test } from '#test';
 test.describe('BaseComponent', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML = '<div class="alert" id="alert1"></div>';
+            $.setHtml(document.body, '<div class="alert" id="alert1"></div>');
         });
     });
 
@@ -92,7 +92,7 @@ test.describe('BaseComponent', () => {
             const component = new Component(node, supplied);
             component.options.items[0].values.push(4);
             component.options.settings.label = 'instance';
-            const second = new Component(document.createElement('div'));
+            const second = new Component($.create('div'));
             second.options.items[0].values.push(5);
 
             return {

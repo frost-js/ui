@@ -8,7 +8,7 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Offcanvas', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<button class="btn btn-secondary" id="offcanvas-toggle-1" data-ui-toggle="offcanvas" data-ui-target="#offcanvas1" type="button"></button>' +
                 '<button class="btn btn-secondary" id="offcanvas-toggle-2" data-ui-toggle="offcanvas" data-ui-target="#offcanvas2" type="button"></button>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas1">' +
@@ -16,7 +16,8 @@ test.describe('Offcanvas', () => {
                 '</div>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas2">' +
                 '<button class="btn-close" id="button2" data-ui-dismiss="offcanvas" type="button"></button>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 
@@ -24,7 +25,7 @@ test.describe('Offcanvas', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: (selector) => UI.Offcanvas.init(document.querySelector(selector)),
+                init: (selector) => UI.Offcanvas.init($.findOne(selector)),
             },
             {
                 name: 'QuerySet',
@@ -55,7 +56,7 @@ test.describe('Offcanvas', () => {
             {
                 name: 'class',
                 dispose: (selector) => {
-                    UI.Offcanvas.init(document.querySelector(selector)).dispose();
+                    UI.Offcanvas.init($.findOne(selector)).dispose();
                 },
             },
             {
@@ -159,7 +160,7 @@ test.describe('Offcanvas', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Offcanvas.init(document.querySelector(selector)).show();
+                    UI.Offcanvas.init($.findOne(selector)).show();
                 },
             },
             {
@@ -231,13 +232,13 @@ test.describe('Offcanvas', () => {
                     document.body.style.setProperty('overflow-y', 'scroll', 'important');
                     document.body.style.setProperty('padding-right', '7px', 'important');
                     document.body.style.minHeight = '2000px';
-                    document.querySelector('#offcanvas1').style.setProperty('z-index', '13', 'important');
-                    UI.Offcanvas.init(document.querySelector('#offcanvas1'));
+                    $.findOne('#offcanvas1').style.setProperty('z-index', '13', 'important');
+                    UI.Offcanvas.init($.findOne('#offcanvas1'));
                 });
 
                 const held = await page.evaluateHandle((property) => $.setStyleLock(document.body, property, 'auto'), property);
 
-                await expect(page.evaluate(() => UI.Offcanvas.init(document.querySelector('#offcanvas1')).show()))
+                await expect(page.evaluate(() => UI.Offcanvas.init($.findOne('#offcanvas1')).show()))
                     .rejects.toThrow(`CSS property "${property}" is already locked.`);
 
                 await expect(page.locator('#offcanvas1')).not.toHaveClass(/\bshow\b/);
@@ -261,12 +262,12 @@ test.describe('Offcanvas', () => {
                     },
                 ]);
 
-                await page.evaluate(() => UI.Offcanvas.init(document.querySelector('#offcanvas1')).show());
+                await page.evaluate(() => UI.Offcanvas.init($.findOne('#offcanvas1')).show());
 
                 await expect(page.locator('#offcanvas1')).toBeVisible();
                 await expect(page.locator('#offcanvas1')).toHaveAttribute('aria-hidden', 'false');
 
-                await page.evaluate(() => UI.Offcanvas.init(document.querySelector('#offcanvas1')).hide());
+                await page.evaluate(() => UI.Offcanvas.init($.findOne('#offcanvas1')).hide());
 
                 await expect(page.locator('#offcanvas1')).toBeHidden();
                 await expectStyles(page, [
@@ -298,10 +299,10 @@ test.describe('Offcanvas', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Offcanvas.init(document.querySelector(selector)).show();
+                    UI.Offcanvas.init($.findOne(selector)).show();
                 },
                 hide: (selector) => {
-                    UI.Offcanvas.init(document.querySelector(selector)).hide();
+                    UI.Offcanvas.init($.findOne(selector)).hide();
                 },
             },
             {
@@ -402,7 +403,7 @@ test.describe('Offcanvas', () => {
             {
                 name: 'class',
                 toggle: (selector) => {
-                    UI.Offcanvas.init(document.querySelector(selector)).toggle();
+                    UI.Offcanvas.init($.findOne(selector)).toggle();
                 },
             },
             {
@@ -441,10 +442,10 @@ test.describe('Offcanvas', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Offcanvas.init(document.querySelector(selector)).show();
+                    UI.Offcanvas.init($.findOne(selector)).show();
                 },
                 toggle: (selector) => {
-                    UI.Offcanvas.init(document.querySelector(selector)).toggle();
+                    UI.Offcanvas.init($.findOne(selector)).toggle();
                 },
             },
             {

@@ -8,9 +8,9 @@ import { getTabGroup } from './helpers.js';
  * Controls a tab trigger and its associated panel.
  */
 export default class Tab extends BaseComponent {
-    #siblings;
-    #target;
-    #transition;
+    #siblings = null;
+    #target = null;
+    #transition = null;
 
     /**
      * Creates a Tab.

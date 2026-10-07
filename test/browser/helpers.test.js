@@ -59,7 +59,7 @@ test.describe('getTouchPositions', () => {
 test.describe('lockStyles', () => {
     test('restores earlier properties when a later lock fails', async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML = '<div id="target" style="overflow-x: scroll !important; overflow-y: auto;"></div>';
+            $.setHtml(document.body, '<div id="target" style="overflow-x: scroll !important; overflow-y: auto;"></div>');
         });
 
         const held = await page.evaluateHandle(() => $.setStyleLock('#target', 'overflow-y', 'clip'));
@@ -116,9 +116,10 @@ test.describe('lockStyles', () => {
 test.describe('lockStylesCounterFactory', () => {
     test('rolls back a failed acquisition without releasing another holder', async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<div id="first" style="overflow-x: scroll !important;"></div>' +
-                '<div id="second" style="overflow-x: auto;"></div>';
+                '<div id="second" style="overflow-x: auto;"></div>',
+            );
         });
 
         const locker = await page.evaluateHandle(() => UI.lockStylesCounterFactory());

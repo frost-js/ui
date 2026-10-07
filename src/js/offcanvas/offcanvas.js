@@ -23,10 +23,10 @@ export default class Offcanvas extends BaseComponent {
         scroll: false,
     };
 
-    #activeTarget;
-    #focusTrap;
-    #releaseScroll;
-    #releaseScrollPadding;
+    #activeTarget = null;
+    #focusTrap = null;
+    #releaseScroll = null;
+    #releaseScrollPadding = null;
     #shown = false;
     #transitioning;
 

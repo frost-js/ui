@@ -3,7 +3,7 @@ import { expect, test } from '#test';
 test.describe('Offcanvas/Dropdown', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas">' +
                 '<button class="btn-close" id="button" data-ui-dismiss="offcanvas" type="button"></button>' +
@@ -15,7 +15,8 @@ test.describe('Offcanvas/Dropdown', () => {
                 '<button class="dropdown-item" id="dropdown-item-3"></button>' +
                 '</div>' +
                 '</div>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 

@@ -19,8 +19,8 @@ export default class Toast extends BaseComponent {
         delay: 5000,
     };
 
-    #releaseDisplay;
-    #timer;
+    #releaseDisplay = null;
+    #timer = null;
     #transitioning;
 
     /** @inheritdoc */

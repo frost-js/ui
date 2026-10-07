@@ -33,10 +33,10 @@ export default class Dropdown extends BaseComponent {
     };
 
     #display;
-    #menuNode;
-    #popper;
-    #referenceNode;
-    #releaseDisplay;
+    #menuNode = null;
+    #popper = null;
+    #referenceNode = null;
+    #releaseDisplay = null;
     #transitioning;
 
     /**

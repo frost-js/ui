@@ -6,11 +6,12 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Collapse', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<button class="btn btn-secondary collapsed" id="collapse-toggle-1" data-ui-toggle="collapse" data-ui-target="#collapse1" type="button"></button>' +
                 '<button class="btn btn-secondary collapsed" id="collapse-toggle-2" data-ui-toggle="collapse" data-ui-target="#collapse2" type="button"></button>' +
                 '<div class="collapse" id="collapse1"><span style="display:block;width:120px;height:80px"></span></div>' +
-                '<div class="collapse" id="collapse2"><span style="display:block;width:120px;height:80px"></span></div>';
+                '<div class="collapse" id="collapse2"><span style="display:block;width:120px;height:80px"></span></div>',
+            );
         });
     });
 
@@ -18,7 +19,7 @@ test.describe('Collapse', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: (selector) => UI.Collapse.init(document.querySelector(selector)),
+                init: (selector) => UI.Collapse.init($.findOne(selector)),
             },
             {
                 name: 'QuerySet',
@@ -49,7 +50,7 @@ test.describe('Collapse', () => {
             {
                 name: 'class',
                 dispose: (selector) => {
-                    UI.Collapse.init(document.querySelector(selector)).dispose();
+                    UI.Collapse.init($.findOne(selector)).dispose();
                 },
             },
             {
@@ -74,13 +75,13 @@ test.describe('Collapse', () => {
         ]) {
             test(`restores styles and trigger state when disposed during ${action} (${dimension})`, async ({ page }) => {
                 const transitioning = await page.evaluate(({ action, dimension }) => {
-                    const node = document.querySelector('#collapse1');
-                    const trigger = document.querySelector('#collapse-toggle-1');
+                    const node = $.findOne('#collapse1');
+                    const trigger = $.findOne('#collapse-toggle-1');
 
                     node.classList.toggle('collapse-horizontal', dimension === 'width');
                     node.classList.toggle('show', action === 'hide');
                     trigger.classList.toggle('collapsed', action !== 'hide');
-                    trigger.setAttribute('aria-expanded', String(action === 'hide'));
+                    $.setAttribute(trigger, 'aria-expanded', String(action === 'hide'));
                     node.style.setProperty(dimension, '93px', 'important');
 
                     window.collapseCompletedEvents = 0;
@@ -90,7 +91,7 @@ test.describe('Collapse', () => {
 
                     const collapse = UI.Collapse.init(node);
                     collapse[action]();
-                    const transitioning = node.classList.contains('collapsing');
+                    const transitioning = $.hasClass(node, 'collapsing');
                     collapse.dispose();
 
                     return transitioning;
@@ -107,7 +108,7 @@ test.describe('Collapse', () => {
                 expect(await page.evaluate(() => $.hasData('#collapse1', 'collapse'))).toBe(false);
                 expect(await page.evaluate(() => window.collapseCompletedEvents)).toBe(0);
 
-                await page.evaluate(() => UI.Collapse.init(document.querySelector('#collapse1')).show());
+                await page.evaluate(() => UI.Collapse.init($.findOne('#collapse1')).show());
 
                 await expect(page.locator('#collapse1')).toHaveClass(/\bshow\b/);
                 await expect(page.locator('#collapse-toggle-1')).toHaveAttribute('aria-expanded', 'true');
@@ -120,7 +121,7 @@ test.describe('Collapse', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Collapse.init(document.querySelector(selector)).show();
+                    UI.Collapse.init($.findOne(selector)).show();
                 },
             },
             {
@@ -175,10 +176,10 @@ test.describe('Collapse', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Collapse.init(document.querySelector(selector)).show();
+                    UI.Collapse.init($.findOne(selector)).show();
                 },
                 hide: (selector) => {
-                    UI.Collapse.init(document.querySelector(selector)).hide();
+                    UI.Collapse.init($.findOne(selector)).hide();
                 },
             },
             {
@@ -255,7 +256,7 @@ test.describe('Collapse', () => {
             {
                 name: 'class',
                 toggle: (selector) => {
-                    UI.Collapse.init(document.querySelector(selector)).toggle();
+                    UI.Collapse.init($.findOne(selector)).toggle();
                 },
             },
             {
@@ -303,10 +304,10 @@ test.describe('Collapse', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Collapse.init(document.querySelector(selector)).show();
+                    UI.Collapse.init($.findOne(selector)).show();
                 },
                 toggle: (selector) => {
-                    UI.Collapse.init(document.querySelector(selector)).toggle();
+                    UI.Collapse.init($.findOne(selector)).toggle();
                 },
             },
             {
@@ -594,7 +595,7 @@ test.describe('Collapse', () => {
 
         test('only hides shown collapses in the same accordion', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML =
+                $.setHtml(document.body,
                     '<div class="accordion" id="outer-accordion">' +
                     '<div class="collapse show" id="outer-collapse-1">' +
                     '<div class="accordion" id="inner-accordion">' +
@@ -602,7 +603,8 @@ test.describe('Collapse', () => {
                     '</div>' +
                     '</div>' +
                     '<div class="collapse" id="outer-collapse-2"></div>' +
-                    '</div>';
+                    '</div>',
+                );
 
                 const options = { parent: '.accordion' };
                 UI.Collapse.init($.findOne('#outer-collapse-1'), options);
@@ -618,16 +620,17 @@ test.describe('Collapse', () => {
         for (const action of ['show', 'hide']) {
             test(`waits for a sibling to finish ${action} before opening`, async ({ page }) => {
                 await page.evaluate((action) => {
-                    document.body.innerHTML =
+                    $.setHtml(document.body,
                         '<div id="accordion">' +
                         '<div class="collapse" id="first" data-ui-parent="#accordion"><div style="height: 80px;"></div></div>' +
                         '<div class="collapse" id="second" data-ui-parent="#accordion"><div style="height: 80px;"></div></div>' +
-                        '</div>';
+                        '</div>',
+                    );
 
-                    const first = document.querySelector('#first');
+                    const first = $.findOne('#first');
                     first.classList.toggle('show', action === 'hide');
                     UI.Collapse.init(first)[action]();
-                    UI.Collapse.init(document.querySelector('#second')).show();
+                    UI.Collapse.init($.findOne('#second')).show();
                 }, action);
 
                 await expect(page.locator('#first')).toHaveClass('collapsing');
@@ -638,7 +641,7 @@ test.describe('Collapse', () => {
 
                 await expect(page.locator('#first')).not.toHaveClass(/\bcollapsing\b/);
 
-                await page.evaluate(() => UI.Collapse.init(document.querySelector('#second')).show());
+                await page.evaluate(() => UI.Collapse.init($.findOne('#second')).show());
 
                 await expect(page.locator('#second')).toHaveClass('collapse show');
                 await expect(page.locator('#first')).toHaveClass('collapse');
@@ -649,9 +652,10 @@ test.describe('Collapse', () => {
     test.describe('trigger selectors', () => {
         test('updates an href trigger', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML =
+                $.setHtml(document.body,
                     '<a class="btn btn-secondary collapsed" id="collapse-toggle" data-ui-toggle="collapse" href="#collapse"></a>' +
-                    '<div class="collapse" id="collapse"></div>';
+                    '<div class="collapse" id="collapse"></div>',
+                );
             });
             await page.locator('#collapse-toggle').click();
 
@@ -668,10 +672,11 @@ test.describe('Collapse', () => {
 
         test('updates a class-based multi-collapse trigger', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML =
+                $.setHtml(document.body,
                     '<button class="btn btn-secondary collapsed" id="collapse-toggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button"></button>' +
                     '<div class="collapse multi-collapse" id="collapse1"></div>' +
-                    '<div class="collapse multi-collapse" id="collapse2"></div>';
+                    '<div class="collapse multi-collapse" id="collapse2"></div>',
+                );
             });
             await page.locator('#collapse-toggle').click();
 
@@ -690,10 +695,11 @@ test.describe('Collapse', () => {
 
         test('normalizes mixed multi-collapse targets', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML =
+                $.setHtml(document.body,
                     '<button class="btn btn-secondary" id="collapse-toggle" data-ui-toggle="collapse" data-ui-target=".multi-collapse" type="button" aria-expanded="true"></button>' +
                     '<div class="collapse multi-collapse show" id="collapse1"></div>' +
-                    '<div class="collapse multi-collapse" id="collapse2"></div>';
+                    '<div class="collapse multi-collapse" id="collapse2"></div>',
+                );
             });
             await page.locator('#collapse-toggle').click();
 

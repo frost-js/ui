@@ -3,7 +3,7 @@ import { expect, test } from '#test';
 test.describe('Text Expand', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML = '<textarea class="input-filled text-expand" id="input"></textarea>';
+            $.setHtml(document.body, '<textarea class="input-filled text-expand" id="input"></textarea>');
         });
     });
 

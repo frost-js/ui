@@ -5,13 +5,14 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Alert', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<div class="alert alert-success fade show" id="alert1">' +
                 '<button class="btn-close" id="button1" data-ui-dismiss="alert" type="button"></button>' +
                 '</div>' +
                 '<div class="alert alert-success fade show" id="alert2">' +
                 '<button class="btn-close" id="button2" data-ui-dismiss="alert" type="button"></button>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 
@@ -19,7 +20,7 @@ test.describe('Alert', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: (selector) => UI.Alert.init(document.querySelector(selector)),
+                init: (selector) => UI.Alert.init($.findOne(selector)),
             },
             {
                 name: 'QuerySet',
@@ -48,7 +49,7 @@ test.describe('Alert', () => {
             {
                 name: 'class',
                 dispose: (selector) => {
-                    UI.Alert.init(document.querySelector(selector)).dispose();
+                    UI.Alert.init($.findOne(selector)).dispose();
                 },
             },
             {
@@ -66,7 +67,7 @@ test.describe('Alert', () => {
         }
 
         test('completes closing after disposal', async ({ page }) => {
-            const node = await page.evaluateHandle(() => document.querySelector('#alert1'));
+            const node = await page.evaluateHandle(() => $.findOne('#alert1'));
             await node.evaluate((alert1) => {
                 window.alertClosedEventTriggered = false;
 
@@ -111,7 +112,7 @@ test.describe('Alert', () => {
             },
         ]) {
             test(`closes the alert (${name})`, async ({ page }) => {
-                const alert = await page.evaluateHandle(() => document.querySelector('#alert1'));
+                const alert = await page.evaluateHandle(() => $.findOne('#alert1'));
                 const state = await alert.evaluate(close);
 
                 expect(state).toEqual({

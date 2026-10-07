@@ -10,9 +10,10 @@ import { expect, test } from '#test';
 export function setup(key) {
     return async ({ page }) => {
         await page.evaluate((key) => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<button class="btn btn-secondary" id="' + key + '-toggle-1" type="button"></button>' +
-                '<button class="btn btn-secondary" id="' + key + '-toggle-2" type="button"></button>';
+                '<button class="btn btn-secondary" id="' + key + '-toggle-2" type="button"></button>',
+            );
         }, key);
     };
 }
@@ -28,7 +29,7 @@ export function floatingContentTests({ key, component }) {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: ({ key, component }) => UI[component].init(document.querySelector('#' + key + '-toggle-1')),
+                init: ({ key, component }) => UI[component].init($.findOne('#' + key + '-toggle-1')),
             },
             {
                 name: 'QuerySet',
@@ -56,10 +57,11 @@ export function floatingContentTests({ key, component }) {
         test.describe('failed initialization', () => {
             test.beforeEach(async ({ page }) => {
                 await page.evaluate((key) => {
-                    document.body.innerHTML =
+                    $.setHtml(document.body,
                         '<div class="modal" id="modal">' +
                         '<button id="' + key + '-toggle-1" title="Original title" type="button"></button>' +
-                        '</div>';
+                        '</div>',
+                    );
 
                     window.modalHideCalls = 0;
                     $.addEvent('#modal', 'hide.ui.modal', () => window.modalHideCalls++);
@@ -158,11 +160,12 @@ export function floatingContentTests({ key, component }) {
 
         test('removes only its modal hide event', async ({ page }) => {
             await page.evaluate(({ key, component }) => {
-                document.body.innerHTML =
+                $.setHtml(document.body,
                     '<div class="modal" id="modal">' +
                     '<button id="' + key + '-toggle-1" type="button"></button>' +
                     '<button id="' + key + '-toggle-2" type="button"></button>' +
-                    '</div>';
+                    '</div>',
+                );
 
                 const modal = $.findOne('#modal');
                 const toggle1 = $.findOne(`#${key}-toggle-1`);

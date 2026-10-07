@@ -6,7 +6,7 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Dropdown', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<div>' +
                 '<button class="btn btn-secondary" id="dropdown-toggle-1" data-ui-toggle="dropdown" type="button"></button>' +
                 '<div class="dropdown-menu fade" id="dropdown1">' +
@@ -22,7 +22,8 @@ test.describe('Dropdown', () => {
                 '<button class="dropdown-item" id="dropdown-2-item-2"></button>' +
                 '<button class="dropdown-item" id="dropdown-2-item-3"></button>' +
                 '</div>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 
@@ -30,7 +31,7 @@ test.describe('Dropdown', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: (selector) => UI.Dropdown.init(document.querySelector(selector)),
+                init: (selector) => UI.Dropdown.init($.findOne(selector)),
             },
             {
                 name: 'QuerySet',
@@ -61,7 +62,7 @@ test.describe('Dropdown', () => {
             {
                 name: 'class',
                 dispose: (selector) => {
-                    UI.Dropdown.init(document.querySelector(selector)).dispose();
+                    UI.Dropdown.init($.findOne(selector)).dispose();
                 },
             },
             {
@@ -134,7 +135,7 @@ test.describe('Dropdown', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Dropdown.init(document.querySelector(selector)).show();
+                    UI.Dropdown.init($.findOne(selector)).show();
                 },
             },
             {
@@ -215,13 +216,13 @@ test.describe('Dropdown', () => {
 
         test('rolls back a failed Popper initialization and allows showing again', async ({ page }) => {
             await page.evaluate(() => {
-                document.querySelector('#dropdown1').style.setProperty('position', 'relative', 'important');
-                UI.Dropdown.init(document.querySelector('#dropdown-toggle-1'));
+                $.findOne('#dropdown1').style.setProperty('position', 'relative', 'important');
+                UI.Dropdown.init($.findOne('#dropdown-toggle-1'));
             });
 
             const held = await page.evaluateHandle(() => $.setStyleLock('#dropdown1', 'position', 'fixed'));
 
-            await expect(page.evaluate(() => UI.Dropdown.init(document.querySelector('#dropdown-toggle-1')).show()))
+            await expect(page.evaluate(() => UI.Dropdown.init($.findOne('#dropdown-toggle-1')).show()))
                 .rejects.toThrow('CSS property "position" is already locked.');
 
             await expect(page.locator('#dropdown1')).not.toHaveClass(/\bshow\b/);
@@ -232,12 +233,12 @@ test.describe('Dropdown', () => {
 
             await expect(page.locator('#dropdown1')).toHaveJSProperty('style.position', 'relative');
 
-            await page.evaluate(() => UI.Dropdown.init(document.querySelector('#dropdown-toggle-1')).show());
+            await page.evaluate(() => UI.Dropdown.init($.findOne('#dropdown-toggle-1')).show());
 
             await expect(page.locator('#dropdown1')).toBeVisible();
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'true');
 
-            await page.evaluate(() => UI.Dropdown.init(document.querySelector('#dropdown-toggle-1')).hide());
+            await page.evaluate(() => UI.Dropdown.init($.findOne('#dropdown-toggle-1')).hide());
 
             await expect(page.locator('#dropdown1')).toBeHidden();
             await expect(page.locator('#dropdown-toggle-1')).toHaveAttribute('aria-expanded', 'false');
@@ -261,7 +262,7 @@ test.describe('Dropdown', () => {
             {
                 name: 'class',
                 hide: (selector) => {
-                    UI.Dropdown.init(document.querySelector(selector)).hide();
+                    UI.Dropdown.init($.findOne(selector)).hide();
                 },
             },
             {

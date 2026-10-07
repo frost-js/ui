@@ -67,8 +67,8 @@ export default class Popper extends BaseComponent {
 
     #placement;
     #referencePlacement;
-    #releaseArrowStyles;
-    #releaseStyles;
+    #releaseArrowStyles = null;
+    #releaseStyles = null;
     #rtl;
 
     /**

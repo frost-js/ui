@@ -3,9 +3,10 @@ import { expect, test } from '#test';
 test.describe('Button', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<button class="btn btn-secondary" id="button1" data-ui-toggle="button" type="button"></button>' +
-                '<button class="btn btn-secondary" id="button2" data-ui-toggle="button" type="button"></button>';
+                '<button class="btn btn-secondary" id="button2" data-ui-toggle="button" type="button"></button>',
+            );
         });
     });
 
@@ -13,7 +14,7 @@ test.describe('Button', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: (selector) => UI.Button.init(document.querySelector(selector)),
+                init: (selector) => UI.Button.init($.findOne(selector)),
             },
             {
                 name: 'QuerySet',
@@ -42,7 +43,7 @@ test.describe('Button', () => {
             {
                 name: 'class',
                 dispose: (selector) => {
-                    UI.Button.init(document.querySelector(selector)).dispose();
+                    UI.Button.init($.findOne(selector)).dispose();
                 },
             },
             {
@@ -65,7 +66,7 @@ test.describe('Button', () => {
             {
                 name: 'class',
                 toggle: (selector) => {
-                    UI.Button.init(document.querySelector(selector)).toggle();
+                    UI.Button.init($.findOne(selector)).toggle();
                 },
             },
             {

@@ -49,14 +49,14 @@ export default class Tooltip extends BaseComponent {
         minContact: false,
     };
 
-    #arrow;
+    #arrow = null;
     #enabled;
-    #hideModalEvent;
-    #modal;
-    #popper;
-    #tooltip;
-    #tooltipInner;
-    #transition;
+    #hideModalHandler = null;
+    #modal = null;
+    #popper = null;
+    #tooltip = null;
+    #tooltipInner = null;
+    #transition = null;
     #triggers = [];
 
     /**
@@ -126,8 +126,8 @@ export default class Tooltip extends BaseComponent {
             $.removeEvent(this.node, 'click.ui.tooltip');
         }
 
-        if (this.#modal && this.#hideModalEvent) {
-            $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+        if (this.#modal && this.#hideModalHandler) {
+            $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalHandler);
         }
 
         this.#modal = null;
@@ -136,7 +136,7 @@ export default class Tooltip extends BaseComponent {
         this.#tooltip = null;
         this.#tooltipInner = null;
         this.#arrow = null;
-        this.#hideModalEvent = null;
+        this.#hideModalHandler = null;
 
         super.dispose();
     }
@@ -317,10 +317,10 @@ export default class Tooltip extends BaseComponent {
         }
 
         if (this.#modal) {
-            this.#hideModalEvent = () => {
+            this.#hideModalHandler = () => {
                 this.hide();
             };
-            $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+            $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalHandler);
         }
     }
 

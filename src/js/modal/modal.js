@@ -26,13 +26,13 @@ export default class Modal extends BaseComponent {
         keyboard: true,
     };
 
-    #activeTarget;
-    #backdrop;
-    #dialog;
-    #focusTrap;
-    #releaseScroll;
-    #releaseScrollPadding;
-    #releaseZIndex;
+    #activeTarget = null;
+    #backdrop = null;
+    #dialog = null;
+    #focusTrap = null;
+    #releaseScroll = null;
+    #releaseScrollPadding = null;
+    #releaseZIndex = null;
     #shown = false;
     #transitioning;
     #zooming;

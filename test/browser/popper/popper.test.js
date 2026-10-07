@@ -4,9 +4,10 @@ import { expectStyles } from '../../support/assertions/styles.js';
 test.describe('Popper', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<button class="btn btn-secondary" id="button" style="width: 80px; height: 34px;" type="button">Button</button>' +
-                '<div class="badge" id="badge" style="width: 60px; height: 21px;">Badge</div>';
+                '<div class="badge" id="badge" style="width: 60px; height: 21px;">Badge</div>',
+            );
         });
     });
 
@@ -14,11 +15,11 @@ test.describe('Popper', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: () => UI.Popper.init(document.querySelector('#badge'), { reference: document.querySelector('#button') }),
+                init: () => UI.Popper.init($.findOne('#badge'), { reference: $.findOne('#button') }),
             },
             {
                 name: 'QuerySet',
-                init: () => $('#badge').popper({ reference: document.querySelector('#button') }),
+                init: () => $('#badge').popper({ reference: $.findOne('#button') }),
             },
         ]) {
             test(`creates a popper (${name})`, async ({ page }) => {
@@ -32,17 +33,17 @@ test.describe('Popper', () => {
         for (const callback of ['beforeUpdate', 'afterUpdate']) {
             test(`restores state when ${callback} throws during initialization`, async ({ page }) => {
                 await page.evaluate(() => {
-                    const node = document.querySelector('#badge');
-                    node.innerHTML = '<span id="arrow" style="position: relative; top: 3px !important;"></span>';
+                    const node = $.findOne('#badge');
+                    $.setHtml(node, '<span id="arrow" style="position: relative; top: 3px !important;"></span>');
                     node.style.setProperty('position', 'fixed', 'important');
                     node.style.setProperty('transform', 'scale(.5)', 'important');
-                    node.dataset.uiPlacement = 'original-popper';
-                    document.querySelector('#button').dataset.uiPlacement = 'original-reference';
+                    $.setDataset(node, 'uiPlacement', 'original-popper');
+                    $.setDataset('#button', 'uiPlacement', 'original-reference');
                 });
 
-                await expect(page.evaluate((callback) => UI.Popper.init(document.querySelector('#badge'), {
-                    reference: document.querySelector('#button'),
-                    arrow: document.querySelector('#arrow'),
+                await expect(page.evaluate((callback) => UI.Popper.init($.findOne('#badge'), {
+                    reference: $.findOne('#button'),
+                    arrow: $.findOne('#arrow'),
                     [callback]: () => {
                         throw new Error('Cannot position popper');
                     },
@@ -68,14 +69,14 @@ test.describe('Popper', () => {
                 await expect(page.locator('#button')).toHaveAttribute('data-ui-placement', 'original-reference');
                 expect(await page.evaluate(() => $.hasData('#badge', 'popper'))).toBe(false);
 
-                await page.evaluate(() => UI.Popper.init(document.querySelector('#badge'), {
-                    reference: document.querySelector('#button'),
-                    arrow: document.querySelector('#arrow'),
+                await page.evaluate(() => UI.Popper.init($.findOne('#badge'), {
+                    reference: $.findOne('#button'),
+                    arrow: $.findOne('#arrow'),
                 }));
 
                 expect(await page.evaluate(() => $.getData('#badge', 'popper') instanceof UI.Popper)).toBe(true);
 
-                await page.evaluate(() => UI.Popper.init(document.querySelector('#badge')).dispose());
+                await page.evaluate(() => UI.Popper.init($.findOne('#badge')).dispose());
 
                 await expectStyles(page, [
                     {
@@ -209,10 +210,10 @@ test.describe('Popper', () => {
 
         test('can be disposed more than once', async ({ page }) => {
             await page.evaluate(() => {
-                const node = document.querySelector('#badge');
+                const node = $.findOne('#badge');
                 node.style.setProperty('position', 'relative', 'important');
 
-                const popper = UI.Popper.init(node, { reference: document.querySelector('#button') });
+                const popper = UI.Popper.init(node, { reference: $.findOne('#button') });
                 popper.dispose();
                 popper.dispose();
             });

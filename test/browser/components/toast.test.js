@@ -7,7 +7,7 @@ test.describe('Toast', () => {
     const setupHidden = async ({ page }) => {
         await page.locator('.toast').evaluateAll((toasts) => {
             for (const toast of toasts) {
-                toast.classList.remove('show');
+                $.removeClass(toast, 'show');
                 toast.style.setProperty('display', 'none', 'important');
             }
         });
@@ -16,20 +16,21 @@ test.describe('Toast', () => {
 
     const setupAutohide = async ({ page }) => {
         await page.locator('#toast1').evaluate((toast) => {
-            toast.classList.remove('fade', 'show');
+            $.removeClass(toast, 'fade', 'show');
             toast.style.setProperty('display', 'none', 'important');
         });
     };
 
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<div class="toast fade show" id="toast1">' +
                 '<button class="btn-close" id="button1" data-ui-dismiss="toast" type="button"></button>' +
                 '</div>' +
                 '<div class="toast fade show" id="toast2">' +
                 '<button class="btn-close" id="button2" data-ui-dismiss="toast" type="button"></button>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 
@@ -37,7 +38,7 @@ test.describe('Toast', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: (selector) => UI.Toast.init(document.querySelector(selector)),
+                init: (selector) => UI.Toast.init($.findOne(selector)),
             },
             {
                 name: 'QuerySet',
@@ -68,7 +69,7 @@ test.describe('Toast', () => {
             {
                 name: 'class',
                 dispose: (selector) => {
-                    UI.Toast.init(document.querySelector(selector)).dispose();
+                    UI.Toast.init($.findOne(selector)).dispose();
                 },
             },
             {
@@ -201,7 +202,7 @@ test.describe('Toast', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Toast.init(document.querySelector(selector), { autohide: false }).show();
+                    UI.Toast.init($.findOne(selector), { autohide: false }).show();
                 },
             },
             {
@@ -282,7 +283,7 @@ test.describe('Toast', () => {
             {
                 name: 'class',
                 hide: (selector) => {
-                    UI.Toast.init(document.querySelector(selector)).hide();
+                    UI.Toast.init($.findOne(selector)).hide();
                 },
             },
             {

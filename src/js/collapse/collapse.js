@@ -14,10 +14,10 @@ import { getDimension } from './helpers.js';
  * @augments {BaseComponent<CollapseOptions>}
  */
 export default class Collapse extends BaseComponent {
-    #parent;
-    #releaseDimension;
+    #parent = null;
+    #releaseDimension = null;
     #transitioning;
-    #triggers;
+    #triggers = null;
 
     /**
      * Creates a Collapse.

@@ -51,15 +51,15 @@ export default class Popover extends BaseComponent {
         minContact: false,
     };
 
-    #arrow;
+    #arrow = null;
     #enabled;
-    #hideModalEvent;
-    #modal;
-    #popover;
-    #popoverBody;
-    #popoverHeader;
-    #popper;
-    #transition;
+    #hideModalHandler = null;
+    #modal = null;
+    #popover = null;
+    #popoverBody = null;
+    #popoverHeader = null;
+    #popper = null;
+    #transition = null;
     #triggers = [];
 
     /**
@@ -129,8 +129,8 @@ export default class Popover extends BaseComponent {
             $.removeEvent(this.node, 'click.ui.popover');
         }
 
-        if (this.#modal && this.#hideModalEvent) {
-            $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+        if (this.#modal && this.#hideModalHandler) {
+            $.removeEvent(this.#modal, 'hide.ui.modal', this.#hideModalHandler);
         }
 
         this.#modal = null;
@@ -140,7 +140,7 @@ export default class Popover extends BaseComponent {
         this.#popoverHeader = null;
         this.#popoverBody = null;
         this.#arrow = null;
-        this.#hideModalEvent = null;
+        this.#hideModalHandler = null;
 
         super.dispose();
     }
@@ -339,10 +339,10 @@ export default class Popover extends BaseComponent {
         }
 
         if (this.#modal) {
-            this.#hideModalEvent = () => {
+            this.#hideModalHandler = () => {
                 this.hide();
             };
-            $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalEvent);
+            $.addEvent(this.#modal, 'hide.ui.modal', this.#hideModalHandler);
         }
     }
 

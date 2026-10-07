@@ -9,7 +9,7 @@ test.use({ mockClock: true });
 test.describe('Carousel', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<div class="carousel" id="carousel1">' +
                 '<ol class="carousel-indicators">' +
                 '<li class="active" id="carousel-1-slide-0" data-ui-slide-to="0"></li>' +
@@ -37,7 +37,8 @@ test.describe('Carousel', () => {
                 '</div>' +
                 '<button id="carousel-2-prev" data-ui-slide="prev" type="button"></button>' +
                 '<button id="carousel-2-next" data-ui-slide="next" type="button"></button>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 
@@ -45,7 +46,7 @@ test.describe('Carousel', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: (selector) => UI.Carousel.init(document.querySelector(selector)),
+                init: (selector) => UI.Carousel.init($.findOne(selector)),
             },
             {
                 name: 'QuerySet',
@@ -67,7 +68,7 @@ test.describe('Carousel', () => {
             {
                 name: 'class',
                 dispose: (selector) => {
-                    UI.Carousel.init(document.querySelector(selector)).dispose();
+                    UI.Carousel.init($.findOne(selector)).dispose();
                 },
             },
             {
@@ -127,7 +128,7 @@ test.describe('Carousel', () => {
 
         test('restores drag styles when disposed during swipe completion', async ({ page }) => {
             await page.evaluate(async () => {
-                const node = document.querySelector('#carousel1');
+                const node = $.findOne('#carousel1');
                 node.style.setProperty('--ui-carousel-transition-scale', '.75', 'important');
 
                 const carousel = UI.Carousel.init(node);
@@ -167,7 +168,7 @@ test.describe('Carousel', () => {
             {
                 name: 'class',
                 cycle: (selector) => {
-                    UI.Carousel.init(document.querySelector(selector)).cycle();
+                    UI.Carousel.init($.findOne(selector)).cycle();
                 },
             },
             {
@@ -222,8 +223,8 @@ test.describe('Carousel', () => {
         for (const { name, pause, cycle } of [
             {
                 name: 'class',
-                pause: (selector) => UI.Carousel.init(document.querySelector(selector)).pause(),
-                cycle: (selector) => UI.Carousel.init(document.querySelector(selector)).cycle(),
+                pause: (selector) => UI.Carousel.init($.findOne(selector)).pause(),
+                cycle: (selector) => UI.Carousel.init($.findOne(selector)).cycle(),
             },
             {
                 name: 'QuerySet',
@@ -232,7 +233,7 @@ test.describe('Carousel', () => {
             },
         ]) {
             test(`stays paused through transitions and hover until resumed (${name})`, async ({ page }) => {
-                await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1'), {
+                await page.evaluate(() => UI.Carousel.init($.findOne('#carousel1'), {
                     interval: 200,
                     ride: 'carousel',
                 }));
@@ -241,7 +242,7 @@ test.describe('Carousel', () => {
 
                 await expect(page.locator('#carousel-1-item-1')).toHaveClass(/\bactive\b/);
 
-                await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1')).next());
+                await page.evaluate(() => UI.Carousel.init($.findOne('#carousel1')).next());
 
                 await expect(page.locator('#carousel-1-slide-1')).toHaveClass(/\bactive\b/);
 
@@ -269,7 +270,7 @@ test.describe('Carousel', () => {
             {
                 name: 'class',
                 show: ([selector, ...args]) => {
-                    UI.Carousel.init(document.querySelector(selector)).show(...args);
+                    UI.Carousel.init($.findOne(selector)).show(...args);
                 },
             },
             {
@@ -358,7 +359,7 @@ test.describe('Carousel', () => {
             {
                 name: 'class',
                 slide: ([selector, ...args]) => {
-                    UI.Carousel.init(document.querySelector(selector)).slide(...args);
+                    UI.Carousel.init($.findOne(selector)).slide(...args);
                 },
             },
             {
@@ -428,7 +429,7 @@ test.describe('Carousel', () => {
             {
                 name: 'class',
                 next: (selector) => {
-                    UI.Carousel.init(document.querySelector(selector)).next();
+                    UI.Carousel.init($.findOne(selector)).next();
                 },
             },
             {
@@ -472,7 +473,7 @@ test.describe('Carousel', () => {
             {
                 name: 'class',
                 prev: (selector) => {
-                    UI.Carousel.init(document.querySelector(selector)).prev();
+                    UI.Carousel.init($.findOne(selector)).prev();
                 },
             },
             {
@@ -1469,7 +1470,7 @@ test.describe('Carousel', () => {
         ]) {
             test(`restores temporary styles after ${name}`, async ({ page }) => {
                 await page.evaluate(async (offsets) => {
-                    const node = document.querySelector('#carousel1');
+                    const node = $.findOne('#carousel1');
                     UI.Carousel.init(node);
                     const width = $.width(node);
 
@@ -1498,7 +1499,7 @@ test.describe('Carousel', () => {
                 ]);
                 expect(await page.locator('#carousel1').evaluate((node) => node.style.getPropertyValue('--ui-carousel-transition-scale'))).toBe('');
 
-                await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1')).next());
+                await page.evaluate(() => UI.Carousel.init($.findOne('#carousel1')).next());
 
                 await expect(page.locator('#carousel1 .carousel-indicators .active')).toHaveAttribute('data-ui-slide-to', String(active % 3));
             });
@@ -1514,14 +1515,14 @@ test.describe('Carousel', () => {
                 });
 
                 test(`recovers from a failed ${property} lock while dragging`, async ({ page }) => {
-                    await page.evaluate(() => UI.Carousel.init(document.querySelector('#carousel1')));
+                    await page.evaluate(() => UI.Carousel.init($.findOne('#carousel1')));
 
                     const held = await page.evaluateHandle(({ selector, property, value }) =>
                         $.setStyleLock(selector, property, value), { selector, property, value });
                     const errorPromise = page.waitForEvent('pageerror');
 
                     await page.evaluate(() => {
-                        const node = document.querySelector('#carousel1');
+                        const node = $.findOne('#carousel1');
                         const width = $.width(node);
 
                         node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));
@@ -1552,7 +1553,7 @@ test.describe('Carousel', () => {
                     await expect(page.locator('#carousel-1-slide-1')).toHaveClass('active');
 
                     await page.evaluate(() => {
-                        const node = document.querySelector('#carousel1');
+                        const node = $.findOne('#carousel1');
                         const width = $.width(node);
 
                         node.dispatchEvent(new MouseEvent('mousedown', { clientX: width / 2 }));

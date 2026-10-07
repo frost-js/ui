@@ -38,8 +38,8 @@ function mergeOptions(...sources) {
  * @template {ComponentOptions} [Options=ComponentOptions]
  */
 export default class BaseComponent {
-    #node;
-    #options;
+    #node = null;
+    #options = null;
 
     /**
      * Initializes a BaseComponent.

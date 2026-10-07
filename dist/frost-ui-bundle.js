@@ -7674,8 +7674,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @template {ComponentOptions} [Options=ComponentOptions]
 	*/
 	var BaseComponent = class {
-		#node;
-		#options;
+		#node = null;
+		#options = null;
 		/**
 		* Initializes a BaseComponent.
 		* @param {HTMLElement} node The input node.
@@ -7959,14 +7959,14 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			swipe: true
 		};
 		#index;
-		#items;
+		#items = null;
 		#mousePaused;
 		#paused;
-		#releaseTransitionScale;
+		#releaseTransitionScale = null;
 		#rtl;
 		#sliding;
 		#styleLocks = /* @__PURE__ */ new Map();
-		#timer;
+		#timer = null;
 		/**
 		* Creates a Carousel.
 		* @param {HTMLElement} node The input node.
@@ -8075,7 +8075,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				let index = null;
 				let progress;
 				let direction;
-				const downEvent = (event) => {
+				const downHandler = (event) => {
 					if (event.button || this.#sliding || !$.is(event.target, ":disabled, .disabled") && ($.is(event.target, "[data-ui-slide-to], [data-ui-slide], a, button, input, textarea, select") || $.closest(event.target, "[data-ui-slide], a, button", (parent) => $.isSame(parent, this.node) || $.is(parent, ":disabled, .disabled")).length)) return false;
 					this.#clearTimer();
 					this.#sliding = true;
@@ -8085,7 +8085,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 					progress = 0;
 					direction = null;
 				};
-				const moveEvent = (event) => {
+				const moveHandler = (event) => {
 					if (!this.node || !this.#sliding) return;
 					const currentX = getPosition(event).x;
 					const scrollX = $.width(this.node) / 2;
@@ -8122,7 +8122,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 						}
 					} while (progress > 1);
 				};
-				const upEvent = () => {
+				const upHandler = () => {
 					if (!this.node || !this.#sliding) return;
 					if (index === null || index === this.#index) {
 						this.#resetDrag();
@@ -8163,8 +8163,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 						this.#setTimer();
 					});
 				};
-				const dragEvent = $.mouseDragFactory(downEvent, moveEvent, upEvent);
-				$.addEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel", dragEvent);
+				const dragHandler = $.mouseDragFactory(downHandler, moveHandler, upHandler);
+				$.addEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel", dragHandler);
 			}
 		}
 		/**
@@ -8343,10 +8343,10 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* @augments {BaseComponent<CollapseOptions>}
 	*/
 	var Collapse = class extends BaseComponent {
-		#parent;
-		#releaseDimension;
+		#parent = null;
+		#releaseDimension = null;
 		#transitioning;
-		#triggers;
+		#triggers = null;
 		/**
 		* Creates a Collapse.
 		* @param {HTMLElement} node The input node.
@@ -8867,8 +8867,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 		};
 		#placement;
 		#referencePlacement;
-		#releaseArrowStyles;
-		#releaseStyles;
+		#releaseArrowStyles = null;
+		#releaseStyles = null;
 		#rtl;
 		/**
 		* Creates a Popper.
@@ -9065,10 +9065,10 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			minContact: false
 		};
 		#display;
-		#menuNode;
-		#popper;
-		#referenceNode;
-		#releaseDisplay;
+		#menuNode = null;
+		#popper = null;
+		#referenceNode = null;
+		#releaseDisplay = null;
 		#transitioning;
 		/**
 		* Creates a Dropdown.
@@ -9370,13 +9370,13 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			show: false,
 			keyboard: true
 		};
-		#activeTarget;
-		#backdrop;
-		#dialog;
-		#focusTrap;
-		#releaseScroll;
-		#releaseScrollPadding;
-		#releaseZIndex;
+		#activeTarget = null;
+		#backdrop = null;
+		#dialog = null;
+		#focusTrap = null;
+		#releaseScroll = null;
+		#releaseScrollPadding = null;
+		#releaseZIndex = null;
 		#shown = false;
 		#transitioning;
 		#zooming;
@@ -9655,10 +9655,10 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			keyboard: true,
 			scroll: false
 		};
-		#activeTarget;
-		#focusTrap;
-		#releaseScroll;
-		#releaseScrollPadding;
+		#activeTarget = null;
+		#focusTrap = null;
+		#releaseScroll = null;
+		#releaseScrollPadding = null;
 		#shown = false;
 		#transitioning;
 		/**
@@ -9845,15 +9845,15 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			spacing: 3,
 			minContact: false
 		};
-		#arrow;
+		#arrow = null;
 		#enabled;
-		#hideModalEvent;
-		#modal;
-		#popover;
-		#popoverBody;
-		#popoverHeader;
-		#popper;
-		#transition;
+		#hideModalHandler = null;
+		#modal = null;
+		#popover = null;
+		#popoverBody = null;
+		#popoverHeader = null;
+		#popper = null;
+		#transition = null;
 		#triggers = [];
 		/**
 		* Creates a Popover.
@@ -9902,7 +9902,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				$.removeEvent(this.node, "blur.ui.popover");
 			}
 			if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.popover");
-			if (this.#modal && this.#hideModalEvent) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+			if (this.#modal && this.#hideModalHandler) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 			this.#modal = null;
 			this.#transition = null;
 			this.#triggers = null;
@@ -9910,7 +9910,7 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			this.#popoverHeader = null;
 			this.#popoverBody = null;
 			this.#arrow = null;
-			this.#hideModalEvent = null;
+			this.#hideModalHandler = null;
 			super.dispose();
 		}
 		/**
@@ -10021,10 +10021,10 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				this.toggle({ force: false });
 			});
 			if (this.#modal) {
-				this.#hideModalEvent = () => {
+				this.#hideModalHandler = () => {
 					this.hide();
 				};
-				$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+				$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 			}
 		}
 		/**
@@ -10085,9 +10085,9 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 	* Controls a tab trigger and its associated panel.
 	*/
 	var Tab = class extends BaseComponent {
-		#siblings;
-		#target;
-		#transition;
+		#siblings = null;
+		#target = null;
+		#transition = null;
 		/**
 		* Creates a Tab.
 		* @param {HTMLElement} node The input node.
@@ -10208,8 +10208,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			autohide: true,
 			delay: 5e3
 		};
-		#releaseDisplay;
-		#timer;
+		#releaseDisplay = null;
+		#timer = null;
 		#transitioning;
 		/** @inheritdoc */
 		dispose() {
@@ -10322,14 +10322,14 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 			spacing: 2,
 			minContact: false
 		};
-		#arrow;
+		#arrow = null;
 		#enabled;
-		#hideModalEvent;
-		#modal;
-		#popper;
-		#tooltip;
-		#tooltipInner;
-		#transition;
+		#hideModalHandler = null;
+		#modal = null;
+		#popper = null;
+		#tooltip = null;
+		#tooltipInner = null;
+		#transition = null;
 		#triggers = [];
 		/**
 		* Creates a Tooltip.
@@ -10378,14 +10378,14 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				$.removeEvent(this.node, "blur.ui.tooltip");
 			}
 			if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.tooltip");
-			if (this.#modal && this.#hideModalEvent) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+			if (this.#modal && this.#hideModalHandler) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 			this.#modal = null;
 			this.#transition = null;
 			this.#triggers = null;
 			this.#tooltip = null;
 			this.#tooltipInner = null;
 			this.#arrow = null;
-			this.#hideModalEvent = null;
+			this.#hideModalHandler = null;
 			super.dispose();
 		}
 		/**
@@ -10491,10 +10491,10 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 				this.toggle({ force: false });
 			});
 			if (this.#modal) {
-				this.#hideModalEvent = () => {
+				this.#hideModalHandler = () => {
 					this.hide();
 				};
-				$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+				$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 			}
 		}
 		/**

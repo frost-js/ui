@@ -8,7 +8,7 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Modal', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<button class="btn btn-secondary" id="modal-toggle-1" data-ui-toggle="modal" data-ui-target="#modal1" type="button"></button>' +
                 '<button class="btn btn-secondary" id="modal-toggle-2" data-ui-toggle="modal" data-ui-target="#modal2" type="button"></button>' +
                 '<div class="modal" id="modal1">' +
@@ -20,7 +20,8 @@ test.describe('Modal', () => {
                 '<div class="modal-dialog" id="modal-dialog-2">' +
                 '<button class="btn-close" id="button2" data-ui-dismiss="modal" type="button"></button>' +
                 '</div>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 
@@ -28,7 +29,7 @@ test.describe('Modal', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: (selector) => UI.Modal.init(document.querySelector(selector)),
+                init: (selector) => UI.Modal.init($.findOne(selector)),
             },
             {
                 name: 'QuerySet',
@@ -59,7 +60,7 @@ test.describe('Modal', () => {
             {
                 name: 'class',
                 dispose: (selector) => {
-                    UI.Modal.init(document.querySelector(selector)).dispose();
+                    UI.Modal.init($.findOne(selector)).dispose();
                 },
             },
             {
@@ -160,7 +161,7 @@ test.describe('Modal', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Modal.init(document.querySelector(selector)).show();
+                    UI.Modal.init($.findOne(selector)).show();
                 },
             },
             {
@@ -255,8 +256,8 @@ test.describe('Modal', () => {
                     document.body.style.setProperty('overflow-y', 'scroll', 'important');
                     document.body.style.setProperty('padding-right', '7px', 'important');
                     document.body.style.minHeight = '2000px';
-                    document.querySelector('#modal1').style.setProperty('z-index', '13', 'important');
-                    UI.Modal.init(document.querySelector('#modal1'));
+                    $.findOne('#modal1').style.setProperty('z-index', '13', 'important');
+                    UI.Modal.init($.findOne('#modal1'));
                 });
 
                 const held = await page.evaluateHandle((property) => $.setStyleLock(
@@ -265,7 +266,7 @@ test.describe('Modal', () => {
                     property === 'z-index' ? '27' : 'auto',
                 ), property);
 
-                await expect(page.evaluate(() => UI.Modal.init(document.querySelector('#modal1')).show()))
+                await expect(page.evaluate(() => UI.Modal.init($.findOne('#modal1')).show()))
                     .rejects.toThrow(`CSS property "${property}" is already locked.`);
 
                 await expect(page.locator('#modal1')).not.toHaveClass(/\bshow\b/);
@@ -289,12 +290,12 @@ test.describe('Modal', () => {
                     },
                 ]);
 
-                await page.evaluate(() => UI.Modal.init(document.querySelector('#modal1')).show());
+                await page.evaluate(() => UI.Modal.init($.findOne('#modal1')).show());
 
                 await expect(page.locator('#modal1')).toBeVisible();
                 await expect(page.locator('#modal1')).toHaveAttribute('aria-hidden', 'false');
 
-                await page.evaluate(() => UI.Modal.init(document.querySelector('#modal1')).hide());
+                await page.evaluate(() => UI.Modal.init($.findOne('#modal1')).hide());
 
                 await expect(page.locator('#modal1')).toBeHidden();
                 await expectStyles(page, [
@@ -326,10 +327,10 @@ test.describe('Modal', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Modal.init(document.querySelector(selector)).show();
+                    UI.Modal.init($.findOne(selector)).show();
                 },
                 hide: (selector) => {
-                    UI.Modal.init(document.querySelector(selector)).hide();
+                    UI.Modal.init($.findOne(selector)).hide();
                 },
             },
             {
@@ -489,7 +490,7 @@ test.describe('Modal', () => {
             {
                 name: 'class',
                 toggle: (selector) => {
-                    UI.Modal.init(document.querySelector(selector)).toggle();
+                    UI.Modal.init($.findOne(selector)).toggle();
                 },
             },
             {
@@ -529,10 +530,10 @@ test.describe('Modal', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Modal.init(document.querySelector(selector)).show();
+                    UI.Modal.init($.findOne(selector)).show();
                 },
                 toggle: (selector) => {
-                    UI.Modal.init(document.querySelector(selector)).toggle();
+                    UI.Modal.init($.findOne(selector)).toggle();
                 },
             },
             {

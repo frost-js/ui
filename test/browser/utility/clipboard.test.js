@@ -8,7 +8,7 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (data-ui-text)', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML = '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 1"></button>';
+                $.setHtml(document.body, '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 1"></button>');
             });
             await page.locator('#button').click();
 
@@ -18,9 +18,10 @@ test.describe('Clipboard', () => {
 
         test('works with copy action (data-ui-target)', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML =
+                $.setHtml(document.body,
                     '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>' +
-                    '<div id="test">Test 2</div>';
+                    '<div id="test">Test 2</div>',
+                );
             });
             await page.locator('#button').click();
 
@@ -34,9 +35,10 @@ test.describe('Clipboard', () => {
         ]) {
             test(`works with copy action (${name})`, async ({ page }) => {
                 await page.evaluate((markup) => {
-                    document.body.innerHTML =
+                    $.setHtml(document.body,
                         '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-target="#test"></button>' +
-                        markup;
+                        markup,
+                    );
                 }, markup);
                 await page.locator('#button').click();
 
@@ -57,9 +59,10 @@ test.describe('Clipboard', () => {
         ]) {
             test(`works with cut action (${name})`, async ({ page }) => {
                 await page.evaluate((markup) => {
-                    document.body.innerHTML =
+                    $.setHtml(document.body,
                         '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>' +
-                        markup;
+                        markup,
+                    );
                 }, markup);
                 await page.locator('#button').click();
 
@@ -70,9 +73,10 @@ test.describe('Clipboard', () => {
 
         test('does not remove text content for elements', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML =
+                $.setHtml(document.body,
                     '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-action="cut" data-ui-target="#test"></button>' +
-                    '<div id="test">Test 7</div>';
+                    '<div id="test">Test 7</div>',
+                );
             });
             await page.locator('#button').click();
 
@@ -89,7 +93,7 @@ test.describe('Clipboard', () => {
 
         test('throws for an invalid action', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML = '<button id="button" data-ui-toggle="clipboard" data-ui-action="paste"></button>';
+                $.setHtml(document.body, '<button id="button" data-ui-toggle="clipboard" data-ui-action="paste"></button>');
             });
 
             const errorPromise = page.waitForEvent('pageerror');
@@ -105,7 +109,7 @@ test.describe('Clipboard', () => {
     test.describe('events', () => {
         test('triggers copied event', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML = '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 8"></button>';
+                $.setHtml(document.body, '<button class="btn btn-secondary" id="button" data-ui-toggle="clipboard" data-ui-text="Test 8"></button>');
                 window.clipboardCopiedEventTriggered = false;
 
                 $.addEvent('#button', 'copied.ui.clipboard', () => {

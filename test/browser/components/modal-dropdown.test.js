@@ -3,7 +3,7 @@ import { expect, test } from '#test';
 test.describe('Modal/Dropdown', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<button class="btn btn-secondary" id="modal-toggle" data-ui-toggle="modal" data-ui-target="#modal" type="button"></button>' +
                 '<div class="modal" id="modal">' +
                 '<div class="modal-dialog" id="modal-dialog">' +
@@ -17,7 +17,8 @@ test.describe('Modal/Dropdown', () => {
                 '</div>' +
                 '</div>' +
                 '</div>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 

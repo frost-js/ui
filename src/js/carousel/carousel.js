@@ -46,14 +46,14 @@ export default class Carousel extends BaseComponent {
     };
 
     #index;
-    #items;
+    #items = null;
     #mousePaused;
     #paused;
-    #releaseTransitionScale;
+    #releaseTransitionScale = null;
     #rtl;
     #sliding;
     #styleLocks = new Map();
-    #timer;
+    #timer = null;
 
     /**
      * Creates a Carousel.
@@ -219,7 +219,7 @@ export default class Carousel extends BaseComponent {
             let progress;
             let direction;
 
-            const downEvent = (event) => {
+            const downHandler = (event) => {
                 if (
                     event.button ||
                     this.#sliding ||
@@ -247,7 +247,7 @@ export default class Carousel extends BaseComponent {
                 direction = null;
             };
 
-            const moveEvent = (event) => {
+            const moveHandler = (event) => {
                 if (!this.node || !this.#sliding) {
                     return;
                 }
@@ -316,7 +316,7 @@ export default class Carousel extends BaseComponent {
                 } while (progress > 1);
             };
 
-            const upEvent = () => {
+            const upHandler = () => {
                 if (!this.node || !this.#sliding) {
                     return;
                 }
@@ -387,9 +387,9 @@ export default class Carousel extends BaseComponent {
                 });
             };
 
-            const dragEvent = $.mouseDragFactory(downEvent, moveEvent, upEvent);
+            const dragHandler = $.mouseDragFactory(downHandler, moveHandler, upHandler);
 
-            $.addEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel', dragEvent);
+            $.addEvent(this.node, 'mousedown.ui.carousel touchstart.ui.carousel', dragHandler);
         }
     }
 

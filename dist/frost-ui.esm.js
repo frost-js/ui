@@ -115,8 +115,8 @@ function mergeOptions(...sources) {
 * @template {ComponentOptions} [Options=ComponentOptions]
 */
 var BaseComponent = class {
-	#node;
-	#options;
+	#node = null;
+	#options = null;
 	/**
 	* Initializes a BaseComponent.
 	* @param {HTMLElement} node The input node.
@@ -400,14 +400,14 @@ var Carousel = class extends BaseComponent {
 		swipe: true
 	};
 	#index;
-	#items;
+	#items = null;
 	#mousePaused;
 	#paused;
-	#releaseTransitionScale;
+	#releaseTransitionScale = null;
 	#rtl;
 	#sliding;
 	#styleLocks = /* @__PURE__ */ new Map();
-	#timer;
+	#timer = null;
 	/**
 	* Creates a Carousel.
 	* @param {HTMLElement} node The input node.
@@ -516,7 +516,7 @@ var Carousel = class extends BaseComponent {
 			let index = null;
 			let progress;
 			let direction;
-			const downEvent = (event) => {
+			const downHandler = (event) => {
 				if (event.button || this.#sliding || !$.is(event.target, ":disabled, .disabled") && ($.is(event.target, "[data-ui-slide-to], [data-ui-slide], a, button, input, textarea, select") || $.closest(event.target, "[data-ui-slide], a, button", (parent) => $.isSame(parent, this.node) || $.is(parent, ":disabled, .disabled")).length)) return false;
 				this.#clearTimer();
 				this.#sliding = true;
@@ -526,7 +526,7 @@ var Carousel = class extends BaseComponent {
 				progress = 0;
 				direction = null;
 			};
-			const moveEvent = (event) => {
+			const moveHandler = (event) => {
 				if (!this.node || !this.#sliding) return;
 				const currentX = getPosition(event).x;
 				const scrollX = $.width(this.node) / 2;
@@ -563,7 +563,7 @@ var Carousel = class extends BaseComponent {
 					}
 				} while (progress > 1);
 			};
-			const upEvent = () => {
+			const upHandler = () => {
 				if (!this.node || !this.#sliding) return;
 				if (index === null || index === this.#index) {
 					this.#resetDrag();
@@ -604,8 +604,8 @@ var Carousel = class extends BaseComponent {
 					this.#setTimer();
 				});
 			};
-			const dragEvent = $.mouseDragFactory(downEvent, moveEvent, upEvent);
-			$.addEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel", dragEvent);
+			const dragHandler = $.mouseDragFactory(downHandler, moveHandler, upHandler);
+			$.addEvent(this.node, "mousedown.ui.carousel touchstart.ui.carousel", dragHandler);
 		}
 	}
 	/**
@@ -784,10 +784,10 @@ function getDimension(node) {
 * @augments {BaseComponent<CollapseOptions>}
 */
 var Collapse = class extends BaseComponent {
-	#parent;
-	#releaseDimension;
+	#parent = null;
+	#releaseDimension = null;
 	#transitioning;
-	#triggers;
+	#triggers = null;
 	/**
 	* Creates a Collapse.
 	* @param {HTMLElement} node The input node.
@@ -1308,8 +1308,8 @@ var Popper = class extends BaseComponent {
 	};
 	#placement;
 	#referencePlacement;
-	#releaseArrowStyles;
-	#releaseStyles;
+	#releaseArrowStyles = null;
+	#releaseStyles = null;
 	#rtl;
 	/**
 	* Creates a Popper.
@@ -1506,10 +1506,10 @@ var Dropdown = class extends BaseComponent {
 		minContact: false
 	};
 	#display;
-	#menuNode;
-	#popper;
-	#referenceNode;
-	#releaseDisplay;
+	#menuNode = null;
+	#popper = null;
+	#referenceNode = null;
+	#releaseDisplay = null;
 	#transitioning;
 	/**
 	* Creates a Dropdown.
@@ -1811,13 +1811,13 @@ var Modal = class extends BaseComponent {
 		show: false,
 		keyboard: true
 	};
-	#activeTarget;
-	#backdrop;
-	#dialog;
-	#focusTrap;
-	#releaseScroll;
-	#releaseScrollPadding;
-	#releaseZIndex;
+	#activeTarget = null;
+	#backdrop = null;
+	#dialog = null;
+	#focusTrap = null;
+	#releaseScroll = null;
+	#releaseScrollPadding = null;
+	#releaseZIndex = null;
 	#shown = false;
 	#transitioning;
 	#zooming;
@@ -2096,10 +2096,10 @@ var Offcanvas = class extends BaseComponent {
 		keyboard: true,
 		scroll: false
 	};
-	#activeTarget;
-	#focusTrap;
-	#releaseScroll;
-	#releaseScrollPadding;
+	#activeTarget = null;
+	#focusTrap = null;
+	#releaseScroll = null;
+	#releaseScrollPadding = null;
 	#shown = false;
 	#transitioning;
 	/**
@@ -2286,15 +2286,15 @@ var Popover = class extends BaseComponent {
 		spacing: 3,
 		minContact: false
 	};
-	#arrow;
+	#arrow = null;
 	#enabled;
-	#hideModalEvent;
-	#modal;
-	#popover;
-	#popoverBody;
-	#popoverHeader;
-	#popper;
-	#transition;
+	#hideModalHandler = null;
+	#modal = null;
+	#popover = null;
+	#popoverBody = null;
+	#popoverHeader = null;
+	#popper = null;
+	#transition = null;
 	#triggers = [];
 	/**
 	* Creates a Popover.
@@ -2343,7 +2343,7 @@ var Popover = class extends BaseComponent {
 			$.removeEvent(this.node, "blur.ui.popover");
 		}
 		if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.popover");
-		if (this.#modal && this.#hideModalEvent) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+		if (this.#modal && this.#hideModalHandler) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 		this.#modal = null;
 		this.#transition = null;
 		this.#triggers = null;
@@ -2351,7 +2351,7 @@ var Popover = class extends BaseComponent {
 		this.#popoverHeader = null;
 		this.#popoverBody = null;
 		this.#arrow = null;
-		this.#hideModalEvent = null;
+		this.#hideModalHandler = null;
 		super.dispose();
 	}
 	/**
@@ -2462,10 +2462,10 @@ var Popover = class extends BaseComponent {
 			this.toggle({ force: false });
 		});
 		if (this.#modal) {
-			this.#hideModalEvent = () => {
+			this.#hideModalHandler = () => {
 				this.hide();
 			};
-			$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+			$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 		}
 	}
 	/**
@@ -2526,9 +2526,9 @@ function getTabGroup(node) {
 * Controls a tab trigger and its associated panel.
 */
 var Tab = class extends BaseComponent {
-	#siblings;
-	#target;
-	#transition;
+	#siblings = null;
+	#target = null;
+	#transition = null;
 	/**
 	* Creates a Tab.
 	* @param {HTMLElement} node The input node.
@@ -2649,8 +2649,8 @@ var Toast = class extends BaseComponent {
 		autohide: true,
 		delay: 5e3
 	};
-	#releaseDisplay;
-	#timer;
+	#releaseDisplay = null;
+	#timer = null;
 	#transitioning;
 	/** @inheritdoc */
 	dispose() {
@@ -2763,14 +2763,14 @@ var Tooltip = class extends BaseComponent {
 		spacing: 2,
 		minContact: false
 	};
-	#arrow;
+	#arrow = null;
 	#enabled;
-	#hideModalEvent;
-	#modal;
-	#popper;
-	#tooltip;
-	#tooltipInner;
-	#transition;
+	#hideModalHandler = null;
+	#modal = null;
+	#popper = null;
+	#tooltip = null;
+	#tooltipInner = null;
+	#transition = null;
 	#triggers = [];
 	/**
 	* Creates a Tooltip.
@@ -2819,14 +2819,14 @@ var Tooltip = class extends BaseComponent {
 			$.removeEvent(this.node, "blur.ui.tooltip");
 		}
 		if (this.#triggers.includes("click")) $.removeEvent(this.node, "click.ui.tooltip");
-		if (this.#modal && this.#hideModalEvent) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+		if (this.#modal && this.#hideModalHandler) $.removeEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 		this.#modal = null;
 		this.#transition = null;
 		this.#triggers = null;
 		this.#tooltip = null;
 		this.#tooltipInner = null;
 		this.#arrow = null;
-		this.#hideModalEvent = null;
+		this.#hideModalHandler = null;
 		super.dispose();
 	}
 	/**
@@ -2932,10 +2932,10 @@ var Tooltip = class extends BaseComponent {
 			this.toggle({ force: false });
 		});
 		if (this.#modal) {
-			this.#hideModalEvent = () => {
+			this.#hideModalHandler = () => {
 				this.hide();
 			};
-			$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalEvent);
+			$.addEvent(this.#modal, "hide.ui.modal", this.#hideModalHandler);
 		}
 	}
 	/**

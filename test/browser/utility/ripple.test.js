@@ -8,7 +8,7 @@ test.use({ mockClock: true });
 test.describe('Ripple', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML = '<button class="btn btn-secondary ripple" id="button"></button>';
+            $.setHtml(document.body, '<button class="btn btn-secondary ripple" id="button"></button>');
         });
     });
 

@@ -3,7 +3,7 @@ import { expect, test } from '#test';
 test.describe('Offcanvas/Modal', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<button class="btn btn-secondary" id="offcanvas-toggle" data-ui-toggle="offcanvas" data-ui-target="#offcanvas" type="button"></button>' +
                 '<div class="offcanvas offcanvas-start" id="offcanvas">' +
                 '<button class="btn-close" id="button" data-ui-dismiss="offcanvas" type="button"></button>' +
@@ -13,7 +13,8 @@ test.describe('Offcanvas/Modal', () => {
                 '<div class="modal-dialog" id="modal-dialog">' +
                 '<button class="btn-close" id="button2" data-ui-dismiss="modal" type="button"></button>' +
                 '</div>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 

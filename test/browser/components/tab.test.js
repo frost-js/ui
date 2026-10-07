@@ -5,7 +5,7 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Tab', () => {
     test.beforeEach(async ({ page }) => {
         await page.evaluate(() => {
-            document.body.innerHTML =
+            $.setHtml(document.body,
                 '<div class="nav nav-tabs">' +
                 '<a class="nav-link active" id="tab-toggle-1" href="#tab1" data-ui-toggle="tab"></a>' +
                 '<a class="nav-link" id="tab-toggle-2" href="#tab2" data-ui-toggle="tab"></a>' +
@@ -21,7 +21,8 @@ test.describe('Tab', () => {
                 '<div class="tab-content">' +
                 '<div class="tab-pane fade active show" id="tab3"></div>' +
                 '<div class="tab-pane fade" id="tab4"></div>' +
-                '</div>';
+                '</div>',
+            );
         });
     });
 
@@ -29,7 +30,7 @@ test.describe('Tab', () => {
         for (const { name, init } of [
             {
                 name: 'class',
-                init: (selector) => UI.Tab.init(document.querySelector(selector)),
+                init: (selector) => UI.Tab.init($.findOne(selector)),
             },
             {
                 name: 'QuerySet',
@@ -58,7 +59,7 @@ test.describe('Tab', () => {
             {
                 name: 'class',
                 dispose: (selector) => {
-                    UI.Tab.init(document.querySelector(selector)).dispose();
+                    UI.Tab.init($.findOne(selector)).dispose();
                 },
             },
             {
@@ -81,7 +82,7 @@ test.describe('Tab', () => {
             {
                 name: 'class',
                 show: (selector) => {
-                    UI.Tab.init(document.querySelector(selector)).show();
+                    UI.Tab.init($.findOne(selector)).show();
                 },
             },
             {
@@ -226,7 +227,7 @@ test.describe('Tab', () => {
             {
                 name: 'class',
                 hide: (selector) => {
-                    UI.Tab.init(document.querySelector(selector)).hide();
+                    UI.Tab.init($.findOne(selector)).hide();
                 },
             },
             {
@@ -611,7 +612,7 @@ test.describe('Tab', () => {
     test.describe('nav item wrappers', () => {
         test('shows the tab', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML =
+                $.setHtml(document.body,
                     '<ul class="nav nav-tabs" role="tablist">' +
                     '<li class="nav-item">' +
                     '<button class="nav-link active" id="wrapped-tab-toggle-1" data-ui-toggle="tab" data-ui-target="#wrapped-tab1" type="button"></button>' +
@@ -623,7 +624,8 @@ test.describe('Tab', () => {
                     '<div class="tab-content">' +
                     '<div class="tab-pane fade active show" id="wrapped-tab1"></div>' +
                     '<div class="tab-pane fade" id="wrapped-tab2"></div>' +
-                    '</div>';
+                    '</div>',
+                );
 
                 UI.Tab.init($.findOne('#wrapped-tab-toggle-2')).show();
             });
@@ -636,7 +638,7 @@ test.describe('Tab', () => {
 
         test('skips disabled tabs during keyboard navigation', async ({ page }) => {
             await page.evaluate(() => {
-                document.body.innerHTML =
+                $.setHtml(document.body,
                     '<ul class="nav nav-tabs" role="tablist">' +
                     '<li class="nav-item">' +
                     '<button class="nav-link active" id="wrapped-tab-toggle-1" data-ui-toggle="tab" data-ui-target="#wrapped-tab1" type="button"></button>' +
@@ -652,7 +654,8 @@ test.describe('Tab', () => {
                     '<div class="tab-pane fade active show" id="wrapped-tab1"></div>' +
                     '<div class="tab-pane fade" id="wrapped-tab2"></div>' +
                     '<div class="tab-pane fade" id="wrapped-tab3"></div>' +
-                    '</div>';
+                    '</div>',
+                );
             });
 
             await page.locator('#wrapped-tab-toggle-1').focus();
