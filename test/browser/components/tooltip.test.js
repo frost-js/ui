@@ -1,4 +1,10 @@
-import { floatingContentTests, setup } from '#cases/components/floating-content.js';
+import {
+    floatingContentEventTests,
+    floatingContentLifecycleTests,
+    floatingContentMethodTests,
+    floatingContentOptionTests,
+    setup,
+} from '#cases/components/floating-content.js';
 import { expect, test } from '#test';
 
 test.use({ reducedMotion: 'no-preference' });
@@ -6,7 +12,7 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Tooltip', () => {
     test.beforeEach(setup('tooltip'));
 
-    floatingContentTests({ key: 'tooltip', component: 'Tooltip' });
+    floatingContentLifecycleTests({ key: 'tooltip', component: 'Tooltip' });
 
     test.describe('#show', () => {
         for (const { name, show } of [
@@ -129,6 +135,8 @@ test.describe('Tooltip', () => {
         });
     });
 
+    floatingContentMethodTests({ key: 'tooltip', component: 'Tooltip' });
+
     test.describe('#refresh', () => {
         for (const { name, prepare, refresh } of [
             {
@@ -177,6 +185,10 @@ test.describe('Tooltip', () => {
             await expect(page.locator('.tooltip-inner')).toHaveText(['Test', 'Test']);
         });
     });
+
+    floatingContentEventTests({ key: 'tooltip', component: 'Tooltip' });
+
+    floatingContentOptionTests({ key: 'tooltip', component: 'Tooltip' });
 
     test.describe('title option', () => {
         for (const { name, run } of [

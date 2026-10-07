@@ -1,4 +1,10 @@
-import { floatingContentTests, setup } from '#cases/components/floating-content.js';
+import {
+    floatingContentEventTests,
+    floatingContentLifecycleTests,
+    floatingContentMethodTests,
+    floatingContentOptionTests,
+    setup,
+} from '#cases/components/floating-content.js';
 import { expect, test } from '#test';
 
 test.use({ reducedMotion: 'no-preference' });
@@ -6,7 +12,7 @@ test.use({ reducedMotion: 'no-preference' });
 test.describe('Popover', () => {
     test.beforeEach(setup('popover'));
 
-    floatingContentTests({ key: 'popover', component: 'Popover' });
+    floatingContentLifecycleTests({ key: 'popover', component: 'Popover' });
 
     test.describe('#show', () => {
         for (const { name, show } of [
@@ -126,6 +132,8 @@ test.describe('Popover', () => {
         });
     });
 
+    floatingContentMethodTests({ key: 'popover', component: 'Popover' });
+
     test.describe('#refresh', () => {
         for (const { name, prepare, refresh } of [
             {
@@ -221,6 +229,10 @@ test.describe('Popover', () => {
             await expect(page.locator('.popover-body')).toHaveText(['Test', 'Test']);
         });
     });
+
+    floatingContentEventTests({ key: 'popover', component: 'Popover' });
+
+    floatingContentOptionTests({ key: 'popover', component: 'Popover' });
 
     test.describe('title option', () => {
         for (const { name, run } of [

@@ -19,12 +19,16 @@ export function setup(key) {
 }
 
 /**
- * Registers the lifecycle and option behaviors shared by tooltips and popovers.
- * @param {object} options The component under test.
- * @param {'tooltip'|'popover'} options.key The QuerySet method and event namespace.
- * @param {'Tooltip'|'Popover'} options.component The exported component class name.
+ * @typedef {object} FloatingContentTestOptions
+ * @property {'tooltip'|'popover'} key The QuerySet method and event namespace.
+ * @property {'Tooltip'|'Popover'} component The exported component class name.
  */
-export function floatingContentTests({ key, component }) {
+
+/**
+ * Registers initialization and disposal tests shared by tooltips and popovers.
+ * @param {FloatingContentTestOptions} options The component under test.
+ */
+export function floatingContentLifecycleTests({ key, component }) {
     test.describe('#init', () => {
         for (const { name, init } of [
             {
@@ -158,6 +162,17 @@ export function floatingContentTests({ key, component }) {
             }, { key, component })).toBe(false);
         });
 
+        test('restores the title attribute', async ({ page }) => {
+            await page.evaluate(({ key, component }) => {
+                const toggle1 = $.findOne(`#${key}-toggle-1`);
+                $.setAttribute(toggle1, { title: 'Test' });
+                UI[component].init(toggle1).dispose();
+            }, { key, component });
+
+            await expect(page.locator(`#${key}-toggle-1`)).toHaveAttribute('title', 'Test');
+            await expect(page.locator(`#${key}-toggle-1`)).not.toHaveAttribute('data-ui-original-title');
+        });
+
         test('preserves consumer trigger and removal listeners', async ({ page }) => {
             const events = await page.evaluate(({ key, component }) => {
                 const node = $.findOne(`#${key}-toggle-1`);
@@ -207,19 +222,14 @@ export function floatingContentTests({ key, component }) {
             expect(await page.evaluate(() => window.modalHideEventTriggered)).toBe(true);
             await expect(page.locator(`.${key}`)).toHaveCount(0);
         });
-
-        test('restores the title attribute', async ({ page }) => {
-            await page.evaluate(({ key, component }) => {
-                const toggle1 = $.findOne(`#${key}-toggle-1`);
-                $.setAttribute(toggle1, { title: 'Test' });
-                UI[component].init(toggle1).dispose();
-            }, { key, component });
-
-            await expect(page.locator(`#${key}-toggle-1`)).toHaveAttribute('title', 'Test');
-            await expect(page.locator(`#${key}-toggle-1`)).not.toHaveAttribute('data-ui-original-title');
-        });
     });
+}
 
+/**
+ * Registers hide, toggle, disable, and enable tests shared by tooltips and popovers.
+ * @param {FloatingContentTestOptions} options The component under test.
+ */
+export function floatingContentMethodTests({ key, component }) {
     test.describe('#hide', () => {
         for (const { name, prepare, hide } of [
             {
@@ -648,7 +658,13 @@ export function floatingContentTests({ key, component }) {
             await expect(page.locator(`.${key}`)).toHaveClass(/\bshow\b/);
         });
     });
+}
 
+/**
+ * Registers lifecycle event tests shared by tooltips and popovers.
+ * @param {FloatingContentTestOptions} options The component under test.
+ */
+export function floatingContentEventTests({ key, component }) {
     test.describe('events', () => {
         test('triggers show event', async ({ page }) => {
             const eventTriggered = await page.evaluate(({ key, component }) => {
@@ -776,7 +792,13 @@ export function floatingContentTests({ key, component }) {
             await expect(page.locator(`.${key}`)).toHaveCSS('opacity', '1');
         });
     });
+}
 
+/**
+ * Registers option tests shared by tooltips and popovers.
+ * @param {FloatingContentTestOptions} options The component under test.
+ */
+export function floatingContentOptionTests({ key, component }) {
     test.describe('customClass option', () => {
         for (const { name, run } of [
             {

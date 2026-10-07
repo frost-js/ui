@@ -116,26 +116,6 @@ test.describe('Carousel', () => {
             });
         }
 
-        test('preserves consumer interaction and removal listeners', async ({ page }) => {
-            const events = await page.evaluate(() => {
-                const node = $.findOne('#carousel1');
-                const types = ['keydown', 'mouseenter', 'mouseleave', 'mousedown', 'touchstart', 'remove'];
-                const names = types.map((type) => `${type}.ui.carousel`).join(' ');
-                const events = [];
-                $.addEvent(node, names, (event) => events.push(`before:${event.type}`));
-
-                const instance = UI.Carousel.init(node);
-                $.addEvent(node, names, (event) => events.push(`after:${event.type}`));
-                instance.dispose();
-                instance.dispose();
-                $.triggerEvent(node, names);
-                return events;
-            });
-
-            expect(events).toEqual(['keydown', 'mouseenter', 'mouseleave', 'mousedown', 'touchstart', 'remove']
-                .flatMap((type) => [`before:${type}`, `after:${type}`]));
-        });
-
         test('removes the touch swipe event', async ({ page }) => {
             const defaultPrevented = await page.evaluate(() => {
                 const carousel1 = $.findOne('#carousel1');
@@ -154,6 +134,26 @@ test.describe('Carousel', () => {
             });
 
             expect(defaultPrevented).toBe(false);
+        });
+
+        test('preserves consumer interaction and removal listeners', async ({ page }) => {
+            const events = await page.evaluate(() => {
+                const node = $.findOne('#carousel1');
+                const types = ['keydown', 'mouseenter', 'mouseleave', 'mousedown', 'touchstart', 'remove'];
+                const names = types.map((type) => `${type}.ui.carousel`).join(' ');
+                const events = [];
+                $.addEvent(node, names, (event) => events.push(`before:${event.type}`));
+
+                const instance = UI.Carousel.init(node);
+                $.addEvent(node, names, (event) => events.push(`after:${event.type}`));
+                instance.dispose();
+                instance.dispose();
+                $.triggerEvent(node, names);
+                return events;
+            });
+
+            expect(events).toEqual(['keydown', 'mouseenter', 'mouseleave', 'mousedown', 'touchstart', 'remove']
+                .flatMap((type) => [`before:${type}`, `after:${type}`]));
         });
 
         test('settles the active slide on disposal without a late event', async ({ page }) => {
