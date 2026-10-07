@@ -63,7 +63,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 	*/
 	function getDataset(node) {
 		const dataset = $.getDataset(node);
-		return Object.fromEntries(Object.entries(dataset).map(([key, value]) => [key.slice(2, 3).toLowerCase() + key.slice(3), value]));
+		return Object.fromEntries(Object.entries(dataset).filter(([key]) => /^ui[A-Z]/.test(key)).map(([key, value]) => [key.slice(2, 3).toLowerCase() + key.slice(3), value]));
 	}
 	/**
 	* Registers a UI component and its QuerySet method.
@@ -124,6 +124,26 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 //#region src/js/base-component.js
 /** @typedef {Record<string, *>} ComponentOptions */
 	/**
+	* Merges component options, cloning arrays instead of merging their entries.
+	* @param {...ComponentOptions} sources The option sources in precedence order.
+	* @returns {ComponentOptions} The merged options.
+	*/
+	function mergeOptions(...sources) {
+		let options = {};
+		for (const source of sources) {
+			if (source == null) continue;
+			options = {
+				...options,
+				...Object.fromEntries(Object.entries(source).map(([key, value]) => {
+					if (Array.isArray(value)) value = $._extend([], value);
+					else if ($._isPlainObject(value)) value = mergeOptions($._isPlainObject(options[key]) ? options[key] : {}, value);
+					return [key, value];
+				}))
+			};
+		}
+		return options;
+	}
+	/**
 	* Provides shared initialization, option handling, and disposal for UI components.
 	* @template {ComponentOptions} [Options=ComponentOptions]
 	*/
@@ -146,7 +166,7 @@ _fr0st_query = __toESM(_fr0st_query, 1);
 		*/
 		constructor(node, options) {
 			this.#node = node;
-			this.#options = Object.freeze($._extend({}, this.constructor.defaults, getDataset(this.#node), options));
+			this.#options = Object.freeze(mergeOptions(this.constructor.defaults, getDataset(this.#node), options));
 			$.addEvent(this.#node, this.constructor.REMOVE_EVENT, () => {
 				this.dispose();
 			});

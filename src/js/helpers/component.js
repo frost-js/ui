@@ -29,6 +29,7 @@ export function getDataset(node) {
 
     return Object.fromEntries(
         Object.entries(dataset)
+            .filter(([key]) => /^ui[A-Z]/.test(key))
             .map(([key, value]) => [key.slice(2, 3).toLowerCase() + key.slice(3), value]),
     );
 }

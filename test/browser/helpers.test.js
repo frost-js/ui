@@ -21,6 +21,27 @@ test.describe('initComponent', () => {
     });
 });
 
+test.describe('getDataset', () => {
+    test('normalizes UI attributes and excludes other namespaces and prefix lookalikes', async ({ page }) => {
+        expect(await page.evaluate(() => {
+            const node = $.create('div', {
+                attributes: {
+                    'data-ui-duration': '0',
+                    'data-ui-enabled': 'false',
+                    'data-ui-length': '[2]',
+                    'data-my-duration': '999',
+                    'data-my-enabled': 'true',
+                    'data-ui': 'metadata',
+                    'data-uicolor': 'red',
+                    'data-id': 'customer',
+                },
+            });
+
+            return UI.getDataset(node);
+        })).toEqual({ duration: 0, enabled: false, length: [2] });
+    });
+});
+
 test.describe('getTouchPositions', () => {
     test('returns the page position of each active touch', async ({ page }) => {
         expect(await page.evaluate(() => UI.getTouchPositions({

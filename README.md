@@ -204,6 +204,8 @@ Options are combined in this order:
 2. The element's `data-ui-*` attributes
 3. Options passed to `init()`
 
+Nested objects merge across these sources. Arrays replace earlier arrays, including when an empty array is supplied. Plain objects and arrays are copied so instances do not modify defaults or caller options.
+
 For example, this element overrides the default backdrop and keyboard behavior:
 
 ```html

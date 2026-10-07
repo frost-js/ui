@@ -4,6 +4,36 @@ import { getDataset } from './helpers/component.js';
 /** @typedef {Record<string, *>} ComponentOptions */
 
 /**
+ * Merges component options, cloning arrays instead of merging their entries.
+ * @param {...ComponentOptions} sources The option sources in precedence order.
+ * @returns {ComponentOptions} The merged options.
+ */
+function mergeOptions(...sources) {
+    let options = {};
+
+    for (const source of sources) {
+        if (source == null) {
+            continue;
+        }
+
+        options = {
+            ...options,
+            ...Object.fromEntries(Object.entries(source).map(([key, value]) => {
+                if (Array.isArray(value)) {
+                    value = $._extend([], value);
+                } else if ($._isPlainObject(value)) {
+                    value = mergeOptions($._isPlainObject(options[key]) ? options[key] : {}, value);
+                }
+
+                return [key, value];
+            })),
+        };
+    }
+
+    return options;
+}
+
+/**
  * Provides shared initialization, option handling, and disposal for UI components.
  * @template {ComponentOptions} [Options=ComponentOptions]
  */
@@ -31,8 +61,7 @@ export default class BaseComponent {
     constructor(node, options) {
         this.#node = node;
 
-        this.#options = Object.freeze($._extend(
-            {},
+        this.#options = Object.freeze(mergeOptions(
             this.constructor.defaults,
             getDataset(this.#node),
             options,
