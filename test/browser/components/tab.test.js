@@ -52,6 +52,39 @@ test.describe('Tab', () => {
             expect(await page.evaluate(() =>
                 $.getData('#tab-toggle-1', 'tab') instanceof UI.Tab)).toBe(true);
         });
+
+        test.describe('failed initialization', () => {
+            test('cleans up registration when constructor initialization throws', async ({ page }) => {
+                const state = await page.evaluate(() => {
+                    const node = $.findOne('#tab-toggle-1');
+                    $.setAttribute(node, 'data-ui-target', '[');
+                    const html = $.getHtml(document.body);
+                    let name = null;
+
+                    try {
+                        UI.Tab.init(node);
+                    } catch (error) {
+                        name = error.name;
+                    }
+
+                    const registered = $.hasData(node, UI.Tab.DATA_KEY);
+                    const unchanged = $.getHtml(document.body) === html;
+                    $.removeAttribute(node, 'data-ui-target');
+                    const instance = UI.Tab.init(node);
+                    const retried = instance instanceof UI.Tab;
+                    instance.dispose();
+
+                    return { name, registered, unchanged, retried };
+                });
+
+                expect(state).toEqual({
+                    name: 'SyntaxError',
+                    registered: false,
+                    unchanged: true,
+                    retried: true,
+                });
+            });
+        });
     });
 
     test.describe('#dispose', () => {

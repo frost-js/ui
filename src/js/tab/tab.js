@@ -19,10 +19,15 @@ export default class Tab extends BaseComponent {
     constructor(node) {
         super(node);
 
-        const selector = getTargetSelector(this.node);
-        this.#target = $.findOne(selector);
-        this.#siblings = getTabGroup(this.node)
-            .filter((node) => !$.isSame(node, this.node));
+        try {
+            const selector = getTargetSelector(this.node);
+            this.#target = $.findOne(selector);
+            this.#siblings = getTabGroup(this.node)
+                .filter((node) => !$.isSame(node, this.node));
+        } catch (error) {
+            this.dispose();
+            throw error;
+        }
     }
 
     /** @inheritdoc */

@@ -47,6 +47,38 @@ test.describe('Offcanvas', () => {
             expect(await page.evaluate(() =>
                 $.getData('#offcanvas1', 'offcanvas') instanceof UI.Offcanvas)).toBe(true);
         });
+
+        test.describe('failed initialization', () => {
+            test('cleans up registration when focus trap creation throws', async ({ page }) => {
+                const state = await page.evaluate(() => {
+                    const node = $.findOne('#offcanvas1');
+                    const init = UI.FocusTrap.init;
+                    const failure = new Error('Cannot create focus trap');
+                    let originalError = false;
+
+                    UI.FocusTrap.init = () => {
+                        throw failure;
+                    };
+
+                    try {
+                        UI.Offcanvas.init(node);
+                    } catch (error) {
+                        originalError = error === failure;
+                    } finally {
+                        UI.FocusTrap.init = init;
+                    }
+
+                    const registered = $.hasData(node, 'offcanvas');
+                    const instance = UI.Offcanvas.init(node);
+                    const retried = instance instanceof UI.Offcanvas;
+                    instance.dispose();
+
+                    return { originalError, registered, retried };
+                });
+
+                expect(state).toEqual({ originalError: true, registered: false, retried: true });
+            });
+        });
     });
 
     test.describe('#dispose', () => {

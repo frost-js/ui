@@ -47,24 +47,29 @@ export default class Dropdown extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this.#display = this.options.display;
-        this.#menuNode = $.next(this.node, '.dropdown-menu').shift();
+        try {
+            this.#display = this.options.display;
+            this.#menuNode = $.next(this.node, '.dropdown-menu').shift();
 
-        if (this.options.reference) {
-            if (this.options.reference === 'parent') {
-                this.#referenceNode = $.parent(this.node).shift();
+            if (this.options.reference) {
+                if (this.options.reference === 'parent') {
+                    this.#referenceNode = $.parent(this.node).shift();
+                } else {
+                    this.#referenceNode = $._isString(this.options.reference) ?
+                        $.findOne(this.options.reference) :
+                        this.options.reference;
+                }
             } else {
-                this.#referenceNode = $._isString(this.options.reference) ?
-                    $.findOne(this.options.reference) :
-                    this.options.reference;
+                this.#referenceNode = this.node;
             }
-        } else {
-            this.#referenceNode = this.node;
-        }
 
-        // Navbar dropdowns use static positioning.
-        if (this.#display !== 'static' && $.closest(this.node, '.navbar-nav').length) {
-            this.#display = 'static';
+            // Navbar dropdowns use static positioning.
+            if (this.#display !== 'static' && $.closest(this.node, '.navbar-nav').length) {
+                this.#display = 'static';
+            }
+        } catch (error) {
+            this.dispose();
+            throw error;
         }
     }
 

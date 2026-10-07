@@ -45,14 +45,19 @@ export default class Modal extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this.#dialog = $.child(this.node, '.modal-dialog').shift();
+        try {
+            this.#dialog = $.child(this.node, '.modal-dialog').shift();
 
-        if (this.options.show) {
-            this.show();
-        }
+            if (this.options.show) {
+                this.show();
+            }
 
-        if (this.options.focus) {
-            this.#focusTrap = FocusTrap.init(this.node);
+            if (this.options.focus) {
+                this.#focusTrap = FocusTrap.init(this.node);
+            }
+        } catch (error) {
+            this.dispose();
+            throw error;
         }
     }
 

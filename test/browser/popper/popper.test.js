@@ -98,6 +98,38 @@ test.describe('Popper', () => {
                 expect(await page.locator('#arrow').evaluate((node) => node.style.getPropertyPriority('top'))).toBe('important');
             });
         }
+
+        test.describe('failed initialization', () => {
+            test('cleans up registration when constructor initialization throws', async ({ page }) => {
+                const state = await page.evaluate(() => {
+                    const node = $.findOne('#badge');
+                    $.setAttribute(node, 'data-ui-placement', 'original');
+                    const html = $.getHtml(document.body);
+                    let name = null;
+
+                    try {
+                        UI.Popper.init(node, { reference: '[' });
+                    } catch (error) {
+                        name = error.name;
+                    }
+
+                    const registered = $.hasData(node, UI.Popper.DATA_KEY);
+                    const unchanged = $.getHtml(document.body) === html;
+                    const instance = UI.Popper.init(node, { reference: $.findOne('#button') });
+                    const retried = instance instanceof UI.Popper;
+                    instance.dispose();
+
+                    return { name, registered, unchanged, retried };
+                });
+
+                expect(state).toEqual({
+                    name: 'SyntaxError',
+                    registered: false,
+                    unchanged: true,
+                    retried: true,
+                });
+            });
+        });
     });
 
     test.describe('#dispose', () => {
@@ -125,6 +157,20 @@ test.describe('Popper', () => {
         ]) {
             test(`removes the popper (${name})`, async ({ page }) => {
                 expect(await page.evaluate(dispose)).toBe(false);
+            });
+        }
+
+        for (const value of ['', 'false', '0']) {
+            test(`preserves the original placement attribute ${JSON.stringify(value)}`, async ({ page }) => {
+                await page.evaluate((value) => {
+                    const node = $.findOne('#badge');
+                    const reference = $.findOne('#button');
+                    $.setAttribute([node, reference], 'data-ui-placement', value);
+                    UI.Popper.init(node, { reference }).dispose();
+                }, value);
+
+                await expect(page.locator('#badge')).toHaveAttribute('data-ui-placement', value);
+                await expect(page.locator('#button')).toHaveAttribute('data-ui-placement', value);
             });
         }
 

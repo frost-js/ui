@@ -41,6 +41,37 @@ test.describe('Collapse', () => {
             expect(await page.evaluate(() =>
                 $.getData('#collapse1', 'collapse') instanceof UI.Collapse)).toBe(true);
         });
+
+        test.describe('failed initialization', () => {
+            test('cleans up registration when constructor initialization throws', async ({ page }) => {
+                const state = await page.evaluate(() => {
+                    const node = $.findOne('#collapse1');
+                    const html = $.getHtml(document.body);
+                    let name = null;
+
+                    try {
+                        UI.Collapse.init(node, { parent: '[' });
+                    } catch (error) {
+                        name = error.name;
+                    }
+
+                    const registered = $.hasData(node, UI.Collapse.DATA_KEY);
+                    const unchanged = $.getHtml(document.body) === html;
+                    const instance = UI.Collapse.init(node);
+                    const retried = instance instanceof UI.Collapse;
+                    instance.dispose();
+
+                    return { name, registered, unchanged, retried };
+                });
+
+                expect(state).toEqual({
+                    name: 'SyntaxError',
+                    registered: false,
+                    unchanged: true,
+                    retried: true,
+                });
+            });
+        });
     });
 
     test.describe('#dispose', () => {

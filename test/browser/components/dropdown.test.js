@@ -53,6 +53,37 @@ test.describe('Dropdown', () => {
             expect(await page.evaluate(() =>
                 $.getData('#dropdown-toggle-1', 'dropdown') instanceof UI.Dropdown)).toBe(true);
         });
+
+        test.describe('failed initialization', () => {
+            test('cleans up registration when constructor initialization throws', async ({ page }) => {
+                const state = await page.evaluate(() => {
+                    const node = $.findOne('#dropdown-toggle-1');
+                    const html = $.getHtml(document.body);
+                    let name = null;
+
+                    try {
+                        UI.Dropdown.init(node, { reference: '[' });
+                    } catch (error) {
+                        name = error.name;
+                    }
+
+                    const registered = $.hasData(node, UI.Dropdown.DATA_KEY);
+                    const unchanged = $.getHtml(document.body) === html;
+                    const instance = UI.Dropdown.init(node);
+                    const retried = instance instanceof UI.Dropdown;
+                    instance.dispose();
+
+                    return { name, registered, unchanged, retried };
+                });
+
+                expect(state).toEqual({
+                    name: 'SyntaxError',
+                    registered: false,
+                    unchanged: true,
+                    retried: true,
+                });
+            });
+        });
     });
 
     test.describe('#dispose', () => {

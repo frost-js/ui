@@ -38,8 +38,13 @@ export default class Offcanvas extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        if (!this.options.scroll || this.options.backdrop) {
-            this.#focusTrap = FocusTrap.init(this.node);
+        try {
+            if (!this.options.scroll || this.options.backdrop) {
+                this.#focusTrap = FocusTrap.init(this.node);
+            }
+        } catch (error) {
+            this.dispose();
+            throw error;
         }
     }
 

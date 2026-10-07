@@ -65,8 +65,7 @@ export default class Popper extends BaseComponent {
         minContact: null,
     };
 
-    #placement;
-    #referencePlacement;
+    #placements = new Map();
     #releaseArrowStyles = null;
     #releaseStyles = null;
     #rtl;
@@ -79,11 +78,11 @@ export default class Popper extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this.#rtl = $.css(this.options.reference, 'direction') === 'rtl';
-        this.#placement = $.getDataset(this.node, 'uiPlacement');
-        this.#referencePlacement = $.getDataset(this.options.reference, 'uiPlacement');
-
         try {
+            this.#rtl = $.css(this.options.reference, 'direction') === 'rtl';
+            this.#placements = new Map([this.node, this.options.reference]
+                .map((node) => [node, $.getAttribute(node, 'data-ui-placement')]));
+
             this.#releaseStyles = lockStyles(this.node, {
                 position: 'absolute',
                 top: 0,
@@ -118,17 +117,14 @@ export default class Popper extends BaseComponent {
             return;
         }
 
-        if (this.#placement) {
-            $.setDataset(this.node, { uiPlacement: this.#placement });
-        } else {
-            $.removeDataset(this.node, 'uiPlacement');
+        for (const [node, value] of this.#placements) {
+            if (value === null) {
+                $.removeAttribute(node, 'data-ui-placement');
+            } else {
+                $.setAttribute(node, { 'data-ui-placement': value });
+            }
         }
-
-        if (this.#referencePlacement) {
-            $.setDataset(this.options.reference, { uiPlacement: this.#referencePlacement });
-        } else {
-            $.removeDataset(this.options.reference, 'uiPlacement');
-        }
+        this.#placements.clear();
 
         this.#releaseArrowStyles?.();
         this.#releaseStyles?.();

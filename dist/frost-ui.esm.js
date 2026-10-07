@@ -124,7 +124,7 @@ var BaseComponent = class {
 	* @returns {BaseComponent} The existing or newly created component.
 	*/
 	static init(node, ...args) {
-		return $.hasData(node, this.DATA_KEY) ? $.getData(node, this.DATA_KEY) : new this(node, ...args);
+		return $._isElement(node) && $.hasData(node, this.DATA_KEY) ? $.getData(node, this.DATA_KEY) : new this(node, ...args);
 	}
 	/**
 	* Creates a BaseComponent.
@@ -132,6 +132,7 @@ var BaseComponent = class {
 	* @param {Options} [options] The component options.
 	*/
 	constructor(node, options) {
+		if (!$._isElement(node)) throw new TypeError("Component must be created on an element.");
 		this.#node = node;
 		this.#options = Object.freeze(mergeOptions(this.constructor.defaults, getDataset(this.#node), options));
 		$.addEvent(this.#node, this.constructor.REMOVE_EVENT, () => {
@@ -415,12 +416,17 @@ var Carousel = class extends BaseComponent {
 	*/
 	constructor(node, options) {
 		super(node, options);
-		this.#rtl = $.css(this.node, "direction") === "rtl";
-		this.#items = $.find(".carousel-item", this.node);
-		this.#index = this.#items.findIndex((item) => $.hasClass(item, "active"));
-		this.#sliding = false;
-		this.#events();
-		if (this.options.ride === "carousel") this.#setTimer();
+		try {
+			this.#rtl = $.css(this.node, "direction") === "rtl";
+			this.#items = $.find(".carousel-item", this.node);
+			this.#index = this.#items.findIndex((item) => $.hasClass(item, "active"));
+			this.#sliding = false;
+			this.#events();
+			if (this.options.ride === "carousel") this.#setTimer();
+		} catch (error) {
+			this.dispose();
+			throw error;
+		}
 	}
 	/**
 	* Resumes automatic cycling and advances when the document is visible.
@@ -795,11 +801,16 @@ var Collapse = class extends BaseComponent {
 	*/
 	constructor(node, options) {
 		super(node, options);
-		this.#triggers = $.find("[data-ui-toggle=\"collapse\"]").filter((trigger) => {
-			const selector = getTargetSelector(trigger);
-			return selector && $.is(this.node, selector);
-		});
-		if (this.options.parent) this.#parent = $.closest(this.node, this.options.parent).shift();
+		try {
+			this.#triggers = $.find("[data-ui-toggle=\"collapse\"]").filter((trigger) => {
+				const selector = getTargetSelector(trigger);
+				return selector && $.is(this.node, selector);
+			});
+			if (this.options.parent) this.#parent = $.closest(this.node, this.options.parent).shift();
+		} catch (error) {
+			this.dispose();
+			throw error;
+		}
 	}
 	/** @inheritdoc */
 	dispose() {
@@ -1306,8 +1317,7 @@ var Popper = class extends BaseComponent {
 		spacing: 0,
 		minContact: null
 	};
-	#placement;
-	#referencePlacement;
+	#placements = /* @__PURE__ */ new Map();
 	#releaseArrowStyles = null;
 	#releaseStyles = null;
 	#rtl;
@@ -1318,10 +1328,9 @@ var Popper = class extends BaseComponent {
 	*/
 	constructor(node, options) {
 		super(node, options);
-		this.#rtl = $.css(this.options.reference, "direction") === "rtl";
-		this.#placement = $.getDataset(this.node, "uiPlacement");
-		this.#referencePlacement = $.getDataset(this.options.reference, "uiPlacement");
 		try {
+			this.#rtl = $.css(this.options.reference, "direction") === "rtl";
+			this.#placements = new Map([this.node, this.options.reference].map((node) => [node, $.getAttribute(node, "data-ui-placement")]));
 			this.#releaseStyles = lockStyles(this.node, {
 				position: "absolute",
 				top: 0,
@@ -1347,10 +1356,9 @@ var Popper = class extends BaseComponent {
 	/** @inheritdoc */
 	dispose() {
 		if (!this.node) return;
-		if (this.#placement) $.setDataset(this.node, { uiPlacement: this.#placement });
-		else $.removeDataset(this.node, "uiPlacement");
-		if (this.#referencePlacement) $.setDataset(this.options.reference, { uiPlacement: this.#referencePlacement });
-		else $.removeDataset(this.options.reference, "uiPlacement");
+		for (const [node, value] of this.#placements) if (value === null) $.removeAttribute(node, "data-ui-placement");
+		else $.setAttribute(node, { "data-ui-placement": value });
+		this.#placements.clear();
 		this.#releaseArrowStyles?.();
 		this.#releaseStyles?.();
 		removePopper(this);
@@ -1518,13 +1526,18 @@ var Dropdown = class extends BaseComponent {
 	*/
 	constructor(node, options) {
 		super(node, options);
-		this.#display = this.options.display;
-		this.#menuNode = $.next(this.node, ".dropdown-menu").shift();
-		if (this.options.reference) {
-			if (this.options.reference === "parent") this.#referenceNode = $.parent(this.node).shift();
-			else this.#referenceNode = $._isString(this.options.reference) ? $.findOne(this.options.reference) : this.options.reference;
-		} else this.#referenceNode = this.node;
-		if (this.#display !== "static" && $.closest(this.node, ".navbar-nav").length) this.#display = "static";
+		try {
+			this.#display = this.options.display;
+			this.#menuNode = $.next(this.node, ".dropdown-menu").shift();
+			if (this.options.reference) {
+				if (this.options.reference === "parent") this.#referenceNode = $.parent(this.node).shift();
+				else this.#referenceNode = $._isString(this.options.reference) ? $.findOne(this.options.reference) : this.options.reference;
+			} else this.#referenceNode = this.node;
+			if (this.#display !== "static" && $.closest(this.node, ".navbar-nav").length) this.#display = "static";
+		} catch (error) {
+			this.dispose();
+			throw error;
+		}
 	}
 	/**
 	* Checks whether the dropdown menu contains a target.
@@ -1828,9 +1841,14 @@ var Modal = class extends BaseComponent {
 	*/
 	constructor(node, options) {
 		super(node, options);
-		this.#dialog = $.child(this.node, ".modal-dialog").shift();
-		if (this.options.show) this.show();
-		if (this.options.focus) this.#focusTrap = focus_trap_default.init(this.node);
+		try {
+			this.#dialog = $.child(this.node, ".modal-dialog").shift();
+			if (this.options.show) this.show();
+			if (this.options.focus) this.#focusTrap = focus_trap_default.init(this.node);
+		} catch (error) {
+			this.dispose();
+			throw error;
+		}
 	}
 	/**
 	* Gets the modal backdrop.
@@ -2109,7 +2127,12 @@ var Offcanvas = class extends BaseComponent {
 	*/
 	constructor(node, options) {
 		super(node, options);
-		if (!this.options.scroll || this.options.backdrop) this.#focusTrap = focus_trap_default.init(this.node);
+		try {
+			if (!this.options.scroll || this.options.backdrop) this.#focusTrap = focus_trap_default.init(this.node);
+		} catch (error) {
+			this.dispose();
+			throw error;
+		}
 	}
 	/** @inheritdoc */
 	dispose() {
@@ -2535,9 +2558,14 @@ var Tab = class extends BaseComponent {
 	*/
 	constructor(node) {
 		super(node);
-		const selector = getTargetSelector(this.node);
-		this.#target = $.findOne(selector);
-		this.#siblings = getTabGroup(this.node).filter((node) => !$.isSame(node, this.node));
+		try {
+			const selector = getTargetSelector(this.node);
+			this.#target = $.findOne(selector);
+			this.#siblings = getTabGroup(this.node).filter((node) => !$.isSame(node, this.node));
+		} catch (error) {
+			this.dispose();
+			throw error;
+		}
 	}
 	/** @inheritdoc */
 	dispose() {

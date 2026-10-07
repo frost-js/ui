@@ -63,18 +63,23 @@ export default class Carousel extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this.#rtl = $.css(this.node, 'direction') === 'rtl';
-        this.#items = $.find('.carousel-item', this.node);
+        try {
+            this.#rtl = $.css(this.node, 'direction') === 'rtl';
+            this.#items = $.find('.carousel-item', this.node);
 
-        this.#index = this.#items.findIndex((item) =>
-            $.hasClass(item, 'active'),
-        );
-        this.#sliding = false;
+            this.#index = this.#items.findIndex((item) =>
+                $.hasClass(item, 'active'),
+            );
+            this.#sliding = false;
 
-        this.#events();
+            this.#events();
 
-        if (this.options.ride === 'carousel') {
-            this.#setTimer();
+            if (this.options.ride === 'carousel') {
+                this.#setTimer();
+            }
+        } catch (error) {
+            this.dispose();
+            throw error;
         }
     }
 

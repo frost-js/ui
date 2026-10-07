@@ -113,6 +113,52 @@ test.describe('BaseComponent', () => {
         });
     });
 
+    test('rejects non-element arguments without disturbing an existing instance', async ({ page }) => {
+        const state = await page.evaluate(() => {
+            const node = $.findOne('#alert1');
+            const instance = UI.Alert.init(node);
+            const html = $.getHtml(document.body);
+            const errors = [];
+
+            for (const [name, argument] of [
+                ['null', null],
+                ['undefined', undefined],
+                ['selector', '#alert1'],
+                ['malformed selector', '['],
+                ['array', [node]],
+                ['QuerySet', $('#alert1')],
+                ['document', document],
+                ['text node', document.createTextNode('text')],
+            ]) {
+                for (const [method, init] of [
+                    ['constructor', (node) => new UI.Alert(node)],
+                    ['init', (node) => UI.Alert.init(node)],
+                ]) {
+                    let message = null;
+
+                    try {
+                        init(argument);
+                    } catch (error) {
+                        message = `${error.name}: ${error.message}`;
+                    }
+
+                    errors.push({ name, method, message });
+                }
+            }
+
+            return {
+                errors,
+                unchanged: $.getHtml(document.body) === html &&
+                    $.getData(node, UI.Alert.DATA_KEY) === instance,
+            };
+        });
+
+        for (const { name, method, message } of state.errors) {
+            expect(message, `${name} (${method})`).toBe('TypeError: Component must be created on an element.');
+        }
+        expect(state.unchanged).toBe(true);
+    });
+
     test('clears the node and options when disposed', async ({ page }) => {
         expect(await page.evaluate(() => {
             const node = $.findOne('#alert1');

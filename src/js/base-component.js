@@ -48,7 +48,7 @@ export default class BaseComponent {
      * @returns {BaseComponent} The existing or newly created component.
      */
     static init(node, ...args) {
-        return $.hasData(node, this.DATA_KEY) ?
+        return $._isElement(node) && $.hasData(node, this.DATA_KEY) ?
             $.getData(node, this.DATA_KEY) :
             new this(node, ...args);
     }
@@ -59,6 +59,10 @@ export default class BaseComponent {
      * @param {Options} [options] The component options.
      */
     constructor(node, options) {
+        if (!$._isElement(node)) {
+            throw new TypeError('Component must be created on an element.');
+        }
+
         this.#node = node;
 
         this.#options = Object.freeze(mergeOptions(

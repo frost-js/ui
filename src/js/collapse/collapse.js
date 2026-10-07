@@ -27,14 +27,19 @@ export default class Collapse extends BaseComponent {
     constructor(node, options) {
         super(node, options);
 
-        this.#triggers = $.find('[data-ui-toggle="collapse"]')
-            .filter((trigger) => {
-                const selector = getTargetSelector(trigger);
-                return selector && $.is(this.node, selector);
-            });
+        try {
+            this.#triggers = $.find('[data-ui-toggle="collapse"]')
+                .filter((trigger) => {
+                    const selector = getTargetSelector(trigger);
+                    return selector && $.is(this.node, selector);
+                });
 
-        if (this.options.parent) {
-            this.#parent = $.closest(this.node, this.options.parent).shift();
+            if (this.options.parent) {
+                this.#parent = $.closest(this.node, this.options.parent).shift();
+            }
+        } catch (error) {
+            this.dispose();
+            throw error;
         }
     }
 

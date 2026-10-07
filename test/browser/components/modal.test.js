@@ -51,6 +51,42 @@ test.describe('Modal', () => {
             expect(await page.evaluate(() =>
                 $.getData('#modal1', 'modal') instanceof UI.Modal)).toBe(true);
         });
+
+        test.describe('failed initialization', () => {
+            test('cleans up registration when immediate showing cannot acquire scroll locks', async ({ page }) => {
+                const state = await page.evaluate(() => {
+                    const node = $.findOne('#modal1');
+                    const release = $.setStyleLock(document.body, 'overflow-y', 'scroll');
+                    let message = null;
+
+                    try {
+                        UI.Modal.init(node, { show: true });
+                    } catch (error) {
+                        message = error.message;
+                    } finally {
+                        release();
+                    }
+
+                    return {
+                        message,
+                        registered: $.hasData(node, 'modal'),
+                        focusTrap: $.hasData(node, 'focustrap'),
+                        backdrops: $.find('.modal-backdrop').length,
+                        open: $.hasClass(document.body, 'modal-open'),
+                    };
+                });
+
+                expect(state).toEqual({
+                    message: 'CSS property "overflow-y" is already locked.',
+                    registered: false,
+                    focusTrap: false,
+                    backdrops: 0,
+                    open: false,
+                });
+                await page.evaluate(() => UI.Modal.init($.findOne('#modal1')));
+                expect(await page.evaluate(() => $.hasData('#modal1', 'modal'))).toBe(true);
+            });
+        });
     });
 
     test.describe('#dispose', () => {

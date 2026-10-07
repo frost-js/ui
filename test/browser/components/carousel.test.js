@@ -61,6 +61,37 @@ test.describe('Carousel', () => {
                     $.getData('#carousel1', 'carousel') instanceof UI.Carousel)).toBe(true);
             });
         }
+
+        test.describe('failed initialization', () => {
+            test('cleans up registration when constructor initialization throws', async ({ page }) => {
+                const state = await page.evaluate(() => {
+                    const node = $.findOne('#carousel1');
+                    const html = $.getHtml(document.body);
+                    let name = null;
+
+                    try {
+                        UI.Carousel.init(node, { ride: 'carousel', interval: Symbol('interval') });
+                    } catch (error) {
+                        name = error.name;
+                    }
+
+                    const registered = $.hasData(node, UI.Carousel.DATA_KEY);
+                    const unchanged = $.getHtml(document.body) === html;
+                    const instance = UI.Carousel.init(node);
+                    const retried = instance instanceof UI.Carousel;
+                    instance.dispose();
+
+                    return { name, registered, unchanged, retried };
+                });
+
+                expect(state).toEqual({
+                    name: 'TypeError',
+                    registered: false,
+                    unchanged: true,
+                    retried: true,
+                });
+            });
+        });
     });
 
     test.describe('#dispose', () => {
