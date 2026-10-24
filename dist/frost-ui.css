@@ -2890,8 +2890,13 @@ fieldset:disabled .btn {
   border-radius: var(--ui-card-inner-border-radius);
 }
 
-.card-img, .card-img-bottom, .card-img-top {
+.card-img,
+.card-img-top,
+.card-img-bottom {
   width: 100%;
+}
+
+.card-img {
   border-radius: var(--ui-card-inner-border-radius);
 }
 
@@ -6617,6 +6622,11 @@ select.input-lg[multiple] option {
 .bg-dark-subtle {
   --ui-bg-opacity: 1;
   background-color: rgb(from var(--ui-dark-subtle) r g b/var(--ui-bg-opacity)) !important;
+}
+
+.bg-body {
+  --ui-bg-opacity: 1;
+  background-color: var(--ui-body-bg) !important;
 }
 
 .bg-body-secondary {

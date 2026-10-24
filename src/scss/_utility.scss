@@ -9,6 +9,7 @@
     property: background-color,
     class: bg,
     values: map.merge(vars.$utilities-bg-colors, (
+        body: var(--ui-body-bg),
         body-secondary: var(--ui-secondary-bg),
         body-tertiary: var(--ui-tertiary-bg),
         transparent: transparent

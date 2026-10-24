@@ -146,17 +146,20 @@
     @include mixins.border-radius(var(--ui-card-inner-border-radius));
 }
 
-.card-img {
+.card-img,
+.card-img-top,
+.card-img-bottom {
     width: 100%;
+}
+
+.card-img {
     @include mixins.border-radius(var(--ui-card-inner-border-radius));
 }
 
 .card-img-top {
-    @extend .card-img;
     @include mixins.border-top-radius(var(--ui-card-inner-border-radius));
 }
 
 .card-img-bottom {
-    @extend .card-img;
     @include mixins.border-bottom-radius(var(--ui-card-inner-border-radius));
 }
