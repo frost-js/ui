@@ -49,7 +49,7 @@ jobs:
         run: npx playwright install --with-deps ${{ matrix.browser }}
 
       - name: Lint
-        run: npm run lint
+        run: npm run lint && npm run lint:sass:unused
 
       - name: Build
         run: npm run build
@@ -72,7 +72,12 @@ jobs:
           files: ./coverage/lcov.info
 
       - name: Verify generated bundles are current
-        run: git diff --exit-code -- dist
+        run: |
+          if [ -n "$(git status --porcelain --untracked-files=all -- dist)" ]; then
+            git status --short --untracked-files=all -- dist
+            echo "::error::Generated bundles must be current and tracked. Run npm run build and commit dist."
+            exit 1
+          fi
 
       - name: Validate package contents
         run: npm pack --dry-run
